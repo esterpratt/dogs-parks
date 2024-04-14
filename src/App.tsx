@@ -1,8 +1,8 @@
-import './App.css';
+import './App.scss';
 import { Map } from './components/Map';
 import { ParksContextProvider } from './context/ParksContextProvider';
 
-function App() {
+const App = () => {
   return (
     <ParksContextProvider>
       <div>
@@ -10,6 +10,6 @@ function App() {
       </div>
     </ParksContextProvider>
   );
-}
+};
 
 export default App;

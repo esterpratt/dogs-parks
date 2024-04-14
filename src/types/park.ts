@@ -22,4 +22,4 @@ interface Park {
   hasFacilities?: boolean;
 }
 
-export type { Park };
+export type { Park, Location };

@@ -1,17 +1,23 @@
-import { MapContainer, Marker, TileLayer, Popup } from 'react-leaflet';
+import { MapContainer as LeafLetMapContainer, TileLayer } from 'react-leaflet';
+import { MarkerList } from './MarkerList';
+import styles from './Map.module.scss';
 
-function Map() {
+const Map = () => {
   return (
-    <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={false}>
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <Marker position={[51.505, -0.09]}>
-        <Popup>This is a popup</Popup>
-      </Marker>
-    </MapContainer>
+    <div className={styles.mapContainer}>
+      <LeafLetMapContainer
+        center={[32.066698, 34.811341]}
+        zoom={17}
+        scrollWheelZoom={false}
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <MarkerList />
+      </LeafLetMapContainer>
+    </div>
   );
-}
+};
 
 export { Map };
