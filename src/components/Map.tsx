@@ -7,7 +7,7 @@ const Map = () => {
     <div className={styles.mapContainer}>
       <LeafLetMapContainer
         center={[32.066698, 34.811341]}
-        zoom={17}
+        zoom={16}
         scrollWheelZoom={false}
       >
         <TileLayer
