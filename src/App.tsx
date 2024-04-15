@@ -1,15 +1,34 @@
+import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import './App.scss';
-import { Map } from './components/Map';
-import { ParksContextProvider } from './context/ParksContextProvider';
+import { Home } from './pages/Home';
+import { Park } from './pages/Park';
+import { parkLoader } from './loaders/parkLoader';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: (
+      // TODO: replace
+      <div>
+        <Outlet />
+      </div>
+    ),
+    children: [
+      {
+        index: true,
+        element: <Home />,
+      },
+      {
+        path: '/parks/:id',
+        element: <Park />,
+        loader: parkLoader,
+      },
+    ],
+  },
+]);
 
 const App = () => {
-  return (
-    <ParksContextProvider>
-      <div>
-        <Map />
-      </div>
-    </ParksContextProvider>
-  );
+  return <RouterProvider router={router} />;
 };
 
 export default App;
