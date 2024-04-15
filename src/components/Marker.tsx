@@ -9,7 +9,7 @@ interface MarkerProps {
 
 const Marker: React.FC<MarkerProps> = ({ id, location, name }) => {
   return (
-    <LeafLetMarker position={[location.lat, location.lng]}>
+    <LeafLetMarker position={[location.latitude, location.longitude]}>
       <Popup>
         Park {name} with id: {id}
       </Popup>

@@ -1,10 +1,9 @@
 import { useContext } from 'react';
 import { Marker } from './Marker';
 import { ParksContext } from '../context/ParksContextProvider';
-import { Park } from '../types/park';
 
 const MarkerList = () => {
-  const parks = useContext<Park[]>(ParksContext);
+  const { parks } = useContext(ParksContext);
 
   return parks.map((park) => (
     <Marker
