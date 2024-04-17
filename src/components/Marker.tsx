@@ -1,5 +1,6 @@
 import { MarkerF, OverlayViewF, OverlayView } from '@react-google-maps/api';
 import { Location } from '../types/park';
+import { MarkerPopup } from './MarkerPopup';
 
 interface MarkerProps {
   id: string;
@@ -26,9 +27,7 @@ const Marker: React.FC<MarkerProps> = ({
           position={{ lat: location.latitude, lng: location.longitude }}
           mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
         >
-          <div>
-            Park {name} with id: {id}
-          </div>
+          <MarkerPopup parkId={id} parkName={name} />
         </OverlayViewF>
       )}
     </MarkerF>
