@@ -3,6 +3,7 @@ import './App.scss';
 import { Home } from './pages/Home';
 import { Park } from './pages/Park';
 import { parkLoader } from './loaders/parkLoader';
+import { ErrorPage } from './pages/Error';
 
 const router = createBrowserRouter([
   {
@@ -13,6 +14,7 @@ const router = createBrowserRouter([
         <Outlet />
       </div>
     ),
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
