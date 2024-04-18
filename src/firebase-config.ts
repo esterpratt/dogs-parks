@@ -3,7 +3,7 @@ import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyBfVUmrtVlrzFjyBDRZxKC5GAgZep4SS2g',
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: 'dogs-parks-8f00e.firebaseapp.com',
   projectId: 'dogs-parks-8f00e',
   storageBucket: 'dogs-parks-8f00e.appspot.com',
