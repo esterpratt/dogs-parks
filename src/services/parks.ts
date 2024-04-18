@@ -2,6 +2,7 @@ import { db } from '../firebase-config';
 import { getDocs, collection, doc, getDoc } from 'firebase/firestore';
 import { Park } from '../types/park';
 import { json } from 'react-router';
+import { fetchImagesByDirectory, uploadImage, Image } from './image';
 
 const parksCollection = collection(db, 'parks');
 
@@ -50,4 +51,47 @@ const fetchPark = async (parkId: string) => {
   }
 };
 
-export { fetchPark, fetchParks };
+const uploadParkImage = async (image: Image, parkId: string) => {
+  try {
+    const res = await uploadImage({ image, path: `parks/${parkId}/other` });
+    return res;
+  } catch (error) {
+    console.error(
+      'there was a problem while trying to upload the image: ',
+      error
+    );
+    throw error;
+  }
+};
+
+const fetchParkPrimaryImage = async (parkId: string) => {
+  try {
+    const res = await fetchImagesByDirectory(`parks/${parkId}/primary`);
+    return res;
+  } catch (error) {
+    console.error(
+      `there was a problem while trying to fetch the primary image of park ${parkId}: ${error}`
+    );
+    throw error;
+  }
+};
+
+const fetchAllParkImages = async (parkId: string) => {
+  try {
+    const res = await fetchImagesByDirectory(`parks/${parkId}/other`);
+    return res;
+  } catch (error) {
+    console.error(
+      `there was a problem while trying to fetch the images of park ${parkId}: ${error}`
+    );
+    throw error;
+  }
+};
+
+export {
+  fetchPark,
+  fetchParks,
+  uploadParkImage,
+  fetchParkPrimaryImage,
+  fetchAllParkImages,
+};
