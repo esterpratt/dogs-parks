@@ -1,18 +1,32 @@
-import { ref, uploadBytes, listAll, getDownloadURL } from 'firebase/storage';
+import {
+  ref,
+  uploadBytes,
+  listAll,
+  getDownloadURL,
+  uploadString,
+  UploadResult,
+} from 'firebase/storage';
 import { storage } from '../firebase-config';
 import { v4 } from 'uuid';
 
-// TODO: what is the type of image?
-export type Image = Blob & { name: string };
-
 interface uploadImageProps {
-  image: Image;
+  image: File | string;
   path: string;
 }
 
 const uploadImage = async ({ image, path }: uploadImageProps) => {
-  const imageRef = ref(storage, `${path}/${image.name + v4()}`);
-  const snapshot = await uploadBytes(imageRef, image);
+  let imageName = v4();
+  let snapshot: UploadResult;
+
+  if (image instanceof File) {
+    imageName = `${image.name}${imageName}`;
+    const storageRef = ref(storage, `${path}/${imageName}`);
+    snapshot = await uploadBytes(storageRef, image);
+  } else {
+    const storageRef = ref(storage, `${path}/${imageName}`);
+    snapshot = await uploadString(storageRef, image, 'data_url');
+  }
+
   const imageUrl = await getDownloadURL(snapshot.ref);
   return imageUrl;
 };

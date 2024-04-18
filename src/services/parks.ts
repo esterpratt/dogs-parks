@@ -2,7 +2,7 @@ import { db } from '../firebase-config';
 import { getDocs, collection, doc, getDoc } from 'firebase/firestore';
 import { Park } from '../types/park';
 import { json } from 'react-router';
-import { fetchImagesByDirectory, uploadImage, Image } from './image';
+import { fetchImagesByDirectory, uploadImage } from './image';
 
 const parksCollection = collection(db, 'parks');
 
@@ -37,7 +37,7 @@ const fetchPark = async (parkId: string) => {
     }
 
     const park = docSnap.data();
-    return { ...park, location: park.location.toJSON() };
+    return { ...park, location: park.location.toJSON(), id: docSnap.id };
   } catch (error) {
     console.error(`there was an error while fetching park ${parkId}: ${error}`);
 
@@ -51,7 +51,7 @@ const fetchPark = async (parkId: string) => {
   }
 };
 
-const uploadParkImage = async (image: Image, parkId: string) => {
+const uploadParkImage = async (image: File | string, parkId: string) => {
   try {
     const res = await uploadImage({ image, path: `parks/${parkId}/other` });
     return res;
