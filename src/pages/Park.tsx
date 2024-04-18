@@ -1,6 +1,6 @@
 import { useLoaderData } from 'react-router';
 import { Park as ParkType } from '../types/park';
-import { ParkGallery } from '../components/Gallery';
+import { ParkGallery } from '../components/ParkGallery';
 
 const Park: React.FC = () => {
   const park = useLoaderData() as ParkType;
