@@ -9,7 +9,6 @@ const useDebounce = (input: string, delay: number = 500) => {
       clearTimeout(timer.current);
     }
     timer.current = setTimeout(() => {
-      console.log('input is: ', input);
       setSearchInput(input);
     }, delay);
 
