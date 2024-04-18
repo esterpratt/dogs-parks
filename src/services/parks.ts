@@ -1,4 +1,4 @@
-import { db } from '../firebase-config';
+import { db } from './firebase-config';
 import { getDocs, collection, doc, getDoc } from 'firebase/firestore';
 import { Park } from '../types/park';
 import { json } from 'react-router';
