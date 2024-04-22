@@ -26,7 +26,7 @@ interface UserContextObj {
 
 const initialData: UserContextObj = {
   user: null,
-  loading: false,
+  loading: true,
   userLogin: () => Promise.resolve(),
   userLogout: () => {},
   userSignin: () => Promise.resolve(),
@@ -41,7 +41,6 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const userExtraDataRef = useRef<Omit<User, 'id'> | null>(null);
 
   useEffect(() => {
-    console.log('running');
     const getUser = async () => {
       if (userExtraDataRef.current) {
         const userToSet = { id: userId!, name: userExtraDataRef.current.name };
