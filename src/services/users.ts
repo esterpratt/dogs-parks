@@ -9,11 +9,9 @@ type createUserProps = Pick<User, 'id' | 'name'>;
 
 const createUser = async ({ id, name }: createUserProps) => {
   try {
-    const snapshot = await setDoc(doc(db, 'users', id), {
+    await setDoc(doc(db, 'users', id), {
       name,
     });
-    console.log(snapshot);
-    return snapshot;
   } catch (error) {
     console.error(
       `there was an error while creating user with id ${id}: ${error}`

@@ -1,12 +1,18 @@
-import { FormEvent, useContext } from 'react';
+import { FormEvent, useContext, useEffect } from 'react';
 import { FormInput } from '../components/FormInput';
 import { UserContext } from '../context/UserContext';
 import { SigninProps } from '../services/authentication';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Signin = () => {
-  const { userSignin } = useContext(UserContext);
+  const { userSignin, user } = useContext(UserContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate('/profile');
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -16,8 +22,6 @@ const Signin = () => {
     const res = await userSignin(formData);
     if (res instanceof Error) {
       console.log('erros: ', res);
-    } else {
-      navigate('/profile');
     }
   };
 

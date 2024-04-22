@@ -3,7 +3,11 @@ import { UserContext } from '../context/UserContext';
 import { useContext } from 'react';
 
 const Navbar = () => {
-  const { user, userLogout } = useContext(UserContext);
+  const { user, loading, userLogout } = useContext(UserContext);
+
+  if (loading) {
+    return null;
+  }
 
   return (
     <nav>

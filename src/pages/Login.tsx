@@ -1,4 +1,4 @@
-import { FormEvent, useContext } from 'react';
+import { FormEvent, useContext, useEffect } from 'react';
 import { FormInput } from '../components/FormInput';
 import { useNavigate } from 'react-router';
 import { LoginProps } from '../services/authentication';
@@ -6,8 +6,14 @@ import { UserContext } from '../context/UserContext';
 import { Link } from 'react-router-dom';
 
 const Login = () => {
-  const { userLogin } = useContext(UserContext);
+  const { userLogin, user } = useContext(UserContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate('/profile');
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -17,8 +23,6 @@ const Login = () => {
     const res = await userLogin(formData);
     if (res instanceof Error) {
       console.log('erros: ', res);
-    } else {
-      navigate('/profile');
     }
   };
 
