@@ -1,11 +1,14 @@
 import { Park } from '../types/park';
-
 interface ParkCardProps {
   park: Park;
 }
 
 const ParkCard: React.FC<ParkCardProps> = ({ park }) => {
-  return <div>Park {park.name}</div>;
+  return (
+    <div>
+      <span>Park {park.name}</span>
+    </div>
+  );
 };
 
 export { ParkCard };
