@@ -39,7 +39,6 @@ const UserContext = createContext<UserContextObj>(initialData);
 const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { userId, loadingUserId } = useOnAuthStateChanged();
   const [user, setUser] = useState<User | null>(null);
-  // const [loading, setLoading] = useState<boolean>(true);
   const userExtraDataRef = useRef<Omit<User, 'id'> | null>(null);
 
   useEffect(() => {
@@ -53,19 +52,16 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
           console.error(error);
         } finally {
           userExtraDataRef.current = null;
-          // setLoading(false);
         }
       } else {
         const userData = await fetchUser(userId!);
         setUser({ ...userData });
-        // setLoading(false);
       }
     };
     if (userId) {
       getUser();
     } else {
       setUser(null);
-      // setLoading(false);
     }
   }, [userId]);
 
