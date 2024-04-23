@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 
 const useOnAuthStateChanged = () => {
   const [userId, setUserId] = useState<string | null>(null);
+  const [loadingUserId, setLoadingUserId] = useState(true);
 
   useEffect(() => {
     const unsubsribe = onAuthStateChanged(auth, (user) => {
@@ -12,11 +13,12 @@ const useOnAuthStateChanged = () => {
       } else {
         setUserId(null);
       }
+      setLoadingUserId(false);
     });
     return unsubsribe;
   }, []);
 
-  return { userId };
+  return { userId, loadingUserId };
 };
 
 export { useOnAuthStateChanged };

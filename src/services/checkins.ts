@@ -31,12 +31,11 @@ const checkin = async ({ userId = null, parkId }: CheckinProps) => {
 const checkout = async (checkoutId: string) => {
   try {
     const checkinRef = doc(db, 'checkins', checkoutId);
-    const res = await updateDoc(checkinRef, {
+    await updateDoc(checkinRef, {
       checkoutTimestamp: serverTimestamp(),
     });
-    console.log(res);
   } catch (error) {
-    console.error('there was an error while checking out');
+    console.error('there was an error while checking out: ', error);
   }
 };
 

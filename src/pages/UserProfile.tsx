@@ -1,12 +1,12 @@
 import { useOutletContext } from 'react-router';
-import { User } from '../types/user';
 
 const UserProfile: React.FC = () => {
-  const user = useOutletContext<User | null>();
+  // TODO: get user by userId
+  const userId = useOutletContext<string | null>();
 
   return (
     <div>
-      <span>Welcome {user!.name}</span>
+      <span>Welcome {userId}</span>
     </div>
   );
 };

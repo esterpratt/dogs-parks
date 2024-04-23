@@ -1,4 +1,4 @@
-import { Park } from '../types/park';
+import { Park } from '../../types/park';
 interface ParkCardProps {
   park: Park;
 }

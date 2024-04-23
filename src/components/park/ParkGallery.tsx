@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useState } from 'react';
-import { Modal } from './Modal';
+import { Modal } from '../Modal';
 import { Camera } from './Camera';
-import { fetchAllParkImages, uploadParkImage } from '../services/parks';
+import { fetchAllParkImages, uploadParkImage } from '../../services/parks';
 
 interface ParkGalleryProps {
   parkId: string;

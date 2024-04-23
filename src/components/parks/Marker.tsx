@@ -1,5 +1,5 @@
 import { MarkerF, OverlayViewF, OverlayView } from '@react-google-maps/api';
-import { Location } from '../types/park';
+import { Location } from '../../types/park';
 import { MarkerPopup } from './MarkerPopup';
 
 interface MarkerProps {

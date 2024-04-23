@@ -9,7 +9,7 @@ import { Navbar } from './components/Navbar';
 import { Login } from './pages/Login';
 import { UserContextProvider } from './context/UserContext';
 import { UserProfile } from './pages/UserProfile';
-import { PrivateRoute } from './components/PrivateRoute';
+import { PrivateRoute } from './pages/PrivateRoute';
 
 const App = () => {
   const router = createBrowserRouter([

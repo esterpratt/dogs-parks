@@ -1,7 +1,7 @@
 import { ChangeEvent, useContext, useState } from 'react';
-import { ParksContext } from '../context/ParksContextProvider';
-import { useDebounce } from '../hooks/useDebounce';
-import { Park } from '../types/park';
+import { ParksContext } from '../../context/ParksContextProvider';
+import { useDebounce } from '../../hooks/useDebounce';
+import { Park } from '../../types/park';
 import { ParkCard } from './ParkCard';
 
 const ParksList: React.FC = () => {

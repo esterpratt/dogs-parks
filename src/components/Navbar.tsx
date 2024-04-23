@@ -3,15 +3,15 @@ import { UserContext } from '../context/UserContext';
 import { useContext } from 'react';
 
 const Navbar = () => {
-  const { user, loading, userLogout } = useContext(UserContext);
+  const { userId, loadingUserId, userLogout } = useContext(UserContext);
 
-  if (loading) {
+  if (loadingUserId) {
     return null;
   }
 
   return (
     <nav>
-      {!user ? (
+      {!userId ? (
         <Link to="/login">Login</Link>
       ) : (
         <button onClick={userLogout}>Logout</button>

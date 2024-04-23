@@ -17,16 +17,18 @@ import { User } from '../types/user';
 import { useOnAuthStateChanged } from '../hooks/useOnAuthStateChanged';
 
 interface UserContextObj {
+  userId: string | null;
   user: User | null;
-  loading: boolean;
+  loadingUserId: boolean;
   userLogin: (props: LoginProps) => Promise<User | Error | void>;
   userLogout: () => void;
   userSignin: (props: SigninProps) => Promise<User | Error | void>;
 }
 
 const initialData: UserContextObj = {
+  userId: null,
   user: null,
-  loading: true,
+  loadingUserId: true,
   userLogin: () => Promise.resolve(),
   userLogout: () => {},
   userSignin: () => Promise.resolve(),
@@ -35,9 +37,9 @@ const initialData: UserContextObj = {
 const UserContext = createContext<UserContextObj>(initialData);
 
 const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const { userId } = useOnAuthStateChanged();
+  const { userId, loadingUserId } = useOnAuthStateChanged();
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  // const [loading, setLoading] = useState<boolean>(true);
   const userExtraDataRef = useRef<Omit<User, 'id'> | null>(null);
 
   useEffect(() => {
@@ -51,18 +53,19 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
           console.error(error);
         } finally {
           userExtraDataRef.current = null;
-          setLoading(false);
+          // setLoading(false);
         }
       } else {
         const userData = await fetchUser(userId!);
         setUser({ ...userData });
-        setLoading(false);
+        // setLoading(false);
       }
     };
     if (userId) {
       getUser();
     } else {
       setUser(null);
+      // setLoading(false);
     }
   }, [userId]);
 
@@ -76,7 +79,6 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   const userLogout = async () => {
     await logout();
-    setLoading(false);
   };
 
   const userSignin = async ({ email, password, name }: SigninProps) => {
@@ -91,7 +93,8 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   const value: UserContextObj = {
     user,
-    loading,
+    userId,
+    loadingUserId,
     userLogin,
     userLogout,
     userSignin,
