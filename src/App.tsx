@@ -9,7 +9,6 @@ import { Navbar } from './components/Navbar';
 import { Login } from './pages/Login';
 import { UserContextProvider } from './context/UserContext';
 import { Profile } from './pages/Profile';
-import { PrivateRoute } from './pages/PrivateRoute';
 import { userLoader } from './loaders/userLoader';
 
 const App = () => {

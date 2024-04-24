@@ -7,13 +7,13 @@ import { PublicProfile } from '../components/profile/PublicProfile';
 
 const Profile: React.FC = () => {
   const user = useLoaderData() as User;
-  const { userId } = useContext(UserContext);
+  const { user: signedInUser } = useContext(UserContext);
 
-  if (userId === user.id) {
+  if (signedInUser?.id === user.id) {
     return <PrivateProfile user={user} />;
   }
 
-  return <PublicProfile user={user} />;
+  return <PublicProfile user={user} signedInUser={signedInUser} />;
 };
 
 export { Profile };
