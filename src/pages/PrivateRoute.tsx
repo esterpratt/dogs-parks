@@ -9,7 +9,7 @@ const PrivateRoute = () => {
     return <div>Loading...</div>;
   }
 
-  return userId ? <Outlet context={userId} /> : <Navigate to="/" />;
+  return userId ? <Outlet /> : <Navigate to="/" />;
 };
 
 export { PrivateRoute };

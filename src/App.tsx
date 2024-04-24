@@ -8,8 +8,9 @@ import { Signin } from './pages/Signin';
 import { Navbar } from './components/Navbar';
 import { Login } from './pages/Login';
 import { UserContextProvider } from './context/UserContext';
-import { UserProfile } from './pages/UserProfile';
+import { Profile } from './pages/Profile';
 import { PrivateRoute } from './pages/PrivateRoute';
+import { userLoader } from './loaders/userLoader';
 
 const App = () => {
   const router = createBrowserRouter([
@@ -42,14 +43,9 @@ const App = () => {
           element: <Login />,
         },
         {
-          path: '/profile',
-          element: <PrivateRoute />,
-          children: [
-            {
-              index: true,
-              element: <UserProfile />,
-            },
-          ],
+          path: '/profile/:id',
+          element: <Profile />,
+          loader: userLoader,
         },
       ],
     },
