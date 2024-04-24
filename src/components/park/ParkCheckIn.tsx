@@ -27,10 +27,18 @@ const ParkCheckIn = ({ parkId }: { parkId: string }) => {
     }
   };
 
-  const onSubmitDogsCount = (dogsCount: string) => {
+  const onSubmitDogsCount = async (dogsCount: string) => {
     // TODO: add animation of thank you before closing - not important if report was succesfull
     const numDogsCount = Number(dogsCount);
-    reportDogsCount({ parkId, dogsCount: numDogsCount, userId: user?.id });
+    try {
+      await reportDogsCount({
+        parkId,
+        dogsCount: numDogsCount,
+        userId: user?.id,
+      });
+    } finally {
+      setOpenDogsCountModal(false);
+    }
   };
 
   return (
