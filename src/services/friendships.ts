@@ -39,14 +39,16 @@ const createFriendship = async ({
     });
     return res.id;
   } catch (error) {
-    console.error(`there was an error while creating friendship: ${error}`);
+    console.error(
+      `there was an error while creating friendship for users ${requesteeId}, ${requesterId}: ${error}`
+    );
     return null;
   }
 };
 
 const fetchFriendship = async (ids: FetchFriendshipProps) => {
   try {
-    const friendRequestQuery = query(
+    const friendshipQuery = query(
       friendshipsCollection,
       or(
         and(
@@ -60,14 +62,40 @@ const fetchFriendship = async (ids: FetchFriendshipProps) => {
       )
     );
 
-    const querySnapshot = await getDocs(friendRequestQuery);
+    const querySnapshot = await getDocs(friendshipQuery);
     const res: Friendship[] = [];
     querySnapshot.forEach((doc) => {
       res.push({ ...doc.data(), id: doc.id } as Friendship);
     });
     return res[0];
   } catch (error) {
-    console.error(`there was an error while fetching friendship: ${error}`);
+    console.error(
+      `there was an error while fetching friendship for users ${ids[0]}, ${ids[1]}: ${error}`
+    );
+    return null;
+  }
+};
+
+const fetchFriendships = async (id: User['id']) => {
+  try {
+    const friendshipsQuery = query(
+      friendshipsCollection,
+      and(
+        or(where('requesterId', '==', id), where('requesteeId', '==', id)),
+        where('status', '==', FRIENDSHIP_STATUS.APPROVED)
+      )
+    );
+
+    const querySnapshot = await getDocs(friendshipsQuery);
+    const res: Friendship[] = [];
+    querySnapshot.forEach((doc) => {
+      res.push({ ...doc.data(), id: doc.id } as Friendship);
+    });
+    return res;
+  } catch (error) {
+    console.error(
+      `there was an error while fetching friendships for user ${id}: ${error}`
+    );
     return null;
   }
 };
@@ -83,9 +111,16 @@ const updateFriendship = async ({
     });
     return friendshipId;
   } catch (error) {
-    console.error('there was an error while updating friendship: ', error);
+    console.error(
+      `there was an error while updating friendship with id ${friendshipId}:  ${error}`
+    );
     return null;
   }
 };
 
-export { createFriendship, updateFriendship, fetchFriendship };
+export {
+  createFriendship,
+  updateFriendship,
+  fetchFriendship,
+  fetchFriendships,
+};

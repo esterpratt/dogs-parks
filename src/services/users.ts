@@ -1,9 +1,19 @@
 import { json } from 'react-router';
 import { db } from './firebase-config';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  documentId,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from 'firebase/firestore';
 import { User } from '../types/user';
+import { fetchFriendships } from './friendships';
 
-// const usersCollection = collection(db, 'users');
+const usersCollection = collection(db, 'users');
 
 type createUserProps = Pick<User, 'id' | 'name'>;
 
@@ -20,7 +30,7 @@ const createUser = async ({ id, name }: createUserProps) => {
   }
 };
 
-const fetchUser = async (id: string) => {
+const fetchUser = async (id: User['id']) => {
   try {
     const docRef = doc(db, 'users', id);
     const docSnap = await getDoc(docRef);
@@ -44,4 +54,37 @@ const fetchUser = async (id: string) => {
   }
 };
 
-export { createUser, fetchUser };
+const fetchUsers = async (ids: User['id'][]) => {
+  try {
+    const usersQuery = query(usersCollection, where(documentId(), 'in', ids));
+    const querySnapshot = await getDocs(usersQuery);
+    const res: User[] = [];
+    querySnapshot.forEach((doc) => {
+      res.push({ ...doc.data(), id: doc.id } as User);
+    });
+    return res;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const fetchFriends = async (id: User['id']) => {
+  try {
+    const friendships = await fetchFriendships(id);
+    if (!friendships) {
+      return [];
+    }
+    const friendsIds = friendships.map((friendship) => {
+      if (friendship.requesteeId !== id) {
+        return friendship.requesteeId;
+      }
+      return friendship.requesterId;
+    });
+    const friends = await fetchUsers(friendsIds);
+    return friends;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export { createUser, fetchUser, fetchFriends };

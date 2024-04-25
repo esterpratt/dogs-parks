@@ -14,7 +14,10 @@ const Navbar = () => {
       {!userId ? (
         <Link to="/login">Login</Link>
       ) : (
-        <button onClick={userLogout}>Logout</button>
+        <>
+          <button onClick={userLogout}>Logout</button>
+          <Link to={`/profile/${userId}`}>My Profile</Link>
+        </>
       )}
     </nav>
   );
