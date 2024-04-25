@@ -10,9 +10,15 @@ interface Friendship {
 enum FRIENDSHIP_STATUS {
   APPROVED = 'APPROVED',
   PENDING = 'PENDING',
-  REJECTED = 'REJECTED',
+  REMOVED = 'REMOVED',
   ABORTED = 'ABORTED',
 }
 
-export { FRIENDSHIP_STATUS };
+enum USER_ROLE {
+  REQUESTEE = 'REQUESTEE',
+  REQUESTER = 'REQUESTER',
+  ANY = 'ANY',
+}
+
+export { FRIENDSHIP_STATUS, USER_ROLE };
 export type { Friendship };

@@ -3,6 +3,7 @@ import { User } from '../../types/user';
 import { Friendship, FRIENDSHIP_STATUS } from '../../types/friendship';
 import {
   createFriendship,
+  deleteFriendship,
   fetchFriendship,
   updateFriendship,
 } from '../../services/friendships';
@@ -19,11 +20,6 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
   const [friendship, setFriendShip] = useState<Friendship | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const { statusToUpdate, buttonText } = getButtonProps(
-    signedInUserId,
-    friendship
-  );
-
   useEffect(() => {
     const getFriendRequest = async () => {
       const friendRequest = await fetchFriendship([signedInUserId, userId]);
@@ -36,8 +32,13 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
     getFriendRequest();
   }, [signedInUserId, userId]);
 
+  const { statusToUpdate, buttonText } = getButtonProps(
+    signedInUserId,
+    friendship
+  );
+
   const onUpdateFriend = async () => {
-    if (!statusToUpdate) {
+    if (!friendship) {
       const friendshipId = await createFriendship({
         requesterId: signedInUserId,
         requesteeId: userId,
@@ -51,6 +52,9 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
           status: FRIENDSHIP_STATUS.PENDING,
         });
       }
+    } else if (statusToUpdate === FRIENDSHIP_STATUS.REMOVED) {
+      await deleteFriendship(friendship.id);
+      setFriendShip(null);
     } else {
       const res = await updateFriendship({
         friendshipId: friendship!.id,
@@ -90,7 +94,7 @@ const getButtonProps = (
   if (!friendship) {
     return {
       buttonText: 'Add Friend',
-      statusToUpdate: null,
+      statusToUpdate: FRIENDSHIP_STATUS.PENDING,
     };
   }
 
@@ -113,10 +117,10 @@ const getButtonProps = (
     case FRIENDSHIP_STATUS.APPROVED: {
       return {
         buttonText: 'Unfriend',
-        statusToUpdate: FRIENDSHIP_STATUS.REJECTED,
+        statusToUpdate: FRIENDSHIP_STATUS.REMOVED,
       };
     }
-    case FRIENDSHIP_STATUS.REJECTED: {
+    case FRIENDSHIP_STATUS.ABORTED: {
       return {
         buttonText: 'Add friend',
         statusToUpdate: FRIENDSHIP_STATUS.PENDING,

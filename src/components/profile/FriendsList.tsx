@@ -1,27 +1,11 @@
-import { useEffect, useState } from 'react';
 import { User } from '../../types/user';
-import { fetchFriends } from '../../services/users';
 import { UserPreview } from '../users/UserPreview';
 
 interface FriendsListProps {
-  userId: User['id'];
+  friends: User[];
 }
 
-const FriendsList: React.FC<FriendsListProps> = ({ userId }) => {
-  const [friends, setFriends] = useState<User[]>([]);
-
-  useEffect(() => {
-    const getfriends = async () => {
-      const friends = await fetchFriends(userId);
-      setFriends(friends || []);
-    };
-    getfriends();
-  }, [userId]);
-
-  if (!friends.length) {
-    return null;
-  }
-
+const FriendsList: React.FC<FriendsListProps> = ({ friends }) => {
   return (
     <div>
       <span>My Friends</span>

@@ -1,8 +1,10 @@
 import { db } from './firebase-config';
 import {
+  Query,
   addDoc,
   and,
   collection,
+  deleteDoc,
   doc,
   getDocs,
   or,
@@ -11,7 +13,7 @@ import {
   where,
 } from 'firebase/firestore';
 import { User } from '../types/user';
-import { Friendship, FRIENDSHIP_STATUS } from '../types/friendship';
+import { Friendship, FRIENDSHIP_STATUS, USER_ROLE } from '../types/friendship';
 
 const friendshipsCollection = collection(db, 'friendships');
 
@@ -25,6 +27,12 @@ type FetchFriendshipProps = [User['id'], User['id']];
 interface UpdateFriendshipProps {
   friendshipId: string;
   status: FRIENDSHIP_STATUS;
+}
+
+interface FetchUserFriendshipsProps {
+  userId: User['id'];
+  userRole?: USER_ROLE;
+  status?: FRIENDSHIP_STATUS;
 }
 
 const createFriendship = async ({
@@ -76,15 +84,48 @@ const fetchFriendship = async (ids: FetchFriendshipProps) => {
   }
 };
 
-const fetchFriendships = async (id: User['id']) => {
+const getFriendshipQuery = ({
+  userId,
+  userRole,
+  status,
+}: FetchUserFriendshipsProps) => {
+  switch (userRole) {
+    case USER_ROLE.REQUESTEE:
+      return query(
+        friendshipsCollection,
+        and(where('requesteeId', '==', userId), where('status', '==', status))
+      );
+    case USER_ROLE.REQUESTER:
+      return query(
+        friendshipsCollection,
+        and(where('requesterId', '==', userId), where('status', '==', status))
+      );
+    case USER_ROLE.ANY:
+    default:
+      return query(
+        friendshipsCollection,
+        and(
+          or(
+            where('requesterId', '==', userId),
+            where('requesteeId', '==', userId)
+          ),
+          where('status', '==', status)
+        )
+      );
+  }
+};
+
+const fetchUserFriendships = async ({
+  userId,
+  userRole = USER_ROLE.ANY,
+  status = FRIENDSHIP_STATUS.APPROVED,
+}: FetchUserFriendshipsProps) => {
   try {
-    const friendshipsQuery = query(
-      friendshipsCollection,
-      and(
-        or(where('requesterId', '==', id), where('requesteeId', '==', id)),
-        where('status', '==', FRIENDSHIP_STATUS.APPROVED)
-      )
-    );
+    const friendshipsQuery: Query = getFriendshipQuery({
+      userId,
+      userRole,
+      status,
+    });
 
     const querySnapshot = await getDocs(friendshipsQuery);
     const res: Friendship[] = [];
@@ -94,7 +135,7 @@ const fetchFriendships = async (id: User['id']) => {
     return res;
   } catch (error) {
     console.error(
-      `there was an error while fetching friendships for user ${id}: ${error}`
+      `there was an error while fetching friendships for user ${userId}: ${error}`
     );
     return null;
   }
@@ -118,9 +159,22 @@ const updateFriendship = async ({
   }
 };
 
+const deleteFriendship = async (friendshipId: string) => {
+  try {
+    const friendshipRef = doc(db, 'friendships', friendshipId);
+    await deleteDoc(friendshipRef);
+  } catch (error) {
+    console.error(
+      `there was an error deleting friendship with id ${friendshipId}:  ${error}`
+    );
+    return null;
+  }
+};
+
 export {
   createFriendship,
   updateFriendship,
   fetchFriendship,
-  fetchFriendships,
+  fetchUserFriendships,
+  deleteFriendship,
 };

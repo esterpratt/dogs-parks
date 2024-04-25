@@ -11,11 +11,18 @@ import {
   where,
 } from 'firebase/firestore';
 import { User } from '../types/user';
-import { fetchFriendships } from './friendships';
+import { fetchUserFriendships } from './friendships';
+import { FRIENDSHIP_STATUS, USER_ROLE } from '../types/friendship';
 
 const usersCollection = collection(db, 'users');
 
 type createUserProps = Pick<User, 'id' | 'name'>;
+
+interface FetchFriendsProps {
+  userId: User['id'];
+  userRole?: USER_ROLE;
+  status?: FRIENDSHIP_STATUS;
+}
 
 const createUser = async ({ id, name }: createUserProps) => {
   try {
@@ -68,14 +75,22 @@ const fetchUsers = async (ids: User['id'][]) => {
   }
 };
 
-const fetchFriends = async (id: User['id']) => {
+const fetchFriends = async ({
+  userId,
+  userRole = USER_ROLE.ANY,
+  status = FRIENDSHIP_STATUS.APPROVED,
+}: FetchFriendsProps) => {
   try {
-    const friendships = await fetchFriendships(id);
-    if (!friendships) {
+    const friendships = await fetchUserFriendships({
+      userId,
+      userRole,
+      status,
+    });
+    if (!friendships || !friendships.length) {
       return [];
     }
     const friendsIds = friendships.map((friendship) => {
-      if (friendship.requesteeId !== id) {
+      if (friendship.requesteeId !== userId) {
         return friendship.requesteeId;
       }
       return friendship.requesterId;
