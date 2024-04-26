@@ -1,0 +1,34 @@
+@import '../variables.scss';
+
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.input {
+  border: none;
+  border-bottom: 1px solid $grey;
+  outline: none;
+  font-size: 20px;
+  font-family: inherit;
+  margin: 0 24px;
+  padding: 16px 0 8px;
+  color: $text;
+
+  ::placeholder {
+    color: $grey;
+  }
+}
+
+.list {
+  background-color: $background-grey-light;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-y: scroll;
+}
+
+.item {
+  padding: 16px 24px;
+}

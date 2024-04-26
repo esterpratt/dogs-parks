@@ -1,10 +1,19 @@
+@import './variables.scss';
+
 body {
+  display: flex;
   width: 100%;
-  background-color: white;
-  color: black;
+  margin: 0;
+  background-color: $white;
+  color: $text;
+  font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
+    sans-serif;
 }
 
 #root {
   width: 100%;
-  margin: 0 auto;
+}
+
+* {
+  box-sizing: border-box;
 }

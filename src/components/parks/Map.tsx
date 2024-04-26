@@ -1,15 +1,20 @@
 import { useJsApiLoader, GoogleMap } from '@react-google-maps/api';
 import { MarkerList } from './MarkerList';
 import styles from './Map.module.scss';
+import classnames from 'classnames';
 
-const Map = () => {
+interface MapProps {
+  className?: string;
+}
+
+const Map: React.FC<MapProps> = ({ className }) => {
   console.log();
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
   });
 
   return (
-    <div className={styles.mapContainer}>
+    <div className={classnames(styles.mapContainer, className)}>
       {!isLoaded && <div>Loading...</div>}
       {isLoaded && (
         <GoogleMap

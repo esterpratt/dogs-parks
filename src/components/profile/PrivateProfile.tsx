@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { User } from '../../types/user';
 import { FriendRequestsList } from './FriendRequestsList';
 import { FriendsList } from './FriendsList';
 import { fetchFriends } from '../../services/users';
 import { FRIENDSHIP_STATUS, USER_ROLE } from '../../types/friendship';
 import { fetchFriendship, updateFriendship } from '../../services/friendships';
+import { UserContext } from '../../context/UserContext';
 
 interface PrivateProfileProps {
   user: User;
@@ -14,6 +15,7 @@ const PrivateProfile: React.FC<PrivateProfileProps> = ({ user }) => {
   // TODO: remove to context/new component so other components in this page won't rerender
   const [friends, setFriends] = useState<User[]>([]);
   const [pendingFriends, setPendingFriends] = useState<User[]>([]);
+  const { userLogout } = useContext(UserContext);
 
   useEffect(() => {
     const getPendingFriends = async () => {
@@ -61,6 +63,7 @@ const PrivateProfile: React.FC<PrivateProfileProps> = ({ user }) => {
   return (
     <div>
       <span>Welcome {user.name}</span>
+      <button onClick={userLogout}>Logout</button>
       {!!friends.length && <FriendsList friends={friends} />}
       {!!pendingFriends.length && (
         <FriendRequestsList
