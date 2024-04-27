@@ -11,21 +11,28 @@
   margin: 0;
   padding: 0;
   text-decoration: none;
+}
 
-  .name,
-  .address {
-    margin: 0;
-    padding: 0;
-    font-weight: $font-weight-medium;
-  }
+.name,
+.address {
+  margin: 0;
+  padding: 0;
+  font-weight: $font-weight-medium;
+}
 
-  .name {
-    font-size: 16px;
-    color: $text;
-  }
+.name {
+  font-size: 16px;
+  color: $text;
+}
 
-  .address {
-    font-size: 12px;
-    color: $brown;
+.address {
+  font-size: 12px;
+  color: $brown;
+}
+
+.no-results {
+  a {
+    color: $blue;
+    text-decoration: none;
   }
 }

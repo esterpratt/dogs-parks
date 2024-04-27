@@ -10,6 +10,7 @@ import { UserContextProvider } from './context/UserContext';
 import { Profile } from './pages/Profile';
 import { userLoader } from './loaders/userLoader';
 import { RootLayout } from './RootLayout';
+import { NewPark } from './pages/NewPark';
 
 const App = () => {
   const router = createBrowserRouter([
@@ -21,6 +22,10 @@ const App = () => {
         {
           index: true,
           element: <Home />,
+        },
+        {
+          path: '/parks/new',
+          element: <NewPark />,
         },
         {
           path: '/parks/:id',
