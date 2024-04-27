@@ -1,0 +1,18 @@
+@import '../../variables.scss';
+
+.chart-container {
+  width: 80%;
+  height: 200px;
+}
+
+.light {
+  color: $green;
+}
+
+.medium {
+  color: $orange;
+}
+
+.busy {
+  color: $red;
+}

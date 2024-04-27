@@ -1,5 +1,15 @@
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import {
+  Query,
+  addDoc,
+  collection,
+  getDocs,
+  query,
+  serverTimestamp,
+  where,
+} from 'firebase/firestore';
 import { db } from './firebase-config';
+import { Park } from '../types/park';
+import { DogsCountReport } from '../types/dogsCount';
 
 interface ReportParkDogsCountProps {
   parkId: string;
@@ -22,8 +32,32 @@ const reportDogsCount = async ({
       userId,
     });
   } catch (error) {
-    console.error('there was an error reporting the dogs count');
+    console.error('there was an error reporting dogs count');
   }
 };
 
-export { reportDogsCount };
+const fetchDogsCount = async (parkId: Park['id']) => {
+  try {
+    const dogsCountQuery: Query = query(
+      dogsCountReportsCollection,
+      where('parkId', '==', parkId)
+    );
+
+    const querySnapshot = await getDocs(dogsCountQuery);
+    const res: DogsCountReport[] = [];
+    querySnapshot.forEach((doc) => {
+      res.push({
+        ...doc.data(),
+        timestamp: doc.data().timestamp.toDate(),
+        id: doc.id,
+      } as DogsCountReport);
+    });
+    return res;
+  } catch (error) {
+    console.error(
+      `there was a problem fetching dogs count of park ${parkId}: ${error}`
+    );
+  }
+};
+
+export { reportDogsCount, fetchDogsCount };
