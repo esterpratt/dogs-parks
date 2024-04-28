@@ -13,6 +13,8 @@ import {
 import { User } from '../types/user';
 import { fetchUserFriendships } from './friendships';
 import { FRIENDSHIP_STATUS, USER_ROLE } from '../types/friendship';
+import { Park } from '../types/park';
+import { fetchParkCheckins } from './checkins';
 
 const usersCollection = collection(db, 'users');
 
@@ -95,6 +97,7 @@ const fetchFriends = async ({
       }
       return friendship.requesterId;
     });
+
     const friends = await fetchUsers(friendsIds);
     return friends;
   } catch (error) {
@@ -102,4 +105,19 @@ const fetchFriends = async ({
   }
 };
 
-export { createUser, fetchUser, fetchFriends };
+const fetchCheckedInUsers = async (parkId: Park['id']) => {
+  try {
+    const parkCheckins = await fetchParkCheckins(parkId);
+    if (!parkCheckins || !parkCheckins.length) {
+      return [];
+    }
+
+    const userIds = parkCheckins.map((checkin) => checkin.userId);
+    const checkedInUsers = await fetchUsers(userIds);
+    return checkedInUsers;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export { createUser, fetchUser, fetchFriends, fetchCheckedInUsers };

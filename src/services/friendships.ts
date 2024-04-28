@@ -84,33 +84,20 @@ const fetchFriendship = async (ids: FetchFriendshipProps) => {
   }
 };
 
-const getFriendshipQuery = ({
+const getFriendshipUserQuery = ({
   userId,
   userRole,
-  status,
 }: FetchUserFriendshipsProps) => {
   switch (userRole) {
     case USER_ROLE.REQUESTEE:
-      return query(
-        friendshipsCollection,
-        and(where('requesteeId', '==', userId), where('status', '==', status))
-      );
+      return where('requesteeId', '==', userId);
     case USER_ROLE.REQUESTER:
-      return query(
-        friendshipsCollection,
-        and(where('requesterId', '==', userId), where('status', '==', status))
-      );
+      return where('requesterId', '==', userId);
     case USER_ROLE.ANY:
     default:
-      return query(
-        friendshipsCollection,
-        and(
-          or(
-            where('requesterId', '==', userId),
-            where('requesteeId', '==', userId)
-          ),
-          where('status', '==', status)
-        )
+      return or(
+        where('requesterId', '==', userId),
+        where('requesteeId', '==', userId)
       );
   }
 };
@@ -121,11 +108,16 @@ const fetchUserFriendships = async ({
   status = FRIENDSHIP_STATUS.APPROVED,
 }: FetchUserFriendshipsProps) => {
   try {
-    const friendshipsQuery: Query = getFriendshipQuery({
-      userId,
-      userRole,
-      status,
-    });
+    const friendshipsQuery: Query = query(
+      friendshipsCollection,
+      and(
+        getFriendshipUserQuery({
+          userId,
+          userRole,
+        }),
+        where('status', '==', status)
+      )
+    );
 
     const querySnapshot = await getDocs(friendshipsQuery);
     const res: Friendship[] = [];

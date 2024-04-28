@@ -11,7 +11,8 @@ const ParkCheckIn = ({ parkId }: { parkId: string }) => {
   const [openDogsCountModal, setOpenDogsCountModal] = useState(false);
   const { user } = useContext(UserContext);
 
-  const shouldCheckIn = !checkIn || checkIn.parkId !== parkId;
+  const shouldCheckIn =
+    !checkIn || checkIn.parkId !== parkId || checkIn.userId !== user?.id;
 
   const onCheckIn = async () => {
     if (!shouldCheckIn) {
@@ -20,7 +21,7 @@ const ParkCheckIn = ({ parkId }: { parkId: string }) => {
     } else {
       const id = await checkin({ userId: user?.id, parkId });
       if (id) {
-        setCheckIn({ id, parkId });
+        setCheckIn({ id, parkId, userId: user?.id });
         setOpenDogsCountModal(true);
       }
       // else there was an error while checkin, for now I return null

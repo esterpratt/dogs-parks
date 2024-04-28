@@ -3,6 +3,7 @@ import { Park as ParkType } from '../types/park';
 import { ParkGallery } from '../components/park/ParkGallery';
 import { ParkCheckIn } from '../components/park/ParkCheckIn';
 import { BusyHours } from '../components/park/BusyHours';
+import { ParkVisitors } from '../components/park/ParkVisitors';
 
 const Park: React.FC = () => {
   const park = useLoaderData() as ParkType;
@@ -13,6 +14,7 @@ const Park: React.FC = () => {
       <BusyHours parkId={park.id} />
       <ParkCheckIn parkId={park.id} />
       <ParkGallery parkId={park.id} />
+      <ParkVisitors parkId={park.id} />
     </div>
   );
 };
