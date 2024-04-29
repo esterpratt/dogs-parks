@@ -18,7 +18,9 @@ const ParksContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     const getParks = async () => {
       const parks = await fetchParks();
-      setParks(parks);
+      if (parks) {
+        setParks(parks);
+      }
     };
 
     getParks();

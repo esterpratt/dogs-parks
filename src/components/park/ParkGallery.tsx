@@ -15,7 +15,9 @@ const ParkGallery: React.FC<ParkGalleryProps> = ({ parkId }) => {
   useEffect(() => {
     const fetchImages = async () => {
       const images = await fetchAllParkImages(parkId);
-      setImages(images);
+      if (images) {
+        setImages(images);
+      }
     };
 
     fetchImages();

@@ -3,7 +3,7 @@ import { FormInput } from '../components/FormInput';
 import { UserContext } from '../context/UserContext';
 import { SigninProps } from '../services/authentication';
 import { Link, useNavigate } from 'react-router-dom';
-import { AppError } from '../types/error';
+import { AppError } from '../services/error';
 
 const Signin = () => {
   const { userSignin, user } = useContext(UserContext);
