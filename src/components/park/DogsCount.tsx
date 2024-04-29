@@ -4,7 +4,7 @@ interface DogsCountProps {
   onSubmitDogsCount: (dogsCount: string) => void;
 }
 
-const DogsCount = ({ onSubmitDogsCount }: DogsCountProps) => {
+const DogsCount: React.FC<DogsCountProps> = ({ onSubmitDogsCount }) => {
   const [dogsCount, setDogsCount] = useState<string>('');
 
   return (

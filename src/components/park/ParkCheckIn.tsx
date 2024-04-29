@@ -6,7 +6,7 @@ import { Modal } from '../Modal';
 import { DogsCount } from './DogsCount';
 import { reportDogsCount } from '../../services/dogsCount';
 
-const ParkCheckIn = ({ parkId }: { parkId: string }) => {
+const ParkCheckIn: React.FC<{ parkId: string }> = ({ parkId }) => {
   const [checkIn, setCheckIn] = useLocalStorage('checkin');
   const [openDogsCountModal, setOpenDogsCountModal] = useState(false);
   const { user } = useContext(UserContext);

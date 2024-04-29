@@ -29,7 +29,7 @@ interface BusyHoursProps {
   parkId: Park['id'];
 }
 
-const BusyHours = ({ parkId }: BusyHoursProps) => {
+const BusyHours: React.FC<BusyHoursProps> = ({ parkId }) => {
   const [dogsCount, setDogsCount] = useState<
     | {
         count: number;

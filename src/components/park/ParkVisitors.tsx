@@ -10,7 +10,7 @@ interface ParkFriendsProps {
   parkId: Park['id'];
 }
 
-const ParkVisitors = ({ parkId }: ParkFriendsProps) => {
+const ParkVisitors: React.FC<ParkFriendsProps> = ({ parkId }) => {
   const { userId } = useContext(UserContext);
   const [users, setUsers] = useState<{ friends: User[]; nonFriends: User[] }>({
     friends: [],
