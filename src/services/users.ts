@@ -1,4 +1,3 @@
-import { json } from 'react-router';
 import { db } from './firebase-config';
 import {
   collection,
@@ -15,6 +14,7 @@ import { fetchUserFriendships } from './friendships';
 import { FRIENDSHIP_STATUS, USER_ROLE } from '../types/friendship';
 import { Park } from '../types/park';
 import { fetchParkCheckins } from './checkins';
+import { AppError, throwError } from './error';
 
 const usersCollection = collection(db, 'users');
 
@@ -32,10 +32,7 @@ const createUser = async ({ id, name }: createUserProps) => {
       name,
     });
   } catch (error) {
-    console.error(
-      `there was an error while creating user with id ${id}: ${error}`
-    );
-    throw error;
+    throwError(error);
   }
 };
 
@@ -45,21 +42,13 @@ const fetchUser = async (id: User['id']) => {
     const docSnap = await getDoc(docRef);
 
     if (!docSnap.exists()) {
-      console.log('user does not exists');
+      throw new AppError('user does not exists', 404);
     }
 
     const user = docSnap.data() as User;
     return { ...user, id: docSnap.id };
   } catch (error) {
-    console.error(`there was an error while fetching user ${id}: ${error}`);
-
-    let status = 500;
-    let message = 'We Hate Google';
-    if (error instanceof Response) {
-      status = error.status;
-      message = error.statusText;
-    }
-    throw json({ message }, { status });
+    throwError(error);
   }
 };
 
@@ -73,7 +62,7 @@ const fetchUsers = async (ids: User['id'][]) => {
     });
     return res;
   } catch (error) {
-    console.error(error);
+    throwError(error);
   }
 };
 
@@ -101,7 +90,7 @@ const fetchFriends = async ({
     const friends = await fetchUsers(friendsIds);
     return friends;
   } catch (error) {
-    console.error(error);
+    throwError(error);
   }
 };
 
@@ -116,7 +105,7 @@ const fetchCheckedInUsers = async (parkId: Park['id']) => {
     const checkedInUsers = await fetchUsers(userIds);
     return checkedInUsers;
   } catch (error) {
-    console.error(error);
+    throwError(error);
   }
 };
 

@@ -1,11 +1,13 @@
-import { FormEvent, useContext, useEffect } from 'react';
+import { FormEvent, useContext, useEffect, useState } from 'react';
 import { FormInput } from '../components/FormInput';
 import { UserContext } from '../context/UserContext';
 import { SigninProps } from '../services/authentication';
 import { Link, useNavigate } from 'react-router-dom';
+import { AppError } from '../types/error';
 
 const Signin = () => {
   const { userSignin, user } = useContext(UserContext);
+  const [error, setError] = useState<string>('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,9 +21,10 @@ const Signin = () => {
     const formData = Object.fromEntries(
       new FormData(event.currentTarget)
     ) as unknown as SigninProps;
-    const res = await userSignin(formData);
-    if (res instanceof Error) {
-      console.log('erros: ', res);
+    try {
+      await userSignin(formData);
+    } catch (error) {
+      setError((error as AppError).message);
     }
   };
 
@@ -30,12 +33,28 @@ const Signin = () => {
       <div>
         <h2>Sign Up</h2>
         <form onSubmit={handleSubmit}>
-          <FormInput name="email" label="Email" type="email" />
-          <FormInput name="password" label="Password" type="password" />
-          <FormInput name="name" label="Your Name" type="text" />
+          <FormInput
+            onChange={() => setError('')}
+            name="email"
+            label="Email"
+            type="email"
+          />
+          <FormInput
+            onChange={() => setError('')}
+            name="password"
+            label="Password"
+            type="password"
+          />
+          <FormInput
+            onChange={() => setError('')}
+            name="name"
+            label="Your Name"
+            type="text"
+          />
           <button type="submit">Sign Up</button>
         </form>
       </div>
+      {error && <div>{error}</div>}
       <div>
         Already have an account? <Link to="/login">Log In</Link>
       </div>

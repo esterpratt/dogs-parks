@@ -5,6 +5,7 @@ import {
   User,
 } from 'firebase/auth';
 import { auth } from './firebase-config';
+import { throwError } from './error';
 
 interface LoginProps {
   email: string;
@@ -20,8 +21,7 @@ const signin = async ({ email, password }: LoginProps) => {
     const user = await createUserWithEmailAndPassword(auth, email, password);
     return user;
   } catch (error) {
-    console.error('error while signing in: ', error);
-    throw error;
+    throwError(error);
   }
 };
 
@@ -30,8 +30,7 @@ const login = async ({ email, password }: LoginProps) => {
     const user = await signInWithEmailAndPassword(auth, email, password);
     return user;
   } catch (error) {
-    console.error('error while logging in: ', error);
-    throw error;
+    throwError(error);
   }
 };
 

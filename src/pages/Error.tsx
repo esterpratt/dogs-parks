@@ -1,4 +1,5 @@
 import { isRouteErrorResponse, useRouteError } from 'react-router';
+import { AppError } from '../services/error';
 
 const ErrorPage: React.FC = () => {
   const error = useRouteError();
@@ -11,6 +12,8 @@ const ErrorPage: React.FC = () => {
     if (error.status === 404 && !error.data.message) {
       message = 'Could not find page';
     }
+  } else if (error instanceof AppError) {
+    message = error.message;
   }
 
   return <div>Hav Hav! Where are my snacks?? {message}</div>;

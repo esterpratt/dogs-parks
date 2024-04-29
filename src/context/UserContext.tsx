@@ -48,14 +48,18 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
         try {
           await createUser(userToSet);
           setUser(userToSet);
-        } catch (error) {
-          console.error(error);
         } finally {
           userExtraDataRef.current = null;
         }
       } else {
-        const userData = await fetchUser(userId!);
-        setUser({ ...userData });
+        try {
+          const userData = await fetchUser(userId!);
+          if (userData) {
+            setUser({ ...userData });
+          }
+        } catch (error) {
+          setUser(null);
+        }
       }
     };
     if (userId) {
@@ -66,11 +70,7 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   }, [userId]);
 
   const userLogin = async ({ email, password }: LoginProps) => {
-    try {
-      await login({ email, password });
-    } catch (error) {
-      return error as Error;
-    }
+    await login({ email, password });
   };
 
   const userLogout = async () => {
@@ -83,7 +83,7 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
       await signin({ email, password });
     } catch (error) {
       userExtraDataRef.current = null;
-      return error as Error;
+      throw error;
     }
   };
 
