@@ -5,12 +5,12 @@ import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: 'dogs-parks-8f00e.firebaseapp.com',
-  projectId: 'dogs-parks-8f00e',
-  storageBucket: 'dogs-parks-8f00e.appspot.com',
-  messagingSenderId: '259543659292',
-  appId: '1:259543659292:web:638272f4add12c797f40d9',
-  measurementId: 'G-0E10KB7SNG',
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_CENTER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
