@@ -1,10 +1,13 @@
 import { LoaderFunction } from 'react-router';
-import { fetchPark } from '../services/parks';
+import { fetchPark, fetchParkPrimaryImage } from '../services/parks';
 
 const parkLoader: LoaderFunction = async ({ params }) => {
   const { id: parkId } = params;
-  const park = await fetchPark(parkId!);
-  return park;
+  const [park, image] = await Promise.all([
+    fetchPark(parkId!),
+    fetchParkPrimaryImage(parkId!),
+  ]);
+  return { park, image };
 };
 
 export { parkLoader };

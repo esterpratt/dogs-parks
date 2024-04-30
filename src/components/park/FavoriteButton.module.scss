@@ -1,0 +1,10 @@
+@import '../../variables.scss';
+
+.heart {
+  transition: color 0.2s;
+  color: $grey-bold;
+
+  &.favorite {
+    color: $red;
+  }
+}

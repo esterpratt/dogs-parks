@@ -1,0 +1,21 @@
+@import '../variables.scss';
+
+.wrapper {
+  width: 100%;
+  border-bottom: 1px solid $text-light;
+  font-size: 10px;
+  font-weight: $font-weight-medium;
+  padding: 8px 0;
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+
+.arrow {
+  display: inline-block;
+  transition: transform 0.3s;
+
+  &.open {
+    transform: rotate(180deg);
+  }
+}

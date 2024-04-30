@@ -1,0 +1,13 @@
+.wrapper {
+  transition: grid-template-rows 0.5s;
+  display: grid;
+  grid-template-rows: 0fr;
+
+  &.open {
+    grid-template-rows: 1fr;
+  }
+}
+
+.content {
+  overflow: hidden;
+}

@@ -1,79 +1,35 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { Park } from '../../types/park';
-import { UserContext } from '../../context/UserContext';
-import { User } from '../../types/user';
-import { fetchCheckedInUsers } from '../../services/users';
-import { fetchUserFriendships } from '../../services/friendships';
 import { UserPreview } from '../users/UserPreview';
+import { ParkVisitorsContext } from './ParkVisitorsContext';
 
 interface ParkFriendsProps {
   parkId: Park['id'];
 }
 
-const ParkVisitors: React.FC<ParkFriendsProps> = ({ parkId }) => {
-  const { userId } = useContext(UserContext);
-  const [users, setUsers] = useState<{ friends: User[]; nonFriends: User[] }>({
-    friends: [],
-    nonFriends: [],
-  });
+const ParkVisitors: React.FC<ParkFriendsProps> = () => {
+  const { visitors } = useContext(ParkVisitorsContext);
 
-  useEffect(() => {
-    const getCheckedInFriends = async () => {
-      const users = await fetchCheckedInUsers(parkId);
-      if (users) {
-        const usersWithoutSignedInUser = users.filter(
-          (user) => user.id !== userId
-        );
-        let friends: User[] = [];
-        let nonFriends: User[] = [...usersWithoutSignedInUser];
-        if (userId) {
-          const userFriendships = await fetchUserFriendships({ userId });
-          if (userFriendships && userFriendships.length) {
-            const friendIds = userFriendships.map((friendShip) => {
-              return friendShip.requesteeId === userId
-                ? friendShip.requesterId
-                : friendShip.requesteeId;
-            });
-            friends = usersWithoutSignedInUser.filter((user) =>
-              friendIds.includes(user.id)
-            );
-            nonFriends = usersWithoutSignedInUser.filter(
-              (user) => !friendIds.includes(user.id)
-            );
-          }
-        }
-
-        setUsers({ friends, nonFriends });
-      } else {
-        setUsers({
-          friends: [],
-          nonFriends: [],
-        });
-      }
-    };
-    getCheckedInFriends();
-  }, [parkId, userId]);
-
-  if (!users.friends.length && !users.nonFriends.length) {
+  if (!visitors.friends.length && !visitors.others.length) {
     return null;
   }
 
   return (
     <div>
-      {!!users.friends.length && (
+      {!!visitors.friends.length && (
         <div>
           <span>Your Friends that in the park right now:</span>
-          {users.friends.map((user) => (
+          {visitors.friends.map((user) => (
             <UserPreview key={user.id} user={user} />
           ))}
         </div>
       )}
-      {!!users.nonFriends.length && (
+      {!!visitors.others.length && (
         <div>
           <span>
-            {users.friends.length ? 'Other v' : 'V'}isitors in the park
+            {visitors.friends.length ? 'Other v' : 'V'}isitors in the park
           </span>
-          {users.nonFriends.map((user) => (
+          {visitors.others.map((user) => (
             <UserPreview key={user.id} user={user} />
           ))}
         </div>

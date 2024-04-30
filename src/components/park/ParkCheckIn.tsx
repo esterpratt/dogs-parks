@@ -1,27 +1,29 @@
 import { checkin, checkout } from '../../services/checkins';
-import { useContext, useState } from 'react';
-import { UserContext } from '../../context/UserContext';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { Modal } from '../Modal';
 import { DogsCount } from './DogsCount';
 import { reportDogsCount } from '../../services/dogsCount';
+import { useState } from 'react';
 
-const ParkCheckIn: React.FC<{ parkId: string }> = ({ parkId }) => {
+const ParkCheckIn: React.FC<{
+  parkId: string;
+  userId: string;
+  userName?: string;
+}> = ({ parkId, userId, userName }) => {
   const [checkIn, setCheckIn] = useLocalStorage('checkin');
   const [openDogsCountModal, setOpenDogsCountModal] = useState(false);
-  const { user } = useContext(UserContext);
 
   const shouldCheckIn =
-    !checkIn || checkIn.parkId !== parkId || checkIn.userId !== user?.id;
+    !checkIn || checkIn.parkId !== parkId || checkIn.userId !== userId;
 
   const onCheckIn = async () => {
     if (!shouldCheckIn) {
       await checkout(checkIn.id);
       setCheckIn(null);
     } else {
-      const id = await checkin({ userId: user?.id, parkId });
+      const id = await checkin({ userId, parkId });
       if (id) {
-        setCheckIn({ id, parkId, userId: user?.id });
+        setCheckIn({ id, parkId, userId });
         setOpenDogsCountModal(true);
       }
       // else there was an error while checkin, for now I return null
@@ -35,7 +37,7 @@ const ParkCheckIn: React.FC<{ parkId: string }> = ({ parkId }) => {
       await reportDogsCount({
         parkId,
         dogsCount: numDogsCount,
-        userId: user?.id,
+        userId,
       });
     } finally {
       setOpenDogsCountModal(false);
@@ -52,7 +54,7 @@ const ParkCheckIn: React.FC<{ parkId: string }> = ({ parkId }) => {
         onClose={() => setOpenDogsCountModal(false)}
       >
         <div>
-          <p>Have a nice stay{user && `, ${user.name}`}!</p>
+          <p>Have a nice stay ${userName}!</p>
           <DogsCount onSubmitDogsCount={onSubmitDogsCount} />
         </div>
       </Modal>

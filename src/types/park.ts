@@ -23,3 +23,4 @@ interface Park {
 }
 
 export type { Park, Location };
+export { ParkMaterial };

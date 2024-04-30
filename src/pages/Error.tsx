@@ -1,5 +1,6 @@
 import { isRouteErrorResponse, useRouteError } from 'react-router';
 import { AppError } from '../services/error';
+import { Navbar } from '../components/Navbar';
 
 const ErrorPage: React.FC = () => {
   const error = useRouteError();
@@ -16,7 +17,12 @@ const ErrorPage: React.FC = () => {
     message = error.message;
   }
 
-  return <div>Hav Hav! Where are my snacks?? {message}</div>;
+  return (
+    <>
+      <Navbar />
+      <div>Hav Hav! Where are my snacks?? {message}</div>
+    </>
+  );
 };
 
 export { ErrorPage };
