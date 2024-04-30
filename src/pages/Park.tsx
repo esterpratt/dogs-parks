@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import { useLoaderData } from 'react-router';
 import { Park as ParkType } from '../types/park';
 import { ParkGallery } from '../components/park/ParkGallery';
@@ -5,15 +6,14 @@ import { ParkCheckIn } from '../components/park/ParkCheckIn';
 import { BusyHours } from '../components/park/BusyHours';
 import { ParkVisitors } from '../components/park/ParkVisitors';
 import { ReviewsPreview } from '../components/park/ReviewsPreview';
-import styles from './Park.module.scss';
 import { ParkDetails } from '../components/park/ParkDetails';
 import { ParkVisitorsContextProvider } from '../components/park/ParkVisitorsContext';
 import { Accordion } from '../components/Accordion';
 import { AccordionTitle } from '../components/AccordionTitle';
 import { AccordionContent } from '../components/AccordionContent';
-import { useContext } from 'react';
 import { UserContext } from '../context/UserContext';
 import { FavoriteButton } from '../components/park/FavoriteButton';
+import styles from './Park.module.scss';
 
 interface ParkData {
   park: ParkType;
