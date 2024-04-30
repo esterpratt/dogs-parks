@@ -3,11 +3,14 @@ import { ControlledInput } from '../ControlledInput';
 
 interface ReviewFormProps {
   reviewId?: string;
-  onSubmitForm: (reviewData: {
-    title: string;
-    content: string;
-    rank: number;
-  }) => void;
+  onSubmitForm: (
+    reviewData: {
+      title: string;
+      content: string;
+      rank: number;
+    },
+    reviewId?: string
+  ) => void;
 }
 
 const ReviewForm: React.FC<ReviewFormProps> = ({ reviewId, onSubmitForm }) => {
@@ -38,11 +41,14 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ reviewId, onSubmitForm }) => {
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onSubmitForm({
-      title: reviewData.title,
-      content: reviewData.content,
-      rank: Number(rank),
-    });
+    onSubmitForm(
+      {
+        title: reviewData.title,
+        content: reviewData.content,
+        rank: Number(rank),
+      },
+      reviewId
+    );
   };
 
   return (

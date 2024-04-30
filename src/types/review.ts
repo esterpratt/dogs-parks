@@ -1,4 +1,5 @@
 interface Review {
+  id: string;
   userId: string;
   parkId: string;
   title: string;
