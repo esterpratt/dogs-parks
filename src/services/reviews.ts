@@ -81,7 +81,7 @@ const fetchReviews = async (parkId: string) => {
     console.error(
       `there was an error while fetching reviews for park ${parkId}: ${error}`
     );
-    return null;
+    return [];
   }
 };
 

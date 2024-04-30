@@ -1,14 +1,9 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Park } from '../../types/park';
 import { Stars } from '../Stars';
-import {
-  addReview,
-  fetchParkRank,
-  fetchReviewsCount,
-} from '../../services/reviews';
-import { Modal } from '../Modal';
-import { ReviewForm } from './ReviewForm';
-import { UserContext } from '../../context/UserContext';
+import { fetchParkRank, fetchReviewsCount } from '../../services/reviews';
+import { Review } from '../../types/review';
+import { AddReviewButton } from './AddReviewButton';
 
 interface ReviewsPreviewProps {
   parkId: Park['id'];
@@ -18,8 +13,6 @@ const ReviewsPreview = ({ parkId }: ReviewsPreviewProps) => {
   const [loading, setLoading] = useState(true);
   const [reviewsCount, setReviewsCount] = useState<number>(0);
   const [rank, setRank] = useState<number | null>(null);
-  const [isAddReviewModalOpen, setIsAddReviewModalOpen] = useState(false);
-  const { userId } = useContext(UserContext);
 
   useEffect(() => {
     const getInitialData = async () => {
@@ -34,21 +27,11 @@ const ReviewsPreview = ({ parkId }: ReviewsPreviewProps) => {
     getInitialData();
   }, [parkId]);
 
-  const onAddReview = async (reviewData: {
-    title: string;
-    content?: string;
-    rank: number;
-  }) => {
-    setIsAddReviewModalOpen(false);
-    const res = await addReview({
-      parkId,
-      userId: userId!,
-      review: reviewData,
-    });
-    if (res) {
-      setRank((prev) => (prev || 0 + reviewData.rank) / reviewsCount + 1);
-      setReviewsCount((prev) => prev + 1);
-    }
+  const onAddReview = async (
+    addedReview: Pick<Review, 'id' | 'rank' | 'title' | 'content'>
+  ) => {
+    setRank((prev) => (prev || 0 + addedReview.rank) / reviewsCount + 1);
+    setReviewsCount((prev) => prev + 1);
   };
 
   if (loading) {
@@ -67,19 +50,7 @@ const ReviewsPreview = ({ parkId }: ReviewsPreviewProps) => {
       ) : (
         <span>No reviews yet</span>
       )}
-      {userId && (
-        <>
-          <button onClick={() => setIsAddReviewModalOpen(true)}>
-            Add a review
-          </button>
-          <Modal
-            open={isAddReviewModalOpen}
-            onClose={() => setIsAddReviewModalOpen(false)}
-          >
-            <ReviewForm onSubmitForm={onAddReview} />
-          </Modal>
-        </>
-      )}
+      <AddReviewButton parkId={parkId} onAddReview={onAddReview} />
     </div>
   );
 };

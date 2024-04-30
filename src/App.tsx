@@ -11,6 +11,8 @@ import { Profile } from './pages/Profile';
 import { userLoader } from './loaders/userLoader';
 import { RootLayout } from './RootLayout';
 import { NewPark } from './pages/NewPark';
+import { Reviews } from './pages/Reviews';
+import { reviewsLoader } from './loaders/reviewsLoader';
 
 const App = () => {
   const router = createBrowserRouter([
@@ -31,6 +33,11 @@ const App = () => {
           path: '/parks/:id',
           element: <Park />,
           loader: parkLoader,
+        },
+        {
+          path: '/parks/:id/reviews',
+          element: <Reviews />,
+          loader: reviewsLoader,
         },
         {
           path: '/signin',

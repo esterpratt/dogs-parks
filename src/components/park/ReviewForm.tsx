@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ControlledInput } from '../ControlledInput';
+import { fetchReview } from '../../services/reviews';
 
 interface ReviewFormProps {
   reviewId?: string;
@@ -22,8 +23,9 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ reviewId, onSubmitForm }) => {
 
   useEffect(() => {
     const getReviewData = async () => {
-      // TODO: implement
-      // const data = fetchReview(reviewId)
+      const data = await fetchReview(reviewId!);
+      // TODO: setReviewData
+      console.log(data);
     };
     if (reviewId) {
       getReviewData();
