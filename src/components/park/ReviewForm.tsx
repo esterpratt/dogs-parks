@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ControlledInput } from '../ControlledInput';
 import { fetchReview } from '../../services/reviews';
+import { Stars } from '../Stars';
 
 interface ReviewFormProps {
   reviewId?: string;
@@ -19,7 +20,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ reviewId, onSubmitForm }) => {
     title: '',
     content: '',
   });
-  const [rank, setRank] = useState<string>('5');
+  const [rank, setRank] = useState<number>(5);
 
   useEffect(() => {
     const getReviewData = async () => {
@@ -68,16 +69,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ reviewId, onSubmitForm }) => {
           value={reviewData.content}
           onChange={onChangeInput}
         />
-        {/* TODO: change to stars component */}
-        <input
-          value={rank}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            setRank(event.target.value)
-          }
-          type="number"
-          max={5}
-          min={0}
-        />
+        <Stars rank={rank} setRank={setRank} />
         <button type="submit">Add review</button>
       </form>
     </div>
