@@ -6,7 +6,6 @@ import {
   ResponsiveContainer,
   Tooltip,
   XAxis,
-  YAxis,
 } from 'recharts';
 import { CategoricalChartProps } from 'recharts/types/chart/generateCategoricalChart';
 
@@ -33,20 +32,25 @@ const AreaChart = ({
             <stop offset="100%" stopColor="#9ac457" stopOpacity={0.9} />
           </linearGradient>
         </defs>
-        <XAxis dataKey={xDataKey} />
-        <YAxis dataKey={yDataKey} domain={[0, 'dataMax + 2']} />
-        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey={xDataKey} interval="preserveStartEnd" tickSize={6} />
+        <CartesianGrid strokeDasharray="5 5" stroke="#ebebeb" />
         <Tooltip />
         <Area
           type="basis"
           dataKey={yDataKey}
-          fillOpacity={0.8}
+          fillOpacity={0.6}
           fill="url(#fillColor)"
-          stroke="#578796"
+          stroke="#ebebeb"
           strokeWidth={0.5}
         />
         {!!referecnceLineData && (
-          <ReferenceLine x={referecnceLineData} stroke="#578796" />
+          <ReferenceLine
+            x={referecnceLineData}
+            stroke="#4d4d4d"
+            strokeWidth={1.5}
+            strokeDasharray={2}
+            strokeOpacity={0.5}
+          />
         )}
       </RechartAreaChart>
     </ResponsiveContainer>

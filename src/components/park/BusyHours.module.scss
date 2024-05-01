@@ -1,8 +1,14 @@
 @import '../../variables.scss';
 
 .chart-container {
-  width: 80%;
-  height: 200px;
+  margin: 12px auto 0;
+  width: 85%;
+  height: 150px;
+  font-size: 12px;
+}
+
+.text {
+  font-size: 12px;
 }
 
 .light {

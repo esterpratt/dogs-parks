@@ -2,6 +2,9 @@ import { FormEvent, useEffect, useState } from 'react';
 import { Modal } from '../Modal';
 import { Camera } from './Camera';
 import { fetchAllParkImages, uploadParkImage } from '../../services/parks';
+import { Carousel } from '../Carousel';
+import { Button } from '../Button';
+import styles from './ParkGallery.module.scss';
 
 interface ParkGalleryProps {
   parkId: string;
@@ -44,14 +47,13 @@ const ParkGallery: React.FC<ParkGalleryProps> = ({ parkId }) => {
 
   return (
     <div>
-      <div>
-        {images.map((img) => (
-          <img src={img} key={img}></img>
-        ))}
-      </div>
-      <button onClick={() => setIsAddImageModalOpen(true)}>
-        Add image to gallery
-      </button>
+      <Carousel images={images} />
+      <Button
+        onClick={() => setIsAddImageModalOpen(true)}
+        className={styles.addPhotoButton}
+      >
+        Add photo
+      </Button>
       <Modal open={isAddImageModalOpen} onClose={onCloseModal}>
         {isCameraOpen ? (
           <Camera onSaveImg={onUploadImg} />

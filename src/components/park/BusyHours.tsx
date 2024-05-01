@@ -79,7 +79,7 @@ const BusyHours: React.FC<BusyHoursProps> = ({ parkId }) => {
 
   return (
     <div>
-      <span>
+      <span className={styles.text}>
         In this hour, the park is usually{' '}
         <span className={styles[business.className]}>{business.str}</span>
       </span>
