@@ -10,21 +10,19 @@ interface FavoriteButtonProps {
 }
 
 const FavoriteButton: React.FC<FavoriteButtonProps> = ({ parkId, userId }) => {
-  const [favorite, setFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
 
-  useEffect(() => {
-    console.log(parkId, userId);
-  }, [parkId, userId]);
+  useEffect(() => {}, [parkId, userId]);
 
   const toggleFavorite = () => {
-    setFavorite((prev) => !prev);
+    setIsFavorite((prev) => !prev);
   };
 
   return (
     <IconContext.Provider
       value={{
         size: '32',
-        className: classnames(styles.heart, favorite && styles.favorite),
+        className: classnames(styles.heart, isFavorite && styles.favorite),
       }}
     >
       <TiHeartFullOutline onClick={toggleFavorite} />
