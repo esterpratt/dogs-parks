@@ -59,7 +59,11 @@ const Stars: React.FC<StarsProps> = ({ rank, setRank }) => {
     ));
   }
 
-  return <div>{starsIcons.map((star, index) => star(index))}</div>;
+  return (
+    <div className={styles.container}>
+      {starsIcons.map((star, index) => star(index))}
+    </div>
+  );
 };
 
 export { Stars };

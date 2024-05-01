@@ -4,6 +4,7 @@ import { Stars } from '../Stars';
 import { fetchParkRank, fetchReviewsCount } from '../../services/reviews';
 import { Review } from '../../types/review';
 import { AddReviewButton } from './AddReviewButton';
+import styles from './ReviewsPreview.module.scss';
 
 interface ReviewsPreviewProps {
   parkId: Park['id'];
@@ -39,18 +40,22 @@ const ReviewsPreview = ({ parkId }: ReviewsPreviewProps) => {
   }
 
   return (
-    <div>
+    <div className={styles.container}>
       {reviewsCount ? (
-        <div>
+        <>
           <Stars rank={rank || 0} />
-          <span>
+          <span className={styles.reviewCount}>
             {reviewsCount === 1 ? '1 Review' : `${reviewsCount} Reviews`}
           </span>
-        </div>
+        </>
       ) : (
         <span>No reviews yet</span>
       )}
-      <AddReviewButton parkId={parkId} onAddReview={onAddReview} />
+      <AddReviewButton
+        parkId={parkId}
+        onAddReview={onAddReview}
+        className={styles.addReview}
+      />
     </div>
   );
 };

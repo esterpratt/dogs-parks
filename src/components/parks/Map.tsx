@@ -8,7 +8,6 @@ interface MapProps {
 }
 
 const Map: React.FC<MapProps> = ({ className }) => {
-  console.log();
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
   });

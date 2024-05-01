@@ -4,9 +4,11 @@ import { Modal } from '../Modal';
 import { ReviewForm } from './ReviewForm';
 import { addReview } from '../../services/reviews';
 import { Review } from '../../types/review';
+import { Button } from '../Button';
 
 interface AddReviewButtonProps {
   parkId: string;
+  className?: string;
   onAddReview?: (
     addedReview: Pick<Review, 'id' | 'rank' | 'title' | 'content'>
   ) => void;
@@ -15,6 +17,7 @@ interface AddReviewButtonProps {
 const AddReviewButton: React.FC<AddReviewButtonProps> = ({
   parkId,
   onAddReview,
+  className,
 }) => {
   const [isAddReviewModalOpen, setIsAddReviewModalOpen] = useState(false);
   const { userId } = useContext(UserContext);
@@ -40,10 +43,10 @@ const AddReviewButton: React.FC<AddReviewButtonProps> = ({
   };
 
   return (
-    <div>
-      <button onClick={() => setIsAddReviewModalOpen(true)}>
+    <div className={className}>
+      <Button onClick={() => setIsAddReviewModalOpen(true)}>
         Add a review
-      </button>
+      </Button>
       <Modal
         open={isAddReviewModalOpen}
         onClose={() => setIsAddReviewModalOpen(false)}

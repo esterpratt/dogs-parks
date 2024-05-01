@@ -26,22 +26,24 @@ const Park: React.FC = () => {
 
   return (
     <ParkVisitorsContextProvider parkId={park.id} userId={user?.id}>
-      <div>
-        <img src={image} />
+      <img src={image} className={styles.image} />
+      <div className={styles.contentContainer}>
         <div className={styles.basicDetails}>
           <div>
-            <span>{park.name}</span>
-            <span>{park.address}</span>
+            <span className={styles.name}>{park.name}</span>
+            <span className={styles.address}>{park.address}</span>
             <ReviewsPreview parkId={park.id} />
           </div>
           {user && (
-            <div>
-              <FavoriteButton parkId={park.id} userId={user.id} />
-              <ParkCheckIn
-                parkId={park.id}
-                userId={user.id}
-                userName={user.name}
-              />
+            <div className={styles.userEngagement}>
+              <div>
+                <FavoriteButton parkId={park.id} userId={user.id} />
+                <ParkCheckIn
+                  parkId={park.id}
+                  userId={user.id}
+                  userName={user.name}
+                />
+              </div>
             </div>
           )}
         </div>

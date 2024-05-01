@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { ParkMaterial } from '../../types/park';
 import { DetailsSqaure } from './DetailsSquare';
 import { ParkVisitorsContext } from './ParkVisitorsContext';
+import styles from './ParkDetails.module.scss';
 
 interface ParkDetailsProps {
   size?: number;
@@ -55,9 +56,14 @@ const ParkDetails = ({ size, ground, shade, water }: ParkDetailsProps) => {
   const waterContent = getBooleanContent(water);
 
   return (
-    <div>
+    <div className={styles.container}>
       <DetailsSqaure title="Size" content={sizeContent} color="#ECAC52" />
-      <DetailsSqaure title="Ground" content={groundContent} color="#9AC457" />
+      <DetailsSqaure
+        title="Ground"
+        content={groundContent}
+        color="#9AC457"
+        className={styles.ground}
+      />
       <DetailsSqaure title="Shade" content={shadeContent} color="#578796" />
       <DetailsSqaure title="Water" content={waterContent} color="#70C3D0" />
       <DetailsSqaure

@@ -1,6 +1,7 @@
 import { ReactNode, createContext, useState } from 'react';
 import { AccordionContent } from './AccordionContent';
 import { AccordionTitle } from './AccordionTitle';
+import styles from './Accordion.module.scss';
 
 interface AccordionProps {
   children: ReactNode;
@@ -27,7 +28,7 @@ const Accordion = ({ children }: AccordionProps) => {
 
   return (
     <AccordionContext.Provider value={{ isOpen, toggleOpen }}>
-      <div>{children}</div>
+      <div className={styles.accordion}>{children}</div>
     </AccordionContext.Provider>
   );
 };

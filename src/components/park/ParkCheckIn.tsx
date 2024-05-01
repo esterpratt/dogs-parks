@@ -1,9 +1,13 @@
+import { useState } from 'react';
+import { TbPennant, TbPennantOff } from 'react-icons/tb';
 import { checkin, checkout } from '../../services/checkins';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { Modal } from '../Modal';
 import { DogsCount } from './DogsCount';
 import { reportDogsCount } from '../../services/dogsCount';
-import { useState } from 'react';
+import { Button } from '../Button';
+import styles from './ParkCheckIn.module.scss';
+import { IconContext } from 'react-icons';
 
 const ParkCheckIn: React.FC<{
   parkId: string;
@@ -46,15 +50,27 @@ const ParkCheckIn: React.FC<{
 
   return (
     <div>
-      <button onClick={onCheckIn}>
-        {!shouldCheckIn ? 'Check Out' : 'Check In'}
-      </button>
+      <Button onClick={onCheckIn} className={styles.button}>
+        {!shouldCheckIn ? (
+          <IconContext.Provider
+            value={{ className: styles.checkoutIcon, size: '32' }}
+          >
+            <TbPennantOff />
+          </IconContext.Provider>
+        ) : (
+          <IconContext.Provider
+            value={{ className: styles.checkinIcon, size: '32' }}
+          >
+            <TbPennant />
+          </IconContext.Provider>
+        )}
+      </Button>
       <Modal
         open={openDogsCountModal}
         onClose={() => setOpenDogsCountModal(false)}
       >
         <div>
-          <p>Have a nice stay ${userName}!</p>
+          <p>Have a nice stay {userName}!</p>
           <DogsCount onSubmitDogsCount={onSubmitDogsCount} />
         </div>
       </Modal>
