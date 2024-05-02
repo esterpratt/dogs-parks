@@ -35,7 +35,7 @@ const ParkCheckIn: React.FC<{
   };
 
   const onSubmitDogsCount = async (dogsCount: string) => {
-    // TODO: add animation of thank you before closing - not important if report was succesfull
+    // TODO: add animation of thank you before closing - not important if report was succesfull or not
     const numDogsCount = Number(dogsCount);
     try {
       await reportDogsCount({
@@ -69,7 +69,7 @@ const ParkCheckIn: React.FC<{
         open={openDogsCountModal}
         onClose={() => setOpenDogsCountModal(false)}
       >
-        <div>
+        <div className={styles.modalContent}>
           <p>Have a nice stay {userName}!</p>
           <DogsCount onSubmitDogsCount={onSubmitDogsCount} />
         </div>

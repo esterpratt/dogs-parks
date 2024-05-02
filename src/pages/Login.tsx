@@ -4,7 +4,9 @@ import { useNavigate } from 'react-router';
 import { LoginProps } from '../services/authentication';
 import { UserContext } from '../context/UserContext';
 import { Link } from 'react-router-dom';
-import { AppError } from '../types/error';
+import { AppError } from '../services/error';
+import styles from './Login.module.scss';
+import { Button } from '../components/Button';
 
 const Login = () => {
   const { userLogin, user } = useContext(UserContext);
@@ -30,10 +32,10 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <div>
+    <div className={styles.container}>
+      <div className={styles.formContainer}>
         <h2>Log In</h2>
-        <form onSubmit={handleSubmit}>
+        <form className={styles.inputsContainer} onSubmit={handleSubmit}>
           <FormInput
             onChange={() => setError('')}
             name="email"
@@ -46,10 +48,12 @@ const Login = () => {
             label="Password"
             type="password"
           />
-          <button type="submit">Log In</button>
+          <div className={styles.error}>{error}</div>
+          <Button className={styles.button} type="submit">
+            Log In
+          </Button>
         </form>
       </div>
-      {error && <div>{error}</div>}
       <div>
         Don't have an account yet? <Link to="/signin">Sign In</Link>
       </div>

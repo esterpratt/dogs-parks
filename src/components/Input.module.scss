@@ -1,0 +1,17 @@
+@import '../variables.scss';
+
+.input {
+  background-color: transparent;
+  color: inherit;
+  border: none;
+  font-size: 16px;
+
+  &::placeholder {
+    color: $text-light;
+  }
+
+  &.basic {
+    border-bottom: 1px solid $text-light;
+    outline: none;
+  }
+}

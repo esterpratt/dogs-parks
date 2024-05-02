@@ -1,0 +1,27 @@
+@import '../variables.scss';
+
+h2 {
+  margin: 24px 0 48px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  margin: 32px;
+}
+
+.form-container {
+  margin-bottom: 48px;
+}
+
+.inputs-container {
+  margin: 32px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.error {
+  color: $red;
+  height: 20px;
+}

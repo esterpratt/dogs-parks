@@ -1,3 +1,6 @@
+import { Input } from './Input';
+import styles from './FormInput.module.scss';
+
 interface FormInputProps extends React.HTMLAttributes<HTMLInputElement> {
   name: string;
   label: string;
@@ -12,8 +15,10 @@ const FormInput: React.FC<FormInputProps> = ({
 }) => {
   return (
     <div>
-      <label htmlFor={name}>{label}</label>
-      <input id={name} type={type} name={name} required {...props} />
+      <label className={styles.label} htmlFor={name}>
+        {label}
+      </label>
+      <Input id={name} type={type} name={name} required {...props} />
     </div>
   );
 };

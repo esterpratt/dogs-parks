@@ -6,10 +6,11 @@ import { Fragment, ReactNode } from 'react';
 
 interface StarsProps {
   rank: number;
+  size?: number;
   setRank?: (rank: number) => void;
 }
 
-const Stars: React.FC<StarsProps> = ({ rank, setRank }) => {
+const Stars: React.FC<StarsProps> = ({ rank, setRank, size = 14 }) => {
   const starsIcons: ((index: number) => ReactNode)[] = [];
 
   let i = 1;
@@ -20,6 +21,7 @@ const Stars: React.FC<StarsProps> = ({ rank, setRank }) => {
         value={{ className: classnames(styles.star, styles.full) }}
       >
         <FaStar
+          size={size}
           onClick={() =>
             setRank
               ? setRank(index + 1 === rank ? index + 0.5 : index + 1)
@@ -36,12 +38,19 @@ const Stars: React.FC<StarsProps> = ({ rank, setRank }) => {
         <IconContext.Provider
           value={{ className: classnames(styles.star, styles.half) }}
         >
-          <FaStarHalf onClick={() => (setRank ? setRank(index) : () => {})} />
+          <FaStarHalf
+            size={size}
+            onClick={() => (setRank ? setRank(index) : () => {})}
+          />
         </IconContext.Provider>
         <IconContext.Provider
           value={{ className: classnames(styles.star, styles.secondHalf) }}
         >
-          <FaStarHalf onClick={() => (setRank ? setRank(index) : () => {})} />
+          <FaStarHalf
+            style={{ marginLeft: `-${size}px` }}
+            size={size}
+            onClick={() => (setRank ? setRank(index) : () => {})}
+          />
         </IconContext.Provider>
       </Fragment>
     ));
@@ -54,7 +63,10 @@ const Stars: React.FC<StarsProps> = ({ rank, setRank }) => {
         key={index}
         value={{ className: classnames(styles.star, styles.empty) }}
       >
-        <FaStar onClick={() => (setRank ? setRank(index + 1) : () => {})} />
+        <FaStar
+          size={size}
+          onClick={() => (setRank ? setRank(index + 1) : () => {})}
+        />
       </IconContext.Provider>
     ));
   }

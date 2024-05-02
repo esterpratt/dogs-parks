@@ -1,0 +1,8 @@
+@import '../variables.scss';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: $text;
+}

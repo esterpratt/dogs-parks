@@ -32,7 +32,10 @@ const ReviewsPreview = ({ parkId }: ReviewsPreviewProps) => {
   const onAddReview = async (
     addedReview: Pick<Review, 'id' | 'rank' | 'title' | 'content'>
   ) => {
-    setRank((prev) => (prev || 0 + addedReview.rank) / reviewsCount + 1);
+    setRank(
+      (prev) =>
+        ((prev || 0) * reviewsCount + addedReview.rank) / (reviewsCount + 1)
+    );
     setReviewsCount((prev) => prev + 1);
   };
 

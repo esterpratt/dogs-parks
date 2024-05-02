@@ -1,4 +1,8 @@
-interface ControlledInputProps {
+import { InputHTMLAttributes } from 'react';
+import styles from './ControlledInput.module.scss';
+import { Input } from './Input';
+
+interface ControlledInputProps extends InputHTMLAttributes<HTMLInputElement> {
   value: string;
   label: string;
   name: string;
@@ -12,15 +16,19 @@ const ControlledInput: React.FC<ControlledInputProps> = ({
   placeholder,
   label,
   name,
+  ...props
 }) => {
   return (
-    <div>
-      <label htmlFor={name}>{label}</label>
-      <input
+    <div className={styles.container}>
+      <label htmlFor={name} className={styles.label}>
+        {label}
+      </label>
+      <Input
         name={name}
         value={value}
         onChange={onChange}
         placeholder={placeholder}
+        {...props}
       />
     </div>
   );

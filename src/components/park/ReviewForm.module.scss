@@ -1,0 +1,23 @@
+@import '../../variables.scss';
+
+.container {
+  margin: 56px 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  color: $text;
+}
+
+.title {
+  font-size: 18px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.button {
+  margin-top: 32px;
+}

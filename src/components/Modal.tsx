@@ -1,5 +1,8 @@
 import { ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import classnames from 'classnames';
+import { CgClose } from 'react-icons/cg';
+import styles from './Modal.module.scss';
 
 interface ModalProps {
   open: boolean;
@@ -26,11 +29,11 @@ const Modal: React.FC<ModalProps> = ({
 
   return createPortal(
     <dialog
-      style={{ width: '600px', height: '800px' }}
       ref={dialogRef}
       onClose={onClose}
-      className={className}
+      className={classnames(styles.modal, className)}
     >
+      <CgClose onClick={onClose} size={24} className={styles.close} />
       {children}
     </dialog>,
     document.getElementById('modal')!

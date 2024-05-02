@@ -4,6 +4,8 @@ import { UserContext } from '../context/UserContext';
 import { SigninProps } from '../services/authentication';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppError } from '../services/error';
+import { Button } from '../components/Button';
+import styles from './Signin.module.scss';
 
 const Signin = () => {
   const { userSignin, user } = useContext(UserContext);
@@ -29,10 +31,10 @@ const Signin = () => {
   };
 
   return (
-    <div>
-      <div>
-        <h2>Sign Up</h2>
-        <form onSubmit={handleSubmit}>
+    <div className={styles.container}>
+      <div className={styles.formContainer}>
+        <h2>Sign In</h2>
+        <form onSubmit={handleSubmit} className={styles.inputsContainer}>
           <FormInput
             onChange={() => setError('')}
             name="email"
@@ -51,10 +53,12 @@ const Signin = () => {
             label="Your Name"
             type="text"
           />
-          <button type="submit">Sign Up</button>
+          <div className={styles.error}>{error}</div>
+          <Button type="submit" className={styles.button}>
+            Sign In
+          </Button>
         </form>
       </div>
-      {error && <div>{error}</div>}
       <div>
         Already have an account? <Link to="/login">Log In</Link>
       </div>
