@@ -1,10 +1,11 @@
 import { useContext } from 'react';
+import { Link } from 'react-router-dom';
 import { ParkMaterial } from '../../types/park';
 import { DetailsSqaure } from './DetailsSquare';
 import { ParkVisitorsContext } from './ParkVisitorsContext';
-import styles from './ParkDetails.module.scss';
+import styles from './ParkGenerals.module.scss';
 
-interface ParkDetailsProps {
+interface ParkGeneralsProps {
   size?: number;
   ground?: ParkMaterial[];
   shade?: boolean;
@@ -44,7 +45,7 @@ const getSizeContent = (value?: number) => {
   return content;
 };
 
-const ParkDetails = ({ size, ground, shade, water }: ParkDetailsProps) => {
+const ParkGenerals = ({ size, ground, shade, water }: ParkGeneralsProps) => {
   const { visitors } = useContext(ParkVisitorsContext);
 
   const visitorsContent = visitors.friends.length
@@ -66,13 +67,15 @@ const ParkDetails = ({ size, ground, shade, water }: ParkDetailsProps) => {
       />
       <DetailsSqaure title="Shade" content={shadeContent} color="#578796" />
       <DetailsSqaure title="Water" content={waterContent} color="#70C3D0" />
-      <DetailsSqaure
-        title={visitors.friends.length ? 'Friends here' : 'Visitors'}
-        content={visitorsContent}
-        color="#BFA990"
-      />
+      <Link to="visitors" className={styles.link}>
+        <DetailsSqaure
+          title={visitors.friends.length ? 'Friends here' : 'Visitors'}
+          content={visitorsContent}
+          color="#BFA990"
+        />
+      </Link>
     </div>
   );
 };
 
-export { ParkDetails };
+export { ParkGenerals };

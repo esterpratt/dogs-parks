@@ -13,6 +13,8 @@ import { RootLayout } from './RootLayout';
 import { NewPark } from './pages/NewPark';
 import { Reviews } from './pages/Reviews';
 import { reviewsLoader } from './loaders/reviewsLoader';
+import { ParkDetails } from './pages/ParkDetails';
+import { ParkVisitors } from './components/park/ParkVisitors';
 
 const App = () => {
   const router = createBrowserRouter([
@@ -30,15 +32,26 @@ const App = () => {
           element: <NewPark />,
         },
         {
-          path: '/parks/:id',
+          path: '/parks/:id/',
           element: <Park />,
           loader: parkLoader,
+          children: [
+            {
+              index: true,
+              element: <ParkDetails />,
+            },
+            {
+              path: 'reviews',
+              element: <Reviews />,
+              loader: reviewsLoader,
+            },
+            {
+              path: 'visitors',
+              element: <ParkVisitors />,
+            },
+          ],
         },
-        {
-          path: '/parks/:id/reviews',
-          element: <Reviews />,
-          loader: reviewsLoader,
-        },
+
         {
           path: '/signin',
           element: <Signin />,

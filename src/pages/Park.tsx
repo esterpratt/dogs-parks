@@ -1,19 +1,13 @@
 import { useContext } from 'react';
-import { useLoaderData } from 'react-router';
+import { Outlet, useLoaderData } from 'react-router';
 import { Park as ParkType } from '../types/park';
-import { ParkGallery } from '../components/park/ParkGallery';
 import { ParkCheckIn } from '../components/park/ParkCheckIn';
-import { BusyHours } from '../components/park/BusyHours';
-import { ParkVisitors } from '../components/park/ParkVisitors';
 import { ReviewsPreview } from '../components/park/ReviewsPreview';
-import { ParkDetails } from '../components/park/ParkDetails';
 import { ParkVisitorsContextProvider } from '../components/park/ParkVisitorsContext';
-import { Accordion } from '../components/Accordion/Accordion';
-import { AccordionTitle } from '../components/Accordion/AccordionTitle';
-import { AccordionContent } from '../components/Accordion/AccordionContent';
 import { UserContext } from '../context/UserContext';
 import { FavoriteButton } from '../components/park/FavoriteButton';
 import styles from './Park.module.scss';
+import { Tabs } from '../components/Tabs';
 
 interface ParkData {
   park: ParkType;
@@ -47,39 +41,16 @@ const Park: React.FC = () => {
             </div>
           )}
         </div>
-        <Accordion>
-          <AccordionTitle>More about this park</AccordionTitle>
-          <AccordionContent>
-            <ParkDetails
-              size={park.size}
-              ground={park.materials}
-              shade={park.hasShade}
-              water={park.hasWater}
-            />
-          </AccordionContent>
-        </Accordion>
-        <Accordion>
-          <AccordionTitle>Busy hours</AccordionTitle>
-          <AccordionContent>
-            <BusyHours parkId={park.id} />
-          </AccordionContent>
-        </Accordion>
-        <Accordion>
-          <AccordionTitle>Gallery</AccordionTitle>
-          <AccordionContent>
-            <ParkGallery parkId={park.id} />
-          </AccordionContent>
-        </Accordion>
-        <Accordion>
-          <AccordionTitle>Visiting the park right now</AccordionTitle>
-          <AccordionContent>
-            <ParkVisitors parkId={park.id} />
-          </AccordionContent>
-        </Accordion>
-        <Accordion>
-          <AccordionTitle>Reviews</AccordionTitle>
-          <AccordionContent>Reviews</AccordionContent>
-        </Accordion>
+        <Tabs
+          tabs={[
+            { text: 'General Info', url: '' },
+            { text: 'Reviews', url: 'Reviews' },
+            { text: 'Visitors', url: 'visitors' },
+          ]}
+        />
+        <div className={styles.outletContainer}>
+          <Outlet context={park} />
+        </div>
       </div>
     </ParkVisitorsContextProvider>
   );

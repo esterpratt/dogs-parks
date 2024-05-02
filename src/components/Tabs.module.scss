@@ -1,0 +1,10 @@
+@import '../variables.scss';
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  margin: 12px 0;
+  padding: 0 16px;
+  font-size: 14px;
+  border-bottom: 1px solid $text-light;
+}

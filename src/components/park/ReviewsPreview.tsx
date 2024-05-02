@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Park } from '../../types/park';
 import { Stars } from '../Stars';
 import { fetchParkRank, fetchReviewsCount } from '../../services/reviews';
@@ -44,9 +45,9 @@ const ReviewsPreview = ({ parkId }: ReviewsPreviewProps) => {
       {reviewsCount ? (
         <>
           <Stars rank={rank || 0} />
-          <span className={styles.reviewCount}>
+          <Link to="reviews" className={styles.reviewCount}>
             {reviewsCount === 1 ? '1 Review' : `${reviewsCount} Reviews`}
-          </span>
+          </Link>
         </>
       ) : (
         <span>No reviews yet</span>

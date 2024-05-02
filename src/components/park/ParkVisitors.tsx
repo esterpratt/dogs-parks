@@ -1,13 +1,8 @@
 import { useContext } from 'react';
-import { Park } from '../../types/park';
 import { UserPreview } from '../users/UserPreview';
 import { ParkVisitorsContext } from './ParkVisitorsContext';
 
-interface ParkFriendsProps {
-  parkId: Park['id'];
-}
-
-const ParkVisitors: React.FC<ParkFriendsProps> = () => {
+const ParkVisitors: React.FC = () => {
   const { visitors } = useContext(ParkVisitorsContext);
 
   if (!visitors.friends.length && !visitors.others.length) {

@@ -1,0 +1,15 @@
+@import '../variables.scss';
+
+.link {
+  text-decoration: none;
+  border: none;
+  color: $text;
+  padding: 0 2px 12px;
+  transition: all 0.1s;
+  border-bottom: 1px solid transparent;
+
+  &.active {
+    border-bottom: 1px solid $green;
+    color: $green;
+  }
+}
