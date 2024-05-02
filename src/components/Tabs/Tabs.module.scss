@@ -1,8 +1,8 @@
-@import '../variables.scss';
+@import '../../variables.scss';
 
 .container {
   display: flex;
-  justify-content: space-between;
+  gap: 36px;
   margin: 12px 0;
   padding: 0 16px;
   font-size: 14px;

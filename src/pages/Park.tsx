@@ -7,7 +7,7 @@ import { ParkVisitorsContextProvider } from '../components/park/ParkVisitorsCont
 import { UserContext } from '../context/UserContext';
 import { FavoriteButton } from '../components/park/FavoriteButton';
 import styles from './Park.module.scss';
-import { Tabs } from '../components/Tabs';
+import { Tabs } from '../components/Tabs/Tabs';
 
 interface ParkData {
   park: ParkType;
