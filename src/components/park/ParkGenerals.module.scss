@@ -1,3 +1,5 @@
+@import '../../variables.scss';
+
 .container {
   display: flex;
   gap: 14px;
@@ -10,4 +12,12 @@
 .link {
   text-decoration: none;
   color: inherit;
+}
+
+:export {
+  green: $green;
+  blue: $blue;
+  orange: $orange;
+  brown: $brown;
+  grey: $grey;
 }

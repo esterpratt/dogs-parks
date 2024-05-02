@@ -2,7 +2,7 @@ import styles from './DetailsSquare.module.scss';
 import classnames from 'classnames';
 
 interface DetailsSqaureProps {
-  color?: string;
+  color: string;
   content?: string;
   title: string;
   className?: string;
@@ -11,7 +11,7 @@ interface DetailsSqaureProps {
 const DetailsSqaure = ({
   title,
   content = '?',
-  color = '#c8c8c8',
+  color,
   className,
 }: DetailsSqaureProps) => {
   return (

@@ -58,20 +58,20 @@ const ParkGenerals = ({ size, ground, shade, water }: ParkGeneralsProps) => {
 
   return (
     <div className={styles.container}>
-      <DetailsSqaure title="Size" content={sizeContent} color="#ECAC52" />
+      <DetailsSqaure title="Size" content={sizeContent} color={styles.orange} />
       <DetailsSqaure
         title="Ground"
         content={groundContent}
-        color="#9AC457"
+        color={styles.green}
         className={styles.ground}
       />
-      <DetailsSqaure title="Shade" content={shadeContent} color="#578796" />
-      <DetailsSqaure title="Water" content={waterContent} color="#70C3D0" />
+      <DetailsSqaure title="Shade" content={shadeContent} color={styles.grey} />
+      <DetailsSqaure title="Water" content={waterContent} color={styles.blue} />
       <Link to="visitors" className={styles.link}>
         <DetailsSqaure
           title={visitors.friends.length ? 'Friends here' : 'Visitors'}
           content={visitorsContent}
-          color="#BFA990"
+          color={styles.brown}
         />
       </Link>
     </div>
