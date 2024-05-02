@@ -3,6 +3,11 @@ import classnames from 'classnames';
 import styles from './FavoriteButton.module.scss';
 import { useEffect, useState } from 'react';
 import { IconContext } from 'react-icons';
+import {
+  addFavorite,
+  fetchUserFavorites,
+  removeFavorite,
+} from '../../services/favorites';
 
 interface FavoriteButtonProps {
   parkId: string;
@@ -10,12 +15,23 @@ interface FavoriteButtonProps {
 }
 
 const FavoriteButton: React.FC<FavoriteButtonProps> = ({ parkId, userId }) => {
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
 
-  useEffect(() => {}, [parkId, userId]);
+  useEffect(() => {
+    const getIsFavorite = async () => {
+      const favorites = await fetchUserFavorites(userId);
+      setIsFavorite(Boolean(favorites) && favorites!.parkIds.includes(parkId));
+    };
+    getIsFavorite();
+  }, [parkId, userId]);
 
-  const toggleFavorite = () => {
+  const toggleFavorite = async () => {
     setIsFavorite((prev) => !prev);
+    if (isFavorite) {
+      await removeFavorite({ parkId, userId });
+    } else {
+      await addFavorite({ parkId, userId });
+    }
   };
 
   return (

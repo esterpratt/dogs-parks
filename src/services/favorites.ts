@@ -6,24 +6,58 @@ import {
   getDocs,
   arrayUnion,
   arrayRemove,
+  doc,
+  addDoc,
 } from 'firebase/firestore';
 import { db } from './firebase-config';
 import { Favorites } from '../types/favorites';
 
-interface AddFavoriteProps {
+interface ActionFavoriteProps {
   userId: string;
   parkId: string;
 }
 
-interface RemoveFavoriteProps extends AddFavoriteProps {}
-
-interface GetAndUpdateProps extends AddFavoriteProps {
-  action: 'remove' | 'add';
-}
-
 const favoritesCollection = collection(db, 'favorites');
 
-const getAndUpdate = async ({ action, userId, parkId }: GetAndUpdateProps) => {
+const createFavorites = async ({ userId, parkId }: ActionFavoriteProps) => {
+  try {
+    await addDoc(favoritesCollection, {
+      parkIds: [parkId],
+      userId,
+    });
+  } catch (error) {
+    console.error('there was an error reporting dogs count');
+  }
+};
+
+const updateFavorites = async (favoritesId: string, parkId: string) => {
+  try {
+    const favoritesRef = doc(db, 'favorites', favoritesId);
+    await updateDoc(favoritesRef, {
+      parkIds: arrayUnion(parkId),
+    });
+  } catch (error) {
+    console.error(
+      `there was an error adding park ${parkId} to favorites:  ${error}`
+    );
+  }
+};
+
+const addFavorite = async ({ userId, parkId }: ActionFavoriteProps) => {
+  const userFavoritesQuery = query(
+    favoritesCollection,
+    where('userId', '==', userId)
+  );
+
+  const querySnapshot = await getDocs(userFavoritesQuery);
+  if (!querySnapshot.docs.length) {
+    await createFavorites({ userId, parkId });
+  } else {
+    await updateFavorites(querySnapshot.docs[0].id, parkId);
+  }
+};
+
+const removeFavorite = async ({ userId, parkId }: ActionFavoriteProps) => {
   try {
     const userFavoritesQuery = query(
       favoritesCollection,
@@ -31,34 +65,18 @@ const getAndUpdate = async ({ action, userId, parkId }: GetAndUpdateProps) => {
     );
 
     const querySnapshot = await getDocs(userFavoritesQuery);
-    querySnapshot.forEach(async (doc) => {
-      if (action === 'add') {
-        await updateDoc(doc.ref, {
-          favorites: arrayUnion(parkId),
-        });
-      } else {
-        await updateDoc(doc.ref, {
-          favorites: arrayRemove(parkId),
-        });
-      }
-      return doc.id;
-    });
+    if (querySnapshot.docs.length) {
+      const docRef = doc(db, 'favorites', querySnapshot.docs[0].id);
+      await updateDoc(docRef, {
+        parkIds: arrayRemove(parkId),
+      });
+    }
   } catch (error) {
     console.error(
-      `there was an error ${
-        action === 'add' ? 'adding' : 'removing'
-      } park ${parkId} to favorites: ${error}`
+      `there was an error removing park ${parkId} to favorites: ${error}`
     );
     return null;
   }
-};
-
-const addFavorite = async ({ userId, parkId }: AddFavoriteProps) => {
-  await getAndUpdate({ userId, parkId, action: 'add' });
-};
-
-const removeFavorite = async ({ userId, parkId }: RemoveFavoriteProps) => {
-  await getAndUpdate({ userId, parkId, action: 'remove' });
 };
 
 const fetchUserFavorites = async (userId: string) => {
@@ -69,13 +87,15 @@ const fetchUserFavorites = async (userId: string) => {
     );
 
     const querySnapshot = await getDocs(userFavoritesQuery);
+    const res: Favorites[] = [];
 
     querySnapshot.forEach((doc) => {
-      return {
+      res.push({
         ...doc.data(),
         id: doc.id,
-      } as Favorites;
+      } as Favorites);
     });
+    return res[0];
   } catch (error) {
     console.error(
       `there was an error fetching favorites for user ${userId}: ${error}`
