@@ -3,7 +3,7 @@ import { Outlet, useLoaderData } from 'react-router';
 import { Park as ParkType } from '../types/park';
 import { ParkCheckIn } from '../components/park/ParkCheckIn';
 import { ReviewsPreview } from '../components/park/ReviewsPreview';
-import { ParkVisitorsContextProvider } from '../components/park/ParkVisitorsContext';
+import { ParkVisitorsContextProvider } from '../context/ParkVisitorsContext';
 import { UserContext } from '../context/UserContext';
 import { FavoriteButton } from '../components/park/FavoriteButton';
 import styles from './Park.module.scss';

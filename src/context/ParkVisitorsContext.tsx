@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useEffect, useState } from 'react';
-import { User } from '../../types/user';
-import { fetchCheckedInUsers } from '../../services/users';
-import { fetchUserFriendships } from '../../services/friendships';
+import { User } from '../types/user';
+import { fetchCheckedInUsers } from '../services/users';
+import { fetchUserFriendships } from '../services/friendships';
 
 interface ParksVisitorContextProps {
   visitors: {

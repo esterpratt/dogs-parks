@@ -1,0 +1,32 @@
+.camera {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  video,
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.capture-button,
+.save-button,
+.recapture-button,
+.cancel-button {
+  position: absolute;
+  bottom: 32px;
+}
+
+.capture-button,
+.save-button {
+  left: 48px;
+}
+
+.recapture-button,
+.cancel-button {
+  right: 48px;
+}

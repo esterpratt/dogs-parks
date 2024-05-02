@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { ParkMaterial } from '../../types/park';
 import { DetailsSqaure } from './DetailsSquare';
-import { ParkVisitorsContext } from './ParkVisitorsContext';
+import { ParkVisitorsContext } from '../../context/ParkVisitorsContext';
 import styles from './ParkGenerals.module.scss';
 
 interface ParkGeneralsProps {

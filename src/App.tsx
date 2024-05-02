@@ -14,7 +14,7 @@ import { NewPark } from './pages/NewPark';
 import { Reviews } from './pages/Reviews';
 import { reviewsLoader } from './loaders/reviewsLoader';
 import { ParkDetails } from './pages/ParkDetails';
-import { ParkVisitors } from './components/park/ParkVisitors';
+import { ParkVisitors } from './pages/ParkVisitors';
 
 const App = () => {
   const router = createBrowserRouter([

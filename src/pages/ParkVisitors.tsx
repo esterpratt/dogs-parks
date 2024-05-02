@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import { UserPreview } from '../users/UserPreview';
-import { ParkVisitorsContext } from './ParkVisitorsContext';
+import { UserPreview } from '../components/users/UserPreview';
+import { ParkVisitorsContext } from '../context/ParkVisitorsContext';
 
 const ParkVisitors: React.FC = () => {
   const { visitors } = useContext(ParkVisitorsContext);

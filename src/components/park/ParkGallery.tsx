@@ -5,6 +5,7 @@ import { fetchAllParkImages, uploadParkImage } from '../../services/parks';
 import { Carousel } from '../Carousel';
 import { Button } from '../Button';
 import styles from './ParkGallery.module.scss';
+import { FileInput } from '../FileInput';
 
 interface ParkGalleryProps {
   parkId: string;
@@ -13,6 +14,7 @@ interface ParkGalleryProps {
 const ParkGallery: React.FC<ParkGalleryProps> = ({ parkId }) => {
   const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
   const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const [error, setError] = useState<string | DOMException | null>(null);
   const [images, setImages] = useState<string[]>([]);
 
   useEffect(() => {
@@ -45,6 +47,12 @@ const ParkGallery: React.FC<ParkGalleryProps> = ({ parkId }) => {
     setIsAddImageModalOpen(false);
   };
 
+  const onCameraError = (error: string | DOMException) => {
+    console.error(error);
+    setError(error);
+    setIsCameraOpen(false);
+  };
+
   return (
     <div>
       <Carousel images={images} />
@@ -56,11 +64,18 @@ const ParkGallery: React.FC<ParkGalleryProps> = ({ parkId }) => {
       </Button>
       <Modal open={isAddImageModalOpen} onClose={onCloseModal}>
         {isCameraOpen ? (
-          <Camera onSaveImg={onUploadImg} />
+          <Camera
+            onSaveImg={onUploadImg}
+            onError={onCameraError}
+            onCancel={() => setIsCameraOpen(false)}
+          />
         ) : (
-          <div>
-            <input type="file" onChange={onUploadFile} value="" />
-            <button onClick={() => setIsCameraOpen(true)}>Take a photo</button>
+          <div className={styles.buttonsContainer}>
+            <FileInput onUploadFile={onUploadFile} />
+            <span>or</span>
+            <Button onClick={() => setIsCameraOpen(true)}>
+              {error ? 'Sorry, cannot use your camera' : 'Take a photo'}
+            </Button>
           </div>
         )}
       </Modal>
