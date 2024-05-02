@@ -1,0 +1,9 @@
+@import '../../variables.scss';
+
+:export {
+  green: $green;
+  red: $red;
+  orange: $orange;
+  strokeLight: $text-light;
+  strokedark: $text;
+}
