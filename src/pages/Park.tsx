@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { Outlet, useLoaderData } from 'react-router';
+import { LuTrees } from 'react-icons/lu';
 import { Park as ParkType } from '../types/park';
 import { ParkCheckIn } from '../components/park/ParkCheckIn';
 import { ReviewsPreview } from '../components/park/ReviewsPreview';
@@ -20,7 +21,13 @@ const Park: React.FC = () => {
 
   return (
     <ParkVisitorsContextProvider parkId={park.id} userId={user?.id}>
-      <img src={image} className={styles.image} />
+      {image ? (
+        <img src={image} className={styles.image} />
+      ) : (
+        <div className={styles.imageIcon}>
+          <LuTrees />
+        </div>
+      )}
       <div className={styles.contentContainer}>
         <div className={styles.basicDetails}>
           <div>

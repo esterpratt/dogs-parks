@@ -7,7 +7,7 @@ const parkLoader: LoaderFunction = async ({ params }) => {
     fetchPark(parkId!),
     fetchParkPrimaryImage(parkId!),
   ]);
-  return { park, image };
+  return { park, image: image?.[0] };
 };
 
 export { parkLoader };
