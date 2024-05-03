@@ -7,7 +7,7 @@ import { ParkVisitorsContextProvider } from '../context/ParkVisitorsContext';
 import { UserContext } from '../context/UserContext';
 import { FavoriteButton } from '../components/park/FavoriteButton';
 import styles from './Park.module.scss';
-import { Tabs } from '../components/Tabs/Tabs';
+import { ParkTabs } from '../components/park/ParkTabs';
 
 interface ParkData {
   park: ParkType;
@@ -41,13 +41,7 @@ const Park: React.FC = () => {
             </div>
           )}
         </div>
-        <Tabs
-          tabs={[
-            { text: 'General Info', url: '' },
-            { text: 'Reviews', url: 'Reviews' },
-            { text: 'Visitors', url: 'visitors' },
-          ]}
-        />
+        <ParkTabs />
         <div className={styles.outletContainer}>
           <Outlet context={park} />
         </div>

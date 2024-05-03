@@ -15,6 +15,7 @@ import { Reviews } from './pages/Reviews';
 import { reviewsLoader } from './loaders/reviewsLoader';
 import { ParkDetails } from './pages/ParkDetails';
 import { ParkVisitors } from './pages/ParkVisitors';
+import { Users } from './pages/Users';
 
 const App = () => {
   const router = createBrowserRouter([
@@ -64,6 +65,10 @@ const App = () => {
           path: '/profile/:id',
           element: <Profile />,
           loader: userLoader,
+        },
+        {
+          path: '/users',
+          element: <Users />,
         },
       ],
     },

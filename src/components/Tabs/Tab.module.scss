@@ -12,4 +12,9 @@
     border-bottom: 1px solid $green;
     color: $green;
   }
+
+  &.disabled {
+    color: $text-light;
+    pointer-events: none;
+  }
 }
