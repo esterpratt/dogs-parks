@@ -1,9 +1,12 @@
+@import '../../variables.scss';
+
 .camera {
   width: 100vw;
   height: 100vh;
   position: fixed;
   top: 0;
   left: 0;
+  color: $text;
 
   video,
   img {
@@ -14,19 +17,26 @@
 }
 
 .capture-button,
-.save-button,
-.recapture-button,
+.buttonsContainer,
 .cancel-button {
   position: absolute;
-  bottom: 32px;
 }
 
 .capture-button,
-.save-button {
-  left: 48px;
+.buttonsContainer {
+  bottom: 48px;
+  left: 50%;
+  opacity: 0.7;
 }
 
-.recapture-button,
 .cancel-button {
-  right: 48px;
+  right: 24px;
+  top: 24px;
+  z-index: 200;
+}
+
+.buttonsContainer {
+  display: flex;
+  gap: 24px;
+  transform: translate(-50%);
 }
