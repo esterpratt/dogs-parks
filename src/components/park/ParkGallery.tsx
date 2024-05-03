@@ -16,6 +16,7 @@ const ParkGallery: React.FC<ParkGalleryProps> = ({ parkId }) => {
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [error, setError] = useState<string | DOMException | null>(null);
   const [images, setImages] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -23,6 +24,7 @@ const ParkGallery: React.FC<ParkGalleryProps> = ({ parkId }) => {
       if (images) {
         setImages(images);
       }
+      setLoading(false);
     };
 
     fetchImages();
@@ -53,14 +55,18 @@ const ParkGallery: React.FC<ParkGalleryProps> = ({ parkId }) => {
     setIsCameraOpen(false);
   };
 
+  if (loading) {
+    return null;
+  }
+
   return (
     <div>
-      <Carousel images={images} />
+      {!!images.length && <Carousel images={images} />}
       <Button
         onClick={() => setIsAddImageModalOpen(true)}
         className={styles.addPhotoButton}
       >
-        Add photo
+        {!images.length && 'No photos yet. '}Add photo
       </Button>
       <Modal open={isAddImageModalOpen} onClose={onCloseModal}>
         {isCameraOpen ? (
