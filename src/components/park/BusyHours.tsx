@@ -1,27 +1,27 @@
 import { useEffect, useState } from 'react';
-import {
-  getHoursChartData,
-  getSlicedHoursChartData,
-  getStrHour,
-} from '../charts/getHoursChartData';
+import { getHoursChartData, getStrHour } from '../charts/getHoursChartData';
 import { fetchDogsCount } from '../../services/dogsCount';
 import { Park } from '../../types/park';
-import { AreaChart } from '../charts/AreaChart';
-import styles from './BusyHours.module.scss';
 import { getSTD } from '../../utils/calcs';
+import { BarChart } from '../charts/BarChart';
+import styles from './BusyHours.module.scss';
+import barChartStyles from '../charts/BarChart.module.scss';
 
 const BUSINESS = {
   LIGHT: {
     str: 'quite',
     className: 'light',
+    color: barChartStyles.green,
   },
   MEDIUM: {
     str: 'not so busy',
     className: 'medium',
+    color: barChartStyles.orange,
   },
   BUSY: {
     str: 'busy',
     className: 'busy',
+    color: barChartStyles.red,
   },
 };
 
@@ -65,10 +65,6 @@ const BusyHours: React.FC<BusyHoursProps> = ({ parkId }) => {
     data: dogsCount,
   });
   const currentCount = hoursChartData[currentHour].count;
-  const slicedHoursChartData = getSlicedHoursChartData({
-    data: hoursChartData,
-    hourToSliceBy: currentHour,
-  });
 
   let business = BUSINESS.MEDIUM;
   if (currentCount > std * 1.2) {
@@ -84,11 +80,11 @@ const BusyHours: React.FC<BusyHoursProps> = ({ parkId }) => {
         <span className={styles[business.className]}>{business.str}</span>
       </span>
       <div className={styles.chartContainer}>
-        <AreaChart
-          data={slicedHoursChartData}
+        <BarChart
+          data={hoursChartData}
           xDataKey="hour"
           yDataKey="count"
-          referecnceLineData={currentStrHour}
+          currentHour={{ hour: currentStrHour, color: business.color }}
         />
       </div>
     </div>

@@ -42,8 +42,8 @@ const getSlicedHoursChartData = ({
   data,
   hourToSliceBy,
 }: GetSlicedHoursChartDataProps) => {
-  let firstIndex = hourToSliceBy - 6;
-  let secondIndex = hourToSliceBy + 6;
+  let firstIndex = hourToSliceBy - 8;
+  let secondIndex = hourToSliceBy + 8;
   if (firstIndex < 0) {
     secondIndex += 0 - firstIndex;
     firstIndex = 0;

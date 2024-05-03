@@ -1,7 +1,7 @@
 interface User {
   id: string;
   name?: string;
-  dogId?: string;
+  dogs?: string[];
 }
 
 export type { User };

@@ -6,12 +6,15 @@ import { fetchFriends } from '../../services/users';
 import { FRIENDSHIP_STATUS, USER_ROLE } from '../../types/friendship';
 import { fetchFriendship, updateFriendship } from '../../services/friendships';
 import { UserContext } from '../../context/UserContext';
+import { Dog } from '../../types/dog';
+import { Dogs } from './Dogs';
 
 interface PrivateProfileProps {
   user: User;
+  dogs?: Dog[];
 }
 
-const PrivateProfile: React.FC<PrivateProfileProps> = ({ user }) => {
+const PrivateProfile: React.FC<PrivateProfileProps> = ({ user, dogs = [] }) => {
   // TODO: remove to context/new component so other components in this page won't rerender
   const [friends, setFriends] = useState<User[]>([]);
   const [pendingFriends, setPendingFriends] = useState<User[]>([]);
@@ -64,6 +67,7 @@ const PrivateProfile: React.FC<PrivateProfileProps> = ({ user }) => {
     <div>
       <span>Welcome {user.name}</span>
       <button onClick={userLogout}>Logout</button>
+      <Dogs dogs={dogs} />
       {!!friends.length && <FriendsList friends={friends} />}
       {!!pendingFriends.length && (
         <FriendRequestsList

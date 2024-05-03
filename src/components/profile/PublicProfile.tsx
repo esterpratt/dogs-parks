@@ -1,14 +1,18 @@
+import { Dog } from '../../types/dog';
 import { User } from '../../types/user';
+import { Dogs } from './Dogs';
 import { FriendRequestButton } from './FriendRequestButton';
 
 interface PublicProfileProps {
   user: User;
+  dogs?: Dog[];
   signedInUser: User | null;
 }
 
 const PublicProfile: React.FC<PublicProfileProps> = ({
   user,
   signedInUser,
+  dogs = [],
 }) => {
   return (
     <div>
@@ -19,6 +23,7 @@ const PublicProfile: React.FC<PublicProfileProps> = ({
           userId={user.id}
         />
       )}
+      <Dogs dogs={dogs} />
     </div>
   );
 };
