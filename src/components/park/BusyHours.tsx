@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { getHoursChartData, getStrHour } from '../charts/getHoursChartData';
 import { fetchDogsCount } from '../../services/dogsCount';
 import { Park } from '../../types/park';
-import { getSTD } from '../../utils/calcs';
+import { getMean, getSTD } from '../../utils/calcs';
 import { BarChart } from '../charts/BarChart';
 import styles from './BusyHours.module.scss';
 import barChartStyles from '../charts/BarChart.module.scss';
@@ -67,20 +67,22 @@ const BusyHours: React.FC<BusyHoursProps> = ({ parkId }) => {
   const currentHour = new Date().getHours();
   const currentStrHour = getStrHour(currentHour);
   const hoursChartData = getHoursChartData(dogsCount);
-  const std = getSTD(hoursChartData.map((item) => item.count));
+  const counts = hoursChartData.map((item) => item.count);
+  const mean = getMean(counts);
+  const std = getSTD(counts, mean);
   const currentCount = hoursChartData[currentHour].count;
 
-  let business = BUSINESS.MEDIUM;
-  if (currentCount > std * 1.2) {
+  let business = BUSINESS.LIGHT;
+  if (currentCount > 3 && currentCount > mean + std * 0.5) {
     business = BUSINESS.BUSY;
-  } else if (currentCount < std * 0.8) {
-    business = BUSINESS.LIGHT;
+  } else if (currentCount > 2 && currentCount > mean - std * 0.5) {
+    business = BUSINESS.MEDIUM;
   }
 
   return (
     <div>
       <span className={styles.text}>
-        In this hour, the park is usually{' '}
+        At this hour, the park is usually{' '}
         <span className={styles[business.className]}>{business.str}</span>
       </span>
       <div className={styles.chartContainer}>

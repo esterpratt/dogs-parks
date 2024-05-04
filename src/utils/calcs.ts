@@ -6,8 +6,8 @@ const getMean = (arr: number[]) => {
   return sum / arr.length;
 };
 
-const getSTD = (arr: number[]) => {
-  const mean = getMean(arr);
+const getSTD = (arr: number[], givenMean?: number) => {
+  const mean = givenMean !== undefined ? givenMean : getMean(arr);
   const variance = getSum(arr.map((v) => (v - mean) ** 2)) / arr.length;
   return variance;
 };

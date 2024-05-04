@@ -26,7 +26,7 @@ const BarChart: React.FC<BarChartProps> = ({
 }) => {
   return (
     <ResponsiveContainer>
-      <RechartsBarChart data={data}>
+      <RechartsBarChart data={data} barGap="100%">
         <XAxis
           dataKey={xDataKey}
           tickMargin={10}
@@ -45,7 +45,7 @@ const BarChart: React.FC<BarChartProps> = ({
         <Bar
           dataKey={yDataKey}
           fill={styles.blue}
-          radius={[10, 10, 10, 10]}
+          radius={[10, 10, 0, 0]}
           barSize={10}
         >
           {data?.map((entry, index) => {
