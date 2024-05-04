@@ -1,11 +1,8 @@
-interface GetHoursChartDataProps {
-  data: { hour: number; count: number }[];
-}
-
-interface GetSlicedHoursChartDataProps {
-  data: { hour: string; count: number }[];
-  hourToSliceBy: number;
-}
+type GetHoursChartDataProps = {
+  hour: number;
+  count: number;
+  fullDate: string;
+}[];
 
 const strHours = [
   '00:00',
@@ -38,39 +35,57 @@ const getStrHour = (hour: number) => {
   return strHours[hour];
 };
 
-const getSlicedHoursChartData = ({
-  data,
-  hourToSliceBy,
-}: GetSlicedHoursChartDataProps) => {
-  let firstIndex = hourToSliceBy - 8;
-  let secondIndex = hourToSliceBy + 8;
-  if (firstIndex < 0) {
-    secondIndex += 0 - firstIndex;
-    firstIndex = 0;
-  } else if (secondIndex > 23) {
-    firstIndex -= secondIndex - 23;
-    secondIndex = 23;
-  }
+const getHoursChartData = (data: GetHoursChartDataProps) => {
+  // arrange data for calculation
+  const countByDateAndHour: {
+    [hour: number]: { [date: string]: { count: number; occurances: number } };
+  } = {};
 
-  return data.slice(firstIndex, secondIndex + 1);
-};
-
-const getHoursChartData = ({ data }: GetHoursChartDataProps) => {
-  data.sort((a, b) => a.hour - b.hour);
-  const hoursObj: { [key: string]: number } = {};
   data.forEach((item) => {
-    const hourString = strHours[item.hour];
-    hoursObj[hourString] = item.count;
+    if (!countByDateAndHour[item.hour]) {
+      countByDateAndHour[item.hour] = {
+        [item.fullDate]: {
+          count: item.count,
+          occurances: 1,
+        },
+      };
+    } else {
+      if (!countByDateAndHour[item.hour][item.fullDate]) {
+        countByDateAndHour[item.hour][item.fullDate] = {
+          count: item.count,
+          occurances: 1,
+        };
+      } else {
+        countByDateAndHour[item.hour][item.fullDate].count += item.count;
+        countByDateAndHour[item.hour][item.fullDate].occurances += 1;
+      }
+    }
   });
 
-  const hoursChartData = strHours.map((hour) => {
+  // get average for every hour
+  const countByHour: { [hour: string]: number } = {};
+  Object.keys(countByDateAndHour).forEach((hour) => {
+    const dateAvg: { [date: string]: number } = {};
+    Object.keys(countByDateAndHour[Number(hour)]).forEach((date) => {
+      dateAvg[date] =
+        countByDateAndHour[Number(hour)][date].count /
+        countByDateAndHour[Number(hour)][date].occurances;
+    });
+    const sum = Object.keys(dateAvg).reduce((acc, date) => {
+      return acc + dateAvg[date];
+    }, 0);
+    const avg = Math.round(sum / Object.keys(dateAvg).length);
+    const strHour = getStrHour(Number(hour));
+    countByHour[strHour] = avg;
+  });
+
+  // get data arrange by hour for the chart
+  return strHours.map((hour) => {
     return {
       hour,
-      count: hoursObj[hour] ?? 0,
+      count: countByHour[hour] || 0,
     };
   });
-
-  return hoursChartData;
 };
 
-export { getHoursChartData, getStrHour, getSlicedHoursChartData };
+export { getHoursChartData, getStrHour };

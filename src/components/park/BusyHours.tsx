@@ -34,6 +34,7 @@ const BusyHours: React.FC<BusyHoursProps> = ({ parkId }) => {
     | {
         count: number;
         hour: number;
+        fullDate: string;
       }[]
     | null
   >(null);
@@ -42,13 +43,18 @@ const BusyHours: React.FC<BusyHoursProps> = ({ parkId }) => {
     const getDogsCount = async () => {
       const dogsCountReports = await fetchDogsCount(parkId);
       if (dogsCountReports) {
-        const dogsCountByHour = dogsCountReports?.map((report) => {
+        const dogsCount = dogsCountReports?.map((report) => {
+          const hour = report.timestamp.getHours();
+          const fullDate = `${report.timestamp.getDate()}, ${report.timestamp.getMonth()}, ${report.timestamp.getFullYear()}`;
+
           return {
             count: report.dogsCount,
-            hour: report.timestamp.getHours(),
+            hour,
+            fullDate,
           };
         });
-        setDogsCount(dogsCountByHour);
+
+        setDogsCount(dogsCount);
       }
     };
     getDogsCount();
@@ -60,10 +66,8 @@ const BusyHours: React.FC<BusyHoursProps> = ({ parkId }) => {
 
   const currentHour = new Date().getHours();
   const currentStrHour = getStrHour(currentHour);
-  const std = getSTD(dogsCount.map((item) => item.count));
-  const hoursChartData = getHoursChartData({
-    data: dogsCount,
-  });
+  const hoursChartData = getHoursChartData(dogsCount);
+  const std = getSTD(hoursChartData.map((item) => item.count));
   const currentCount = hoursChartData[currentHour].count;
 
   let business = BUSINESS.MEDIUM;

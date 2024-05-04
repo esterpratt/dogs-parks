@@ -8,7 +8,7 @@ const getMean = (arr: number[]) => {
 
 const getSTD = (arr: number[]) => {
   const mean = getMean(arr);
-  const variance = getSum(arr.map((v) => (v - mean) ** 2));
+  const variance = getSum(arr.map((v) => (v - mean) ** 2)) / arr.length;
   return variance;
 };
 
