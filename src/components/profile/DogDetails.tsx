@@ -1,14 +1,24 @@
-import { useState } from 'react';
 import classnames from 'classnames';
 import { Dog } from '../../types/dog';
 import styles from './DogDetails.module.scss';
 
 interface DogProps {
   dogs: Dog[];
+  currentDogId: string;
+  setCurrentDogId: (id: string) => void;
+  className?: string;
 }
 
-const DogDetails: React.FC<DogProps> = ({ dogs }) => {
-  const [currentDog, setCurrentDog] = useState<Dog>(dogs[0]);
+const DogDetails: React.FC<DogProps> = ({
+  dogs,
+  currentDogId,
+  setCurrentDogId,
+  className,
+}) => {
+  const currentDog = dogs.find((dog) => dog.id === currentDogId);
+  if (!currentDog) {
+    return null;
+  }
   const {
     age,
     breed,
@@ -23,13 +33,13 @@ const DogDetails: React.FC<DogProps> = ({ dogs }) => {
   } = currentDog;
 
   return (
-    <div>
+    <div className={classnames(styles.container, className)}>
       {dogs.length > 1 && (
         <div className={styles.dogTabs}>
           {dogs.map((dog) => (
             <span
               key={dog.id}
-              onClick={() => setCurrentDog(dog)}
+              onClick={() => setCurrentDogId(dog.id)}
               className={classnames(
                 styles.dogTab,
                 dog.id === currentDog.id && styles.current
@@ -40,45 +50,83 @@ const DogDetails: React.FC<DogProps> = ({ dogs }) => {
           ))}
         </div>
       )}
-      <table>
-        <tr>
-          <td>Age</td>
-          <td>{age}</td>
-        </tr>
-        <tr>
-          <td>Breed</td>
-          <td>{breed || '?'}</td>
-        </tr>
-        <tr>
-          <td>Size</td>
-          <td>{size || '?'}</td>
-        </tr>
-        <tr>
-          <td>Temperament</td>
-          <td>{temperament || '?'}</td>
-        </tr>
-        <tr>
-          <td>Energy</td>
-          <td>{energy || '?'}</td>
-        </tr>
-        <tr>
-          <td>Possessive?</td>
-          <td>{possessive || '?'}</td>
-        </tr>
-        <tr>
-          <td>Likes</td>
-          <td>{likes?.length ? likes?.join(', ') : '?'}</td>
-        </tr>
-        <tr>
-          <td>Dislikes</td>
-          <td>{dislikes?.length ? dislikes?.join(', ') : '?'}</td>
-        </tr>
-        {description && (
+      <table className={styles.details}>
+        <tbody>
           <tr>
-            <td>More about {name}</td>
-            <td>{description}</td>
+            <td>
+              <div>Age</div>
+            </td>
+            <td>
+              <div>{age}</div>
+            </td>
           </tr>
-        )}
+          <tr>
+            <td>
+              <div>Breed</div>
+            </td>
+            <td>
+              <div>{breed || '?'}</div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div>Size</div>
+            </td>
+            <td>
+              <div>{size || '?'}</div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div>Temperament</div>
+            </td>
+            <td>
+              <div>{temperament || '?'}</div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div>Energy</div>
+            </td>
+            <td>
+              <div>{energy || '?'}</div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div>Possessive</div>
+            </td>
+            <td>
+              <div>{possessive || '?'}</div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div>Likes</div>
+            </td>
+            <td>
+              <div>{likes?.length ? likes?.join(', ') : '?'}</div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div>Dislikes</div>
+            </td>
+            <td>
+              <div>{dislikes?.length ? dislikes?.join(', ') : '?'}</div>
+            </td>
+          </tr>
+          {description && (
+            <tr>
+              <td>
+                <div>More about {name}</div>
+              </td>
+              <td>
+                <div>{description}</div>
+              </td>
+            </tr>
+          )}
+        </tbody>
       </table>
     </div>
   );

@@ -5,13 +5,16 @@ import styles from './AccordionContent.module.scss';
 
 interface AccordionContentProps {
   children: ReactNode;
+  className?: string;
 }
 
-const AccordionContent = ({ children }: AccordionContentProps) => {
+const AccordionContent = ({ children, className }: AccordionContentProps) => {
   const { isOpen } = useContext(AccordionContext);
 
   return (
-    <div className={classnames(styles.wrapper, isOpen && styles.open)}>
+    <div
+      className={classnames(styles.wrapper, isOpen && styles.open, className)}
+    >
       <div className={styles.content}>{children}</div>
     </div>
   );

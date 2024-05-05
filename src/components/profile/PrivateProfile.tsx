@@ -9,6 +9,7 @@ import { DogsImages } from './DogsImages';
 import styles from './PrivateProfile.module.scss';
 import { Outlet } from 'react-router';
 import { ProfileTabs } from './ProfileTabs';
+import { useState } from 'react';
 
 interface PrivateProfileProps {
   user: User;
@@ -21,6 +22,7 @@ const PrivateProfile: React.FC<PrivateProfileProps> = ({
   dogs,
   imagesByDog,
 }) => {
+  const [currentDogId, setCurrentDogId] = useState<string>(dogs[0].id);
   // TODO: remove to context friends + reviews and use it in the tabs
   // const [friends, setFriends] = useState<User[]>([]);
   // const [pendingFriends, setPendingFriends] = useState<User[]>([]);
@@ -56,9 +58,13 @@ const PrivateProfile: React.FC<PrivateProfileProps> = ({
   //   getPendingFriends();
   // }, [user.id]);
 
-  const primaryDogsImages = Object.values(imagesByDog).map(
-    (dogImages) => dogImages.primary
-  );
+  const primaryImages = Object.keys(imagesByDog).map((id) => {
+    return {
+      id,
+      src: imagesByDog[id].primary,
+    };
+  });
+
   const dogsNames = dogs.map((dog) => dog.name);
   const lastDogName = dogsNames.pop();
   const dogNamesStr = `${dogsNames.join(', ')} & ${lastDogName}`;
@@ -79,12 +85,18 @@ const PrivateProfile: React.FC<PrivateProfileProps> = ({
   return (
     <div>
       <div className={styles.imgsContainer}>
-        <DogsImages images={primaryDogsImages} />
+        <DogsImages
+          images={primaryImages}
+          currentDogId={currentDogId}
+          setCurrentDogId={setCurrentDogId}
+        />
         <span>{dogNamesStr}</span>
       </div>
       <ProfileTabs />
       <div className={styles.outletContainer}>
-        <Outlet context={{ user, dogs, imagesByDog }} />
+        <Outlet
+          context={{ user, dogs, imagesByDog, currentDogId, setCurrentDogId }}
+        />
       </div>
       {/* {!!friends.length && <FriendsList friends={friends} />}
       {!!pendingFriends.length && (

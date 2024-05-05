@@ -1,6 +1,7 @@
 import { useOutletContext } from 'react-router';
 import { MdOutlineModeEditOutline } from 'react-icons/md';
 import { FaPlus } from 'react-icons/fa6';
+import classnames from 'classnames';
 import { Dog } from '../types/dog';
 import { User } from '../types/user';
 import { DogDetails } from '../components/profile/DogDetails';
@@ -9,17 +10,21 @@ import { AccordionTitle } from '../components/Accordion/AccordionTitle';
 import { AccordionContent } from '../components/Accordion/AccordionContent';
 import { AccordionArrow } from '../components/Accordion/AccordionArrow';
 import styles from './ProfileInfo.module.scss';
+import { UserDetails } from '../components/profile/UserDetails';
 
 interface ProfileInfoProps {
   user: User;
   dogs: Dog[];
+  currentDogId: string;
+  setCurrentDogId: (id: string) => void;
   imagesByDog: { [dogId: string]: { primary: string; other: string[] } };
 }
 
 const ProfileInfo = () => {
-  const { user, dogs, imagesByDog } = useOutletContext<ProfileInfoProps>();
+  const { user, dogs, imagesByDog, currentDogId, setCurrentDogId } =
+    useOutletContext<ProfileInfoProps>();
   return (
-    <div>
+    <div className={styles.infoContainer}>
       <Accordion>
         <AccordionTitle className={styles.title}>
           {(isOpen) => (
@@ -32,8 +37,15 @@ const ProfileInfo = () => {
             </>
           )}
         </AccordionTitle>
-        <AccordionContent>
-          <DogDetails dogs={dogs} />
+        <AccordionContent
+          className={classnames(styles.contentContainer, styles.dark)}
+        >
+          <DogDetails
+            className={styles.content}
+            dogs={dogs}
+            currentDogId={currentDogId}
+            setCurrentDogId={setCurrentDogId}
+          />
         </AccordionContent>
       </Accordion>
       <Accordion>
@@ -48,7 +60,9 @@ const ProfileInfo = () => {
             </>
           )}
         </AccordionTitle>
-        <AccordionContent>{JSON.stringify(imagesByDog)}</AccordionContent>
+        <AccordionContent className={styles.contentContainer}>
+          <div className={styles.content}>{JSON.stringify(imagesByDog)}</div>
+        </AccordionContent>
       </Accordion>
       <Accordion>
         <AccordionTitle className={styles.title}>
@@ -62,7 +76,11 @@ const ProfileInfo = () => {
             </>
           )}
         </AccordionTitle>
-        <AccordionContent>{user.name}</AccordionContent>
+        <AccordionContent
+          className={classnames(styles.contentContainer, styles.dark)}
+        >
+          <UserDetails user={user} className={styles.content} />
+        </AccordionContent>
       </Accordion>
     </div>
   );
