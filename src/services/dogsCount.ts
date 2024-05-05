@@ -8,7 +8,6 @@ import {
   where,
 } from 'firebase/firestore';
 import { db } from './firebase-config';
-import { Park } from '../types/park';
 import { DogsCountReport } from '../types/dogsCount';
 
 interface ReportParkDogsCountProps {
@@ -36,7 +35,7 @@ const reportDogsCount = async ({
   }
 };
 
-const fetchDogsCount = async (parkId: Park['id']) => {
+const fetchDogsCount = async (parkId: string) => {
   try {
     const dogsCountQuery: Query = query(
       dogsCountReportsCollection,

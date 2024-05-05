@@ -12,7 +12,6 @@ import {
 import { User } from '../types/user';
 import { fetchUserFriendships } from './friendships';
 import { FRIENDSHIP_STATUS, USER_ROLE } from '../types/friendship';
-import { Park } from '../types/park';
 import { fetchParkCheckins } from './checkins';
 import { AppError, throwError } from './error';
 
@@ -21,7 +20,7 @@ const usersCollection = collection(db, 'users');
 type createUserProps = Pick<User, 'id' | 'name'>;
 
 interface FetchFriendsProps {
-  userId: User['id'];
+  userId: string;
   userRole?: USER_ROLE;
   status?: FRIENDSHIP_STATUS;
 }
@@ -36,7 +35,7 @@ const createUser = async ({ id, name }: createUserProps) => {
   }
 };
 
-const fetchUser = async (id: User['id']) => {
+const fetchUser = async (id: string) => {
   try {
     const docRef = doc(db, 'users', id);
     const docSnap = await getDoc(docRef);
@@ -52,7 +51,7 @@ const fetchUser = async (id: User['id']) => {
   }
 };
 
-const fetchUsers = async (ids: User['id'][]) => {
+const fetchUsers = async (ids: string[]) => {
   try {
     const usersQuery = query(usersCollection, where(documentId(), 'in', ids));
     const querySnapshot = await getDocs(usersQuery);
@@ -94,7 +93,7 @@ const fetchFriends = async ({
   }
 };
 
-const fetchCheckedInUsers = async (parkId: Park['id']) => {
+const fetchCheckedInUsers = async (parkId: string) => {
   try {
     const parkCheckins = await fetchParkCheckins(parkId);
     if (!parkCheckins || !parkCheckins.length) {

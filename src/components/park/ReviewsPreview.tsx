@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Park } from '../../types/park';
 import { Stars } from '../Stars';
 import { fetchParkRank, fetchReviewsCount } from '../../services/reviews';
 import { Review } from '../../types/review';
@@ -8,7 +7,7 @@ import { AddReviewButton } from './AddReviewButton';
 import styles from './ReviewsPreview.module.scss';
 
 interface ReviewsPreviewProps {
-  parkId: Park['id'];
+  parkId: string;
 }
 
 const ReviewsPreview = ({ parkId }: ReviewsPreviewProps) => {
