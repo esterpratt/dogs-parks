@@ -12,17 +12,16 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore';
-import { User } from '../types/user';
 import { Friendship, FRIENDSHIP_STATUS, USER_ROLE } from '../types/friendship';
 
 const friendshipsCollection = collection(db, 'friendships');
 
 interface CreateFriendshipProps {
-  requesterId: User['id'];
-  requesteeId: User['id'];
+  requesterId: string;
+  requesteeId: string;
 }
 
-type FetchFriendshipProps = [User['id'], User['id']];
+type FetchFriendshipProps = [string, string];
 
 interface UpdateFriendshipProps {
   friendshipId: string;
@@ -30,7 +29,7 @@ interface UpdateFriendshipProps {
 }
 
 interface FetchUserFriendshipsProps {
-  userId: User['id'];
+  userId: string;
   userRole?: USER_ROLE;
   status?: FRIENDSHIP_STATUS;
 }

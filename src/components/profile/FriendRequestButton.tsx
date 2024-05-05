@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { User } from '../../types/user';
 import { Friendship, FRIENDSHIP_STATUS } from '../../types/friendship';
 import {
   createFriendship,
@@ -9,8 +8,8 @@ import {
 } from '../../services/friendships';
 
 interface PublicProfileProps {
-  signedInUserId: User['id'];
-  userId: User['id'];
+  signedInUserId: string;
+  userId: string;
 }
 
 const FriendRequestButton: React.FC<PublicProfileProps> = ({
@@ -88,7 +87,7 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
 };
 
 const getButtonProps = (
-  signedInUserId: User['id'],
+  signedInUserId: string,
   friendship: Friendship | null
 ) => {
   if (!friendship) {

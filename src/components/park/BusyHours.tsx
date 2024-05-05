@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getHoursChartData, getStrHour } from '../charts/getHoursChartData';
 import { fetchDogsCount } from '../../services/dogsCount';
-import { Park } from '../../types/park';
 import { getMean, getSTD } from '../../utils/calcs';
 import { BarChart } from '../charts/BarChart';
 import styles from './BusyHours.module.scss';
@@ -26,7 +25,7 @@ const BUSINESS = {
 };
 
 interface BusyHoursProps {
-  parkId: Park['id'];
+  parkId: string;
 }
 
 const BusyHours: React.FC<BusyHoursProps> = ({ parkId }) => {

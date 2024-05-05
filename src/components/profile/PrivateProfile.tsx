@@ -50,10 +50,11 @@ const PrivateProfile: React.FC<PrivateProfileProps> = ({ user, dogs = [] }) => {
     getPendingFriends();
   }, [user.id]);
 
-  const onApproveFriendShip = async (friendId: User['id']) => {
-    const friendShip = await fetchFriendship([friendId, user.id]);
+  const onApproveFriendShip = async (friendId: string) => {
+    const friendship = await fetchFriendship([friendId, user.id]);
+    console.log(friendship);
     await updateFriendship({
-      friendshipId: friendShip!.id,
+      friendshipId: friendship!.id,
       status: FRIENDSHIP_STATUS.APPROVED,
     });
     const newFriend = pendingFriends.find((friend) => friend.id === friendId);
