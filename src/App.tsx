@@ -16,6 +16,9 @@ import { reviewsLoader } from './loaders/reviewsLoader';
 import { ParkDetails } from './pages/ParkDetails';
 import { ParkVisitors } from './pages/ParkVisitors';
 import { Users } from './pages/Users';
+import { ProfileInfo } from './pages/ProfileInfo';
+import { UserReviews } from './pages/UserReviews';
+import { UserFriends } from './pages/UserFriends';
 
 const App = () => {
   const router = createBrowserRouter([
@@ -65,6 +68,21 @@ const App = () => {
           path: '/profile/:id',
           element: <Profile />,
           loader: userLoader,
+          children: [
+            {
+              index: true,
+              element: <ProfileInfo />,
+            },
+            {
+              path: 'reviews',
+              element: <UserReviews />,
+              loader: reviewsLoader,
+            },
+            {
+              path: 'friends',
+              element: <UserFriends />,
+            },
+          ],
         },
         {
           path: '/users',

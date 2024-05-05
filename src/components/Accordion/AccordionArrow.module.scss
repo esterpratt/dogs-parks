@@ -1,0 +1,8 @@
+.arrow {
+  display: inline-block;
+  transition: transform 0.3s;
+
+  &.open {
+    transform: rotate(180deg);
+  }
+}

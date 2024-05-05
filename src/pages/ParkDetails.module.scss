@@ -1,0 +1,9 @@
+.title {
+  justify-content: space-between;
+
+  .left {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+  }
+}

@@ -1,0 +1,59 @@
+@import '../../variables.scss';
+
+.img {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1px solid $text;
+  transition: all 0.3s;
+}
+
+.transparent {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  opacity: 0.3;
+  background-color: $text-light;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: all 0.3s;
+}
+
+.container {
+  position: relative;
+  height: 200px;
+}
+
+.img-container {
+  position: absolute;
+  top: 0;
+  left: 50%;
+
+  &:first-child {
+    transform: translate(-50%);
+    z-index: 50;
+  }
+
+  &:nth-child(2n) {
+    z-index: 30;
+  }
+
+  &:nth-child(3n) {
+    transform: translate(-100%);
+    z-index: 20;
+  }
+
+  &.primary {
+    z-index: 100;
+
+    .img {
+      border-color: $green;
+    }
+
+    .transparent {
+      opacity: 0;
+    }
+  }
+}

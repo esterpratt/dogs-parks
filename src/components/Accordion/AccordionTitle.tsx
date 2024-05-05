@@ -1,22 +1,22 @@
 import { ReactNode, useContext } from 'react';
-import { RiArrowDownSLine } from 'react-icons/ri';
 import { AccordionContext } from './Accordion';
 import classnames from 'classnames';
 import styles from './AccordionTitle.module.scss';
 
 interface AccordionTitleProps {
-  children: ReactNode;
+  children: (isOpen: boolean) => ReactNode;
+  className?: string;
 }
 
-const AccordionTitle = ({ children }: AccordionTitleProps) => {
+const AccordionTitle: React.FC<AccordionTitleProps> = ({
+  children,
+  className,
+}) => {
   const { toggleOpen, isOpen } = useContext(AccordionContext);
 
   return (
-    <div onClick={toggleOpen} className={styles.wrapper}>
-      {children}
-      <RiArrowDownSLine
-        className={classnames(styles.arrow, isOpen && styles.open)}
-      />
+    <div onClick={toggleOpen} className={classnames(styles.wrapper, className)}>
+      {children(isOpen)}
     </div>
   );
 };

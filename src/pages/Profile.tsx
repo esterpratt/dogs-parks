@@ -7,14 +7,25 @@ import { PublicProfile } from '../components/profile/PublicProfile';
 import { Dog } from '../types/dog';
 
 const Profile: React.FC = () => {
-  const { user, dogs } = useLoaderData() as { user: User; dogs: Dog[] };
+  const { user, dogs, imagesByDog } = useLoaderData() as {
+    user: User;
+    dogs: Dog[];
+    imagesByDog: { [dogId: string]: { primary: string; other: string[] } };
+  };
   const { user: signedInUser } = useContext(UserContext);
 
   if (signedInUser?.id === user.id) {
-    return <PrivateProfile user={user} dogs={dogs} />;
+    return <PrivateProfile user={user} dogs={dogs} imagesByDog={imagesByDog} />;
   }
 
-  return <PublicProfile user={user} signedInUser={signedInUser} dogs={dogs} />;
+  return (
+    <PublicProfile
+      user={user}
+      signedInUser={signedInUser}
+      dogs={dogs}
+      imagesByDog={imagesByDog}
+    />
+  );
 };
 
 export { Profile };

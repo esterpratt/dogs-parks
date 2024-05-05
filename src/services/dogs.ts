@@ -7,10 +7,9 @@ import {
   query,
   where,
 } from 'firebase/firestore';
-import { User } from '../types/user';
 import { throwError } from './error';
 import { Dog } from '../types/dog';
-import { fetchUser } from './users';
+import { fetchImagesByDirectory } from './image';
 
 const dogsCollection = collection(db, 'dogs');
 
@@ -30,9 +29,9 @@ const fetchDogs = async (ids: string[]) => {
   try {
     const usersQuery = query(dogsCollection, where(documentId(), 'in', ids));
     const querySnapshot = await getDocs(usersQuery);
-    const res: User[] = [];
+    const res: Dog[] = [];
     querySnapshot.forEach((doc) => {
-      res.push({ ...doc.data(), id: doc.id } as User);
+      res.push({ ...doc.data(), id: doc.id } as Dog);
     });
     return res;
   } catch (error) {
@@ -42,15 +41,40 @@ const fetchDogs = async (ids: string[]) => {
 
 const fetchUserDogs = async (userId: string) => {
   try {
-    const user = await fetchUser(userId);
-    if (user?.dogs) {
-      return fetchDogs(user.dogs);
-    } else {
-      return null;
-    }
+    const dogsQuery = query(dogsCollection, where('owner', '==', userId));
+    const querySnapshot = await getDocs(dogsQuery);
+    const res: Dog[] = [];
+    querySnapshot.forEach((doc) => {
+      res.push({ ...doc.data(), id: doc.id } as Dog);
+    });
+    return res;
   } catch (error) {
     throwError(error);
   }
 };
 
-export { fetchDogs, createDog, fetchUserDogs };
+const fetchDogPrimaryImage = async (dogId: string) => {
+  try {
+    const res = await fetchImagesByDirectory(`dogs/${dogId}/primary`);
+    return res;
+  } catch (error) {
+    throwError(error);
+  }
+};
+
+const fetchAllDogsImages = async (dogId: string) => {
+  try {
+    const res = await fetchImagesByDirectory(`dogs/${dogId}/other`);
+    return res;
+  } catch (error) {
+    throwError(error);
+  }
+};
+
+export {
+  fetchDogs,
+  createDog,
+  fetchUserDogs,
+  fetchDogPrimaryImage,
+  fetchAllDogsImages,
+};
