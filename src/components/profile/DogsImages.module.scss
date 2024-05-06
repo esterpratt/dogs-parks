@@ -31,18 +31,30 @@
   top: 0;
   left: 50%;
 
-  &:first-child {
+  &.center {
     transform: translate(-50%);
+  }
+
+  &.right {
+    transform: translate(-100%);
+  }
+
+  &.end-right {
+    transform: translate(-110%);
+  }
+
+  &.end-left {
+    transform: translate(10%);
+  }
+
+  &:first-child {
     z-index: 50;
   }
 
-  &:nth-child(2n) {
+  &:nth-child(2n),
+  &:nth-child(3n),
+  &:nth-child(5n) {
     z-index: 30;
-  }
-
-  &:nth-child(3n) {
-    transform: translate(-100%);
-    z-index: 20;
   }
 
   &.primary {

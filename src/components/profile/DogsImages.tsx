@@ -9,6 +9,15 @@ interface DogsImagesProps {
   isSignedInUser: boolean;
 }
 
+// right now support of up to 3 dogs
+const getImagesTranslationClasses = (imagesCount: number) => {
+  if (imagesCount % 2 > 0) {
+    return ['center', 'left', 'right'];
+  } else {
+    return ['endLeft', 'endRight'];
+  }
+};
+
 const DogsImages: React.FC<DogsImagesProps> = ({
   images,
   currentDogId,
@@ -19,13 +28,16 @@ const DogsImages: React.FC<DogsImagesProps> = ({
   // TODO: images should be editable if isSignedInUser is true
   console.log(isSignedInUser);
 
+  const imagesTranslationClasses = getImagesTranslationClasses(images.length);
+
   return (
     <div className={classnames(styles.container, className)}>
-      {images.map((img) => (
+      {images.map((img, index) => (
         <div
           key={img.id}
           className={classnames(
             styles.imgContainer,
+            styles[imagesTranslationClasses[index]],
             img.id === currentDogId && styles.primary
           )}
           onClick={() => setCurrentDogId(img.id)}

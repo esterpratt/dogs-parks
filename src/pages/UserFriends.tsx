@@ -1,18 +1,18 @@
 // import { useContext, useEffect, useState } from 'react';
-import { User } from '../types/user';
-import { Dog } from '../types/dog';
+// import { User } from '../types/user';
+// import { Dog } from '../types/dog';
 // import { fetchFriends } from '../../services/users';
 // import { FRIENDSHIP_STATUS, USER_ROLE } from '../../types/friendship';
 // import { fetchFriendship, updateFriendship } from '../../services/friendships';
 // import { UserContext } from '../../context/UserContext';
 
-interface UserFriendsProps {
-  user: User;
-  dogs: Dog[];
-  imagesByDog: { [dogId: string]: { primary: string; other: string[] } };
-}
+// interface UserFriendsProps {
+//   user: User;
+//   dogs: Dog[];
+//   imagesByDog: { [dogId: string]: { primary: string; other: string[] } };
+// }
 
-const UserFriends: React.FC<UserFriendsProps> = () => {
+const UserFriends = () => {
   // TODO: remove to context friends + reviews and use it in the tabs
   // const [friends, setFriends] = useState<User[]>([]);
   // const [pendingFriends, setPendingFriends] = useState<User[]>([]);
