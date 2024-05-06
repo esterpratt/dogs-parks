@@ -12,6 +12,9 @@ import styles from './ProfileInfo.module.scss';
 import { UserDetails } from '../components/profile/UserDetails';
 import { DogGalleryContainer } from '../components/profile/DogGalleryContainer';
 import { Button } from '../components/Button';
+import { MouseEvent, useState } from 'react';
+import { EditDogsModal } from '../components/profile/EditDogsModal';
+import { EditUserModal } from '../components/profile/EditUserModal';
 
 interface ProfileInfoProps {
   user: User;
@@ -31,11 +34,23 @@ const ProfileInfo = () => {
     setCurrentDogId,
     isSignedInUser,
   } = useOutletContext<ProfileInfoProps>();
+  const [isEditDogsModalOpen, setIsEditDogsModalOpen] = useState(false);
+  const [isEditUserModalOpen, setIsEditUserModalOpen] = useState(false);
 
   const galleryImages: { [id: string]: string[] } = {};
   Object.keys(imagesByDog).forEach((id) => {
     galleryImages[id] = imagesByDog[id].other;
   });
+
+  const onEditDog = (event: MouseEvent<HTMLButtonElement | SVGElement>) => {
+    event?.stopPropagation();
+    setIsEditDogsModalOpen(true);
+  };
+
+  const onEditUser = (event: MouseEvent) => {
+    event?.stopPropagation();
+    setIsEditUserModalOpen(true);
+  };
 
   return (
     <div className={styles.infoContainer}>
@@ -47,14 +62,16 @@ const ProfileInfo = () => {
                 <span>Doggy Card</span>
                 <AccordionArrow isOpen={isOpen} />
               </div>
-              {isSignedInUser && <MdOutlineModeEditOutline size={18} />}
+              {isSignedInUser && (
+                <MdOutlineModeEditOutline onClick={onEditDog} size={18} />
+              )}
             </>
           )}
         </AccordionTitle>
         <AccordionContent
           className={classnames(styles.contentContainer, styles.dark)}
         >
-          {!!dogs.length && currentDogId && (
+          {!!dogs.length && (
             <DogDetails
               className={styles.content}
               dogs={dogs}
@@ -63,7 +80,7 @@ const ProfileInfo = () => {
             />
           )}
           {!dogs.length && (
-            <Button className={styles.content}>
+            <Button className={styles.content} onClick={onEditDog}>
               {isSignedInUser
                 ? 'Add your dog'
                 : `${user.name} Did not add their dog`}
@@ -71,7 +88,7 @@ const ProfileInfo = () => {
           )}
         </AccordionContent>
       </Accordion>
-      {!!dogs.length && currentDogId && (
+      {!!dogs.length && (
         <DogGalleryContainer
           galleryImages={galleryImages}
           dogs={dogs}
@@ -91,7 +108,9 @@ const ProfileInfo = () => {
                 <span>Owner Card</span>
                 <AccordionArrow isOpen={isOpen} />
               </div>
-              {isSignedInUser && <MdOutlineModeEditOutline size={18} />}
+              {isSignedInUser && (
+                <MdOutlineModeEditOutline onClick={onEditUser} size={18} />
+              )}
             </>
           )}
         </AccordionTitle>
@@ -100,6 +119,16 @@ const ProfileInfo = () => {
         >
           <UserDetails user={user} className={styles.content} />
         </AccordionContent>
+        <EditDogsModal
+          dogs={dogs}
+          isOpen={isEditDogsModalOpen}
+          onClose={() => setIsEditDogsModalOpen(false)}
+          currentDogId={currentDogId}
+        />
+        <EditUserModal
+          isOpen={isEditUserModalOpen}
+          onClose={() => setIsEditUserModalOpen(false)}
+        />
       </Accordion>
     </div>
   );

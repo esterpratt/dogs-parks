@@ -2,7 +2,15 @@
 
 .container {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  gap: 8px;
   color: $text;
+
+  &.basic {
+    flex-direction: column;
+  }
+
+  &.single-line {
+    flex-direction: row;
+    align-items: center;
+  }
 }

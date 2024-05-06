@@ -6,15 +6,17 @@ interface DogsTabsProps {
   dogs: Dog[];
   currentDogId: string;
   setCurrentDogId: (id: string) => void;
+  className?: string;
 }
 
 const DogsTabs: React.FC<DogsTabsProps> = ({
   dogs,
   setCurrentDogId,
   currentDogId,
+  className,
 }) => {
   return (
-    <div className={styles.dogTabs}>
+    <div className={classnames(styles.dogTabs, className)}>
       {dogs.map((dog) => (
         <span
           key={dog.id}

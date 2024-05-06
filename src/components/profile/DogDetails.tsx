@@ -49,7 +49,7 @@ const DogDetails: React.FC<DogProps> = ({
               <div>Age</div>
             </td>
             <td>
-              <div>{age}</div>
+              <div>{age || '?'}</div>
             </td>
           </tr>
           <tr>
