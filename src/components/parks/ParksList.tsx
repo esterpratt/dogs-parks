@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { ParksContext } from '../../context/ParksContextProvider';
+import { ParksContext } from '../../context/ParksContext';
 import { Park } from '../../types/park';
 import { SearchList } from '../SearchList';
 import styles from './ParksList.module.scss';

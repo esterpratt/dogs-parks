@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { Marker } from './Marker';
-import { ParksContext } from '../../context/ParksContextProvider';
+import { ParksContext } from '../../context/ParksContext';
 
 const MarkerList = () => {
   const { parks } = useContext(ParksContext);

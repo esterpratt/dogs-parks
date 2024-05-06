@@ -1,45 +1,19 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Stars } from '../Stars';
-import { fetchParkRank, fetchReviewsCount } from '../../services/reviews';
-import { Review } from '../../types/review';
 import styles from './ReviewsPreview.module.scss';
 import { Button } from '../Button';
 import { ReviewModal } from './ReviewModal';
 import { UserContext } from '../../context/UserContext';
+import { ParkReviewsContext } from '../../context/ParkReviewsContext';
 
-interface ReviewsPreviewProps {
-  parkId: string;
-}
-
-const ReviewsPreview = ({ parkId }: ReviewsPreviewProps) => {
-  const [loading, setLoading] = useState(true);
-  const [reviewsCount, setReviewsCount] = useState<number>(0);
-  const [rank, setRank] = useState<number | null>(null);
+const ReviewsPreview = () => {
+  const { rank, reviewsCount, loading } = useContext(ParkReviewsContext);
   const [isAddReviewModalOpen, setIsAddReviewModalOpen] = useState(false);
   const { userId } = useContext(UserContext);
 
-  useEffect(() => {
-    const getInitialData = async () => {
-      const reviewsCount = await fetchReviewsCount(parkId);
-      if (reviewsCount) {
-        const rank = await fetchParkRank(parkId);
-        setReviewsCount(reviewsCount);
-        setRank(rank);
-      }
-      setLoading(false);
-    };
-    getInitialData();
-  }, [parkId]);
-
-  const onAddReview = async (
-    addedReview: Pick<Review, 'id' | 'rank' | 'title' | 'content'>
-  ) => {
-    setRank(
-      (prev) =>
-        ((prev || 0) * reviewsCount + addedReview.rank) / (reviewsCount + 1)
-    );
-    setReviewsCount((prev) => prev + 1);
+  const onAddReview = () => {
+    setIsAddReviewModalOpen(false);
   };
 
   if (loading) {
@@ -64,7 +38,6 @@ const ReviewsPreview = ({ parkId }: ReviewsPreviewProps) => {
             Add a review
           </Button>
           <ReviewModal
-            parkId={parkId}
             userId={userId}
             onAddReview={onAddReview}
             isOpen={isAddReviewModalOpen}

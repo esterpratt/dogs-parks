@@ -9,6 +9,7 @@ import { UserContext } from '../context/UserContext';
 import { FavoriteButton } from '../components/park/FavoriteButton';
 import styles from './Park.module.scss';
 import { ParkTabs } from '../components/park/ParkTabs';
+import { ParkReviewsContextProvider } from '../context/ParkReviewsContext';
 
 interface ParkData {
   park: ParkType;
@@ -21,38 +22,40 @@ const Park: React.FC = () => {
 
   return (
     <ParkVisitorsContextProvider parkId={park.id} userId={user?.id}>
-      {image ? (
-        <img src={image} className={styles.image} />
-      ) : (
-        <div className={styles.imageIcon}>
-          <LuTrees />
-        </div>
-      )}
-      <div className={styles.contentContainer}>
-        <div className={styles.basicDetails}>
-          <div>
-            <span className={styles.name}>{park.name}</span>
-            <span className={styles.address}>{park.address}</span>
-            <ReviewsPreview parkId={park.id} />
+      <ParkReviewsContextProvider parkId={park.id}>
+        {image ? (
+          <img src={image} className={styles.image} />
+        ) : (
+          <div className={styles.imageIcon}>
+            <LuTrees />
           </div>
-          {user && (
-            <div className={styles.userEngagement}>
-              <div>
-                <FavoriteButton parkId={park.id} userId={user.id} />
-                <ParkCheckIn
-                  parkId={park.id}
-                  userId={user.id}
-                  userName={user.name}
-                />
-              </div>
+        )}
+        <div className={styles.contentContainer}>
+          <div className={styles.basicDetails}>
+            <div>
+              <span className={styles.name}>{park.name}</span>
+              <span className={styles.address}>{park.address}</span>
+              <ReviewsPreview />
             </div>
-          )}
+            {user && (
+              <div className={styles.userEngagement}>
+                <div>
+                  <FavoriteButton parkId={park.id} userId={user.id} />
+                  <ParkCheckIn
+                    parkId={park.id}
+                    userId={user.id}
+                    userName={user.name}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+          <ParkTabs />
+          <div className={styles.outletContainer}>
+            <Outlet context={park} />
+          </div>
         </div>
-        <ParkTabs />
-        <div className={styles.outletContainer}>
-          <Outlet context={park} />
-        </div>
-      </div>
+      </ParkReviewsContextProvider>
     </ParkVisitorsContextProvider>
   );
 };

@@ -1,22 +1,17 @@
-import { useLoaderData, useRevalidator } from 'react-router';
-import { Review } from '../types/review';
 import { useContext, useState } from 'react';
 import { UserContext } from '../context/UserContext';
 import { Button } from '../components/Button';
 import { ReviewModal } from '../components/park/ReviewModal';
+import { ParkReviewsContext } from '../context/ParkReviewsContext';
 // import styles from './Reviews.module.scss';
 
 const Reviews: React.FC = () => {
-  const { reviews, parkId } = useLoaderData() as {
-    reviews: Review[];
-    parkId: string;
-  };
-  const revalidator = useRevalidator();
+  const { reviews } = useContext(ParkReviewsContext);
   const { userId } = useContext(UserContext);
   const [isAddReviewModalOpen, setIsAddReviewModalOpen] = useState(false);
 
   const onAddReview = () => {
-    revalidator.revalidate();
+    setIsAddReviewModalOpen(false);
   };
 
   if (!reviews.length) {
@@ -29,7 +24,6 @@ const Reviews: React.FC = () => {
               Add a review
             </Button>
             <ReviewModal
-              parkId={parkId}
               userId={userId}
               onAddReview={onAddReview}
               isOpen={isAddReviewModalOpen}

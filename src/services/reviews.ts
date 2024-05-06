@@ -114,7 +114,7 @@ const updateReview = async ({ reviewId, review }: UpdateReviewProps) => {
   }
 };
 
-const addReview = async ({ parkId, userId, review }: AddReviewProps) => {
+const createReview = async ({ parkId, userId, review }: AddReviewProps) => {
   try {
     const res = await addDoc(reviewsCollection, {
       title: review.title,
@@ -136,6 +136,6 @@ export {
   fetchReviews,
   fetchReview,
   fetchReviewsCount,
-  addReview,
+  createReview,
   updateReview,
 };

@@ -5,7 +5,7 @@ interface Review {
   title: string;
   content?: string;
   rank: number;
-  createdAt: Date;
+  createdAt?: Date;
   updatedAt?: Date;
 }
 

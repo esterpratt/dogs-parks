@@ -52,7 +52,7 @@ const ParkCheckIn: React.FC<{
   };
 
   const onAddReview = () => {
-    // TODO: reviews context
+    setOpenReviewModal(false);
   };
 
   return (
@@ -85,7 +85,6 @@ const ParkCheckIn: React.FC<{
         title="Hope you had a great time! We will be happy if you could add a review"
         isOpen={openReviewModal}
         closeModal={() => setOpenReviewModal(false)}
-        parkId={parkId}
         userId={userId}
         onAddReview={onAddReview}
       />
