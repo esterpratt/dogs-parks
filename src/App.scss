@@ -51,23 +51,24 @@ body {
       right: -6px;
     }
   }
-}
 
-.slick-track {
-  display: flex !important;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: stretch;
+  .slick-track {
+    display: flex !important;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    margin-left: 0;
 
-  .slick-slide {
-    height: inherit;
+    .slick-slide {
+      height: inherit;
 
-    > div {
-      height: 100%;
-      margin-right: 4px;
+      > div {
+        height: 100%;
+        margin-right: 4px;
 
-      &:first-child {
-        margin-left: 4px;
+        &:first-child {
+          margin-left: 4px;
+        }
       }
     }
   }

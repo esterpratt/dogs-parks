@@ -5,7 +5,7 @@ import { FaArrowRotateRight } from 'react-icons/fa6';
 import { MdOutlineSave } from 'react-icons/md';
 import { CgClose } from 'react-icons/cg';
 import styles from './Camera.module.scss';
-import { Button } from '../Button';
+import { Button } from './Button';
 
 interface CustomWebcamProps {
   onSaveImg: (img: string) => void;

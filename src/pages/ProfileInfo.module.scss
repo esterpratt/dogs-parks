@@ -11,7 +11,7 @@
   padding: 12px 0;
   width: auto;
 
-  .left {
+  > div:first-of-type {
     display: flex;
     gap: 2px;
     align-items: center;

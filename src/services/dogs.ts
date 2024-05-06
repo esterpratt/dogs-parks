@@ -9,7 +9,7 @@ import {
 } from 'firebase/firestore';
 import { throwError } from './error';
 import { Dog } from '../types/dog';
-import { fetchImagesByDirectory } from './image';
+import { fetchImagesByDirectory, uploadImage } from './image';
 
 const dogsCollection = collection(db, 'dogs');
 
@@ -53,6 +53,15 @@ const fetchUserDogs = async (userId: string) => {
   }
 };
 
+const uploadDogImage = async (image: File | string, dogId: string) => {
+  try {
+    const res = await uploadImage({ image, path: `dogs/${dogId}/other` });
+    return res;
+  } catch (error) {
+    throwError(error);
+  }
+};
+
 const fetchDogPrimaryImage = async (dogId: string) => {
   try {
     const res = await fetchImagesByDirectory(`dogs/${dogId}/primary`);
@@ -77,4 +86,5 @@ export {
   fetchUserDogs,
   fetchDogPrimaryImage,
   fetchAllDogsImages,
+  uploadDogImage,
 };

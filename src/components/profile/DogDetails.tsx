@@ -1,6 +1,7 @@
 import classnames from 'classnames';
 import { Dog } from '../../types/dog';
 import styles from './DogDetails.module.scss';
+import { DogsTabs } from './DogsTabs';
 
 interface DogProps {
   dogs: Dog[];
@@ -35,20 +36,11 @@ const DogDetails: React.FC<DogProps> = ({
   return (
     <div className={classnames(styles.container, className)}>
       {dogs.length > 1 && (
-        <div className={styles.dogTabs}>
-          {dogs.map((dog) => (
-            <span
-              key={dog.id}
-              onClick={() => setCurrentDogId(dog.id)}
-              className={classnames(
-                styles.dogTab,
-                dog.id === currentDog.id && styles.current
-              )}
-            >
-              {dog.name}
-            </span>
-          ))}
-        </div>
+        <DogsTabs
+          dogs={dogs}
+          setCurrentDogId={setCurrentDogId}
+          currentDogId={currentDogId}
+        />
       )}
       <table className={styles.details}>
         <tbody>
