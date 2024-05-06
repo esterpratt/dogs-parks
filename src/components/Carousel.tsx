@@ -6,7 +6,7 @@ import styles from './Carousel.module.scss';
 
 interface CarouselProps {
   images: string[];
-  addImage?: () => void;
+  addImage?: (() => void) | null;
 }
 
 const Carousel: React.FC<CarouselProps> = ({ images, addImage }) => {
@@ -23,7 +23,9 @@ const Carousel: React.FC<CarouselProps> = ({ images, addImage }) => {
         {images.map((img) => (
           <img className={styles.image} src={img} key={img} />
         ))}
-        <img className={styles.image} src={AddPhotoImg} onClick={addImage} />
+        {addImage && (
+          <img className={styles.image} src={AddPhotoImg} onClick={addImage} />
+        )}
       </Slider>
     </div>
   );

@@ -1,10 +1,13 @@
-import { useLoaderData } from 'react-router';
+import { Outlet, useLoaderData } from 'react-router';
 import { User } from '../types/user';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../context/UserContext';
-import { PrivateProfile } from '../components/profile/PrivateProfile';
-import { PublicProfile } from '../components/profile/PublicProfile';
 import { Dog } from '../types/dog';
+import { DogsImages } from '../components/profile/DogsImages';
+import { ProfileTabs } from '../components/profile/ProfileTabs';
+import styles from './Profile.module.scss';
+import { Button } from '../components/Button';
+import { FriendRequestButton } from '../components/profile/FriendRequestButton';
 
 const Profile: React.FC = () => {
   const { user, dogs, imagesByDog } = useLoaderData() as {
@@ -12,19 +15,69 @@ const Profile: React.FC = () => {
     dogs: Dog[];
     imagesByDog: { [dogId: string]: { primary: string; other: string[] } };
   };
-  const { user: signedInUser } = useContext(UserContext);
 
-  if (signedInUser?.id === user.id) {
-    return <PrivateProfile user={user} dogs={dogs} imagesByDog={imagesByDog} />;
-  }
+  const { user: signedInUser, userLogout } = useContext(UserContext);
+  const isSignedInUser = signedInUser?.id === user.id;
+  const [currentDogId, setCurrentDogId] = useState<string>('');
+
+  useEffect(() => {
+    setCurrentDogId(dogs[0]?.id);
+  }, [dogs]);
+
+  const primaryImages = Object.keys(imagesByDog).map((id) => {
+    return {
+      id,
+      src: imagesByDog[id].primary,
+    };
+  });
+
+  const dogsNames = dogs.map((dog) => dog.name);
+  const lastDogName = dogsNames.pop();
+  const dogNamesStr = `${dogsNames.join(', ')} & ${lastDogName}`;
+
+  const onLogout = () => {
+    userLogout();
+  };
 
   return (
-    <PublicProfile
-      user={user}
-      signedInUser={signedInUser}
-      dogs={dogs}
-      imagesByDog={imagesByDog}
-    />
+    <div>
+      <div className={styles.imgsContainer}>
+        {!!dogs.length && currentDogId && (
+          <DogsImages
+            images={primaryImages}
+            currentDogId={currentDogId}
+            setCurrentDogId={setCurrentDogId}
+            isSignedInUser
+          />
+        )}
+        <div>
+          <span>
+            {isSignedInUser ? 'Hello ' : 'Meet '}
+            {dogs.length ? dogNamesStr : user.name}
+          </span>
+          {isSignedInUser && <Button onClick={onLogout}>Logout</Button>}
+          {!isSignedInUser && signedInUser && (
+            <FriendRequestButton
+              userId={user.id}
+              signedInUserId={signedInUser.id}
+            />
+          )}
+        </div>
+      </div>
+      {isSignedInUser && <ProfileTabs />}
+      <div className={styles.outletContainer}>
+        <Outlet
+          context={{
+            user,
+            dogs,
+            imagesByDog,
+            currentDogId,
+            setCurrentDogId,
+            isSignedInUser,
+          }}
+        />
+      </div>
+    </div>
   );
 };
 

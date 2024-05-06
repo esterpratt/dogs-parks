@@ -11,6 +11,7 @@ import { AccordionArrow } from '../components/Accordion/AccordionArrow';
 import styles from './ProfileInfo.module.scss';
 import { UserDetails } from '../components/profile/UserDetails';
 import { DogGalleryContainer } from '../components/profile/DogGalleryContainer';
+import { Button } from '../components/Button';
 
 interface ProfileInfoProps {
   user: User;
@@ -18,11 +19,18 @@ interface ProfileInfoProps {
   currentDogId: string;
   setCurrentDogId: (id: string) => void;
   imagesByDog: { [dogId: string]: { primary: string; other: string[] } };
+  isSignedInUser: boolean;
 }
 
 const ProfileInfo = () => {
-  const { user, dogs, imagesByDog, currentDogId, setCurrentDogId } =
-    useOutletContext<ProfileInfoProps>();
+  const {
+    user,
+    dogs,
+    imagesByDog,
+    currentDogId,
+    setCurrentDogId,
+    isSignedInUser,
+  } = useOutletContext<ProfileInfoProps>();
 
   const galleryImages: { [id: string]: string[] } = {};
   Object.keys(imagesByDog).forEach((id) => {
@@ -39,30 +47,42 @@ const ProfileInfo = () => {
                 <span>Doggy Card</span>
                 <AccordionArrow isOpen={isOpen} />
               </div>
-              <MdOutlineModeEditOutline size={18} />
+              {isSignedInUser && <MdOutlineModeEditOutline size={18} />}
             </>
           )}
         </AccordionTitle>
         <AccordionContent
           className={classnames(styles.contentContainer, styles.dark)}
         >
-          <DogDetails
-            className={styles.content}
-            dogs={dogs}
-            currentDogId={currentDogId}
-            setCurrentDogId={setCurrentDogId}
-          />
+          {!!dogs.length && currentDogId && (
+            <DogDetails
+              className={styles.content}
+              dogs={dogs}
+              currentDogId={currentDogId}
+              setCurrentDogId={setCurrentDogId}
+            />
+          )}
+          {!dogs.length && (
+            <Button className={styles.content}>
+              {isSignedInUser
+                ? 'Add your dog'
+                : `${user.name} Did not add their dog`}
+            </Button>
+          )}
         </AccordionContent>
       </Accordion>
-      <DogGalleryContainer
-        galleryImages={galleryImages}
-        dogs={dogs}
-        currentDogId={currentDogId}
-        setCurrentDogId={setCurrentDogId}
-        accordionTitleClassName={styles.title}
-        accordionContentContainerClassName={styles.contentContainer}
-        accordionContentClassName={styles.content}
-      />
+      {!!dogs.length && currentDogId && (
+        <DogGalleryContainer
+          galleryImages={galleryImages}
+          dogs={dogs}
+          currentDogId={currentDogId}
+          setCurrentDogId={setCurrentDogId}
+          isSignedInUser={isSignedInUser}
+          accordionTitleClassName={styles.title}
+          accordionContentContainerClassName={styles.contentContainer}
+          accordionContentClassName={styles.content}
+        />
+      )}
       <Accordion>
         <AccordionTitle className={styles.title}>
           {(isOpen) => (
@@ -71,7 +91,7 @@ const ProfileInfo = () => {
                 <span>Owner Card</span>
                 <AccordionArrow isOpen={isOpen} />
               </div>
-              <MdOutlineModeEditOutline size={18} />
+              {isSignedInUser && <MdOutlineModeEditOutline size={18} />}
             </>
           )}
         </AccordionTitle>

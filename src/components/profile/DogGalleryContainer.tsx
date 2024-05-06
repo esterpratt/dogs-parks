@@ -15,6 +15,7 @@ interface DogGalleryContainerProps {
   dogs: Dog[];
   currentDogId: string;
   setCurrentDogId: (id: string) => void;
+  isSignedInUser: boolean;
   accordionTitleClassName?: string;
   accordionContentClassName?: string;
   accordionContentContainerClassName?: string;
@@ -25,6 +26,7 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
   currentDogId,
   setCurrentDogId,
   galleryImages,
+  isSignedInUser,
   accordionTitleClassName,
   accordionContentClassName,
   accordionContentContainerClassName,
@@ -65,9 +67,14 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
                 <span>Gallery</span>
                 <AccordionArrow isOpen={isOpen} />
               </div>
-              <div className={styles.addPhotoButton} onClick={onClickAddPhoto}>
-                <FaPlus size={14} />
-              </div>
+              {isSignedInUser && (
+                <div
+                  className={styles.addPhotoButton}
+                  onClick={onClickAddPhoto}
+                >
+                  <FaPlus size={14} />
+                </div>
+              )}
             </>
           )}
         </AccordionTitle>
@@ -77,6 +84,7 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
             images={images}
             dogs={dogs}
             currentDogId={currentDogId}
+            isSignedInUser={isSignedInUser}
             setCurrentDogId={setCurrentDogId}
             openCameraModal={openCameraModal}
           />

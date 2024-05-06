@@ -11,12 +11,14 @@ interface DogGalleryProps {
   setCurrentDogId: (id: string) => void;
   className?: string;
   openCameraModal: () => void;
+  isSignedInUser: boolean;
 }
 
 const DogGallery: React.FC<DogGalleryProps> = ({
   dogs,
   currentDogId,
   setCurrentDogId,
+  isSignedInUser,
   images,
   className,
   openCameraModal,
@@ -32,7 +34,10 @@ const DogGallery: React.FC<DogGalleryProps> = ({
           setCurrentDogId={setCurrentDogId}
         />
       )}
-      <Carousel images={currentDogImages} addImage={openCameraModal} />
+      <Carousel
+        images={currentDogImages}
+        addImage={isSignedInUser ? openCameraModal : null}
+      />
     </div>
   );
 };

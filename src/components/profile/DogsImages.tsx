@@ -6,6 +6,7 @@ interface DogsImagesProps {
   currentDogId: string;
   setCurrentDogId: (id: string) => void;
   className?: string;
+  isSignedInUser: boolean;
 }
 
 const DogsImages: React.FC<DogsImagesProps> = ({
@@ -13,7 +14,11 @@ const DogsImages: React.FC<DogsImagesProps> = ({
   currentDogId,
   setCurrentDogId,
   className,
+  isSignedInUser,
 }) => {
+  // TODO: images should be editable if isSignedInUser is true
+  console.log(isSignedInUser);
+
   return (
     <div className={classnames(styles.container, className)}>
       {images.map((img) => (
