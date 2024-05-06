@@ -17,7 +17,6 @@ const ParkCheckIn: React.FC<{
 }> = ({ parkId, userId, userName }) => {
   const [checkIn, setCheckIn] = useLocalStorage('checkin');
   const [openDogsCountModal, setOpenDogsCountModal] = useState(false);
-  const [openCheckoutModal, setOpenCheckoutModal] = useState(false);
   const [openReviewModal, setOpenReviewModal] = useState(false);
 
   const shouldCheckIn =
