@@ -8,6 +8,7 @@ import { reportDogsCount } from '../../services/dogsCount';
 import { Button } from '../Button';
 import styles from './ParkCheckIn.module.scss';
 import { IconContext } from 'react-icons';
+import { ReviewModal } from './ReviewModal';
 
 const ParkCheckIn: React.FC<{
   parkId: string;
@@ -16,6 +17,8 @@ const ParkCheckIn: React.FC<{
 }> = ({ parkId, userId, userName }) => {
   const [checkIn, setCheckIn] = useLocalStorage('checkin');
   const [openDogsCountModal, setOpenDogsCountModal] = useState(false);
+  const [openCheckoutModal, setOpenCheckoutModal] = useState(false);
+  const [openReviewModal, setOpenReviewModal] = useState(false);
 
   const shouldCheckIn =
     !checkIn || checkIn.parkId !== parkId || checkIn.userId !== userId;
@@ -24,6 +27,7 @@ const ParkCheckIn: React.FC<{
     if (!shouldCheckIn) {
       await checkout(checkIn.id);
       setCheckIn(null);
+      setOpenReviewModal(true);
     } else {
       const id = await checkin({ userId, parkId });
       if (id) {
@@ -46,6 +50,10 @@ const ParkCheckIn: React.FC<{
     } finally {
       setOpenDogsCountModal(false);
     }
+  };
+
+  const onAddReview = () => {
+    // TODO: reviews context
   };
 
   return (
@@ -74,6 +82,14 @@ const ParkCheckIn: React.FC<{
           <DogsCount onSubmitDogsCount={onSubmitDogsCount} />
         </div>
       </Modal>
+      <ReviewModal
+        title="Hope you had a great time! We will be happy if you could add a review"
+        isOpen={openReviewModal}
+        closeModal={() => setOpenReviewModal(false)}
+        parkId={parkId}
+        userId={userId}
+        onAddReview={onAddReview}
+      />
     </div>
   );
 };

@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Stars } from '../Stars';
 import { fetchParkRank, fetchReviewsCount } from '../../services/reviews';
 import { Review } from '../../types/review';
-import { AddReviewButton } from './AddReviewButton';
 import styles from './ReviewsPreview.module.scss';
+import { Button } from '../Button';
+import { ReviewModal } from './ReviewModal';
+import { UserContext } from '../../context/UserContext';
 
 interface ReviewsPreviewProps {
   parkId: string;
@@ -14,6 +16,8 @@ const ReviewsPreview = ({ parkId }: ReviewsPreviewProps) => {
   const [loading, setLoading] = useState(true);
   const [reviewsCount, setReviewsCount] = useState<number>(0);
   const [rank, setRank] = useState<number | null>(null);
+  const [isAddReviewModalOpen, setIsAddReviewModalOpen] = useState(false);
+  const { userId } = useContext(UserContext);
 
   useEffect(() => {
     const getInitialData = async () => {
@@ -54,11 +58,20 @@ const ReviewsPreview = ({ parkId }: ReviewsPreviewProps) => {
       ) : (
         <span>No reviews yet</span>
       )}
-      <AddReviewButton
-        parkId={parkId}
-        onAddReview={onAddReview}
-        className={styles.addReview}
-      />
+      {userId && (
+        <div className={styles.addReview}>
+          <Button onClick={() => setIsAddReviewModalOpen(true)}>
+            Add a review
+          </Button>
+          <ReviewModal
+            parkId={parkId}
+            userId={userId}
+            onAddReview={onAddReview}
+            isOpen={isAddReviewModalOpen}
+            closeModal={() => setIsAddReviewModalOpen(false)}
+          />
+        </div>
+      )}
     </div>
   );
 };
