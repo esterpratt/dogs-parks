@@ -34,10 +34,12 @@ const DogGallery: React.FC<DogGalleryProps> = ({
           setCurrentDogId={setCurrentDogId}
         />
       )}
-      <Carousel
-        images={currentDogImages}
-        addImage={isSignedInUser ? openCameraModal : null}
-      />
+      {(isSignedInUser || !!currentDogImages.length) && (
+        <Carousel
+          images={currentDogImages}
+          addImage={isSignedInUser ? openCameraModal : null}
+        />
+      )}
     </div>
   );
 };

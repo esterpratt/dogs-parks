@@ -1,4 +1,5 @@
 import classnames from 'classnames';
+import { PiDog } from 'react-icons/pi';
 import styles from './DogsImages.module.scss';
 
 interface DogsImagesProps {
@@ -42,7 +43,13 @@ const DogsImages: React.FC<DogsImagesProps> = ({
           )}
           onClick={() => setCurrentDogId(img.id)}
         >
-          <img src={img.src} className={styles.img} />
+          {img.src ? (
+            <img src={img.src} className={styles.img} />
+          ) : (
+            <div className={classnames(styles.img, styles.empty)}>
+              <PiDog size={64} />
+            </div>
+          )}
           <div className={styles.transparent} />
         </div>
       ))}
