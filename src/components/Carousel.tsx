@@ -9,7 +9,7 @@ interface CarouselProps {
   addImage?: (() => void) | null;
 }
 
-const Carousel: React.FC<CarouselProps> = ({ images, addImage }) => {
+const Carousel: React.FC<CarouselProps> = ({ images = [], addImage }) => {
   const settings = {
     className: 'center',
     infinite: false,

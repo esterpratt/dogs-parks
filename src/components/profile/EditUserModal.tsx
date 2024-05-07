@@ -1,6 +1,8 @@
 import { useContext } from 'react';
 import { UserContext } from '../../context/UserContext';
 import { Modal } from '../Modal';
+import { EditUser } from './EditUser';
+import styles from './EditUserModal.module.scss';
 
 interface EditUserModalProps {
   isOpen: boolean;
@@ -16,7 +18,8 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <Modal open={isOpen} onClose={onClose}>
-      <div>Edit user {user.name}</div>;
+      <div className={styles.title}>Edit your details</div>
+      <EditUser user={user} onSubmitForm={onClose} />
     </Modal>
   );
 };

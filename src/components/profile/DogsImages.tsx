@@ -24,10 +24,9 @@ const DogsImages: React.FC<DogsImagesProps> = ({
   currentDogId,
   setCurrentDogId,
   className,
-  isSignedInUser,
+  // isSignedInUser,
 }) => {
   // TODO: images should be editable if isSignedInUser is true
-  console.log(isSignedInUser);
 
   const imagesTranslationClasses = getImagesTranslationClasses(images.length);
 

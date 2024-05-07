@@ -7,6 +7,7 @@ import {
   getDocs,
   query,
   setDoc,
+  updateDoc,
   where,
 } from 'firebase/firestore';
 import { User } from '../types/user';
@@ -19,6 +20,11 @@ const usersCollection = collection(db, 'users');
 
 type createUserProps = Pick<User, 'id' | 'name'>;
 
+interface EditUserProps {
+  userId: string;
+  userDetails: Omit<User, 'id'>;
+}
+
 interface FetchFriendsProps {
   userId: string;
   userRole?: USER_ROLE;
@@ -29,6 +35,17 @@ const createUser = async ({ id, name }: createUserProps) => {
   try {
     await setDoc(doc(db, 'users', id), {
       name,
+    });
+  } catch (error) {
+    throwError(error);
+  }
+};
+
+const updateUser = async ({ userId, userDetails }: EditUserProps) => {
+  try {
+    const userRef = doc(db, 'users', userId);
+    await updateDoc(userRef, {
+      ...userDetails,
     });
   } catch (error) {
     throwError(error);
@@ -108,4 +125,4 @@ const fetchCheckedInUsers = async (parkId: string) => {
   }
 };
 
-export { createUser, fetchUser, fetchFriends, fetchCheckedInUsers };
+export { createUser, updateUser, fetchUser, fetchFriends, fetchCheckedInUsers };

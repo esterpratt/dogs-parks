@@ -55,6 +55,13 @@ const ProfileInfo = () => {
 
   const onCloseDogsModal = () => {
     setIsEditDogsModalOpen(false);
+
+    // TODO: if I'll use action with the form, revalidate will automatically happen
+    revalidate();
+  };
+
+  const onCloseUserModal = () => {
+    setIsEditUserModalOpen(false);
     revalidate();
   };
 
@@ -133,7 +140,7 @@ const ProfileInfo = () => {
         />
         <EditUserModal
           isOpen={isEditUserModalOpen}
-          onClose={() => setIsEditUserModalOpen(false)}
+          onClose={onCloseUserModal}
         />
       </Accordion>
     </div>

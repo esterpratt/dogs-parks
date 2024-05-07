@@ -12,7 +12,7 @@ import {
   logout,
   signin,
 } from '../services/authentication';
-import { createUser, fetchUser } from '../services/users';
+import { createUser, fetchUser, updateUser } from '../services/users';
 import { User } from '../types/user';
 import { useOnAuthStateChanged } from '../hooks/useOnAuthStateChanged';
 
@@ -23,6 +23,7 @@ interface UserContextObj {
   userLogin: (props: LoginProps) => Promise<User | Error | void>;
   userLogout: () => void;
   userSignin: (props: SigninProps) => Promise<User | Error | void>;
+  editUser: (props: User) => Promise<User | Error | void>;
 }
 
 const initialData: UserContextObj = {
@@ -32,6 +33,7 @@ const initialData: UserContextObj = {
   userLogin: () => Promise.resolve(),
   userLogout: () => {},
   userSignin: () => Promise.resolve(),
+  editUser: () => Promise.resolve(),
 };
 
 const UserContext = createContext<UserContextObj>(initialData);
@@ -69,6 +71,11 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     }
   }, [userId]);
 
+  const editUser = async (userToEdit: User) => {
+    await updateUser({ userId: userToEdit.id, userDetails: userToEdit });
+    setUser((prev) => ({ ...prev, ...userToEdit }));
+  };
+
   const userLogin = async ({ email, password }: LoginProps) => {
     await login({ email, password });
   };
@@ -94,6 +101,7 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     userLogin,
     userLogout,
     userSignin,
+    editUser,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

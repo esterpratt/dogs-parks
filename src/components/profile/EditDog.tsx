@@ -49,19 +49,18 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = Object.fromEntries(new FormData(event.currentTarget)) as {
-      [key: string]: string;
-    };
-    const likes = data?.likes.split(', ');
-    const dislikes = data?.dislikes.split(', ');
-    const age = Number(data?.age);
+
+    const likes = dogData?.likes?.split(', ') || [];
+    const dislikes = dogData?.dislikes?.split(', ') || [];
+    const age = Number(dogData?.age);
+
     if (dog) {
       await updateDog({
         dogId: dog.id,
-        dogDetails: { ...data, age, likes, dislikes },
+        dogDetails: { ...dogData, age, likes, dislikes },
       });
     } else {
-      await createDog({ owner: userId!, ...data, age, likes, dislikes });
+      await createDog({ owner: userId!, ...dogData, age, likes, dislikes });
     }
     if (onSubmitForm) {
       onSubmitForm();
