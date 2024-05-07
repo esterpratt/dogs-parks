@@ -28,6 +28,10 @@ const EditDogsModal: React.FC<EditDogsModalProps> = ({
     setDogIdToEdit(currentDogId);
   }, [currentDogId]);
 
+  const onSubmitDogsForm = () => {
+    onClose();
+  };
+
   return (
     <Modal open={isOpen} onClose={onClose} className={styles.modal}>
       {dogs && dogs.length > 1 && dogIdToEdit && (
@@ -41,7 +45,7 @@ const EditDogsModal: React.FC<EditDogsModalProps> = ({
       <div className={styles.title}>
         {dogToEdit ? `Edit ${dogToEdit.name}` : 'Add your dog'} details
       </div>
-      <EditDog dog={dogToEdit} />
+      <EditDog dog={dogToEdit} onSubmitForm={onSubmitDogsForm} />
     </Modal>
   );
 };

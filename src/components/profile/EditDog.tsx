@@ -1,87 +1,145 @@
-import { FormEvent } from 'react';
+import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
 import { Dog } from '../../types/dog';
 import { Button } from '../Button';
 import styles from './EditDog.module.scss';
-import { FormInput } from '../FormInput';
+import { ControlledInput } from '../ControlledInput';
+import { createDog, updateDog } from '../../services/dogs';
+import { UserContext } from '../../context/UserContext';
 
 interface EditDogProps {
   dog?: Dog;
+  onSubmitForm?: () => void;
 }
 
-const EditDog: React.FC<EditDogProps> = ({ dog }) => {
-  const {
-    name,
-    age,
-    breed,
-    size,
-    temperament,
-    energy,
-    possessive,
-    likes,
-    dislikes,
-    description,
-  } = dog || {};
+// TODO: create context / lift state up
+// so the state will include the data from each dog without overriding
+const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
+  const [dogData, setDogData] = useState<
+    | (Pick<Dog, 'name' | 'age' | 'breed' | 'size'> &
+        Partial<
+          Omit<Dog, 'likes' | 'dislikes'> & { likes: string; dislikes: string }
+        >)
+    | null
+  >(null);
+  const { userId } = useContext(UserContext);
 
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    if (dog) {
+      setDogData({
+        ...dog,
+        likes: dog.likes?.join(', '),
+        dislikes: dog.dislikes?.join(', '),
+      });
+    } else {
+      setDogData(null);
+    }
+  }, [dog]);
+
+  const onInputChange = (
+    event: ChangeEvent<HTMLInputElement>,
+    value?: string | number
+  ) => {
+    setDogData((prev) => {
+      return {
+        ...prev,
+        [event.target.name]: value || event.target.value,
+      };
+    });
+  };
+
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = Object.fromEntries(new FormData(event.currentTarget));
-    console.log(data);
+    const data = Object.fromEntries(new FormData(event.currentTarget)) as {
+      [key: string]: string;
+    };
+    const likes = data?.likes.split(', ');
+    const dislikes = data?.dislikes.split(', ');
+    const age = Number(data?.age);
+    if (dog) {
+      await updateDog({
+        dogId: dog.id,
+        dogDetails: { ...data, age, likes, dislikes },
+      });
+    } else {
+      await createDog({ owner: userId!, ...data, age, likes, dislikes });
+    }
+    if (onSubmitForm) {
+      onSubmitForm();
+    }
   };
 
   return (
     <form onSubmit={onSubmit} className={styles.form}>
-      <FormInput
-        defaultValue={name}
+      <ControlledInput
+        value={dogData?.name || ''}
+        onChange={onInputChange}
         name="name"
         label="Name:"
         variant="singleLine"
         required
       />
-      <FormInput
-        defaultValue={age}
+      <ControlledInput
+        value={dogData?.age?.toString() || ''}
+        onChange={onInputChange}
         name="age"
         label="Age:"
         variant="singleLine"
         required
       />
-      <FormInput
-        defaultValue={breed}
+      <ControlledInput
+        value={dogData?.breed || ''}
+        onChange={onInputChange}
         name="breed"
         label="Breed:"
         variant="singleLine"
         required
       />
       {/* TODO: should be closed options */}
-      <FormInput
-        defaultValue={size}
+      <ControlledInput
+        value={dogData?.size || ''}
+        onChange={onInputChange}
         name="size"
         label="size:"
         variant="singleLine"
         required
       />
-      <FormInput
-        defaultValue={temperament}
+      <ControlledInput
+        value={dogData?.temperament || ''}
+        onChange={onInputChange}
         name="temperament"
         label="Temperament"
       />
       {/* TODO: should be closed options */}
-      <FormInput defaultValue={energy} name="energy" label="Energy" />
-      <FormInput
-        defaultValue={possessive}
+      <ControlledInput
+        value={dogData?.energy || ''}
+        onChange={onInputChange}
+        name="energy"
+        label="Energy"
+      />
+      <ControlledInput
+        value={dogData?.possessive || ''}
+        onChange={onInputChange}
         name="possessive"
         label="Possessive"
       />
       {/* TODO: each like should be apart with option to add another like */}
-      <FormInput defaultValue={likes?.join(', ')} name="likes" label="Likes" />
+      <ControlledInput
+        value={dogData?.likes || ''}
+        onChange={onInputChange}
+        name="likes"
+        label="Likes"
+      />
       {/* TODO: each dislike should be apart with option to add another dislike */}
-      <FormInput
-        defaultValue={dislikes?.join(', ')}
+      <ControlledInput
+        value={dogData?.dislikes || ''}
+        onChange={onInputChange}
         name="dislikes"
         label="Dislikes"
       />
       {/* TODO: should be textarea of few lines (set max chars) */}
-      <FormInput
-        defaultValue={description}
+      <ControlledInput
+        value={dogData?.description || ''}
+        onChange={onInputChange}
         name="description"
         label="Description"
       />

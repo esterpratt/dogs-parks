@@ -13,6 +13,7 @@ interface Dog {
   description?: string;
   possessive?: string;
   energy?: dogsEnergy;
+  owner: string;
 }
 
 export type { Dog };

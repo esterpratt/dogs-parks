@@ -4,7 +4,7 @@ import styles from './ControlledInput.module.scss';
 import { Input } from './Input';
 
 interface ControlledInputProps extends InputHTMLAttributes<HTMLInputElement> {
-  value?: string | number;
+  value?: string;
   label: string;
   name: string;
   placeholder?: string;

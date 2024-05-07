@@ -2,9 +2,11 @@ import { db } from './firebase-config';
 import {
   addDoc,
   collection,
+  doc,
   documentId,
   getDocs,
   query,
+  updateDoc,
   where,
 } from 'firebase/firestore';
 import { throwError } from './error';
@@ -13,12 +15,29 @@ import { fetchImagesByDirectory, uploadImage } from './image';
 
 const dogsCollection = collection(db, 'dogs');
 
-type CreateDogProps = Omit<Dog, 'id'>;
+type CreateDogProps = Pick<Dog, 'owner' | 'age' | 'breed' | 'size'> &
+  Partial<Dog>;
+
+interface EditDogProps {
+  dogId: string;
+  dogDetails: Partial<Dog>;
+}
 
 const createDog = async (createDogProps: CreateDogProps) => {
   try {
     await addDoc(dogsCollection, {
       ...createDogProps,
+    });
+  } catch (error) {
+    throwError(error);
+  }
+};
+
+const updateDog = async ({ dogId, dogDetails }: EditDogProps) => {
+  try {
+    const dogRef = doc(db, 'dogs', dogId);
+    await updateDoc(dogRef, {
+      ...dogDetails,
     });
   } catch (error) {
     throwError(error);
@@ -83,6 +102,7 @@ const fetchAllDogsImages = async (dogId: string) => {
 export {
   fetchDogs,
   createDog,
+  updateDog,
   fetchUserDogs,
   fetchDogPrimaryImage,
   fetchAllDogsImages,

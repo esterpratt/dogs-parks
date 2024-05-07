@@ -1,4 +1,4 @@
-import { useOutletContext } from 'react-router';
+import { useOutletContext, useRevalidator } from 'react-router';
 import { MdOutlineModeEditOutline } from 'react-icons/md';
 import classnames from 'classnames';
 import { Dog } from '../types/dog';
@@ -36,6 +36,7 @@ const ProfileInfo = () => {
   } = useOutletContext<ProfileInfoProps>();
   const [isEditDogsModalOpen, setIsEditDogsModalOpen] = useState(false);
   const [isEditUserModalOpen, setIsEditUserModalOpen] = useState(false);
+  const { revalidate } = useRevalidator();
 
   const galleryImages: { [id: string]: string[] } = {};
   Object.keys(imagesByDog).forEach((id) => {
@@ -50,6 +51,11 @@ const ProfileInfo = () => {
   const onEditUser = (event: MouseEvent) => {
     event?.stopPropagation();
     setIsEditUserModalOpen(true);
+  };
+
+  const onCloseDogsModal = () => {
+    setIsEditDogsModalOpen(false);
+    revalidate();
   };
 
   return (
@@ -122,7 +128,7 @@ const ProfileInfo = () => {
         <EditDogsModal
           dogs={dogs}
           isOpen={isEditDogsModalOpen}
-          onClose={() => setIsEditDogsModalOpen(false)}
+          onClose={onCloseDogsModal}
           currentDogId={currentDogId}
         />
         <EditUserModal

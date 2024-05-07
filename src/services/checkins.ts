@@ -37,9 +37,9 @@ const checkin = async ({ userId = null, parkId }: CheckinProps) => {
   }
 };
 
-const checkout = async (checkoutId: string) => {
+const checkout = async (checkinId: string) => {
   try {
-    const checkinRef = doc(db, 'checkins', checkoutId);
+    const checkinRef = doc(db, 'checkins', checkinId);
     await updateDoc(checkinRef, {
       checkoutTimestamp: serverTimestamp(),
     });
