@@ -40,18 +40,36 @@ const Signin = () => {
             name="email"
             label="Email"
             type="email"
+            required
           />
           <FormInput
             onChange={() => setError('')}
             name="password"
             label="Password"
             type="password"
+            required
           />
           <FormInput
             onChange={() => setError('')}
             name="name"
             label="Your Name"
             type="text"
+            required
+          />
+          <FormInput
+            onChange={() => setError('')}
+            name="dogName"
+            label={
+              <>
+                Your Dog Name
+                <span>
+                  if you have more than one, don't worry, you could later add
+                  the rest
+                </span>
+              </>
+            }
+            type="text"
+            required
           />
           <div className={styles.error}>{error}</div>
           <Button type="submit" className={styles.button}>

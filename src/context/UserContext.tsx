@@ -15,6 +15,7 @@ import {
 import { createUser, fetchUser, updateUser } from '../services/users';
 import { User } from '../types/user';
 import { useOnAuthStateChanged } from '../hooks/useOnAuthStateChanged';
+import { createDog } from '../services/dogs';
 
 interface UserContextObj {
   userId: string | null;
@@ -41,7 +42,9 @@ const UserContext = createContext<UserContextObj>(initialData);
 const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { userId, loadingUserId } = useOnAuthStateChanged();
   const [user, setUser] = useState<User | null>(null);
-  const userExtraDataRef = useRef<Omit<User, 'id'> | null>(null);
+  const userExtraDataRef = useRef<{ name: string; dogName: string } | null>(
+    null
+  );
 
   useEffect(() => {
     const getUser = async () => {
@@ -49,6 +52,10 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
         const userToSet = { id: userId!, name: userExtraDataRef.current.name };
         try {
           await createUser(userToSet);
+          await createDog({
+            owner: userId!,
+            name: userExtraDataRef.current.dogName,
+          });
           setUser(userToSet);
         } finally {
           userExtraDataRef.current = null;
@@ -84,9 +91,14 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     await logout();
   };
 
-  const userSignin = async ({ email, password, name }: SigninProps) => {
+  const userSignin = async ({
+    email,
+    password,
+    name,
+    dogName,
+  }: SigninProps) => {
     try {
-      userExtraDataRef.current = { name };
+      userExtraDataRef.current = { name, dogName };
       await signin({ email, password });
     } catch (error) {
       userExtraDataRef.current = null;

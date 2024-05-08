@@ -14,6 +14,7 @@ interface LoginProps {
 
 interface SigninProps extends LoginProps {
   name: string;
+  dogName: string;
 }
 
 const signin = async ({ email, password }: LoginProps) => {

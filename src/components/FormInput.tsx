@@ -1,14 +1,16 @@
 import classnames from 'classnames';
 import { Input } from './Input';
 import styles from './FormInput.module.scss';
+import { ReactNode } from 'react';
 
 interface FormInputProps extends React.HTMLAttributes<HTMLInputElement> {
   name: string;
-  label: string;
+  label: string | ReactNode;
   type?: string;
   required?: boolean;
   variant?: 'basic' | 'singleLine';
-  defaultValue?: string | number;
+  defaultValue?: string;
+  placeholder?: string;
 }
 
 const FormInput: React.FC<FormInputProps> = ({
@@ -18,6 +20,7 @@ const FormInput: React.FC<FormInputProps> = ({
   required,
   variant = 'basic',
   defaultValue,
+  placeholder,
   ...props
 }) => {
   return (
@@ -31,6 +34,7 @@ const FormInput: React.FC<FormInputProps> = ({
         type={type}
         name={name}
         required={required}
+        placeholder={placeholder}
         {...props}
       />
     </div>
