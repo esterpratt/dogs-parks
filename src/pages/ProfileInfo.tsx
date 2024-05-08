@@ -11,7 +11,6 @@ import { AccordionArrow } from '../components/Accordion/AccordionArrow';
 import styles from './ProfileInfo.module.scss';
 import { UserDetails } from '../components/profile/UserDetails';
 import { DogGalleryContainer } from '../components/profile/DogGalleryContainer';
-import { Button } from '../components/Button';
 import { MouseEvent, useState } from 'react';
 import { EditDogsModal } from '../components/profile/EditDogsModal';
 import { EditUserModal } from '../components/profile/EditUserModal';
@@ -84,21 +83,15 @@ const ProfileInfo = () => {
         <AccordionContent
           className={classnames(styles.contentContainer, styles.dark)}
         >
-          {!!dogs.length && (
-            <DogDetails
-              className={styles.content}
-              dogs={dogs}
-              currentDogId={currentDogId}
-              setCurrentDogId={setCurrentDogId}
-            />
-          )}
-          {!dogs.length && (
-            <Button className={styles.content} onClick={onEditDog}>
-              {isSignedInUser
-                ? 'Add your dog'
-                : `${user.name} Did not add their dog`}
-            </Button>
-          )}
+          <DogDetails
+            isSignedInUser={isSignedInUser}
+            className={styles.content}
+            dogs={dogs}
+            currentDogId={currentDogId}
+            setCurrentDogId={setCurrentDogId}
+            userName={user.name}
+            onEditDog={onEditDog}
+          />
         </AccordionContent>
       </Accordion>
       {!!dogs.length && (
