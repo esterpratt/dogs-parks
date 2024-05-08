@@ -24,7 +24,7 @@ interface AddReviewProps {
 
 interface UpdateReviewProps {
   reviewId: string;
-  review: Omit<Review, 'id' | 'parkId' | 'createdAt' | 'userId'>;
+  reviewData: Omit<Review, 'id' | 'parkId' | 'createdAt' | 'userId'>;
 }
 
 const reviewsCollection = collection(db, 'reviews');
@@ -85,6 +85,32 @@ const fetchReviews = async (parkId: string) => {
   }
 };
 
+const fetchUserReviews = async (userId: string) => {
+  try {
+    const reviewsQuery = query(
+      reviewsCollection,
+      where('userId', '==', userId)
+    );
+
+    const querySnapshot = await getDocs(reviewsQuery);
+    const res: Review[] = [];
+    querySnapshot.forEach((doc) => {
+      res.push({
+        ...doc.data(),
+        id: doc.id,
+        createdAt: doc.data().createdAt.toDate(),
+        updatedAt: doc.data().updatedAt?.toDate(),
+      } as Review);
+    });
+    return res;
+  } catch (error) {
+    console.error(
+      `there was an error while fetching reviews pf user ${userId}: ${error}`
+    );
+    return [];
+  }
+};
+
 const fetchReview = async (reviewId: string) => {
   try {
     const docRef = doc(db, 'reviews', reviewId);
@@ -101,14 +127,20 @@ const fetchReview = async (reviewId: string) => {
   }
 };
 
-const updateReview = async ({ reviewId, review }: UpdateReviewProps) => {
+const updateReview = async ({ reviewId, reviewData }: UpdateReviewProps) => {
   try {
     const reviewRef = doc(db, 'reviews', reviewId);
-    const res = await updateDoc(reviewRef, {
-      ...review,
+    await updateDoc(reviewRef, {
+      ...reviewData,
       updatedAt: serverTimestamp(),
     });
-    return res;
+    const reviewSnap = await getDoc(reviewRef);
+    return {
+      ...reviewSnap.data(),
+      id: reviewSnap.id,
+      updatedAt: reviewSnap.data()?.updatedAt.toDate(),
+      createdAt: reviewSnap.data()?.createdAt.toDate(),
+    } as Review;
   } catch {
     return null;
   }
@@ -138,4 +170,7 @@ export {
   fetchReviewsCount,
   createReview,
   updateReview,
+  fetchUserReviews,
 };
+
+export type { UpdateReviewProps };

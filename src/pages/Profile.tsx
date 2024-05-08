@@ -3,6 +3,7 @@ import { User } from '../types/user';
 import { Dog } from '../types/dog';
 import { UserProfile } from '../components/profile/UserProfile';
 import { UserFriendsContextProvider } from '../context/UserFriendsContext';
+import { UserReviewsContextProvider } from '../context/UserReviewsContext';
 
 const Profile: React.FC = () => {
   const { user, dogs, imagesByDog } = useLoaderData() as {
@@ -14,14 +15,16 @@ const Profile: React.FC = () => {
 
   return (
     <UserFriendsContextProvider>
-      <div>
-        <UserProfile
-          user={user}
-          dogs={dogs}
-          imagesByDog={imagesByDog}
-          key={location.key}
-        />
-      </div>
+      <UserReviewsContextProvider>
+        <div>
+          <UserProfile
+            user={user}
+            dogs={dogs}
+            imagesByDog={imagesByDog}
+            key={location.key}
+          />
+        </div>
+      </UserReviewsContextProvider>
     </UserFriendsContextProvider>
   );
 };

@@ -1,42 +1,31 @@
-import { useContext } from 'react';
 import { Modal } from '../Modal';
 import { ReviewForm } from './ReviewForm';
 import styles from './ReviewModal.module.scss';
-import { ParkReviewsContext } from '../../context/ParkReviewsContext';
+import { Review } from '../../types/review';
 
 interface ReviewModalProps {
   title?: string;
   isOpen: boolean;
-  userId: string;
+  review?: Review;
   closeModal: () => void;
-  onAddReview?: () => void;
+  onSubmitReview: (reviewData: {
+    title: string;
+    content?: string;
+    rank: number;
+  }) => void;
 }
 
 const ReviewModal: React.FC<ReviewModalProps> = ({
   isOpen,
   closeModal,
-  onAddReview,
-  userId,
   title,
+  review,
+  onSubmitReview,
 }) => {
-  const { addReview } = useContext(ParkReviewsContext);
-
-  const onSubmitReview = async (reviewData: {
-    title: string;
-    content?: string;
-    rank: number;
-  }) => {
-    closeModal();
-    addReview(reviewData, userId);
-
-    if (onAddReview) {
-      onAddReview();
-    }
-  };
   return (
     <Modal open={isOpen} onClose={() => closeModal()}>
       {title && <div className={styles.title}>{title}</div>}
-      <ReviewForm onSubmitForm={onSubmitReview} />
+      <ReviewForm onSubmitForm={onSubmitReview} review={review} />
     </Modal>
   );
 };

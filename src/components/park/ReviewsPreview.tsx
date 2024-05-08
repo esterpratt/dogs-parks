@@ -8,17 +8,23 @@ import { UserContext } from '../../context/UserContext';
 import { ParkReviewsContext } from '../../context/ParkReviewsContext';
 
 const ReviewsPreview = () => {
-  const { rank, reviewsCount, loading } = useContext(ParkReviewsContext);
+  const { rank, reviewsCount, loading, addReview } =
+    useContext(ParkReviewsContext);
   const [isAddReviewModalOpen, setIsAddReviewModalOpen] = useState(false);
   const { userId } = useContext(UserContext);
-
-  const onAddReview = () => {
-    setIsAddReviewModalOpen(false);
-  };
 
   if (loading) {
     return null;
   }
+
+  const onAddReview = async (review: {
+    title: string;
+    content?: string;
+    rank: number;
+  }) => {
+    setIsAddReviewModalOpen(false);
+    addReview(review, userId!);
+  };
 
   return (
     <div className={styles.container}>
@@ -38,8 +44,7 @@ const ReviewsPreview = () => {
             Add a review
           </Button>
           <ReviewModal
-            userId={userId}
-            onAddReview={onAddReview}
+            onSubmitReview={onAddReview}
             isOpen={isAddReviewModalOpen}
             closeModal={() => setIsAddReviewModalOpen(false)}
           />

@@ -11,7 +11,7 @@ import { Profile } from './pages/Profile';
 import { userLoader } from './loaders/userLoader';
 import { RootLayout } from './RootLayout';
 import { NewPark } from './pages/NewPark';
-import { Reviews } from './pages/Reviews';
+import { Reviews } from './pages/ParkReviews';
 import { reviewsLoader } from './loaders/reviewsLoader';
 import { ParkDetails } from './pages/ParkDetails';
 import { ParkVisitors } from './pages/ParkVisitors';

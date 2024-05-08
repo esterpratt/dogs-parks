@@ -1,9 +1,11 @@
 import { useContext } from 'react';
 import { Tabs } from '../Tabs/Tabs';
 import { UserFriendsContext } from '../../context/UserFriendsContext';
+import { UserReviewsContext } from '../../context/UserReviewsContext';
 
 const ProfileTabs = () => {
   const { friends, pendingFriends } = useContext(UserFriendsContext);
+  const { reviews } = useContext(UserReviewsContext);
   return (
     <Tabs
       tabs={[
@@ -16,6 +18,7 @@ const ProfileTabs = () => {
         {
           text: 'My Reviews',
           url: 'reviews',
+          disabled: !reviews.length,
         },
       ]}
     />

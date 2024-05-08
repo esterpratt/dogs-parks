@@ -1,39 +1,43 @@
 import { useEffect, useState } from 'react';
 import { ControlledInput } from '../ControlledInput';
-import { fetchReview } from '../../services/reviews';
 import { Stars } from '../Stars';
 import { Button } from '../Button';
 import styles from './ReviewForm.module.scss';
+import { Review } from '../../types/review';
 
 interface ReviewFormProps {
-  reviewId?: string;
-  onSubmitForm: (
-    reviewData: {
-      title: string;
-      content: string;
-      rank: number;
-    },
-    reviewId?: string
-  ) => void;
+  review?: Review;
+  onSubmitForm: (reviewData: {
+    title: string;
+    content: string;
+    rank: number;
+  }) => void;
 }
 
-const ReviewForm: React.FC<ReviewFormProps> = ({ reviewId, onSubmitForm }) => {
-  const [reviewData, setReviewData] = useState({
-    title: '',
-    content: '',
+const ReviewForm: React.FC<ReviewFormProps> = ({ review, onSubmitForm }) => {
+  const [reviewData, setReviewData] = useState(() => {
+    return {
+      title: review?.title || '',
+      content: review?.content || '',
+    };
   });
   const [rank, setRank] = useState<number>(5);
 
   useEffect(() => {
-    const getReviewData = async () => {
-      const data = await fetchReview(reviewId!);
-      // TODO: setReviewData
-      console.log(data);
-    };
-    if (reviewId) {
-      getReviewData();
+    if (review) {
+      setReviewData({
+        title: review.title,
+        content: review.content || '',
+      });
+      setRank(review.rank);
+    } else {
+      setReviewData({
+        title: '',
+        content: '',
+      });
+      setRank(5);
     }
-  }, [reviewId]);
+  }, [review]);
 
   const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setReviewData((prev) => {
@@ -46,14 +50,11 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ reviewId, onSubmitForm }) => {
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onSubmitForm(
-      {
-        title: reviewData.title,
-        content: reviewData.content,
-        rank: Number(rank),
-      },
-      reviewId
-    );
+    onSubmitForm({
+      title: reviewData.title,
+      content: reviewData.content,
+      rank: Number(rank),
+    });
   };
 
   return (
