@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { MdCenterFocusStrong } from 'react-icons/md';
 import { DirectionsRenderer, GoogleMap } from '@react-google-maps/api';
 import classnames from 'classnames';
 import styles from './Map.module.scss';
@@ -9,13 +10,15 @@ interface MapProps {
   className?: string;
 }
 
+const DEFAULT_LOCATION = { lat: 32.09992, lng: 34.809212 };
+
 const Map: React.FC<MapProps> = ({ className }) => {
-  const [center, setCenter] = useState({ lat: 32.05, lng: 34.85 });
+  const [center, setCenter] = useState(DEFAULT_LOCATION);
   const [directions, setDirections] = useState<
     google.maps.DirectionsResult | undefined
   >();
 
-  useEffect(() => {
+  const setUserCenter = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         setCenter({
@@ -24,6 +27,10 @@ const Map: React.FC<MapProps> = ({ className }) => {
         });
       });
     }
+  };
+
+  useEffect(() => {
+    setUserCenter();
   }, []);
 
   const onGetDirections = (location: Location) => {
@@ -53,7 +60,16 @@ const Map: React.FC<MapProps> = ({ className }) => {
         center={center}
         zoom={16}
         mapContainerStyle={{ width: '100%', height: '100%' }}
+        options={{
+          disableDefaultUI: true,
+          zoomControl: true,
+          zoomControlOptions: { position: 3 },
+          gestureHandling: 'greedy', // DELETE - only for testing
+        }}
       >
+        <div className={styles.center} onClick={setUserCenter}>
+          <MdCenterFocusStrong size={28} />
+        </div>
         {directions && <DirectionsRenderer directions={directions} />}
         <MarkerList onGetDirections={onGetDirections} />
       </GoogleMap>

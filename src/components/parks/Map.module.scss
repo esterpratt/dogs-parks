@@ -1,0 +1,14 @@
+.center {
+  width: 40px;
+  height: 40px;
+  background-color: rgb(255, 255, 255);
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+  bottom: 25px;
+  right: 10px;
+  z-index: 100;
+}
