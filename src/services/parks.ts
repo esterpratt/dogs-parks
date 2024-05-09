@@ -1,5 +1,13 @@
 import { db } from './firebase-config';
-import { getDocs, collection, doc, getDoc } from 'firebase/firestore';
+import {
+  getDocs,
+  collection,
+  doc,
+  getDoc,
+  addDoc,
+  GeoPoint,
+  updateDoc,
+} from 'firebase/firestore';
 import { Park } from '../types/park';
 import { fetchImagesByDirectory, uploadImage } from './image';
 import { AppError, throwError } from './error';
@@ -39,6 +47,43 @@ const fetchPark = async (parkId: string) => {
   }
 };
 
+const createPark = async (
+  parkDetails: Pick<Park, 'address' | 'city' | 'name' | 'location'> &
+    Partial<Park>
+) => {
+  try {
+    const res = await addDoc(parksCollection, {
+      ...parkDetails,
+      location: new GeoPoint(
+        parkDetails.location.latitude,
+        parkDetails.location.longitude
+      ),
+    });
+    return res.id;
+  } catch (error) {
+    console.error(`there was an error while creating park: ${error}`);
+    return null;
+  }
+};
+
+const updatePark = async (parkId: string, parkDetails: Partial<Park>) => {
+  try {
+    const parkRef = doc(db, 'parks', parkId);
+    if (parkDetails.location) {
+      parkDetails.location = new GeoPoint(
+        parkDetails.location.latitude,
+        parkDetails.location.longitude
+      );
+    }
+    await updateDoc(parkRef, {
+      ...parkDetails,
+    });
+  } catch (error) {
+    console.error(`there was an error while updating park ${parkId}: ${error}`);
+    return null;
+  }
+};
+
 const uploadParkImage = async (image: File | string, parkId: string) => {
   try {
     const res = await uploadImage({ image, path: `parks/${parkId}/other` });
@@ -72,4 +117,6 @@ export {
   uploadParkImage,
   fetchParkPrimaryImage,
   fetchAllParkImages,
+  createPark,
+  updatePark,
 };
