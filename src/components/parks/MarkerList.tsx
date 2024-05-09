@@ -1,8 +1,13 @@
 import { useContext, useState } from 'react';
 import { Marker } from './Marker';
 import { ParksContext } from '../../context/ParksContext';
+import { Location } from '../../types/park';
 
-const MarkerList = () => {
+interface MarkerListProps {
+  onGetDirections: (location: Location) => void;
+}
+
+const MarkerList: React.FC<MarkerListProps> = ({ onGetDirections }) => {
   const { parks } = useContext(ParksContext);
   const [activeMarker, setActiveMarker] = useState<string | null>(null);
 
@@ -13,6 +18,7 @@ const MarkerList = () => {
       id={park.id}
       location={park.location}
       name={park.name}
+      onGetDirections={onGetDirections}
       setActiveMarker={setActiveMarker}
     />
   ));

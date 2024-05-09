@@ -8,6 +8,7 @@ interface MarkerProps {
   name: string;
   activeMarker: string | null;
   setActiveMarker: (id: string | null) => void;
+  onGetDirections: (location: Location) => void;
 }
 
 const Marker: React.FC<MarkerProps> = ({
@@ -16,6 +17,7 @@ const Marker: React.FC<MarkerProps> = ({
   name,
   activeMarker,
   setActiveMarker,
+  onGetDirections,
 }) => {
   return (
     <MarkerF
@@ -27,7 +29,11 @@ const Marker: React.FC<MarkerProps> = ({
           position={{ lat: location.latitude, lng: location.longitude }}
           mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
         >
-          <MarkerPopup parkId={id} parkName={name} />
+          <MarkerPopup
+            parkId={id}
+            parkName={name}
+            onGetDirections={() => onGetDirections(location)}
+          />
         </OverlayViewF>
       )}
     </MarkerF>
