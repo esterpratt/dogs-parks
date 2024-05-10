@@ -1,0 +1,9 @@
+@import '../variables.scss';
+
+.container {
+  color: $text;
+}
+
+.name {
+  text-transform: capitalize;
+}

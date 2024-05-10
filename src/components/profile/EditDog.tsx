@@ -1,10 +1,12 @@
 import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
-import { Dog } from '../../types/dog';
+import { Dog, DOG_ENERGY, DOG_SIZE, GENDER } from '../../types/dog';
 import { Button } from '../Button';
 import styles from './EditDog.module.scss';
 import { ControlledInput } from '../ControlledInput';
 import { createDog, updateDog } from '../../services/dogs';
 import { UserContext } from '../../context/UserContext';
+import { RadioInputs } from '../RadioInputs';
+import { TextArea } from '../TextArea';
 
 interface EditDogProps {
   dog?: Dog;
@@ -37,7 +39,7 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
   }, [dog]);
 
   const onInputChange = (
-    event: ChangeEvent<HTMLInputElement>,
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     value?: string | number
   ) => {
     setDogData((prev) => {
@@ -84,6 +86,15 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
         variant="singleLine"
         required
       />
+      <RadioInputs
+        value={dogData?.gender || ''}
+        options={[
+          { value: GENDER.FEMALE, id: GENDER.FEMALE },
+          { value: GENDER.MALE, id: GENDER.MALE },
+        ]}
+        onOptionChange={onInputChange}
+        name="gender"
+      />
       <ControlledInput
         value={dogData?.age?.toString() || ''}
         onChange={onInputChange}
@@ -100,14 +111,15 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
         variant="singleLine"
         required
       />
-      {/* TODO: should be closed options */}
-      <ControlledInput
+      <RadioInputs
         value={dogData?.size || ''}
-        onChange={onInputChange}
+        options={[
+          { value: DOG_SIZE.LARGE, id: DOG_SIZE.LARGE },
+          { value: DOG_SIZE.MEDIUM, id: DOG_SIZE.MEDIUM },
+          { value: DOG_SIZE.SMALL, id: DOG_SIZE.SMALL },
+        ]}
+        onOptionChange={onInputChange}
         name="size"
-        label="size:"
-        variant="singleLine"
-        required
       />
       <ControlledInput
         value={dogData?.temperament || ''}
@@ -115,12 +127,15 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
         name="temperament"
         label="Temperament"
       />
-      {/* TODO: should be closed options */}
-      <ControlledInput
+      <RadioInputs
         value={dogData?.energy || ''}
-        onChange={onInputChange}
+        options={[
+          { value: DOG_ENERGY.HIGH, id: DOG_ENERGY.HIGH },
+          { value: DOG_ENERGY.MEDIUM, id: DOG_ENERGY.MEDIUM },
+          { value: DOG_ENERGY.LOW, id: DOG_ENERGY.LOW },
+        ]}
+        onOptionChange={onInputChange}
         name="energy"
-        label="Energy"
       />
       <ControlledInput
         value={dogData?.possessive || ''}
@@ -128,22 +143,22 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
         name="possessive"
         label="Possessive"
       />
-      {/* TODO: each like should be apart with option to add another like */}
+      {/* TODO: each like and dislike should be apart with option to add another like */}
       <ControlledInput
         value={dogData?.likes || ''}
         onChange={onInputChange}
         name="likes"
         label="Likes"
       />
-      {/* TODO: each dislike should be apart with option to add another dislike */}
       <ControlledInput
         value={dogData?.dislikes || ''}
         onChange={onInputChange}
         name="dislikes"
         label="Dislikes"
       />
-      {/* TODO: should be textarea of few lines (set max chars) */}
-      <ControlledInput
+      <TextArea
+        rows={8}
+        maxLength={180}
         value={dogData?.description || ''}
         onChange={onInputChange}
         name="description"
