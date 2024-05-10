@@ -7,6 +7,7 @@ interface TextAreaProps {
   label: string;
   rows?: number;
   maxLength?: number;
+  placeholder?: string;
   onChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
@@ -17,11 +18,13 @@ const TextArea: React.FC<TextAreaProps> = ({
   name,
   rows,
   maxLength,
+  placeholder,
 }) => {
   return (
     <div className={styles.container}>
       <label htmlFor={name}>{label}</label>
       <textarea
+        placeholder={placeholder}
         maxLength={maxLength || 180}
         rows={rows || 3}
         value={value}

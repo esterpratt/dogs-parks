@@ -4,6 +4,7 @@ import { Stars } from '../Stars';
 import { Button } from '../Button';
 import styles from './ReviewForm.module.scss';
 import { Review } from '../../types/review';
+import { TextArea } from '../TextArea';
 
 interface ReviewFormProps {
   review?: Review;
@@ -39,7 +40,9 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ review, onSubmitForm }) => {
     }
   }, [review]);
 
-  const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeInput = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setReviewData((prev) => {
       return {
         ...prev,
@@ -68,12 +71,12 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ review, onSubmitForm }) => {
           onChange={onChangeInput}
           placeholder="Review title"
         />
-        <ControlledInput
+        <TextArea
           label="Content"
           name="content"
           value={reviewData.content}
           onChange={onChangeInput}
-          placeholder="Please elaborate"
+          placeholder="Please elaborate..."
         />
         <span className={styles.rankTitle}>Rank:</span>
         <Stars rank={rank} setRank={setRank} size={32} />
