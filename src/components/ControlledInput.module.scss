@@ -2,7 +2,7 @@
 
 .container {
   display: flex;
-  gap: 8px;
+  gap: 12px;
   color: $text;
 
   &.basic {
@@ -12,5 +12,9 @@
   &.single-line {
     flex-direction: row;
     align-items: center;
+  }
+
+  label {
+    padding-left: 4px;
   }
 }

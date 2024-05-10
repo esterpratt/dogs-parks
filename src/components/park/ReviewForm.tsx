@@ -78,10 +78,17 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ review, onSubmitForm }) => {
           onChange={onChangeInput}
           placeholder="Please elaborate..."
         />
-        <span className={styles.rankTitle}>Rank:</span>
-        <Stars rank={rank} setRank={setRank} size={32} />
-        <Button type="submit" className={styles.button}>
-          Submit review
+        <div>
+          <span className={styles.rankTitle}>Rank</span>
+          <Stars
+            className={styles.stars}
+            rank={rank}
+            setRank={setRank}
+            size={32}
+          />
+        </div>
+        <Button variant="orange" type="submit" className={styles.button}>
+          Submit
         </Button>
       </form>
     </div>

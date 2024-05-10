@@ -8,9 +8,15 @@ interface StarsProps {
   rank: number;
   size?: number;
   setRank?: (rank: number) => void;
+  className?: string;
 }
 
-const Stars: React.FC<StarsProps> = ({ rank, setRank, size = 14 }) => {
+const Stars: React.FC<StarsProps> = ({
+  rank,
+  setRank,
+  size = 14,
+  className,
+}) => {
   const starsIcons: ((index: number) => ReactNode)[] = [];
 
   let i = 1;
@@ -72,7 +78,7 @@ const Stars: React.FC<StarsProps> = ({ rank, setRank, size = 14 }) => {
   }
 
   return (
-    <div className={styles.container}>
+    <div className={classnames(styles.container, className)}>
       {starsIcons.map((star, index) => star(index))}
     </div>
   );

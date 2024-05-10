@@ -1,13 +1,14 @@
 @import '../variables.scss';
 
 .input {
-  background-color: transparent;
-  color: inherit;
-  border: none;
+  color: $text-bold;
+  border: 1px solid $grey-bold;
+  background-color: $white;
+  border-radius: 24px;
   font-size: 16px;
   font-family: inherit;
   outline: none;
-  border-bottom: 1px solid $text-light;
+  padding: 20px 16px;
 
   &::placeholder {
     color: $text-light;

@@ -5,4 +5,23 @@
   flex-direction: column;
   gap: 12px;
   color: $text;
+
+  label {
+    padding-left: 4px;
+  }
+
+  textarea {
+    color: $text-bold;
+    border: 1px solid $grey-bold;
+    background-color: $white;
+    border-radius: 24px;
+    font-size: 16px;
+    font-family: inherit;
+    outline: none;
+    padding: 20px 16px;
+
+    &::placeholder {
+      color: $text-light;
+    }
+  }
 }

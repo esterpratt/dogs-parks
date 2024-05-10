@@ -1,0 +1,51 @@
+@import '../variables.scss';
+
+h2 {
+  margin: 32px 0 24px;
+  font-weight: inherit;
+  padding: 12px 4px;
+  border-bottom: 1px solid $grey-bold;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  margin: 0 32px;
+}
+
+.inputs-container {
+  margin: 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.button {
+  align-self: center;
+  margin-top: 48px;
+}
+
+.error {
+  color: $red;
+  height: 20px;
+  padding-left: 4px;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.2s;
+
+  &.show {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+.change-method {
+  margin-top: 16px;
+  align-self: center;
+
+  a {
+    text-decoration: none;
+    color: $green;
+    margin-left: 4px;
+  }
+}

@@ -15,9 +15,22 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 32px;
 }
 
 .button {
-  margin-top: 32px;
+  align-self: center;
+  position: absolute;
+  bottom: 48px;
+}
+
+.rank-title {
+  padding-left: 4px;
+}
+
+.stars {
+  background-color: $white;
+  border-radius: 16px;
+  padding: 16px;
+  margin-top: 12px;
 }
