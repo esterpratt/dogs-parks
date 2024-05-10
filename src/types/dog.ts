@@ -1,18 +1,20 @@
-type dogsSize = 'large' | 'medium' | 'small';
-type dogsEnergy = 'high' | 'medium' | 'low';
+type DogSize = 'large' | 'medium' | 'small';
+type DogEnergy = 'high' | 'medium' | 'low';
+type Gender = 'female' | 'male';
 
 interface Dog {
   id: string;
   name: string;
   age?: number;
-  size?: dogsSize;
+  gender?: Gender;
+  size?: DogSize;
   breed?: string;
   temperament?: string;
   likes?: string[];
   dislikes?: string[];
   description?: string;
   possessive?: string;
-  energy?: dogsEnergy;
+  energy?: DogEnergy;
   owner: string;
 }
 

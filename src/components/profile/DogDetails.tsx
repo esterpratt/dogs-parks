@@ -30,6 +30,7 @@ const DogDetails: React.FC<DogProps> = ({
   const dogDetailsTextMap = useMemo(
     () => [
       { label: 'Age', data: currentDog?.age },
+      { label: 'Gender', data: currentDog?.gender },
       { label: 'Breed', data: currentDog?.breed },
       { label: 'Size', data: currentDog?.size },
       { label: 'Temperament', data: currentDog?.temperament },

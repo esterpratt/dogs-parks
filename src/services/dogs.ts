@@ -15,7 +15,7 @@ import { fetchImagesByDirectory, uploadImage } from './image';
 
 const dogsCollection = collection(db, 'dogs');
 
-type CreateDogProps = Pick<Dog, 'owner' | 'name'> & Partial<Dog>;
+type CreateDogProps = Omit<Dog, 'id'>;
 
 interface EditDogProps {
   dogId: string;

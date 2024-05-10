@@ -15,10 +15,11 @@ interface EditDogProps {
 // so the state will include the data from each dog without overriding
 const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
   const [dogData, setDogData] = useState<
-    | (Pick<Dog, 'name' | 'age' | 'breed' | 'size'> &
-        Partial<
-          Omit<Dog, 'likes' | 'dislikes'> & { likes: string; dislikes: string }
-        >)
+    | (Partial<Omit<Dog, 'likes' | 'dislikes'>> &
+        Required<Pick<Dog, 'name'>> & {
+          likes?: string;
+          dislikes?: string;
+        })
     | null
   >(null);
   const { userId } = useContext(UserContext);
@@ -50,9 +51,9 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const likes = dogData?.likes?.split(', ') || [];
-    const dislikes = dogData?.dislikes?.split(', ') || [];
-    const age = Number(dogData?.age);
+    const likes = dogData!.likes?.split(', ') || [];
+    const dislikes = dogData!.dislikes?.split(', ') || [];
+    const age = Number(dogData!.age);
 
     if (dog) {
       await updateDog({
@@ -60,7 +61,13 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
         dogDetails: { ...dogData, age, likes, dislikes },
       });
     } else {
-      await createDog({ owner: userId!, ...dogData, age, likes, dislikes });
+      await createDog({
+        owner: userId!,
+        ...dogData!,
+        age,
+        likes,
+        dislikes,
+      });
     }
     if (onSubmitForm) {
       onSubmitForm();
