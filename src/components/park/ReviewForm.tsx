@@ -22,7 +22,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ review, onSubmitForm }) => {
       content: review?.content || '',
     };
   });
-  const [rank, setRank] = useState<number>(5);
+  const [rank, setRank] = useState<number>(0);
 
   useEffect(() => {
     if (review) {
@@ -36,7 +36,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ review, onSubmitForm }) => {
         title: '',
         content: '',
       });
-      setRank(5);
+      setRank(0);
     }
   }, [review]);
 
@@ -78,8 +78,8 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ review, onSubmitForm }) => {
           onChange={onChangeInput}
           placeholder="Please elaborate..."
         />
-        <div>
-          <span className={styles.rankTitle}>Rank</span>
+        <div className={styles.rankContainer}>
+          <span className={styles.rankTitle}>Rate the park</span>
           <Stars
             className={styles.stars}
             rank={rank}

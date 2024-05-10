@@ -1,13 +1,13 @@
 import { Outlet } from 'react-router';
-import { User } from '../../types/user';
+import { User } from '../types/user';
 import { useContext, useEffect, useState } from 'react';
-import { UserContext } from '../../context/UserContext';
-import { Dog } from '../../types/dog';
-import { DogsImages } from './DogsImages';
-import { ProfileTabs } from './ProfileTabs';
+import { UserContext } from '../context/UserContext';
+import { Dog } from '../types/dog';
+import { DogsImages } from '../components/profile/DogsImages';
+import { ProfileTabs } from '../components/profile/ProfileTabs';
 import styles from './UserProfile.module.scss';
-import { Button } from '../Button';
-import { FriendRequestButton } from './FriendRequestButton';
+import { Button } from '../components/Button';
+import { FriendRequestButton } from '../components/profile/FriendRequestButton';
 
 interface UserProfileProps {
   user: User;
@@ -58,7 +58,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
           />
         )}
         <div>
-          <span>
+          <span className={styles.name}>
             {isSignedInUser ? 'Hello ' : 'Meet '}
             {dogs.length ? dogNamesStr : user.name}
           </span>

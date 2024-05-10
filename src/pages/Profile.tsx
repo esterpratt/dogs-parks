@@ -1,7 +1,7 @@
 import { useLoaderData, useLocation } from 'react-router';
 import { User } from '../types/user';
 import { Dog } from '../types/dog';
-import { UserProfile } from '../components/profile/UserProfile';
+import { UserProfile } from './UserProfile';
 import { UserFriendsContextProvider } from '../context/UserFriendsContext';
 import { UserReviewsContextProvider } from '../context/UserReviewsContext';
 

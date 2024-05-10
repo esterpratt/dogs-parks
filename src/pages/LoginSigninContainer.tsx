@@ -80,8 +80,7 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
                   <>
                     Your Dog Name
                     <span>
-                      if you have more than one, don't worry, you could later
-                      add the rest
+                      have a pack? great! you could later add everybody!
                     </span>
                   </>
                 }

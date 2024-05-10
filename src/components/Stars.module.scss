@@ -17,10 +17,10 @@
 
   &.second-half {
     transform: scale(-1, 1);
-    color: $text-light;
+    color: $grey-bold;
   }
 
   &.empty {
-    color: $text-light;
+    color: $grey-bold;
   }
 }

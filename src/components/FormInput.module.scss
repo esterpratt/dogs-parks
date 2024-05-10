@@ -1,6 +1,6 @@
 .container {
   display: flex;
-  gap: 12px;
+  gap: 8px;
 
   &.basic {
     flex-direction: column;
@@ -13,11 +13,11 @@
 }
 
 label {
-  padding-left: 4px;
+  padding-left: 2px;
 
   span {
     display: block;
     margin-top: 8px;
-    font-size: 12px;
+    font-size: 14px;
   }
 }

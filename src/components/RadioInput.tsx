@@ -1,4 +1,5 @@
 import { ChangeEvent } from 'react';
+import classnames from 'classnames';
 import styles from './RadioInput.module.scss';
 
 interface RadioInputsProps {
@@ -17,7 +18,12 @@ const RadioInput: React.FC<RadioInputsProps> = ({
   onOptionChange,
 }) => {
   return (
-    <div className={styles.input}>
+    <div
+      className={classnames(
+        styles.input,
+        selectedValue === value && styles.checked
+      )}
+    >
       <input
         type="radio"
         name={name}

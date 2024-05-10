@@ -2,6 +2,17 @@
 
 .container {
   color: $text;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.options {
+  width: fit-content;
+  display: flex;
+  background-color: white;
+  border: 1px solid $grey-bold;
+  border-radius: 18px;
 }
 
 .name {

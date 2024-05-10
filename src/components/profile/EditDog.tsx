@@ -82,8 +82,7 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
         value={dogData?.name || ''}
         onChange={onInputChange}
         name="name"
-        label="Name:"
-        variant="singleLine"
+        label="Name"
         required
       />
       <RadioInputs
@@ -99,16 +98,14 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
         value={dogData?.age?.toString() || ''}
         onChange={onInputChange}
         name="age"
-        label="Age:"
-        variant="singleLine"
+        label="Age"
         required
       />
       <ControlledInput
         value={dogData?.breed || ''}
         onChange={onInputChange}
         name="breed"
-        label="Breed:"
-        variant="singleLine"
+        label="Breed"
         required
       />
       <RadioInputs
@@ -164,7 +161,7 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
         name="description"
         label="Description"
       />
-      <Button type="submit" className={styles.saveButton}>
+      <Button variant="orange" type="submit" className={styles.saveButton}>
         Save
       </Button>
     </form>

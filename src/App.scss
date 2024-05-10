@@ -4,9 +4,10 @@ body {
   display: flex;
   width: 100%;
   margin: 0;
-  background-color: $white;
+  background-color: $grey-light;
   color: $text;
-  font-weight: $font-weight-medium;
+  font-weight: $font-weight-light;
+  letter-spacing: 0.5px;
   font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
     sans-serif;
 }

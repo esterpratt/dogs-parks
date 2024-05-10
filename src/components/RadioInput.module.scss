@@ -1,5 +1,42 @@
+@import '../variables.scss';
+
 .input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 16px 20px;
+  flex-grow: 1;
+
+  &.checked {
+    background-color: $green;
+    color: $white;
+  }
+
+  &:not(:last-child) {
+    border-right: 1px solid $grey-bold;
+  }
+
+  &:first-child {
+    border-top-left-radius: 18px;
+    border-bottom-left-radius: 18px;
+  }
+
+  &:last-child {
+    border-top-right-radius: 18px;
+    border-bottom-right-radius: 18px;
+  }
+
   label {
     text-transform: capitalize;
+    padding: 0;
+  }
+
+  input {
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin: 0;
   }
 }

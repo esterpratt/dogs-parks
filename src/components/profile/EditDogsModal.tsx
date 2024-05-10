@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Modal } from '../Modal';
 import { Dog } from '../../types/dog';
-import { DogsTabs } from './DogsTabs';
 import { EditDog } from './EditDog';
 import styles from './EditDogsModal.module.scss';
 
@@ -34,14 +33,6 @@ const EditDogsModal: React.FC<EditDogsModalProps> = ({
 
   return (
     <Modal open={isOpen} onClose={onClose} className={styles.modal}>
-      {dogs && dogs.length > 1 && dogIdToEdit && (
-        <DogsTabs
-          dogs={dogs}
-          currentDogId={dogIdToEdit}
-          setCurrentDogId={(id) => setDogIdToEdit(id)}
-          className={styles.tabs}
-        />
-      )}
       <div className={styles.title}>
         {dogToEdit ? `Edit ${dogToEdit.name}` : 'Add your dog'} details
       </div>

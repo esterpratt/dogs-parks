@@ -22,15 +22,20 @@
   align-self: center;
   position: absolute;
   bottom: 48px;
+  font-size: 24px;
+}
+
+.rank-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .rank-title {
+  font-size: 18px;
   padding-left: 4px;
 }
 
 .stars {
-  background-color: $white;
-  border-radius: 16px;
   padding: 16px;
-  margin-top: 12px;
 }

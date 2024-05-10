@@ -3,15 +3,15 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
   color: $text;
 
   label {
-    padding-left: 4px;
+    padding-left: 2px;
   }
 
   textarea {
-    color: $text-bold;
+    color: $text-medium;
     border: 1px solid $grey-bold;
     background-color: $white;
     border-radius: 24px;
@@ -19,8 +19,11 @@
     font-family: inherit;
     outline: none;
     padding: 20px 16px;
+    font-weight: inherit;
+    letter-spacing: inherit;
 
     &::placeholder {
+      opacity: 1;
       color: $text-light;
     }
   }

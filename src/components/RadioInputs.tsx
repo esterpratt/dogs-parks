@@ -18,18 +18,20 @@ const RadioInputs: React.FC<RadioInputProps> = ({
   return (
     <div className={styles.container}>
       <div className={styles.name}>{name}</div>
-      {options.map((option) => {
-        return (
-          <RadioInput
-            key={option.id}
-            name={name}
-            id={option.id}
-            value={option.value}
-            selectedValue={value}
-            onOptionChange={onOptionChange}
-          />
-        );
-      })}
+      <div className={styles.options}>
+        {options.map((option) => {
+          return (
+            <RadioInput
+              key={option.id}
+              name={name}
+              id={option.id}
+              value={option.value}
+              selectedValue={value}
+              onOptionChange={onOptionChange}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 };
