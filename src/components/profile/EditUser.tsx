@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
 import { Button } from '../Button';
-import styles from './EditDog.module.scss';
+import styles from './EditUser.module.scss';
 import { ControlledInput } from '../ControlledInput';
 import { User } from '../../types/user';
 import { UserContext } from '../../context/UserContext';
@@ -44,10 +44,10 @@ const EditUser: React.FC<EditUserProps> = ({ user, onSubmitForm }) => {
         value={userData.name || ''}
         onChange={onInputChange}
         name="name"
-        label="Name:"
+        label="Name"
         required
       />
-      <Button type="submit" className={styles.saveButton}>
+      <Button type="submit" variant="orange" className={styles.saveButton}>
         Save
       </Button>
     </form>

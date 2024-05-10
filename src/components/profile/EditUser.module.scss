@@ -2,10 +2,10 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  margin: 36px 0 0;
 }
 
 .save-button {
-  margin: 0 auto;
-  margin-top: 32px;
+  bottom: 48px;
+  align-self: center;
+  position: absolute;
 }

@@ -17,7 +17,12 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose }) => {
   }
 
   return (
-    <Modal open={isOpen} onClose={onClose}>
+    <Modal
+      open={isOpen}
+      onClose={onClose}
+      className={styles.modal}
+      height="50%"
+    >
       <div className={styles.title}>Edit your details</div>
       <EditUser user={user} onSubmitForm={onClose} />
     </Modal>

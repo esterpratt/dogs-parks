@@ -80,6 +80,7 @@ const ParkCheckIn: React.FC<{
         )}
       </Button>
       <Modal
+        height="50%"
         className={styles.dogsCountModal}
         open={openDogsCountModal}
         onClose={() => setOpenDogsCountModal(false)}

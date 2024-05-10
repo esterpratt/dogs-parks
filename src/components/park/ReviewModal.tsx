@@ -23,7 +23,12 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
   onSubmitReview,
 }) => {
   return (
-    <Modal open={isOpen} onClose={() => closeModal()}>
+    <Modal
+      open={isOpen}
+      onClose={() => closeModal()}
+      className={styles.content}
+      height="75%"
+    >
       {title && <div className={styles.title}>{title}</div>}
       <ReviewForm onSubmitForm={onSubmitReview} review={review} />
     </Modal>

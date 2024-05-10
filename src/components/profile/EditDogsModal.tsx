@@ -32,7 +32,12 @@ const EditDogsModal: React.FC<EditDogsModalProps> = ({
   };
 
   return (
-    <Modal open={isOpen} onClose={onClose} className={styles.modal}>
+    <Modal
+      open={isOpen}
+      onClose={onClose}
+      className={styles.modal}
+      height="90%"
+    >
       <div className={styles.title}>
         {dogToEdit ? `Edit ${dogToEdit.name}` : 'Add your dog'} details
       </div>

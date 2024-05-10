@@ -3,12 +3,31 @@
 .modal {
   transition: all 0.5s;
   border: none;
-  border-radius: 12px;
   display: block;
-  height: 80%;
-  width: 90%;
-  margin-top: 48px;
   background-color: $grey-light;
+  padding: 0;
+
+  &.center {
+    border-radius: 12px;
+    height: 80%;
+    width: 90%;
+    margin-top: 48px;
+  }
+
+  &.bottom {
+    margin-top: auto;
+    margin-bottom: -300px;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    width: 100%;
+    max-width: 100%;
+    visibility: visible;
+    opacity: 1;
+
+    &[open] {
+      margin-bottom: 0;
+    }
+  }
 
   &[open] {
     visibility: visible;
@@ -27,6 +46,15 @@
   }
 }
 
+.content {
+  position: relative;
+  height: 100%;
+  overflow: auto;
+}
+
 .close {
-  float: right;
+  position: absolute;
+  z-index: 100;
+  top: 16px;
+  right: 16px;
 }

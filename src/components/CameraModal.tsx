@@ -1,9 +1,12 @@
+import { FormEvent, useState } from 'react';
+import { PiCamera } from 'react-icons/pi';
+import { PiImageSquare } from 'react-icons/pi';
 import { Button } from './Button';
 import { FileInput } from './FileInput';
 import { Camera } from './Camera';
 import { Modal } from './Modal';
-import { FormEvent, useState } from 'react';
 import styles from './CameraModal.module.scss';
+import { IconContext } from 'react-icons';
 
 interface CameraModalProps {
   open: boolean;
@@ -41,7 +44,12 @@ const CameraModal: React.FC<CameraModalProps> = ({
   };
 
   return (
-    <Modal open={open} onClose={onCloseModal}>
+    <Modal
+      open={open}
+      onClose={onCloseModal}
+      variant="bottom"
+      className={styles.modal}
+    >
       {isCameraOpen ? (
         <Camera
           onSaveImg={onSaveImg}
@@ -49,13 +57,28 @@ const CameraModal: React.FC<CameraModalProps> = ({
           onCancel={() => setIsCameraOpen(false)}
         />
       ) : (
-        <div className={styles.buttonsContainer}>
-          <FileInput onUploadFile={onUploadFile} />
-          <span>or</span>
-          <Button onClick={() => setIsCameraOpen(true)}>
-            {error ? 'Sorry, cannot use your camera' : 'Take a photo'}
-          </Button>
-        </div>
+        <>
+          <div className={styles.buttonsContainer}>
+            <FileInput onUploadFile={onUploadFile}>
+              <div className={styles.button}>
+                <IconContext.Provider value={{ className: styles.icon }}>
+                  <PiImageSquare />
+                </IconContext.Provider>
+                <span>Upload</span>
+              </div>
+            </FileInput>
+            <Button
+              onClick={() => setIsCameraOpen(true)}
+              className={styles.button}
+            >
+              <IconContext.Provider value={{ className: styles.icon }}>
+                <PiCamera />
+              </IconContext.Provider>
+              <span>Camera</span>
+            </Button>
+          </div>
+          <span>{error && 'Sorry, cannot use your camera'}</span>
+        </>
       )}
     </Modal>
   );
