@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { TbPennant, TbPennantOff } from 'react-icons/tb';
 import { checkin, checkout } from '../../services/checkins';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
@@ -9,6 +9,7 @@ import { Button } from '../Button';
 import styles from './ParkCheckIn.module.scss';
 import { IconContext } from 'react-icons';
 import { ReviewModal } from './ReviewModal';
+import { ParkReviewsContext } from '../../context/ParkReviewsContext';
 
 const ParkCheckIn: React.FC<{
   parkId: string;
@@ -18,6 +19,7 @@ const ParkCheckIn: React.FC<{
   const [checkIn, setCheckIn] = useLocalStorage('checkin');
   const [openDogsCountModal, setOpenDogsCountModal] = useState(false);
   const [openReviewModal, setOpenReviewModal] = useState(false);
+  const { addReview } = useContext(ParkReviewsContext);
 
   const shouldCheckIn =
     !checkIn || checkIn.parkId !== parkId || checkIn.userId !== userId;
@@ -51,8 +53,13 @@ const ParkCheckIn: React.FC<{
     }
   };
 
-  const onAddReview = () => {
+  const onSubmitReview = async (review: {
+    title: string;
+    content?: string;
+    rank: number;
+  }) => {
     setOpenReviewModal(false);
+    addReview(review, userId!);
   };
 
   return (
@@ -73,20 +80,20 @@ const ParkCheckIn: React.FC<{
         )}
       </Button>
       <Modal
+        className={styles.dogsCountModal}
         open={openDogsCountModal}
         onClose={() => setOpenDogsCountModal(false)}
       >
         <div className={styles.modalContent}>
-          <p>Have a nice stay {userName}!</p>
+          <div className={styles.title}>Have a nice stay {userName}!</div>
           <DogsCount onSubmitDogsCount={onSubmitDogsCount} />
         </div>
       </Modal>
       <ReviewModal
-        title="Hope you had a great time! We will be happy if you could add a review"
+        title="Hope you had a great time! We will be happy if you could add a review!"
         isOpen={openReviewModal}
         closeModal={() => setOpenReviewModal(false)}
-        userId={userId}
-        onAddReview={onAddReview}
+        onSubmitReview={onSubmitReview}
       />
     </div>
   );

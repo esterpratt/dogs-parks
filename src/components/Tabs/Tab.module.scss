@@ -7,6 +7,7 @@
   padding: 0 2px 12px;
   transition: all 0.1s;
   border-bottom: 1px solid transparent;
+  font-weight: $font-weight-medium;
 
   &.active {
     border-bottom: 1px solid $green;
@@ -14,7 +15,7 @@
   }
 
   &.disabled {
-    color: $text-light;
+    color: $disabled;
     pointer-events: none;
   }
 }
