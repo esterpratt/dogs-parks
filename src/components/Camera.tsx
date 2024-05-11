@@ -6,13 +6,18 @@ import { Button } from './Button';
 interface CustomWebcamProps {
   onSaveImg: (img: string) => void;
   onError?: (error: string | DOMException) => void;
+  isOpen: boolean;
 }
 
 const videoConstraints: WebcamProps['videoConstraints'] = {
   facingMode: 'environment',
 };
 
-const Camera: React.FC<CustomWebcamProps> = ({ onSaveImg, onError }) => {
+const Camera: React.FC<CustomWebcamProps> = ({
+  onSaveImg,
+  onError,
+  isOpen,
+}) => {
   const webcamRef = useRef<Webcam>(null);
   const [img, setImg] = useState<string | null>(null);
 
@@ -24,16 +29,17 @@ const Camera: React.FC<CustomWebcamProps> = ({ onSaveImg, onError }) => {
     setImg(null);
   };
 
+  const onClickSaveImage = () => {
+    onSaveImg(img!);
+  };
+
   return (
     <div className={styles.camera}>
       {img ? (
         <>
           <img src={img} alt="screenshot" className={styles.cameraView} />
           <div className={styles.buttonsContainer}>
-            <Button
-              className={styles.saveButton}
-              onClick={() => onSaveImg(img)}
-            >
+            <Button className={styles.saveButton} onClick={onClickSaveImage}>
               Save
             </Button>
             <Button className={styles.recaptureButton} onClick={recapture}>
@@ -43,13 +49,15 @@ const Camera: React.FC<CustomWebcamProps> = ({ onSaveImg, onError }) => {
         </>
       ) : (
         <>
-          <Webcam
-            ref={webcamRef}
-            videoConstraints={videoConstraints}
-            onUserMediaError={onError}
-            className={styles.cameraView}
-            mirrored
-          />
+          {isOpen && (
+            <Webcam
+              ref={webcamRef}
+              videoConstraints={videoConstraints}
+              onUserMediaError={onError}
+              className={styles.cameraView}
+              mirrored
+            />
+          )}
           <div className={styles.captureButtonContainer}>
             <Button onClick={captureImg} className={styles.captureButton}>
               <div className={styles.inner} />
