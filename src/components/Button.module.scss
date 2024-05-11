@@ -1,6 +1,6 @@
 @import '../variables.scss';
 
-button {
+.button {
   border: none;
   border-radius: 48px;
   font-family: inherit;
@@ -8,12 +8,9 @@ button {
   font-weight: inherit;
   margin: 0;
   letter-spacing: inherit;
-
-  &.basic {
-    background-color: inherit;
-    color: inherit;
-    padding: 0;
-  }
+  background-color: inherit;
+  color: inherit;
+  padding: 0;
 
   &.orange {
     width: fit-content;

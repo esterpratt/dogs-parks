@@ -19,7 +19,7 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <button
       onClick={onClick}
-      className={classnames(styles[variant], className)}
+      className={classnames(styles.button, styles[variant], className)}
       {...props}
     >
       {children}

@@ -8,9 +8,10 @@ interface ModalProps {
   open: boolean;
   onClose?: () => void;
   className?: string;
-  variant?: 'center' | 'bottom';
+  variant?: 'center' | 'bottom' | 'fullScreen';
   height?: string;
   width?: string;
+  removeCloseButton?: boolean;
   children: ReactNode;
 }
 
@@ -22,6 +23,7 @@ const Modal: React.FC<ModalProps> = ({
   width,
   children,
   className,
+  removeCloseButton,
 }) => {
   const dialogRef = useRef<HTMLDialogElement | null>(null);
 
@@ -55,7 +57,9 @@ const Modal: React.FC<ModalProps> = ({
         className={classnames(styles.content, className)}
         onClick={(event) => event?.stopPropagation()}
       >
-        <CgClose onClick={onClose} size={24} className={styles.close} />
+        {!removeCloseButton && (
+          <CgClose onClick={onClose} size={24} className={styles.close} />
+        )}
         {children}
       </div>
     </dialog>,
