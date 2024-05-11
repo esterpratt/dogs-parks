@@ -73,17 +73,12 @@ const App = () => {
           loader: userLoader,
           children: [
             {
-              path: 'dogs',
-              children: [
-                {
-                  index: true,
-                  element: <UserDogs />,
-                },
-                {
-                  path: ':dogId',
-                  element: <UserDog />,
-                },
-              ],
+              index: true,
+              element: <UserDogs />,
+            },
+            {
+              path: 'dogs/:dogId',
+              element: <UserDog />,
             },
             {
               path: 'reviews',

@@ -60,6 +60,10 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
     openCameraModal();
   };
 
+  if (!isSignedInUser && !images.length) {
+    return null;
+  }
+
   return (
     <>
       <Accordion>

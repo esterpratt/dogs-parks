@@ -6,8 +6,10 @@ import styles from './UserDogs.module.scss';
 import { FaCirclePlus } from 'react-icons/fa6';
 import { IconContext } from 'react-icons';
 import { EditDogsModal } from '../components/profile/EditDogsModal';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { FriendRequestButton } from '../components/profile/FriendRequestButton';
+import { UserContext } from '../context/UserContext';
 
 interface UserDogsProps {
   user: User;
@@ -17,6 +19,7 @@ interface UserDogsProps {
 
 const UserDogs = () => {
   const { dogs, isSignedInUser, user } = useOutletContext() as UserDogsProps;
+  const { userId: signedInUserId } = useContext(UserContext);
   const [isEditDogsModalOpen, setIsEditDogsModalOpen] = useState(false);
 
   return (
@@ -38,7 +41,7 @@ const UserDogs = () => {
         <div className={styles.dogs}>
           {dogs.map((dog) => (
             <Link
-              to={`${dog.id}`}
+              to={`dogs/${dog.id}`}
               key={dog.id}
               state={{ dog, isSignedInUser, userName: user.name }}
             >
@@ -55,6 +58,14 @@ const UserDogs = () => {
               <FaCirclePlus />
             </IconContext.Provider>
             <span className={styles.addDogText}>Add Dog</span>
+          </div>
+        )}
+        {!isSignedInUser && signedInUserId && (
+          <div>
+            <FriendRequestButton
+              userId={user.id}
+              signedInUserId={signedInUserId}
+            />
           </div>
         )}
       </div>

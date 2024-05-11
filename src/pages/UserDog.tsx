@@ -62,9 +62,11 @@ const UserDog = () => {
                 <PiDog size={64} />
               </div>
             )}
-            <IconContext.Provider value={{ className: styles.editPhotoIcon }}>
-              <PiCameraFill onClick={() => setIsAddImageModalOpen(true)} />
-            </IconContext.Provider>
+            {isSignedInUser && (
+              <IconContext.Provider value={{ className: styles.editPhotoIcon }}>
+                <PiCameraFill onClick={() => setIsAddImageModalOpen(true)} />
+              </IconContext.Provider>
+            )}
           </div>
           <div className={styles.details}>
             <div>
