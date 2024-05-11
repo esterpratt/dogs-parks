@@ -6,15 +6,18 @@ import {
   fetchFriendship,
   updateFriendship,
 } from '../../services/friendships';
+import { Button } from '../Button';
 
 interface PublicProfileProps {
   signedInUserId: string;
   userId: string;
+  className?: string;
 }
 
 const FriendRequestButton: React.FC<PublicProfileProps> = ({
   signedInUserId,
   userId,
+  className,
 }) => {
   const [friendship, setFriendShip] = useState<Friendship | null>(null);
   const [loading, setLoading] = useState(true);
@@ -80,8 +83,10 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
   }
 
   return (
-    <div>
-      <button onClick={onUpdateFriend}>{buttonText}</button>
+    <div className={className}>
+      <Button variant="orange" onClick={onUpdateFriend}>
+        {buttonText}
+      </Button>
     </div>
   );
 };

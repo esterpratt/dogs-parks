@@ -19,6 +19,7 @@
   margin-bottom: 12px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .title-text {
@@ -48,4 +49,9 @@
 .add-dog-text {
   font-size: 16px;
   color: $green;
+}
+
+.friend-request-button {
+  margin: 32px 0;
+  text-align: center;
 }

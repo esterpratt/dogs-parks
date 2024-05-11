@@ -61,12 +61,11 @@ const UserDogs = () => {
           </div>
         )}
         {!isSignedInUser && signedInUserId && (
-          <div>
-            <FriendRequestButton
-              userId={user.id}
-              signedInUserId={signedInUserId}
-            />
-          </div>
+          <FriendRequestButton
+            className={styles.friendRequestButton}
+            userId={user.id}
+            signedInUserId={signedInUserId}
+          />
         )}
       </div>
       <EditDogsModal

@@ -12,7 +12,7 @@ const ProfileTabs = () => {
     <Tabs
       className={styles.tabs}
       tabs={[
-        { text: 'Dogs', url: 'dogs', end: false },
+        { text: 'Dogs', url: '', end: false },
         {
           text: 'Friends',
           url: 'friends',
