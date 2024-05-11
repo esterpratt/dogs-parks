@@ -1,5 +1,5 @@
 import { MouseEvent, useState } from 'react';
-import { useLocation } from 'react-router';
+import { useLocation, useRevalidator } from 'react-router';
 import { Link } from 'react-router-dom';
 import { IoMdFemale, IoMdMale } from 'react-icons/io';
 import { MdOutlineModeEditOutline } from 'react-icons/md';
@@ -26,6 +26,7 @@ const UserDog = () => {
   const { dog, isSignedInUser, userName } = state;
   const { primaryImage, name, age, gender } = dog;
   const [image, setImage] = useState(primaryImage);
+  const { revalidate } = useRevalidator();
 
   const onCloseDogsModal = () => {
     setIsEditDogsModalOpen(false);
@@ -41,6 +42,7 @@ const UserDog = () => {
     const uploadedImg = await uploadDogPrimaryImage(img, dog.id);
     if (uploadedImg) {
       setImage(uploadedImg);
+      revalidate();
     }
   };
 
