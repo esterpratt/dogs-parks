@@ -32,6 +32,7 @@ interface Dog {
   description?: string;
   possessive?: string;
   energy?: DOG_ENERGY;
+  primaryImage?: string;
   owner: string;
 }
 

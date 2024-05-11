@@ -4,13 +4,13 @@
   text-decoration: none;
   border: none;
   color: $text;
-  padding: 0 2px 12px;
-  transition: all 0.1s;
-  border-bottom: 1px solid transparent;
+  padding: 0 3px 12px;
+  transition: all 0.2s;
+  border-bottom: 2px solid transparent;
   font-weight: $font-weight-medium;
 
   &.active {
-    border-bottom: 1px solid $green;
+    border-bottom: 2px solid $orange;
     color: $green;
   }
 

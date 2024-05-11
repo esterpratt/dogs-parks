@@ -1,10 +1,6 @@
 import { LoaderFunction } from 'react-router';
 import { fetchUser } from '../services/users';
-import {
-  fetchAllDogsImages,
-  fetchDogPrimaryImage,
-  fetchUserDogs,
-} from '../services/dogs';
+import { fetchDogPrimaryImage, fetchUserDogs } from '../services/dogs';
 
 const userLoader: LoaderFunction = async ({ params }) => {
   const { id: userId } = params;
@@ -12,21 +8,21 @@ const userLoader: LoaderFunction = async ({ params }) => {
     fetchUser(userId!),
     fetchUserDogs(userId!),
   ]);
-  const imagesByDog: {
-    [dogId: string]: { primary?: string; other?: string[] };
-  } = {};
-  for (const dog of dogs) {
-    const [primary, other] = await Promise.all([
-      fetchDogPrimaryImage(dog.id),
-      fetchAllDogsImages(dog.id),
-    ]);
-    imagesByDog[dog.id] = {
-      primary: primary?.[0],
-      other,
-    };
-  }
 
-  return { user, dogs, imagesByDog };
+  const dogImagesPromises: Promise<string[] | null>[] = [];
+  dogs.forEach((dog) => {
+    dogImagesPromises.push(fetchDogPrimaryImage(dog.id));
+  });
+
+  const primaryDogsImages = await Promise.all(dogImagesPromises);
+
+  primaryDogsImages.forEach((dogImages, index) => {
+    if (dogImages && dogImages.length) {
+      dogs[index].primaryImage = dogImages[0];
+    }
+  });
+
+  return { user, dogs };
 };
 
 export { userLoader };

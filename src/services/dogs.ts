@@ -85,7 +85,10 @@ const fetchDogPrimaryImage = async (dogId: string) => {
     const res = await fetchImagesByDirectory(`dogs/${dogId}/primary`);
     return res;
   } catch (error) {
-    throwError(error);
+    console.error(
+      `there was a problem fetching primary image for dog ${dogId}: ${error}`
+    );
+    return null;
   }
 };
 

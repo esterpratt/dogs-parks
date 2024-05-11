@@ -6,12 +6,18 @@ interface TabProps {
   url: string;
   text: string;
   disabled?: boolean;
+  end?: boolean;
 }
 
-const Tab: React.FC<TabProps> = ({ url, text, disabled = false }) => {
+const Tab: React.FC<TabProps> = ({
+  url,
+  text,
+  disabled = false,
+  end = true,
+}) => {
   return (
     <NavLink
-      end={true}
+      end={end}
       to={url}
       className={({ isActive }: { isActive: boolean }) =>
         classnames(

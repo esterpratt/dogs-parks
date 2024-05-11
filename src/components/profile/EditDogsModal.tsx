@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { Modal } from '../Modal';
 import { Dog } from '../../types/dog';
 import { EditDog } from './EditDog';
@@ -7,26 +6,14 @@ import styles from './EditDogsModal.module.scss';
 interface EditDogsModalProps {
   isOpen: boolean;
   onClose: () => void;
-  dogs?: Dog[];
-  currentDogId?: string;
+  dog?: Dog;
 }
 
 const EditDogsModal: React.FC<EditDogsModalProps> = ({
   isOpen,
   onClose,
-  dogs,
-  currentDogId,
+  dog,
 }) => {
-  const [dogIdToEdit, setDogIdToEdit] = useState(currentDogId);
-  const dogToEdit =
-    dogs && dogs.length === 1
-      ? dogs[0]
-      : dogs?.find((dog) => dog.id === dogIdToEdit);
-
-  useEffect(() => {
-    setDogIdToEdit(currentDogId);
-  }, [currentDogId]);
-
   const onSubmitDogsForm = () => {
     onClose();
   };
@@ -39,9 +26,9 @@ const EditDogsModal: React.FC<EditDogsModalProps> = ({
       height="90%"
     >
       <div className={styles.title}>
-        {dogToEdit ? `Edit ${dogToEdit.name}` : 'Add your dog'} details
+        {dog ? `Edit ${dog.name}` : 'Add your dog'} details
       </div>
-      <EditDog dog={dogToEdit} onSubmitForm={onSubmitDogsForm} />
+      <EditDog dog={dog} onSubmitForm={onSubmitDogsForm} />
     </Modal>
   );
 };

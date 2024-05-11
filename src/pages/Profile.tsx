@@ -1,29 +1,31 @@
-import { useLoaderData, useLocation } from 'react-router';
+import { Outlet, useLoaderData } from 'react-router';
 import { User } from '../types/user';
 import { Dog } from '../types/dog';
-import { UserProfile } from './UserProfile';
 import { UserFriendsContextProvider } from '../context/UserFriendsContext';
 import { UserReviewsContextProvider } from '../context/UserReviewsContext';
+import { useContext } from 'react';
+import { UserContext } from '../context/UserContext';
+import { ProfileTabs } from '../components/profile/ProfileTabs';
 
 const Profile: React.FC = () => {
-  const { user, dogs, imagesByDog } = useLoaderData() as {
+  const { user, dogs } = useLoaderData() as {
     user: User;
     dogs: Dog[];
-    imagesByDog: { [dogId: string]: { primary: string; other: string[] } };
   };
-  const location = useLocation();
+  const { user: signedInUser } = useContext(UserContext);
+  const isSignedInUser = signedInUser?.id === user.id;
 
   return (
     <UserFriendsContextProvider>
       <UserReviewsContextProvider>
-        <div>
-          <UserProfile
-            user={user}
-            dogs={dogs}
-            imagesByDog={imagesByDog}
-            key={location.key}
-          />
-        </div>
+        {isSignedInUser && <ProfileTabs />}
+        <Outlet
+          context={{
+            user,
+            dogs,
+            isSignedInUser,
+          }}
+        />
       </UserReviewsContextProvider>
     </UserFriendsContextProvider>
   );

@@ -16,9 +16,12 @@ import { reviewsLoader } from './loaders/reviewsLoader';
 import { ParkDetails } from './pages/ParkDetails';
 import { ParkVisitors } from './pages/ParkVisitors';
 import { Users } from './pages/Users';
-import { ProfileInfo } from './pages/ProfileInfo';
 import { UserReviews } from './pages/UserReviews';
 import { UserFriends } from './pages/UserFriends';
+import { UserDog } from './pages/UserDog';
+import { UserDogs } from './pages/UserDogs';
+import { UserFavorites } from './pages/UserFavorites';
+import { UserInfo } from './pages/UserInfo';
 
 const App = () => {
   const router = createBrowserRouter([
@@ -70,8 +73,17 @@ const App = () => {
           loader: userLoader,
           children: [
             {
-              index: true,
-              element: <ProfileInfo />,
+              path: 'dogs',
+              children: [
+                {
+                  index: true,
+                  element: <UserDogs />,
+                },
+                {
+                  path: ':id',
+                  element: <UserDog />,
+                },
+              ],
             },
             {
               path: 'reviews',
@@ -81,6 +93,14 @@ const App = () => {
             {
               path: 'friends',
               element: <UserFriends />,
+            },
+            {
+              path: 'favorites',
+              element: <UserFavorites />,
+            },
+            {
+              path: 'info',
+              element: <UserInfo />,
             },
           ],
         },
