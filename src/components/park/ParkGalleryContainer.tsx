@@ -8,6 +8,7 @@ import { FaPlus } from 'react-icons/fa';
 import { AccordionContent } from '../Accordion/AccordionContent';
 import { ParkGallery } from './ParkGallery';
 import styles from './ParkGalleryContainer.module.scss';
+import { IconContext } from 'react-icons';
 
 interface ParkGalleryContainerProps {
   parkId: string;
@@ -60,7 +61,9 @@ const ParkGalleryContainer: React.FC<ParkGalleryContainerProps> = ({
                 <AccordionArrow isOpen={isOpen} />
               </div>
               <div className={styles.addPhotoButton} onClick={onClickAddPhoto}>
-                <FaPlus size={14} />
+                <IconContext.Provider value={{ className: styles.plus }}>
+                  <FaPlus size={14} />
+                </IconContext.Provider>
               </div>
             </>
           )}

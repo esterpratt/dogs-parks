@@ -1,5 +1,131 @@
+import { MouseEvent, useState } from 'react';
+import { useLocation } from 'react-router';
+import { Link } from 'react-router-dom';
+import { IoMdFemale, IoMdMale } from 'react-icons/io';
+import { MdOutlineModeEditOutline } from 'react-icons/md';
+import { PiCameraFill, PiDog } from 'react-icons/pi';
+import { FaArrowLeftLong } from 'react-icons/fa6';
+import classnames from 'classnames';
+import { Accordion } from '../components/Accordion/Accordion';
+import { AccordionTitle } from '../components/Accordion/AccordionTitle';
+import { AccordionArrow } from '../components/Accordion/AccordionArrow';
+import { AccordionContent } from '../components/Accordion/AccordionContent';
+import { DogDetails } from '../components/profile/DogDetails';
+import { DogGalleryContainer } from '../components/profile/DogGalleryContainer';
+import { EditDogsModal } from '../components/profile/EditDogsModal';
+import { uploadDogPrimaryImage } from '../services/dogs';
+import { IconContext } from 'react-icons';
+import { GENDER } from '../types/dog';
+import styles from './UserDog.module.scss';
+import { CameraModal } from '../components/CameraModal';
+
 const UserDog = () => {
-  return <div>User dog</div>;
+  const { state } = useLocation();
+  const [isEditDogsModalOpen, setIsEditDogsModalOpen] = useState(false);
+  const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
+  const { dog, isSignedInUser, userName } = state;
+  const { primaryImage, name, age, gender } = dog;
+  const [image, setImage] = useState(primaryImage);
+
+  const onCloseDogsModal = () => {
+    setIsEditDogsModalOpen(false);
+  };
+
+  const onEditDog = (event: MouseEvent<HTMLButtonElement | SVGElement>) => {
+    event?.stopPropagation();
+    setIsEditDogsModalOpen(true);
+  };
+
+  const onUploadImg = async (img: string | File) => {
+    setIsAddImageModalOpen(false);
+    const uploadedImg = await uploadDogPrimaryImage(img, dog.id);
+    if (uploadedImg) {
+      setImage(uploadedImg);
+    }
+  };
+
+  return (
+    <>
+      <div className={styles.container}>
+        <Link to=".." className={styles.prevLink}>
+          <FaArrowLeftLong />
+          <span>{isSignedInUser ? 'My' : `${userName}'s`} Dogs</span>
+        </Link>
+        <div className={styles.importantDetails}>
+          <div className={styles.imgContainer}>
+            {image ? (
+              <img src={image} className={styles.img} />
+            ) : (
+              <div className={classnames(styles.img, styles.empty)}>
+                <PiDog size={64} />
+              </div>
+            )}
+            <IconContext.Provider value={{ className: styles.editPhotoIcon }}>
+              <PiCameraFill onClick={() => setIsAddImageModalOpen(true)} />
+            </IconContext.Provider>
+          </div>
+          <div className={styles.details}>
+            <div>
+              <span className={styles.name}>{name}</span>
+              {gender && (
+                <IconContext.Provider value={{ className: styles.genderIcon }}>
+                  {gender === GENDER.FEMALE ? <IoMdFemale /> : <IoMdMale />}
+                </IconContext.Provider>
+              )}
+            </div>
+            {age && (
+              <div className={styles.age}>
+                {age} Year{age > 1 && 's'} old
+              </div>
+            )}
+          </div>
+        </div>
+        <Accordion className={styles.accordion}>
+          <AccordionTitle className={styles.title}>
+            {(isOpen) => (
+              <>
+                <div className={styles.left}>
+                  <span>Dog Details</span>
+                  <AccordionArrow isOpen={isOpen} />
+                </div>
+                {isSignedInUser && (
+                  <IconContext.Provider value={{ className: styles.editIcon }}>
+                    <MdOutlineModeEditOutline onClick={onEditDog} size={18} />
+                  </IconContext.Provider>
+                )}
+              </>
+            )}
+          </AccordionTitle>
+          <AccordionContent className={classnames(styles.contentContainer)}>
+            <DogDetails
+              isSignedInUser={isSignedInUser}
+              className={styles.content}
+              dog={dog}
+              userName={userName}
+              onEditDog={onEditDog}
+            />
+          </AccordionContent>
+        </Accordion>
+        <DogGalleryContainer
+          dog={dog}
+          isSignedInUser={isSignedInUser}
+          accordionTitleClassName={styles.title}
+          accordionContentContainerClassName={styles.contentContainer}
+          accordionContentClassName={styles.content}
+        />
+      </div>
+      <EditDogsModal
+        dog={dog}
+        isOpen={isEditDogsModalOpen}
+        onClose={onCloseDogsModal}
+      />
+      <CameraModal
+        open={isAddImageModalOpen}
+        setOpen={setIsAddImageModalOpen}
+        onUploadImg={onUploadImg}
+      />
+    </>
+  );
 };
 
 export { UserDog };

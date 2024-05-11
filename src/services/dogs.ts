@@ -80,6 +80,19 @@ const uploadDogImage = async (image: File | string, dogId: string) => {
   }
 };
 
+const uploadDogPrimaryImage = async (image: File | string, dogId: string) => {
+  try {
+    const res = await uploadImage({
+      image,
+      path: `dogs/${dogId}/primary`,
+      name: 'primaryImage',
+    });
+    return res;
+  } catch (error) {
+    throwError(error);
+  }
+};
+
 const fetchDogPrimaryImage = async (dogId: string) => {
   try {
     const res = await fetchImagesByDirectory(`dogs/${dogId}/primary`);
@@ -109,4 +122,5 @@ export {
   fetchDogPrimaryImage,
   fetchAllDogsImages,
   uploadDogImage,
+  uploadDogPrimaryImage,
 };

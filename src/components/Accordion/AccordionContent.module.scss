@@ -2,13 +2,16 @@
   transition: grid-template-rows 0.5s;
   display: grid;
   grid-template-rows: 0fr;
-  padding: 12px 0;
 
   &.open {
     grid-template-rows: 1fr;
   }
 }
 
-.content {
+.content-container {
   overflow: hidden;
+}
+
+.content {
+  padding: 12px;
 }

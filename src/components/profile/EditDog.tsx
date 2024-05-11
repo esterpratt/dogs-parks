@@ -13,8 +13,6 @@ interface EditDogProps {
   onSubmitForm?: () => void;
 }
 
-// TODO: create context / lift state up
-// so the state will include the data from each dog without overriding
 const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
   const [dogData, setDogData] = useState<
     | (Partial<Omit<Dog, 'likes' | 'dislikes'>> &
@@ -50,6 +48,7 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
     });
   };
 
+  // TODO: move to action?
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 

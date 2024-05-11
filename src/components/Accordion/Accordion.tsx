@@ -4,6 +4,7 @@ import { AccordionTitle } from './AccordionTitle';
 
 interface AccordionProps {
   children: ReactNode;
+  className?: string;
 }
 
 interface AccordionContextProps {
@@ -18,7 +19,7 @@ const initialValue: AccordionContextProps = {
 
 const AccordionContext = createContext(initialValue);
 
-const Accordion = ({ children }: AccordionProps) => {
+const Accordion = ({ children, className }: AccordionProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(true);
 
   const toggleOpen = () => {
@@ -27,7 +28,7 @@ const Accordion = ({ children }: AccordionProps) => {
 
   return (
     <AccordionContext.Provider value={{ isOpen, toggleOpen }}>
-      <div>{children}</div>
+      <div className={className}>{children}</div>
     </AccordionContext.Provider>
   );
 };

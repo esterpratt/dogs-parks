@@ -16,14 +16,16 @@ interface UserDogsProps {
 }
 
 const UserDogs = () => {
-  const { dogs, isSignedInUser } = useOutletContext() as UserDogsProps;
+  const { dogs, isSignedInUser, user } = useOutletContext() as UserDogsProps;
   const [isEditDogsModalOpen, setIsEditDogsModalOpen] = useState(false);
 
   return (
     <>
       <div className={styles.container}>
         <div className={styles.title}>
-          <span className={styles.titleText}>Your Dogs</span>
+          <span className={styles.titleText}>
+            {isSignedInUser ? 'Your' : `${user.name}'s`} Dogs
+          </span>
           {isSignedInUser && (
             <div
               className={styles.addDogText}
@@ -35,20 +37,26 @@ const UserDogs = () => {
         </div>
         <div className={styles.dogs}>
           {dogs.map((dog) => (
-            <Link to={`${dog.id}`} key={dog.id}>
+            <Link
+              to={`${dog.id}`}
+              key={dog.id}
+              state={{ dog, isSignedInUser, userName: user.name }}
+            >
               <DogPreview dog={dog} />
             </Link>
           ))}
         </div>
-        <div
-          className={styles.addDogButton}
-          onClick={() => setIsEditDogsModalOpen(true)}
-        >
-          <IconContext.Provider value={{ className: styles.plus }}>
-            <FaCirclePlus />
-          </IconContext.Provider>
-          <span className={styles.addDogText}>Add Dog</span>
-        </div>
+        {isSignedInUser && (
+          <div
+            className={styles.addDogButton}
+            onClick={() => setIsEditDogsModalOpen(true)}
+          >
+            <IconContext.Provider value={{ className: styles.plus }}>
+              <FaCirclePlus />
+            </IconContext.Provider>
+            <span className={styles.addDogText}>Add Dog</span>
+          </div>
+        )}
       </div>
       <EditDogsModal
         isOpen={isEditDogsModalOpen}

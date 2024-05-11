@@ -15,7 +15,9 @@ const AccordionContent = ({ children, className }: AccordionContentProps) => {
     <div
       className={classnames(styles.wrapper, isOpen && styles.open, className)}
     >
-      <div className={styles.content}>{children}</div>
+      <div className={styles.contentContainer}>
+        <div className={styles.content}>{children}</div>
+      </div>
     </div>
   );
 };

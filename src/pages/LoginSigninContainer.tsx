@@ -22,7 +22,7 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
 
   useEffect(() => {
     if (user) {
-      navigate(`/profile/${user.id}`);
+      navigate(`/profile/${user.id}/dogs`);
     }
   }, [user, navigate]);
 

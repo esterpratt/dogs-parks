@@ -1,3 +1,9 @@
+@import '../../variables.scss';
+
 .add-photo-button {
   display: flex;
+}
+
+.plus {
+  color: $green;
 }

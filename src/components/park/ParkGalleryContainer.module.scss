@@ -1,3 +1,5 @@
+@import '../../variables.scss';
+
 .title {
   justify-content: space-between;
 
@@ -10,4 +12,8 @@
 
 .add-photo-button {
   display: flex;
+}
+
+.plus {
+  color: $green;
 }

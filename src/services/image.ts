@@ -12,14 +12,15 @@ import { v4 } from 'uuid';
 interface uploadImageProps {
   image: File | string;
   path: string;
+  name?: string;
 }
 
-const uploadImage = async ({ image, path }: uploadImageProps) => {
-  let imageName = v4();
+const uploadImage = async ({ image, path, name }: uploadImageProps) => {
+  let imageName = name || v4();
   let snapshot: UploadResult;
 
   if (image instanceof File) {
-    imageName = `${image.name}${imageName}`;
+    imageName = `${name || image.name + imageName}`;
     const storageRef = ref(storage, `${path}/${imageName}`);
     snapshot = await uploadBytes(storageRef, image);
   } else {

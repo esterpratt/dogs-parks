@@ -80,7 +80,7 @@ const App = () => {
                   element: <UserDogs />,
                 },
                 {
-                  path: ':id',
+                  path: ':dogId',
                   element: <UserDog />,
                 },
               ],
