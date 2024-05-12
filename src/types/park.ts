@@ -4,7 +4,7 @@ interface Location {
 }
 
 enum ParkMaterial {
-  GARSS = 'grass',
+  GRASS = 'grass',
   SAND = 'sand',
 }
 

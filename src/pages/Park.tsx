@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { Outlet, useLoaderData } from 'react-router';
+import { Outlet, useLoaderData, useParams } from 'react-router';
 import { LuTrees } from 'react-icons/lu';
 import { Park as ParkType } from '../types/park';
 import { ParkCheckIn } from '../components/park/ParkCheckIn';
@@ -14,6 +14,7 @@ import { IconContext } from 'react-icons';
 import { PiCameraFill } from 'react-icons/pi';
 import { CameraModal } from '../components/CameraModal';
 import { uploadParkPrimaryImage } from '../services/parks';
+import { ParksContext } from '../context/ParksContext';
 
 interface ParkData {
   park: ParkType;
@@ -21,22 +22,29 @@ interface ParkData {
 }
 
 const Park: React.FC = () => {
-  const { park, image } = useLoaderData() as ParkData;
+  const { id: parkId } = useParams();
+  const { parks } = useContext(ParksContext);
+  const { image } = useLoaderData() as ParkData;
+  const park = parks.find((park) => park.id === parkId);
   const [primaryImage, setPrimaryImage] = useState(image);
   const { user } = useContext(UserContext);
   const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
 
   const onUploadImg = async (img: string | File) => {
     setIsAddImageModalOpen(false);
-    const uploadedImg = await uploadParkPrimaryImage(img, park.id);
+    const uploadedImg = await uploadParkPrimaryImage(img, parkId!);
     if (uploadedImg) {
       setPrimaryImage(uploadedImg);
     }
   };
 
+  if (!park) {
+    return null;
+  }
+
   return (
-    <ParkVisitorsContextProvider parkId={park.id} userId={user?.id}>
-      <ParkReviewsContextProvider parkId={park.id}>
+    <ParkVisitorsContextProvider parkId={parkId!} userId={user?.id}>
+      <ParkReviewsContextProvider parkId={parkId!}>
         {primaryImage ? (
           <img src={primaryImage} className={styles.image} />
         ) : (
@@ -54,16 +62,16 @@ const Park: React.FC = () => {
         <div className={styles.contentContainer}>
           <div className={styles.basicDetails}>
             <div>
-              <span className={styles.name}>{park.name}</span>
-              <span className={styles.address}>{park.address}</span>
+              <span className={styles.name}>{park!.name}</span>
+              <span className={styles.address}>{park!.address}</span>
               <ReviewsPreview />
             </div>
             {user && (
               <div className={styles.userEngagement}>
                 <div>
-                  <FavoriteButton parkId={park.id} userId={user.id} />
+                  <FavoriteButton parkId={parkId!} userId={user.id} />
                   <ParkCheckIn
-                    parkId={park.id}
+                    parkId={parkId!}
                     userId={user.id}
                     userName={user.name}
                   />

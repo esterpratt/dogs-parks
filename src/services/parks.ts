@@ -75,6 +75,7 @@ const updatePark = async (parkId: string, parkDetails: Partial<Park>) => {
         parkDetails.location.longitude
       );
     }
+
     await updateDoc(parkRef, {
       ...parkDetails,
     });

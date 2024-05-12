@@ -27,6 +27,7 @@ import { UserDogs } from './pages/UserDogs';
 import { UserFavorites } from './pages/UserFavorites';
 import { UserInfo } from './pages/UserInfo';
 import { UserFriendsContextProvider } from './context/UserFriendsContext';
+import { ParksContextProvider } from './context/ParksContext';
 
 const App = () => {
   const router = createBrowserRouter([
@@ -119,7 +120,9 @@ const App = () => {
   return (
     <UserContextProvider>
       <UserFriendsContextProvider>
-        <RouterProvider router={router} />
+        <ParksContextProvider>
+          <RouterProvider router={router} />
+        </ParksContextProvider>
       </UserFriendsContextProvider>
     </UserContextProvider>
   );
