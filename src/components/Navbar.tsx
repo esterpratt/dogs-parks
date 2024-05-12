@@ -17,7 +17,7 @@ const Navbar = () => {
           <div className={styles.leftBar}>
             <HiOutlineMenu />
             <Link
-              to={userId ? `/profile/${userId}` : '/login'}
+              to={userId ? `/profile/${userId}/dogs` : '/login'}
               className={styles.user}
             >
               <FaUserCircle />

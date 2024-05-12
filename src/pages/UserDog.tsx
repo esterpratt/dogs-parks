@@ -49,7 +49,7 @@ const UserDog = () => {
   return (
     <>
       <div className={styles.container}>
-        <Link to=".." className={styles.prevLink}>
+        <Link to=".." relative="path" className={styles.prevLink}>
           <FaArrowLeftLong />
           <span>{isSignedInUser ? 'My' : `${userName}'s`} Dogs</span>
         </Link>

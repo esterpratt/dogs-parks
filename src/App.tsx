@@ -1,4 +1,8 @@
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import {
+  Navigate,
+  RouterProvider,
+  createBrowserRouter,
+} from 'react-router-dom';
 import './App.scss';
 import { Home } from './pages/Home';
 import { Park } from './pages/Park';
@@ -75,6 +79,10 @@ const App = () => {
           children: [
             {
               index: true,
+              element: <Navigate to="dogs" replace />,
+            },
+            {
+              path: 'dogs',
               element: <UserDogs />,
             },
             {

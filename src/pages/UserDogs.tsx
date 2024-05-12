@@ -41,7 +41,7 @@ const UserDogs = () => {
         <div className={styles.dogs}>
           {dogs.map((dog) => (
             <Link
-              to={`dogs/${dog.id}`}
+              to={dog.id}
               key={dog.id}
               state={{ dog, isSignedInUser, userName: user.name }}
             >
