@@ -21,7 +21,7 @@ const Navbar = () => {
               className={styles.user}
             >
               <FaUserCircle />
-              {user ? user.name : 'Guest'}
+              Hewo {user ? user.name : 'Guest'}!
             </Link>
           </div>
         )}

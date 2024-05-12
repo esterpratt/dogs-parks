@@ -93,6 +93,19 @@ const uploadParkImage = async (image: File | string, parkId: string) => {
   }
 };
 
+const uploadParkPrimaryImage = async (image: File | string, parkId: string) => {
+  try {
+    const res = await uploadImage({
+      image,
+      path: `parks/${parkId}/primary`,
+      name: 'primaryImage',
+    });
+    return res;
+  } catch (error) {
+    throwError(error);
+  }
+};
+
 const fetchParkPrimaryImage = async (parkId: string) => {
   try {
     const res = await fetchImagesByDirectory(`parks/${parkId}/primary`);
@@ -115,6 +128,7 @@ export {
   fetchPark,
   fetchParks,
   uploadParkImage,
+  uploadParkPrimaryImage,
   fetchParkPrimaryImage,
   fetchAllParkImages,
   createPark,

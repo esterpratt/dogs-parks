@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { Outlet, useLoaderData } from 'react-router';
 import { LuTrees } from 'react-icons/lu';
 import { Park as ParkType } from '../types/park';
@@ -10,6 +10,10 @@ import { FavoriteButton } from '../components/park/FavoriteButton';
 import styles from './Park.module.scss';
 import { ParkTabs } from '../components/park/ParkTabs';
 import { ParkReviewsContextProvider } from '../context/ParkReviewsContext';
+import { IconContext } from 'react-icons';
+import { PiCameraFill } from 'react-icons/pi';
+import { CameraModal } from '../components/CameraModal';
+import { uploadParkPrimaryImage } from '../services/parks';
 
 interface ParkData {
   park: ParkType;
@@ -18,16 +22,33 @@ interface ParkData {
 
 const Park: React.FC = () => {
   const { park, image } = useLoaderData() as ParkData;
+  const [primaryImage, setPrimaryImage] = useState(image);
   const { user } = useContext(UserContext);
+  const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
+
+  const onUploadImg = async (img: string | File) => {
+    setIsAddImageModalOpen(false);
+    const uploadedImg = await uploadParkPrimaryImage(img, park.id);
+    if (uploadedImg) {
+      setPrimaryImage(uploadedImg);
+    }
+  };
 
   return (
     <ParkVisitorsContextProvider parkId={park.id} userId={user?.id}>
       <ParkReviewsContextProvider parkId={park.id}>
-        {image ? (
-          <img src={image} className={styles.image} />
+        {primaryImage ? (
+          <img src={primaryImage} className={styles.image} />
         ) : (
           <div className={styles.imageIcon}>
-            <LuTrees />
+            <IconContext.Provider value={{ className: styles.parkIcon }}>
+              <LuTrees />
+            </IconContext.Provider>
+            {user && (
+              <IconContext.Provider value={{ className: styles.editPhotoIcon }}>
+                <PiCameraFill onClick={() => setIsAddImageModalOpen(true)} />
+              </IconContext.Provider>
+            )}
           </div>
         )}
         <div className={styles.contentContainer}>
@@ -55,6 +76,11 @@ const Park: React.FC = () => {
             <Outlet context={park} />
           </div>
         </div>
+        <CameraModal
+          open={isAddImageModalOpen}
+          setOpen={setIsAddImageModalOpen}
+          onUploadImg={onUploadImg}
+        />
       </ParkReviewsContextProvider>
     </ParkVisitorsContextProvider>
   );
