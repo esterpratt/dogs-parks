@@ -1,11 +1,9 @@
 import { useContext } from 'react';
 import { Tabs } from '../Tabs/Tabs';
-import { UserFriendsContext } from '../../context/UserFriendsContext';
 import { UserReviewsContext } from '../../context/UserReviewsContext';
 import styles from './ProfileTabs.module.scss';
 
 const ProfileTabs = () => {
-  const { friends, pendingFriends } = useContext(UserFriendsContext);
   const { reviews } = useContext(UserReviewsContext);
 
   return (
@@ -16,7 +14,6 @@ const ProfileTabs = () => {
         {
           text: 'Friends',
           url: 'friends',
-          disabled: !friends.length && !pendingFriends.length,
         },
         {
           text: 'Favorites',

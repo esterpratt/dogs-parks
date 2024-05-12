@@ -3,13 +3,14 @@ import { UserFriendsContext } from '../context/UserFriendsContext';
 import { UserPreview } from '../components/users/UserPreview';
 
 const UserFriends = () => {
-  const { friends, pendingFriends } = useContext(UserFriendsContext);
+  const { friends, pendingFriends, myPendingFriends } =
+    useContext(UserFriendsContext);
 
   return (
     <div>
       {!!pendingFriends.length && (
         <div>
-          <div>Wants to be my friends:</div>
+          <div>Want to be my friends</div>
           {pendingFriends.map((friend) => {
             return <UserPreview key={friend.id} user={friend} />;
           })}
@@ -19,6 +20,14 @@ const UserFriends = () => {
         <div>
           <div>My Friends</div>
           {friends.map((friend) => {
+            return <UserPreview key={friend.id} user={friend} />;
+          })}
+        </div>
+      )}
+      {!!myPendingFriends.length && (
+        <div>
+          <div>Waiting for their Responses</div>
+          {myPendingFriends.map((friend) => {
             return <UserPreview key={friend.id} user={friend} />;
           })}
         </div>

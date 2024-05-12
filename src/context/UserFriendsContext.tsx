@@ -1,20 +1,27 @@
 import { PropsWithChildren, createContext, useEffect, useState } from 'react';
 import { User } from '../types/user';
 import { useOnAuthStateChanged } from '../hooks/useOnAuthStateChanged';
-import { fetchFriends } from '../services/users';
+import { fetchFriends, fetchUser } from '../services/users';
 import { FRIENDSHIP_STATUS, USER_ROLE } from '../types/friendship';
-import { fetchFriendship, updateFriendship } from '../services/friendships';
+import {
+  createFriendship,
+  deleteFriendship,
+  fetchFriendship,
+  updateFriendship,
+} from '../services/friendships';
 
 interface UserFriendsContextObj {
   friends: User[];
   pendingFriends: User[];
-  approveFriendShip: (friendId: string) => void;
+  myPendingFriends: User[];
+  updateFriendShip: (friendId: string, status: FRIENDSHIP_STATUS) => void;
 }
 
 const initialData: UserFriendsContextObj = {
   friends: [],
   pendingFriends: [],
-  approveFriendShip: () => {},
+  myPendingFriends: [],
+  updateFriendShip: () => {},
 };
 
 const UserFriendsContext = createContext<UserFriendsContextObj>(initialData);
@@ -25,6 +32,7 @@ const UserFriendsContextProvider: React.FC<PropsWithChildren> = ({
   const { userId } = useOnAuthStateChanged();
   const [friends, setFriends] = useState<User[]>([]);
   const [pendingFriends, setPendingFriends] = useState<User[]>([]);
+  const [myPendingFriends, setMyPendingFriends] = useState<User[]>([]);
 
   useEffect(() => {
     const getFriends = async () => {
@@ -34,10 +42,16 @@ const UserFriendsContextProvider: React.FC<PropsWithChildren> = ({
         userRole: USER_ROLE.REQUESTEE,
         status: FRIENDSHIP_STATUS.PENDING,
       });
+      const fetchMyPendingFriendsPromise = fetchFriends({
+        userId: userId!,
+        userRole: USER_ROLE.REQUESTER,
+        status: FRIENDSHIP_STATUS.PENDING,
+      });
 
-      const [friends, pendingFriends] = await Promise.all([
+      const [friends, pendingFriends, myPendingFriends] = await Promise.all([
         fetchFriendsPromise,
         fetchPendingFriendsPromise,
+        fetchMyPendingFriendsPromise,
       ]);
 
       if (friends?.length) {
@@ -51,6 +65,12 @@ const UserFriendsContextProvider: React.FC<PropsWithChildren> = ({
       } else {
         setPendingFriends([]);
       }
+
+      if (myPendingFriends?.length) {
+        setMyPendingFriends(myPendingFriends);
+      } else {
+        setMyPendingFriends([]);
+      }
     };
 
     if (userId) {
@@ -58,26 +78,53 @@ const UserFriendsContextProvider: React.FC<PropsWithChildren> = ({
     } else {
       setFriends([]);
       setPendingFriends([]);
+      setMyPendingFriends([]);
     }
   }, [userId]);
 
-  const approveFriendShip = async (friendId: string) => {
-    const friendShip = await fetchFriendship([friendId, userId!]);
-    await updateFriendship({
-      friendshipId: friendShip!.id,
-      status: FRIENDSHIP_STATUS.APPROVED,
-    });
-    const newFriend = pendingFriends.find((friend) => friend.id === friendId);
-    setPendingFriends((prev) =>
-      prev.filter((friend) => friend.id !== friendId)
-    );
-    setFriends((prev) => [...prev, newFriend!]);
+  const updateFriendShip = async (
+    friendId: string,
+    status: FRIENDSHIP_STATUS
+  ) => {
+    const friendship = await fetchFriendship([friendId, userId!]);
+
+    if (friendship) {
+      if (
+        status === FRIENDSHIP_STATUS.ABORTED ||
+        status === FRIENDSHIP_STATUS.REMOVED
+      ) {
+        await deleteFriendship(friendship.id);
+        setFriends((prev) => prev.filter((friend) => friend.id !== friendId));
+        setMyPendingFriends((prev) =>
+          prev.filter((friend) => friend.id !== friendId)
+        );
+      } else {
+        await updateFriendship({
+          friendshipId: friendship!.id,
+          status,
+        });
+        const newFriend = pendingFriends.find(
+          (friend) => friend.id === friendId
+        );
+        setPendingFriends((prev) =>
+          prev.filter((friend) => friend.id !== friendId)
+        );
+        setFriends((prev) => [...prev, newFriend!]);
+      }
+    } else if (status === FRIENDSHIP_STATUS.PENDING) {
+      await createFriendship({ requesteeId: friendId, requesterId: userId! });
+      const newFriend = await fetchUser(friendId);
+      if (newFriend) {
+        setMyPendingFriends((prev) => [...prev, newFriend]);
+      }
+    }
   };
 
   const value: UserFriendsContextObj = {
     friends,
     pendingFriends,
-    approveFriendShip,
+    myPendingFriends,
+    updateFriendShip,
   };
 
   return (

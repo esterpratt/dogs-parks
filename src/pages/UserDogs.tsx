@@ -64,7 +64,6 @@ const UserDogs = () => {
           <FriendRequestButton
             className={styles.friendRequestButton}
             userId={user.id}
-            signedInUserId={signedInUserId}
           />
         )}
       </div>

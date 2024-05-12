@@ -1,134 +1,55 @@
-import { useEffect, useState } from 'react';
-import { Friendship, FRIENDSHIP_STATUS } from '../../types/friendship';
-import {
-  createFriendship,
-  deleteFriendship,
-  fetchFriendship,
-  updateFriendship,
-} from '../../services/friendships';
+import { useContext } from 'react';
+import { FRIENDSHIP_STATUS } from '../../types/friendship';
 import { Button } from '../Button';
+import { UserFriendsContext } from '../../context/UserFriendsContext';
+import { User } from '../../types/user';
 
 interface PublicProfileProps {
-  signedInUserId: string;
   userId: string;
   className?: string;
 }
 
-const FriendRequestButton: React.FC<PublicProfileProps> = ({
-  signedInUserId,
-  userId,
-  className,
-}) => {
-  const [friendship, setFriendShip] = useState<Friendship | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const getFriendRequest = async () => {
-      const friendRequest = await fetchFriendship([signedInUserId, userId]);
-      if (friendRequest) {
-        setFriendShip(friendRequest);
-      }
-      setLoading(false);
-    };
-
-    getFriendRequest();
-  }, [signedInUserId, userId]);
-
-  const { statusToUpdate, buttonText } = getButtonProps(
-    signedInUserId,
-    friendship
-  );
-
-  const onUpdateFriend = async () => {
-    if (!friendship) {
-      const friendshipId = await createFriendship({
-        requesterId: signedInUserId,
-        requesteeId: userId,
-      });
-      // right now I return null if there is an error
-      if (friendshipId) {
-        setFriendShip({
-          id: friendshipId,
-          requesterId: signedInUserId,
-          requesteeId: userId,
-          status: FRIENDSHIP_STATUS.PENDING,
-        });
-      }
-    } else if (statusToUpdate === FRIENDSHIP_STATUS.REMOVED) {
-      await deleteFriendship(friendship.id);
-      setFriendShip(null);
-    } else {
-      const res = await updateFriendship({
-        friendshipId: friendship!.id,
-        status: statusToUpdate,
-      });
-      // right now I return null if there is an error
-      if (res) {
-        // stupid typescript - prev can't be null but nevertheless it creates issues
-        setFriendShip((prev) => {
-          if (prev) {
-            return {
-              ...prev,
-              status: statusToUpdate,
-            };
-          }
-          return null;
-        });
-      }
-    }
-  };
-
-  if (loading) {
-    return null;
-  }
-
-  return (
-    <div className={className}>
-      <Button variant="orange" onClick={onUpdateFriend}>
-        {buttonText}
-      </Button>
-    </div>
-  );
-};
+interface GetFriendshipStatusProps {
+  friendId: string;
+  friends: User[];
+  pendingFriends: User[];
+  myPendingFriends: User[];
+}
 
 const getButtonProps = (
-  signedInUserId: string,
-  friendship: Friendship | null
+  friendshipData: {
+    status: FRIENDSHIP_STATUS;
+    isFriendIsRequester?: boolean;
+  } | null
 ) => {
-  if (!friendship) {
+  if (!friendshipData) {
     return {
       buttonText: 'Add Friend',
       statusToUpdate: FRIENDSHIP_STATUS.PENDING,
     };
   }
 
-  const isSignedInUserIsRequester = signedInUserId === friendship.requesterId;
+  const { status, isFriendIsRequester } = friendshipData;
 
-  switch (friendship.status) {
-    case FRIENDSHIP_STATUS.PENDING: {
-      if (isSignedInUserIsRequester) {
-        return {
-          buttonText: 'Remove Friend Request',
-          statusToUpdate: FRIENDSHIP_STATUS.ABORTED,
-        };
-      } else {
-        return {
-          buttonText: 'Approve Friend Request',
-          statusToUpdate: FRIENDSHIP_STATUS.APPROVED,
-        };
-      }
-    }
+  switch (status) {
     case FRIENDSHIP_STATUS.APPROVED: {
       return {
         buttonText: 'Unfriend',
         statusToUpdate: FRIENDSHIP_STATUS.REMOVED,
       };
     }
-    case FRIENDSHIP_STATUS.ABORTED: {
-      return {
-        buttonText: 'Add friend',
-        statusToUpdate: FRIENDSHIP_STATUS.PENDING,
-      };
+    case FRIENDSHIP_STATUS.PENDING: {
+      if (isFriendIsRequester) {
+        return {
+          buttonText: 'Approve Friend Request',
+          statusToUpdate: FRIENDSHIP_STATUS.APPROVED,
+        };
+      } else {
+        return {
+          buttonText: 'Remove Friend Request',
+          statusToUpdate: FRIENDSHIP_STATUS.ABORTED,
+        };
+      }
     }
     default: {
       return {
@@ -137,6 +58,64 @@ const getButtonProps = (
       };
     }
   }
+};
+
+const getFriendshipStatus = ({
+  friendId,
+  friends,
+  pendingFriends,
+  myPendingFriends,
+}: GetFriendshipStatusProps) => {
+  if (friends.find((friend) => friend.id === friendId)) {
+    return {
+      status: FRIENDSHIP_STATUS.APPROVED,
+    };
+  }
+
+  if (pendingFriends.find((friend) => friend.id === friendId)) {
+    return {
+      status: FRIENDSHIP_STATUS.PENDING,
+      isFriendIsRequester: true,
+    };
+  }
+
+  if (myPendingFriends.find((friend) => friend.id === friendId)) {
+    return {
+      status: FRIENDSHIP_STATUS.PENDING,
+      isFriendIsRequester: false,
+    };
+  }
+
+  return null;
+};
+
+const FriendRequestButton: React.FC<PublicProfileProps> = ({
+  userId,
+  className,
+}) => {
+  const { friends, pendingFriends, myPendingFriends, updateFriendShip } =
+    useContext(UserFriendsContext);
+
+  const { statusToUpdate, buttonText } = getButtonProps(
+    getFriendshipStatus({
+      friendId: userId,
+      friends,
+      pendingFriends,
+      myPendingFriends,
+    })
+  );
+
+  const onUpdateFriend = async () => {
+    updateFriendShip(userId, statusToUpdate);
+  };
+
+  return (
+    <div className={className}>
+      <Button variant="orange" onClick={onUpdateFriend}>
+        {buttonText}
+      </Button>
+    </div>
+  );
 };
 
 export { FriendRequestButton };
