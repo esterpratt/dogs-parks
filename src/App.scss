@@ -38,11 +38,16 @@ body {
       }
     }
 
+    &.slick-next::before {
+      margin-left: 12px;
+    }
+
     &.slick-prev {
       left: -6px;
       padding-top: 6px;
 
       &::before {
+        margin-right: 12px;
         transform: rotate(180deg);
       }
     }

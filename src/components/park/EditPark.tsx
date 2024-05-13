@@ -133,7 +133,7 @@ const EditPark: React.FC<EditParkProps> = ({ onSubmitForm, park }) => {
           name="hasWater"
         />
       )}
-      <Button variant="orange" type="submit" className={styles.saveButton}>
+      <Button variant="green" type="submit" className={styles.saveButton}>
         Save
       </Button>
     </form>

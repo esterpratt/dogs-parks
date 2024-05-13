@@ -1,6 +1,7 @@
 import { ReactNode, createContext, useState } from 'react';
 import { AccordionContent } from './AccordionContent';
 import { AccordionTitle } from './AccordionTitle';
+import { AccordionTitleWithIcon } from './AccordionTitleWithIcon';
 
 interface AccordionProps {
   children: ReactNode;
@@ -34,6 +35,7 @@ const Accordion = ({ children, className }: AccordionProps) => {
 };
 
 Accordion.Title = AccordionTitle;
+Accordion.TitleWithIcon = AccordionTitleWithIcon;
 Accordion.Content = AccordionContent;
 
 export { Accordion, AccordionContext };

@@ -87,7 +87,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ review, onSubmitForm }) => {
             size={32}
           />
         </div>
-        <Button variant="orange" type="submit" className={styles.button}>
+        <Button variant="green" type="submit" className={styles.button}>
           Submit
         </Button>
       </form>

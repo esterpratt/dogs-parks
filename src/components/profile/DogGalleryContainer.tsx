@@ -1,30 +1,23 @@
-import { MouseEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { Dog } from '../../types/dog';
 import { fetchAllDogsImages, uploadDogImage } from '../../services/dogs';
 import { CameraModal } from '../CameraModal';
 import { Accordion } from '../Accordion/Accordion';
-import { AccordionTitle } from '../Accordion/AccordionTitle';
-import { AccordionArrow } from '../Accordion/AccordionArrow';
-import { AccordionContent } from '../Accordion/AccordionContent';
 import { DogGallery } from './DogGallery';
-import styles from './DogGalleryContainer.module.scss';
-import { IconContext } from 'react-icons';
 
 interface DogGalleryContainerProps {
   dog: Dog;
   isSignedInUser: boolean;
-  accordionTitleClassName?: string;
-  accordionContentClassName?: string;
-  accordionContentContainerClassName?: string;
+  className?: string;
+  contentClassName?: string;
 }
 
 const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
   dog,
   isSignedInUser,
-  accordionTitleClassName,
-  accordionContentClassName,
-  accordionContentContainerClassName,
+  className,
+  contentClassName,
 }) => {
   const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
   const [images, setImages] = useState<string[]>([]);
@@ -55,8 +48,7 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
     setIsAddImageModalOpen(true);
   };
 
-  const onClickAddPhoto = (event: MouseEvent<HTMLDivElement>) => {
-    event.stopPropagation();
+  const onClickAddPhoto = () => {
     openCameraModal();
   };
 
@@ -66,36 +58,21 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
 
   return (
     <>
-      <Accordion>
-        <AccordionTitle className={accordionTitleClassName}>
-          {(isOpen) => (
-            <>
-              <div className={styles.left}>
-                <span>Gallery</span>
-                <AccordionArrow isOpen={isOpen} />
-              </div>
-              {isSignedInUser && (
-                <div
-                  className={styles.addPhotoButton}
-                  onClick={onClickAddPhoto}
-                >
-                  <IconContext.Provider value={{ className: styles.plus }}>
-                    <FaPlus size={14} />
-                  </IconContext.Provider>
-                </div>
-              )}
-            </>
-          )}
-        </AccordionTitle>
-        <AccordionContent className={accordionContentContainerClassName}>
+      <Accordion className={className}>
+        <Accordion.TitleWithIcon
+          title="Gallery"
+          showIcon={isSignedInUser}
+          Icon={FaPlus}
+          onClickIcon={onClickAddPhoto}
+        />
+        <Accordion.Content className={contentClassName}>
           <DogGallery
-            className={accordionContentClassName}
             images={images}
             dog={dog}
             isSignedInUser={isSignedInUser}
             openCameraModal={openCameraModal}
           />
-        </AccordionContent>
+        </Accordion.Content>
       </Accordion>
       <CameraModal
         open={isAddImageModalOpen}

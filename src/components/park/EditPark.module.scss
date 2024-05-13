@@ -1,0 +1,11 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.save-button {
+  bottom: 48px;
+  align-self: center;
+  position: absolute;
+}

@@ -111,7 +111,7 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
 
   return (
     <div className={className}>
-      <Button variant="orange" onClick={onUpdateFriend}>
+      <Button variant="green" onClick={onUpdateFriend}>
         {buttonText}
       </Button>
     </div>

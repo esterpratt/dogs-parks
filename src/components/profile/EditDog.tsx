@@ -160,7 +160,7 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
         name="description"
         label="Description"
       />
-      <Button variant="orange" type="submit" className={styles.saveButton}>
+      <Button variant="green" type="submit" className={styles.saveButton}>
         Save
       </Button>
     </form>

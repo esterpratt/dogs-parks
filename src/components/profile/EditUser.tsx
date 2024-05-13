@@ -47,7 +47,7 @@ const EditUser: React.FC<EditUserProps> = ({ user, onSubmitForm }) => {
         label="Name"
         required
       />
-      <Button type="submit" variant="orange" className={styles.saveButton}>
+      <Button type="submit" variant="green" className={styles.saveButton}>
         Save
       </Button>
     </form>

@@ -1,4 +1,4 @@
-import { MouseEvent, useState } from 'react';
+import { useState } from 'react';
 import { useLocation, useRevalidator } from 'react-router';
 import { Link } from 'react-router-dom';
 import { IoMdFemale, IoMdMale } from 'react-icons/io';
@@ -7,9 +7,6 @@ import { PiCameraFill, PiDog } from 'react-icons/pi';
 import { FaArrowLeftLong } from 'react-icons/fa6';
 import classnames from 'classnames';
 import { Accordion } from '../components/Accordion/Accordion';
-import { AccordionTitle } from '../components/Accordion/AccordionTitle';
-import { AccordionArrow } from '../components/Accordion/AccordionArrow';
-import { AccordionContent } from '../components/Accordion/AccordionContent';
 import { DogDetails } from '../components/profile/DogDetails';
 import { DogGalleryContainer } from '../components/profile/DogGalleryContainer';
 import { EditDogsModal } from '../components/profile/EditDogsModal';
@@ -32,8 +29,7 @@ const UserDog = () => {
     setIsEditDogsModalOpen(false);
   };
 
-  const onEditDog = (event: MouseEvent<HTMLButtonElement | SVGElement>) => {
-    event?.stopPropagation();
+  const onEditDog = () => {
     setIsEditDogsModalOpen(true);
   };
 
@@ -85,22 +81,14 @@ const UserDog = () => {
           </div>
         </div>
         <Accordion className={styles.accordion}>
-          <AccordionTitle className={styles.title}>
-            {(isOpen) => (
-              <>
-                <div className={styles.left}>
-                  <span>Dog Details</span>
-                  <AccordionArrow isOpen={isOpen} />
-                </div>
-                {isSignedInUser && (
-                  <IconContext.Provider value={{ className: styles.editIcon }}>
-                    <MdOutlineModeEditOutline onClick={onEditDog} size={18} />
-                  </IconContext.Provider>
-                )}
-              </>
-            )}
-          </AccordionTitle>
-          <AccordionContent className={classnames(styles.contentContainer)}>
+          <Accordion.TitleWithIcon
+            title="Dog Details"
+            showIcon={isSignedInUser}
+            Icon={MdOutlineModeEditOutline}
+            onClickIcon={onEditDog}
+            iconSize={18}
+          />
+          <Accordion.Content className={styles.contentContainer}>
             <DogDetails
               isSignedInUser={isSignedInUser}
               className={styles.content}
@@ -108,14 +96,13 @@ const UserDog = () => {
               userName={userName}
               onEditDog={onEditDog}
             />
-          </AccordionContent>
+          </Accordion.Content>
         </Accordion>
         <DogGalleryContainer
           dog={dog}
           isSignedInUser={isSignedInUser}
-          accordionTitleClassName={styles.title}
-          accordionContentContainerClassName={styles.contentContainer}
-          accordionContentClassName={styles.content}
+          className={styles.accordion}
+          contentClassName={styles.contentContainer}
         />
       </div>
       <EditDogsModal

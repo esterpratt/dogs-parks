@@ -21,7 +21,7 @@ const DogsCount: React.FC<DogsCountProps> = ({ onSubmitDogsCount }) => {
         onChange={(event) => setDogsCount(event.currentTarget.value)}
       />
       <Button
-        variant="orange"
+        variant="green"
         onClick={() => onSubmitDogsCount(dogsCount)}
         disabled={!dogsCount && dogsCount !== '0'}
       >

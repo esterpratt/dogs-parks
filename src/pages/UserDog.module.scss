@@ -85,7 +85,6 @@
   height: 20px;
 }
 
-.edit-icon,
 .gender-icon {
   color: $green;
 }
@@ -95,23 +94,9 @@
 }
 
 .accordion {
-  margin-top: 12px;
-  margin-bottom: 12px;
-}
-
-.title {
-  justify-content: space-between;
   padding: 12px;
-  width: auto;
-
-  > div:first-of-type {
-    display: flex;
-    gap: 2px;
-    align-items: center;
-  }
 }
 
 .content-container {
-  padding: 0;
   background-color: $white;
 }

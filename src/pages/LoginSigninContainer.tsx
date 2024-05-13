@@ -90,7 +90,7 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
             </>
           )}
 
-          <Button variant="orange" type="submit" className={styles.button}>
+          <Button variant="green" type="submit" className={styles.button}>
             {method === 'signin' ? 'Sign In' : 'Log In'}
           </Button>
         </form>
