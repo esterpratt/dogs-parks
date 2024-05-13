@@ -8,7 +8,7 @@ interface ModalProps {
   open: boolean;
   onClose?: () => void;
   className?: string;
-  variant?: 'center' | 'bottom' | 'fullScreen';
+  variant?: 'center' | 'bottom' | 'fullScreen' | 'appear';
   height?: string;
   width?: string;
   removeCloseButton?: boolean;

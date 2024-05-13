@@ -7,6 +7,10 @@
   background-color: $grey-light;
   padding: 0;
 
+  &.appear {
+    border-radius: 12px;
+  }
+
   &.full-screen {
     height: 100%;
     width: 100%;

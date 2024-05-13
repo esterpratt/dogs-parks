@@ -1,5 +1,21 @@
+@import '../variables.scss';
+
 .image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.modal-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background-color: $black;
+
+  img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+  }
 }
