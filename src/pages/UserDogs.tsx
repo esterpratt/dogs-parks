@@ -22,6 +22,8 @@ const UserDogs = () => {
   const { userId: signedInUserId } = useContext(UserContext);
   const [isEditDogsModalOpen, setIsEditDogsModalOpen] = useState(false);
 
+  throw 'whatttt';
+
   return (
     <>
       <div className={styles.container}>

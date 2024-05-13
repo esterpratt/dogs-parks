@@ -1,0 +1,16 @@
+@import '../variables.scss';
+
+.content {
+  margin: 96px auto;
+  width: 70%;
+  color: $text;
+  font-size: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+
+  > span {
+    display: block;
+  }
+}

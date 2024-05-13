@@ -1,6 +1,7 @@
 import { isRouteErrorResponse, useRouteError } from 'react-router';
 import { AppError } from '../services/error';
 import { Navbar } from '../components/Navbar';
+import styles from './Error.module.scss';
 
 const ErrorPage: React.FC = () => {
   const error = useRouteError();
@@ -20,7 +21,10 @@ const ErrorPage: React.FC = () => {
   return (
     <>
       <Navbar />
-      <div>Hav Hav! Where are my snacks?? {message}</div>
+      <div className={styles.content}>
+        <span>Oops! {message}</span>
+        <span>Try to give me more snacks!</span>
+      </div>
     </>
   );
 };
