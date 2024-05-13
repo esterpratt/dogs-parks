@@ -6,7 +6,7 @@ import { MdOutlineModeEditOutline } from 'react-icons/md';
 import { PiCameraFill, PiDog } from 'react-icons/pi';
 import { FaArrowLeftLong } from 'react-icons/fa6';
 import classnames from 'classnames';
-import { Accordion } from '../components/Accordion/Accordion';
+import { Accordion } from '../components/accordion/Accordion';
 import { DogDetails } from '../components/profile/DogDetails';
 import { DogGalleryContainer } from '../components/profile/DogGalleryContainer';
 import { EditDogsModal } from '../components/profile/EditDogsModal';
@@ -14,7 +14,7 @@ import { uploadDogPrimaryImage } from '../services/dogs';
 import { IconContext } from 'react-icons';
 import { GENDER } from '../types/dog';
 import styles from './UserDog.module.scss';
-import { CameraModal } from '../components/CameraModal';
+import { CameraModal } from '../components/camera/CameraModal';
 
 const UserDog = () => {
   const { state } = useLocation();

@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { Dog } from '../../types/dog';
 import { fetchAllDogsImages, uploadDogImage } from '../../services/dogs';
-import { CameraModal } from '../CameraModal';
-import { Accordion } from '../Accordion/Accordion';
+import { CameraModal } from '../camera/CameraModal';
+import { Accordion } from '../accordion/Accordion';
 import { DogGallery } from './DogGallery';
 
 interface DogGalleryContainerProps {

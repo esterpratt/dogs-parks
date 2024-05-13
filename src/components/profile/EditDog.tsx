@@ -2,11 +2,11 @@ import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
 import { Dog, DOG_ENERGY, DOG_SIZE, GENDER } from '../../types/dog';
 import { Button } from '../Button';
 import styles from './EditDog.module.scss';
-import { ControlledInput } from '../ControlledInput';
+import { ControlledInput } from '../inputs/ControlledInput';
 import { createDog, updateDog } from '../../services/dogs';
 import { UserContext } from '../../context/UserContext';
-import { RadioInputs } from '../RadioInputs';
-import { TextArea } from '../TextArea';
+import { RadioInputs } from '../inputs/RadioInputs';
+import { TextArea } from '../inputs/TextArea';
 
 interface EditDogProps {
   dog?: Dog;

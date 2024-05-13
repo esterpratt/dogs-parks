@@ -1,11 +1,11 @@
 import { useContext, useState } from 'react';
 import { useOutletContext } from 'react-router';
-import { Accordion } from '../components/Accordion/Accordion';
-import { AccordionContent } from '../components/Accordion/AccordionContent';
+import { Accordion } from '../components/accordion/Accordion';
+import { AccordionContent } from '../components/accordion/AccordionContent';
 import { BusyHours } from '../components/park/BusyHours';
 import { Park } from '../types/park';
 import { ParkGenerals } from '../components/park/ParkGenerals';
-import { AccordionArrow } from '../components/Accordion/AccordionArrow';
+import { AccordionArrow } from '../components/accordion/AccordionArrow';
 import { ParkGalleryContainer } from '../components/park/ParkGalleryContainer';
 import { UserContext } from '../context/UserContext';
 import { MdOutlineModeEditOutline } from 'react-icons/md';

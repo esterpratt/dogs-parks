@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
 import { Button } from '../Button';
 import styles from './EditUser.module.scss';
-import { ControlledInput } from '../ControlledInput';
+import { ControlledInput } from '../inputs/ControlledInput';
 import { User } from '../../types/user';
 import { UserContext } from '../../context/UserContext';
 

@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState } from 'react';
 import Webcam, { WebcamProps } from 'react-webcam';
 import styles from './Camera.module.scss';
-import { Button } from './Button';
+import { Button } from '../Button';
 
 interface CustomWebcamProps {
   onSaveImg: (img: string) => void;

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { ControlledInput } from '../ControlledInput';
+import { ControlledInput } from '../inputs/ControlledInput';
 import { Stars } from '../Stars';
 import { Button } from '../Button';
 import styles from './ReviewForm.module.scss';
 import { Review } from '../../types/review';
-import { TextArea } from '../TextArea';
+import { TextArea } from '../inputs/TextArea';
 
 interface ReviewFormProps {
   review?: Review;

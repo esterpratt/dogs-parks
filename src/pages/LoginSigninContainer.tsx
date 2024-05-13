@@ -7,7 +7,7 @@ import { UserContext } from '../context/UserContext';
 import { SigninProps } from '../services/authentication';
 import { AppError } from '../services/error';
 import { Link } from 'react-router-dom';
-import { FormInput } from '../components/FormInput';
+import { FormInput } from '../components/inputs/FormInput';
 
 interface LoginSigninContainerProps {
   method: 'signin' | 'login';

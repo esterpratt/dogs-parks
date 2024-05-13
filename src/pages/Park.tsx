@@ -12,7 +12,7 @@ import { ParkTabs } from '../components/park/ParkTabs';
 import { ParkReviewsContextProvider } from '../context/ParkReviewsContext';
 import { IconContext } from 'react-icons';
 import { PiCameraFill } from 'react-icons/pi';
-import { CameraModal } from '../components/CameraModal';
+import { CameraModal } from '../components/camera/CameraModal';
 import { uploadParkPrimaryImage } from '../services/parks';
 import { ParksContext } from '../context/ParksContext';
 

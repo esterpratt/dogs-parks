@@ -1,10 +1,10 @@
 import { ChangeEvent, FormEvent, useContext, useState } from 'react';
 import { Button } from '../Button';
 import styles from './EditPark.module.scss';
-import { ControlledInput } from '../ControlledInput';
-import { RadioInputs } from '../RadioInputs';
+import { ControlledInput } from '../inputs/ControlledInput';
+import { RadioInputs } from '../inputs/RadioInputs';
 import { Park, ParkMaterial } from '../../types/park';
-import { MultiSelectInputs } from '../MultiSelectInputs';
+import { MultiSelectInputs } from '../inputs/MultiSelectInputs';
 import { ParksContext } from '../../context/ParksContext';
 
 interface EditParkProps {

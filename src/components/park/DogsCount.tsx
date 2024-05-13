@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button } from '../Button';
-import { ControlledInput } from '../ControlledInput';
+import { ControlledInput } from '../inputs/ControlledInput';
 
 interface DogsCountProps {
   onSubmitDogsCount: (dogsCount: string) => void;

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { fetchAllParkImages, uploadParkImage } from '../../services/parks';
-import { CameraModal } from '../CameraModal';
-import { Accordion } from '../Accordion/Accordion';
+import { CameraModal } from '../camera/CameraModal';
+import { Accordion } from '../accordion/Accordion';
 import { FaPlus } from 'react-icons/fa';
 import { ParkGallery } from './ParkGallery';
 
