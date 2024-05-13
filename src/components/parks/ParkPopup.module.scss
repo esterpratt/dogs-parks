@@ -1,0 +1,146 @@
+@import '../../variables.scss';
+
+.park-modal {
+  height: 25vh;
+  width: 99%;
+  position: fixed;
+  z-index: 200;
+  bottom: -300px;
+  left: 2px;
+  background-color: $white;
+  padding: 36px 18px 18px;
+  border: 1px solid $grey-bold;
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  transition: all 0.5s;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  &.open {
+    bottom: 0;
+  }
+}
+
+.img-container {
+  width: 40%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border: 1px solid $grey-bold;
+  flex-shrink: 0;
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.park-icon {
+  width: 64px;
+  height: 64px;
+  color: $brown;
+}
+
+.details-container {
+  height: 100%;
+  width: 100%;
+  padding: 6px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow: hidden;
+  text-wrap: nowrap;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.name {
+  text-decoration: none;
+  padding-bottom: 4px;
+  border-bottom: 1px solid $orange;
+  color: $orange;
+  font-size: 16px;
+  font-weight: $font-weight-medium;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+}
+
+.address {
+  font-size: 14px;
+}
+
+.directions-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex-grow: 1;
+
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+
+    > * {
+      color: $green;
+      text-decoration: none;
+      border: none;
+      font-size: 14px;
+      padding: 0;
+      background-color: inherit;
+      font-weight: $font-weight-light;
+    }
+  }
+}
+
+.directions-button {
+  text-align: left;
+}
+
+.dirctions-icon {
+  color: $green;
+}
+
+.directions {
+  position: absolute;
+  bottom: 4px;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.icon {
+  color: $green;
+  margin-right: 4px;
+}
+
+.distance,
+.duration {
+  display: flex;
+}
+
+.close {
+  position: absolute;
+  z-index: 100;
+  top: 12px;
+  right: 12px;
+  color: $green;
+  padding: 3px;
+  border: 1px solid $green;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}

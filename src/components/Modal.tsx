@@ -9,6 +9,7 @@ interface ModalProps {
   onClose?: () => void;
   className?: string;
   variant?: 'center' | 'bottom' | 'fullScreen' | 'appear';
+  hideBackdrop?: boolean;
   height?: string;
   width?: string;
   removeCloseButton?: boolean;
@@ -19,6 +20,7 @@ const Modal: React.FC<ModalProps> = ({
   open,
   onClose,
   variant = 'center',
+  hideBackdrop = false,
   height,
   width,
   children,
@@ -50,8 +52,12 @@ const Modal: React.FC<ModalProps> = ({
       style={style}
       ref={dialogRef}
       onClose={onClose}
-      className={classnames(styles.modal, styles[variant])}
-      onClick={onClose}
+      className={classnames(
+        styles.modal,
+        styles[variant],
+        hideBackdrop && styles.hideBackdrop
+      )}
+      onClick={hideBackdrop ? () => {} : onClose}
     >
       <div
         className={classnames(styles.content, className)}

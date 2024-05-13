@@ -1,42 +1,28 @@
-import { MarkerF, OverlayViewF, OverlayView } from '@react-google-maps/api';
-import { Location } from '../../types/park';
-import { MarkerPopup } from './MarkerPopup';
+import { MarkerF } from '@react-google-maps/api';
+import parkSVG from '../../assets/park.svg';
+import { Location, Park } from '../../types/park';
 
 interface MarkerProps {
-  id: string;
+  park: Park;
   location: Location;
-  name: string;
-  activeMarker: string | null;
-  setActiveMarker: (id: string | null) => void;
-  onGetDirections: (location: Location) => void;
+  activePark: Park | null;
+  setActivePark: (event: google.maps.MapMouseEvent, park: Park | null) => void;
 }
 
 const Marker: React.FC<MarkerProps> = ({
-  id,
+  park,
   location,
-  name,
-  activeMarker,
-  setActiveMarker,
-  onGetDirections,
+  activePark,
+  setActivePark,
 }) => {
   return (
     <MarkerF
       position={{ lat: location.latitude, lng: location.longitude }}
-      onClick={() => setActiveMarker(id === activeMarker ? null : id)}
-    >
-      {activeMarker === id && (
-        <OverlayViewF
-          position={{ lat: location.latitude, lng: location.longitude }}
-          mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-        >
-          <MarkerPopup
-            parkId={id}
-            parkName={name}
-            onGetDirections={() => onGetDirections(location)}
-          />
-        </OverlayViewF>
-      )}
-    </MarkerF>
+      icon={{ url: parkSVG, fillColor: 'green' }}
+      onClick={(event) =>
+        setActivePark(event, park.id === activePark?.id ? null : park)
+      }
+    ></MarkerF>
   );
 };
 
