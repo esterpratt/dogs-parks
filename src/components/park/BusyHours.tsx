@@ -59,8 +59,12 @@ const BusyHours: React.FC<BusyHoursProps> = ({ parkId }) => {
     getDogsCount();
   }, [parkId]);
 
-  if (!dogsCount) {
-    return null;
+  if (!dogsCount?.length) {
+    return (
+      <div className={styles.noData}>
+        No Data Yet. If you are here, check-in to add data
+      </div>
+    );
   }
 
   const currentHour = new Date().getHours();
