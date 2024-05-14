@@ -23,12 +23,13 @@ interface ParkData {
 
 const Park: React.FC = () => {
   const { id: parkId } = useParams();
-  const { parks } = useContext(ParksContext);
   const { image } = useLoaderData() as ParkData;
-  const park = parks.find((park) => park.id === parkId);
-  const [primaryImage, setPrimaryImage] = useState(image);
+  const { parks } = useContext(ParksContext);
   const { user } = useContext(UserContext);
+  const [primaryImage, setPrimaryImage] = useState(image);
   const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
+
+  const park = parks.find((park) => park.id === parkId);
 
   const onUploadImg = async (img: string | File) => {
     setIsAddImageModalOpen(false);
