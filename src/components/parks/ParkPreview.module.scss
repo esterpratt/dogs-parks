@@ -1,0 +1,29 @@
+@import '../../variables.scss';
+
+.park {
+  list-style: none;
+  text-decoration: none;
+  color: inherit;
+  border: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.name,
+.address {
+  margin: 0;
+  padding: 0;
+}
+
+.name {
+  font-size: 18px;
+  color: $text;
+}
+
+.address {
+  font-size: 14px;
+  color: $brown;
+}

@@ -7,6 +7,8 @@ import { MarkerList } from './MarkerList';
 import { Location, Park } from '../../types/park';
 import { ParkPopup } from './ParkPopup';
 import walkSVG from '../../assets/walk.svg';
+import { Button } from '../Button';
+import { Link } from 'react-router-dom';
 
 interface MapProps {
   className?: string;
@@ -88,6 +90,9 @@ const Map: React.FC<MapProps> = ({ className }) => {
   return (
     <>
       <div className={classnames(styles.mapContainer, className)}>
+        <Link to="/parks" className={styles.listViewButton}>
+          <Button variant="orange">List View</Button>
+        </Link>
         <GoogleMap
           onLoad={(map) => setMap(map)}
           onUnmount={() => setMap(null)}

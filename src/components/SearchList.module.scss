@@ -8,29 +8,39 @@
 
 .input {
   border: none;
-  border-bottom: 1px solid $grey;
+  border-bottom: 1px solid $text-medium;
+  // border-radius: 12px;
   outline: none;
   font-size: 20px;
   font-family: inherit;
-  margin: 0 24px;
-  padding: 16px 0 8px;
+  margin: 0 6px;
+  padding: 16px 8px;
   color: $text;
+  background-color: inherit;
+  font-weight: $font-weight-light;
+  letter-spacing: inherit;
 
-  ::placeholder {
-    color: $grey;
+  &::placeholder {
+    color: $text-medium;
   }
 }
 
 .list {
-  background-color: $grey-light;
   margin: 0;
   padding: 0;
   height: 100%;
   overflow-y: scroll;
+  border-radius: 8px;
 }
 
 .item {
-  padding: 16px 24px;
+  padding: 16px;
+  border-bottom: 1px solid $text-light;
+  background-color: #fff;
+
+  &:first-child {
+    padding-top: 24px;
+  }
 }
 
 .no-results {

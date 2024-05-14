@@ -28,6 +28,7 @@ import { UserFavorites } from './pages/UserFavorites';
 import { UserInfo } from './pages/UserInfo';
 import { UserFriendsContextProvider } from './context/UserFriendsContext';
 import { ParksContextProvider } from './context/ParksContext';
+import { Parks } from './pages/Parks';
 
 const App = () => {
   const router = createBrowserRouter([
@@ -39,6 +40,10 @@ const App = () => {
         {
           index: true,
           element: <Home />,
+        },
+        {
+          path: '/parks',
+          element: <Parks />,
         },
         {
           path: '/parks/new',
@@ -64,7 +69,6 @@ const App = () => {
             },
           ],
         },
-
         {
           path: '/signin',
           element: <Signin />,

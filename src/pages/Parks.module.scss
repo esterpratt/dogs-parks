@@ -1,0 +1,17 @@
+.container {
+  padding: 24px 12px;
+}
+
+.map-link {
+  margin-left: 12px;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.parks-list {
+  margin: 12px 16px;
+  width: calc(100% - 32px);
+}
