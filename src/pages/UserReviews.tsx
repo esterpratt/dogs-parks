@@ -34,4 +34,4 @@ const UserReviews = () => {
   );
 };
 
-export { UserReviews };
+export default UserReviews;

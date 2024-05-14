@@ -3,7 +3,6 @@ import { UserContext } from '../context/UserContext';
 import { Button } from '../components/Button';
 import { ReviewModal } from '../components/park/ReviewModal';
 import { ParkReviewsContext } from '../context/ParkReviewsContext';
-// import styles from './Reviews.module.scss';
 
 const Reviews: React.FC = () => {
   const { reviews } = useContext(ParkReviewsContext);
@@ -11,6 +10,7 @@ const Reviews: React.FC = () => {
   const [isAddReviewModalOpen, setIsAddReviewModalOpen] = useState(false);
 
   const onAddReview = () => {
+    // todo: add review
     setIsAddReviewModalOpen(false);
   };
 
@@ -24,8 +24,7 @@ const Reviews: React.FC = () => {
               Add a review
             </Button>
             <ReviewModal
-              userId={userId}
-              onAddReview={onAddReview}
+              onSubmitReview={onAddReview}
               isOpen={isAddReviewModalOpen}
               closeModal={() => setIsAddReviewModalOpen(false)}
             />
@@ -46,4 +45,4 @@ const Reviews: React.FC = () => {
   );
 };
 
-export { Reviews };
+export default Reviews;

@@ -36,4 +36,4 @@ const UserFriends = () => {
   );
 };
 
-export { UserFriends };
+export default UserFriends;

@@ -41,4 +41,4 @@ const ParkVisitors: React.FC = () => {
   );
 };
 
-export { ParkVisitors };
+export default ParkVisitors;

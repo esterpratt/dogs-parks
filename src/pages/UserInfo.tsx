@@ -45,4 +45,4 @@ const UserInfo = () => {
   );
 };
 
-export { UserInfo };
+export default UserInfo;

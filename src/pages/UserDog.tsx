@@ -119,4 +119,4 @@ const UserDog = () => {
   );
 };
 
-export { UserDog };
+export default UserDog;

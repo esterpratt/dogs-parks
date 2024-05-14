@@ -61,4 +61,4 @@ const ParkDetails = () => {
   );
 };
 
-export { ParkDetails };
+export default ParkDetails;

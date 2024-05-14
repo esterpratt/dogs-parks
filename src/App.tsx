@@ -1,3 +1,4 @@
+import { Suspense, lazy } from 'react';
 import {
   Navigate,
   RouterProvider,
@@ -5,30 +6,33 @@ import {
 } from 'react-router-dom';
 import './App.scss';
 import { Home } from './pages/Home';
-import { Park } from './pages/Park';
-import { parkLoader } from './loaders/parkLoader';
+import { RootLayout } from './RootLayout';
 import { ErrorPage } from './pages/Error';
 import { Signin } from './pages/Signin';
 import { Login } from './pages/Login';
-import { UserContextProvider } from './context/UserContext';
 import { Profile } from './pages/Profile';
-import { userLoader } from './loaders/userLoader';
-import { RootLayout } from './RootLayout';
-import { NewPark } from './pages/NewPark';
-import { Reviews } from './pages/ParkReviews';
-import { reviewsLoader } from './loaders/reviewsLoader';
-import { ParkDetails } from './pages/ParkDetails';
-import { ParkVisitors } from './pages/ParkVisitors';
+import { Parks } from './pages/Parks';
 import { Users } from './pages/Users';
-import { UserReviews } from './pages/UserReviews';
-import { UserFriends } from './pages/UserFriends';
-import { UserDog } from './pages/UserDog';
 import { UserDogs } from './pages/UserDogs';
-import { UserFavorites } from './pages/UserFavorites';
-import { UserInfo } from './pages/UserInfo';
+import { Park } from './pages/Park';
+import { NewPark } from './pages/NewPark';
+
+import { UserContextProvider } from './context/UserContext';
 import { UserFriendsContextProvider } from './context/UserFriendsContext';
 import { ParksContextProvider } from './context/ParksContext';
-import { Parks } from './pages/Parks';
+
+import { parkLoader } from './loaders/parkLoader';
+import { userLoader } from './loaders/userLoader';
+import { reviewsLoader } from './loaders/reviewsLoader';
+
+const UserDog = lazy(() => import('./pages/UserDog'));
+const UserReviews = lazy(() => import('./pages/UserReviews'));
+const UserFriends = lazy(() => import('./pages/UserFriends'));
+const UserFavorites = lazy(() => import('./pages/UserFavorites'));
+const UserInfo = lazy(() => import('./pages/UserInfo'));
+const ParkReviews = lazy(() => import('./pages/ParkReviews'));
+const ParkDetails = lazy(() => import('./pages/ParkDetails'));
+const ParkVisitors = lazy(() => import('./pages/ParkVisitors'));
 
 const App = () => {
   const router = createBrowserRouter([
@@ -56,16 +60,28 @@ const App = () => {
           children: [
             {
               index: true,
-              element: <ParkDetails />,
+              element: (
+                <Suspense fallback={<div>Loading...</div>}>
+                  <ParkDetails />
+                </Suspense>
+              ),
             },
             {
               path: 'reviews',
-              element: <Reviews />,
+              element: (
+                <Suspense fallback={<div>Loading...</div>}>
+                  <ParkReviews />
+                </Suspense>
+              ),
               loader: reviewsLoader,
             },
             {
               path: 'visitors',
-              element: <ParkVisitors />,
+              element: (
+                <Suspense fallback={<div>Loading...</div>}>
+                  <ParkVisitors />
+                </Suspense>
+              ),
             },
           ],
         },
@@ -92,24 +108,44 @@ const App = () => {
             },
             {
               path: 'dogs/:dogId',
-              element: <UserDog />,
+              element: (
+                <Suspense fallback={<div>Loading...</div>}>
+                  <UserDog />
+                </Suspense>
+              ),
             },
             {
               path: 'reviews',
-              element: <UserReviews />,
+              element: (
+                <Suspense fallback={<div>Loading...</div>}>
+                  <UserReviews />
+                </Suspense>
+              ),
               loader: reviewsLoader,
             },
             {
               path: 'friends',
-              element: <UserFriends />,
+              element: (
+                <Suspense fallback={<div>Loading...</div>}>
+                  <UserFriends />
+                </Suspense>
+              ),
             },
             {
               path: 'favorites',
-              element: <UserFavorites />,
+              element: (
+                <Suspense fallback={<div>Loading...</div>}>
+                  <UserFavorites />
+                </Suspense>
+              ),
             },
             {
               path: 'info',
-              element: <UserInfo />,
+              element: (
+                <Suspense fallback={<div>Loading...</div>}>
+                  <UserInfo />
+                </Suspense>
+              ),
             },
           ],
         },
