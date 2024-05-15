@@ -1,12 +1,14 @@
 import { useJsApiLoader } from '@react-google-maps/api';
 
 import { Map } from './Map';
+import { Location } from '../../types/park';
 
 interface MapProps {
   className?: string;
+  location: Location | undefined;
 }
 
-const MapLoader: React.FC<MapProps> = ({ className }) => {
+const MapLoader: React.FC<MapProps> = ({ className, location }) => {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
   });
@@ -15,7 +17,7 @@ const MapLoader: React.FC<MapProps> = ({ className }) => {
     return null;
   }
 
-  return <Map className={className} />;
+  return <Map className={className} location={location} />;
 };
 
 export { MapLoader };

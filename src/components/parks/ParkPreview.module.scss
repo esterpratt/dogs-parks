@@ -8,6 +8,12 @@
   margin: 0;
   padding: 0;
   display: flex;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+.details-container {
+  display: flex;
   flex-direction: column;
   gap: 8px;
 }
@@ -26,4 +32,13 @@
 .address {
   font-size: 14px;
   color: $brown;
+}
+
+.buttons-container {
+  display: flex;
+  flex-direction: column;
+  color: $green;
+  justify-content: space-between;
+  align-items: end;
+  font-size: 14px;
 }

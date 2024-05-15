@@ -12,11 +12,12 @@ import { Link } from 'react-router-dom';
 
 interface MapProps {
   className?: string;
+  location: Location | undefined;
 }
 
 const DEFAULT_LOCATION = { lat: 32.09992, lng: 34.809212 };
 
-const Map: React.FC<MapProps> = ({ className }) => {
+const Map: React.FC<MapProps> = ({ className, location }) => {
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [center, setCenter] = useState(DEFAULT_LOCATION);
   const [activePark, setActivePark] = useState<Park | null>(null);
@@ -51,8 +52,12 @@ const Map: React.FC<MapProps> = ({ className }) => {
   };
 
   useEffect(() => {
-    setUserCenter();
-  }, []);
+    if (location) {
+      setCenter({ lat: location.latitude, lng: location.longitude });
+    } else {
+      setUserCenter();
+    }
+  }, [location]);
 
   const onCloseParkPopup = () => {
     directionsRenderer.current.setMap(null);
