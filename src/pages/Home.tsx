@@ -1,11 +1,17 @@
 import { useLocation } from 'react-router';
-import { MapLoader } from '../components/parks/MapLoader';
 import styles from './Home.module.scss';
+import { Map } from '../components/parks/Map';
+import { useGoogleMapsLoader } from '../hooks/useGoogleMapsLoader';
 
 const Home: React.FC = () => {
   const { state } = useLocation();
+  const { isLoaded } = useGoogleMapsLoader();
 
-  return <MapLoader className={styles.map} location={state?.location} />;
+  if (!isLoaded) {
+    return null;
+  }
+
+  return <Map className={styles.map} location={state?.location} />;
 };
 
 export { Home };

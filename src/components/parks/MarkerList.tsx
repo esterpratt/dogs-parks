@@ -5,7 +5,7 @@ import { Park } from '../../types/park';
 
 interface MarkerListProps {
   activePark: Park | null;
-  setActivePark: (event: google.maps.MapMouseEvent, park: Park) => void;
+  setActivePark: (event: google.maps.MapMouseEvent, park: Park | null) => void;
 }
 
 const MarkerList: React.FC<MarkerListProps> = ({
@@ -16,11 +16,11 @@ const MarkerList: React.FC<MarkerListProps> = ({
 
   return parks.map((park) => (
     <Marker
-      activePark={activePark}
       key={park.id}
-      park={park}
       location={park.location}
-      setActivePark={(event) => setActivePark(event, park)}
+      onClick={(event) =>
+        setActivePark(event, park.id === activePark?.id ? null : park)
+      }
     />
   ));
 };

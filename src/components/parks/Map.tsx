@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { MdCenterFocusStrong } from 'react-icons/md';
 import { GoogleMap } from '@react-google-maps/api';
-import classnames from 'classnames';
 import styles from './Map.module.scss';
 import { MarkerList } from './MarkerList';
 import { Location, Park } from '../../types/park';
@@ -9,10 +7,11 @@ import { ParkPopup } from './ParkPopup';
 import walkSVG from '../../assets/walk.svg';
 import { Button } from '../Button';
 import { Link } from 'react-router-dom';
+import { AiOutlineAim } from 'react-icons/ai';
 
 interface MapProps {
   className?: string;
-  location: Location | undefined;
+  location?: Location | undefined;
 }
 
 const DEFAULT_LOCATION = { lat: 32.09992, lng: 34.809212 };
@@ -64,7 +63,10 @@ const Map: React.FC<MapProps> = ({ className, location }) => {
     setActivePark(null);
   };
 
-  const onSetActivePark = (event: google.maps.MapMouseEvent, park: Park) => {
+  const onSetActivePark = (
+    event: google.maps.MapMouseEvent,
+    park: Park | null
+  ) => {
     event.stop();
     setDirections(undefined);
     directionsRenderer.current.setMap(null);
@@ -94,7 +96,7 @@ const Map: React.FC<MapProps> = ({ className, location }) => {
 
   return (
     <>
-      <div className={classnames(styles.mapContainer, className)}>
+      <div className={className}>
         <Link to="/parks" className={styles.listViewButton}>
           <Button variant="orange">List View</Button>
         </Link>
@@ -117,7 +119,7 @@ const Map: React.FC<MapProps> = ({ className, location }) => {
           }}
         >
           <div className={styles.center} onClick={setUserCenter}>
-            <MdCenterFocusStrong size={28} />
+            <AiOutlineAim size={28} />
           </div>
           <MarkerList setActivePark={onSetActivePark} activePark={activePark} />
         </GoogleMap>

@@ -13,6 +13,7 @@ import { fetchImagesByDirectory, uploadImage } from './image';
 import { AppError, throwError } from './error';
 
 const parksCollection = collection(db, 'parks');
+const suggestedParksCollection = collection(db, 'suggestedParks');
 
 const fetchParks = async () => {
   try {
@@ -52,7 +53,7 @@ const createPark = async (
     Partial<Park>
 ) => {
   try {
-    const res = await addDoc(parksCollection, {
+    const res = await addDoc(suggestedParksCollection, {
       ...parkDetails,
       location: new GeoPoint(
         parkDetails.location.latitude,

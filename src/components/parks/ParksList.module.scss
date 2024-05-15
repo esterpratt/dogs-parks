@@ -4,14 +4,20 @@
   text-decoration: none;
 }
 
-.sort,
-.filter {
-  margin: 12px 8px;
-}
-
 .no-results {
+  font-size: 18px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 12px;
+  gap: 8px;
+
+  span {
+    line-height: 30px;
+  }
+
   a {
-    color: $blue;
+    color: $orange;
+    font-weight: $font-weight-medium;
     text-decoration: none;
   }
 }
