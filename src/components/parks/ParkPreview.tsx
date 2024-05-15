@@ -11,7 +11,7 @@ const ParkPreview: React.FC<ParkPreviewProps> = ({ park }) => {
     <div className={styles.park}>
       <p className={styles.name}>{park.name}</p>
       <p className={styles.address}>
-        {park.address} {park.city}
+        {park.address}, {park.city}
       </p>
     </div>
   );

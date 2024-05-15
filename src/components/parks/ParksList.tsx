@@ -1,11 +1,11 @@
-import { useContext /* ChangeEvent, useState */ } from 'react';
+import { useContext, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { ParksContext } from '../../context/ParksContext';
 import { Park } from '../../types/park';
 import { SearchList } from '../SearchList';
 import styles from './ParksList.module.scss';
-import { Link } from 'react-router-dom';
 import { ParkPreview } from './ParkPreview';
-// import { RadioInputs } from '../inputs/RadioInputs';
+import { useDistance } from '../../hooks/useDistance';
 
 interface ParksListProps {
   className?: string;
@@ -13,15 +13,20 @@ interface ParksListProps {
 
 const ParksList: React.FC<ParksListProps> = ({ className }) => {
   const { parks } = useContext(ParksContext);
-  // const [sortBy, setSortBy] = useState('city');
+  const parksToSort = useMemo(
+    () =>
+      parks.map((park) => ({
+        ...park,
+        ...park.location,
+      })),
+    [parks]
+  );
 
-  const filterParksFunc = (park: Park, searchInput: string) => {
+  const sortedParks = useDistance(parksToSort);
+
+  const searchParksFunc = (park: Park, searchInput: string) => {
     return park.name.toLowerCase().includes(searchInput.toLowerCase());
   };
-
-  // const onSort = (event: ChangeEvent<HTMLInputElement>) => {
-  //   setSortBy(event.target.value);
-  // };
 
   const NoResultsLayout = (
     <div className={styles.noResults}>
@@ -35,38 +40,12 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
 
   return (
     <div className={styles.container}>
-      {/* <div className={styles.sort}>
-        <RadioInputs
-          options={[
-            { value: 'rank', id: 'rank' },
-            { value: 'location', id: 'location' },
-            { value: 'city', id: 'city' },
-            { value: 'size', id: 'size' },
-          ]}
-          name="Sort by"
-          value={sortBy}
-          onOptionChange={onSort}
-        />
-      </div>
-      <div className={styles.filter}>
-        <RadioInputs
-          options={[
-            { value: 'with shade', id: 'shade' },
-            { value: 'with water', id: 'water' },
-            { value: 'friends there', id: 'friends' },
-            { value: 'big', id: 'big' },
-          ]}
-          name="Filter by"
-          value={sortBy}
-          onOptionChange={onSort}
-        />
-      </div> */}
       <SearchList
-        items={parks}
+        items={sortedParks}
         placeholder="Search Dogs Park"
         noResultsLayout={NoResultsLayout}
         itemKeyfn={(park) => park.id}
-        filterFunc={filterParksFunc}
+        filterFunc={searchParksFunc}
         containerClassName={className}
       >
         {(park) => (
