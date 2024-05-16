@@ -1,0 +1,64 @@
+@import '../../variables.scss';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.button {
+  width: 100%;
+  text-align: center;
+  padding: 4px 0;
+  background-color: $green;
+  border-radius: 2px 2px 12px 12px;
+  color: $white;
+}
+
+.card-container {
+  text-decoration: none;
+  color: inherit;
+  letter-spacing: inherit;
+  display: flex;
+  gap: 24px;
+  border: 1px solid $grey-bold;
+  background-color: $white;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 18px;
+
+  &:not(:last-child) {
+    border-radius: 12px 12px 2px 2px;
+  }
+}
+
+.dog-image {
+  width: 96px;
+  height: 96px;
+  border-radius: 12px;
+
+  > img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+
+  &.empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid $text-light;
+  }
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+  justify-content: space-between;
+}
+
+.dog-names {
+  font-weight: $font-weight-medium;
+}

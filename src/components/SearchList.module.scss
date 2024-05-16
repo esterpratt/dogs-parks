@@ -9,7 +9,6 @@
 .input {
   border: none;
   border-bottom: 1px solid $text-medium;
-  // border-radius: 12px;
   outline: none;
   font-size: 20px;
   font-family: inherit;
@@ -25,21 +24,20 @@
   }
 }
 
+.button {
+  margin: 32px auto;
+}
+
 .list {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow-y: scroll;
   border-radius: 8px;
-}
+  display: flex;
+  flex-direction: column;
 
-.item {
-  padding: 16px;
-  border-bottom: 1px solid $text-light;
-  background-color: #fff;
-
-  &:first-child {
-    padding-top: 24px;
+  > li {
+    list-style: none;
   }
 }
 
