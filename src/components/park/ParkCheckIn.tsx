@@ -8,7 +8,7 @@ import { reportDogsCount } from '../../services/dogsCount';
 import { Button } from '../Button';
 import styles from './ParkCheckIn.module.scss';
 import { IconContext } from 'react-icons';
-import { ReviewModal } from './ReviewModal';
+import { ReviewModal } from '../ReviewModal';
 import { ParkReviewsContext } from '../../context/ParkReviewsContext';
 
 const ParkCheckIn: React.FC<{

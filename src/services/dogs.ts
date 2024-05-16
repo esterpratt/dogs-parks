@@ -45,13 +45,24 @@ const updateDog = async ({ dogId, dogDetails }: EditDogProps) => {
 
 const fetchDogs = async (ids: string[]) => {
   try {
-    const usersQuery = query(dogsCollection, where(documentId(), 'in', ids));
-    const querySnapshot = await getDocs(usersQuery);
-    const res: Dog[] = [];
-    querySnapshot.forEach((doc) => {
-      res.push({ ...doc.data(), id: doc.id } as Dog);
-    });
-    return res;
+    if (!ids || !ids.length) {
+      const data = await getDocs(dogsCollection);
+      const dogs = data.docs.map((doc) => {
+        return {
+          ...doc.data(),
+          id: doc.id,
+        };
+      }) as Dog[];
+      return dogs;
+    } else {
+      const usersQuery = query(dogsCollection, where(documentId(), 'in', ids));
+      const querySnapshot = await getDocs(usersQuery);
+      const res: Dog[] = [];
+      querySnapshot.forEach((doc) => {
+        res.push({ ...doc.data(), id: doc.id } as Dog);
+      });
+      return res;
+    }
   } catch (error) {
     throwError(error);
   }

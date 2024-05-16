@@ -70,13 +70,24 @@ const fetchUser = async (id: string) => {
 
 const fetchUsers = async (ids: string[]) => {
   try {
-    const usersQuery = query(usersCollection, where(documentId(), 'in', ids));
-    const querySnapshot = await getDocs(usersQuery);
-    const res: User[] = [];
-    querySnapshot.forEach((doc) => {
-      res.push({ ...doc.data(), id: doc.id } as User);
-    });
-    return res;
+    if (!ids || !ids.length) {
+      const data = await getDocs(usersCollection);
+      const users = data.docs.map((doc) => {
+        return {
+          ...doc.data(),
+          id: doc.id,
+        };
+      }) as User[];
+      return users;
+    } else {
+      const usersQuery = query(usersCollection, where(documentId(), 'in', ids));
+      const querySnapshot = await getDocs(usersQuery);
+      const res: User[] = [];
+      querySnapshot.forEach((doc) => {
+        res.push({ ...doc.data(), id: doc.id } as User);
+      });
+      return res;
+    }
   } catch (error) {
     throwError(error);
   }
@@ -125,4 +136,11 @@ const fetchCheckedInUsers = async (parkId: string) => {
   }
 };
 
-export { createUser, updateUser, fetchUser, fetchFriends, fetchCheckedInUsers };
+export {
+  createUser,
+  updateUser,
+  fetchUser,
+  fetchFriends,
+  fetchCheckedInUsers,
+  fetchUsers,
+};

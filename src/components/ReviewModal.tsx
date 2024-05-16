@@ -1,7 +1,7 @@
-import { Modal } from '../Modal';
-import { ReviewForm } from './ReviewForm';
+import { Modal } from './Modal';
+import { ReviewForm } from './park/ReviewForm';
 import styles from './ReviewModal.module.scss';
-import { Review } from '../../types/review';
+import { Review } from '../types/review';
 
 interface ReviewModalProps {
   title?: string;

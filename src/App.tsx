@@ -24,6 +24,8 @@ import { ParksContextProvider } from './context/ParksContext';
 import { parkLoader } from './loaders/parkLoader';
 import { userLoader } from './loaders/userLoader';
 import { reviewsLoader } from './loaders/reviewsLoader';
+import { Loading } from './components/Loading';
+import { usersLoader } from './loaders/usersLoader';
 
 const UserDog = lazy(() => import('./pages/UserDog'));
 const UserReviews = lazy(() => import('./pages/UserReviews'));
@@ -61,7 +63,7 @@ const App = () => {
             {
               index: true,
               element: (
-                <Suspense fallback={<div>Loading...</div>}>
+                <Suspense fallback={<Loading />}>
                   <ParkDetails />
                 </Suspense>
               ),
@@ -69,7 +71,7 @@ const App = () => {
             {
               path: 'reviews',
               element: (
-                <Suspense fallback={<div>Loading...</div>}>
+                <Suspense fallback={<Loading />}>
                   <ParkReviews />
                 </Suspense>
               ),
@@ -78,7 +80,7 @@ const App = () => {
             {
               path: 'visitors',
               element: (
-                <Suspense fallback={<div>Loading...</div>}>
+                <Suspense fallback={<Loading />}>
                   <ParkVisitors />
                 </Suspense>
               ),
@@ -109,7 +111,7 @@ const App = () => {
             {
               path: 'dogs/:dogId',
               element: (
-                <Suspense fallback={<div>Loading...</div>}>
+                <Suspense fallback={<Loading />}>
                   <UserDog />
                 </Suspense>
               ),
@@ -117,7 +119,7 @@ const App = () => {
             {
               path: 'reviews',
               element: (
-                <Suspense fallback={<div>Loading...</div>}>
+                <Suspense fallback={<Loading />}>
                   <UserReviews />
                 </Suspense>
               ),
@@ -126,7 +128,7 @@ const App = () => {
             {
               path: 'friends',
               element: (
-                <Suspense fallback={<div>Loading...</div>}>
+                <Suspense fallback={<Loading />}>
                   <UserFriends />
                 </Suspense>
               ),
@@ -134,7 +136,7 @@ const App = () => {
             {
               path: 'favorites',
               element: (
-                <Suspense fallback={<div>Loading...</div>}>
+                <Suspense fallback={<Loading />}>
                   <UserFavorites />
                 </Suspense>
               ),
@@ -142,7 +144,7 @@ const App = () => {
             {
               path: 'info',
               element: (
-                <Suspense fallback={<div>Loading...</div>}>
+                <Suspense fallback={<Loading />}>
                   <UserInfo />
                 </Suspense>
               ),
@@ -152,6 +154,7 @@ const App = () => {
         {
           path: '/users',
           element: <Users />,
+          loader: usersLoader,
         },
       ],
     },

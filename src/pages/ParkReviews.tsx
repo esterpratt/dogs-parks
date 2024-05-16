@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { UserContext } from '../context/UserContext';
 import { Button } from '../components/Button';
-import { ReviewModal } from '../components/park/ReviewModal';
+import { ReviewModal } from '../components/ReviewModal';
 import { ParkReviewsContext } from '../context/ParkReviewsContext';
 
 const Reviews: React.FC = () => {

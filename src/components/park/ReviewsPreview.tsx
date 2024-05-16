@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Stars } from '../Stars';
 import styles from './ReviewsPreview.module.scss';
 import { Button } from '../Button';
-import { ReviewModal } from './ReviewModal';
+import { ReviewModal } from '../ReviewModal';
 import { UserContext } from '../../context/UserContext';
 import { ParkReviewsContext } from '../../context/ParkReviewsContext';
 

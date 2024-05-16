@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Review } from '../types/review';
 import { Button } from './Button';
-import { ReviewModal } from './park/ReviewModal';
+import { ReviewModal } from './ReviewModal';
 import { UpdateReviewProps } from '../services/reviews';
 
 interface ReviewPreviewProps {
