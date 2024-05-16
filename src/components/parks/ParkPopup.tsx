@@ -1,13 +1,15 @@
 import { Link } from 'react-router-dom';
 import { FaWalking, FaRegClock } from 'react-icons/fa';
+import { IoRibbonSharp } from 'react-icons/io5';
 import classnames from 'classnames';
 import { Location, Park } from '../../types/park';
 import styles from './ParkPopup.module.scss';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { fetchParkPrimaryImage } from '../../services/parks';
 import { IconContext } from 'react-icons';
 import { LuTrees } from 'react-icons/lu';
 import { CgClose } from 'react-icons/cg';
+import { ParksContext } from '../../context/ParksContext';
 
 interface ParkPopupProps {
   activePark: Park | null;
@@ -23,6 +25,8 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
   onClose,
 }) => {
   const [image, setImage] = useState<string | null>(null);
+  const { favoriteParkIds } = useContext(ParksContext);
+  const isFavorite = activePark && favoriteParkIds.includes(activePark?.id);
 
   useEffect(() => {
     const getImage = async () => {
@@ -50,6 +54,14 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
           <IconContext.Provider value={{ className: styles.parkIcon }}>
             <LuTrees />
           </IconContext.Provider>
+        )}
+        {isFavorite && (
+          <div className={styles.favorite}>
+            <IconContext.Provider value={{ className: styles.ribbon }}>
+              <IoRibbonSharp />
+            </IconContext.Provider>
+            <span>Favorite Park!</span>
+          </div>
         )}
       </Link>
       <div className={styles.detailsContainer}>

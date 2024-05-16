@@ -104,4 +104,40 @@ const fetchUserFavorites = async (userId: string) => {
   }
 };
 
-export { addFavorite, removeFavorite, fetchUserFavorites };
+const fetchAllFavorites = async () => {
+  try {
+    const favorites = await getDocs(favoritesCollection);
+    return favorites.docs.map((doc) => {
+      return {
+        ...doc.data(),
+        id: doc.id,
+      } as Favorites;
+    });
+  } catch (error) {
+    console.error(`there was an error fetching favorites parks: ${error}`);
+    return [];
+  }
+};
+
+const fetchFavoriteParks = async () => {
+  try {
+    const favorites = await fetchAllFavorites();
+    const parkList = favorites.map((favoriteReport) => favoriteReport.parkIds);
+
+    const parksCounts: { [key: string]: number } = {};
+    parkList.flat().forEach((park) => {
+      parksCounts[park] = (parksCounts[park] || 0) + 1;
+    });
+    const maxParksCount = Math.max(...Object.values(parksCounts));
+    const mostFrequentParks = Object.keys(parksCounts).filter(
+      (parkId) => parksCounts[parkId] === maxParksCount
+    );
+
+    return mostFrequentParks;
+  } catch (error) {
+    console.error(`there was an error fetching favorite park: ${error}`);
+    return [];
+  }
+};
+
+export { addFavorite, removeFavorite, fetchUserFavorites, fetchFavoriteParks };

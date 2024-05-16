@@ -31,6 +31,7 @@
   border-radius: 12px;
   border: 1px solid $grey-bold;
   flex-shrink: 0;
+  // position: relative;
 }
 
 .img {
@@ -143,4 +144,26 @@
   justify-content: center;
   width: 24px;
   height: 24px;
+}
+
+.favorite {
+  position: absolute;
+  z-index: 400;
+  top: -16px;
+  left: 14px;
+  display: flex;
+  gap: 6px;
+  align-items: end;
+  font-size: 14px;
+  color: $white;
+  background-color: $orange;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.ribbon {
+  color: $white;
+  width: 18px;
+  height: 18px;
+  rotate: (-15deg);
 }
