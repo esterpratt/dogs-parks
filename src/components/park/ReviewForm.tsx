@@ -70,6 +70,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ review, onSubmitForm }) => {
           value={reviewData.title}
           onChange={onChangeInput}
           placeholder="Review title"
+          required
         />
         <TextArea
           label="Content"
