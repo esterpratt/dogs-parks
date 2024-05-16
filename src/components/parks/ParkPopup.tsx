@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import { FaWalking, FaRegClock } from 'react-icons/fa';
-import { IoRibbonSharp } from 'react-icons/io5';
 import classnames from 'classnames';
 import { Location, Park } from '../../types/park';
 import styles from './ParkPopup.module.scss';
@@ -10,6 +9,7 @@ import { IconContext } from 'react-icons';
 import { LuTrees } from 'react-icons/lu';
 import { CgClose } from 'react-icons/cg';
 import { ParksContext } from '../../context/ParksContext';
+import { FavoriteRibbon } from '../FavoriteRibbon';
 
 interface ParkPopupProps {
   activePark: Park | null;
@@ -55,14 +55,7 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
             <LuTrees />
           </IconContext.Provider>
         )}
-        {isFavorite && (
-          <div className={styles.favorite}>
-            <IconContext.Provider value={{ className: styles.ribbon }}>
-              <IoRibbonSharp />
-            </IconContext.Provider>
-            <span>Favorite Park!</span>
-          </div>
-        )}
+        {isFavorite && <FavoriteRibbon className={styles.favorite} />}
       </Link>
       <div className={styles.detailsContainer}>
         <div className={styles.details}>

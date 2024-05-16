@@ -1,0 +1,19 @@
+@import '../variables.scss';
+
+.favorite {
+  display: flex;
+  gap: 6px;
+  align-items: end;
+  font-size: 14px;
+  color: $white;
+  background-color: $orange;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.ribbon {
+  color: $white;
+  width: 18px;
+  height: 18px;
+  rotate: (-15deg);
+}
