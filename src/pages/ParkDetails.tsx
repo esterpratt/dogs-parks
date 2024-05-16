@@ -1,20 +1,17 @@
 import { useContext, useState } from 'react';
 import { useOutletContext } from 'react-router';
+import { MdOutlineModeEditOutline } from 'react-icons/md';
 import { Accordion } from '../components/accordion/Accordion';
 import { BusyHours } from '../components/park/BusyHours';
 import { Park } from '../types/park';
 import { ParkGenerals } from '../components/park/ParkGenerals';
 import { ParkGalleryContainer } from '../components/park/ParkGalleryContainer';
 import { UserContext } from '../context/UserContext';
-import { MdOutlineModeEditOutline } from 'react-icons/md';
-import { EditParkModal } from '../components/park/EditParkModal';
+import { ChooseEditParkOptionModal } from '../components/park/ChooseEditParkOptionModal';
 
 const ParkDetails = () => {
   const park = useOutletContext<Park>();
   const { userId } = useContext(UserContext);
-  const isEditable =
-    !!userId &&
-    (!park.size || !park.materials?.length || !park.hasShade || !park.hasWater);
   const [isEditParkModalOpen, setIsEditParkModalOpen] = useState(false);
 
   return (
@@ -22,7 +19,7 @@ const ParkDetails = () => {
       <Accordion>
         <Accordion.TitleWithIcon
           title="More about this park"
-          showIcon={isEditable}
+          showIcon={!!userId}
           Icon={MdOutlineModeEditOutline}
           onClickIcon={() => setIsEditParkModalOpen(true)}
           iconSize={18}
@@ -49,11 +46,12 @@ const ParkDetails = () => {
           <BusyHours parkId={park.id} />
         </Accordion.Content>
       </Accordion>
-      {isEditable && (
-        <EditParkModal
-          park={park}
+
+      {!!userId && (
+        <ChooseEditParkOptionModal
           isOpen={isEditParkModalOpen}
           onClose={() => setIsEditParkModalOpen(false)}
+          park={park}
         />
       )}
       <ParkGalleryContainer parkId={park.id} />
