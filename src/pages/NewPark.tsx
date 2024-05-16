@@ -1,63 +1,112 @@
-import { GoogleMap } from '@react-google-maps/api';
-import { useGoogleMapsLoader } from '../hooks/useGoogleMapsLoader';
+import { ChangeEvent, useState } from 'react';
 import styles from './NewPark.module.scss';
-import { useEffect, useState } from 'react';
-import { Marker } from '../components/parks/Marker';
+import classnames from 'classnames';
 import { Location } from '../types/park';
-
-const DEFAULT_LOCATION = { lat: 32.09992, lng: 34.809212 };
+import { ControlledInput } from '../components/inputs/ControlledInput';
+import { Button } from '../components/Button';
+import { LocationInput } from '../components/inputs/LocationInput';
+import { createPark } from '../services/parks';
 
 const NewPark: React.FC = () => {
-  const { isLoaded } = useGoogleMapsLoader();
-  const [center, setCenter] = useState(DEFAULT_LOCATION);
-  const [marker, setMarker] = useState<Location | null>(null);
+  const [markerLocation, setMarkerLocation] = useState<Location | null>(null);
+  const [parkDetails, setParkDetails] = useState({
+    name: '',
+    city: '',
+    address: '',
+    size: '',
+  });
+  const [error, setError] = useState('');
 
-  useEffect(() => {
-    const setUserCenter = () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          setCenter({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          });
-        });
-      }
-    };
-
-    setUserCenter();
-  }, []);
+  const onChangeParkDetails = (event: ChangeEvent<HTMLInputElement>) => {
+    setError('');
+    setParkDetails((prev) => {
+      return {
+        ...prev,
+        [event.target.name]: event.target.value,
+      };
+    });
+  };
 
   const onMapClick = (event: google.maps.MapMouseEvent) => {
-    setMarker({
+    setMarkerLocation({
       latitude: event.latLng!.lat(),
       longitude: event.latLng!.lng(),
     });
   };
 
+  const onAddPark = async () => {
+    if (
+      !markerLocation ||
+      !parkDetails.name ||
+      !parkDetails.address ||
+      !parkDetails.city
+    ) {
+      setError('Please fill in the missing details');
+    } else {
+      const newPark: {
+        name: string;
+        city: string;
+        address: string;
+        size?: number;
+        location: Location;
+      } = {
+        name: parkDetails.name,
+        address: parkDetails.address,
+        city: parkDetails.city,
+        location: {
+          latitude: markerLocation?.latitude,
+          longitude: markerLocation.longitude,
+        },
+      };
+      if (parkDetails.size) {
+        newPark.size = Number(parkDetails.size);
+      }
+      await createPark(newPark);
+    }
+  };
+
   return (
-    <div>
-      {isLoaded && (
-        <div className={styles.map}>
-          <GoogleMap
-            onClick={onMapClick}
-            center={center}
-            zoom={16}
-            clickableIcons={false}
-            mapContainerStyle={{
-              width: '100%',
-              height: '100%',
-            }}
-            options={{
-              disableDefaultUI: true,
-              zoomControl: true,
-              zoomControlOptions: { position: 3 },
-              gestureHandling: 'greedy', // DELETE - only for testing
-            }}
-          >
-            {marker && <Marker location={marker} />}
-          </GoogleMap>
-        </div>
-      )}
+    <div className={styles.container}>
+      <div className={styles.title}>Fill the park details to add it</div>
+      <div className={classnames(styles.error, error && styles.show)}>
+        {error}
+      </div>
+      <div className={styles.inputsContainer}>
+        <ControlledInput
+          label="Park Name*"
+          name="name"
+          value={parkDetails.name}
+          onChange={onChangeParkDetails}
+        />
+        <ControlledInput
+          label="City*"
+          name="city"
+          value={parkDetails.city}
+          onChange={onChangeParkDetails}
+        />
+        <ControlledInput
+          label="Address*"
+          name="address"
+          value={parkDetails.address}
+          onChange={onChangeParkDetails}
+        />
+        <LocationInput
+          label="Click on the map to set the park location*"
+          markerLocation={markerLocation}
+          onMapClick={onMapClick}
+          className={styles.map}
+        />
+        <ControlledInput
+          type="number"
+          label="Size in meters (if known)"
+          name="size"
+          value={parkDetails.size}
+          onChange={onChangeParkDetails}
+        />
+        <Button variant="green" onClick={onAddPark} className={styles.button}>
+          Add Park
+        </Button>
+      </div>
     </div>
   );
 };

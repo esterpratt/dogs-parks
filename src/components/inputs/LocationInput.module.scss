@@ -1,0 +1,18 @@
+@import '../../variables.scss';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.map {
+  height: 100%;
+  width: 100%;
+  border: 1px solid $grey-bold;
+  border-radius: 12px;
+
+  > div {
+    border-radius: 12px;
+  }
+}

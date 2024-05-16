@@ -1,5 +1,39 @@
+@import '../variables.scss';
+
+.title {
+  font-size: 18px;
+}
+
 .map {
-  height: 360px;
-  width: 300px;
-  border-radius: 8px;
+  height: 280px;
+  width: 100%;
+}
+
+.container {
+  padding: 24px;
+}
+
+.inputs-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.error {
+  color: $red;
+  height: 14px;
+  font-size: 14px;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.2s;
+  margin: 12px 0;
+
+  &.show {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+.button {
+  align-self: center;
 }
