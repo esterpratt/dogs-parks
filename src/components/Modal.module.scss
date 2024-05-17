@@ -1,6 +1,7 @@
 @import '../variables.scss';
 
 .modal {
+  position: fixed;
   transition: all 0.5s;
   border: none;
   display: block;

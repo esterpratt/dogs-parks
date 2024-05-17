@@ -14,7 +14,6 @@ const ReviewsPreview = () => {
   const { addReview } = useContext(UserReviewsContext);
   const [isAddReviewModalOpen, setIsAddReviewModalOpen] = useState(false);
   const { userId } = useContext(UserContext);
-  console.log(rank, reviewsCount, loading);
 
   if (loading) {
     return null;

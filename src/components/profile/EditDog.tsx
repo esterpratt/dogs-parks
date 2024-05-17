@@ -153,8 +153,8 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
         label="Dislikes"
       />
       <TextArea
-        rows={8}
-        maxLength={180}
+        rows={9}
+        maxLength={330}
         value={dogData?.description || ''}
         onChange={onInputChange}
         name="description"
