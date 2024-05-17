@@ -19,7 +19,7 @@ import {
 interface AddReviewProps {
   parkId: string;
   userId: string | null;
-  review: Omit<Review, 'id' | 'parkId' | 'createdAt' | 'userId'>;
+  reviewData: Omit<Review, 'id' | 'parkId' | 'createdAt' | 'userId'>;
 }
 
 interface UpdateReviewProps {
@@ -147,12 +147,12 @@ const updateReview = async ({ reviewId, reviewData }: UpdateReviewProps) => {
   }
 };
 
-const createReview = async ({ parkId, userId, review }: AddReviewProps) => {
+const createReview = async ({ parkId, userId, reviewData }: AddReviewProps) => {
   try {
     const docRef = await addDoc(reviewsCollection, {
-      title: review.title,
-      content: review.content,
-      rank: review.rank,
+      title: reviewData.title,
+      content: reviewData.content,
+      rank: reviewData.rank,
       parkId,
       userId,
       createdAt: serverTimestamp(),
@@ -183,4 +183,4 @@ export {
   fetchUserReviews,
 };
 
-export type { UpdateReviewProps };
+export type { UpdateReviewProps, AddReviewProps };

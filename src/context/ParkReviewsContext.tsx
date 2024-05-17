@@ -1,19 +1,19 @@
-import { ReactNode, createContext, useEffect, useState } from 'react';
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+} from 'react';
 import { Review } from '../types/review';
-import { createReview, fetchParkRank, fetchReviews } from '../services/reviews';
+import { fetchParkRank, fetchReviews } from '../services/reviews';
+import { UserReviewsContext } from './UserReviewsContext';
 
 interface ParkReviewsContextObj {
   reviews: Review[];
   reviewsCount: number;
   rank: number | null;
   loading: boolean;
-  addReview: ({
-    review,
-    userId,
-  }: {
-    review: Omit<Review, 'id' | 'parkId' | 'createdAt' | 'userId'>;
-    userId: string | null;
-  }) => void;
 }
 
 interface ParkReviewsContextProps {
@@ -24,27 +24,101 @@ interface ParkReviewsContextProps {
 const initialData: ParkReviewsContextObj = {
   reviews: [],
   reviewsCount: 0,
-  rank: null,
+  rank: 0,
   loading: true,
-  addReview: () => {},
 };
 
 const ParkReviewsContext = createContext<ParkReviewsContextObj>(initialData);
+
+enum REVIEWS_ACTION_TYPE {
+  GET_REVIEWS = 'get-reviews',
+  UPDATE_REVIEWS = 'update-reviews',
+}
+
+interface ReviewsState {
+  reviews: Review[];
+  rank: number;
+  loading: boolean;
+}
+
+interface ReviewsAction {
+  type: REVIEWS_ACTION_TYPE;
+  payload:
+    | { reviews: Review[]; rank: number | null }
+    | { updatedReview: Review | null };
+}
+
+const reviewsReducer = (state: ReviewsState, action: ReviewsAction) => {
+  switch (action.type) {
+    case REVIEWS_ACTION_TYPE.GET_REVIEWS: {
+      const { reviews, rank } = action.payload as ReviewsState;
+      return {
+        reviews,
+        rank,
+        loading: false,
+      };
+    }
+    case REVIEWS_ACTION_TYPE.UPDATE_REVIEWS: {
+      const { updatedReview } = action.payload as {
+        updatedReview: Review | null;
+      };
+
+      if (!updatedReview) {
+        return state;
+      }
+
+      const reviewsWithoutUpdated = [
+        ...state.reviews.filter((review) => review.id !== updatedReview.id),
+      ];
+      const newReviews = [updatedReview, ...reviewsWithoutUpdated];
+      const prevReviewsLength = state.reviews.length;
+      let newRank;
+      if (newReviews.length > prevReviewsLength) {
+        newRank =
+          ((state.rank || 0) * prevReviewsLength + updatedReview.rank) /
+          (prevReviewsLength + 1);
+      } else {
+        const prevReview = state.reviews.find(
+          (review) => review.id === updatedReview.id
+        );
+        const prevRankWithoutUpdated =
+          ((state.rank || 0) * prevReviewsLength - (prevReview?.rank || 0)) /
+          (prevReviewsLength - 1);
+        newRank =
+          (prevRankWithoutUpdated * (prevReviewsLength - 1) +
+            updatedReview.rank) /
+          newReviews.length;
+      }
+
+      return {
+        ...state,
+        reviews: newReviews,
+        rank: newRank,
+      };
+    }
+    default: {
+      return state;
+    }
+  }
+};
 
 const ParkReviewsContextProvider: React.FC<ParkReviewsContextProps> = ({
   children,
   parkId,
 }) => {
-  const [loading, setLoading] = useState(true);
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [reviewsCount, setReviewsCount] = useState(0);
-  const [rank, setRank] = useState<number | null>(null);
+  const { updatedReview } = useContext(UserReviewsContext);
+  const [reviewsState, reviewsDispatch] = useReducer(reviewsReducer, {
+    reviews: [],
+    rank: 0,
+    loading: true,
+  });
 
   useEffect(() => {
     const getReviewsData = async () => {
       const reviews = await fetchReviews(parkId);
+      let rank = null;
+
       if (reviews.length) {
-        setReviewsCount(reviews.length);
         reviews.sort((a, b) => {
           const aDate = a.updatedAt
             ? a.updatedAt.getTime()
@@ -54,40 +128,30 @@ const ParkReviewsContextProvider: React.FC<ParkReviewsContextProps> = ({
             : b.createdAt!.getTime();
           return bDate - aDate;
         });
-        setReviews(reviews);
-        const rank = await fetchParkRank(parkId);
-        setRank(rank);
+        rank = await fetchParkRank(parkId);
       }
-      setLoading(false);
+
+      reviewsDispatch({
+        type: REVIEWS_ACTION_TYPE.GET_REVIEWS,
+        payload: { reviews, rank },
+      });
     };
 
     getReviewsData();
   }, [parkId]);
 
-  const addReview = async ({
-    review,
-    userId,
-  }: {
-    review: Omit<Review, 'id' | 'parkId' | 'createdAt' | 'userId'>;
-    userId: string | null;
-  }) => {
-    const savedReview = await createReview({ parkId, review, userId });
-    if (savedReview) {
-      setReviews((prevReviews) => [{ ...savedReview }, ...prevReviews]);
-      setRank(
-        (prev) =>
-          ((prev || 0) * reviewsCount + review.rank) / (reviewsCount + 1)
-      );
-      setReviewsCount((prev) => prev + 1);
-    }
-  };
+  useEffect(() => {
+    reviewsDispatch({
+      type: REVIEWS_ACTION_TYPE.UPDATE_REVIEWS,
+      payload: { updatedReview },
+    });
+  }, [updatedReview]);
 
   const value: ParkReviewsContextObj = {
-    reviews,
-    addReview,
-    reviewsCount,
-    rank,
-    loading,
+    reviews: reviewsState.reviews,
+    reviewsCount: reviewsState.reviews.length,
+    rank: reviewsState.rank,
+    loading: reviewsState.loading,
   };
 
   return (

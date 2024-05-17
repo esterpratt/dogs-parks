@@ -9,7 +9,7 @@ import { Button } from '../Button';
 import styles from './ParkCheckIn.module.scss';
 import { IconContext } from 'react-icons';
 import { ReviewModal } from '../ReviewModal';
-import { ParkReviewsContext } from '../../context/ParkReviewsContext';
+import { UserReviewsContext } from '../../context/UserReviewsContext';
 
 const ParkCheckIn: React.FC<{
   parkId: string;
@@ -19,7 +19,7 @@ const ParkCheckIn: React.FC<{
   const [checkIn, setCheckIn] = useLocalStorage('checkin');
   const [openDogsCountModal, setOpenDogsCountModal] = useState(false);
   const [openReviewModal, setOpenReviewModal] = useState(false);
-  const { addReview } = useContext(ParkReviewsContext);
+  const { addReview } = useContext(UserReviewsContext);
 
   const shouldCheckIn =
     !checkIn || checkIn.parkId !== parkId || checkIn.userId !== userId;
@@ -35,7 +35,6 @@ const ParkCheckIn: React.FC<{
         setCheckIn({ id, parkId, userId });
         setOpenDogsCountModal(true);
       }
-      // else there was an error while checkin, for now I return null
     }
   };
 
@@ -59,7 +58,7 @@ const ParkCheckIn: React.FC<{
     rank: number;
   }) => {
     setOpenReviewModal(false);
-    addReview(review, userId!);
+    addReview({ reviewData: review, parkId });
   };
 
   return (

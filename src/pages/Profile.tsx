@@ -1,7 +1,6 @@
 import { Outlet, useLoaderData } from 'react-router';
 import { User } from '../types/user';
 import { Dog } from '../types/dog';
-import { UserReviewsContextProvider } from '../context/UserReviewsContext';
 import { useContext } from 'react';
 import { UserContext } from '../context/UserContext';
 import { ProfileTabs } from '../components/profile/ProfileTabs';
@@ -15,7 +14,7 @@ const Profile: React.FC = () => {
   const isSignedInUser = signedInUser?.id === user.id;
 
   return (
-    <UserReviewsContextProvider>
+    <>
       {isSignedInUser && <ProfileTabs />}
       <Outlet
         context={{
@@ -24,7 +23,7 @@ const Profile: React.FC = () => {
           isSignedInUser,
         }}
       />
-    </UserReviewsContextProvider>
+    </>
   );
 };
 

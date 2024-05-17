@@ -7,10 +7,14 @@ import { getFormattedDate } from '../utils/time';
 import { fetchUser } from '../services/users';
 import styles from './ReviewPreview.module.scss';
 import { Stars } from './Stars';
+import { fetchPark } from '../services/parks';
+import { User } from '../types/user';
+import { Park } from '../types/park';
 
 interface ReviewPreviewProps {
   review: Review;
   userId?: string | null;
+  showPark?: boolean;
   onUpdateReview?: ({ reviewId, reviewData }: UpdateReviewProps) => void;
 }
 
@@ -18,27 +22,33 @@ const ReviewPreview: React.FC<ReviewPreviewProps> = ({
   review,
   userId,
   onUpdateReview,
+  showPark = false,
 }) => {
   const [isAddReviewModalOpen, setIsAddReviewModalOpen] = useState(false);
   const reviewTime = useMemo<string>(() => {
     return getFormattedDate(review.updatedAt || review.createdAt);
   }, [review.createdAt, review.updatedAt]);
-  const [userName, setUserName] = useState('');
+  const [userName, setUserName] = useState<string>('');
+  const [parkName, setParkName] = useState<string>('');
 
   useEffect(() => {
-    const getUserName = async () => {
-      let userName = 'Anonymous';
-      if (review.userId) {
-        const user = await fetchUser(review.userId);
-        if (user && user.name) {
-          userName = user.name;
-        }
-      }
-      setUserName(userName);
+    const getNames = async () => {
+      const promises: [
+        Promise<Partial<User> | undefined>,
+        Promise<Partial<Park> | undefined>
+      ] = [
+        review.userId
+          ? fetchUser(review.userId)
+          : Promise.resolve({ name: 'Anonymous' }),
+        fetchPark(review.parkId),
+      ];
+      const [user, park] = await Promise.all(promises);
+      setUserName(user?.name || 'Anonymous');
+      setParkName(park?.name || 'N/A');
     };
 
-    getUserName();
-  }, [review.userId]);
+    getNames();
+  }, [review.userId, review.parkId]);
 
   const onSubmitReview = (updatedReview: {
     title: string;
@@ -57,6 +67,7 @@ const ReviewPreview: React.FC<ReviewPreviewProps> = ({
   return (
     <>
       <div className={styles.container}>
+        {showPark && <div className={styles.parkName}>{parkName}</div>}
         <div className={styles.preview}>
           <div className={styles.title}>{review.title}</div>
           <Stars rank={review.rank} className={styles.stars} />
@@ -66,7 +77,7 @@ const ReviewPreview: React.FC<ReviewPreviewProps> = ({
         )}
         <div className={styles.footer}>
           <div className={styles.time}>{reviewTime}</div>
-          <div className={styles.name}>By: {userName}</div>
+          <div className={styles.name}>by: {userName}</div>
           {userId === review.userId && (
             <Button
               onClick={() => setIsAddReviewModalOpen(true)}

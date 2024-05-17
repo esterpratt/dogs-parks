@@ -1,9 +1,10 @@
 import { useContext } from 'react';
+import { useOutletContext } from 'react-router';
 import { UserReviewsContext } from '../context/UserReviewsContext';
 import { ReviewPreview } from '../components/ReviewPreview';
-import { useOutletContext } from 'react-router';
 import { UpdateReviewProps } from '../services/reviews';
 import { User } from '../types/user';
+import styles from './UserReviews.module.scss';
 
 const UserReviews = () => {
   const { user } = useOutletContext() as { user: User };
@@ -19,10 +20,11 @@ const UserReviews = () => {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       {reviews.map((review) => {
         return (
           <ReviewPreview
+            showPark
             key={review.id}
             review={review}
             userId={user.id}

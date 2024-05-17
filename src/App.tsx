@@ -26,6 +26,7 @@ import { userLoader } from './loaders/userLoader';
 import { reviewsLoader } from './loaders/reviewsLoader';
 import { Loading } from './components/Loading';
 import { usersLoader } from './loaders/usersLoader';
+import { UserReviewsContextProvider } from './context/UserReviewsContext';
 
 const UserDog = lazy(() => import('./pages/UserDog'));
 const UserReviews = lazy(() => import('./pages/UserReviews'));
@@ -163,9 +164,11 @@ const App = () => {
   return (
     <UserContextProvider>
       <UserFriendsContextProvider>
-        <ParksContextProvider>
-          <RouterProvider router={router} />
-        </ParksContextProvider>
+        <UserReviewsContextProvider>
+          <ParksContextProvider>
+            <RouterProvider router={router} />
+          </ParksContextProvider>
+        </UserReviewsContextProvider>
       </UserFriendsContextProvider>
     </UserContextProvider>
   );

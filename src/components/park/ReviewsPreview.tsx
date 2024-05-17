@@ -1,24 +1,27 @@
 import { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Stars } from '../Stars';
 import styles from './ReviewsPreview.module.scss';
 import { Button } from '../Button';
 import { ReviewModal } from '../ReviewModal';
 import { UserContext } from '../../context/UserContext';
 import { ParkReviewsContext } from '../../context/ParkReviewsContext';
+import { UserReviewsContext } from '../../context/UserReviewsContext';
 
 const ReviewsPreview = () => {
-  const { rank, reviewsCount, loading, addReview } =
-    useContext(ParkReviewsContext);
+  const { id: parkId } = useParams();
+  const { rank, reviewsCount, loading } = useContext(ParkReviewsContext);
+  const { addReview } = useContext(UserReviewsContext);
   const [isAddReviewModalOpen, setIsAddReviewModalOpen] = useState(false);
   const { userId } = useContext(UserContext);
+  console.log(rank, reviewsCount, loading);
 
   if (loading) {
     return null;
   }
 
   const onAddReview = async (
-    review: {
+    reviewData: {
       title: string;
       content?: string;
       rank: number;
@@ -26,7 +29,7 @@ const ReviewsPreview = () => {
     isAnonymous: boolean
   ) => {
     setIsAddReviewModalOpen(false);
-    addReview({ review, userId: isAnonymous ? null : userId! });
+    addReview({ reviewData, isAnonymous, parkId: parkId! });
   };
 
   return (
