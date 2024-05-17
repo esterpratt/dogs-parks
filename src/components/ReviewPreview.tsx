@@ -24,7 +24,10 @@ const ReviewPreview: React.FC<ReviewPreviewProps> = ({
   }) => {
     setIsAddReviewModalOpen(false);
     if (onUpdateReview) {
-      onUpdateReview({ reviewId: review.id, reviewData: updatedReview });
+      onUpdateReview({
+        reviewId: review.id,
+        reviewData: updatedReview,
+      });
     }
   };
 

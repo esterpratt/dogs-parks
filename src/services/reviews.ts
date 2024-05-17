@@ -18,7 +18,7 @@ import {
 
 interface AddReviewProps {
   parkId: string;
-  userId: string;
+  userId: string | null;
   review: Omit<Review, 'id' | 'parkId' | 'createdAt' | 'userId'>;
 }
 

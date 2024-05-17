@@ -7,10 +7,13 @@ interface ParkReviewsContextObj {
   reviewsCount: number;
   rank: number | null;
   loading: boolean;
-  addReview: (
-    reviewData: Omit<Review, 'id' | 'parkId' | 'createdAt' | 'userId'>,
-    userId: string
-  ) => void;
+  addReview: ({
+    review,
+    userId,
+  }: {
+    review: Omit<Review, 'id' | 'parkId' | 'createdAt' | 'userId'>;
+    userId: string | null;
+  }) => void;
 }
 
 interface ParkReviewsContextProps {
@@ -52,19 +55,22 @@ const ParkReviewsContextProvider: React.FC<ParkReviewsContextProps> = ({
     getReviewsData();
   }, [parkId]);
 
-  const addReview = async (
-    reviewData: Omit<Review, 'id' | 'parkId' | 'createdAt' | 'userId'>,
-    userId: string
-  ) => {
-    const id = await createReview({ parkId, review: reviewData, userId });
+  const addReview = async ({
+    review,
+    userId,
+  }: {
+    review: Omit<Review, 'id' | 'parkId' | 'createdAt' | 'userId'>;
+    userId: string | null;
+  }) => {
+    const id = await createReview({ parkId, review, userId });
     if (id) {
       setReviews((prevReviews) => [
         ...prevReviews,
-        { ...reviewData, id, parkId, userId },
+        { ...review, id, parkId, userId },
       ]);
       setRank(
         (prev) =>
-          ((prev || 0) * reviewsCount + reviewData.rank) / (reviewsCount + 1)
+          ((prev || 0) * reviewsCount + review.rank) / (reviewsCount + 1)
       );
       setReviewsCount((prev) => prev + 1);
     }

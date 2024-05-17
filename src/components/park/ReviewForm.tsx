@@ -5,14 +5,18 @@ import { Button } from '../Button';
 import styles from './ReviewForm.module.scss';
 import { Review } from '../../types/review';
 import { TextArea } from '../inputs/TextArea';
+import { Checkbox } from '../inputs/Checkbox';
 
 interface ReviewFormProps {
   review?: Review;
-  onSubmitForm: (reviewData: {
-    title: string;
-    content: string;
-    rank: number;
-  }) => void;
+  onSubmitForm: (
+    reviewData: {
+      title: string;
+      content: string;
+      rank: number;
+    },
+    isAnonymous: boolean
+  ) => void;
 }
 
 const ReviewForm: React.FC<ReviewFormProps> = ({ review, onSubmitForm }) => {
@@ -23,6 +27,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ review, onSubmitForm }) => {
     };
   });
   const [rank, setRank] = useState<number>(0);
+  const [isAnonymous, setIsAnonymous] = useState(false);
 
   useEffect(() => {
     if (review) {
@@ -51,13 +56,27 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ review, onSubmitForm }) => {
     });
   };
 
+  const resetReview = () => {
+    setReviewData({ title: '', content: '' });
+    setRank(0);
+    setIsAnonymous(false);
+  };
+
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onSubmitForm({
-      title: reviewData.title,
-      content: reviewData.content,
-      rank: Number(rank),
-    });
+    onSubmitForm(
+      {
+        title: reviewData.title,
+        content: reviewData.content,
+        rank: Number(rank),
+      },
+      isAnonymous
+    );
+    resetReview();
+  };
+
+  const onChangeAnonymousStatus = () => {
+    setIsAnonymous((prev) => !prev);
   };
 
   return (
@@ -88,6 +107,14 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ review, onSubmitForm }) => {
             size={32}
           />
         </div>
+        {!review && (
+          <Checkbox
+            id="isAnonymous"
+            label="Report anonymously"
+            isChecked={isAnonymous}
+            onChange={onChangeAnonymousStatus}
+          />
+        )}
         <Button variant="green" type="submit" className={styles.button}>
           Submit
         </Button>

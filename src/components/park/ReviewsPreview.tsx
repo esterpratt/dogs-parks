@@ -17,13 +17,16 @@ const ReviewsPreview = () => {
     return null;
   }
 
-  const onAddReview = async (review: {
-    title: string;
-    content?: string;
-    rank: number;
-  }) => {
+  const onAddReview = async (
+    review: {
+      title: string;
+      content?: string;
+      rank: number;
+    },
+    isAnonymous: boolean
+  ) => {
     setIsAddReviewModalOpen(false);
-    addReview(review, userId!);
+    addReview({ review, userId: isAnonymous ? null : userId! });
   };
 
   return (

@@ -8,11 +8,14 @@ interface ReviewModalProps {
   isOpen: boolean;
   review?: Review;
   closeModal: () => void;
-  onSubmitReview: (reviewData: {
-    title: string;
-    content?: string;
-    rank: number;
-  }) => void;
+  onSubmitReview: (
+    reviewData: {
+      title: string;
+      content?: string;
+      rank: number;
+    },
+    isAnonymous: boolean
+  ) => void;
 }
 
 const ReviewModal: React.FC<ReviewModalProps> = ({

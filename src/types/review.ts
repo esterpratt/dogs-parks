@@ -1,6 +1,6 @@
 interface Review {
   id: string;
-  userId: string;
+  userId: string | null;
   parkId: string;
   title: string;
   content?: string;
