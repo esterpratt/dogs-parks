@@ -141,14 +141,15 @@ const updateReview = async ({ reviewId, reviewData }: UpdateReviewProps) => {
       updatedAt: reviewSnap.data()?.updatedAt.toDate(),
       createdAt: reviewSnap.data()?.createdAt.toDate(),
     } as Review;
-  } catch {
+  } catch (error) {
+    console.error(`there was an error updating review ${reviewId}: ${error}`);
     return null;
   }
 };
 
 const createReview = async ({ parkId, userId, review }: AddReviewProps) => {
   try {
-    const res = await addDoc(reviewsCollection, {
+    const docRef = await addDoc(reviewsCollection, {
       title: review.title,
       content: review.content,
       rank: review.rank,
@@ -157,8 +158,17 @@ const createReview = async ({ parkId, userId, review }: AddReviewProps) => {
       createdAt: serverTimestamp(),
       updatedAt: null,
     });
-    return res.id;
+    const savedReview = await getDoc(docRef);
+    return {
+      ...savedReview.data(),
+      id: savedReview.id,
+      updatedAt: savedReview.data()?.updatedAt?.toDate(),
+      createdAt: savedReview.data()?.createdAt.toDate(),
+    } as Review;
   } catch (error) {
+    console.error(
+      `there was an error creating review for park ${parkId}: ${error}`
+    );
     return null;
   }
 };

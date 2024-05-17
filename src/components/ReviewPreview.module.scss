@@ -1,0 +1,51 @@
+@import '../variables.scss';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 1px solid $text-light;
+  border-radius: 12px;
+  background-color: $white;
+  padding: 16px;
+  font-size: 14px;
+
+  > :not(:last-child) {
+    border-bottom: 1px solid $text-light;
+  }
+}
+
+.preview {
+  padding-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: $font-weight-medium;
+  margin-right: 12px;
+}
+
+.time {
+  margin-right: 12px;
+}
+
+.content {
+  display: flex;
+  padding: 0 0 12px;
+}
+
+.footer {
+  display: flex;
+  color: $text-medium;
+}
+
+.name {
+  flex-grow: 1;
+}
+
+.button {
+  color: $green;
+}

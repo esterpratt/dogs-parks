@@ -45,6 +45,15 @@ const ParkReviewsContextProvider: React.FC<ParkReviewsContextProps> = ({
       const reviews = await fetchReviews(parkId);
       if (reviews.length) {
         setReviewsCount(reviews.length);
+        reviews.sort((a, b) => {
+          const aDate = a.updatedAt
+            ? a.updatedAt.getTime()
+            : a.createdAt!.getTime();
+          const bDate = b.updatedAt
+            ? b.updatedAt.getTime()
+            : b.createdAt!.getTime();
+          return bDate - aDate;
+        });
         setReviews(reviews);
         const rank = await fetchParkRank(parkId);
         setRank(rank);
@@ -62,12 +71,9 @@ const ParkReviewsContextProvider: React.FC<ParkReviewsContextProps> = ({
     review: Omit<Review, 'id' | 'parkId' | 'createdAt' | 'userId'>;
     userId: string | null;
   }) => {
-    const id = await createReview({ parkId, review, userId });
-    if (id) {
-      setReviews((prevReviews) => [
-        ...prevReviews,
-        { ...review, id, parkId, userId },
-      ]);
+    const savedReview = await createReview({ parkId, review, userId });
+    if (savedReview) {
+      setReviews((prevReviews) => [{ ...savedReview }, ...prevReviews]);
       setRank(
         (prev) =>
           ((prev || 0) * reviewsCount + review.rank) / (reviewsCount + 1)

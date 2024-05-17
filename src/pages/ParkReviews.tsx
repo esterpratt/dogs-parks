@@ -3,6 +3,8 @@ import { UserContext } from '../context/UserContext';
 import { Button } from '../components/Button';
 import { ReviewModal } from '../components/ReviewModal';
 import { ParkReviewsContext } from '../context/ParkReviewsContext';
+import { ReviewPreview } from '../components/ReviewPreview';
+import styles from './ParkReviews.module.scss';
 
 const Reviews: React.FC = () => {
   const { reviews } = useContext(ParkReviewsContext);
@@ -36,9 +38,11 @@ const Reviews: React.FC = () => {
 
   return (
     <div>
-      <ul>
+      <ul className={styles.list}>
         {reviews.map((review) => (
-          <li key={review.id}>{review.title}</li>
+          <li key={review.id} className={styles.item}>
+            <ReviewPreview review={review} userId={userId} />
+          </li>
         ))}
       </ul>
     </div>

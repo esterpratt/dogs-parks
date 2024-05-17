@@ -94,6 +94,8 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ review, onSubmitForm }) => {
         <TextArea
           label="Content"
           name="content"
+          rows={7}
+          maxLength={280}
           value={reviewData.content}
           onChange={onChangeInput}
           placeholder="Please elaborate..."
