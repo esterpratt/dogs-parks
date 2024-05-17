@@ -9,13 +9,14 @@
   padding: 0;
   display: flex;
   justify-content: space-between;
-  gap: 4px;
+  gap: 8px;
 }
 
 .details-container {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  width: 70%;
 }
 
 .name,
