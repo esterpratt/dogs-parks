@@ -1,6 +1,7 @@
 @import '../variables.scss';
 
 .button {
+  width: fit-content;
   border: none;
   border-radius: 48px;
   font-family: inherit;
@@ -13,14 +14,12 @@
   padding: 0;
 
   &.green {
-    width: fit-content;
     color: $white;
     background-color: $green;
     padding: 12px 24px;
   }
 
   &.orange {
-    width: fit-content;
     color: $white;
     background-color: $orange;
     padding: 12px 24px;

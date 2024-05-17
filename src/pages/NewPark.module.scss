@@ -10,7 +10,7 @@
 }
 
 .container {
-  padding: 24px;
+  padding: 18px 24px 12px;
 }
 
 .inputs-container {
@@ -34,6 +34,11 @@
   }
 }
 
+.buttons {
+  display: flex;
+  justify-content: space-around;
+}
+
 .button {
-  align-self: center;
+  width: 116px;
 }

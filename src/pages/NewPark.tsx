@@ -6,6 +6,7 @@ import { ControlledInput } from '../components/inputs/ControlledInput';
 import { Button } from '../components/Button';
 import { LocationInput } from '../components/inputs/LocationInput';
 import { createPark } from '../services/parks';
+import { useNavigate } from 'react-router';
 
 const NewPark: React.FC = () => {
   const [markerLocation, setMarkerLocation] = useState<Location | null>(null);
@@ -16,6 +17,7 @@ const NewPark: React.FC = () => {
     size: '',
   });
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const onChangeParkDetails = (event: ChangeEvent<HTMLInputElement>) => {
     setError('');
@@ -32,6 +34,10 @@ const NewPark: React.FC = () => {
       latitude: event.latLng!.lat(),
       longitude: event.latLng!.lng(),
     });
+  };
+
+  const onCancel = () => {
+    navigate('/parks');
   };
 
   const onAddPark = async () => {
@@ -62,6 +68,7 @@ const NewPark: React.FC = () => {
         newPark.size = Number(parkDetails.size);
       }
       await createPark(newPark);
+      navigate('/parks');
     }
   };
 
@@ -103,9 +110,14 @@ const NewPark: React.FC = () => {
           value={parkDetails.size}
           onChange={onChangeParkDetails}
         />
-        <Button variant="green" onClick={onAddPark} className={styles.button}>
-          Add Park
-        </Button>
+        <div className={styles.buttons}>
+          <Button variant="green" onClick={onAddPark} className={styles.button}>
+            Add Park
+          </Button>
+          <Button variant="orange" onClick={onCancel} className={styles.button}>
+            Cancel
+          </Button>
+        </div>
       </div>
     </div>
   );
