@@ -9,6 +9,8 @@ import {
   fetchFriendship,
   updateFriendship,
 } from '../services/friendships';
+import { fetchUserDogs } from '../services/dogs';
+import { Dog } from '../types/dog';
 
 enum FRIENDS_ACTION_TYPE {
   FETCH_FRIENDS = 'FETCH_FRIENDS',
@@ -18,10 +20,14 @@ enum FRIENDS_ACTION_TYPE {
   CREATE_FRIENDSHIP = 'CREATE_FRIENDSHIP',
 }
 
+interface UserWithDogs extends User {
+  dogs: Dog[];
+}
+
 interface FriendsState {
-  friends: User[];
-  pendingFriends: User[];
-  myPendingFriends: User[];
+  friends: UserWithDogs[];
+  pendingFriends: UserWithDogs[];
+  myPendingFriends: UserWithDogs[];
 }
 
 interface FriendsAction {
@@ -75,7 +81,7 @@ const friendsReducer = (state: FriendsState, action: FriendsAction) => {
       };
     }
     case FRIENDS_ACTION_TYPE.CREATE_FRIENDSHIP: {
-      const { newFriend } = action.payload as { newFriend: User };
+      const { newFriend } = action.payload as { newFriend: UserWithDogs };
       return {
         ...state,
         myPendingFriends: [...state.myPendingFriends, newFriend],
@@ -104,11 +110,10 @@ const UserFriendsContextProvider: React.FC<PropsWithChildren> = ({
   children,
 }) => {
   const { userId } = useOnAuthStateChanged();
-  const [friendsState, friendsDispatch] = useReducer(friendsReducer, {
-    friends: [],
-    pendingFriends: [],
-    myPendingFriends: [],
-  });
+  const [friendsState, friendsDispatch] = useReducer(
+    friendsReducer,
+    friendsInitialData
+  );
 
   useEffect(() => {
     const getFriends = async () => {
@@ -123,14 +128,55 @@ const UserFriendsContextProvider: React.FC<PropsWithChildren> = ({
         userRole: USER_ROLE.REQUESTER,
         status: FRIENDSHIP_STATUS.PENDING,
       });
-      const [friends, pendingFriends, myPendingFriends] = await Promise.all([
-        fetchFriendsPromise,
-        fetchPendingFriendsPromise,
-        fetchMyPendingFriendsPromise,
-      ]);
+      const [friends = [], pendingFriends = [], myPendingFriends = []] =
+        await Promise.all([
+          fetchFriendsPromise,
+          fetchPendingFriendsPromise,
+          fetchMyPendingFriendsPromise,
+        ]);
+
+      const fetchUserDogsPromises = [
+        ...friends,
+        ...pendingFriends,
+        ...myPendingFriends,
+      ].map((user) => {
+        return fetchUserDogs(user.id);
+      });
+
+      const usersDogs = await Promise.all(fetchUserDogsPromises);
+
+      const friendsDogs = usersDogs.splice(0, friends.length);
+      const pendingFriendsDogs = usersDogs.splice(0, pendingFriends.length);
+      const myPendingFriendsDogs = usersDogs.splice(0, usersDogs.length);
+
+      const friendsWithDogs = friends.map((user, index) => {
+        return {
+          ...user,
+          dogs: friendsDogs[index] || [],
+        };
+      });
+
+      const pendingFriendsWithDogs = pendingFriends.map((user, index) => {
+        return {
+          ...user,
+          dogs: pendingFriendsDogs[index] || [],
+        };
+      });
+
+      const myPendingFriendsWithDogs = myPendingFriends.map((user, index) => {
+        return {
+          ...user,
+          dogs: myPendingFriendsDogs[index] || [],
+        };
+      });
+
       friendsDispatch({
         type: FRIENDS_ACTION_TYPE.FETCH_FRIENDS,
-        payload: { friends, pendingFriends, myPendingFriends },
+        payload: {
+          friends: friendsWithDogs,
+          pendingFriends: pendingFriendsWithDogs,
+          myPendingFriends: myPendingFriendsWithDogs,
+        },
       });
     };
     if (userId) {
@@ -170,9 +216,11 @@ const UserFriendsContextProvider: React.FC<PropsWithChildren> = ({
       await createFriendship({ requesteeId: friendId, requesterId: userId! });
       const newFriend = await fetchUser(friendId);
       if (newFriend) {
+        const friendDogs = await fetchUserDogs(newFriend.id);
+        const friendWithDogs = { ...newFriend, dogs: friendDogs };
         friendsDispatch({
           type: FRIENDS_ACTION_TYPE.CREATE_FRIENDSHIP,
-          payload: { newFriend },
+          payload: { newFriend: friendWithDogs },
         });
       }
     }
