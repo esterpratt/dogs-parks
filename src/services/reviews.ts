@@ -60,6 +60,7 @@ const fetchParkRank = async (parkId: string) => {
 };
 
 const fetchReviews = async (parkId: string) => {
+  console.log('fetching reviews');
   try {
     const reviewsQuery = query(
       reviewsCollection,

@@ -12,6 +12,10 @@
 .link {
   text-decoration: none;
   color: inherit;
+
+  &.disabled {
+    pointer-events: none;
+  }
 }
 
 :export {

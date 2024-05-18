@@ -30,6 +30,10 @@
   &:not(:last-child) {
     border-radius: 12px 12px 2px 2px;
   }
+
+  &.disabled {
+    pointer-events: none;
+  }
 }
 
 .dog-image {

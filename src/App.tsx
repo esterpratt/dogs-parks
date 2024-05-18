@@ -16,17 +16,16 @@ import { Users } from './pages/Users';
 import { UserDogs } from './pages/UserDogs';
 import { Park } from './pages/Park';
 import { NewPark } from './pages/NewPark';
+import { Loading } from './components/Loading';
 
 import { UserContextProvider } from './context/UserContext';
 import { UserFriendsContextProvider } from './context/UserFriendsContext';
+import { UserReviewsContextProvider } from './context/UserReviewsContext';
 import { ParksContextProvider } from './context/ParksContext';
 
 import { parkLoader } from './loaders/parkLoader';
 import { userLoader } from './loaders/userLoader';
-import { reviewsLoader } from './loaders/reviewsLoader';
-import { Loading } from './components/Loading';
 import { usersLoader } from './loaders/usersLoader';
-import { UserReviewsContextProvider } from './context/UserReviewsContext';
 
 const UserDog = lazy(() => import('./pages/UserDog'));
 const UserReviews = lazy(() => import('./pages/UserReviews'));
@@ -76,7 +75,6 @@ const App = () => {
                   <ParkReviews />
                 </Suspense>
               ),
-              loader: reviewsLoader,
             },
             {
               path: 'visitors',
@@ -124,7 +122,6 @@ const App = () => {
                   <UserReviews />
                 </Suspense>
               ),
-              loader: reviewsLoader,
             },
             {
               path: 'friends',

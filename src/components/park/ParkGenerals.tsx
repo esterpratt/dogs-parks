@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import classnames from 'classnames';
 import { ParkMaterial } from '../../types/park';
 import { DetailsSqaure } from './DetailsSquare';
 import { ParkVisitorsContext } from '../../context/ParkVisitorsContext';
@@ -48,9 +49,11 @@ const getSizeContent = (value?: number) => {
 const ParkGenerals = ({ size, ground, shade, water }: ParkGeneralsProps) => {
   const { visitors } = useContext(ParkVisitorsContext);
 
-  const visitorsContent = visitors.friends.length
-    ? visitors.friends.length.toString()
-    : visitors.others.length.toString();
+  const visitorsCount = visitors.friends.length
+    ? visitors.friends.length
+    : visitors.others.length;
+
+  const visitorsContent = visitorsCount.toString();
   const sizeContent = getSizeContent(size);
   const groundContent = getListContent(ground);
   const shadeContent = getBooleanContent(shade);
@@ -67,7 +70,10 @@ const ParkGenerals = ({ size, ground, shade, water }: ParkGeneralsProps) => {
       />
       <DetailsSqaure title="Shade" content={shadeContent} color={styles.grey} />
       <DetailsSqaure title="Water" content={waterContent} color={styles.blue} />
-      <Link to="visitors" className={styles.link}>
+      <Link
+        to="visitors"
+        className={classnames(styles.link, !visitorsCount && styles.disabled)}
+      >
         <DetailsSqaure
           title={visitors.friends.length ? 'Friends here' : 'Visitors'}
           content={visitorsContent}
