@@ -1,8 +1,14 @@
+@import '../variables.scss';
+
 .container {
   padding: 32px 24px;
   display: flex;
   flex-direction: column;
   gap: 32px;
+}
+
+.no-friends {
+  align-items: center;
 }
 
 .friends-container {
@@ -13,4 +19,10 @@
 
 .title {
   font-size: 18px;
+}
+
+.link {
+  text-decoration: none;
+  border: none;
+  color: $green;
 }

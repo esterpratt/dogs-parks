@@ -78,7 +78,7 @@ const ReviewPreview: React.FC<ReviewPreviewProps> = ({
         <div className={styles.footer}>
           <div className={styles.time}>{reviewTime}</div>
           <div className={styles.name}>by: {userName}</div>
-          {userId === review.userId && (
+          {userId && userId === review.userId && (
             <Button
               onClick={() => setIsAddReviewModalOpen(true)}
               className={styles.button}
