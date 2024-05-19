@@ -47,13 +47,12 @@ const getSizeContent = (value?: number) => {
 };
 
 const ParkGenerals = ({ size, ground, shade, water }: ParkGeneralsProps) => {
-  const { visitors } = useContext(ParkVisitorsContext);
+  const { friends, othersCount } = useContext(ParkVisitorsContext);
+  const friendsLength = friends.length;
 
-  const visitorsCount = visitors.friends.length
-    ? visitors.friends.length
-    : visitors.others.length;
-
-  const visitorsContent = visitorsCount.toString();
+  const visitorsContent = friendsLength
+    ? friendsLength.toString()
+    : othersCount.toString();
   const sizeContent = getSizeContent(size);
   const groundContent = getListContent(ground);
   const shadeContent = getBooleanContent(shade);
@@ -72,10 +71,13 @@ const ParkGenerals = ({ size, ground, shade, water }: ParkGeneralsProps) => {
       <DetailsSqaure title="Water" content={waterContent} color={styles.blue} />
       <Link
         to="visitors"
-        className={classnames(styles.link, !visitorsCount && styles.disabled)}
+        className={classnames(
+          styles.link,
+          !friendsLength && !othersCount && styles.disabled
+        )}
       >
         <DetailsSqaure
-          title={visitors.friends.length ? 'Friends here' : 'Visitors'}
+          title={friendsLength ? 'Friends here' : 'Visitors'}
           content={visitorsContent}
           color={styles.brown}
         />

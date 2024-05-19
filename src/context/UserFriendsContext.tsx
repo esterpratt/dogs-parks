@@ -241,3 +241,4 @@ const UserFriendsContextProvider: React.FC<PropsWithChildren> = ({
 };
 
 export { UserFriendsContextProvider, UserFriendsContext };
+export type { UserWithDogs };

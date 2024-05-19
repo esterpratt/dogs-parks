@@ -44,7 +44,7 @@ const Park: React.FC = () => {
   }
 
   return (
-    <ParkVisitorsContextProvider parkId={parkId!} userId={user?.id}>
+    <ParkVisitorsContextProvider parkId={parkId!}>
       <ParkReviewsContextProvider parkId={parkId!}>
         {primaryImage ? (
           <img src={primaryImage} className={styles.image} />

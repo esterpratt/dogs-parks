@@ -1,39 +1,41 @@
 import { useContext } from 'react';
+import { Link } from 'react-router-dom';
 import { UserPreview } from '../components/users/UserPreview';
 import { ParkVisitorsContext } from '../context/ParkVisitorsContext';
-import { Link } from 'react-router-dom';
+import styles from './ParkVisitors.module.scss';
 
 const ParkVisitors: React.FC = () => {
-  const { visitors } = useContext(ParkVisitorsContext);
-  const friendsCount = visitors.friends.length;
-  const othersCount = visitors.others.length;
+  const { friends, othersCount } = useContext(ParkVisitorsContext);
+  const friendsCount = friends.length;
 
   if (!friendsCount && !othersCount) {
     return null;
   }
 
   return (
-    <div>
+    <div className={styles.container}>
       {!!friendsCount && (
-        <div>
-          <span>Your Friends that in the park right now:</span>
-          {visitors.friends.map((user) => (
+        <div className={styles.friendsContainer}>
+          <span className={styles.friendsTitle}>
+            Your Friends that in the park right now:
+          </span>
+          {friends.map((user) => (
             <UserPreview key={user.id} user={user} />
           ))}
         </div>
       )}
       {!!othersCount && (
-        <div>
-          {friendsCount ? (
-            <span>
-              There {othersCount > 1 ? 'are' : 'is'} {othersCount} more visitor
-              {othersCount > 1 && 's'} in the park right now
-            </span>
-          ) : (
-            <span>
-              None of the current visitors in the park is your friend.{' '}
-              <Link to="/users">Search for new friends</Link>
-            </span>
+        <div className={styles.othersContainer}>
+          <span className={styles.othersTitle}>
+            There {othersCount > 1 ? 'are' : 'is'} {othersCount}{' '}
+            {!!friendsCount && 'more'} visitor
+            {othersCount > 1 && 's'} in the park right now.
+          </span>
+          {!friendsCount && (
+            <>
+              <span>You can only see friends' details.</span>
+              <Link to="/users">Search for new friends here</Link>
+            </>
           )}
         </div>
       )}

@@ -3,7 +3,8 @@ import { Tabs } from '../tabs/Tabs';
 import { ParkVisitorsContext } from '../../context/ParkVisitorsContext';
 
 const ParkTabs = () => {
-  const { visitors } = useContext(ParkVisitorsContext);
+  const { friends, othersCount } = useContext(ParkVisitorsContext);
+
   return (
     <Tabs
       tabs={[
@@ -12,7 +13,7 @@ const ParkTabs = () => {
         {
           text: 'Visitors',
           url: 'visitors',
-          disabled: !visitors.friends.length && !visitors.others.length,
+          disabled: !friends.length && !othersCount,
         },
       ]}
     />
