@@ -1,13 +1,16 @@
 import { Outlet } from 'react-router';
-import { Navbar } from './components/Navbar';
+import { NavbarTop } from './components/NavbarTop';
+import { NavbarBottom } from './components/NavbarBottom';
+import styles from './RootLayout.module.scss';
 
 const RootLayout = () => {
   return (
     <>
-      <Navbar />
-      <div>
+      <NavbarTop />
+      <div className={styles.appContent}>
         <Outlet />
       </div>
+      <NavbarBottom />
     </>
   );
 };

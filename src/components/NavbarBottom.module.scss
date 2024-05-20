@@ -1,0 +1,28 @@
+@import '../variables.scss';
+
+.navbar {
+  height: $navbar-height;
+  padding: 0 16px 16px;
+  display: flex;
+  justify-content: space-between;
+  background-color: $green;
+  position: fixed;
+  z-index: 500;
+  bottom: 0;
+  width: 100vw;
+}
+
+.icons {
+  color: $white;
+  width: 32px;
+  height: 32px;
+
+  :not(:last-child) {
+    border-right: 1px solid $grey-light;
+  }
+}
+
+.home {
+  width: 48px;
+  height: 48px;
+}

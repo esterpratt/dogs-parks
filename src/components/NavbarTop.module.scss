@@ -1,12 +1,15 @@
 @import '../variables.scss';
 
 .navbar {
-  height: 80px;
+  height: $navbar-height;
   padding: 0 16px 16px;
   display: flex;
   justify-content: space-between;
   align-items: end;
   background-color: $green;
+  position: fixed;
+  z-index: 500;
+  width: 100vw;
 }
 
 .icons {
