@@ -1,14 +1,17 @@
 import React, { MouseEvent } from 'react';
+import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
+import classnames from 'classnames';
 import { Park } from '../../types/park';
 import styles from './ParkPreview.module.scss';
 import { Button } from '../Button';
-import { useNavigate } from 'react-router';
 
 interface ParkPreviewProps {
   park: Park;
+  className?: string;
 }
 
-const ParkPreview: React.FC<ParkPreviewProps> = ({ park }) => {
+const ParkPreview: React.FC<ParkPreviewProps> = ({ park, className }) => {
   const navgiate = useNavigate();
   const onClickMapLink = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -16,7 +19,10 @@ const ParkPreview: React.FC<ParkPreviewProps> = ({ park }) => {
   };
 
   return (
-    <div className={styles.park}>
+    <Link
+      to={`/parks/${park.id}`}
+      className={classnames(styles.park, className)}
+    >
       <div className={styles.detailsContainer}>
         <span className={styles.name}>{park.name}</span>
         <span className={styles.address}>
@@ -29,7 +35,7 @@ const ParkPreview: React.FC<ParkPreviewProps> = ({ park }) => {
           See in map
         </Button>
       </div>
-    </div>
+    </Link>
   );
 };
 

@@ -26,6 +26,7 @@ import { ParksContextProvider } from './context/ParksContext';
 import { parkLoader } from './loaders/parkLoader';
 import { userLoader } from './loaders/userLoader';
 import { usersLoader } from './loaders/usersLoader';
+import { userFavoritesLoader } from './loaders/userFavoritesLoader';
 
 const UserDog = lazy(() => import('./pages/UserDog'));
 const UserReviews = lazy(() => import('./pages/UserReviews'));
@@ -138,6 +139,7 @@ const App = () => {
                   <UserFavorites />
                 </Suspense>
               ),
+              loader: userFavoritesLoader,
             },
             {
               path: 'info',

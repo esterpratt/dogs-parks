@@ -48,11 +48,7 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
       filterFunc={searchParksFunc}
       containerClassName={classnames(styles.list, className)}
     >
-      {(park) => (
-        <Link to={`/parks/${park.id}`} className={styles.park}>
-          <ParkPreview park={park} />
-        </Link>
-      )}
+      {(park) => <ParkPreview park={park} className={styles.park} />}
     </SearchList>
   );
 };
