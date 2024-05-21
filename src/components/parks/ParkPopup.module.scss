@@ -18,7 +18,7 @@
   gap: 16px;
 
   &.open {
-    bottom: 0;
+    bottom: $navbar-height;
   }
 }
 

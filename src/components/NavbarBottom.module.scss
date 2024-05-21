@@ -1,28 +1,59 @@
 @import '../variables.scss';
 
 .navbar {
-  height: $navbar-height;
-  padding: 0 16px 16px;
-  display: flex;
-  justify-content: space-between;
-  background-color: $green;
   position: fixed;
   z-index: 500;
   bottom: 0;
   width: 100vw;
+  height: $navbar-height;
+  background-color: $green;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+}
+
+.icons-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-grow: 1;
+  height: 46px;
+
+  a {
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    border: none;
+    font-size: 14px;
+    color: $white;
+
+    &:not(:last-child) {
+      &::after {
+        position: absolute;
+        content: '';
+        top: 50%;
+        transform: translate(0, -50%);
+        right: -25px;
+        height: 36px;
+        border-right: 1px solid $text-light;
+      }
+    }
+  }
 }
 
 .icons {
   color: $white;
-  width: 32px;
-  height: 32px;
-
-  :not(:last-child) {
-    border-right: 1px solid $grey-light;
-  }
+  width: 24px;
+  height: 24px;
 }
 
 .home {
-  width: 48px;
-  height: 48px;
+  svg {
+    width: 48px;
+    height: 48px;
+  }
 }

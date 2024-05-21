@@ -13,34 +13,36 @@ const NavbarBottom = () => {
 
   return (
     <nav className={styles.navbar}>
-      <IconContext.Provider value={{ className: styles.icons }}>
-        {loadingUserId ? null : (
-          <>
-            <Link to="/" className={styles.map}>
-              <FaMapMarkedAlt />
-              <span>Map</span>
-            </Link>
-            <Link to="/parks" className={styles.parks}>
-              <LuTrees />
-              <span>Parks</span>
-            </Link>
-            <Link to="/" className={styles.home}>
-              <HiHome />
-            </Link>
-            <Link to="/users" className={styles.users}>
-              <GiThreeFriends />
-              <span>Users</span>
-            </Link>
-            <Link
-              to={userId ? `/profile/${userId}/dogs` : '/login'}
-              className={styles.user}
-            >
-              <FaUserCircle />
-              <span>{userId ? 'Profile' : 'Log In'}</span>
-            </Link>
-          </>
-        )}
-      </IconContext.Provider>
+      <div className={styles.iconsContainer}>
+        <IconContext.Provider value={{ className: styles.icons }}>
+          {loadingUserId ? null : (
+            <>
+              <Link to="/" className={styles.map}>
+                <FaMapMarkedAlt />
+                <span>Map</span>
+              </Link>
+              <Link to="/parks" className={styles.parks}>
+                <LuTrees />
+                <span>Parks</span>
+              </Link>
+              <Link to="/" className={styles.home}>
+                <HiHome />
+              </Link>
+              <Link to="/users" className={styles.users}>
+                <GiThreeFriends />
+                <span>Users</span>
+              </Link>
+              <Link
+                to={userId ? `/profile/${userId}/dogs` : '/login'}
+                className={styles.user}
+              >
+                <FaUserCircle />
+                <span>{userId ? 'Profile' : 'Log In'}</span>
+              </Link>
+            </>
+          )}
+        </IconContext.Provider>
+      </div>
     </nav>
   );
 };
