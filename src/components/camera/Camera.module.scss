@@ -40,23 +40,17 @@
 }
 
 .buttons-container,
-.capture-button-container {
+.capture-buttons-container {
   flex-grow: 1;
   width: 100%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 36px;
 }
 
-.buttons-container {
-  justify-content: space-between;
-}
-
-.capture-button-container {
-  justify-content: center;
-  position: relative;
-}
-
-.capture-button + .cancel-button {
-  position: absolute;
+.icons {
+  color: $green;
+  width: 32px;
+  height: 32px;
 }

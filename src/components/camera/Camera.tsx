@@ -1,25 +1,27 @@
 import React, { useCallback, useRef, useState } from 'react';
-import Webcam, { WebcamProps } from 'react-webcam';
+import Webcam from 'react-webcam';
+import { FaArrowsRotate } from 'react-icons/fa6';
 import styles from './Camera.module.scss';
 import { Button } from '../Button';
+import { IconContext } from 'react-icons';
+import { CgClose } from 'react-icons/cg';
 
 interface CustomWebcamProps {
   onSaveImg: (img: string) => void;
   onError?: (error: string | DOMException) => void;
+  onClose: () => void;
   isOpen: boolean;
 }
-
-const videoConstraints: WebcamProps['videoConstraints'] = {
-  facingMode: 'environment',
-};
 
 const Camera: React.FC<CustomWebcamProps> = ({
   onSaveImg,
   onError,
+  onClose,
   isOpen,
 }) => {
   const webcamRef = useRef<Webcam>(null);
   const [img, setImg] = useState<string | null>(null);
+  const [facingMode, setFacingMode] = useState('environment');
 
   const captureImg = useCallback(() => {
     setImg(webcamRef.current!.getScreenshot());
@@ -52,16 +54,31 @@ const Camera: React.FC<CustomWebcamProps> = ({
           {isOpen && (
             <Webcam
               ref={webcamRef}
-              videoConstraints={videoConstraints}
+              videoConstraints={{ facingMode }}
               onUserMediaError={onError}
               className={styles.cameraView}
               mirrored
             />
           )}
-          <div className={styles.captureButtonContainer}>
-            <Button onClick={captureImg} className={styles.captureButton}>
-              <div className={styles.inner} />
-            </Button>
+          <div className={styles.captureButtonsContainer}>
+            <IconContext.Provider value={{ className: styles.icons }}>
+              <Button onClick={onClose}>
+                <CgClose />
+              </Button>
+              <Button onClick={captureImg} className={styles.captureButton}>
+                <div className={styles.inner} />
+              </Button>
+              <Button
+                onClick={() =>
+                  setFacingMode((prev) =>
+                    prev === 'environment' ? 'user' : 'environment'
+                  )
+                }
+                className={styles.rotateButton}
+              >
+                <FaArrowsRotate />
+              </Button>
+            </IconContext.Provider>
           </div>
         </>
       )}

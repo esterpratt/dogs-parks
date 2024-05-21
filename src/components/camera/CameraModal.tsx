@@ -101,6 +101,7 @@ const CameraModal: React.FC<CameraModalProps> = ({
           isOpen={isCameraOpen}
           onSaveImg={onSaveImg}
           onError={onCameraError}
+          onClose={() => setIsCameraOpen(false)}
         />
       </Modal>
     </>
