@@ -2,9 +2,11 @@ import { useState } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import AddPhotoImg from '../assets/addPhoto.png';
+import { FaPlus } from 'react-icons/fa';
+import classnames from 'classnames';
 import styles from './Carousel.module.scss';
 import { Modal } from './Modal';
+import { IconContext } from 'react-icons';
 
 interface CarouselProps {
   images: string[];
@@ -38,11 +40,17 @@ const Carousel: React.FC<CarouselProps> = ({ images = [], addImage }) => {
             />
           ))}
           {addImage && (
-            <img
-              className={styles.image}
-              src={AddPhotoImg}
+            <div
+              className={classnames(styles.image, styles.addImage)}
               onClick={addImage}
-            />
+            >
+              <div className={styles.plusContent}>
+                <IconContext.Provider value={{ className: styles.plusIcon }}>
+                  <FaPlus />
+                </IconContext.Provider>
+                <span>Add photo</span>
+              </div>
+            </div>
           )}
         </Slider>
       </div>
