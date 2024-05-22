@@ -26,6 +26,7 @@ const ParkDetails = () => {
         />
         <Accordion.Content>
           <ParkGenerals
+            parkId={park.id}
             size={park.size}
             ground={park.materials}
             shade={park.hasShade}

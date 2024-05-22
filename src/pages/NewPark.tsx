@@ -7,6 +7,8 @@ import { Button } from '../components/Button';
 import { LocationInput } from '../components/inputs/LocationInput';
 import { createPark } from '../services/parks';
 import { useNavigate } from 'react-router';
+import { useMutation } from '@tanstack/react-query';
+import { queryClient } from '../services/react-query';
 
 const NewPark: React.FC = () => {
   const [markerLocation, setMarkerLocation] = useState<Location | null>(null);
@@ -18,6 +20,16 @@ const NewPark: React.FC = () => {
   });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  const { mutate } = useMutation({
+    mutationFn: createPark,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['parks'],
+      });
+      navigate('/parks');
+    },
+  });
 
   const onChangeParkDetails = (event: ChangeEvent<HTMLInputElement>) => {
     setError('');
@@ -67,8 +79,7 @@ const NewPark: React.FC = () => {
       if (parkDetails.size) {
         newPark.size = Number(parkDetails.size);
       }
-      await createPark(newPark);
-      navigate('/parks');
+      mutate(newPark);
     }
   };
 

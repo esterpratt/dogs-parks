@@ -9,4 +9,6 @@ interface Review {
   updatedAt?: Date;
 }
 
-export type { Review };
+type ReviewData = Pick<Review, 'title' | 'content' | 'rank'>;
+
+export type { Review, ReviewData };

@@ -42,7 +42,11 @@ const fetchPark = async (parkId: string) => {
     }
 
     const park = docSnap.data();
-    return { ...park, location: park.location.toJSON(), id: docSnap.id };
+    return {
+      ...park,
+      location: park.location.toJSON(),
+      id: docSnap.id,
+    } as Park;
   } catch (error) {
     throwError(error);
   }

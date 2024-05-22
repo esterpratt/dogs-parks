@@ -3,13 +3,13 @@ import { FaWalking, FaRegClock } from 'react-icons/fa';
 import classnames from 'classnames';
 import { Location, Park } from '../../types/park';
 import styles from './ParkPopup.module.scss';
-import { useContext, useEffect, useState } from 'react';
 import { fetchParkPrimaryImage } from '../../services/parks';
 import { IconContext } from 'react-icons';
 import { LuTrees } from 'react-icons/lu';
 import { CgClose } from 'react-icons/cg';
-import { ParksContext } from '../../context/ParksContext';
 import { FavoriteRibbon } from '../FavoriteRibbon';
+import { useQuery } from '@tanstack/react-query';
+import { fetchFavoriteParks } from '../../services/favorites';
 
 interface ParkPopupProps {
   activePark: Park | null;
@@ -24,25 +24,21 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
   directions,
   onClose,
 }) => {
-  const [image, setImage] = useState<string | null>(null);
-  const { favoriteParkIds } = useContext(ParksContext);
-  const isFavorite = activePark && favoriteParkIds.includes(activePark?.id);
-
-  useEffect(() => {
-    const getImage = async () => {
+  const { data: image } = useQuery({
+    queryKey: ['parkImage', activePark!.id],
+    queryFn: async () => {
       const image = await fetchParkPrimaryImage(activePark!.id);
-      if (image?.length) {
-        setImage(image[0]);
-      } else {
-        setImage(null);
-      }
-    };
-    if (activePark?.id) {
-      getImage();
-    } else {
-      setImage(null);
-    }
-  }, [activePark]);
+      return image?.[0];
+    },
+    enabled: !!activePark,
+  });
+
+  const { data: favoriteParkIds = [] } = useQuery({
+    queryKey: ['favoriteParks'],
+    queryFn: fetchFavoriteParks,
+  });
+
+  const isFavorite = activePark && favoriteParkIds.includes(activePark?.id);
 
   return (
     <div className={classnames(styles.parkModal, !!activePark && styles.open)}>

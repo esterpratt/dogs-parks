@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
 import { getHoursChartData, getStrHour } from '../charts/getHoursChartData';
 import { fetchDogsCount } from '../../services/dogsCount';
 import { getMean, getSTD } from '../../utils/calcs';
 import { BarChart } from '../charts/BarChart';
 import styles from './BusyHours.module.scss';
 import barChartStyles from '../charts/BarChart.module.scss';
+import { useQuery } from '@tanstack/react-query';
 
 const BUSINESS = {
   LIGHT: {
@@ -29,35 +29,21 @@ interface BusyHoursProps {
 }
 
 const BusyHours: React.FC<BusyHoursProps> = ({ parkId }) => {
-  const [dogsCount, setDogsCount] = useState<
-    | {
-        count: number;
-        hour: number;
-        fullDate: string;
-      }[]
-    | null
-  >(null);
+  const { data: dogsCountReports } = useQuery({
+    queryKey: ['dogsCount', parkId],
+    queryFn: () => fetchDogsCount(parkId),
+  });
 
-  useEffect(() => {
-    const getDogsCount = async () => {
-      const dogsCountReports = await fetchDogsCount(parkId);
-      if (dogsCountReports) {
-        const dogsCount = dogsCountReports?.map((report) => {
-          const hour = report.timestamp.getHours();
-          const fullDate = `${report.timestamp.getDate()}, ${report.timestamp.getMonth()}, ${report.timestamp.getFullYear()}`;
+  const dogsCount = dogsCountReports?.map((report) => {
+    const hour = report.timestamp.getHours();
+    const fullDate = `${report.timestamp.getDate()}, ${report.timestamp.getMonth()}, ${report.timestamp.getFullYear()}`;
 
-          return {
-            count: report.dogsCount,
-            hour,
-            fullDate,
-          };
-        });
-
-        setDogsCount(dogsCount);
-      }
+    return {
+      count: report.dogsCount,
+      hour,
+      fullDate,
     };
-    getDogsCount();
-  }, [parkId]);
+  });
 
   if (!dogsCount?.length) {
     return (

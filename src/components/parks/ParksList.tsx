@@ -1,27 +1,28 @@
-import { useContext, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames';
-import { ParksContext } from '../../context/ParksContext';
 import { Park } from '../../types/park';
 import { SearchList } from '../SearchList';
 import styles from './ParksList.module.scss';
 import { ParkPreview } from './ParkPreview';
 import { useDistance } from '../../hooks/useDistance';
+import { fetchParks } from '../../services/parks';
+import { useQuery } from '@tanstack/react-query';
+import { Loading } from '../Loading';
 
 interface ParksListProps {
   className?: string;
 }
 
 const ParksList: React.FC<ParksListProps> = ({ className }) => {
-  const { parks } = useContext(ParksContext);
-  const parksToSort = useMemo(
-    () =>
-      parks.map((park) => ({
-        ...park,
-        ...park.location,
-      })),
-    [parks]
-  );
+  const { isPending, data: parks = [] } = useQuery({
+    queryKey: ['parks'],
+    queryFn: fetchParks,
+  });
+
+  const parksToSort = parks.map((park) => ({
+    ...park,
+    ...park.location,
+  }));
 
   const sortedParks = useDistance(parksToSort);
 
@@ -38,6 +39,10 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
       </span>
     </div>
   );
+
+  if (isPending) {
+    return <Loading />;
+  }
 
   return (
     <SearchList

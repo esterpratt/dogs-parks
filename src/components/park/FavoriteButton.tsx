@@ -8,6 +8,8 @@ import {
   fetchUserFavorites,
   removeFavorite,
 } from '../../services/favorites';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { queryClient } from '../../services/react-query';
 
 interface FavoriteButtonProps {
   parkId: string;
@@ -16,22 +18,37 @@ interface FavoriteButtonProps {
 
 const FavoriteButton: React.FC<FavoriteButtonProps> = ({ parkId, userId }) => {
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const { data: favoritesParkIds = [] } = useQuery({
+    queryKey: ['favorites', userId],
+    queryFn: async () => {
+      const favorites = await fetchUserFavorites(userId);
+      return favorites?.parkIds ?? [];
+    },
+  });
 
   useEffect(() => {
-    const getIsFavorite = async () => {
-      const favorites = await fetchUserFavorites(userId);
-      setIsFavorite(Boolean(favorites) && favorites!.parkIds.includes(parkId));
-    };
-    getIsFavorite();
-  }, [parkId, userId]);
+    setIsFavorite(favoritesParkIds.includes(parkId));
+  }, [favoritesParkIds, parkId]);
+
+  const { mutate: mutateFavorite } = useMutation({
+    mutationFn: (isFavorite: boolean) =>
+      isFavorite
+        ? addFavorite({ parkId, userId })
+        : removeFavorite({ parkId, userId }),
+    onMutate: async (isFavorite) => {
+      setIsFavorite(isFavorite);
+      return { prevFavorite: !isFavorite };
+    },
+    onError: (error, data, context) => {
+      setIsFavorite(!context!.prevFavorite);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['favorites', userId] });
+    },
+  });
 
   const toggleFavorite = async () => {
-    setIsFavorite((prev) => !prev);
-    if (isFavorite) {
-      await removeFavorite({ parkId, userId });
-    } else {
-      await addFavorite({ parkId, userId });
-    }
+    mutateFavorite(!isFavorite);
   };
 
   return (

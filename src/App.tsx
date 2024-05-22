@@ -4,6 +4,7 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from 'react-router-dom';
+import { QueryClientProvider } from '@tanstack/react-query';
 import './App.scss';
 import { Home } from './pages/Home';
 import { RootLayout } from './RootLayout';
@@ -21,12 +22,11 @@ import { Loading } from './components/Loading';
 import { UserContextProvider } from './context/UserContext';
 import { UserFriendsContextProvider } from './context/UserFriendsContext';
 import { UserReviewsContextProvider } from './context/UserReviewsContext';
-import { ParksContextProvider } from './context/ParksContext';
 
 import { parkLoader } from './loaders/parkLoader';
 import { userLoader } from './loaders/userLoader';
 import { usersLoader } from './loaders/usersLoader';
-import { userFavoritesLoader } from './loaders/userFavoritesLoader';
+import { queryClient } from './services/react-query';
 
 const UserDog = lazy(() => import('./pages/UserDog'));
 const UserReviews = lazy(() => import('./pages/UserReviews'));
@@ -139,7 +139,6 @@ const App = () => {
                   <UserFavorites />
                 </Suspense>
               ),
-              loader: userFavoritesLoader,
             },
             {
               path: 'info',
@@ -161,15 +160,15 @@ const App = () => {
   ]);
 
   return (
-    <UserContextProvider>
-      <UserFriendsContextProvider>
-        <UserReviewsContextProvider>
-          <ParksContextProvider>
+    <QueryClientProvider client={queryClient}>
+      <UserContextProvider>
+        <UserFriendsContextProvider>
+          <UserReviewsContextProvider>
             <RouterProvider router={router} />
-          </ParksContextProvider>
-        </UserReviewsContextProvider>
-      </UserFriendsContextProvider>
-    </UserContextProvider>
+          </UserReviewsContextProvider>
+        </UserFriendsContextProvider>
+      </UserContextProvider>
+    </QueryClientProvider>
   );
 };
 

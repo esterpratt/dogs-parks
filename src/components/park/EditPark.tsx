@@ -1,11 +1,13 @@
-import { ChangeEvent, FormEvent, useContext, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { Button } from '../Button';
 import styles from './EditPark.module.scss';
 import { ControlledInput } from '../inputs/ControlledInput';
 import { RadioInputs } from '../inputs/RadioInputs';
 import { Park, ParkMaterial } from '../../types/park';
 import { MultiSelectInputs } from '../inputs/MultiSelectInputs';
-import { ParksContext } from '../../context/ParksContext';
+import { useMutation } from '@tanstack/react-query';
+import { updatePark } from '../../services/parks';
+import { queryClient } from '../../services/react-query';
 
 interface EditParkProps {
   onSubmitForm?: () => void;
@@ -13,7 +15,6 @@ interface EditParkProps {
 }
 
 const EditPark: React.FC<EditParkProps> = ({ onSubmitForm, park }) => {
-  const { editPark } = useContext(ParksContext);
   const [parkDetails, setParkDetails] = useState<{
     materials?: ParkMaterial[];
     size?: string;
@@ -30,6 +31,30 @@ const EditPark: React.FC<EditParkProps> = ({ onSubmitForm, park }) => {
     };
   });
 
+  const { mutate } = useMutation({
+    mutationFn: (data: { id: string; updatedData: Partial<Park> }) =>
+      updatePark(data.id, data.updatedData),
+    onMutate: async (data) => {
+      await queryClient.cancelQueries({ queryKey: ['park', park.id] });
+      const prevPark = queryClient.getQueryData<Park>(['park', park.id]);
+      queryClient.setQueryData(['park', park.id], {
+        ...prevPark,
+        ...data.updatedData,
+      });
+
+      return { prevPark };
+    },
+    onError: (error, data, context) => {
+      queryClient.setQueryData(['park', park.id], context?.prevPark);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['park', park.id] });
+      if (onSubmitForm) {
+        onSubmitForm();
+      }
+    },
+  });
+
   const onInputChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     value?: string | number | string[]
@@ -42,7 +67,6 @@ const EditPark: React.FC<EditParkProps> = ({ onSubmitForm, park }) => {
     });
   };
 
-  // TODO: move to action?
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -82,11 +106,7 @@ const EditPark: React.FC<EditParkProps> = ({ onSubmitForm, park }) => {
       updatedData.hasWater = hasWater;
     }
 
-    await editPark(park.id, updatedData);
-
-    if (onSubmitForm) {
-      onSubmitForm();
-    }
+    mutate({ id: park.id, updatedData });
   };
 
   return (

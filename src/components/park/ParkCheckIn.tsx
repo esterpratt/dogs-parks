@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { TbPennant, TbPennantOff } from 'react-icons/tb';
 import { checkin, checkout } from '../../services/checkins';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
@@ -9,7 +9,9 @@ import { Button } from '../Button';
 import styles from './ParkCheckIn.module.scss';
 import { IconContext } from 'react-icons';
 import { ReviewModal } from '../ReviewModal';
-import { UserReviewsContext } from '../../context/UserReviewsContext';
+import { useAddReview } from '../../hooks/useAddReview';
+import { useMutation } from '@tanstack/react-query';
+import { queryClient } from '../../services/react-query';
 
 const ParkCheckIn: React.FC<{
   parkId: string;
@@ -19,8 +21,22 @@ const ParkCheckIn: React.FC<{
   const [checkIn, setCheckIn] = useLocalStorage('checkin');
   const [openDogsCountModal, setOpenDogsCountModal] = useState(false);
   const [openReviewModal, setOpenReviewModal] = useState(false);
-  const { addReview } = useContext(UserReviewsContext);
+  const { addReview } = useAddReview(parkId, userId);
+  const { mutate: addDogCountReport } = useMutation({
+    mutationFn: (dogsCount: number) =>
+      reportDogsCount({
+        parkId,
+        dogsCount,
+        userId,
+      }),
+    onSuccess: async () => {
+      queryClient.invalidateQueries({
+        queryKey: ['dogsCount', parkId],
+      });
+    },
+  });
 
+  // TODO: CHECKIN USING REACT-QUERY
   const shouldCheckIn =
     !checkIn || checkIn.parkId !== parkId || checkIn.userId !== userId;
 
@@ -39,17 +55,8 @@ const ParkCheckIn: React.FC<{
   };
 
   const onSubmitDogsCount = async (dogsCount: string) => {
-    // TODO: add animation of thank you before closing - not important if report was succesfull or not
-    const numDogsCount = Number(dogsCount);
-    try {
-      await reportDogsCount({
-        parkId,
-        dogsCount: numDogsCount,
-        userId,
-      });
-    } finally {
-      setOpenDogsCountModal(false);
-    }
+    setOpenDogsCountModal(false);
+    addDogCountReport(Number(dogsCount));
   };
 
   const onSubmitReview = async (review: {
@@ -58,7 +65,7 @@ const ParkCheckIn: React.FC<{
     rank: number;
   }) => {
     setOpenReviewModal(false);
-    addReview({ reviewData: review, parkId });
+    addReview({ reviewData: review });
   };
 
   return (

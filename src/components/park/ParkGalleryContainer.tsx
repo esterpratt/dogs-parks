@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { fetchAllParkImages, uploadParkImage } from '../../services/parks';
 import { CameraModal } from '../camera/CameraModal';
 import { Accordion } from '../accordion/Accordion';
 import { FaPlus } from 'react-icons/fa';
 import { ParkGallery } from './ParkGallery';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { queryClient } from '../../services/react-query';
 
 interface ParkGalleryContainerProps {
   parkId: string;
@@ -13,34 +15,31 @@ const ParkGalleryContainer: React.FC<ParkGalleryContainerProps> = ({
   parkId,
 }) => {
   const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
-  const [images, setImages] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchImages = async () => {
-      const images = await fetchAllParkImages(parkId);
-      if (images) {
-        setImages(images);
-      }
-      setLoading(false);
-    };
+  const { data: parkImages = [], isPending } = useQuery({
+    queryKey: ['parkImages', parkId],
+    queryFn: () => fetchAllParkImages(parkId),
+  });
 
-    fetchImages();
-  }, [parkId]);
+  const { mutate } = useMutation({
+    mutationFn: (img: string | File) => uploadParkImage(img, parkId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['parkImages', parkId],
+      });
+    },
+  });
 
   const onUploadImg = async (img: string | File) => {
     setIsAddImageModalOpen(false);
-    const uploadedImg = await uploadParkImage(img, parkId);
-    if (uploadedImg) {
-      setImages((prevImages) => [...prevImages, uploadedImg]);
-    }
+    mutate(img);
   };
 
   const onClickAddPhoto = () => {
     setIsAddImageModalOpen(true);
   };
 
-  if (loading) {
+  if (isPending) {
     return null;
   }
 
@@ -56,7 +55,7 @@ const ParkGalleryContainer: React.FC<ParkGalleryContainerProps> = ({
         />
         <Accordion.Content>
           <ParkGallery
-            images={images}
+            images={parkImages}
             openCameraModal={() => setIsAddImageModalOpen(true)}
           />
         </Accordion.Content>

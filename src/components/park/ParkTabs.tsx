@@ -1,9 +1,12 @@
-import { useContext } from 'react';
 import { Tabs } from '../tabs/Tabs';
-import { ParkVisitorsContext } from '../../context/ParkVisitorsContext';
+import { useParkVisitors } from '../../hooks/useParkVisitors';
 
-const ParkTabs = () => {
-  const { friends, othersCount } = useContext(ParkVisitorsContext);
+interface ParkTabsProps {
+  parkId: string;
+}
+
+const ParkTabs: React.FC<ParkTabsProps> = ({ parkId }) => {
+  const { visitorIds } = useParkVisitors(parkId);
 
   return (
     <Tabs
@@ -13,7 +16,7 @@ const ParkTabs = () => {
         {
           text: 'Visitors',
           url: 'visitors',
-          disabled: !friends.length && !othersCount,
+          disabled: !visitorIds.length,
         },
       ]}
     />

@@ -82,6 +82,20 @@ const fetchUserDogs = async (userId: string) => {
   }
 };
 
+const fetchUsersDogs = async (userIds: string[]) => {
+  try {
+    const dogsQuery = query(dogsCollection, where('owner', 'in', userIds));
+    const querySnapshot = await getDocs(dogsQuery);
+    const res: Dog[] = [];
+    querySnapshot.forEach((doc) => {
+      res.push({ ...doc.data(), id: doc.id } as Dog);
+    });
+    return res;
+  } catch (error) {
+    throwError(error);
+  }
+};
+
 const uploadDogImage = async (image: File | string, dogId: string) => {
   try {
     const res = await uploadImage({ image, path: `dogs/${dogId}/other` });
@@ -130,6 +144,7 @@ export {
   createDog,
   updateDog,
   fetchUserDogs,
+  fetchUsersDogs,
   fetchDogPrimaryImage,
   fetchAllDogsImages,
   uploadDogImage,

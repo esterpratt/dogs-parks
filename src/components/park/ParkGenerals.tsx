@@ -1,16 +1,16 @@
-import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 import { ParkMaterial } from '../../types/park';
 import { DetailsSqaure } from './DetailsSquare';
-import { ParkVisitorsContext } from '../../context/ParkVisitorsContext';
 import styles from './ParkGenerals.module.scss';
+import { useParkVisitors } from '../../hooks/useParkVisitors';
 
 interface ParkGeneralsProps {
   size?: number;
   ground?: ParkMaterial[];
   shade?: boolean;
   water?: boolean;
+  parkId: string;
 }
 
 const getBooleanContent = (value?: boolean) => {
@@ -46,12 +46,20 @@ const getSizeContent = (value?: number) => {
   return content;
 };
 
-const ParkGenerals = ({ size, ground, shade, water }: ParkGeneralsProps) => {
-  const { friends, othersCount } = useContext(ParkVisitorsContext);
-  const friendsLength = friends.length;
+const ParkGenerals = ({
+  size,
+  ground,
+  shade,
+  water,
+  parkId,
+}: ParkGeneralsProps) => {
+  const { friendInParkIds, visitorIds } = useParkVisitors(parkId);
 
-  const visitorsContent = friendsLength
-    ? friendsLength.toString()
+  const friendsCount = friendInParkIds.length;
+  const othersCount = visitorIds.length - friendsCount;
+
+  const visitorsContent = friendsCount
+    ? friendsCount.toString()
     : othersCount.toString();
   const sizeContent = getSizeContent(size);
   const groundContent = getListContent(ground);
@@ -73,11 +81,11 @@ const ParkGenerals = ({ size, ground, shade, water }: ParkGeneralsProps) => {
         to="visitors"
         className={classnames(
           styles.link,
-          !friendsLength && !othersCount && styles.disabled
+          !friendsCount && !othersCount && styles.disabled
         )}
       >
         <DetailsSqaure
-          title={friendsLength ? 'Friends here' : 'Visitors'}
+          title={friendsCount ? 'Friends here' : 'Visitors'}
           content={visitorsContent}
           color={styles.brown}
         />

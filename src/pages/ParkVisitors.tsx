@@ -1,12 +1,60 @@
 import { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
 import { UserPreview } from '../components/users/UserPreview';
-import { ParkVisitorsContext } from '../context/ParkVisitorsContext';
 import styles from './ParkVisitors.module.scss';
+import { useQuery } from '@tanstack/react-query';
+import { UserContext } from '../context/UserContext';
+import { fetchUsers } from '../services/users';
+import { Park } from '../types/park';
+import { Loading } from '../components/Loading';
+import { fetchUsersDogs } from '../services/dogs';
+import { useParkVisitors } from '../hooks/useParkVisitors';
 
 const ParkVisitors: React.FC = () => {
-  const { friends, othersCount } = useContext(ParkVisitorsContext);
+  const { userId } = useContext(UserContext);
+  const { park } = useOutletContext() as { park: Park };
+
+  const {
+    visitorIds,
+    friendIds,
+    friendInParkIds,
+    isPendingFriends: isPendingFriendIds,
+    isPendingVisitors,
+  } = useParkVisitors(park.id);
+
+  const { data: friends = [], isPending: isPendingFriends } = useQuery({
+    queryKey: ['friends', userId],
+    queryFn: () => fetchUsers(friendIds),
+    enabled: !!friendInParkIds.length,
+  });
+
+  const { data: friendsWithDogs = [], isPending: isPendingDogs } = useQuery({
+    queryKey: ['friendsDogs', friendIds],
+    queryFn: async () => {
+      const dogs = await fetchUsersDogs(friendInParkIds);
+      return dogs
+        ? friends.map((friend) => {
+            return {
+              ...friend,
+              dogs: dogs.filter((dog) => dog.owner === friend.id),
+            };
+          })
+        : [];
+    },
+    enabled: !!friends.length,
+  });
+
   const friendsCount = friends.length;
+  const othersCount = visitorIds.length - friendsCount;
+
+  if (
+    isPendingDogs ||
+    isPendingVisitors ||
+    isPendingFriendIds ||
+    isPendingFriends
+  ) {
+    return <Loading />;
+  }
 
   if (!friendsCount && !othersCount) {
     return null;
@@ -19,7 +67,7 @@ const ParkVisitors: React.FC = () => {
           <span className={styles.friendsTitle}>
             Your Friends that in the park right now:
           </span>
-          {friends.map((user) => (
+          {friendsWithDogs.map((user) => (
             <UserPreview key={user.id} user={user} />
           ))}
         </div>

@@ -5,17 +5,29 @@ import styles from './ReviewsPreview.module.scss';
 import { Button } from '../Button';
 import { ReviewModal } from '../ReviewModal';
 import { UserContext } from '../../context/UserContext';
-import { ParkReviewsContext } from '../../context/ParkReviewsContext';
-import { UserReviewsContext } from '../../context/UserReviewsContext';
+import { useQuery } from '@tanstack/react-query';
+import { fetchParkRank, fetchReviews } from '../../services/reviews';
+import { useAddReview } from '../../hooks/useAddReview';
 
 const ReviewsPreview = () => {
   const { id: parkId } = useParams();
-  const { rank, reviewsCount, loading } = useContext(ParkReviewsContext);
-  const { addReview } = useContext(UserReviewsContext);
   const [isAddReviewModalOpen, setIsAddReviewModalOpen] = useState(false);
   const { userId } = useContext(UserContext);
 
-  if (loading) {
+  const { data: reviews, isPending: isPendingReviews } = useQuery({
+    queryKey: ['reviews', parkId],
+    queryFn: () => fetchReviews(parkId!),
+  });
+  const { data: rank, isPending: isPendingRank } = useQuery({
+    queryKey: ['reviews', 'rank', parkId],
+    queryFn: () => fetchParkRank(parkId!),
+  });
+
+  const reviewsCount = reviews?.length;
+
+  const { addReview } = useAddReview(parkId!, userId);
+
+  if (isPendingReviews || isPendingRank) {
     return null;
   }
 
@@ -28,7 +40,7 @@ const ReviewsPreview = () => {
     isAnonymous: boolean
   ) => {
     setIsAddReviewModalOpen(false);
-    addReview({ reviewData, isAnonymous, parkId: parkId! });
+    addReview({ reviewData, isAnonymous });
   };
 
   return (

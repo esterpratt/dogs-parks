@@ -1,7 +1,8 @@
-import { useContext } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Marker } from './Marker';
-import { ParksContext } from '../../context/ParksContext';
 import { Park } from '../../types/park';
+import { fetchParks } from '../../services/parks';
+import { Loading } from '../Loading';
 
 interface MarkerListProps {
   activePark: Park | null;
@@ -12,9 +13,16 @@ const MarkerList: React.FC<MarkerListProps> = ({
   activePark,
   setActivePark,
 }) => {
-  const { parks } = useContext(ParksContext);
+  const { isPending, data: parks } = useQuery({
+    queryKey: ['parks'],
+    queryFn: fetchParks,
+  });
 
-  return parks.map((park) => (
+  if (isPending) {
+    return <Loading />;
+  }
+
+  return parks?.map((park) => (
     <Marker
       key={park.id}
       location={park.location}
