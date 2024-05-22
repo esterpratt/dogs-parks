@@ -18,6 +18,8 @@ interface ParkPopupProps {
   onClose: () => void;
 }
 
+const HOUR_IN_MS = 1000 * 60 * 60;
+
 const ParkPopup: React.FC<ParkPopupProps> = ({
   activePark,
   onGetDirections,
@@ -36,6 +38,8 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
   const { data: favoriteParkIds = [] } = useQuery({
     queryKey: ['favoriteParks'],
     queryFn: fetchFavoriteParks,
+    staleTime: HOUR_IN_MS,
+    gcTime: HOUR_IN_MS,
   });
 
   const isFavorite = activePark && favoriteParkIds.includes(activePark?.id);
