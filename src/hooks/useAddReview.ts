@@ -13,7 +13,10 @@ const useAddReview = (parkId: string, userId: string | null) => {
       }),
     onSuccess: async () => {
       queryClient.invalidateQueries({
-        queryKey: ['reviews'],
+        queryKey: ['reviews', parkId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['reviews', userId],
       });
     },
   });

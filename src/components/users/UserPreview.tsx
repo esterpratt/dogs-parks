@@ -53,7 +53,7 @@ const UserPreview: React.FC<UserPreviewProps> = ({ user }) => {
       </Link>
       {!!userId && (
         <FriendRequestButton
-          userId={user.id}
+          friendId={user.id}
           buttonVariant="basic"
           className={styles.button}
         />

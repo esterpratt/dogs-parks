@@ -63,7 +63,7 @@ const UserDogs = () => {
         {!isSignedInUser && signedInUserId && (
           <FriendRequestButton
             className={styles.friendRequestButton}
-            userId={user.id}
+            friendId={user.id}
           />
         )}
       </div>

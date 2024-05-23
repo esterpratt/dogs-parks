@@ -1,24 +1,33 @@
 import { useContext } from 'react';
 import { Button } from '../Button';
-import { UserFriendsContext } from '../../context/UserFriendsContext';
 import { useFriendshipStatus } from '../../hooks/useFriendshipStatus';
+import { UserContext } from '../../context/UserContext';
+import { useUpdateFriendship } from '../../hooks/useUpdateFriendship';
 
 interface PublicProfileProps {
-  userId: string;
+  friendId: string;
   className?: string;
   buttonVariant?: 'green' | 'basic' | 'orange';
 }
 
 const FriendRequestButton: React.FC<PublicProfileProps> = ({
-  userId,
+  friendId,
   className,
   buttonVariant = 'green',
 }) => {
-  const { updateFriendShip } = useContext(UserFriendsContext);
-  const { statusToUpdate, buttonText } = useFriendshipStatus(userId);
+  const { userId } = useContext(UserContext);
+  const { statusToUpdate, buttonText } = useFriendshipStatus({
+    friendId,
+    userId: userId!,
+  });
+
+  const { onUpdateFriendship } = useUpdateFriendship({
+    friendId,
+    userId: userId!,
+  });
 
   const onUpdateFriend = async () => {
-    updateFriendShip(userId, statusToUpdate);
+    onUpdateFriendship(statusToUpdate);
   };
 
   return (

@@ -20,8 +20,6 @@ import { NewPark } from './pages/NewPark';
 import { Loading } from './components/Loading';
 
 import { UserContextProvider } from './context/UserContext';
-import { UserFriendsContextProvider } from './context/UserFriendsContext';
-import { UserReviewsContextProvider } from './context/UserReviewsContext';
 
 import { parkLoader } from './loaders/parkLoader';
 import { userLoader } from './loaders/userLoader';
@@ -162,11 +160,7 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <UserContextProvider>
-        <UserFriendsContextProvider>
-          <UserReviewsContextProvider>
-            <RouterProvider router={router} />
-          </UserReviewsContextProvider>
-        </UserFriendsContextProvider>
+        <RouterProvider router={router} />
       </UserContextProvider>
     </QueryClientProvider>
   );

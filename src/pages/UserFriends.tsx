@@ -1,15 +1,68 @@
-import { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
 import classnames from 'classnames';
-import { UserFriendsContext } from '../context/UserFriendsContext';
 import { UserPreview } from '../components/users/UserPreview';
 import styles from './UserFriends.module.scss';
+import { User } from '../types/user';
+import { useGetFriendsWithDogs } from '../hooks/useGetFriendsWithDogs';
+import { Loading } from '../components/Loading';
+import { useGetUserFriends } from '../hooks/useGetUserFriends';
 
 const UserFriends = () => {
-  const { friends, pendingFriends, myPendingFriends } =
-    useContext(UserFriendsContext);
+  const { user } = useOutletContext() as { user: User };
 
-  if (!friends.length && !pendingFriends.length && !myPendingFriends.length) {
+  const {
+    isPendingIds,
+    isPendingUsers,
+    friendIds,
+    pendingFriendIds,
+    myPendingFriendIds,
+    friends,
+    pendingFriends,
+    myPendingFriends,
+  } = useGetUserFriends(user.id);
+
+  const { friendsWithDogs = [], isPendingDogs: isPendingFriendsDogs } =
+    useGetFriendsWithDogs({
+      additionalQueryKey: friendIds,
+      friendIds,
+      friendsToMap: friends,
+      enabled: !!friends.length,
+    });
+
+  const {
+    friendsWithDogs: pendingFriendsWithDogs = [],
+    isPendingDogs: isPendingPendingFriendsDogs,
+  } = useGetFriendsWithDogs({
+    additionalQueryKey: pendingFriendIds,
+    friendIds,
+    friendsToMap: pendingFriends,
+    enabled: !!pendingFriends.length,
+  });
+
+  const {
+    friendsWithDogs: myPendingFriendsWithDogs = [],
+    isPendingDogs: isPendingMyPendingFriendsDogs,
+  } = useGetFriendsWithDogs({
+    additionalQueryKey: myPendingFriendIds,
+    friendIds,
+    friendsToMap: myPendingFriends,
+    enabled: !!myPendingFriends.length,
+  });
+
+  const isPendingFriendsWithDogs =
+    isPendingFriendsDogs ||
+    isPendingPendingFriendsDogs ||
+    isPendingMyPendingFriendsDogs;
+
+  if (isPendingIds || isPendingUsers || isPendingFriendsWithDogs) {
+    return <Loading />;
+  }
+
+  if (
+    !friendsWithDogs.length &&
+    !pendingFriendsWithDogs.length &&
+    !myPendingFriendsWithDogs.length
+  ) {
     return (
       <div className={classnames(styles.container, styles.noFriends)}>
         <span>You don't have friends yet</span>
@@ -21,26 +74,26 @@ const UserFriends = () => {
   }
   return (
     <div className={styles.container}>
-      {!!friends.length && (
+      {!!friendsWithDogs.length && (
         <div className={styles.friendsContainer}>
           <div className={styles.title}>My Friends</div>
-          {friends.map((friend) => {
+          {friendsWithDogs.map((friend) => {
             return <UserPreview key={friend.id} user={friend} />;
           })}
         </div>
       )}
-      {!!pendingFriends.length && (
+      {!!pendingFriendsWithDogs.length && (
         <div className={styles.friendsContainer}>
           <div className={styles.title}>Want to be my friends</div>
-          {pendingFriends.map((friend) => {
+          {pendingFriendsWithDogs.map((friend) => {
             return <UserPreview key={friend.id} user={friend} />;
           })}
         </div>
       )}
-      {!!myPendingFriends.length && (
+      {!!myPendingFriendsWithDogs.length && (
         <div className={styles.friendsContainer}>
           <div className={styles.title}>Waiting for their Responses</div>
-          {myPendingFriends.map((friend) => {
+          {myPendingFriendsWithDogs.map((friend) => {
             return <UserPreview key={friend.id} user={friend} />;
           })}
         </div>

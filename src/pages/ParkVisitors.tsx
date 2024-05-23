@@ -7,8 +7,8 @@ import { UserContext } from '../context/UserContext';
 import { fetchUsers } from '../services/users';
 import { Park } from '../types/park';
 import { Loading } from '../components/Loading';
-import { fetchUsersDogs } from '../services/dogs';
 import { useParkVisitors } from '../hooks/useParkVisitors';
+import { useGetFriendsWithDogs } from '../hooks/useGetFriendsWithDogs';
 
 const ParkVisitors: React.FC = () => {
   const { userId } = useContext(UserContext);
@@ -18,29 +18,20 @@ const ParkVisitors: React.FC = () => {
     visitorIds,
     friendIds,
     friendInParkIds,
-    isPendingFriends: isPendingFriendIds,
+    isPendingFriendIds,
     isPendingVisitors,
   } = useParkVisitors(park.id);
 
   const { data: friends = [], isPending: isPendingFriends } = useQuery({
-    queryKey: ['friends', userId],
+    queryKey: ['friends', userId, 'approved', 'users'],
     queryFn: () => fetchUsers(friendIds),
     enabled: !!friendInParkIds.length,
   });
 
-  const { data: friendsWithDogs = [], isPending: isPendingDogs } = useQuery({
-    queryKey: ['friendsDogs', friendIds],
-    queryFn: async () => {
-      const dogs = await fetchUsersDogs(friendInParkIds);
-      return dogs
-        ? friends.map((friend) => {
-            return {
-              ...friend,
-              dogs: dogs.filter((dog) => dog.owner === friend.id),
-            };
-          })
-        : [];
-    },
+  const { friendsWithDogs = [], isPendingDogs } = useGetFriendsWithDogs({
+    additionalQueryKey: friendIds,
+    friendIds: friendInParkIds,
+    friendsToMap: friends,
     enabled: !!friends.length,
   });
 

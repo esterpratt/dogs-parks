@@ -1,7 +1,6 @@
-import { useContext } from 'react';
-import { UserFriendsContext } from '../context/UserFriendsContext';
 import { FRIENDSHIP_STATUS } from '../types/friendship';
 import { User } from '../types/user';
+import { useGetUserFriends } from './useGetUserFriends';
 
 interface GetFriendshipStatusProps {
   friendId: string;
@@ -83,13 +82,19 @@ const getFriendshipStatus = ({
   return null;
 };
 
-const useFriendshipStatus = (userId: string) => {
+const useFriendshipStatus = ({
+  userId,
+  friendId,
+}: {
+  userId: string;
+  friendId: string;
+}) => {
   const { friends, pendingFriends, myPendingFriends } =
-    useContext(UserFriendsContext);
+    useGetUserFriends(userId);
 
   const { statusToUpdate, buttonText } = getButtonProps(
     getFriendshipStatus({
-      friendId: userId,
+      friendId,
       friends,
       pendingFriends,
       myPendingFriends,
