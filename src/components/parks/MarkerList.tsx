@@ -13,12 +13,12 @@ const MarkerList: React.FC<MarkerListProps> = ({
   activePark,
   setActivePark,
 }) => {
-  const { isPending, data: parks } = useQuery({
+  const { isLoading, data: parks } = useQuery({
     queryKey: ['parks'],
     queryFn: fetchParks,
   });
 
-  if (isPending) {
+  if (isLoading) {
     return <Loading />;
   }
 

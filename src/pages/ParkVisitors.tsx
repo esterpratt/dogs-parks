@@ -1,48 +1,52 @@
 import { useContext } from 'react';
-import { Link, useOutletContext } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { UserPreview } from '../components/users/UserPreview';
 import styles from './ParkVisitors.module.scss';
 import { useQuery } from '@tanstack/react-query';
 import { UserContext } from '../context/UserContext';
 import { fetchUsers } from '../services/users';
-import { Park } from '../types/park';
 import { Loading } from '../components/Loading';
 import { useParkVisitors } from '../hooks/useParkVisitors';
 import { useGetFriendsWithDogs } from '../hooks/useGetFriendsWithDogs';
 
 const ParkVisitors: React.FC = () => {
   const { userId } = useContext(UserContext);
-  const { park } = useOutletContext() as { park: Park };
+  const { id: parkId } = useParams();
 
   const {
     visitorIds,
     friendIds,
     friendInParkIds,
-    isPendingFriendIds,
-    isPendingVisitors,
-  } = useParkVisitors(park.id);
+    isLoadingFriendIds,
+    isLoadingVisitors,
+  } = useParkVisitors(parkId!);
 
-  const { data: friends = [], isPending: isPendingFriends } = useQuery({
+  const { data: friends = [], isLoading: isLoadingFriends } = useQuery({
     queryKey: ['friends', userId, 'approved', 'users'],
     queryFn: () => fetchUsers(friendIds),
     enabled: !!friendInParkIds.length,
   });
 
-  const { friendsWithDogs = [], isPendingDogs } = useGetFriendsWithDogs({
-    additionalQueryKey: friendIds,
-    friendIds: friendInParkIds,
-    friendsToMap: friends,
-    enabled: !!friends.length,
-  });
+  const friendsInPark = friends.filter((friend) =>
+    friendInParkIds.includes(friend.id)
+  );
 
-  const friendsCount = friends.length;
+  const { friendsWithDogs = [], isLoading: isLoadingDogs } =
+    useGetFriendsWithDogs({
+      additionalQueryKey: friendInParkIds,
+      friendIds: friendInParkIds,
+      friendsToMap: friendsInPark,
+      enabled: !!friendsInPark.length,
+    });
+
+  const friendsCount = friendsInPark.length;
   const othersCount = visitorIds.length - friendsCount;
 
   if (
-    isPendingDogs ||
-    isPendingVisitors ||
-    isPendingFriendIds ||
-    isPendingFriends
+    isLoadingDogs ||
+    isLoadingFriendIds ||
+    isLoadingVisitors ||
+    isLoadingFriends
   ) {
     return <Loading />;
   }

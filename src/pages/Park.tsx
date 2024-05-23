@@ -17,22 +17,25 @@ import {
 } from '../services/parks';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '../services/react-query';
+import { Loading } from '../components/Loading';
 
 const Park: React.FC = () => {
   const { id: parkId } = useParams();
   const { user } = useContext(UserContext);
 
-  const { data: park } = useQuery({
+  const { data: park, isLoading } = useQuery({
     queryKey: ['park', parkId],
     queryFn: () => fetchPark(parkId!),
   });
-  const { data: primaryImage } = useQuery({
+
+  const { data: primaryImage, isLoading: isLoadingImage } = useQuery({
     queryKey: ['parkImage', parkId],
     queryFn: async () => {
-      const image = await fetchParkPrimaryImage(parkId!);
-      return image?.[0];
+      const images = await fetchParkPrimaryImage(parkId!);
+      return { src: images ? images[0] : '' };
     },
   });
+  const { src: primaryImageSrc } = primaryImage || {};
 
   const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
 
@@ -48,14 +51,18 @@ const Park: React.FC = () => {
     mutate(img);
   };
 
+  if (isLoading || isLoadingImage) {
+    return <Loading />;
+  }
+
   if (!park) {
     return null;
   }
 
   return (
     <>
-      {primaryImage ? (
-        <img src={primaryImage} className={styles.image} />
+      {primaryImageSrc ? (
+        <img src={primaryImageSrc} className={styles.image} />
       ) : (
         <div className={styles.imageIcon}>
           <IconContext.Provider value={{ className: styles.parkIcon }}>

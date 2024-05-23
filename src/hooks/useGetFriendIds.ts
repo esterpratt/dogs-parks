@@ -19,7 +19,7 @@ const useGetFriendIds = ({
   userRole = USER_ROLE.ANY,
   friendshipStatus = FRIENDSHIP_STATUS.APPROVED,
 }: UseGetFriendIdsProps) => {
-  const { data: friendIds = [], isPending: isPendingFriendIds } = useQuery({
+  const { data: friendIds = [], isLoading: isLoadingFriendIds } = useQuery({
     queryKey: ['friends', userId, additionalKey, 'ids'],
     queryFn: async () => {
       const friendships = await fetchUserFriendships({
@@ -42,7 +42,7 @@ const useGetFriendIds = ({
     enabled: !!userId && enabled,
   });
 
-  return { friendIds, isPendingFriendIds };
+  return { friendIds, isLoadingFriendIds };
 };
 
 export { useGetFriendIds };

@@ -10,7 +10,7 @@ import { Loading } from '../components/Loading';
 const UserFavorites = () => {
   const { id: userId } = useParams();
 
-  const { data: favoriteParkIds = [], isPending: isPendingFavorites } =
+  const { data: favoriteParkIds = [], isLoading: isLoadingFavorites } =
     useQuery({
       queryKey: ['favorites', userId],
       queryFn: async () => {
@@ -19,7 +19,7 @@ const UserFavorites = () => {
       },
     });
 
-  const { data: parks = [], isPending: isPendingParks } = useQuery({
+  const { data: parks = [], isLoading: isLoadingParks } = useQuery({
     queryKey: ['parks'],
     queryFn: fetchParks,
     enabled: !!favoriteParkIds.length,
@@ -29,7 +29,7 @@ const UserFavorites = () => {
     favoriteParkIds.includes(park.id)
   );
 
-  if (isPendingParks || isPendingFavorites) {
+  if (isLoadingParks || isLoadingFavorites) {
     return <Loading />;
   }
 

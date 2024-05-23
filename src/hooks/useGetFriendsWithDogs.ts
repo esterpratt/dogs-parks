@@ -15,7 +15,7 @@ const useGetFriendsWithDogs = ({
   friendsToMap,
   enabled = true,
 }: UseGetFriendsWithDogsProps) => {
-  const { data: friendsWithDogs = [], isPending: isPendingDogs } = useQuery({
+  const { data: friendsWithDogs = [], isLoading } = useQuery({
     queryKey: ['friendsDogs', additionalQueryKey],
     queryFn: async () => {
       const dogs = await fetchUsersDogs(friendIds);
@@ -31,7 +31,7 @@ const useGetFriendsWithDogs = ({
     enabled,
   });
 
-  return { friendsWithDogs, isPendingDogs };
+  return { friendsWithDogs, isLoading };
 };
 
 export { useGetFriendsWithDogs };

@@ -14,11 +14,11 @@ const ReviewsPreview = () => {
   const [isAddReviewModalOpen, setIsAddReviewModalOpen] = useState(false);
   const { userId } = useContext(UserContext);
 
-  const { data: reviews, isPending: isPendingReviews } = useQuery({
+  const { data: reviews, isLoading: isLoadingReviews } = useQuery({
     queryKey: ['reviews', parkId],
     queryFn: () => fetchReviews(parkId!),
   });
-  const { data: rank, isPending: isPendingRank } = useQuery({
+  const { data: rank, isLoading: isLoadingRank } = useQuery({
     queryKey: ['reviews', 'rank', parkId],
     queryFn: () => fetchParkRank(parkId!),
   });
@@ -27,7 +27,7 @@ const ReviewsPreview = () => {
 
   const { addReview } = useAddReview(parkId!, userId);
 
-  if (isPendingReviews || isPendingRank) {
+  if (isLoadingReviews || isLoadingRank) {
     return null;
   }
 

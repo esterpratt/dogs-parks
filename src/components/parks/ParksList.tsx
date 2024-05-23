@@ -14,7 +14,7 @@ interface ParksListProps {
 }
 
 const ParksList: React.FC<ParksListProps> = ({ className }) => {
-  const { isPending, data: parks = [] } = useQuery({
+  const { isLoading, data: parks = [] } = useQuery({
     queryKey: ['parks'],
     queryFn: fetchParks,
   });
@@ -40,7 +40,7 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
     </div>
   );
 
-  if (isPending) {
+  if (isLoading) {
     return <Loading />;
   }
 

@@ -8,7 +8,7 @@ const FIVE_MINUTES = 1000 * 60 * 5;
 
 const useParkVisitors = (parkId: string) => {
   const { userId } = useContext(UserContext);
-  const { data: visitorIds = [], isPending: isPendingVisitors } = useQuery({
+  const { data: visitorIds = [], isLoading: isLoadingVisitors } = useQuery({
     queryKey: ['visitors', parkId],
     queryFn: async () => {
       const checkins = await fetchParkCheckins(parkId);
@@ -18,7 +18,7 @@ const useParkVisitors = (parkId: string) => {
     gcTime: FIVE_MINUTES,
   });
 
-  const { friendIds = [], isPendingFriendIds } = useGetFriendIds({
+  const { friendIds = [], isLoadingFriendIds } = useGetFriendIds({
     userId,
     enabled: !!visitorIds.length,
   });
@@ -29,8 +29,8 @@ const useParkVisitors = (parkId: string) => {
     visitorIds,
     friendIds,
     friendInParkIds,
-    isPendingFriendIds,
-    isPendingVisitors,
+    isLoadingFriendIds,
+    isLoadingVisitors,
   };
 };
 

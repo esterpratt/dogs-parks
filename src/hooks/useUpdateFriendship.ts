@@ -19,7 +19,10 @@ const useUpdateFriendship = ({
 }: UseUpdateFriendshipProps) => {
   const { data: friendship } = useQuery({
     queryKey: ['friendship', friendId, userId],
-    queryFn: () => fetchFriendship([friendId, userId]),
+    queryFn: async () => {
+      const friendship = await fetchFriendship([friendId, userId]);
+      return friendship ? friendship : null;
+    },
   });
 
   const { mutate: removeFriendship } = useMutation({

@@ -4,13 +4,13 @@ import { useGetFriendIds } from './useGetFriendIds';
 import { fetchUsers } from '../services/users';
 
 const useGetUserFriends = (userId: string) => {
-  const { friendIds = [], isPendingFriendIds } = useGetFriendIds({
+  const { friendIds = [], isLoadingFriendIds } = useGetFriendIds({
     userId,
   });
 
   const {
     friendIds: pendingFriendIds = [],
-    isPendingFriendIds: isPendingPendingFriendIds,
+    isLoadingFriendIds: isLoadingPendingFriendIds,
   } = useGetFriendIds({
     userId,
     userRole: USER_ROLE.REQUESTEE,
@@ -20,7 +20,7 @@ const useGetUserFriends = (userId: string) => {
 
   const {
     friendIds: myPendingFriendIds = [],
-    isPendingFriendIds: isPendingMyPendingFriendIds,
+    isLoadingFriendIds: isLoadingMyPendingFriendIds,
   } = useGetFriendIds({
     userId,
     userRole: USER_ROLE.REQUESTER,
@@ -28,37 +28,37 @@ const useGetUserFriends = (userId: string) => {
     additionalKey: 'myPendingFriends',
   });
 
-  const isPendingIds =
-    isPendingFriendIds ||
-    isPendingPendingFriendIds ||
-    isPendingMyPendingFriendIds;
+  const isLoadingIds =
+    isLoadingFriendIds ||
+    isLoadingPendingFriendIds ||
+    isLoadingMyPendingFriendIds;
 
-  const { data: friends = [], isPending: isPendingFriends } = useQuery({
+  const { data: friends = [], isLoading: isLoadingFriends } = useQuery({
     queryKey: ['friends', userId, 'approved', 'users'],
     queryFn: () => fetchUsers(friendIds),
     enabled: !!friendIds.length,
   });
 
-  const { data: pendingFriends = [], isPending: isPendingPendingFriends } =
+  const { data: pendingFriends = [], isLoading: isLoadingPendingFriends } =
     useQuery({
       queryKey: ['friends', userId, 'pendingFriends', 'users'],
       queryFn: () => fetchUsers(pendingFriendIds),
       enabled: !!pendingFriendIds.length,
     });
 
-  const { data: myPendingFriends = [], isPending: isPendingMyPendingFriends } =
+  const { data: myPendingFriends = [], isLoading: isLoadingMyPendingFriends } =
     useQuery({
       queryKey: ['friends', userId, 'myPendingFriends', 'users'],
       queryFn: () => fetchUsers(myPendingFriendIds),
       enabled: !!myPendingFriendIds.length,
     });
 
-  const isPendingUsers =
-    isPendingFriends || isPendingPendingFriends || isPendingMyPendingFriends;
+  const isLoadingUsers =
+    isLoadingFriends || isLoadingPendingFriends || isLoadingMyPendingFriends;
 
   return {
-    isPendingIds,
-    isPendingUsers,
+    isLoadingIds,
+    isLoadingUsers,
     friendIds,
     pendingFriendIds,
     myPendingFriendIds,

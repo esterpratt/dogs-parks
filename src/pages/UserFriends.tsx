@@ -11,8 +11,8 @@ const UserFriends = () => {
   const { user } = useOutletContext() as { user: User };
 
   const {
-    isPendingIds,
-    isPendingUsers,
+    isLoadingIds,
+    isLoadingUsers,
     friendIds,
     pendingFriendIds,
     myPendingFriendIds,
@@ -21,7 +21,7 @@ const UserFriends = () => {
     myPendingFriends,
   } = useGetUserFriends(user.id);
 
-  const { friendsWithDogs = [], isPendingDogs: isPendingFriendsDogs } =
+  const { friendsWithDogs = [], isLoading: isLoadingFriendsDogs } =
     useGetFriendsWithDogs({
       additionalQueryKey: friendIds,
       friendIds,
@@ -31,30 +31,30 @@ const UserFriends = () => {
 
   const {
     friendsWithDogs: pendingFriendsWithDogs = [],
-    isPendingDogs: isPendingPendingFriendsDogs,
+    isLoading: isLoadingPendingFriendsDogs,
   } = useGetFriendsWithDogs({
     additionalQueryKey: pendingFriendIds,
-    friendIds,
+    friendIds: pendingFriendIds,
     friendsToMap: pendingFriends,
     enabled: !!pendingFriends.length,
   });
 
   const {
     friendsWithDogs: myPendingFriendsWithDogs = [],
-    isPendingDogs: isPendingMyPendingFriendsDogs,
+    isLoading: isLoadingMyPendingFriendsDogs,
   } = useGetFriendsWithDogs({
     additionalQueryKey: myPendingFriendIds,
-    friendIds,
+    friendIds: myPendingFriendIds,
     friendsToMap: myPendingFriends,
     enabled: !!myPendingFriends.length,
   });
 
-  const isPendingFriendsWithDogs =
-    isPendingFriendsDogs ||
-    isPendingPendingFriendsDogs ||
-    isPendingMyPendingFriendsDogs;
+  const isLoadingFriendsWithDogs =
+    isLoadingFriendsDogs ||
+    isLoadingPendingFriendsDogs ||
+    isLoadingMyPendingFriendsDogs;
 
-  if (isPendingIds || isPendingUsers || isPendingFriendsWithDogs) {
+  if (isLoadingIds || isLoadingUsers || isLoadingFriendsWithDogs) {
     return <Loading />;
   }
 
