@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useLocation, useParams } from 'react-router';
+import { useLocation, useParams, useRevalidator } from 'react-router';
 import { Link } from 'react-router-dom';
 import { IoMdFemale, IoMdMale } from 'react-icons/io';
 import { MdOutlineModeEditOutline } from 'react-icons/md';
@@ -28,6 +28,7 @@ const UserDog = () => {
   const { state } = useLocation();
   const [isEditDogsModalOpen, setIsEditDogsModalOpen] = useState(false);
   const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
+  const { revalidate } = useRevalidator();
   const { isSignedInUser, userName } = state;
 
   const { data: dog, isLoading: isLoadingDog } = useQuery({
@@ -52,6 +53,7 @@ const UserDog = () => {
       queryClient.invalidateQueries({
         queryKey: ['dogImage', dogId],
       });
+      revalidate();
     },
   });
 

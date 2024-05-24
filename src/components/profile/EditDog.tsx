@@ -13,6 +13,7 @@ import { RadioInputs } from '../inputs/RadioInputs';
 import { TextArea } from '../inputs/TextArea';
 import { useMutation } from '@tanstack/react-query';
 import { queryClient } from '../../services/react-query';
+import { useRevalidator } from 'react-router';
 
 interface EditDogProps {
   dog?: Dog;
@@ -29,6 +30,7 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
     | null
   >(null);
   const { userId } = useContext(UserContext);
+  const { revalidate } = useRevalidator();
 
   const { mutate: mutateDog } = useMutation({
     mutationFn: (data: UpdateDogProps) =>
@@ -48,6 +50,7 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
     onSettled: (data, error, vars) => {
       queryClient.invalidateQueries({ queryKey: ['dogs', vars.dogId] });
       queryClient.invalidateQueries({ queryKey: ['dogs', userId] });
+      revalidate();
     },
   });
 
@@ -57,6 +60,7 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
       queryClient.invalidateQueries({
         queryKey: ['dogs', userId],
       });
+      revalidate();
     },
   });
 
