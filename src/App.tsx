@@ -21,7 +21,6 @@ import { Loading } from './components/Loading';
 
 import { UserContextProvider } from './context/UserContext';
 
-import { parkLoader } from './loaders/parkLoader';
 import { userLoader } from './loaders/userLoader';
 import { usersLoader } from './loaders/usersLoader';
 import { queryClient } from './services/react-query';
@@ -57,7 +56,6 @@ const App = () => {
         {
           path: '/parks/:id/',
           element: <Park />,
-          loader: parkLoader,
           children: [
             {
               index: true,

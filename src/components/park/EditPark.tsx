@@ -35,9 +35,9 @@ const EditPark: React.FC<EditParkProps> = ({ onSubmitForm, park }) => {
     mutationFn: (data: { id: string; updatedData: Partial<Park> }) =>
       updatePark(data.id, data.updatedData),
     onMutate: async (data) => {
-      await queryClient.cancelQueries({ queryKey: ['park', park.id] });
-      const prevPark = queryClient.getQueryData<Park>(['park', park.id]);
-      queryClient.setQueryData(['park', park.id], {
+      await queryClient.cancelQueries({ queryKey: ['parks', park.id] });
+      const prevPark = queryClient.getQueryData<Park>(['parks', park.id]);
+      queryClient.setQueryData(['parks', park.id], {
         ...prevPark,
         ...data.updatedData,
       });
@@ -45,10 +45,10 @@ const EditPark: React.FC<EditParkProps> = ({ onSubmitForm, park }) => {
       return { prevPark };
     },
     onError: (error, data, context) => {
-      queryClient.setQueryData(['park', park.id], context?.prevPark);
+      queryClient.setQueryData(['parks', park.id], context?.prevPark);
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['park', park.id] });
+      queryClient.invalidateQueries({ queryKey: ['parks', park.id] });
       if (onSubmitForm) {
         onSubmitForm();
       }

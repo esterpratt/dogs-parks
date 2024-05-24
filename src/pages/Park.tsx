@@ -24,7 +24,7 @@ const Park: React.FC = () => {
   const { user } = useContext(UserContext);
 
   const { data: park, isLoading } = useQuery({
-    queryKey: ['park', parkId],
+    queryKey: ['parks', parkId],
     queryFn: () => fetchPark(parkId!),
   });
 
@@ -32,10 +32,9 @@ const Park: React.FC = () => {
     queryKey: ['parkImage', parkId],
     queryFn: async () => {
       const images = await fetchParkPrimaryImage(parkId!);
-      return { src: images ? images[0] : '' };
+      return images?.length ? images[0] : null;
     },
   });
-  const { src: primaryImageSrc } = primaryImage || {};
 
   const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
 
@@ -61,8 +60,8 @@ const Park: React.FC = () => {
 
   return (
     <>
-      {primaryImageSrc ? (
-        <img src={primaryImageSrc} className={styles.image} />
+      {primaryImage ? (
+        <img src={primaryImage} className={styles.image} />
       ) : (
         <div className={styles.imageIcon}>
           <IconContext.Provider value={{ className: styles.parkIcon }}>
