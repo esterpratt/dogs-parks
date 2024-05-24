@@ -4,7 +4,7 @@ import { useGetFriendsIds } from './useGetFriendsIds';
 
 const FIVE_MINUTES = 1000 * 60 * 5;
 
-const useParkVisitors = (parkId: string, userId?: string | null) => {
+const useGetParkVisitors = (parkId: string, userId?: string | null) => {
   const { data: visitorsIds = [], isLoading: isLoadingVisitors } = useQuery({
     queryKey: ['parkVisitors', parkId],
     queryFn: async () => {
@@ -31,4 +31,4 @@ const useParkVisitors = (parkId: string, userId?: string | null) => {
   };
 };
 
-export { useParkVisitors };
+export { useGetParkVisitors };

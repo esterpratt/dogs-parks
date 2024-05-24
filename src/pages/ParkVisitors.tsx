@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { UserContext } from '../context/UserContext';
 import { fetchUsersWithDogsByIds } from '../services/users';
 import { Loading } from '../components/Loading';
-import { useParkVisitors } from '../hooks/api/useParkVisitors';
+import { useGetParkVisitors } from '../hooks/api/useGetParkVisitors';
 
 const ParkVisitors: React.FC = () => {
   const { userId } = useContext(UserContext);
@@ -17,7 +17,7 @@ const ParkVisitors: React.FC = () => {
     friendsInParkIds,
     isLoadingFriendsIds,
     isLoadingVisitors,
-  } = useParkVisitors(parkId!, userId);
+  } = useGetParkVisitors(parkId!, userId);
 
   const { data: friendsInParkWithDogs = [], isLoading: isLoadingDogs } =
     useQuery({

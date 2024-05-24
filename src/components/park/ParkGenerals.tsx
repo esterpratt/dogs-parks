@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import { ParkMaterial } from '../../types/park';
 import { DetailsSqaure } from './DetailsSquare';
 import styles from './ParkGenerals.module.scss';
-import { useParkVisitors } from '../../hooks/api/useParkVisitors';
+import { useParkVisitors } from '../../hooks/api/useGetParkVisitors';
 
 interface ParkGeneralsProps {
   size?: number;
