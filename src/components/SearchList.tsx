@@ -66,9 +66,10 @@ const SearchList = <T,>({
           ))}
         </ul>
       )}
-      {!isSearchToSee && !filteredItems.length && (
-        <span className={styles.noResults}>{noResultsLayout}</span>
-      )}
+      {(!isSearchToSee || (isSearchToSee && searchInput)) &&
+        !filteredItems.length && (
+          <span className={styles.noResults}>{noResultsLayout}</span>
+        )}
     </div>
   );
 };

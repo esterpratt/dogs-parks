@@ -30,15 +30,17 @@ const useUpdateFriendship = ({
     useMutation({
       mutationFn: (friendshipId: string) => deleteFriendship(friendshipId),
       onSuccess: async () => {
-        queryClient.invalidateQueries({
-          queryKey: ['friends', userId, FRIENDS_KEY.FRIENDS],
-        });
-        queryClient.invalidateQueries({
-          queryKey: ['friends', userId, FRIENDS_KEY.MY_PENDING_FRIENDS],
-        });
-        queryClient.invalidateQueries({
-          queryKey: ['friendship', friendId, userId],
-        });
+        return Promise.all([
+          queryClient.invalidateQueries({
+            queryKey: ['friends', userId, FRIENDS_KEY.FRIENDS],
+          }),
+          queryClient.invalidateQueries({
+            queryKey: ['friends', userId, FRIENDS_KEY.MY_PENDING_FRIENDS],
+          }),
+          queryClient.invalidateQueries({
+            queryKey: ['friendship', friendId, userId],
+          }),
+        ]);
       },
     });
 
@@ -50,12 +52,14 @@ const useUpdateFriendship = ({
           requesterId: userId,
         }),
       onSuccess: async () => {
-        queryClient.invalidateQueries({
-          queryKey: ['friends', userId, FRIENDS_KEY.MY_PENDING_FRIENDS],
-        });
-        queryClient.invalidateQueries({
-          queryKey: ['friendship', friendId, userId],
-        });
+        return Promise.all([
+          queryClient.invalidateQueries({
+            queryKey: ['friends', userId, FRIENDS_KEY.MY_PENDING_FRIENDS],
+          }),
+          queryClient.invalidateQueries({
+            queryKey: ['friendship', friendId, userId],
+          }),
+        ]);
       },
     });
 
@@ -69,15 +73,17 @@ const useUpdateFriendship = ({
         status: FRIENDSHIP_STATUS;
       }) => updateFriendship({ friendshipId, status }),
       onSuccess: async () => {
-        queryClient.invalidateQueries({
-          queryKey: ['friends', userId, FRIENDS_KEY.FRIENDS],
-        });
-        queryClient.invalidateQueries({
-          queryKey: ['friends', userId, FRIENDS_KEY.PENDING_FRIENDS],
-        });
-        queryClient.invalidateQueries({
-          queryKey: ['friendship', friendId, userId],
-        });
+        return Promise.all([
+          queryClient.invalidateQueries({
+            queryKey: ['friends', userId, FRIENDS_KEY.FRIENDS],
+          }),
+          queryClient.invalidateQueries({
+            queryKey: ['friends', userId, FRIENDS_KEY.PENDING_FRIENDS],
+          }),
+          queryClient.invalidateQueries({
+            queryKey: ['friendship', friendId, userId],
+          }),
+        ]);
       },
     });
 

@@ -12,7 +12,7 @@ import { FRIENDS_KEY } from '../hooks/api/keys';
 const UserFriends = () => {
   const { user } = useOutletContext() as { user: User };
 
-  const { data: friends = [], isLoading: isLoadingFriends } = useQuery({
+  const { data: friends = [], isFetching: isLoadingFriends } = useQuery({
     queryKey: ['friends', user.id, FRIENDS_KEY.FRIENDS, 'dogs'],
     queryFn: () =>
       fetchFriendsWithDogs({
@@ -20,7 +20,7 @@ const UserFriends = () => {
       }),
   });
 
-  const { data: pendingFriends = [], isLoading: isLoadingPendingFriends } =
+  const { data: pendingFriends = [], isFetching: isLoadingPendingFriends } =
     useQuery({
       queryKey: ['friends', user.id, FRIENDS_KEY.PENDING_FRIENDS, 'dogs'],
       queryFn: () =>
@@ -31,7 +31,7 @@ const UserFriends = () => {
         }),
     });
 
-  const { data: myPendingFriends = [], isLoading: isLoadingMyPendingFriends } =
+  const { data: myPendingFriends = [], isFetching: isLoadingMyPendingFriends } =
     useQuery({
       queryKey: ['friends', user.id, FRIENDS_KEY.MY_PENDING_FRIENDS, 'dogs'],
       queryFn: () =>
