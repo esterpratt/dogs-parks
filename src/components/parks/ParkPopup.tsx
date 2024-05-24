@@ -30,12 +30,10 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
     queryKey: ['parkImage', activePark?.id],
     queryFn: async () => {
       const images = await fetchParkPrimaryImage(activePark!.id);
-      return { src: images ? images[0] : '' };
+      return images ? images[0] : null;
     },
     enabled: !!activePark,
   });
-
-  const { src } = image || {};
 
   const { data: favoriteParkIds = [] } = useQuery({
     queryKey: ['favoriteParks'],
@@ -50,8 +48,8 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
     <div className={classnames(styles.parkModal, !!activePark && styles.open)}>
       <CgClose onClick={onClose} size={24} className={styles.close} />
       <Link to={`/parks/${activePark?.id}`} className={styles.imgContainer}>
-        {src ? (
-          <img src={src} className={styles.img} />
+        {image ? (
+          <img src={image} className={styles.img} />
         ) : (
           <IconContext.Provider value={{ className: styles.parkIcon }}>
             <LuTrees />

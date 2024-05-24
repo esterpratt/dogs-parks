@@ -15,6 +15,8 @@ import { fetchUserFriendships } from './friendships';
 import { FRIENDSHIP_STATUS, USER_ROLE } from '../types/friendship';
 import { fetchParkCheckins } from './checkins';
 import { AppError, throwError } from './error';
+import { fetchDogs, fetchUsersDogs } from './dogs';
+import { Dog } from '../types/dog';
 
 const usersCollection = collection(db, 'users');
 
@@ -68,7 +70,7 @@ const fetchUser = async (id: string) => {
   }
 };
 
-const fetchUsers = async (ids: string[]) => {
+const fetchUsers = async (ids?: string[]) => {
   try {
     if (!ids || !ids.length) {
       const data = await getDocs(usersCollection);
@@ -88,6 +90,26 @@ const fetchUsers = async (ids: string[]) => {
       });
       return res;
     }
+  } catch (error) {
+    throwError(error);
+  }
+};
+
+const fetchUsersWithDogsByIds = async (ids?: string[]) => {
+  try {
+    const dogsPromise = ids?.length ? fetchUsersDogs(ids) : fetchDogs();
+    const promises: [Promise<User[] | undefined>, Promise<Dog[] | undefined>] =
+      [fetchUsers(ids), dogsPromise];
+
+    const [users = [], dogs = []] = await Promise.all(promises);
+    const usersWithDogs = users?.map((user) => {
+      return {
+        ...user,
+        dogs: dogs ? dogs.filter((dog) => dog.owner === user.id) : [],
+      };
+    });
+
+    return usersWithDogs;
   } catch (error) {
     throwError(error);
   }
@@ -121,6 +143,36 @@ const fetchFriends = async ({
   }
 };
 
+const fetchFriendsWithDogs = async ({
+  userId,
+  userRole = USER_ROLE.ANY,
+  status = FRIENDSHIP_STATUS.APPROVED,
+}: FetchFriendsProps) => {
+  try {
+    const friends = await fetchFriends({
+      userId,
+      userRole,
+      status,
+    });
+
+    if (!friends?.length) {
+      return [];
+    }
+
+    const dogs = await fetchUsersDogs(friends.map((friend) => friend.id));
+    const friendsWithDogs = friends.map((friend) => {
+      return {
+        ...friend,
+        dogs: dogs ? dogs.filter((dog) => dog.owner === friend.id) : [],
+      };
+    });
+
+    return friendsWithDogs;
+  } catch (error) {
+    throwError(error);
+  }
+};
+
 const fetchCheckedInUsers = async (parkId: string) => {
   try {
     const parkCheckins = await fetchParkCheckins(parkId);
@@ -143,4 +195,8 @@ export {
   fetchFriends,
   fetchCheckedInUsers,
   fetchUsers,
+  fetchFriendsWithDogs,
+  fetchUsersWithDogsByIds,
 };
+
+export type { EditUserProps };

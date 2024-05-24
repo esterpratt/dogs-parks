@@ -12,7 +12,7 @@ import {
   logout,
   signin,
 } from '../services/authentication';
-import { createUser, fetchUser, updateUser } from '../services/users';
+import { createUser, fetchUser } from '../services/users';
 import { User } from '../types/user';
 import { useOnAuthStateChanged } from '../hooks/useOnAuthStateChanged';
 import { createDog } from '../services/dogs';
@@ -24,7 +24,6 @@ interface UserContextObj {
   userLogin: (props: LoginProps) => Promise<User | Error | void>;
   userLogout: () => void;
   userSignin: (props: SigninProps) => Promise<User | Error | void>;
-  editUser: (props: User) => Promise<User | Error | void>;
 }
 
 const initialData: UserContextObj = {
@@ -34,7 +33,6 @@ const initialData: UserContextObj = {
   userLogin: () => Promise.resolve(),
   userLogout: () => {},
   userSignin: () => Promise.resolve(),
-  editUser: () => Promise.resolve(),
 };
 
 const UserContext = createContext<UserContextObj>(initialData);
@@ -49,13 +47,16 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     const getUser = async () => {
       if (userExtraDataRef.current) {
-        const userToSet = { id: userId!, name: userExtraDataRef.current.name };
+        const name = userExtraDataRef.current.name;
+        const dogName = userExtraDataRef.current.dogName;
+        const userToSet = { id: userId!, name };
         try {
-          await createUser(userToSet);
-          await createDog({
+          const createUserPromise = createUser(userToSet);
+          const createDogPromise = createDog({
             owner: userId!,
-            name: userExtraDataRef.current.dogName,
+            name: dogName,
           });
+          await Promise.all([createDogPromise, createUserPromise]);
           setUser(userToSet);
         } finally {
           userExtraDataRef.current = null;
@@ -77,11 +78,6 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
       setUser(null);
     }
   }, [userId]);
-
-  const editUser = async (userToEdit: User) => {
-    await updateUser({ userId: userToEdit.id, userDetails: userToEdit });
-    setUser((prev) => ({ ...prev, ...userToEdit }));
-  };
 
   const userLogin = async ({ email, password }: LoginProps) => {
     await login({ email, password });
@@ -113,7 +109,6 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     userLogin,
     userLogout,
     userSignin,
-    editUser,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

@@ -1,20 +1,45 @@
-import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { Button } from '../Button';
 import styles from './EditUser.module.scss';
 import { ControlledInput } from '../inputs/ControlledInput';
 import { User } from '../../types/user';
-import { UserContext } from '../../context/UserContext';
+import { useMutation } from '@tanstack/react-query';
+import {
+  updateUser,
+  EditUserProps as UpdateUserProps,
+} from '../../services/users';
+import { queryClient } from '../../services/react-query';
 
 interface EditUserProps {
   user: User;
   onSubmitForm?: () => void;
 }
 
-// TODO: create context / lift state up
-// so the state will include the data from each dog without overriding
 const EditUser: React.FC<EditUserProps> = ({ user, onSubmitForm }) => {
   const [userData, setUserData] = useState(user);
-  const { editUser } = useContext(UserContext);
+
+  const { mutate: mutateUser } = useMutation({
+    mutationFn: (data: UpdateUserProps) =>
+      updateUser({
+        userId: data.userId,
+        userDetails: data.userDetails,
+      }),
+    onMutate: async (data) => {
+      await queryClient.cancelQueries({ queryKey: ['users', user.id] });
+      const prevUser = queryClient.getQueryData<User>(['users', user.id]);
+      queryClient.setQueryData(['users', user.id], {
+        ...prevUser,
+        ...data.userDetails,
+      });
+      return { prevUser };
+    },
+    onError: (error, data, context) => {
+      queryClient.setQueryData(['users', user.id], context?.prevUser);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['users', user.id] });
+    },
+  });
 
   useEffect(() => {
     setUserData(user);
@@ -32,7 +57,7 @@ const EditUser: React.FC<EditUserProps> = ({ user, onSubmitForm }) => {
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    await editUser({ ...userData, id: user.id });
+    mutateUser({ userId: user.id, userDetails: userData });
     if (onSubmitForm) {
       onSubmitForm();
     }

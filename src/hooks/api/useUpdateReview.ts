@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
-import { updateReview } from '../services/reviews';
-import { Review, ReviewData } from '../types/review';
-import { queryClient } from '../services/react-query';
+import { updateReview } from '../../services/reviews';
+import { Review, ReviewData } from '../../types/review';
+import { queryClient } from '../../services/react-query';
 
 const useUpdateReview = (parkId: string) => {
   const { mutate } = useMutation({

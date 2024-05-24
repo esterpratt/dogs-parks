@@ -7,7 +7,7 @@ import { ReviewModal } from '../ReviewModal';
 import { UserContext } from '../../context/UserContext';
 import { useQuery } from '@tanstack/react-query';
 import { fetchParkRank, fetchReviews } from '../../services/reviews';
-import { useAddReview } from '../../hooks/useAddReview';
+import { useAddReview } from '../../hooks/api/useAddReview';
 
 const ReviewsPreview = () => {
   const { id: parkId } = useParams();

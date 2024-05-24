@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useLocation, useRevalidator } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { IoMdFemale, IoMdMale } from 'react-icons/io';
 import { MdOutlineModeEditOutline } from 'react-icons/md';
@@ -10,20 +10,50 @@ import { Accordion } from '../components/accordion/Accordion';
 import { DogDetails } from '../components/profile/DogDetails';
 import { DogGalleryContainer } from '../components/profile/DogGalleryContainer';
 import { EditDogsModal } from '../components/profile/EditDogsModal';
-import { uploadDogPrimaryImage } from '../services/dogs';
+import {
+  fetchDogPrimaryImage,
+  fetchDogs,
+  uploadDogPrimaryImage,
+} from '../services/dogs';
 import { IconContext } from 'react-icons';
 import { GENDER } from '../types/dog';
 import styles from './UserDog.module.scss';
 import { CameraModal } from '../components/camera/CameraModal';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { queryClient } from '../services/react-query';
+import { Loading } from '../components/Loading';
 
 const UserDog = () => {
+  const { dogId } = useParams();
   const { state } = useLocation();
   const [isEditDogsModalOpen, setIsEditDogsModalOpen] = useState(false);
   const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
-  const { dog, isSignedInUser, userName } = state;
-  const { primaryImage, name, age, gender } = dog;
-  const [image, setImage] = useState(primaryImage);
-  const { revalidate } = useRevalidator();
+  const { isSignedInUser, userName } = state;
+
+  const { data: dog, isLoading: isLoadingDog } = useQuery({
+    queryKey: ['dogs', dogId],
+    queryFn: async () => {
+      const dogs = await fetchDogs([dogId!]);
+      return dogs?.[0];
+    },
+  });
+
+  const { data: primaryImage, isLoading: isLoadingImage } = useQuery({
+    queryKey: ['dogImage', dogId],
+    queryFn: async () => {
+      const images = await fetchDogPrimaryImage(dogId!);
+      return images?.length ? images[0] : null;
+    },
+  });
+
+  const { mutate: setDogImage } = useMutation({
+    mutationFn: (img: string | File) => uploadDogPrimaryImage(img, dogId!),
+    onSuccess: async () => {
+      queryClient.invalidateQueries({
+        queryKey: ['dogImage', dogId],
+      });
+    },
+  });
 
   const onCloseDogsModal = () => {
     setIsEditDogsModalOpen(false);
@@ -35,12 +65,16 @@ const UserDog = () => {
 
   const onUploadImg = async (img: string | File) => {
     setIsAddImageModalOpen(false);
-    const uploadedImg = await uploadDogPrimaryImage(img, dog.id);
-    if (uploadedImg) {
-      setImage(uploadedImg);
-      revalidate();
-    }
+    setDogImage(img);
   };
+
+  if (isLoadingDog || isLoadingImage) {
+    return <Loading />;
+  }
+
+  if (!dog) {
+    return null;
+  }
 
   return (
     <>
@@ -51,8 +85,8 @@ const UserDog = () => {
         </Link>
         <div className={styles.importantDetails}>
           <div className={styles.imgContainer}>
-            {image ? (
-              <img src={image} className={styles.img} />
+            {primaryImage ? (
+              <img src={primaryImage} className={styles.img} />
             ) : (
               <div className={classnames(styles.img, styles.empty)}>
                 <PiDog size={64} />
@@ -66,16 +100,16 @@ const UserDog = () => {
           </div>
           <div className={styles.details}>
             <div>
-              <span className={styles.name}>{name}</span>
-              {gender && (
+              <span className={styles.name}>{dog.name}</span>
+              {dog.gender && (
                 <IconContext.Provider value={{ className: styles.genderIcon }}>
-                  {gender === GENDER.FEMALE ? <IoMdFemale /> : <IoMdMale />}
+                  {dog.gender === GENDER.FEMALE ? <IoMdFemale /> : <IoMdMale />}
                 </IconContext.Provider>
               )}
             </div>
-            {age && (
+            {dog.age && (
               <div className={styles.age}>
-                {age} Year{age > 1 && 's'} old
+                {dog.age} Year{dog.age > 1 && 's'} old
               </div>
             )}
           </div>

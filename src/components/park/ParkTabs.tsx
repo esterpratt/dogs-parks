@@ -1,12 +1,12 @@
 import { Tabs } from '../tabs/Tabs';
-import { useParkVisitors } from '../../hooks/useParkVisitors';
+import { useParkVisitors } from '../../hooks/api/useParkVisitors';
 
 interface ParkTabsProps {
   parkId: string;
 }
 
 const ParkTabs: React.FC<ParkTabsProps> = ({ parkId }) => {
-  const { visitorIds } = useParkVisitors(parkId);
+  const { visitorsIds } = useParkVisitors(parkId);
 
   return (
     <Tabs
@@ -16,7 +16,7 @@ const ParkTabs: React.FC<ParkTabsProps> = ({ parkId }) => {
         {
           text: 'Visitors',
           url: 'visitors',
-          disabled: !visitorIds.length,
+          disabled: !visitorsIds.length,
         },
       ]}
     />

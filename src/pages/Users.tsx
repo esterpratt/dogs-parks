@@ -63,7 +63,7 @@ const Users = () => {
         noResultsLayout={NoResultsLayout}
         containerClassName={styles.list}
       >
-        {(user) => <UserPreview user={user} />}
+        {(user) => <UserPreview user={user} showFriendshipButton={false} />}
       </SearchList>
     </div>
   );

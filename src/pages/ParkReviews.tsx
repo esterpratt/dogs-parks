@@ -13,7 +13,7 @@ import { useParams } from 'react-router';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '../services/react-query';
 import { Review, ReviewData } from '../types/review';
-import { useAddReview } from '../hooks/useAddReview';
+import { useAddReview } from '../hooks/api/useAddReview';
 
 const Reviews: React.FC = () => {
   const { id: parkId } = useParams();
@@ -54,6 +54,7 @@ const Reviews: React.FC = () => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['reviews', parkId] });
+      queryClient.invalidateQueries({ queryKey: ['reviews', userId] });
     },
   });
 

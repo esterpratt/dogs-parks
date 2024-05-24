@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchUserFriendships } from '../services/friendships';
-import { FRIENDSHIP_STATUS, USER_ROLE } from '../types/friendship';
+import { fetchUserFriendships } from '../../services/friendships';
+import { FRIENDSHIP_STATUS, USER_ROLE } from '../../types/friendship';
+import { FRIENDS_KEY } from './keys';
 
 const FIVE_MINUTES = 1000 * 60 * 5;
 
@@ -9,17 +10,17 @@ interface UseGetFriendIdsProps {
   userRole?: USER_ROLE;
   friendshipStatus?: FRIENDSHIP_STATUS;
   enabled?: boolean;
-  additionalKey?: string;
+  additionalKey?: FRIENDS_KEY;
 }
 
-const useGetFriendIds = ({
+const useGetFriendsIds = ({
   userId,
-  additionalKey = 'approved',
+  additionalKey = FRIENDS_KEY.FRIENDS,
   enabled = true,
   userRole = USER_ROLE.ANY,
   friendshipStatus = FRIENDSHIP_STATUS.APPROVED,
 }: UseGetFriendIdsProps) => {
-  const { data: friendIds = [], isLoading: isLoadingFriendIds } = useQuery({
+  const { data: friendsIds = [], isLoading } = useQuery({
     queryKey: ['friends', userId, additionalKey, 'ids'],
     queryFn: async () => {
       const friendships = await fetchUserFriendships({
@@ -42,7 +43,7 @@ const useGetFriendIds = ({
     enabled: !!userId && enabled,
   });
 
-  return { friendIds, isLoadingFriendIds };
+  return { friendsIds, isLoading };
 };
 
-export { useGetFriendIds };
+export { useGetFriendsIds };

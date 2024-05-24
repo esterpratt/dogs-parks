@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { Dog } from '../../types/dog';
-import { fetchAllDogsImages, uploadDogImage } from '../../services/dogs';
+import { fetchAllDogImages, uploadDogImage } from '../../services/dogs';
 import { CameraModal } from '../camera/CameraModal';
 import { Accordion } from '../accordion/Accordion';
 import { DogGallery } from './DogGallery';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { queryClient } from '../../services/react-query';
 
 interface DogGalleryContainerProps {
   dog: Dog;
@@ -20,28 +22,24 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
   contentClassName,
 }) => {
   const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
-  const [images, setImages] = useState<string[]>([]);
 
-  useEffect(() => {
-    const getImages = async () => {
-      const images = await fetchAllDogsImages(dog.id);
-      if (images) {
-        setImages(images);
-      } else {
-        setImages([]);
-      }
-    };
-    getImages();
-  }, [dog.id]);
+  const { data: dogImages = [], isLoading } = useQuery({
+    queryKey: ['dogImages', dog.id],
+    queryFn: () => fetchAllDogImages(dog.id),
+  });
+
+  const { mutate } = useMutation({
+    mutationFn: (img: string | File) => uploadDogImage(img, dog.id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['dogImages', dog.id],
+      });
+    },
+  });
 
   const onUploadImg = async (img: string | File) => {
     setIsAddImageModalOpen(false);
-    const uploadedImg = await uploadDogImage(img, dog.id);
-    if (uploadedImg) {
-      setImages((prevImages) => {
-        return [...prevImages, uploadedImg];
-      });
-    }
+    mutate(img);
   };
 
   const openCameraModal = () => {
@@ -52,7 +50,7 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
     openCameraModal();
   };
 
-  if (!isSignedInUser && !images.length) {
+  if (!isSignedInUser && !dogImages.length && isLoading) {
     return null;
   }
 
@@ -67,7 +65,7 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
         />
         <Accordion.Content className={contentClassName}>
           <DogGallery
-            images={images}
+            images={dogImages}
             dog={dog}
             isSignedInUser={isSignedInUser}
             openCameraModal={openCameraModal}

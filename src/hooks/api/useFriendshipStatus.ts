@@ -1,12 +1,11 @@
-import { FRIENDSHIP_STATUS } from '../types/friendship';
-import { User } from '../types/user';
-import { useGetUserFriends } from './useGetUserFriends';
+import { FRIENDSHIP_STATUS } from '../../types/friendship';
+import { useGetUserFriendsIds } from './useGetUserFriendsIds';
 
 interface GetFriendshipStatusProps {
   friendId: string;
-  friends: User[];
-  pendingFriends: User[];
-  myPendingFriends: User[];
+  friendsIds: string[];
+  pendingFriendsIds: string[];
+  myPendingFriendsIds: string[];
 }
 
 const getButtonProps = (
@@ -55,24 +54,24 @@ const getButtonProps = (
 
 const getFriendshipStatus = ({
   friendId,
-  friends,
-  pendingFriends,
-  myPendingFriends,
+  friendsIds,
+  pendingFriendsIds,
+  myPendingFriendsIds,
 }: GetFriendshipStatusProps) => {
-  if (friends.find((friend) => friend.id === friendId)) {
+  if (friendsIds.includes(friendId)) {
     return {
       status: FRIENDSHIP_STATUS.APPROVED,
     };
   }
 
-  if (pendingFriends.find((friend) => friend.id === friendId)) {
+  if (pendingFriendsIds.includes(friendId)) {
     return {
       status: FRIENDSHIP_STATUS.PENDING,
       isFriendIsRequester: true,
     };
   }
 
-  if (myPendingFriends.find((friend) => friend.id === friendId)) {
+  if (myPendingFriendsIds.includes(friendId)) {
     return {
       status: FRIENDSHIP_STATUS.PENDING,
       isFriendIsRequester: false,
@@ -89,15 +88,15 @@ const useFriendshipStatus = ({
   userId: string;
   friendId: string;
 }) => {
-  const { friends, pendingFriends, myPendingFriends } =
-    useGetUserFriends(userId);
+  const { friendsIds, pendingFriendsIds, myPendingFriendsIds } =
+    useGetUserFriendsIds(userId);
 
   const { statusToUpdate, buttonText } = getButtonProps(
     getFriendshipStatus({
       friendId,
-      friends,
-      pendingFriends,
-      myPendingFriends,
+      friendsIds,
+      pendingFriendsIds,
+      myPendingFriendsIds,
     })
   );
 

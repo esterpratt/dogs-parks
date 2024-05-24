@@ -24,9 +24,10 @@ interface EditDogProps {
 
 const createDog = async (createDogProps: CreateDogProps) => {
   try {
-    await addDoc(dogsCollection, {
+    const res = await addDoc(dogsCollection, {
       ...createDogProps,
     });
+    return res.id;
   } catch (error) {
     throwError(error);
   }
@@ -43,7 +44,7 @@ const updateDog = async ({ dogId, dogDetails }: EditDogProps) => {
   }
 };
 
-const fetchDogs = async (ids: string[]) => {
+const fetchDogs = async (ids?: string[]) => {
   try {
     if (!ids || !ids.length) {
       const data = await getDocs(dogsCollection);
@@ -130,7 +131,7 @@ const fetchDogPrimaryImage = async (dogId: string) => {
   }
 };
 
-const fetchAllDogsImages = async (dogId: string) => {
+const fetchAllDogImages = async (dogId: string) => {
   try {
     const res = await fetchImagesByDirectory(`dogs/${dogId}/other`);
     return res;
@@ -146,7 +147,9 @@ export {
   fetchUserDogs,
   fetchUsersDogs,
   fetchDogPrimaryImage,
-  fetchAllDogsImages,
+  fetchAllDogImages,
   uploadDogImage,
   uploadDogPrimaryImage,
 };
+
+export type { EditDogProps };

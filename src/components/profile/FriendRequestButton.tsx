@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 import { Button } from '../Button';
-import { useFriendshipStatus } from '../../hooks/useFriendshipStatus';
+import { useFriendshipStatus } from '../../hooks/api/useFriendshipStatus';
 import { UserContext } from '../../context/UserContext';
-import { useUpdateFriendship } from '../../hooks/useUpdateFriendship';
+import { useUpdateFriendship } from '../../hooks/api/useUpdateFriendship';
 
 interface PublicProfileProps {
   friendId: string;

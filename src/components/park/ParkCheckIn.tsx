@@ -9,7 +9,7 @@ import { Button } from '../Button';
 import styles from './ParkCheckIn.module.scss';
 import { IconContext } from 'react-icons';
 import { ReviewModal } from '../ReviewModal';
-import { useAddReview } from '../../hooks/useAddReview';
+import { useAddReview } from '../../hooks/api/useAddReview';
 import { useMutation } from '@tanstack/react-query';
 import { queryClient } from '../../services/react-query';
 

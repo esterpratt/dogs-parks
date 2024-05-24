@@ -3,10 +3,16 @@ import { Dog, DOG_ENERGY, DOG_SIZE, GENDER } from '../../types/dog';
 import { Button } from '../Button';
 import styles from './EditDog.module.scss';
 import { ControlledInput } from '../inputs/ControlledInput';
-import { createDog, updateDog } from '../../services/dogs';
+import {
+  createDog,
+  updateDog,
+  EditDogProps as UpdateDogProps,
+} from '../../services/dogs';
 import { UserContext } from '../../context/UserContext';
 import { RadioInputs } from '../inputs/RadioInputs';
 import { TextArea } from '../inputs/TextArea';
+import { useMutation } from '@tanstack/react-query';
+import { queryClient } from '../../services/react-query';
 
 interface EditDogProps {
   dog?: Dog;
@@ -23,6 +29,36 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
     | null
   >(null);
   const { userId } = useContext(UserContext);
+
+  const { mutate: mutateDog } = useMutation({
+    mutationFn: (data: UpdateDogProps) =>
+      updateDog({ dogId: data.dogId, dogDetails: data.dogDetails }),
+    onMutate: async (vars) => {
+      await queryClient.cancelQueries({ queryKey: ['dogs', vars.dogId] });
+      const prevDog = queryClient.getQueryData<Dog>(['dogs', vars.dogId]);
+      queryClient.setQueryData(['dogs', vars.dogId], {
+        ...prevDog,
+        ...vars.dogDetails,
+      });
+      return { prevDog };
+    },
+    onError: (error, vars, context) => {
+      queryClient.setQueryData(['dogs', vars.dogId], context?.prevDog);
+    },
+    onSettled: (data, error, vars) => {
+      queryClient.invalidateQueries({ queryKey: ['dogs', vars.dogId] });
+      queryClient.invalidateQueries({ queryKey: ['dogs', userId] });
+    },
+  });
+
+  const { mutate: addDog } = useMutation({
+    mutationFn: (data: Omit<Dog, 'id'>) => createDog({ ...data }),
+    onSuccess: async () => {
+      queryClient.invalidateQueries({
+        queryKey: ['dogs', userId],
+      });
+    },
+  });
 
   useEffect(() => {
     if (dog) {
@@ -57,12 +93,12 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
     const age = Number(dogData!.age);
 
     if (dog) {
-      await updateDog({
+      mutateDog({
         dogId: dog.id,
         dogDetails: { ...dogData, age, likes, dislikes },
       });
     } else {
-      await createDog({
+      addDog({
         owner: userId!,
         ...dogData!,
         age,

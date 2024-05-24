@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import { ParkMaterial } from '../../types/park';
 import { DetailsSqaure } from './DetailsSquare';
 import styles from './ParkGenerals.module.scss';
-import { useParkVisitors } from '../../hooks/useParkVisitors';
+import { useParkVisitors } from '../../hooks/api/useParkVisitors';
 
 interface ParkGeneralsProps {
   size?: number;
@@ -53,10 +53,10 @@ const ParkGenerals = ({
   water,
   parkId,
 }: ParkGeneralsProps) => {
-  const { friendInParkIds, visitorIds } = useParkVisitors(parkId);
+  const { friendsInParkIds, visitorsIds } = useParkVisitors(parkId);
 
-  const friendsCount = friendInParkIds.length;
-  const othersCount = visitorIds.length - friendsCount;
+  const friendsCount = friendsInParkIds.length;
+  const othersCount = visitorsIds.length - friendsCount;
 
   const visitorsContent = friendsCount
     ? friendsCount.toString()

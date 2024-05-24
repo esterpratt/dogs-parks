@@ -43,7 +43,7 @@ const UserDogs = () => {
             <Link
               to={dog.id}
               key={dog.id}
-              state={{ dog, isSignedInUser, userName: user.name }}
+              state={{ isSignedInUser, userName: user.name }}
             >
               <DogPreview dog={dog} />
             </Link>

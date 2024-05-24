@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { PiDog } from 'react-icons/pi';
 import classnames from 'classnames';
@@ -8,26 +8,28 @@ import styles from './UserPreview.module.scss';
 import { fetchDogPrimaryImage } from '../../services/dogs';
 import { FriendRequestButton } from '../profile/FriendRequestButton';
 import { UserContext } from '../../context/UserContext';
+import { useQuery } from '@tanstack/react-query';
 
 interface UserPreviewProps {
   user: User & { dogs: Dog[] };
+  showFriendshipButton?: boolean;
 }
 
-const UserPreview: React.FC<UserPreviewProps> = ({ user }) => {
-  const [dogImage, setDogImage] = useState('');
+const UserPreview: React.FC<UserPreviewProps> = ({
+  user,
+  showFriendshipButton = true,
+}) => {
   const { userId } = useContext(UserContext);
-
-  useEffect(() => {
-    const getDogPrimaryImage = async () => {
-      const dogId = user.dogs[0].id;
-      const image = await fetchDogPrimaryImage(dogId);
-      if (image && image.length) {
-        setDogImage(image[0]);
+  const { data: dogImage } = useQuery({
+    queryKey: ['dogImage', user.dogs[0].id],
+    queryFn: async () => {
+      const images = await fetchDogPrimaryImage(user.dogs[0].id);
+      if (images?.length) {
+        return images[0];
       }
-    };
-
-    getDogPrimaryImage();
-  }, [user]);
+      return null;
+    },
+  });
 
   let dogNames = user.dogs[0].name;
   if (user.dogs.length > 1) {
@@ -51,7 +53,7 @@ const UserPreview: React.FC<UserPreviewProps> = ({ user }) => {
           <span className={styles.userName}>Owner: {user.name}</span>
         </div>
       </Link>
-      {!!userId && (
+      {!!userId && showFriendshipButton && (
         <FriendRequestButton
           friendId={user.id}
           buttonVariant="basic"

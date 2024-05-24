@@ -4,50 +4,32 @@ import { UserPreview } from '../components/users/UserPreview';
 import styles from './ParkVisitors.module.scss';
 import { useQuery } from '@tanstack/react-query';
 import { UserContext } from '../context/UserContext';
-import { fetchUsers } from '../services/users';
+import { fetchUsersWithDogsByIds } from '../services/users';
 import { Loading } from '../components/Loading';
-import { useParkVisitors } from '../hooks/useParkVisitors';
-import { useGetFriendsWithDogs } from '../hooks/useGetFriendsWithDogs';
+import { useParkVisitors } from '../hooks/api/useParkVisitors';
 
 const ParkVisitors: React.FC = () => {
   const { userId } = useContext(UserContext);
   const { id: parkId } = useParams();
 
   const {
-    visitorIds,
-    friendIds,
-    friendInParkIds,
-    isLoadingFriendIds,
+    visitorsIds,
+    friendsInParkIds,
+    isLoadingFriendsIds,
     isLoadingVisitors,
-  } = useParkVisitors(parkId!);
+  } = useParkVisitors(parkId!, userId);
 
-  const { data: friends = [], isLoading: isLoadingFriends } = useQuery({
-    queryKey: ['friends', userId, 'approved', 'users'],
-    queryFn: () => fetchUsers(friendIds),
-    enabled: !!friendInParkIds.length,
-  });
-
-  const friendsInPark = friends.filter((friend) =>
-    friendInParkIds.includes(friend.id)
-  );
-
-  const { friendsWithDogs = [], isLoading: isLoadingDogs } =
-    useGetFriendsWithDogs({
-      additionalQueryKey: friendInParkIds,
-      friendIds: friendInParkIds,
-      friendsToMap: friendsInPark,
-      enabled: !!friendsInPark.length,
+  const { data: friendsInParkWithDogs = [], isLoading: isLoadingDogs } =
+    useQuery({
+      queryKey: ['parkVisitorsWithDogs', parkId],
+      queryFn: () => fetchUsersWithDogsByIds(friendsInParkIds),
+      enabled: !!friendsInParkIds.length,
     });
 
-  const friendsCount = friendsInPark.length;
-  const othersCount = visitorIds.length - friendsCount;
+  const friendsCount = friendsInParkIds.length;
+  const othersCount = visitorsIds.length - friendsCount;
 
-  if (
-    isLoadingDogs ||
-    isLoadingFriendIds ||
-    isLoadingVisitors ||
-    isLoadingFriends
-  ) {
+  if (isLoadingDogs || isLoadingFriendsIds || isLoadingVisitors) {
     return <Loading />;
   }
 
@@ -62,8 +44,12 @@ const ParkVisitors: React.FC = () => {
           <span className={styles.friendsTitle}>
             Your Friends that in the park right now:
           </span>
-          {friendsWithDogs.map((user) => (
-            <UserPreview key={user.id} user={user} />
+          {friendsInParkWithDogs.map((user) => (
+            <UserPreview
+              key={user.id}
+              user={user}
+              showFriendshipButton={false}
+            />
           ))}
         </div>
       )}
