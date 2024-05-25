@@ -1,6 +1,9 @@
 import { useContext, useState } from 'react';
 import { Outlet, useParams } from 'react-router';
 import { LuTrees } from 'react-icons/lu';
+import classnames from 'classnames';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { queryClient } from '../services/react-query';
 import { ParkCheckIn } from '../components/park/ParkCheckIn';
 import { ReviewsPreview } from '../components/park/ReviewsPreview';
 import { UserContext } from '../context/UserContext';
@@ -15,8 +18,6 @@ import {
   fetchParkPrimaryImage,
   uploadParkPrimaryImage,
 } from '../services/parks';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { queryClient } from '../services/react-query';
 import { Loading } from '../components/Loading';
 
 const Park: React.FC = () => {
@@ -63,7 +64,7 @@ const Park: React.FC = () => {
       {primaryImage ? (
         <img src={primaryImage} className={styles.image} />
       ) : (
-        <div className={styles.imageIcon}>
+        <div className={classnames(styles.image, styles.imageIcon)}>
           <IconContext.Provider value={{ className: styles.parkIcon }}>
             <LuTrees />
           </IconContext.Provider>

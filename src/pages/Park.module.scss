@@ -5,17 +5,14 @@
   width: 100%;
   object-fit: cover;
   margin-top: 1px;
-}
-
-.image-icon {
-  height: 250px;
-  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   border-bottom: 1px solid $text-light;
+}
 
+.image-icon {
   .park-icon {
     width: 50%;
     height: 50%;

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { Marker } from './Marker';
 import { Park } from '../../types/park';
-import { fetchParks } from '../../services/parks';
+import { fetchParksJSON } from '../../services/parks';
 import { Loading } from '../Loading';
 
 interface MarkerListProps {
@@ -15,7 +15,7 @@ const MarkerList: React.FC<MarkerListProps> = ({
 }) => {
   const { isLoading, data: parks } = useQuery({
     queryKey: ['parks'],
-    queryFn: fetchParks,
+    queryFn: fetchParksJSON,
   });
 
   if (isLoading) {

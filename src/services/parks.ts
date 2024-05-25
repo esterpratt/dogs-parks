@@ -1,4 +1,4 @@
-import { db } from './firebase-config';
+import { db, storage } from './firebase-config';
 import {
   getDocs,
   collection,
@@ -8,12 +8,24 @@ import {
   GeoPoint,
   updateDoc,
 } from 'firebase/firestore';
-import { Park } from '../types/park';
+import { ref, getDownloadURL } from 'firebase/storage';
+import { Park, ParkForLists } from '../types/park';
 import { fetchImagesByDirectory, uploadImage } from './image';
 import { AppError, throwError } from './error';
 
 const parksCollection = collection(db, 'parks');
 const suggestedParksCollection = collection(db, 'suggestedParks');
+
+const fetchParksJSON = async () => {
+  try {
+    const jsonRef = ref(storage, 'parks.json');
+    const parksURL = await getDownloadURL(jsonRef);
+    const res = await fetch(parksURL);
+    return res.json() as Promise<ParkForLists[]>;
+  } catch (error) {
+    throwError(error);
+  }
+};
 
 const fetchParks = async () => {
   try {
@@ -133,6 +145,7 @@ const fetchAllParkImages = async (parkId: string) => {
 export {
   fetchPark,
   fetchParks,
+  fetchParksJSON,
   uploadParkImage,
   uploadParkPrimaryImage,
   fetchParkPrimaryImage,

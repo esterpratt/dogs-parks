@@ -5,7 +5,7 @@ import { SearchList } from '../SearchList';
 import styles from './ParksList.module.scss';
 import { ParkPreview } from './ParkPreview';
 import { useDistance } from '../../hooks/useDistance';
-import { fetchParks } from '../../services/parks';
+import { fetchParksJSON } from '../../services/parks';
 import { useQuery } from '@tanstack/react-query';
 import { Loading } from '../Loading';
 import { useMemo } from 'react';
@@ -17,7 +17,7 @@ interface ParksListProps {
 const ParksList: React.FC<ParksListProps> = ({ className }) => {
   const { isLoading, data: parks = [] } = useQuery({
     queryKey: ['parks'],
-    queryFn: fetchParks,
+    queryFn: fetchParksJSON,
   });
 
   const parksToSort = useMemo(

@@ -1,11 +1,5 @@
-import {
-  ref,
-  uploadBytes,
-  listAll,
-  getDownloadURL,
-  uploadString,
-  UploadResult,
-} from 'firebase/storage';
+import imageCompression from 'browser-image-compression';
+import { ref, uploadBytes, listAll, getDownloadURL } from 'firebase/storage';
 import { storage } from './firebase-config';
 import { v4 } from 'uuid';
 
@@ -16,17 +10,17 @@ interface uploadImageProps {
 }
 
 const uploadImage = async ({ image, path, name }: uploadImageProps) => {
-  let imageName = name || v4();
-  let snapshot: UploadResult;
+  const prefix = typeof image === 'string' ? '' : image.name;
+  const imageName = name ? name : prefix + v4();
+  const file =
+    typeof image === 'string'
+      ? await imageCompression.getFilefromDataUrl(image, imageName)
+      : image;
 
-  if (image instanceof File) {
-    imageName = `${name || image.name + imageName}`;
-    const storageRef = ref(storage, `${path}/${imageName}`);
-    snapshot = await uploadBytes(storageRef, image);
-  } else {
-    const storageRef = ref(storage, `${path}/${imageName}`);
-    snapshot = await uploadString(storageRef, image, 'data_url');
-  }
+  const compressedImage = await imageCompression(file, { maxSizeMB: 0.1 });
+
+  const storageRef = ref(storage, `${path}/${imageName}`);
+  const snapshot = await uploadBytes(storageRef, compressedImage);
 
   const imageUrl = await getDownloadURL(snapshot.ref);
   return imageUrl;
