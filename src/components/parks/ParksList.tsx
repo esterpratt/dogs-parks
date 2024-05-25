@@ -8,6 +8,7 @@ import { useDistance } from '../../hooks/useDistance';
 import { fetchParks } from '../../services/parks';
 import { useQuery } from '@tanstack/react-query';
 import { Loading } from '../Loading';
+import { useMemo } from 'react';
 
 interface ParksListProps {
   className?: string;
@@ -19,10 +20,14 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
     queryFn: fetchParks,
   });
 
-  const parksToSort = parks.map((park) => ({
-    ...park,
-    ...park.location,
-  }));
+  const parksToSort = useMemo(
+    () =>
+      parks.map((park) => ({
+        ...park,
+        ...park.location,
+      })),
+    [parks]
+  );
 
   const sortedParks = useDistance(parksToSort);
 
