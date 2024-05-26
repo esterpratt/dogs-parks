@@ -36,21 +36,38 @@ const ParkCheckIn: React.FC<{
     },
   });
 
-  // TODO: CHECKIN USING REACT-QUERY
-  const shouldCheckIn =
-    !checkIn || checkIn.parkId !== parkId || checkIn.userId !== userId;
+  const { mutateAsync: parkCheckIn } = useMutation({
+    mutationFn: async () => {
+      const id = await checkin({ userId, parkId });
+      return id;
+    },
+    onSuccess: async () => {
+      setOpenDogsCountModal(true);
+      queryClient.invalidateQueries({
+        queryKey: ['parkVisitors', parkId],
+      });
+    },
+  });
+
+  const { mutate: parkCheckout } = useMutation({
+    mutationFn: () => checkout(checkIn.id),
+    onSuccess: async () => {
+      setCheckIn(null);
+      setOpenReviewModal(true);
+      queryClient.invalidateQueries({
+        queryKey: ['parkVisitors', parkId],
+      });
+    },
+  });
+
+  const shouldCheckIn = !checkIn || checkIn.parkId !== parkId;
 
   const onCheckIn = async () => {
     if (!shouldCheckIn) {
-      await checkout(checkIn.id);
-      setCheckIn(null);
-      setOpenReviewModal(true);
+      parkCheckout();
     } else {
-      const id = await checkin({ userId, parkId });
-      if (id) {
-        setCheckIn({ id, parkId, userId });
-        setOpenDogsCountModal(true);
-      }
+      const id = await parkCheckIn();
+      setCheckIn({ id, parkId });
     }
   };
 
