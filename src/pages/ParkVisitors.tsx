@@ -28,6 +28,8 @@ const ParkVisitors: React.FC = () => {
 
   const friendsCount = friendsInParkIds.length;
   const othersCount = visitorsIds.length - friendsCount;
+  const userIsOnlyVisitor =
+    othersCount === 1 && friendsCount === 0 && visitorsIds[0] === userId;
 
   if (isLoadingDogs || isLoadingFriendsIds || isLoadingVisitors) {
     return <Loading />;
@@ -56,11 +58,16 @@ const ParkVisitors: React.FC = () => {
       {!!othersCount && (
         <div className={styles.othersContainer}>
           <span className={styles.othersTitle}>
-            There {othersCount > 1 ? 'are' : 'is'} {othersCount}{' '}
-            {!!friendsCount && 'more'} visitor
-            {othersCount > 1 && 's'} in the park right now.
+            {userIsOnlyVisitor ? (
+              'You are the only visitor in the park right now'
+            ) : (
+              <>
+                {!!friendsCount && 'more'} visitor
+                {othersCount > 1 && 's'} in the park right now.
+              </>
+            )}
           </span>
-          {!friendsCount && (
+          {!friendsCount && !userIsOnlyVisitor && (
             <>
               <span>You can only see friends' details.</span>
               <Link to="/users">Search for new friends here</Link>

@@ -37,9 +37,9 @@ const getSizeContent = (value?: number) => {
   let content = '?';
   if (value) {
     content = 'M';
-    if (value >= 50) {
+    if (value >= 100) {
       content = 'L';
-    } else if (value <= 30) {
+    } else if (value < 50) {
       content = 'S';
     }
   }
