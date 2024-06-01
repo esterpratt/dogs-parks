@@ -5,6 +5,8 @@ import { Button } from '../Button';
 import { UserContext } from '../../context/UserContext';
 import styles from './ReportParkModal.module.scss';
 import { createReport } from '../../services/reports';
+import { useMutation } from '@tanstack/react-query';
+import { ThankYouModalContext } from '../../context/ThankYouModalContext';
 
 interface ReportParkModalProps {
   open: boolean;
@@ -18,7 +20,13 @@ const ReportParkModal: React.FC<ReportParkModalProps> = ({
   parkId,
 }) => {
   const { userId } = useContext(UserContext);
+  const { setIsOpen: setIsThankYouModalOpen } =
+    useContext(ThankYouModalContext);
   const [text, setText] = useState('');
+  const { mutate } = useMutation({
+    mutationFn: () => createReport({ userId: userId!, parkId, text }),
+    onSuccess: () => setIsThankYouModalOpen(true),
+  });
 
   const onChangeText = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setText(event.target.value);
@@ -27,7 +35,7 @@ const ReportParkModal: React.FC<ReportParkModalProps> = ({
   const onSubmitReport = async () => {
     onClose();
     if (text) {
-      await createReport({ userId: userId!, parkId, text });
+      mutate();
     }
   };
 

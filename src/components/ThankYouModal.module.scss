@@ -1,0 +1,19 @@
+@import '../variables.scss';
+
+.modal {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 32px;
+}
+
+.title {
+  font-size: 24px;
+  margin-left: 12px;
+}
+
+.icon {
+  color: $green;
+  width: 24px;
+  height: 24px;
+}

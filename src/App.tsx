@@ -25,6 +25,7 @@ import { userLoader } from './loaders/userLoader';
 import { usersLoader } from './loaders/usersLoader';
 
 import { UserContextProvider } from './context/UserContext';
+import { ThankYouModalContextProvider } from './context/ThankYouModalContext';
 
 const UserDog = lazy(() => import('./pages/UserDog'));
 const UserReviews = lazy(() => import('./pages/UserReviews'));
@@ -158,9 +159,11 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <UserContextProvider>
-        <RouterProvider router={router} />
-      </UserContextProvider>
+      <ThankYouModalContextProvider>
+        <UserContextProvider>
+          <RouterProvider router={router} />
+        </UserContextProvider>
+      </ThankYouModalContextProvider>
     </QueryClientProvider>
   );
 };

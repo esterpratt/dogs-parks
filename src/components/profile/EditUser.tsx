@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
 import { Button } from '../Button';
 import styles from './EditUser.module.scss';
 import { ControlledInput } from '../inputs/ControlledInput';
@@ -9,6 +9,7 @@ import {
   EditUserProps as UpdateUserProps,
 } from '../../services/users';
 import { queryClient } from '../../services/react-query';
+import { ThankYouModalContext } from '../../context/ThankYouModalContext';
 
 interface EditUserProps {
   user: User;
@@ -17,6 +18,8 @@ interface EditUserProps {
 
 const EditUser: React.FC<EditUserProps> = ({ user, onSubmitForm }) => {
   const [userData, setUserData] = useState(user);
+  const { setIsOpen: setIsThankYouModalOpen } =
+    useContext(ThankYouModalContext);
 
   const { mutate: mutateUser } = useMutation({
     mutationFn: (data: UpdateUserProps) =>
@@ -35,6 +38,9 @@ const EditUser: React.FC<EditUserProps> = ({ user, onSubmitForm }) => {
     },
     onError: (error, data, context) => {
       queryClient.setQueryData(['user', 'me', user.id], context?.prevUser);
+    },
+    onSuccess: () => {
+      setIsThankYouModalOpen(true);
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['user', 'me', user.id] });

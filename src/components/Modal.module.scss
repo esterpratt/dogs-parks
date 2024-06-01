@@ -2,11 +2,17 @@
 
 .modal {
   position: fixed;
+  z-index: 1000;
   transition: all 0.5s;
   border: none;
   display: block;
   background-color: $grey-light;
+  box-shadow: 0 0 0 100vmax rgba($text, 0.7);
   padding: 0;
+
+  &.delay[open] {
+    transition-delay: 0.5s;
+  }
 
   &.appear {
     border-radius: 12px;
@@ -20,17 +26,22 @@
     background-color: inherit;
   }
 
-  &.center {
+  &.center,
+  &.center-top {
     border-radius: 12px;
     height: 80%;
     width: 90%;
     max-width: 90%;
     max-height: 80%;
     margin-top: 300px;
+  }
 
-    &[open] {
-      margin-top: 48px;
-    }
+  &.center[open] {
+    margin-top: 112px;
+  }
+
+  &.center-top[open] {
+    margin-top: 48px;
   }
 
   &.bottom {
@@ -39,7 +50,6 @@
     border-radius: 24px;
     width: 95%;
     max-width: 95%;
-    visibility: visible;
     opacity: 1;
 
     &[open] {

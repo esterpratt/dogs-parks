@@ -14,6 +14,7 @@ import { TextArea } from '../inputs/TextArea';
 import { useMutation } from '@tanstack/react-query';
 import { queryClient } from '../../services/react-query';
 import { useRevalidator } from 'react-router';
+import { ThankYouModalContext } from '../../context/ThankYouModalContext';
 
 interface EditDogProps {
   dog?: Dog;
@@ -21,6 +22,8 @@ interface EditDogProps {
 }
 
 const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
+  const { setIsOpen: setIsThankYouModalOpen } =
+    useContext(ThankYouModalContext);
   const [dogData, setDogData] = useState<
     | (Partial<Omit<Dog, 'likes' | 'dislikes'>> &
         Required<Pick<Dog, 'name'>> & {
@@ -46,6 +49,9 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
     },
     onError: (error, vars, context) => {
       queryClient.setQueryData(['dogs', vars.dogId], context?.prevDog);
+    },
+    onSuccess: () => {
+      setIsThankYouModalOpen(true);
     },
     onSettled: (data, error, vars) => {
       queryClient.invalidateQueries({ queryKey: ['dogs', vars.dogId] });

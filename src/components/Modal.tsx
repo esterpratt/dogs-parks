@@ -8,24 +8,26 @@ interface ModalProps {
   open: boolean;
   onClose?: () => void;
   className?: string;
-  variant?: 'center' | 'bottom' | 'fullScreen' | 'appear';
-  hideBackdrop?: boolean;
+  variant?: 'center' | 'centerTop' | 'bottom' | 'fullScreen' | 'appear';
   height?: string;
   width?: string;
   removeCloseButton?: boolean;
   children: ReactNode;
+  autoClose?: boolean;
+  delay?: boolean;
 }
 
 const Modal: React.FC<ModalProps> = ({
   open,
   onClose,
-  variant = 'center',
-  hideBackdrop = false,
+  variant = 'centerTop',
   height,
   width,
   children,
   className,
   removeCloseButton,
+  autoClose = false,
+  delay = false,
 }) => {
   const dialogRef = useRef<HTMLDialogElement | null>(null);
 
@@ -33,10 +35,16 @@ const Modal: React.FC<ModalProps> = ({
     const modal = dialogRef.current;
     if (open) {
       modal!.showModal();
+
+      if (autoClose) {
+        setTimeout(() => {
+          modal!.close();
+        }, 2000);
+      }
     }
 
     return () => modal!.close();
-  }, [open]);
+  }, [open, autoClose]);
 
   const style: CSSProperties = {};
 
@@ -55,9 +63,9 @@ const Modal: React.FC<ModalProps> = ({
       className={classnames(
         styles.modal,
         styles[variant],
-        hideBackdrop && styles.hideBackdrop
+        delay && styles.delay
       )}
-      onClick={hideBackdrop ? () => {} : onClose}
+      onClick={onClose}
     >
       <div
         className={classnames(styles.content, className)}

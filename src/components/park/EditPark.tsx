@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useContext, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { Button } from '../Button';
 import styles from './EditPark.module.scss';
@@ -8,6 +8,7 @@ import { Park, ParkMaterial } from '../../types/park';
 import { MultiSelectInputs } from '../inputs/MultiSelectInputs';
 import { updatePark } from '../../services/parks';
 import { queryClient } from '../../services/react-query';
+import { ThankYouModalContext } from '../../context/ThankYouModalContext';
 
 interface EditParkProps {
   onSubmitForm?: () => void;
@@ -15,6 +16,8 @@ interface EditParkProps {
 }
 
 const EditPark: React.FC<EditParkProps> = ({ onSubmitForm, park }) => {
+  const { setIsOpen: setIsThankYouModalOpen } =
+    useContext(ThankYouModalContext);
   const [parkDetails, setParkDetails] = useState<{
     materials?: ParkMaterial[];
     size?: string;
@@ -46,6 +49,9 @@ const EditPark: React.FC<EditParkProps> = ({ onSubmitForm, park }) => {
     },
     onError: (error, data, context) => {
       queryClient.setQueryData(['parks', park.id], context?.prevPark);
+    },
+    onSuccess: () => {
+      setIsThankYouModalOpen(true);
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['parks', park.id] });
