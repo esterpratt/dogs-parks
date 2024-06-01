@@ -35,12 +35,10 @@ const ChooseEditParkOptionModal: React.FC<ChooseEditParkOptionModalProps> = ({
 
   const onEditPark = () => {
     setIsEditModalOpen(true);
-    // onClose();
   };
 
   const onReportPark = () => {
     setIsReportModalOpen(true);
-    // onClose();
   };
 
   return (
