@@ -25,8 +25,8 @@ const EditUser: React.FC<EditUserProps> = ({ user, onSubmitForm }) => {
         userDetails: data.userDetails,
       }),
     onMutate: async (data) => {
-      await queryClient.cancelQueries({ queryKey: ['users', user.id] });
-      const prevUser = queryClient.getQueryData<User>(['users', user.id]);
+      await queryClient.cancelQueries({ queryKey: ['user', 'me', user.id] });
+      const prevUser = queryClient.getQueryData<User>(['user', 'me', user.id]);
       queryClient.setQueryData(['users', user.id], {
         ...prevUser,
         ...data.userDetails,
@@ -34,10 +34,10 @@ const EditUser: React.FC<EditUserProps> = ({ user, onSubmitForm }) => {
       return { prevUser };
     },
     onError: (error, data, context) => {
-      queryClient.setQueryData(['users', user.id], context?.prevUser);
+      queryClient.setQueryData(['user', 'me', user.id], context?.prevUser);
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['users', user.id] });
+      queryClient.invalidateQueries({ queryKey: ['user', 'me', user.id] });
     },
   });
 

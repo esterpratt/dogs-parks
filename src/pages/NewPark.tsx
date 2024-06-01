@@ -23,7 +23,7 @@ const NewPark: React.FC = () => {
 
   const { mutate } = useMutation({
     mutationFn: createPark,
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({
         queryKey: ['parks'],
       });

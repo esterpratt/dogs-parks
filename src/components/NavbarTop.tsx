@@ -7,13 +7,14 @@ import { UserContext } from '../context/UserContext';
 import styles from './NavbarTop.module.scss';
 
 const NavbarTop = () => {
-  const { userId, loadingUserId, user } = useContext(UserContext);
+  const { userId, loadingUserId, isLoadingUser, user } =
+    useContext(UserContext);
   const navigate = useNavigate();
 
   return (
     <nav className={styles.navbar}>
       <IconContext.Provider value={{ className: styles.icons, size: '32' }}>
-        {loadingUserId ? null : (
+        {isLoadingUser || loadingUserId ? null : (
           <div className={styles.leftBar}>
             <Link
               to={userId ? `/profile/${userId}/dogs` : '/login'}

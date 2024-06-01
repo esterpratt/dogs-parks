@@ -23,7 +23,7 @@ const ParkGalleryContainer: React.FC<ParkGalleryContainerProps> = ({
 
   const { mutate } = useMutation({
     mutationFn: (img: string | File) => uploadParkImage(img, parkId),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({
         queryKey: ['parkImages', parkId],
       });

@@ -30,7 +30,7 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
 
   const { mutate } = useMutation({
     mutationFn: (img: string | File) => uploadDogImage(img, dog.id),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({
         queryKey: ['dogImages', dog.id],
       });
@@ -50,7 +50,7 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
     openCameraModal();
   };
 
-  if (!isSignedInUser && !dogImages.length && isLoading) {
+  if ((!isSignedInUser && !dogImages.length) || isLoading) {
     return null;
   }
 

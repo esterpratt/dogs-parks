@@ -1,10 +1,4 @@
-import {
-  PropsWithChildren,
-  createContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { PropsWithChildren, createContext, useEffect, useRef } from 'react';
 import {
   LoginProps,
   SigninProps,
@@ -16,20 +10,24 @@ import { createUser, fetchUser } from '../services/users';
 import { User } from '../types/user';
 import { useOnAuthStateChanged } from '../hooks/useOnAuthStateChanged';
 import { createDog } from '../services/dogs';
+import { queryClient } from '../services/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 interface UserContextObj {
   userId: string | null;
-  user: User | null;
+  user?: User | null;
   loadingUserId: boolean;
-  userLogin: (props: LoginProps) => Promise<User | Error | void>;
+  isLoadingUser?: boolean;
+  userLogin: (props: LoginProps) => void;
   userLogout: () => void;
-  userSignin: (props: SigninProps) => Promise<User | Error | void>;
+  userSignin: (props: SigninProps) => void;
 }
 
 const initialData: UserContextObj = {
   userId: null,
   user: null,
   loadingUserId: true,
+  isLoadingUser: true,
   userLogin: () => Promise.resolve(),
   userLogout: () => {},
   userSignin: () => Promise.resolve(),
@@ -39,71 +37,82 @@ const UserContext = createContext<UserContextObj>(initialData);
 
 const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { userId, loadingUserId } = useOnAuthStateChanged();
-  const [user, setUser] = useState<User | null>(null);
   const userExtraDataRef = useRef<{ name: string; dogName: string } | null>(
     null
   );
 
-  useEffect(() => {
-    const getUser = async () => {
-      if (userExtraDataRef.current) {
-        const name = userExtraDataRef.current.name;
-        const dogName = userExtraDataRef.current.dogName;
-        const userToSet = { id: userId!, name };
-        try {
-          const createUserPromise = createUser(userToSet);
-          const createDogPromise = createDog({
-            owner: userId!,
-            name: dogName,
-          });
-          await Promise.all([createDogPromise, createUserPromise]);
-          setUser(userToSet);
-        } finally {
-          userExtraDataRef.current = null;
-        }
-      } else {
-        try {
-          const userData = await fetchUser(userId!);
-          if (userData) {
-            setUser({ ...userData });
-          }
-        } catch (error) {
-          setUser(null);
-        }
-      }
-    };
-    if (userId) {
-      getUser();
-    } else {
-      setUser(null);
-    }
-  }, [userId]);
+  const {
+    data: user,
+    refetch: refetchUser,
+    isLoading: isLoadingUser,
+  } = useQuery({
+    queryKey: ['user', 'me', userId],
+    queryFn: () => fetchUser(userId!),
+    enabled: !!userId,
+  });
 
-  const userLogin = async ({ email, password }: LoginProps) => {
-    await login({ email, password });
-  };
-
-  const userLogout = async () => {
-    await logout();
-  };
-
-  const userSignin = async ({
-    email,
-    password,
-    name,
-    dogName,
-  }: SigninProps) => {
-    try {
-      userExtraDataRef.current = { name, dogName };
-      await signin({ email, password });
-    } catch (error) {
+  const { mutate: addDog } = useMutation({
+    mutationFn: () => {
+      const dogToSet = {
+        owner: userId!,
+        name: userExtraDataRef.current!.dogName,
+      };
+      return createDog(dogToSet);
+    },
+    onSettled: () => {
       userExtraDataRef.current = null;
-      throw error;
+    },
+  });
+
+  const { mutate: addUser } = useMutation({
+    mutationFn: (data: { userId: string }) => {
+      const userToSet = {
+        id: data.userId,
+        name: userExtraDataRef.current!.name,
+      };
+      return createUser(userToSet);
+    },
+    onSuccess: () => {
+      refetchUser();
+      addDog();
+    },
+  });
+
+  const { mutate: userSignin } = useMutation({
+    mutationFn: (vars: SigninProps) =>
+      signin({ email: vars.email, password: vars.password }),
+    onSuccess: (data, vars: SigninProps) => {
+      userExtraDataRef.current = { name: vars.name, dogName: vars.dogName };
+    },
+    onError: () => {
+      userExtraDataRef.current = null;
+    },
+  });
+
+  const { mutate: userLogin } = useMutation({
+    mutationFn: (data: LoginProps) =>
+      login({ email: data.email, password: data.password }),
+  });
+
+  const { mutate: userLogout } = useMutation({
+    mutationFn: () => logout(),
+  });
+
+  useEffect(() => {
+    if (userId) {
+      if (userExtraDataRef.current) {
+        addUser({ userId });
+      } else {
+        refetchUser();
+      }
+    } else {
+      queryClient.removeQueries({ queryKey: ['user', 'me'] });
     }
-  };
+  }, [userId, addUser, refetchUser]);
 
   const value: UserContextObj = {
     user,
+    isLoadingUser,
     userId,
     loadingUserId,
     userLogin,

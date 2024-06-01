@@ -10,7 +10,7 @@ const userLoader: LoaderFunction = async ({ params }) => {
 
   const promises: [Promise<User>, Promise<Dog[]>] = [
     queryClient.fetchQuery({
-      queryKey: ['users', userId],
+      queryKey: ['user', userId],
       queryFn: () => fetchUser(userId!),
     }),
     queryClient.fetchQuery({

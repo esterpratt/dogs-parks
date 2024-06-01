@@ -19,11 +19,12 @@ import { Park } from './pages/Park';
 import { NewPark } from './pages/NewPark';
 import { Loading } from './components/Loading';
 
-import { UserContextProvider } from './context/UserContext';
+import { queryClient } from './services/react-query';
 
 import { userLoader } from './loaders/userLoader';
 import { usersLoader } from './loaders/usersLoader';
-import { queryClient } from './services/react-query';
+
+import { UserContextProvider } from './context/UserContext';
 
 const UserDog = lazy(() => import('./pages/UserDog'));
 const UserReviews = lazy(() => import('./pages/UserReviews'));
