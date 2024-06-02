@@ -15,6 +15,18 @@ interface EditParkProps {
   park: Park;
 }
 
+const getBooleanValue = (value?: string) => {
+  if (value === 'Y') {
+    return true;
+  }
+
+  if (value === 'N') {
+    return false;
+  }
+
+  return undefined;
+};
+
 const EditPark: React.FC<EditParkProps> = ({ onSubmitForm, park }) => {
   const { setIsOpen: setIsThankYouModalOpen } =
     useContext(ThankYouModalContext);
@@ -27,17 +39,15 @@ const EditPark: React.FC<EditParkProps> = ({ onSubmitForm, park }) => {
   }>(() => {
     return {
       size: park.size?.toString(),
-      facilities:
+      hasFacilities:
         park.hasFacilities === false
-          ? 'no'
+          ? 'N'
           : park.hasFacilities
-          ? 'yes'
+          ? 'Y'
           : undefined,
       materials: park.materials,
-      hasShade:
-        park.hasShade === false ? 'no' : park.hasShade ? 'yes' : undefined,
-      hasWater:
-        park.hasWater === false ? 'no' : park.hasWater ? 'yes' : undefined,
+      hasShade: park.hasShade === false ? 'N' : park.hasShade ? 'Y' : undefined,
+      hasWater: park.hasWater === false ? 'N' : park.hasWater ? 'Y' : undefined,
     };
   });
 
@@ -45,6 +55,10 @@ const EditPark: React.FC<EditParkProps> = ({ onSubmitForm, park }) => {
     mutationFn: (data: { id: string; updatedData: Partial<Park> }) =>
       updatePark(data.id, data.updatedData),
     onMutate: async (data) => {
+      if (onSubmitForm) {
+        onSubmitForm();
+      }
+
       await queryClient.cancelQueries({ queryKey: ['parks', park.id] });
       const prevPark = queryClient.getQueryData<Park>(['parks', park.id]);
       queryClient.setQueryData(['parks', park.id], {
@@ -62,9 +76,6 @@ const EditPark: React.FC<EditParkProps> = ({ onSubmitForm, park }) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['parks', park.id] });
-      if (onSubmitForm) {
-        onSubmitForm();
-      }
     },
   });
 
@@ -92,24 +103,9 @@ const EditPark: React.FC<EditParkProps> = ({ onSubmitForm, park }) => {
     } = {};
 
     const materials = parkDetails.materials ? parkDetails.materials : undefined;
-    const hasFacilities =
-      parkDetails.hasFacilities === 'yes'
-        ? true
-        : parkDetails.hasShade === 'no'
-        ? false
-        : undefined;
-    const hasShade =
-      parkDetails.hasShade === 'yes'
-        ? true
-        : parkDetails.hasShade === 'no'
-        ? false
-        : undefined;
-    const hasWater =
-      parkDetails.hasWater === 'yes'
-        ? true
-        : parkDetails.hasWater === 'no'
-        ? false
-        : undefined;
+    const hasFacilities = getBooleanValue(parkDetails.hasFacilities);
+    const hasShade = getBooleanValue(parkDetails.hasShade);
+    const hasWater = getBooleanValue(parkDetails.hasWater);
     const size =
       parkDetails.size !== undefined ? Number(parkDetails.size) : undefined;
 

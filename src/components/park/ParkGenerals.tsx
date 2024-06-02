@@ -14,8 +14,10 @@ interface ParkGeneralsProps {
   parkId: string;
 }
 
+const NO_CONTENT = '?';
+
 const getBooleanContent = (value?: boolean) => {
-  let content = '?';
+  let content = NO_CONTENT;
   if (value) {
     content = 'Y';
   } else if (value === false) {
@@ -25,7 +27,7 @@ const getBooleanContent = (value?: boolean) => {
 };
 
 const getListContent = (values?: string[]) => {
-  let content = '?';
+  let content = NO_CONTENT;
   if (values && values.length) {
     content = values
       .map((value) => value[0].toUpperCase() + value.slice(1))
@@ -35,7 +37,7 @@ const getListContent = (values?: string[]) => {
 };
 
 const getSizeContent = (value?: number) => {
-  let content = '?';
+  let content = NO_CONTENT;
   if (value) {
     content = 'M';
     if (value >= 100) {
@@ -76,7 +78,10 @@ const ParkGenerals = ({
         title="Ground"
         content={groundContent}
         color={styles.brown}
-        className={styles.ground}
+        className={classnames(
+          styles.ground,
+          groundContent === NO_CONTENT && styles.noContent
+        )}
       />
       <DetailsSqaure
         title="Facilities"

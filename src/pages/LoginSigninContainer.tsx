@@ -63,14 +63,14 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
           <FormInput
             onChange={() => setError('')}
             name="email"
-            label="Email*"
+            label="Email *"
             type="email"
             required
           />
           <FormInput
             onChange={() => setError('')}
             name="password"
-            label="Password*"
+            label="Password *"
             type="password"
             required
           />
@@ -79,7 +79,7 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
               <FormInput
                 onChange={() => setError('')}
                 name="name"
-                label="Your Name*"
+                label="Your Name *"
                 type="text"
                 required
               />
@@ -88,7 +88,7 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
                 name="dogName"
                 label={
                   <>
-                    Your Dog Name*
+                    Your Dog Name *
                     <span>
                       have a pack? great! you could later add everybody!
                     </span>

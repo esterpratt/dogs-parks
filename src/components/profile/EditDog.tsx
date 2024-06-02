@@ -127,7 +127,7 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
         value={dogData?.name || ''}
         onChange={onInputChange}
         name="name"
-        label="Name*"
+        label="Name *"
         required
       />
       <RadioInputs
@@ -138,20 +138,20 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
         ]}
         onOptionChange={onInputChange}
         name="gender"
-        label="Gender*"
+        label="Gender *"
       />
       <ControlledInput
         value={dogData?.age?.toString() || ''}
         onChange={onInputChange}
         name="age"
-        label="Age*"
+        label="Age *"
         required
       />
       <ControlledInput
         value={dogData?.breed || ''}
         onChange={onInputChange}
         name="breed"
-        label="Breed*"
+        label="Breed *"
         required
       />
       <RadioInputs
@@ -188,7 +188,6 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
         name="possessive"
         label="Possessive"
       />
-      {/* TODO: each like and dislike should be apart with option to add another like */}
       <ControlledInput
         value={dogData?.likes || ''}
         onChange={onInputChange}

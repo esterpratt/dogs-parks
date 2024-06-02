@@ -5,7 +5,7 @@
   justify-content: space-between;
 }
 
-.ground {
+.ground:not(.no-content) {
   font-size: 14px;
 }
 
