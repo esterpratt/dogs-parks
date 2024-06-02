@@ -5,6 +5,7 @@ import styles from './RadioInputs.module.scss';
 interface RadioInputProps {
   options: { id: string; value: string }[];
   name: string;
+  label: string;
   value: string;
   onOptionChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
@@ -12,12 +13,13 @@ interface RadioInputProps {
 const RadioInputs: React.FC<RadioInputProps> = ({
   options,
   name,
+  label,
   value,
   onOptionChange,
 }) => {
   return (
     <div className={styles.container}>
-      <div className={styles.name}>{name}</div>
+      <div className={styles.name}>{label}</div>
       <div className={styles.options}>
         {options.map((option) => {
           return (

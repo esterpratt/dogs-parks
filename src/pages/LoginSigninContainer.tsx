@@ -1,11 +1,10 @@
-import { FormEvent, useContext, useEffect, useState } from 'react';
+import { FormEvent, useContext, useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 import styles from './LoginSigninContainer.module.scss';
 import { Button } from '../components/Button';
 import { useNavigate } from 'react-router';
 import { UserContext } from '../context/UserContext';
 import { SigninProps } from '../services/authentication';
-import { AppError } from '../services/error';
 import { Link } from 'react-router-dom';
 import { FormInput } from '../components/inputs/FormInput';
 
@@ -16,9 +15,11 @@ interface LoginSigninContainerProps {
 const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
   method,
 }) => {
-  const { userSignin, userLogin, user } = useContext(UserContext);
+  const { userSignin, userLogin, user, singinError, loginError } =
+    useContext(UserContext);
   const [error, setError] = useState<string>('');
   const navigate = useNavigate();
+  const isMethodChanged = useRef(false);
 
   useEffect(() => {
     if (user) {
@@ -26,19 +27,28 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
     }
   }, [user, navigate]);
 
+  useEffect(() => {
+    setError('');
+    isMethodChanged.current = true;
+  }, [method]);
+
+  useEffect(() => {
+    if (!isMethodChanged.current) {
+      setError(singinError?.message || loginError?.message || '');
+    } else {
+      isMethodChanged.current = false;
+    }
+  }, [singinError, loginError]);
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = Object.fromEntries(
       new FormData(event.currentTarget)
     ) as unknown as SigninProps;
-    try {
-      if (method === 'signin') {
-        await userSignin(formData);
-      } else {
-        await userLogin(formData);
-      }
-    } catch (error) {
-      setError((error as AppError).message);
+    if (method === 'signin') {
+      userSignin(formData);
+    } else {
+      userLogin(formData);
     }
   };
 
@@ -53,14 +63,14 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
           <FormInput
             onChange={() => setError('')}
             name="email"
-            label="Email"
+            label="Email*"
             type="email"
             required
           />
           <FormInput
             onChange={() => setError('')}
             name="password"
-            label="Password"
+            label="Password*"
             type="password"
             required
           />
@@ -69,7 +79,7 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
               <FormInput
                 onChange={() => setError('')}
                 name="name"
-                label="Your Name"
+                label="Your Name*"
                 type="text"
                 required
               />
@@ -78,7 +88,7 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
                 name="dogName"
                 label={
                   <>
-                    Your Dog Name
+                    Your Dog Name*
                     <span>
                       have a pack? great! you could later add everybody!
                     </span>

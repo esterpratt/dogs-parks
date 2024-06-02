@@ -146,6 +146,7 @@ const EditPark: React.FC<EditParkProps> = ({ onSubmitForm, park }) => {
           ]}
           onOptionChange={onInputChange}
           name="hasShade"
+          label="Has Shade?"
         />
       )}
       {park.hasWater === undefined && (
@@ -157,6 +158,7 @@ const EditPark: React.FC<EditParkProps> = ({ onSubmitForm, park }) => {
           ]}
           onOptionChange={onInputChange}
           name="hasWater"
+          label="Has Water?"
         />
       )}
       <Button variant="green" type="submit" className={styles.saveButton}>

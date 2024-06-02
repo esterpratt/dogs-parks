@@ -12,6 +12,7 @@ import { useOnAuthStateChanged } from '../hooks/useOnAuthStateChanged';
 import { createDog } from '../services/dogs';
 import { queryClient } from '../services/react-query';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { throwError } from '../services/error';
 
 interface UserContextObj {
   userId: string | null;
@@ -21,6 +22,8 @@ interface UserContextObj {
   userLogin: (props: LoginProps) => void;
   userLogout: () => void;
   userSignin: (props: SigninProps) => void;
+  singinError: Error | null;
+  loginError: Error | null;
 }
 
 const initialData: UserContextObj = {
@@ -31,6 +34,8 @@ const initialData: UserContextObj = {
   userLogin: () => Promise.resolve(),
   userLogout: () => {},
   userSignin: () => Promise.resolve(),
+  singinError: null,
+  loginError: null,
 };
 
 const UserContext = createContext<UserContextObj>(initialData);
@@ -72,26 +77,30 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
       };
       return createUser(userToSet);
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       refetchUser();
       addDog();
     },
   });
 
-  const { mutate: userSignin } = useMutation({
+  const { mutate: userSignin, error: singinError } = useMutation({
     mutationFn: (vars: SigninProps) =>
       signin({ email: vars.email, password: vars.password }),
     onSuccess: (data, vars: SigninProps) => {
       userExtraDataRef.current = { name: vars.name, dogName: vars.dogName };
     },
-    onError: () => {
+    onError: (error) => {
       userExtraDataRef.current = null;
+      throwError(error);
     },
   });
 
-  const { mutate: userLogin } = useMutation({
+  const { mutate: userLogin, error: loginError } = useMutation({
     mutationFn: (data: LoginProps) =>
       login({ email: data.email, password: data.password }),
+    onError: (error) => {
+      throwError(error);
+    },
   });
 
   const { mutate: userLogout } = useMutation({
@@ -118,6 +127,8 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     userLogin,
     userLogout,
     userSignin,
+    singinError,
+    loginError,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
