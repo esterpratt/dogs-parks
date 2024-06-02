@@ -8,6 +8,7 @@ import { useGetParkVisitors } from '../../hooks/api/useGetParkVisitors';
 interface ParkGeneralsProps {
   size?: number;
   ground?: ParkMaterial[];
+  facilities?: boolean;
   shade?: boolean;
   water?: boolean;
   parkId: string;
@@ -16,9 +17,9 @@ interface ParkGeneralsProps {
 const getBooleanContent = (value?: boolean) => {
   let content = '?';
   if (value) {
-    content = 'V';
+    content = 'Y';
   } else if (value === false) {
-    content = 'X';
+    content = 'N';
   }
   return content;
 };
@@ -49,6 +50,7 @@ const getSizeContent = (value?: number) => {
 const ParkGenerals = ({
   size,
   ground,
+  facilities,
   shade,
   water,
   parkId,
@@ -63,6 +65,7 @@ const ParkGenerals = ({
     : othersCount.toString();
   const sizeContent = getSizeContent(size);
   const groundContent = getListContent(ground);
+  const facilitiesContent = getBooleanContent(facilities);
   const shadeContent = getBooleanContent(shade);
   const waterContent = getBooleanContent(water);
 
@@ -72,8 +75,13 @@ const ParkGenerals = ({
       <DetailsSqaure
         title="Ground"
         content={groundContent}
-        color={styles.green}
+        color={styles.brown}
         className={styles.ground}
+      />
+      <DetailsSqaure
+        title="Facilities"
+        content={facilitiesContent}
+        color={styles.darkGreen}
       />
       <DetailsSqaure title="Shade" content={shadeContent} color={styles.grey} />
       <DetailsSqaure title="Water" content={waterContent} color={styles.blue} />
@@ -87,7 +95,7 @@ const ParkGenerals = ({
         <DetailsSqaure
           title={friendsCount ? 'Friends here' : 'Visitors'}
           content={visitorsContent}
-          color={styles.brown}
+          color={styles.green}
         />
       </Link>
     </div>

@@ -20,12 +20,19 @@ const EditPark: React.FC<EditParkProps> = ({ onSubmitForm, park }) => {
     useContext(ThankYouModalContext);
   const [parkDetails, setParkDetails] = useState<{
     materials?: ParkMaterial[];
+    hasFacilities?: string;
     size?: string;
     hasShade?: string;
     hasWater?: string;
   }>(() => {
     return {
       size: park.size?.toString(),
+      facilities:
+        park.hasFacilities === false
+          ? 'no'
+          : park.hasFacilities
+          ? 'yes'
+          : undefined,
       materials: park.materials,
       hasShade:
         park.hasShade === false ? 'no' : park.hasShade ? 'yes' : undefined,
@@ -80,10 +87,17 @@ const EditPark: React.FC<EditParkProps> = ({ onSubmitForm, park }) => {
       materials?: ParkMaterial[];
       size?: number;
       hasShade?: boolean;
+      hasFacilities?: boolean;
       hasWater?: boolean;
     } = {};
 
     const materials = parkDetails.materials ? parkDetails.materials : undefined;
+    const hasFacilities =
+      parkDetails.hasFacilities === 'yes'
+        ? true
+        : parkDetails.hasShade === 'no'
+        ? false
+        : undefined;
     const hasShade =
       parkDetails.hasShade === 'yes'
         ? true
@@ -111,6 +125,9 @@ const EditPark: React.FC<EditParkProps> = ({ onSubmitForm, park }) => {
     if (hasWater !== undefined) {
       updatedData.hasWater = hasWater;
     }
+    if (hasFacilities !== undefined) {
+      updatedData.hasFacilities = hasFacilities;
+    }
 
     mutate({ id: park.id, updatedData });
   };
@@ -137,12 +154,24 @@ const EditPark: React.FC<EditParkProps> = ({ onSubmitForm, park }) => {
           name="materials"
         />
       )}
+      {park.hasFacilities === undefined && (
+        <RadioInputs
+          value={parkDetails.hasFacilities || ''}
+          options={[
+            { value: 'Y', id: 'yes' },
+            { value: 'N', id: 'no' },
+          ]}
+          onOptionChange={onInputChange}
+          name="hasFacilities"
+          label="Has Facilities?"
+        />
+      )}
       {park.hasShade === undefined && (
         <RadioInputs
           value={parkDetails.hasShade || ''}
           options={[
-            { value: 'yes', id: 'yes' },
-            { value: 'no', id: 'no' },
+            { value: 'Y', id: 'yes' },
+            { value: 'N', id: 'no' },
           ]}
           onOptionChange={onInputChange}
           name="hasShade"
@@ -153,8 +182,8 @@ const EditPark: React.FC<EditParkProps> = ({ onSubmitForm, park }) => {
         <RadioInputs
           value={parkDetails.hasWater || ''}
           options={[
-            { value: 'yes', id: 'yes' },
-            { value: 'no', id: 'no' },
+            { value: 'Y', id: 'yes' },
+            { value: 'N', id: 'no' },
           ]}
           onOptionChange={onInputChange}
           name="hasWater"

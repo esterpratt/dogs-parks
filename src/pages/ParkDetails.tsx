@@ -29,6 +29,7 @@ const ParkDetails = () => {
             parkId={park.id}
             size={park.size}
             ground={park.materials}
+            facilities={park.hasFacilities}
             shade={park.hasShade}
             water={park.hasWater}
           />
@@ -47,7 +48,6 @@ const ParkDetails = () => {
           <BusyHours parkId={park.id} />
         </Accordion.Content>
       </Accordion>
-
       {!!userId && (
         <ChooseEditParkOptionModal
           isOpen={isEditParkModalOpen}

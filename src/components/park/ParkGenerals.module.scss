@@ -2,7 +2,7 @@
 
 .container {
   display: flex;
-  gap: 14px;
+  justify-content: space-between;
 }
 
 .ground {
@@ -20,6 +20,7 @@
 
 :export {
   green: $green;
+  darkGreen: $green-dark;
   blue: $blue;
   orange: $orange;
   brown: $brown;
