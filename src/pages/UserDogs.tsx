@@ -15,10 +15,12 @@ interface UserDogsProps {
   user: User;
   dogs: Dog[];
   isSignedInUser: boolean;
+  dogImages: (string | null)[];
 }
 
 const UserDogs = () => {
-  const { dogs, isSignedInUser, user } = useOutletContext() as UserDogsProps;
+  const { dogs, dogImages, isSignedInUser, user } =
+    useOutletContext() as UserDogsProps;
   const { userId: signedInUserId } = useContext(UserContext);
   const [isEditDogsModalOpen, setIsEditDogsModalOpen] = useState(false);
 
@@ -39,13 +41,13 @@ const UserDogs = () => {
           )}
         </div>
         <div className={styles.dogs}>
-          {dogs.map((dog) => (
+          {dogs.map((dog, index) => (
             <Link
               to={dog.id}
               key={dog.id}
               state={{ isSignedInUser, userName: user.name }}
             >
-              <DogPreview dog={dog} />
+              <DogPreview dog={dog} image={dogImages[index]} />
             </Link>
           ))}
         </div>

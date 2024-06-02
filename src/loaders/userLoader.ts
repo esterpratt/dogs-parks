@@ -1,4 +1,4 @@
-import { LoaderFunction } from 'react-router';
+import { LoaderFunction, defer } from 'react-router';
 import { fetchUser } from '../services/users';
 import { fetchDogPrimaryImage, fetchUserDogs } from '../services/dogs';
 import { queryClient } from '../services/react-query';
@@ -21,28 +21,24 @@ const userLoader: LoaderFunction = async ({ params }) => {
 
   const [user, dogs = []] = await Promise.all(promises);
 
-  const dogImagesPromises: Promise<string | null>[] = [];
-  dogs.forEach((dog) => {
-    dogImagesPromises.push(
-      queryClient.fetchQuery({
-        queryKey: ['dogImage', dog.id],
-        queryFn: async () => {
-          const images = await fetchDogPrimaryImage(dog.id);
-          return images?.length ? images[0] : null;
-        },
-      })
-    );
-  });
+  const getDogsImages = async () => {
+    const dogsImagesPromises: Promise<string | null>[] = [];
+    dogs.forEach((dog) => {
+      dogsImagesPromises.push(
+        queryClient.fetchQuery({
+          queryKey: ['dogImage', dog.id],
+          queryFn: async () => {
+            const images = await fetchDogPrimaryImage(dog.id);
+            return images?.length ? images[0] : null;
+          },
+        })
+      );
+    });
 
-  const primaryDogsImages = await Promise.all(dogImagesPromises);
+    return Promise.all(dogsImagesPromises);
+  };
 
-  primaryDogsImages.forEach((dogImage, index) => {
-    if (dogImage) {
-      dogs[index].primaryImage = dogImage;
-    }
-  });
-
-  return { user, dogs };
+  return defer({ user, dogs, dogImages: getDogsImages() });
 };
 
 export { userLoader };

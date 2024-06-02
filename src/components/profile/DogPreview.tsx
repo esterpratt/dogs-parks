@@ -7,16 +7,17 @@ import { IconContext } from 'react-icons';
 
 interface DogPreviewProps {
   dog: Dog;
+  image: string | null;
 }
 
-const DogPreview: React.FC<DogPreviewProps> = ({ dog }) => {
-  const { name, age, gender, primaryImage } = dog;
+const DogPreview: React.FC<DogPreviewProps> = ({ dog, image }) => {
+  const { name, age, gender } = dog;
 
   return (
     <div className={styles.container}>
       <div className={styles.imgContainer}>
-        {primaryImage ? (
-          <img src={primaryImage} className={styles.img} />
+        {image ? (
+          <img src={image} className={styles.img} />
         ) : (
           <div className={classnames(styles.img, styles.empty)}>
             <PiDog size={64} />
