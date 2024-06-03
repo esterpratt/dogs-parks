@@ -53,9 +53,9 @@ const UserFriends = () => {
   if (!friends.length && !pendingFriends.length && !myPendingFriends.length) {
     return (
       <div className={classnames(styles.container, styles.noFriends)}>
-        <span>You don't have friends yet</span>
+        <span>No friends yet.</span>
         <Link to="/users" className={styles.link}>
-          Search for friends
+          Sniff out some friends!
         </Link>
       </div>
     );

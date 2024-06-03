@@ -59,14 +59,14 @@ const ChooseEditParkOptionModal: React.FC<ChooseEditParkOptionModalProps> = ({
               <IconContext.Provider value={{ className: styles.icon }}>
                 <MdOutlineModeEditOutline />
               </IconContext.Provider>
-              <span>Edit Park Details</span>
+              <span>Update Park Details</span>
             </Button>
           )}
           <Button onClick={onReportPark} className={styles.buttonContainer}>
             <IconContext.Provider value={{ className: styles.icon }}>
               <FaExclamation />
             </IconContext.Provider>
-            <span>Report Wrong Details</span>
+            <span>Report Incorrect Details</span>
           </Button>
           <Button onClick={onClose} className={styles.buttonContainer}>
             <IconContext.Provider value={{ className: styles.icon }}>

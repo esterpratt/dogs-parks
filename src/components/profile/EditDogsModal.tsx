@@ -26,7 +26,7 @@ const EditDogsModal: React.FC<EditDogsModalProps> = ({
       height="90%"
     >
       <div className={styles.title}>
-        {dog ? `Edit ${dog.name}` : 'Add your dog'} details
+        {dog ? `Update ${dog.name}'s` : `Add your dog's`} details
       </div>
       <EditDog dog={dog} onSubmitForm={onSubmitDogsForm} />
     </Modal>

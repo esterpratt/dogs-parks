@@ -113,12 +113,12 @@ const ParkCheckIn: React.FC<{
         onClose={() => setOpenDogsCountModal(false)}
       >
         <div className={styles.modalContent}>
-          <div className={styles.title}>Have a nice stay {userName}!</div>
+          <div className={styles.title}>Enjoy your stay, {userName}!</div>
           <DogsCount onSubmitDogsCount={onSubmitDogsCount} />
         </div>
       </Modal>
       <ReviewModal
-        title="Hope you had a great time! We will be happy if you could add a review!"
+        title="Hope you had a tail-wagging time! Leave a review if you can!"
         isOpen={openReviewModal}
         closeModal={() => setOpenReviewModal(false)}
         onSubmitReview={onSubmitReview}

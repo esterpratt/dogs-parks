@@ -48,7 +48,7 @@ const BusyHours: React.FC<BusyHoursProps> = ({ parkId }) => {
   if (!dogsCount?.length) {
     return (
       <div className={styles.noData}>
-        No Data Yet. If you are here, check-in to add data
+        No data yet. If you’re here, check in to add info!
       </div>
     );
   }
@@ -71,7 +71,7 @@ const BusyHours: React.FC<BusyHoursProps> = ({ parkId }) => {
   return (
     <div>
       <span className={styles.text}>
-        At this hour, the park is usually{' '}
+        Around this time, the park is usually{' '}
         <span className={styles[business.className]}>{business.str}</span>
       </span>
       <div className={styles.chartContainer}>

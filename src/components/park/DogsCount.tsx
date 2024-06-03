@@ -14,7 +14,7 @@ const DogsCount: React.FC<DogsCountProps> = ({ onSubmitDogsCount }) => {
       <ControlledInput
         type="number"
         name="dogsCount"
-        label="How many dogs are there with you?"
+        label="How many dogs are with you?"
         min={0}
         max={99}
         value={dogsCount}

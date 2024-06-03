@@ -90,7 +90,7 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
                   <>
                     Your Dog Name *
                     <span>
-                      have a pack? great! you could later add everybody!
+                      Got a pack? Awesome! You can add everyone later.
                     </span>
                   </>
                 }
@@ -108,11 +108,11 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
       <div className={styles.changeMethod}>
         {method === 'signin' ? (
           <>
-            Already have an account? <Link to="/login">Log In</Link>
+            Already part of the pack? <Link to="/login">Log In</Link>
           </>
         ) : (
           <>
-            Doesn't have an account yet? <Link to="/signin">Sign In</Link>
+            Not part of the pack yet? <Link to="/signin">Sign In</Link>
           </>
         )}
       </div>

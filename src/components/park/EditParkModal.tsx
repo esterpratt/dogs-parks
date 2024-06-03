@@ -26,7 +26,7 @@ const EditParkModal: React.FC<EditParksModalProps> = ({
       height="90%"
     >
       <div className={styles.title}>
-        Can you help us fill in the missing details about this park?
+        Can you help us with missing details about this park?
       </div>
       <EditPark park={park} onSubmitForm={onSubmitParkForm} />
     </Modal>

@@ -37,10 +37,9 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
 
   const NoResultsLayout = (
     <div className={styles.noResults}>
-      <span>Didn't find your park?</span>
+      <span>Can’t sniff out your park?</span>
       <span>
-        Please consider helping us by{' '}
-        <Link to="new">adding the park details</Link>
+        Help us by <Link to="new">adding the park details!</Link>
       </span>
     </div>
   );

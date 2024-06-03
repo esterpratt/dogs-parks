@@ -18,7 +18,7 @@ const ParkDetails = () => {
     <div>
       <Accordion>
         <Accordion.TitleWithIcon
-          title="More about this park"
+          title="Get the scoop on the park"
           showIcon={!!userId}
           Icon={MdOutlineModeEditOutline}
           onClickIcon={() => setIsEditParkModalOpen(true)}

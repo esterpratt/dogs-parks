@@ -85,14 +85,14 @@ const Reviews: React.FC = () => {
   if (!reviews?.length) {
     return (
       <div className={styles.noReviews}>
-        <span className={styles.title}>No reviews yet for the park</span>
+        <span className={styles.title}>No barks about this park yet.</span>
         {userId && (
           <div>
             <Button
               onClick={() => setIsAddReviewModalOpen(true)}
               className={styles.button}
             >
-              Add a review
+              Be the first to leave a review!
             </Button>
             <ReviewModal
               onSubmitReview={onAddReview}

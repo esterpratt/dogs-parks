@@ -45,7 +45,7 @@ const ReportParkModal: React.FC<ReportParkModalProps> = ({
         <TextArea
           rows={15}
           name="report"
-          label="Please fill here the wrong details"
+          label="Tell us what’s wrong here."
           value={text}
           onChange={onChangeText}
           maxLength={360}

@@ -10,7 +10,7 @@ interface ThankYouModalProps {
 }
 
 const ThankYouModal: React.FC<ThankYouModalProps> = ({
-  title = 'Thank you!',
+  title = 'Good Boy!',
 }) => {
   const { isOpen, setIsOpen } = useContext(ThankYouModalContext);
 

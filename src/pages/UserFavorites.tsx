@@ -36,11 +36,9 @@ const UserFavorites = () => {
   if (!favoriteParkIds.length) {
     return (
       <div className={styles.container}>
-        <span className={styles.noFavoritesTitle}>
-          You don't have any favorite parks yet.
-        </span>
+        <span className={styles.noFavoritesTitle}>No favorite parks yet.</span>
         <span className={styles.link}>
-          See what parks are close to you <Link to="/">here</Link>
+          Sniff out nearby parks <Link to="/">here!</Link>
         </span>
       </div>
     );

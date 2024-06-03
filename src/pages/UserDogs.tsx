@@ -29,14 +29,14 @@ const UserDogs = () => {
       <div className={styles.container}>
         <div className={styles.title}>
           <span className={styles.titleText}>
-            {isSignedInUser ? 'Your' : `${user.name}'s`} Dogs
+            {isSignedInUser ? 'Your' : `${user.name}'s`} pack
           </span>
           {isSignedInUser && (
             <div
               className={styles.addDogText}
               onClick={() => setIsEditDogsModalOpen(true)}
             >
-              Add Dog
+              Add a Dog
             </div>
           )}
         </div>
@@ -59,7 +59,7 @@ const UserDogs = () => {
             <IconContext.Provider value={{ className: styles.plus }}>
               <FaCirclePlus />
             </IconContext.Provider>
-            <span className={styles.addDogText}>Add Dog</span>
+            <span className={styles.addDogText}>Add a Dog</span>
           </div>
         )}
         {!isSignedInUser && signedInUserId && (

@@ -21,7 +21,7 @@ const NavbarTop = () => {
               className={styles.user}
             >
               <FaUserCircle />
-              Hewo {user ? user.name : 'Guest'}!
+              Paws Up, {user ? user.name : 'Guest'}!
             </Link>
           </div>
         )}

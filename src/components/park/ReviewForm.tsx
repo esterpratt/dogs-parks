@@ -81,7 +81,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ review, onSubmitForm }) => {
 
   return (
     <div className={styles.container}>
-      <span className={styles.title}>How do you find the park?</span>
+      <span className={styles.title}>How did you dig the park?</span>
       <form onSubmit={onSubmit} className={styles.form}>
         <ControlledInput
           label="Title"

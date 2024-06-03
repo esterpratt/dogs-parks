@@ -23,8 +23,8 @@ const ErrorPage: React.FC = () => {
     <>
       <NavbarTop />
       <div className={styles.content}>
-        <span>Oops! {message}</span>
-        <span>Try to give me more snacks!</span>
+        <span>Uh-oh! {message}</span>
+        <span>Toss me more treats and try again!</span>
       </div>
       <NavbarBottom />
     </>

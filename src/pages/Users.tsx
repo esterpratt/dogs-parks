@@ -45,18 +45,18 @@ const Users = () => {
       <div className={styles.message}>
         {!userId ? (
           <>
-            In order to see users details and ask friendship you need to{' '}
+            To see user details and make friends, you need to{' '}
             <Link to="../login" className={styles.link}>
               log in
             </Link>
           </>
         ) : (
-          <span>Search for friends</span>
+          <span>Sniff out some friends</span>
         )}
       </div>
       <SearchList
         isSearchToSee
-        placeholder="user or dog name"
+        placeholder="Search by user or dog name"
         itemKeyfn={(userWithDog) => userWithDog.id}
         items={usersWithoutCurrentUser}
         filterFunc={filterUsers}
