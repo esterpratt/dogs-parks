@@ -1,7 +1,6 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, lazy, Suspense } from 'react';
 import { UserContext } from '../context/UserContext';
 import { Button } from '../components/Button';
-import { ReviewModal } from '../components/ReviewModal';
 import { ReviewPreview } from '../components/ReviewPreview';
 import styles from './ParkReviews.module.scss';
 import {
@@ -14,6 +13,9 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '../services/react-query';
 import { Review, ReviewData } from '../types/review';
 import { useAddReview } from '../hooks/api/useAddReview';
+import { Loading } from '../components/Loading';
+
+const ReviewModal = lazy(() => import('../components/ReviewModal'));
 
 const Reviews: React.FC = () => {
   const { id: parkId } = useParams();
@@ -49,7 +51,7 @@ const Reviews: React.FC = () => {
       );
       return { prevReviews };
     },
-    onError: (error, data, context) => {
+    onError: (_error, _data, context) => {
       queryClient.setQueryData(['reviews', parkId], context?.prevReviews);
     },
     onSettled: () => {
@@ -94,11 +96,13 @@ const Reviews: React.FC = () => {
             >
               Be the first to leave a review!
             </Button>
-            <ReviewModal
-              onSubmitReview={onAddReview}
-              isOpen={isAddReviewModalOpen}
-              closeModal={() => setIsAddReviewModalOpen(false)}
-            />
+            <Suspense fallback={<Loading />}>
+              <ReviewModal
+                onSubmitReview={onAddReview}
+                isOpen={isAddReviewModalOpen}
+                closeModal={() => setIsAddReviewModalOpen(false)}
+              />
+            </Suspense>
           </div>
         )}
       </div>

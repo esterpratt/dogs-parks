@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, lazy, Suspense } from 'react';
 import { TbPennant, TbPennantOff } from 'react-icons/tb';
 import { checkin, checkout } from '../../services/checkins';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
@@ -8,11 +8,13 @@ import { reportDogsCount } from '../../services/dogsCount';
 import { Button } from '../Button';
 import styles from './ParkCheckIn.module.scss';
 import { IconContext } from 'react-icons';
-import { ReviewModal } from '../ReviewModal';
 import { useAddReview } from '../../hooks/api/useAddReview';
 import { useMutation } from '@tanstack/react-query';
 import { queryClient } from '../../services/react-query';
 import { ThankYouModalContext } from '../../context/ThankYouModalContext';
+import { Loading } from '../Loading';
+
+const ReviewModal = lazy(() => import('../ReviewModal'));
 
 const ParkCheckIn: React.FC<{
   parkId: string;
@@ -117,14 +119,16 @@ const ParkCheckIn: React.FC<{
           <DogsCount onSubmitDogsCount={onSubmitDogsCount} />
         </div>
       </Modal>
-      <ReviewModal
-        title="Hope you had a tail-wagging time! Leave a review if you can!"
-        isOpen={openReviewModal}
-        closeModal={() => setOpenReviewModal(false)}
-        onSubmitReview={onSubmitReview}
-      />
+      <Suspense fallback={<Loading />}>
+        <ReviewModal
+          title="Hope you had a tail-wagging time! Leave a review if you can!"
+          isOpen={openReviewModal}
+          closeModal={() => setOpenReviewModal(false)}
+          onSubmitReview={onSubmitReview}
+        />
+      </Suspense>
     </div>
   );
 };
 
-export { ParkCheckIn };
+export default ParkCheckIn;

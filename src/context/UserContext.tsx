@@ -86,7 +86,7 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { mutate: userSignin, error: singinError } = useMutation({
     mutationFn: (vars: SigninProps) =>
       signin({ email: vars.email, password: vars.password }),
-    onSuccess: (data, vars: SigninProps) => {
+    onSuccess: (_data, vars: SigninProps) => {
       userExtraDataRef.current = { name: vars.name, dogName: vars.dogName };
     },
     onError: (error) => {

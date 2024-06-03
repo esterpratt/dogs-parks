@@ -1,3 +1,4 @@
+import { Suspense, lazy } from 'react';
 import { useOutletContext } from 'react-router';
 import { User } from '../types/user';
 import { Dog } from '../types/dog';
@@ -5,11 +6,13 @@ import { DogPreview } from '../components/profile/DogPreview';
 import styles from './UserDogs.module.scss';
 import { FaCirclePlus } from 'react-icons/fa6';
 import { IconContext } from 'react-icons';
-import { EditDogsModal } from '../components/profile/EditDogsModal';
 import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FriendRequestButton } from '../components/profile/FriendRequestButton';
 import { UserContext } from '../context/UserContext';
+import { Loading } from '../components/Loading';
+
+const EditDogsModal = lazy(() => import('../components/profile/EditDogsModal'));
 
 interface UserDogsProps {
   user: User;
@@ -69,10 +72,12 @@ const UserDogs = () => {
           />
         )}
       </div>
-      <EditDogsModal
-        isOpen={isEditDogsModalOpen}
-        onClose={() => setIsEditDogsModalOpen(false)}
-      />
+      <Suspense fallback={<Loading />}>
+        <EditDogsModal
+          isOpen={isEditDogsModalOpen}
+          onClose={() => setIsEditDogsModalOpen(false)}
+        />
+      </Suspense>
       ;
     </>
   );

@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { Dog } from '../../types/dog';
 import { fetchAllDogImages, uploadDogImage } from '../../services/dogs';
-import { CameraModal } from '../camera/CameraModal';
 import { Accordion } from '../accordion/Accordion';
 import { DogGallery } from './DogGallery';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '../../services/react-query';
+import { Loading } from '../Loading';
+
+const CameraModal = lazy(() => import('../camera/CameraModal'));
 
 interface DogGalleryContainerProps {
   dog: Dog;
@@ -72,11 +74,13 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
           />
         </Accordion.Content>
       </Accordion>
-      <CameraModal
-        open={isAddImageModalOpen}
-        setOpen={setIsAddImageModalOpen}
-        onUploadImg={onUploadImg}
-      />
+      <Suspense fallback={<Loading />}>
+        <CameraModal
+          open={isAddImageModalOpen}
+          setOpen={setIsAddImageModalOpen}
+          onUploadImg={onUploadImg}
+        />
+      </Suspense>
     </>
   );
 };

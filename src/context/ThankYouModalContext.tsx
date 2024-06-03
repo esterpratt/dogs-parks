@@ -4,8 +4,11 @@ import {
   SetStateAction,
   createContext,
   useState,
+  lazy,
+  Suspense,
 } from 'react';
-import { ThankYouModal } from '../components/ThankYouModal';
+import { Loading } from '../components/Loading';
+const ThankYouModal = lazy(() => import('../components/ThankYouModal'));
 
 interface ThankYouModalContextObj {
   isOpen: boolean;
@@ -33,7 +36,9 @@ const ThankYouModalContextProvider: React.FC<PropsWithChildren> = ({
   return (
     <ThankYouModalContext.Provider value={value}>
       {children}
-      <ThankYouModal />
+      <Suspense fallback={<Loading />}>
+        <ThankYouModal />
+      </Suspense>
     </ThankYouModalContext.Provider>
   );
 };

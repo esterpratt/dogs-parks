@@ -36,7 +36,7 @@ const EditUser: React.FC<EditUserProps> = ({ user, onSubmitForm }) => {
       });
       return { prevUser };
     },
-    onError: (error, data, context) => {
+    onError: (_error, _data, context) => {
       queryClient.setQueryData(['user', 'me', user.id], context?.prevUser);
     },
     onSuccess: () => {

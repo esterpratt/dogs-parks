@@ -29,4 +29,4 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose }) => {
   );
 };
 
-export { EditUserModal };
+export default EditUserModal;

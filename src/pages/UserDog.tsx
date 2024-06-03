@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { useLocation, useParams, useRevalidator } from 'react-router';
 import { Link } from 'react-router-dom';
 import { IoMdFemale, IoMdMale } from 'react-icons/io';
@@ -9,7 +9,7 @@ import classnames from 'classnames';
 import { Accordion } from '../components/accordion/Accordion';
 import { DogDetails } from '../components/profile/DogDetails';
 import { DogGalleryContainer } from '../components/profile/DogGalleryContainer';
-import { EditDogsModal } from '../components/profile/EditDogsModal';
+
 import {
   fetchDogPrimaryImage,
   fetchDogs,
@@ -18,10 +18,12 @@ import {
 import { IconContext } from 'react-icons';
 import { GENDER } from '../types/dog';
 import styles from './UserDog.module.scss';
-import { CameraModal } from '../components/camera/CameraModal';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '../services/react-query';
 import { Loading } from '../components/Loading';
+
+const CameraModal = lazy(() => import('../components/camera/CameraModal'));
+const EditDogsModal = lazy(() => import('../components/profile/EditDogsModal'));
 
 const UserDog = () => {
   const { dogId } = useParams();
@@ -141,16 +143,20 @@ const UserDog = () => {
           contentClassName={styles.contentContainer}
         />
       </div>
-      <EditDogsModal
-        dog={dog}
-        isOpen={isEditDogsModalOpen}
-        onClose={onCloseDogsModal}
-      />
-      <CameraModal
-        open={isAddImageModalOpen}
-        setOpen={setIsAddImageModalOpen}
-        onUploadImg={onUploadImg}
-      />
+      <Suspense fallback={<Loading />}>
+        <EditDogsModal
+          dog={dog}
+          isOpen={isEditDogsModalOpen}
+          onClose={onCloseDogsModal}
+        />
+      </Suspense>
+      <Suspense fallback={<Loading />}>
+        <CameraModal
+          open={isAddImageModalOpen}
+          setOpen={setIsAddImageModalOpen}
+          onUploadImg={onUploadImg}
+        />
+      </Suspense>
     </>
   );
 };

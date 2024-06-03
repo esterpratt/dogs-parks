@@ -41,10 +41,10 @@ const UserReviews = () => {
       );
       return { prevReviews, updatedReview };
     },
-    onError: (error, data, context) => {
+    onError: (_error, _data, context) => {
       queryClient.setQueryData(['reviews', user.id], context?.prevReviews);
     },
-    onSettled: (data, error, variables, context) => {
+    onSettled: (_data, _error, _variables, context) => {
       const parkId = context?.updatedReview.parkId;
       queryClient.invalidateQueries({ queryKey: ['reviews', user.id] });
       queryClient.invalidateQueries({ queryKey: ['reviews', parkId] });

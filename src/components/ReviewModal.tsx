@@ -55,4 +55,4 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
   );
 };
 
-export { ReviewModal };
+export default ReviewModal;

@@ -62,4 +62,4 @@ const ReportParkModal: React.FC<ReportParkModalProps> = ({
   );
 };
 
-export { ReportParkModal };
+export default ReportParkModal;

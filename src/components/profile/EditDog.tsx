@@ -47,13 +47,13 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
       });
       return { prevDog };
     },
-    onError: (error, vars, context) => {
+    onError: (_error, vars, context) => {
       queryClient.setQueryData(['dogs', vars.dogId], context?.prevDog);
     },
     onSuccess: () => {
       setIsThankYouModalOpen(true);
     },
-    onSettled: (data, error, vars) => {
+    onSettled: (_data, _error, vars) => {
       queryClient.invalidateQueries({ queryKey: ['dogs', vars.dogId] });
       queryClient.invalidateQueries({ queryKey: ['dogs', userId] });
       revalidate();

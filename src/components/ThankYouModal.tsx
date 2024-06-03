@@ -32,4 +32,4 @@ const ThankYouModal: React.FC<ThankYouModalProps> = ({
   );
 };
 
-export { ThankYouModal };
+export default ThankYouModal;

@@ -39,7 +39,7 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ parkId, userId }) => {
       setIsFavorite(isFavorite);
       return { prevFavorite: !isFavorite };
     },
-    onError: (error, data, context) => {
+    onError: (_error, _data, context) => {
       setIsFavorite(!context!.prevFavorite);
     },
     onSettled: () => {

@@ -33,4 +33,4 @@ const EditParkModal: React.FC<EditParksModalProps> = ({
   );
 };
 
-export { EditParkModal };
+export default EditParkModal;

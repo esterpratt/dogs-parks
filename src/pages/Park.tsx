@@ -1,10 +1,9 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, lazy, Suspense } from 'react';
 import { Outlet, useParams } from 'react-router';
 import { LuTrees } from 'react-icons/lu';
 import classnames from 'classnames';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '../services/react-query';
-import { ParkCheckIn } from '../components/park/ParkCheckIn';
 import { ReviewsPreview } from '../components/park/ReviewsPreview';
 import { UserContext } from '../context/UserContext';
 import { FavoriteButton } from '../components/park/FavoriteButton';
@@ -12,13 +11,15 @@ import styles from './Park.module.scss';
 import { ParkTabs } from '../components/park/ParkTabs';
 import { IconContext } from 'react-icons';
 import { PiCameraFill } from 'react-icons/pi';
-import { CameraModal } from '../components/camera/CameraModal';
 import {
   fetchPark,
   fetchParkPrimaryImage,
   uploadParkPrimaryImage,
 } from '../services/parks';
 import { Loading } from '../components/Loading';
+
+const ParkCheckIn = lazy(() => import('../components/park/ParkCheckIn'));
+const CameraModal = lazy(() => import('../components/camera/CameraModal'));
 
 const Park: React.FC = () => {
   const { id: parkId } = useParams();
@@ -86,11 +87,13 @@ const Park: React.FC = () => {
             <div className={styles.userEngagement}>
               <div>
                 <FavoriteButton parkId={parkId!} userId={user.id} />
-                <ParkCheckIn
-                  parkId={parkId!}
-                  userId={user.id}
-                  userName={user.name}
-                />
+                <Suspense fallback={<Loading />}>
+                  <ParkCheckIn
+                    parkId={parkId!}
+                    userId={user.id}
+                    userName={user.name}
+                  />
+                </Suspense>
               </div>
             </div>
           )}
@@ -100,11 +103,13 @@ const Park: React.FC = () => {
           <Outlet context={park} />
         </div>
       </div>
-      <CameraModal
-        open={isAddImageModalOpen}
-        setOpen={setIsAddImageModalOpen}
-        onUploadImg={onUploadImg}
-      />
+      <Suspense fallback={<Loading />}>
+        <CameraModal
+          open={isAddImageModalOpen}
+          setOpen={setIsAddImageModalOpen}
+          onUploadImg={onUploadImg}
+        />
+      </Suspense>
     </>
   );
 };

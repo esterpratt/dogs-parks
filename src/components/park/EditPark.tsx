@@ -68,7 +68,7 @@ const EditPark: React.FC<EditParkProps> = ({ onSubmitForm, park }) => {
 
       return { prevPark };
     },
-    onError: (error, data, context) => {
+    onError: (_error, _data, context) => {
       queryClient.setQueryData(['parks', park.id], context?.prevPark);
     },
     onSuccess: () => {

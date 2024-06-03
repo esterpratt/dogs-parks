@@ -1,3 +1,4 @@
+import { useEffect, useState, lazy, Suspense } from 'react';
 import { IconContext } from 'react-icons';
 import { MdOutlineModeEditOutline } from 'react-icons/md';
 import { FaExclamation } from 'react-icons/fa6';
@@ -5,10 +6,11 @@ import { CgClose } from 'react-icons/cg';
 import { Button } from '../Button';
 import { Modal } from '../Modal';
 import styles from './ChooseEditParkOptionModal.module.scss';
-import { EditParkModal } from './EditParkModal';
 import { Park } from '../../types/park';
-import { useEffect, useState } from 'react';
-import { ReportParkModal } from './ReportParkModal';
+import { Loading } from '../Loading';
+
+const EditParkModal = lazy(() => import('./EditParkModal'));
+const ReportParkModal = lazy(() => import('./ReportParkModal'));
 
 interface ChooseEditParkOptionModalProps {
   isOpen: boolean;
@@ -76,18 +78,22 @@ const ChooseEditParkOptionModal: React.FC<ChooseEditParkOptionModalProps> = ({
           </Button>
         </div>
       </Modal>
-      <ReportParkModal
-        parkId={park.id}
-        open={isReportModalOpen}
-        onClose={() => setIsReportModalOpen(false)}
-      />
-      <EditParkModal
-        park={park}
-        isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
-      />
+      <Suspense fallback={<Loading />}>
+        <ReportParkModal
+          parkId={park.id}
+          open={isReportModalOpen}
+          onClose={() => setIsReportModalOpen(false)}
+        />
+      </Suspense>
+      <Suspense fallback={<Loading />}>
+        <EditParkModal
+          park={park}
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+        />
+      </Suspense>
     </>
   );
 };
 
-export { ChooseEditParkOptionModal };
+export default ChooseEditParkOptionModal;

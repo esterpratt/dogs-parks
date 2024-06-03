@@ -26,7 +26,7 @@ const useUpdateReview = (parkId: string) => {
       );
       return { prevReviews };
     },
-    onError: (error, data, context) => {
+    onError: (_error, _data, context) => {
       queryClient.setQueryData(['reviews', parkId], context?.prevReviews);
     },
     onSettled: () => {

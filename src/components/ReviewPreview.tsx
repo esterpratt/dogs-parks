@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, lazy, Suspense } from 'react';
 import { Review } from '../types/review';
 import { Button } from './Button';
-import { ReviewModal } from './ReviewModal';
 import { UpdateReviewProps } from '../services/reviews';
 import { getFormattedDate } from '../utils/time';
 import { fetchUser } from '../services/users';
@@ -10,6 +9,9 @@ import { Stars } from './Stars';
 import { fetchPark } from '../services/parks';
 import { User } from '../types/user';
 import { Park } from '../types/park';
+import { Loading } from './Loading';
+
+const ReviewModal = lazy(() => import('./ReviewModal'));
 
 interface ReviewPreviewProps {
   review: Review;
@@ -88,12 +90,14 @@ const ReviewPreview: React.FC<ReviewPreviewProps> = ({
           )}
         </div>
       </div>
-      <ReviewModal
-        review={review}
-        onSubmitReview={onSubmitReview}
-        isOpen={isAddReviewModalOpen}
-        closeModal={() => setIsAddReviewModalOpen(false)}
-      />
+      <Suspense fallback={<Loading />}>
+        <ReviewModal
+          review={review}
+          onSubmitReview={onSubmitReview}
+          isOpen={isAddReviewModalOpen}
+          closeModal={() => setIsAddReviewModalOpen(false)}
+        />
+      </Suspense>
     </>
   );
 };

@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { fetchAllParkImages, uploadParkImage } from '../../services/parks';
-import { CameraModal } from '../camera/CameraModal';
 import { Accordion } from '../accordion/Accordion';
 import { FaPlus } from 'react-icons/fa';
 import { ParkGallery } from './ParkGallery';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '../../services/react-query';
+import { Loading } from '../Loading';
+
+const CameraModal = lazy(() => import('../camera/CameraModal'));
 
 interface ParkGalleryContainerProps {
   parkId: string;
@@ -60,11 +62,13 @@ const ParkGalleryContainer: React.FC<ParkGalleryContainerProps> = ({
           />
         </Accordion.Content>
       </Accordion>
-      <CameraModal
-        open={isAddImageModalOpen}
-        setOpen={setIsAddImageModalOpen}
-        onUploadImg={onUploadImg}
-      />
+      <Suspense fallback={<Loading />}>
+        <CameraModal
+          open={isAddImageModalOpen}
+          setOpen={setIsAddImageModalOpen}
+          onUploadImg={onUploadImg}
+        />
+      </Suspense>
     </>
   );
 };

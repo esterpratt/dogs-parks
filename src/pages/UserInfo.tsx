@@ -1,10 +1,12 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, lazy, Suspense } from 'react';
 import { useNavigate } from 'react-router';
 import { IconContext } from 'react-icons';
 import { MdLogout, MdOutlineModeEditOutline } from 'react-icons/md';
 import { UserContext } from '../context/UserContext';
-import { EditUserModal } from '../components/profile/EditUserModal';
 import styles from './UserInfo.module.scss';
+import { Loading } from '../components/Loading';
+
+const EditUserModal = lazy(() => import('../components/profile/EditUserModal'));
 
 const UserInfo = () => {
   const { userLogout } = useContext(UserContext);
@@ -40,7 +42,12 @@ const UserInfo = () => {
           <span>Logout</span>
         </div>
       </div>
-      <EditUserModal isOpen={isEditUserModalOpen} onClose={onCloseUserModal} />
+      <Suspense fallback={<Loading />}>
+        <EditUserModal
+          isOpen={isEditUserModalOpen}
+          onClose={onCloseUserModal}
+        />
+      </Suspense>
     </>
   );
 };

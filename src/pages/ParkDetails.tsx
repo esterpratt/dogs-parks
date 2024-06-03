@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, lazy, Suspense } from 'react';
 import { useOutletContext } from 'react-router';
 import { MdOutlineModeEditOutline } from 'react-icons/md';
 import { Accordion } from '../components/accordion/Accordion';
@@ -7,7 +7,11 @@ import { Park } from '../types/park';
 import { ParkGenerals } from '../components/park/ParkGenerals';
 import { ParkGalleryContainer } from '../components/park/ParkGalleryContainer';
 import { UserContext } from '../context/UserContext';
-import { ChooseEditParkOptionModal } from '../components/park/ChooseEditParkOptionModal';
+import { Loading } from '../components/Loading';
+
+const ChooseEditParkOptionModal = lazy(
+  () => import('../components/park/ChooseEditParkOptionModal')
+);
 
 const ParkDetails = () => {
   const park = useOutletContext<Park>();
@@ -49,11 +53,13 @@ const ParkDetails = () => {
         </Accordion.Content>
       </Accordion>
       {!!userId && (
-        <ChooseEditParkOptionModal
-          isOpen={isEditParkModalOpen}
-          onClose={() => setIsEditParkModalOpen(false)}
-          park={park}
-        />
+        <Suspense fallback={<Loading />}>
+          <ChooseEditParkOptionModal
+            isOpen={isEditParkModalOpen}
+            onClose={() => setIsEditParkModalOpen(false)}
+            park={park}
+          />
+        </Suspense>
       )}
       <ParkGalleryContainer parkId={park.id} />
     </div>
