@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { IconContext } from 'react-icons';
 import { HiHome } from 'react-icons/hi';
-import { FaUserCircle, FaMapMarkedAlt } from 'react-icons/fa';
+import { FaMapMarkedAlt } from 'react-icons/fa';
 import { LuTrees } from 'react-icons/lu';
 import { GiSittingDog, GiThreeFriends } from 'react-icons/gi';
 import { UserContext } from '../context/UserContext';
