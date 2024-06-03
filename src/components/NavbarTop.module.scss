@@ -12,8 +12,20 @@
   width: 100vw;
 }
 
-.icons {
+.dog-icon {
+  color: $green;
+  padding: 5px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: $white;
+  transform: scaleX(-1);
+}
+
+.home-icon {
   color: $white;
+  width: 32px;
+  height: 32px;
 }
 
 .left-bar {

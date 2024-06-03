@@ -51,6 +51,16 @@
   height: 24px;
 }
 
+.dog-icon {
+  color: $green;
+  background-color: $white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  padding: 2px;
+  transform: scaleX(-1);
+}
+
 .home {
   svg {
     width: 48px;

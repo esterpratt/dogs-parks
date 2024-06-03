@@ -4,7 +4,7 @@ import { IconContext } from 'react-icons';
 import { HiHome } from 'react-icons/hi';
 import { FaUserCircle, FaMapMarkedAlt } from 'react-icons/fa';
 import { LuTrees } from 'react-icons/lu';
-import { GiThreeFriends } from 'react-icons/gi';
+import { GiSittingDog, GiThreeFriends } from 'react-icons/gi';
 import { UserContext } from '../context/UserContext';
 import styles from './NavbarBottom.module.scss';
 
@@ -36,7 +36,9 @@ const NavbarBottom = () => {
                 to={userId ? `/profile/${userId}/dogs` : '/login'}
                 className={styles.user}
               >
-                <FaUserCircle />
+                <IconContext.Provider value={{ className: styles.dogIcon }}>
+                  <GiSittingDog />
+                </IconContext.Provider>
                 <span>{userId ? 'Profile' : 'Log In'}</span>
               </Link>
             </>
