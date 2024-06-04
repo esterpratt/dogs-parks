@@ -3,7 +3,7 @@ import { FaPlus } from 'react-icons/fa';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Dog } from '../../types/dog';
 import { fetchAllDogImages, uploadDogImage } from '../../services/dogs';
-import { AccordionContainer } from '../accordionCmps/AccordionContainer';
+import { AccordionContainer } from '../accordion/AccordionContainer';
 import { DogGallery } from './DogGallery';
 import { queryClient } from '../../services/react-query';
 import { Loading } from '../Loading';

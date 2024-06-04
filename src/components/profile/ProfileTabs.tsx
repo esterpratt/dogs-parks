@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import styles from './ProfileTabs.module.scss';
 import { UserContext } from '../../context/UserContext';
 import { fetchUserReviews } from '../../services/reviews';
-import { TabsList } from '../tabsCmps/TabsList';
+import { TabsList } from '../tabs/TabsList';
 
 const ProfileTabs = () => {
   const { userId } = useContext(UserContext);

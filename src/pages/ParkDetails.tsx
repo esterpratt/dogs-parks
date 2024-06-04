@@ -7,7 +7,7 @@ import { ParkGenerals } from '../components/park/ParkGenerals';
 import { ParkGalleryContainer } from '../components/park/ParkGalleryContainer';
 import { UserContext } from '../context/UserContext';
 import { Loading } from '../components/Loading';
-import { AccordionContainer } from '../components/accordionCmps/AccordionContainer';
+import { AccordionContainer } from '../components/accordion/AccordionContainer';
 
 const ChooseEditParkOptionModal = lazy(
   () => import('../components/park/ChooseEditParkOptionModal')
