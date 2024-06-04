@@ -1,9 +1,9 @@
 import { useContext } from 'react';
-import { Tabs } from '../tabs/Tabs';
-import styles from './ProfileTabs.module.scss';
 import { useQuery } from '@tanstack/react-query';
+import styles from './ProfileTabs.module.scss';
 import { UserContext } from '../../context/UserContext';
 import { fetchUserReviews } from '../../services/reviews';
+import { Tabs } from '../tabs/Tabs';
 
 const ProfileTabs = () => {
   const { userId } = useContext(UserContext);

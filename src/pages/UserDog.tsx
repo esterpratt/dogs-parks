@@ -6,7 +6,6 @@ import { MdOutlineModeEditOutline } from 'react-icons/md';
 import { PiCameraFill, PiDog } from 'react-icons/pi';
 import { FaArrowLeftLong } from 'react-icons/fa6';
 import classnames from 'classnames';
-import { Accordion } from '../components/accordion/Accordion';
 import { DogDetails } from '../components/profile/DogDetails';
 import { DogGalleryContainer } from '../components/profile/DogGalleryContainer';
 
@@ -21,6 +20,7 @@ import styles from './UserDog.module.scss';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '../services/react-query';
 import { Loading } from '../components/Loading';
+import { Accordion } from '../components/accordion/Accordion';
 
 const CameraModal = lazy(() => import('../components/camera/CameraModal'));
 const EditDogsModal = lazy(() => import('../components/profile/EditDogsModal'));

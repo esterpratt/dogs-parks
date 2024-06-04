@@ -1,11 +1,11 @@
 import { useState, lazy, Suspense } from 'react';
-import { fetchAllParkImages, uploadParkImage } from '../../services/parks';
-import { Accordion } from '../accordion/Accordion';
 import { FaPlus } from 'react-icons/fa';
-import { ParkGallery } from './ParkGallery';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { fetchAllParkImages, uploadParkImage } from '../../services/parks';
 import { queryClient } from '../../services/react-query';
+import { ParkGallery } from './ParkGallery';
 import { Loading } from '../Loading';
+import { Accordion } from '../accordion/Accordion';
 
 const CameraModal = lazy(() => import('../camera/CameraModal'));
 

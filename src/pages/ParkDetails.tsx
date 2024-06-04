@@ -1,13 +1,13 @@
 import { useContext, useState, lazy, Suspense } from 'react';
 import { useOutletContext } from 'react-router';
 import { MdOutlineModeEditOutline } from 'react-icons/md';
-import { Accordion } from '../components/accordion/Accordion';
 import { BusyHours } from '../components/park/BusyHours';
 import { Park } from '../types/park';
 import { ParkGenerals } from '../components/park/ParkGenerals';
 import { ParkGalleryContainer } from '../components/park/ParkGalleryContainer';
 import { UserContext } from '../context/UserContext';
 import { Loading } from '../components/Loading';
+import { Accordion } from '../components/accordion/Accordion';
 
 const ChooseEditParkOptionModal = lazy(
   () => import('../components/park/ChooseEditParkOptionModal')
@@ -41,7 +41,7 @@ const ParkDetails = () => {
       </Accordion>
       <Accordion>
         <Accordion.Title>
-          {(isOpen) => (
+          {(isOpen: boolean) => (
             <>
               Busy hours
               <Accordion.Arrow isOpen={isOpen} />
