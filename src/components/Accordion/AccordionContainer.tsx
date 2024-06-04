@@ -21,7 +21,7 @@ const initialValue: AccordionContextProps = {
 
 const AccordionContext = createContext(initialValue);
 
-const Accordion = ({ children, className }: AccordionProps) => {
+const AccordionContainer = ({ children, className }: AccordionProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(true);
 
   const toggleOpen = () => {
@@ -35,9 +35,9 @@ const Accordion = ({ children, className }: AccordionProps) => {
   );
 };
 
-Accordion.Title = AccordionTitle;
-Accordion.TitleWithIcon = AccordionTitleWithIcon;
-Accordion.Content = AccordionContent;
-Accordion.Arrow = AccordionArrow;
+AccordionContainer.Title = AccordionTitle;
+AccordionContainer.TitleWithIcon = AccordionTitleWithIcon;
+AccordionContainer.Content = AccordionContent;
+AccordionContainer.Arrow = AccordionArrow;
 
-export { Accordion, AccordionContext };
+export { AccordionContainer, AccordionContext };

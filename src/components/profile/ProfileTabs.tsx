@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import styles from './ProfileTabs.module.scss';
 import { UserContext } from '../../context/UserContext';
 import { fetchUserReviews } from '../../services/reviews';
-import { Tabs } from '../tabs/Tabs';
+import { TabsList } from '../tabs/TabsList';
 
 const ProfileTabs = () => {
   const { userId } = useContext(UserContext);
@@ -13,7 +13,7 @@ const ProfileTabs = () => {
   });
 
   return (
-    <Tabs
+    <TabsList
       className={styles.tabs}
       tabs={[
         { text: 'Dogs', url: 'dogs', end: false },

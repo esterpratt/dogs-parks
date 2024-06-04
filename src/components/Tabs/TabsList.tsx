@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import { Tab } from './Tab';
-import styles from './Tabs.module.scss';
+import styles from './TabsList.module.scss';
 
 interface TabsProps {
   tabs: {
@@ -12,7 +12,7 @@ interface TabsProps {
   className?: string;
 }
 
-const Tabs: React.FC<TabsProps> = ({ tabs, className }) => {
+const TabsList: React.FC<TabsProps> = ({ tabs, className }) => {
   return (
     <div className={classnames(styles.container, className)}>
       {tabs.map(({ text, url, disabled, end }) => (
@@ -22,4 +22,4 @@ const Tabs: React.FC<TabsProps> = ({ tabs, className }) => {
   );
 };
 
-export { Tabs };
+export { TabsList };

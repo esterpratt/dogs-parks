@@ -7,7 +7,7 @@ import { ParkGenerals } from '../components/park/ParkGenerals';
 import { ParkGalleryContainer } from '../components/park/ParkGalleryContainer';
 import { UserContext } from '../context/UserContext';
 import { Loading } from '../components/Loading';
-import { Accordion } from '../components/accordion/Accordion';
+import { AccordionContainer } from '../components/accordion/AccordionContainer';
 
 const ChooseEditParkOptionModal = lazy(
   () => import('../components/park/ChooseEditParkOptionModal')
@@ -20,15 +20,15 @@ const ParkDetails = () => {
 
   return (
     <div>
-      <Accordion>
-        <Accordion.TitleWithIcon
+      <AccordionContainer>
+        <AccordionContainer.TitleWithIcon
           title="Get the scoop on the park"
           showIcon={!!userId}
           Icon={MdOutlineModeEditOutline}
           onClickIcon={() => setIsEditParkModalOpen(true)}
           iconSize={18}
         />
-        <Accordion.Content>
+        <AccordionContainer.Content>
           <ParkGenerals
             parkId={park.id}
             size={park.size}
@@ -37,21 +37,21 @@ const ParkDetails = () => {
             shade={park.hasShade}
             water={park.hasWater}
           />
-        </Accordion.Content>
-      </Accordion>
-      <Accordion>
-        <Accordion.Title>
+        </AccordionContainer.Content>
+      </AccordionContainer>
+      <AccordionContainer>
+        <AccordionContainer.Title>
           {(isOpen: boolean) => (
             <>
               Busy hours
-              <Accordion.Arrow isOpen={isOpen} />
+              <AccordionContainer.Arrow isOpen={isOpen} />
             </>
           )}
-        </Accordion.Title>
-        <Accordion.Content>
+        </AccordionContainer.Title>
+        <AccordionContainer.Content>
           <BusyHours parkId={park.id} />
-        </Accordion.Content>
-      </Accordion>
+        </AccordionContainer.Content>
+      </AccordionContainer>
       {!!userId && (
         <Suspense fallback={<Loading />}>
           <ChooseEditParkOptionModal

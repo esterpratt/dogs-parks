@@ -1,10 +1,10 @@
 import { useState, lazy, Suspense } from 'react';
 import { FaPlus } from 'react-icons/fa';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { Dog } from '../../types/dog';
 import { fetchAllDogImages, uploadDogImage } from '../../services/dogs';
-import { Accordion } from '../accordion/Accordion';
+import { AccordionContainer } from '../accordion/AccordionContainer';
 import { DogGallery } from './DogGallery';
-import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '../../services/react-query';
 import { Loading } from '../Loading';
 
@@ -58,22 +58,22 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
 
   return (
     <>
-      <Accordion className={className}>
-        <Accordion.TitleWithIcon
+      <AccordionContainer className={className}>
+        <AccordionContainer.TitleWithIcon
           title="Gallery"
           showIcon={isSignedInUser}
           Icon={FaPlus}
           onClickIcon={onClickAddPhoto}
         />
-        <Accordion.Content className={contentClassName}>
+        <AccordionContainer.Content className={contentClassName}>
           <DogGallery
             images={dogImages}
             dog={dog}
             isSignedInUser={isSignedInUser}
             openCameraModal={openCameraModal}
           />
-        </Accordion.Content>
-      </Accordion>
+        </AccordionContainer.Content>
+      </AccordionContainer>
       <Suspense fallback={<Loading />}>
         <CameraModal
           open={isAddImageModalOpen}

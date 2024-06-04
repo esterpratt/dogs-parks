@@ -5,7 +5,7 @@ import { fetchAllParkImages, uploadParkImage } from '../../services/parks';
 import { queryClient } from '../../services/react-query';
 import { ParkGallery } from './ParkGallery';
 import { Loading } from '../Loading';
-import { Accordion } from '../accordion/Accordion';
+import { AccordionContainer } from '../accordion/AccordionContainer';
 
 const CameraModal = lazy(() => import('../camera/CameraModal'));
 
@@ -47,21 +47,21 @@ const ParkGalleryContainer: React.FC<ParkGalleryContainerProps> = ({
 
   return (
     <>
-      <Accordion>
-        <Accordion.TitleWithIcon
+      <AccordionContainer>
+        <AccordionContainer.TitleWithIcon
           title="Gallery"
           showIcon
           Icon={FaPlus}
           onClickIcon={onClickAddPhoto}
           iconSize={14}
         />
-        <Accordion.Content>
+        <AccordionContainer.Content>
           <ParkGallery
             images={parkImages}
             openCameraModal={() => setIsAddImageModalOpen(true)}
           />
-        </Accordion.Content>
-      </Accordion>
+        </AccordionContainer.Content>
+      </AccordionContainer>
       <Suspense fallback={<Loading />}>
         <CameraModal
           open={isAddImageModalOpen}
