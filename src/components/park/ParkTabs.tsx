@@ -1,5 +1,5 @@
 import { useGetParkVisitors } from '../../hooks/api/useGetParkVisitors';
-import { TabsList } from '../tabs/TabsList';
+import { TabsList } from '../tabsCmps/TabsList';
 
 interface ParkTabsProps {
   parkId: string;

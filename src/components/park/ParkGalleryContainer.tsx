@@ -5,7 +5,7 @@ import { fetchAllParkImages, uploadParkImage } from '../../services/parks';
 import { queryClient } from '../../services/react-query';
 import { ParkGallery } from './ParkGallery';
 import { Loading } from '../Loading';
-import { AccordionContainer } from '../accordion/AccordionContainer';
+import { AccordionContainer } from '../accordionCmps/AccordionContainer';
 
 const CameraModal = lazy(() => import('../camera/CameraModal'));
 
