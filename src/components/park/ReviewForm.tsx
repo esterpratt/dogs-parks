@@ -83,40 +83,42 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ review, onSubmitForm }) => {
     <div className={styles.container}>
       <span className={styles.title}>How did you dig the park?</span>
       <form onSubmit={onSubmit} className={styles.form}>
-        <ControlledInput
-          label="Title"
-          name="title"
-          value={reviewData.title}
-          onChange={onChangeInput}
-          placeholder="Review title"
-          required
-        />
-        <TextArea
-          label="Content"
-          name="content"
-          rows={7}
-          maxLength={280}
-          value={reviewData.content}
-          onChange={onChangeInput}
-          placeholder="Please elaborate..."
-        />
-        <div className={styles.rankContainer}>
-          <span className={styles.rankTitle}>Rate the park</span>
-          <Stars
-            className={styles.stars}
-            rank={rank}
-            setRank={setRank}
-            size={32}
+        <div className={styles.formInputs}>
+          <ControlledInput
+            label="Title"
+            name="title"
+            value={reviewData.title}
+            onChange={onChangeInput}
+            placeholder="Review title"
+            required
           />
+          <TextArea
+            label="Content"
+            name="content"
+            rows={7}
+            maxLength={280}
+            value={reviewData.content}
+            onChange={onChangeInput}
+            placeholder="Please elaborate..."
+          />
+          <div className={styles.rankContainer}>
+            <span className={styles.rankTitle}>Rate the park</span>
+            <Stars
+              className={styles.stars}
+              rank={rank}
+              setRank={setRank}
+              size={32}
+            />
+          </div>
+          {!review && (
+            <Checkbox
+              id="isAnonymous"
+              label="Report anonymously"
+              isChecked={isAnonymous}
+              onChange={onChangeAnonymousStatus}
+            />
+          )}
         </div>
-        {!review && (
-          <Checkbox
-            id="isAnonymous"
-            label="Report anonymously"
-            isChecked={isAnonymous}
-            onChange={onChangeAnonymousStatus}
-          />
-        )}
         <Button variant="green" type="submit" className={styles.button}>
           Submit
         </Button>

@@ -1,9 +1,5 @@
 @import '../variables.scss';
 
-.container {
-  padding: 24px 0;
-}
-
 .prev-link {
   margin-left: 12px;
   text-decoration: none;
@@ -14,7 +10,7 @@
 }
 
 .important-details {
-  margin: 72px 16px 0;
+  margin: 72px 0 0;
   height: 130px;
   background-color: $white;
   border-radius: 12px;
@@ -91,10 +87,6 @@
 
 .age {
   margin-top: 12px;
-}
-
-.accordion {
-  padding: 12px;
 }
 
 .content-container {

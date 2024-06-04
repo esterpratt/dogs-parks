@@ -40,15 +40,16 @@ const ReportParkModal: React.FC<ReportParkModalProps> = ({
   };
 
   return (
-    <Modal open={open} onClose={onClose} height="60%">
+    <Modal open={open} onClose={onClose} height="80%">
       <div className={styles.container}>
         <TextArea
+          className={styles.textArea}
           rows={15}
           name="report"
           label="Tell us what’s wrong here."
           value={text}
           onChange={onChangeText}
-          maxLength={360}
+          maxLength={600}
         />
         <Button
           variant="green"

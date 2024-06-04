@@ -78,7 +78,7 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
             >
               Lead the way
             </button>
-            <Link to={`/parks/${activePark?.id}`}>Fetch Park Page</Link>
+            <Link to={`/parks/${activePark?.id}`}>Fetch park page</Link>
           </div>
           {directions && (
             <div className={styles.directions}>

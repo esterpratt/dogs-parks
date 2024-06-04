@@ -35,9 +35,9 @@ const ChooseEditParkOptionModal: React.FC<ChooseEditParkOptionModalProps> = ({
   const isEditable =
     !park.size ||
     !park.materials?.length ||
-    !park.hasShade ||
-    !park.hasWater ||
-    !park.hasFacilities;
+    park.hasShade === undefined ||
+    park.hasWater === undefined ||
+    park.hasFacilities === undefined;
 
   const onEditPark = () => {
     setIsEditModalOpen(true);
@@ -54,6 +54,7 @@ const ChooseEditParkOptionModal: React.FC<ChooseEditParkOptionModalProps> = ({
         onClose={onClose}
         className={styles.modal}
         variant="bottom"
+        height={isEditable ? '296px' : '205px'}
       >
         <div className={styles.buttonsContainer}>
           {isEditable && (

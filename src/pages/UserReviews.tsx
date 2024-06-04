@@ -10,6 +10,7 @@ import { User } from '../types/user';
 import styles from './UserReviews.module.scss';
 import { queryClient } from '../services/react-query';
 import { Review, ReviewData } from '../types/review';
+import { ReviewModalContextProvider } from '../context/ReviewModalContext';
 
 const UserReviews = () => {
   const { user } = useOutletContext() as { user: User };
@@ -72,19 +73,20 @@ const UserReviews = () => {
   }
 
   return (
-    <div className={styles.container}>
-      {reviews.map((review) => {
-        return (
-          <ReviewPreview
-            showPark
-            key={review.id}
-            review={review}
-            userId={user.id}
-            onUpdateReview={onUpdateReview}
-          />
-        );
-      })}
-    </div>
+    <ReviewModalContextProvider onUpdateReview={onUpdateReview}>
+      <div className={styles.container}>
+        {reviews.map((review) => {
+          return (
+            <ReviewPreview
+              showPark
+              key={review.id}
+              review={review}
+              userId={user.id}
+            />
+          );
+        })}
+      </div>
+    </ReviewModalContextProvider>
   );
 };
 

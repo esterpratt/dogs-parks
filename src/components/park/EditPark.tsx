@@ -130,62 +130,64 @@ const EditPark: React.FC<EditParkProps> = ({ onSubmitForm, park }) => {
 
   return (
     <form onSubmit={onSubmit} className={styles.form}>
-      {!park.size && (
-        <ControlledInput
-          type="number"
-          value={parkDetails.size?.toString() || ''}
-          onChange={onInputChange}
-          name="size"
-          label="Size"
-        />
-      )}
-      {!park.materials && (
-        <MultiSelectInputs
-          options={[
-            { id: ParkMaterial.SAND, value: ParkMaterial.SAND },
-            { id: ParkMaterial.GRASS, value: ParkMaterial.GRASS },
-          ]}
-          value={parkDetails.materials || []}
-          onInputChange={onInputChange}
-          name="materials"
-        />
-      )}
-      {park.hasFacilities === undefined && (
-        <RadioInputs
-          value={parkDetails.hasFacilities || ''}
-          options={[
-            { value: 'Y', id: 'yes' },
-            { value: 'N', id: 'no' },
-          ]}
-          onOptionChange={onInputChange}
-          name="hasFacilities"
-          label="Has Facilities?"
-        />
-      )}
-      {park.hasShade === undefined && (
-        <RadioInputs
-          value={parkDetails.hasShade || ''}
-          options={[
-            { value: 'Y', id: 'yes' },
-            { value: 'N', id: 'no' },
-          ]}
-          onOptionChange={onInputChange}
-          name="hasShade"
-          label="Has Shade?"
-        />
-      )}
-      {park.hasWater === undefined && (
-        <RadioInputs
-          value={parkDetails.hasWater || ''}
-          options={[
-            { value: 'Y', id: 'yes' },
-            { value: 'N', id: 'no' },
-          ]}
-          onOptionChange={onInputChange}
-          name="hasWater"
-          label="Has Water?"
-        />
-      )}
+      <div className={styles.formInputs}>
+        {!park.size && (
+          <ControlledInput
+            type="number"
+            value={parkDetails.size?.toString() || ''}
+            onChange={onInputChange}
+            name="size"
+            label="Size"
+          />
+        )}
+        {!park.materials && (
+          <MultiSelectInputs
+            options={[
+              { id: ParkMaterial.SAND, value: ParkMaterial.SAND },
+              { id: ParkMaterial.GRASS, value: ParkMaterial.GRASS },
+            ]}
+            value={parkDetails.materials || []}
+            onInputChange={onInputChange}
+            name="materials"
+          />
+        )}
+        {park.hasFacilities === undefined && (
+          <RadioInputs
+            value={parkDetails.hasFacilities || ''}
+            options={[
+              { value: 'Y', id: 'yes' },
+              { value: 'N', id: 'no' },
+            ]}
+            onOptionChange={onInputChange}
+            name="hasFacilities"
+            label="Has Facilities?"
+          />
+        )}
+        {park.hasShade === undefined && (
+          <RadioInputs
+            value={parkDetails.hasShade || ''}
+            options={[
+              { value: 'Y', id: 'yes' },
+              { value: 'N', id: 'no' },
+            ]}
+            onOptionChange={onInputChange}
+            name="hasShade"
+            label="Has Shade?"
+          />
+        )}
+        {park.hasWater === undefined && (
+          <RadioInputs
+            value={parkDetails.hasWater || ''}
+            options={[
+              { value: 'Y', id: 'yes' },
+              { value: 'N', id: 'no' },
+            ]}
+            onOptionChange={onInputChange}
+            name="hasWater"
+            label="Has Water?"
+          />
+        )}
+      </div>
       <Button variant="green" type="submit" className={styles.saveButton}>
         Save
       </Button>

@@ -1,17 +1,23 @@
+@import '../../variables.scss';
+
 .details {
   td {
     padding-top: 4px;
-    padding-right: 12px;
+    padding-right: 16px;
     vertical-align: top;
     font-weight: inherit;
 
     div {
-      max-height: 118px;
+      max-height: 272px;
       overflow: hidden;
     }
 
     &:first-child {
       width: 35%;
+    }
+
+    &:last-child {
+      color: rgba($text, 0.6);
     }
   }
 }

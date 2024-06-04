@@ -1,4 +1,5 @@
 import { ChangeEvent } from 'react';
+import classnames from 'classnames';
 import styles from './TextArea.module.scss';
 
 interface TextAreaProps {
@@ -9,6 +10,7 @@ interface TextAreaProps {
   maxLength?: number;
   placeholder?: string;
   onChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
+  className?: string;
 }
 
 const TextArea: React.FC<TextAreaProps> = ({
@@ -19,9 +21,10 @@ const TextArea: React.FC<TextAreaProps> = ({
   rows,
   maxLength,
   placeholder,
+  className,
 }) => {
   return (
-    <div className={styles.container}>
+    <div className={classnames(styles.container, className)}>
       <label htmlFor={name}>{label}</label>
       <textarea
         placeholder={placeholder}

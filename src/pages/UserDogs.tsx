@@ -1,16 +1,14 @@
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useContext, useState } from 'react';
 import { useOutletContext } from 'react-router';
+import { Link } from 'react-router-dom';
 import { User } from '../types/user';
 import { Dog } from '../types/dog';
 import { DogPreview } from '../components/profile/DogPreview';
 import styles from './UserDogs.module.scss';
-import { FaCirclePlus } from 'react-icons/fa6';
-import { IconContext } from 'react-icons';
-import { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { FriendRequestButton } from '../components/profile/FriendRequestButton';
 import { UserContext } from '../context/UserContext';
 import { Loading } from '../components/Loading';
+import { Button } from '../components/Button';
 
 const EditDogsModal = lazy(() => import('../components/profile/EditDogsModal'));
 
@@ -55,15 +53,13 @@ const UserDogs = () => {
           ))}
         </div>
         {isSignedInUser && (
-          <div
+          <Button
+            variant="green"
             className={styles.addDogButton}
             onClick={() => setIsEditDogsModalOpen(true)}
           >
-            <IconContext.Provider value={{ className: styles.plus }}>
-              <FaCirclePlus />
-            </IconContext.Provider>
-            <span className={styles.addDogText}>Add a Dog</span>
-          </div>
+            Add a dog
+          </Button>
         )}
         {!isSignedInUser && signedInUserId && (
           <FriendRequestButton
@@ -78,7 +74,6 @@ const UserDogs = () => {
           onClose={() => setIsEditDogsModalOpen(false)}
         />
       </Suspense>
-      ;
     </>
   );
 };

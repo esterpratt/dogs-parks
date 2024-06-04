@@ -123,91 +123,93 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
 
   return (
     <form onSubmit={onSubmit} className={styles.form}>
-      <ControlledInput
-        value={dogData?.name || ''}
-        onChange={onInputChange}
-        name="name"
-        label="Name *"
-        required
-      />
-      <RadioInputs
-        value={dogData?.gender || ''}
-        options={[
-          { value: GENDER.FEMALE, id: GENDER.FEMALE },
-          { value: GENDER.MALE, id: GENDER.MALE },
-        ]}
-        onOptionChange={onInputChange}
-        name="gender"
-        label="Gender *"
-      />
-      <ControlledInput
-        value={dogData?.age?.toString() || ''}
-        onChange={onInputChange}
-        name="age"
-        label="Age *"
-        required
-      />
-      <ControlledInput
-        value={dogData?.breed || ''}
-        onChange={onInputChange}
-        name="breed"
-        label="Breed *"
-        required
-      />
-      <RadioInputs
-        value={dogData?.size || ''}
-        options={[
-          { value: DOG_SIZE.LARGE, id: DOG_SIZE.LARGE },
-          { value: DOG_SIZE.MEDIUM, id: DOG_SIZE.MEDIUM },
-          { value: DOG_SIZE.SMALL, id: DOG_SIZE.SMALL },
-        ]}
-        onOptionChange={onInputChange}
-        name="size"
-        label="Size"
-      />
-      <ControlledInput
-        value={dogData?.temperament || ''}
-        onChange={onInputChange}
-        name="temperament"
-        label="Temperament"
-      />
-      <RadioInputs
-        value={dogData?.energy || ''}
-        options={[
-          { value: DOG_ENERGY.HIGH, id: DOG_ENERGY.HIGH },
-          { value: DOG_ENERGY.MEDIUM, id: DOG_ENERGY.MEDIUM },
-          { value: DOG_ENERGY.LOW, id: DOG_ENERGY.LOW },
-        ]}
-        onOptionChange={onInputChange}
-        name="energy"
-        label="Energy"
-      />
-      <ControlledInput
-        value={dogData?.possessive || ''}
-        onChange={onInputChange}
-        name="possessive"
-        label="Possessive"
-      />
-      <ControlledInput
-        value={dogData?.likes || ''}
-        onChange={onInputChange}
-        name="likes"
-        label="Likes"
-      />
-      <ControlledInput
-        value={dogData?.dislikes || ''}
-        onChange={onInputChange}
-        name="dislikes"
-        label="Dislikes"
-      />
-      <TextArea
-        rows={9}
-        maxLength={330}
-        value={dogData?.description || ''}
-        onChange={onInputChange}
-        name="description"
-        label="Description"
-      />
+      <div className={styles.formInputs}>
+        <ControlledInput
+          value={dogData?.name || ''}
+          onChange={onInputChange}
+          name="name"
+          label="Name *"
+          required
+        />
+        <RadioInputs
+          value={dogData?.gender || ''}
+          options={[
+            { value: GENDER.FEMALE, id: GENDER.FEMALE },
+            { value: GENDER.MALE, id: GENDER.MALE },
+          ]}
+          onOptionChange={onInputChange}
+          name="gender"
+          label="Gender *"
+        />
+        <ControlledInput
+          value={dogData?.age?.toString() || ''}
+          onChange={onInputChange}
+          name="age"
+          label="Age *"
+          required
+        />
+        <ControlledInput
+          value={dogData?.breed || ''}
+          onChange={onInputChange}
+          name="breed"
+          label="Breed *"
+          required
+        />
+        <RadioInputs
+          value={dogData?.size || ''}
+          options={[
+            { value: DOG_SIZE.LARGE, id: DOG_SIZE.LARGE },
+            { value: DOG_SIZE.MEDIUM, id: DOG_SIZE.MEDIUM },
+            { value: DOG_SIZE.SMALL, id: DOG_SIZE.SMALL },
+          ]}
+          onOptionChange={onInputChange}
+          name="size"
+          label="Size"
+        />
+        <ControlledInput
+          value={dogData?.temperament || ''}
+          onChange={onInputChange}
+          name="temperament"
+          label="Temperament"
+        />
+        <RadioInputs
+          value={dogData?.energy || ''}
+          options={[
+            { value: DOG_ENERGY.HIGH, id: DOG_ENERGY.HIGH },
+            { value: DOG_ENERGY.MEDIUM, id: DOG_ENERGY.MEDIUM },
+            { value: DOG_ENERGY.LOW, id: DOG_ENERGY.LOW },
+          ]}
+          onOptionChange={onInputChange}
+          name="energy"
+          label="Energy"
+        />
+        <ControlledInput
+          value={dogData?.possessive || ''}
+          onChange={onInputChange}
+          name="possessive"
+          label="Possessive"
+        />
+        <ControlledInput
+          value={dogData?.likes || ''}
+          onChange={onInputChange}
+          name="likes"
+          label="Likes"
+        />
+        <ControlledInput
+          value={dogData?.dislikes || ''}
+          onChange={onInputChange}
+          name="dislikes"
+          label="Dislikes"
+        />
+        <TextArea
+          rows={9}
+          maxLength={330}
+          value={dogData?.description || ''}
+          onChange={onInputChange}
+          name="description"
+          label="Description"
+        />
+      </div>
       <Button variant="green" type="submit" className={styles.saveButton}>
         Save
       </Button>

@@ -11,21 +11,18 @@
 }
 
 .dogs-count-modal {
-  padding: 56px 24px 0;
+  padding: 56px 24px 24px;
 }
 
 .modal-content {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  height: 100%;
   color: $text;
 
   button {
-    margin-top: 24px;
+    margin: 24px auto;
     font-size: 18px;
-    position: absolute;
-    bottom: 48px;
-    align-self: center;
   }
 }
 

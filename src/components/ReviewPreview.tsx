@@ -1,75 +1,47 @@
-import { useEffect, useMemo, useState, lazy, Suspense } from 'react';
+import { useMemo, useContext } from 'react';
 import { Review } from '../types/review';
 import { Button } from './Button';
-import { UpdateReviewProps } from '../services/reviews';
 import { getFormattedDate } from '../utils/time';
 import { fetchUser } from '../services/users';
 import styles from './ReviewPreview.module.scss';
 import { Stars } from './Stars';
 import { fetchPark } from '../services/parks';
-import { User } from '../types/user';
-import { Park } from '../types/park';
-import { Loading } from './Loading';
-
-const ReviewModal = lazy(() => import('./ReviewModal'));
+import { useQuery } from '@tanstack/react-query';
+import { ReviewModalContext } from '../context/ReviewModalContext';
 
 interface ReviewPreviewProps {
   review: Review;
   userId?: string | null;
   showPark?: boolean;
-  onUpdateReview?: ({ reviewId, reviewData }: UpdateReviewProps) => void;
 }
 
 const ReviewPreview: React.FC<ReviewPreviewProps> = ({
   review,
   userId,
-  onUpdateReview,
   showPark = false,
 }) => {
-  const [isAddReviewModalOpen, setIsAddReviewModalOpen] = useState(false);
+  const { setOpenedReview } = useContext(ReviewModalContext);
   const reviewTime = useMemo<string>(() => {
     return getFormattedDate(review.updatedAt || review.createdAt);
   }, [review.createdAt, review.updatedAt]);
-  const [userName, setUserName] = useState<string>('');
-  const [parkName, setParkName] = useState<string>('');
 
-  useEffect(() => {
-    const getNames = async () => {
-      const promises: [
-        Promise<Partial<User> | undefined>,
-        Promise<Partial<Park> | undefined>
-      ] = [
-        review.userId
-          ? fetchUser(review.userId)
-          : Promise.resolve({ name: 'Anonymous' }),
-        fetchPark(review.parkId),
-      ];
-      const [user, park] = await Promise.all(promises);
-      setUserName(user?.name || 'Anonymous');
-      setParkName(park?.name || 'N/A');
-    };
+  const { data: user } = useQuery({
+    queryKey: ['user', review.userId],
+    queryFn: () => fetchUser(review.userId!),
+    enabled: !!review.userId,
+  });
 
-    getNames();
-  }, [review.userId, review.parkId]);
-
-  const onSubmitReview = (updatedReview: {
-    title: string;
-    content?: string;
-    rank: number;
-  }) => {
-    setIsAddReviewModalOpen(false);
-    if (onUpdateReview) {
-      onUpdateReview({
-        reviewId: review.id,
-        reviewData: updatedReview,
-      });
-    }
-  };
+  const { data: park } = useQuery({
+    queryKey: ['park', review.parkId],
+    queryFn: () => fetchPark(review.parkId),
+  });
 
   return (
     <>
       <div className={styles.container}>
-        {showPark && <div className={styles.parkName}>{parkName}</div>}
+        {showPark && (
+          <div className={styles.parkName}>{park?.name || 'N/A'}</div>
+        )}
         <div className={styles.preview}>
           <div className={styles.title}>{review.title}</div>
           <Stars rank={review.rank} className={styles.stars} />
@@ -79,10 +51,10 @@ const ReviewPreview: React.FC<ReviewPreviewProps> = ({
         )}
         <div className={styles.footer}>
           <div className={styles.time}>{reviewTime}</div>
-          <div className={styles.name}>by: {userName}</div>
+          <div className={styles.name}>by: {user?.name || 'Anonymous'}</div>
           {userId && userId === review.userId && (
             <Button
-              onClick={() => setIsAddReviewModalOpen(true)}
+              onClick={() => setOpenedReview(review)}
               className={styles.button}
             >
               Update Review
@@ -90,14 +62,6 @@ const ReviewPreview: React.FC<ReviewPreviewProps> = ({
           )}
         </div>
       </div>
-      <Suspense fallback={<Loading />}>
-        <ReviewModal
-          review={review}
-          onSubmitReview={onSubmitReview}
-          isOpen={isAddReviewModalOpen}
-          closeModal={() => setIsAddReviewModalOpen(false)}
-        />
-      </Suspense>
     </>
   );
 };

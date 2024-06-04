@@ -1,7 +1,7 @@
 @import './variables.scss';
 
 .app-content {
-  height: calc(100vh - $navbar-height * 2);
+  height: calc(100dvh - $navbar-height * 2);
   margin-top: $navbar-height;
   overflow: auto;
 }

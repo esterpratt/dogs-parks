@@ -14,6 +14,7 @@ import { queryClient } from '../services/react-query';
 import { Review, ReviewData } from '../types/review';
 import { useAddReview } from '../hooks/api/useAddReview';
 import { Loading } from '../components/Loading';
+import { ReviewModalContextProvider } from '../context/ReviewModalContext';
 
 const ReviewModal = lazy(() => import('../components/ReviewModal'));
 
@@ -110,19 +111,17 @@ const Reviews: React.FC = () => {
   }
 
   return (
-    <div>
-      <ul className={styles.list}>
-        {reviews.map((review) => (
-          <li key={review.id} className={styles.item}>
-            <ReviewPreview
-              review={review}
-              userId={userId}
-              onUpdateReview={onUpdateReview}
-            />
-          </li>
-        ))}
-      </ul>
-    </div>
+    <ReviewModalContextProvider onUpdateReview={onUpdateReview}>
+      <div>
+        <ul className={styles.list}>
+          {reviews.map((review) => (
+            <li key={review.id} className={styles.item}>
+              <ReviewPreview review={review} userId={userId} />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </ReviewModalContextProvider>
   );
 };
 

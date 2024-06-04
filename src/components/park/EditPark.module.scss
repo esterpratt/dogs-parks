@@ -1,11 +1,16 @@
 .form {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+
+.form-inputs {
+  display: flex;
+  flex-direction: column;
   gap: 24px;
 }
 
 .save-button {
-  bottom: 48px;
-  align-self: center;
-  position: absolute;
+  margin: 24px auto;
 }

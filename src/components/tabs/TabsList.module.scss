@@ -1,10 +1,12 @@
 @import '../../variables.scss';
 
 .container {
+  width: 100%;
+  height: $tabs-height;
   display: flex;
-  gap: 36px;
+  align-items: center;
   margin: 0;
-  padding: 16px 16px 0;
+  padding: 0 16px;
   font-size: 14px;
   border-bottom: 1px solid $text-light;
 }

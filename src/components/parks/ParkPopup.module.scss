@@ -8,14 +8,14 @@
   bottom: -300px;
   left: 2px;
   background-color: $white;
-  padding: 36px 18px 18px;
+  padding: 36px 14px 14px;
   border: 1px solid $grey-bold;
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
   transition: all 0.5s;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 
   &.open {
     bottom: $navbar-height;
@@ -31,7 +31,6 @@
   border-radius: 12px;
   border: 1px solid $grey-bold;
   flex-shrink: 0;
-  // position: relative;
 }
 
 .img {
@@ -50,7 +49,7 @@
 .details-container {
   height: 100%;
   width: 100%;
-  padding: 6px 0;
+  padding: 2px 0;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -89,12 +88,13 @@
   .buttons {
     display: flex;
     justify-content: space-between;
+    align-items: flex-end;
 
     > * {
       color: $green;
       text-decoration: none;
       border: none;
-      font-size: 14px;
+      font-size: 13px;
       padding: 0;
       background-color: inherit;
       font-weight: $font-weight-light;
@@ -102,22 +102,14 @@
   }
 }
 
-.directions-button {
-  text-align: left;
-}
-
-.dirctions-icon {
-  color: $green;
-}
-
 .directions {
   position: absolute;
-  bottom: 4px;
+  bottom: 0;
   left: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 16px;
 }
 
 .icon {
@@ -128,6 +120,7 @@
 .distance,
 .duration {
   display: flex;
+  align-items: center;
 }
 
 .close {

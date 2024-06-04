@@ -1,10 +1,11 @@
+import { Suspense, useContext } from 'react';
 import { Await, Outlet, useLoaderData } from 'react-router';
 import { User } from '../types/user';
 import { Dog } from '../types/dog';
-import { Suspense, useContext } from 'react';
 import { UserContext } from '../context/UserContext';
 import { ProfileTabs } from '../components/profile/ProfileTabs';
 import { Loading } from '../components/Loading';
+import styles from './Profile.module.scss';
 
 const Profile: React.FC = () => {
   const { user, dogs, dogImages } = useLoaderData() as {
@@ -21,14 +22,16 @@ const Profile: React.FC = () => {
       <Suspense fallback={<Loading />}>
         <Await resolve={dogImages}>
           {(dogImages: (string | null)[]) => (
-            <Outlet
-              context={{
-                user,
-                dogs,
-                dogImages,
-                isSignedInUser,
-              }}
-            />
+            <div className={styles.container}>
+              <Outlet
+                context={{
+                  user,
+                  dogs,
+                  dogImages,
+                  isSignedInUser,
+                }}
+              />
+            </div>
           )}
         </Await>
       </Suspense>

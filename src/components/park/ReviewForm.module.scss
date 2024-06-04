@@ -5,6 +5,7 @@
   flex-direction: column;
   gap: 24px;
   color: $text;
+  height: 100%;
 }
 
 .title {
@@ -12,15 +13,20 @@
 }
 
 .form {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.form-inputs {
   display: flex;
   flex-direction: column;
   gap: 18px;
 }
 
 .button {
-  align-self: center;
-  position: absolute;
-  bottom: 24px;
+  margin: 24px auto;
   font-size: 18px;
 }
 

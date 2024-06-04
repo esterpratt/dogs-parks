@@ -1,7 +1,8 @@
 @import '../variables.scss';
 
 .container {
-  padding: 24px 32px;
+  display: flex;
+  flex-direction: column;
 }
 
 .dogs {
@@ -27,17 +28,7 @@
 }
 
 .add-dog-button {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
   margin: 32px auto;
-  border: 1px solid $text-light;
-  border-radius: 50%;
-  background-color: $white;
-  width: 110px;
-  height: 110px;
 }
 
 .plus {

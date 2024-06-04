@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button } from '../Button';
 import { ControlledInput } from '../inputs/ControlledInput';
+import styles from './DogsCount.module.scss';
 
 interface DogsCountProps {
   onSubmitDogsCount: (dogsCount: string) => void;
@@ -10,7 +11,7 @@ const DogsCount: React.FC<DogsCountProps> = ({ onSubmitDogsCount }) => {
   const [dogsCount, setDogsCount] = useState<string>('');
 
   return (
-    <>
+    <div className={styles.container}>
       <ControlledInput
         type="number"
         name="dogsCount"
@@ -27,7 +28,7 @@ const DogsCount: React.FC<DogsCountProps> = ({ onSubmitDogsCount }) => {
       >
         Submit
       </Button>
-    </>
+    </div>
   );
 };
 

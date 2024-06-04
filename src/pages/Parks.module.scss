@@ -1,9 +1,11 @@
+@import '../variables.scss';
+
 .container {
   padding: 24px 12px 8px;
 }
 
 .map-link {
-  margin-left: 12px;
+  margin-left: 8px;
   margin-bottom: 12px;
   text-decoration: none;
   color: inherit;
@@ -13,6 +15,6 @@
 }
 
 .parks-list {
-  margin: 0 16px;
-  width: calc(100% - 32px);
+  width: 100%;
+  max-height: calc(100dvh - $navbar-height * 2 - 68px);
 }

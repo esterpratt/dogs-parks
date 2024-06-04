@@ -36,12 +36,12 @@ const CameraModal: React.FC<CameraModalProps> = ({
   };
 
   const onCloseModal = () => {
+    setError(null);
     setOpen(false);
   };
 
   const openCamera = () => {
     setIsCameraOpen(true);
-    onCloseModal();
   };
 
   const onCameraError = (error: string | DOMException) => {
@@ -53,6 +53,7 @@ const CameraModal: React.FC<CameraModalProps> = ({
   return (
     <>
       <Modal
+        height="296px"
         open={open}
         onClose={onCloseModal}
         variant="bottom"
@@ -90,7 +91,9 @@ const CameraModal: React.FC<CameraModalProps> = ({
             <span>Cancel</span>
           </Button>
         </div>
-        <span>{error && 'Sorry, cannot use your camera'}</span>
+        <span className={styles.error}>
+          {error && 'Sorry, cannot use your camera'}
+        </span>
       </Modal>
       <Modal
         variant="fullScreen"
