@@ -1,7 +1,7 @@
 import { ReactNode, useContext } from 'react';
-import { AccordionContext } from './AccordionContainer';
 import classnames from 'classnames';
 import styles from './AccordionTitle.module.scss';
+import { AccordionContext } from './AccordionContext';
 
 interface AccordionTitleProps {
   children: (isOpen: boolean) => ReactNode;

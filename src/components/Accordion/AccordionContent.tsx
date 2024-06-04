@@ -1,6 +1,6 @@
 import { ReactNode, useContext } from 'react';
 import classnames from 'classnames';
-import { AccordionContext } from './AccordionContainer';
+import { AccordionContext } from './AccordionContext';
 import styles from './AccordionContent.module.scss';
 
 interface AccordionContentProps {

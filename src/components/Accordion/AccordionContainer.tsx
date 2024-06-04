@@ -1,25 +1,14 @@
-import { ReactNode, createContext, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { AccordionContent } from './AccordionContent';
 import { AccordionTitle } from './AccordionTitle';
 import { AccordionTitleWithIcon } from './AccordionTitleWithIcon';
 import { AccordionArrow } from './AccordionArrow';
+import { AccordionContext } from './AccordionContext';
 
 interface AccordionProps {
   children: ReactNode;
   className?: string;
 }
-
-interface AccordionContextProps {
-  isOpen: boolean;
-  toggleOpen: () => void;
-}
-
-const initialValue: AccordionContextProps = {
-  isOpen: true,
-  toggleOpen: () => {},
-};
-
-const AccordionContext = createContext(initialValue);
 
 const AccordionContainer = ({ children, className }: AccordionProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(true);
@@ -40,4 +29,4 @@ AccordionContainer.TitleWithIcon = AccordionTitleWithIcon;
 AccordionContainer.Content = AccordionContent;
 AccordionContainer.Arrow = AccordionArrow;
 
-export { AccordionContainer, AccordionContext };
+export { AccordionContainer };
