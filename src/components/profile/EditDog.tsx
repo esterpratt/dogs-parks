@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useContext, useEffect, useMemo, useState } from 'react';
 import { Dog, DOG_ENERGY, DOG_SIZE, GENDER } from '../../types/dog';
 import { Button } from '../Button';
 import styles from './EditDog.module.scss';
@@ -123,9 +123,11 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
     }
   };
 
-  const formattedBirthday = !dogData?.birthday
+  const formattedBirthday = useMemo(() => {
+    return !dogData?.birthday
     ? ''
-    : getFormattedDate(dogData.birthday);
+    : getFormattedDate(dogData.birthday)
+  }, [dogData?.birthday]);
 
   return (
     <form onSubmit={onSubmit} className={styles.form}>
