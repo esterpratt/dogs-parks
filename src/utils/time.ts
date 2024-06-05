@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
 
-const getFormattedDate = (date?: Date) => {
+const getFormattedPastDate = (date?: Date) => {
   if (!date) {
     return 'N/A';
   }
@@ -18,4 +18,16 @@ const getFormattedDate = (date?: Date) => {
   return dateDayjs.format('DD/MM/YYYY');
 };
 
-export { getFormattedDate };
+const getFormattedDate = (date: Date) => {
+  const dateDayjs = dayjs(date);
+  return dateDayjs.format('YYYY-MM-DD');
+};
+
+const getAge = (birthday: Date) => {
+  const currentDayjs = dayjs();
+  const dateDayjs = dayjs(birthday);
+  const diff = currentDayjs.diff(dateDayjs, 'year');
+  return diff;
+};
+
+export { getFormattedPastDate, getFormattedDate, getAge };

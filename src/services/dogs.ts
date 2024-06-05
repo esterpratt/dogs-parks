@@ -51,6 +51,7 @@ const fetchDogs = async (ids?: string[]) => {
       const dogs = data.docs.map((doc) => {
         return {
           ...doc.data(),
+          birthday: doc.data().birthday?.toDate(),
           id: doc.id,
         };
       }) as Dog[];
@@ -60,7 +61,11 @@ const fetchDogs = async (ids?: string[]) => {
       const querySnapshot = await getDocs(usersQuery);
       const res: Dog[] = [];
       querySnapshot.forEach((doc) => {
-        res.push({ ...doc.data(), id: doc.id } as Dog);
+        res.push({
+          ...doc.data(),
+          birthday: doc.data().birthday?.toDate(),
+          id: doc.id,
+        } as Dog);
       });
       return res;
     }
@@ -75,7 +80,11 @@ const fetchUserDogs = async (userId: string) => {
     const querySnapshot = await getDocs(dogsQuery);
     const res: Dog[] = [];
     querySnapshot.forEach((doc) => {
-      res.push({ ...doc.data(), id: doc.id } as Dog);
+      res.push({
+        ...doc.data(),
+        birthday: doc.data().birthday?.toDate(),
+        id: doc.id,
+      } as Dog);
     });
     return res;
   } catch (error) {
@@ -89,7 +98,11 @@ const fetchUsersDogs = async (userIds: string[]) => {
     const querySnapshot = await getDocs(dogsQuery);
     const res: Dog[] = [];
     querySnapshot.forEach((doc) => {
-      res.push({ ...doc.data(), id: doc.id } as Dog);
+      res.push({
+        ...doc.data(),
+        birthday: doc.data().birthday?.toDate(),
+        id: doc.id,
+      } as Dog);
     });
     return res;
   } catch (error) {

@@ -4,6 +4,7 @@ import { IoMdFemale, IoMdMale } from 'react-icons/io';
 import { Dog, GENDER } from '../../types/dog';
 import styles from './DogPreview.module.scss';
 import { IconContext } from 'react-icons';
+import { getAge } from '../../utils/time';
 
 interface DogPreviewProps {
   dog: Dog;
@@ -11,7 +12,8 @@ interface DogPreviewProps {
 }
 
 const DogPreview: React.FC<DogPreviewProps> = ({ dog, image }) => {
-  const { name, age, gender } = dog;
+  const { name, birthday, gender } = dog;
+  const age = !birthday ? null : getAge(birthday);
 
   return (
     <div className={styles.container}>

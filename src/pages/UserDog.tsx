@@ -21,6 +21,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '../services/react-query';
 import { Loading } from '../components/Loading';
 import { AccordionContainer } from '../components/accordion/AccordionContainer';
+import { getAge } from '../utils/time';
 
 const CameraModal = lazy(() => import('../components/camera/CameraModal'));
 const EditDogsModal = lazy(() => import('../components/profile/EditDogsModal'));
@@ -80,6 +81,8 @@ const UserDog = () => {
     return null;
   }
 
+  const age = !dog.birthday ? null : getAge(dog.birthday);
+
   return (
     <>
       <div className={styles.container}>
@@ -111,9 +114,9 @@ const UserDog = () => {
                 </IconContext.Provider>
               )}
             </div>
-            {dog.age && (
+            {age && (
               <div className={styles.age}>
-                {dog.age} Year{dog.age > 1 && 's'} old
+                {age} Year{age > 1 && 's'} old
               </div>
             )}
           </div>

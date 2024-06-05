@@ -22,7 +22,7 @@ enum GENDER {
 interface Dog {
   id: string;
   name: string;
-  age?: number;
+  birthday?: Date;
   gender?: GENDER;
   size?: DOG_SIZE;
   breed?: string;

@@ -15,6 +15,7 @@ import { useMutation } from '@tanstack/react-query';
 import { queryClient } from '../../services/react-query';
 import { useRevalidator } from 'react-router';
 import { ThankYouModalContext } from '../../context/ThankYouModalContext';
+import { getFormattedDate } from '../../utils/time';
 
 interface EditDogProps {
   dog?: Dog;
@@ -94,24 +95,25 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
     });
   };
 
-  // TODO: move to action?
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const likes = dogData!.likes?.split(', ') || [];
     const dislikes = dogData!.dislikes?.split(', ') || [];
-    const age = Number(dogData!.age);
+    const birthday = !dogData!.birthday
+      ? dogData!.birthday
+      : new Date(dogData!.birthday);
 
     if (dog) {
       mutateDog({
         dogId: dog.id,
-        dogDetails: { ...dogData, age, likes, dislikes },
+        dogDetails: { ...dogData, birthday, likes, dislikes },
       });
     } else {
       addDog({
         owner: userId!,
         ...dogData!,
-        age,
+        birthday,
         likes,
         dislikes,
       });
@@ -120,6 +122,10 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
       onSubmitForm();
     }
   };
+
+  const formattedBirthday = !dogData?.birthday
+    ? ''
+    : getFormattedDate(dogData.birthday);
 
   return (
     <form onSubmit={onSubmit} className={styles.form}>
@@ -142,10 +148,11 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
           label="Gender *"
         />
         <ControlledInput
-          value={dogData?.age?.toString() || ''}
+          value={formattedBirthday}
           onChange={onInputChange}
-          name="age"
-          label="Age *"
+          name="birthday"
+          label="Birthday *"
+          type="date"
           required
         />
         <ControlledInput

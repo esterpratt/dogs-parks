@@ -1,7 +1,7 @@
 import { useMemo, useContext } from 'react';
 import { Review } from '../types/review';
 import { Button } from './Button';
-import { getFormattedDate } from '../utils/time';
+import { getFormattedPastDate } from '../utils/time';
 import { fetchUser } from '../services/users';
 import styles from './ReviewPreview.module.scss';
 import { Stars } from './Stars';
@@ -22,7 +22,7 @@ const ReviewPreview: React.FC<ReviewPreviewProps> = ({
 }) => {
   const { setOpenedReview } = useContext(ReviewModalContext);
   const reviewTime = useMemo<string>(() => {
-    return getFormattedDate(review.updatedAt || review.createdAt);
+    return getFormattedPastDate(review.updatedAt || review.createdAt);
   }, [review.createdAt, review.updatedAt]);
 
   const { data: user } = useQuery({
