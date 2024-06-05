@@ -84,7 +84,6 @@ const createPark = async (
 };
 
 const updatePark = async (parkId: string, parkDetails: Partial<Park>) => {
-  console.log(parkDetails);
   try {
     const parkRef = doc(db, 'parks', parkId);
     if (parkDetails.location) {

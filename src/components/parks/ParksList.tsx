@@ -27,8 +27,6 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
     }));
   }, [parks]);
 
-  console.log('parksToSort: ', parksToSort);
-
   const sortedParks = useDistance(parksToSort);
 
   const searchParksFunc = (park: Park, searchInput: string) => {
