@@ -12,6 +12,7 @@
 
 .button-container {
   padding: 24px;
+  width: 100%;
 
   &:not(:last-child) {
     border-bottom: 1px solid $text-light;

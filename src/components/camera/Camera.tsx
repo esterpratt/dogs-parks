@@ -35,6 +35,10 @@ const Camera: React.FC<CustomWebcamProps> = ({
     onSaveImg(img!);
   };
 
+  if (!isOpen) {
+    return null;
+  }
+
   return (
     <div className={styles.camera}>
       {img ? (
@@ -51,15 +55,13 @@ const Camera: React.FC<CustomWebcamProps> = ({
         </>
       ) : (
         <>
-          {isOpen && (
-            <Webcam
-              ref={webcamRef}
-              videoConstraints={{ facingMode }}
-              onUserMediaError={onError}
-              className={styles.cameraView}
-              mirrored
-            />
-          )}
+          <Webcam
+            ref={webcamRef}
+            videoConstraints={{ facingMode }}
+            onUserMediaError={onError}
+            className={styles.cameraView}
+            mirrored
+          />
           <div className={styles.captureButtonsContainer}>
             <IconContext.Provider value={{ className: styles.icons }}>
               <Button onClick={onClose}>
