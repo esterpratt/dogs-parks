@@ -48,15 +48,15 @@
 
   &.bottom {
     height: fit-content;
-    margin-top: auto;
-    margin-bottom: -300px;
+    top: 100%;
+    transform: translate(0, 55%);
     border-radius: 24px;
     width: 95%;
     max-width: 95%;
     opacity: 1;
 
     &[open] {
-      margin-bottom: 10px;
+      transform: translate(0, -54%);
     }
   }
 
