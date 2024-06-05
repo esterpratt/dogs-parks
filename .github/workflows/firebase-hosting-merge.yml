@@ -11,13 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: npm ci && npm run build
-      - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DOGS_PARKS_8F00E }}
-          channelId: live
-          projectId: dogs-parks-8f00e
         env:
           VITE_GOOGLE_MAPS_API_KEY: ${{secrets.VITE_GOOGLE_MAPS_API_KEY}}
           VITE_FIREBASE_API_KEY: ${{secrets.VITE_FIREBASE_API_KEY}}
@@ -27,3 +20,10 @@ jobs:
           VITE_FIREBASE_MESSAGING_CENTER_ID: ${{secrets.VITE_FIREBASE_MESSAGING_CENTER_ID}}
           VITE_FIREBASE_APP_ID: ${{secrets.VITE_FIREBASE_APP_ID}}
           VITE_FIREBASE_MEASUREMENT_ID: ${{secrets.VITE_FIREBASE_MEASUREMENT_ID}}
+      - run: npm ci && npm run build
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DOGS_PARKS_8F00E }}
+          channelId: live
+          projectId: dogs-parks-8f00e
