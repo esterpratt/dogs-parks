@@ -10,30 +10,29 @@ import { Loading } from '../components/Loading';
 const UserFavorites = () => {
   const { id: userId } = useParams();
 
-  const { data: favoriteParkIds = [], isLoading: isLoadingFavorites } =
-    useQuery({
-      queryKey: ['favorites', userId],
-      queryFn: async () => {
-        const favorites = await fetchUserFavorites(userId!);
-        return favorites?.parkIds ?? [];
-      },
-    });
-
-  const { data: parks = [], isLoading: isLoadingParks } = useQuery({
-    queryKey: ['parks'],
-    queryFn: fetchParks,
-    enabled: !!favoriteParkIds.length,
+  const { data: favoriteParkIds, isLoading: isLoadingFavorites } = useQuery({
+    queryKey: ['favorites', userId],
+    queryFn: async () => {
+      const favorites = await fetchUserFavorites(userId!);
+      return favorites?.parkIds ?? [];
+    },
   });
 
-  const favoriteParks = parks.filter((park) =>
-    favoriteParkIds.includes(park.id)
-  );
+  const { data: parks, isLoading: isLoadingParks } = useQuery({
+    queryKey: ['parks'],
+    queryFn: fetchParks,
+    enabled: !!favoriteParkIds?.length,
+  });
+
+  const favoriteParks = parks?.length
+    ? parks.filter((park) => favoriteParkIds!.includes(park.id))
+    : [];
 
   if (isLoadingParks || isLoadingFavorites) {
     return <Loading />;
   }
 
-  if (!favoriteParkIds.length) {
+  if (!favoriteParkIds?.length) {
     return (
       <div className={styles.container}>
         <span className={styles.noFavoritesTitle}>No favorite parks yet.</span>

@@ -1,5 +1,4 @@
 import { Link, useOutletContext } from 'react-router-dom';
-import classnames from 'classnames';
 import { UserPreview } from '../components/users/UserPreview';
 import styles from './UserFriends.module.scss';
 import { User } from '../types/user';
@@ -12,7 +11,7 @@ import { FRIENDS_KEY } from '../hooks/api/keys';
 const UserFriends = () => {
   const { user } = useOutletContext() as { user: User };
 
-  const { data: friends = [], isFetching: isLoadingFriends } = useQuery({
+  const { data: friends, isFetching: isLoadingFriends } = useQuery({
     queryKey: ['friends', user.id, FRIENDS_KEY.FRIENDS, 'dogs'],
     queryFn: () =>
       fetchFriendsWithDogs({
@@ -20,7 +19,7 @@ const UserFriends = () => {
       }),
   });
 
-  const { data: pendingFriends = [], isFetching: isLoadingPendingFriends } =
+  const { data: pendingFriends, isFetching: isLoadingPendingFriends } =
     useQuery({
       queryKey: ['friends', user.id, FRIENDS_KEY.PENDING_FRIENDS, 'dogs'],
       queryFn: () =>
@@ -31,7 +30,7 @@ const UserFriends = () => {
         }),
     });
 
-  const { data: myPendingFriends = [], isFetching: isLoadingMyPendingFriends } =
+  const { data: myPendingFriends, isFetching: isLoadingMyPendingFriends } =
     useQuery({
       queryKey: ['friends', user.id, FRIENDS_KEY.MY_PENDING_FRIENDS, 'dogs'],
       queryFn: () =>
@@ -50,10 +49,14 @@ const UserFriends = () => {
     return <Loading />;
   }
 
-  if (!friends.length && !pendingFriends.length && !myPendingFriends.length) {
+  if (
+    !friends?.length &&
+    !pendingFriends?.length &&
+    !myPendingFriends?.length
+  ) {
     return (
-      <div className={classnames(styles.container, styles.noFriends)}>
-        <span>No friends yet.</span>
+      <div className={styles.noFriends}>
+        <span className={styles.noFriendsTitle}>No friends yet.</span>
         <Link to="/users" className={styles.link}>
           Sniff out some friends!
         </Link>
@@ -63,7 +66,7 @@ const UserFriends = () => {
 
   return (
     <div className={styles.container}>
-      {!!friends.length && (
+      {!!friends?.length && (
         <div className={styles.friendsContainer}>
           <div className={styles.title}>My Friends</div>
           {friends.map((friend) => {
@@ -71,7 +74,7 @@ const UserFriends = () => {
           })}
         </div>
       )}
-      {!!pendingFriends.length && (
+      {!!pendingFriends?.length && (
         <div className={styles.friendsContainer}>
           <div className={styles.title}>Want to be my friends</div>
           {pendingFriends.map((friend) => {
@@ -79,7 +82,7 @@ const UserFriends = () => {
           })}
         </div>
       )}
-      {!!myPendingFriends.length && (
+      {!!myPendingFriends?.length && (
         <div className={styles.friendsContainer}>
           <div className={styles.title}>Waiting for their Responses</div>
           {myPendingFriends.map((friend) => {

@@ -7,7 +7,25 @@
 }
 
 .no-friends {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
   align-items: center;
+}
+
+.no-friends-title {
+  margin: 24px auto;
+  font-size: 18px;
+}
+
+.link {
+  font-size: 18px;
+  margin: 0 auto;
+
+  a {
+    text-decoration: none;
+    color: $green;
+  }
 }
 
 .friends-container {

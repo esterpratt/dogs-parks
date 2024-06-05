@@ -18,7 +18,7 @@ interface FavoriteButtonProps {
 
 const FavoriteButton: React.FC<FavoriteButtonProps> = ({ parkId, userId }) => {
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
-  const { data: favoritesParkIds = [] } = useQuery({
+  const { data: favoritesParkIds } = useQuery({
     queryKey: ['favorites', userId],
     queryFn: async () => {
       const favorites = await fetchUserFavorites(userId);
@@ -27,7 +27,7 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ parkId, userId }) => {
   });
 
   useEffect(() => {
-    setIsFavorite(favoritesParkIds.includes(parkId));
+    setIsFavorite(favoritesParkIds ? favoritesParkIds.includes(parkId) : false);
   }, [favoritesParkIds, parkId]);
 
   const { mutate: mutateFavorite } = useMutation({

@@ -15,19 +15,19 @@ interface ParksListProps {
 }
 
 const ParksList: React.FC<ParksListProps> = ({ className }) => {
-  const { isLoading, data: parks = [] } = useQuery({
+  const { isLoading, data: parks } = useQuery({
     queryKey: ['parks'],
     queryFn: fetchParksJSON,
   });
 
-  const parksToSort = useMemo(
-    () =>
-      parks.map((park) => ({
-        ...park,
-        ...park.location,
-      })),
-    [parks]
-  );
+  const parksToSort = useMemo(() => {
+    return parks?.map((park) => ({
+      ...park,
+      ...park.location,
+    }));
+  }, [parks]);
+
+  console.log('parksToSort: ', parksToSort);
 
   const sortedParks = useDistance(parksToSort);
 

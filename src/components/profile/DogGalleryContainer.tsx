@@ -25,7 +25,7 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
 }) => {
   const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
 
-  const { data: dogImages = [], isLoading } = useQuery({
+  const { data: dogImages, isLoading } = useQuery({
     queryKey: ['dogImages', dog.id],
     queryFn: () => fetchAllDogImages(dog.id),
   });
@@ -52,7 +52,7 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
     openCameraModal();
   };
 
-  if ((!isSignedInUser && !dogImages.length) || isLoading) {
+  if ((!isSignedInUser && !dogImages?.length) || isLoading) {
     return null;
   }
 
@@ -67,7 +67,7 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
         />
         <AccordionContainer.Content className={contentClassName}>
           <DogGallery
-            images={dogImages}
+            images={dogImages ?? []}
             dog={dog}
             isSignedInUser={isSignedInUser}
             openCameraModal={openCameraModal}

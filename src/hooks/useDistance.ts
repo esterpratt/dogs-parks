@@ -4,11 +4,13 @@ import { GeolibInputCoordinates } from 'geolib/es/types';
 
 type GenericWithGeo<T> = T & GeolibInputCoordinates;
 
-const useDistance = <T>(items: GenericWithGeo<T>[]) => {
-  const [sortedItems, setSortedItems] = useState(items);
+const useDistance = <T>(items: GenericWithGeo<T>[] | undefined) => {
+  const [sortedItems, setSortedItems] = useState<GenericWithGeo<T>[]>(
+    items ?? []
+  );
 
   useEffect(() => {
-    if (!navigator.geolocation) {
+    if (!items || !navigator.geolocation) {
       return;
     }
 

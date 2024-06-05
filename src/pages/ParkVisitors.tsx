@@ -19,12 +19,11 @@ const ParkVisitors: React.FC = () => {
     isLoadingVisitors,
   } = useGetParkVisitors(parkId!, userId);
 
-  const { data: friendsInParkWithDogs = [], isLoading: isLoadingDogs } =
-    useQuery({
-      queryKey: ['parkVisitorsWithDogs', parkId],
-      queryFn: () => fetchUsersWithDogsByIds(friendsInParkIds),
-      enabled: !!friendsInParkIds.length,
-    });
+  const { data: friendsInParkWithDogs, isLoading: isLoadingDogs } = useQuery({
+    queryKey: ['parkVisitorsWithDogs', parkId],
+    queryFn: () => fetchUsersWithDogsByIds(friendsInParkIds),
+    enabled: !!friendsInParkIds.length,
+  });
 
   const friendsCount = friendsInParkIds.length;
   const othersCount = visitorsIds.length - friendsCount;
@@ -46,7 +45,7 @@ const ParkVisitors: React.FC = () => {
           <span className={styles.friendsTitle}>
             Your Friends that in the park right now:
           </span>
-          {friendsInParkWithDogs.map((user) => (
+          {friendsInParkWithDogs?.map((user) => (
             <UserPreview
               key={user.id}
               user={user}

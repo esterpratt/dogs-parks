@@ -30,7 +30,7 @@ const UserDogs = () => {
       <div className={styles.container}>
         <div className={styles.title}>
           <span className={styles.titleText}>
-            {isSignedInUser ? 'Your' : `${user.name}'s`} pack
+            {isSignedInUser ? 'My' : `${user.name}'s`} pack
           </span>
           {isSignedInUser && (
             <div

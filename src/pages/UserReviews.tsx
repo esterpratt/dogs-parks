@@ -15,7 +15,7 @@ import { ReviewModalContextProvider } from '../context/ReviewModalContext';
 const UserReviews = () => {
   const { user } = useOutletContext() as { user: User };
 
-  const { data: reviews = [] } = useQuery({
+  const { data: reviews } = useQuery({
     queryKey: ['reviews', user.id],
     queryFn: () => fetchUserReviews(user.id),
   });
@@ -68,7 +68,7 @@ const UserReviews = () => {
     mutateReview({ reviewData, reviewId });
   };
 
-  if (!reviews.length) {
+  if (!reviews?.length) {
     return null;
   }
 

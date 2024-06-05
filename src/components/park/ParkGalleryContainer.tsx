@@ -18,7 +18,7 @@ const ParkGalleryContainer: React.FC<ParkGalleryContainerProps> = ({
 }) => {
   const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
 
-  const { data: parkImages = [], isLoading } = useQuery({
+  const { data: parkImages, isLoading } = useQuery({
     queryKey: ['parkImages', parkId],
     queryFn: () => fetchAllParkImages(parkId),
   });
@@ -57,7 +57,7 @@ const ParkGalleryContainer: React.FC<ParkGalleryContainerProps> = ({
         />
         <AccordionContainer.Content>
           <ParkGallery
-            images={parkImages}
+            images={parkImages ?? []}
             openCameraModal={() => setIsAddImageModalOpen(true)}
           />
         </AccordionContainer.Content>

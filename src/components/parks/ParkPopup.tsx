@@ -35,14 +35,15 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
     enabled: !!activePark,
   });
 
-  const { data: favoriteParkIds = [] } = useQuery({
+  const { data: favoriteParkIds } = useQuery({
     queryKey: ['favoriteParks'],
     queryFn: fetchFavoriteParks,
     staleTime: HOUR_IN_MS,
     gcTime: HOUR_IN_MS,
   });
 
-  const isFavorite = activePark && favoriteParkIds.includes(activePark?.id);
+  const isFavorite =
+    activePark && favoriteParkIds && favoriteParkIds.includes(activePark?.id);
 
   return (
     <div className={classnames(styles.parkModal, !!activePark && styles.open)}>

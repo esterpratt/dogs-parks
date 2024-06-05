@@ -7,7 +7,7 @@ import { TabsList } from '../tabs/TabsList';
 
 const ProfileTabs = () => {
   const { userId } = useContext(UserContext);
-  const { data: reviews = [] } = useQuery({
+  const { data: reviews } = useQuery({
     queryKey: ['reviews', userId],
     queryFn: () => fetchUserReviews(userId!),
   });
@@ -28,7 +28,7 @@ const ProfileTabs = () => {
         {
           text: 'Reviews',
           url: 'reviews',
-          disabled: !reviews.length,
+          disabled: !reviews?.length,
         },
         {
           text: 'Settings',
