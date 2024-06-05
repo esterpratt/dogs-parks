@@ -25,7 +25,7 @@ const UserFavorites = () => {
   });
 
   const favoriteParks = parks?.length
-    ? parks.filter((park) => favoriteParkIds!.includes(park.id))
+    ? parks.filter((park) => favoriteParkIds?.includes(park.id))
     : [];
 
   if (isLoadingParks || isLoadingFavorites) {
