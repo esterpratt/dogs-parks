@@ -55,7 +55,9 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
   return (
     <div className={styles.container}>
       <div className={styles.formContainer}>
-        <h2>{method === 'signin' ? 'Sign In' : 'Log In'}</h2>
+        <h2 className={styles.title}>
+          {method === 'signin' ? 'Sign In' : 'Log In'}
+        </h2>
         <div className={classnames(styles.error, error ? styles.show : '')}>
           {error}
         </div>
@@ -99,7 +101,6 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
               />
             </>
           )}
-
           <Button variant="green" type="submit" className={styles.button}>
             {method === 'signin' ? 'Sign In' : 'Log In'}
           </Button>

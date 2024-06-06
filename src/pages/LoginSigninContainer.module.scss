@@ -1,7 +1,7 @@
 @import '../variables.scss';
 
-h2 {
-  margin: 32px 0 24px;
+.title {
+  margin: 12px 0;
   font-weight: inherit;
   padding: 12px 4px;
   border-bottom: 1px solid $grey-bold;
@@ -11,11 +11,11 @@ h2 {
 .container {
   display: flex;
   flex-direction: column;
-  margin: 0 32px;
+  margin: 0 24px 12px;
 }
 
 .inputs-container {
-  margin: 24px 0;
+  margin: 12px 0;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -23,14 +23,14 @@ h2 {
 
 .button {
   align-self: center;
-  margin-top: 48px;
+  margin-top: 24px;
   font-size: 24px;
 }
 
 .error {
   color: $red;
   height: 20px;
-  padding-left: 4px;
+  padding-left: 2px;
   visibility: hidden;
   opacity: 0;
   transition: all 0.2s;
