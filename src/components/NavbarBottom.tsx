@@ -39,7 +39,7 @@ const NavbarBottom = () => {
                 <IconContext.Provider value={{ className: styles.dogIcon }}>
                   <GiSittingDog />
                 </IconContext.Provider>
-                <span>{userId ? 'Profile' : 'Log In'}</span>
+                <span>{userId ? 'Profile' : 'Dog In'}</span>
               </Link>
             </>
           )}
