@@ -10,7 +10,6 @@
   background-color: $black;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 
 .webcam-container {
@@ -47,12 +46,17 @@
 
 .buttons-container,
 .capture-buttons-container {
-  flex-grow: 1;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 36px;
+}
+
+.capture-buttons-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
 }
 
 .icons {
