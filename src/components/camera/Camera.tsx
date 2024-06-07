@@ -55,13 +55,15 @@ const Camera: React.FC<CustomWebcamProps> = ({
         </>
       ) : (
         <>
-          <Webcam
-            ref={webcamRef}
-            videoConstraints={{ facingMode }}
-            onUserMediaError={onError}
-            className={styles.cameraView}
-            mirrored
-          />
+          <div className={styles.webcamContainer}>
+            <Webcam
+              ref={webcamRef}
+              videoConstraints={{ facingMode }}
+              onUserMediaError={onError}
+              className={styles.cameraView}
+              mirrored
+            />
+          </div>
           <div className={styles.captureButtonsContainer}>
             <IconContext.Provider value={{ className: styles.icons }}>
               <Button onClick={onClose}>
