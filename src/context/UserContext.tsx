@@ -1,4 +1,4 @@
-import { PropsWithChildren, createContext, useEffect, useRef } from 'react';
+import { PropsWithChildren, createContext, useState } from 'react';
 import {
   LoginProps,
   SigninProps,
@@ -24,6 +24,11 @@ interface UserContextObj {
   userSignin: (props: SigninProps) => void;
   singinError: Error | null;
   loginError: Error | null;
+  isCreatingDog: boolean;
+  isCreatingUser: boolean;
+  isLogingIn: boolean;
+  isSigningIn: boolean;
+  isDogCreated: boolean;
 }
 
 const initialData: UserContextObj = {
@@ -36,15 +41,18 @@ const initialData: UserContextObj = {
   userSignin: () => Promise.resolve(),
   singinError: null,
   loginError: null,
+  isCreatingDog: false,
+  isCreatingUser: false,
+  isLogingIn: false,
+  isSigningIn: false,
+  isDogCreated: false,
 };
 
 const UserContext = createContext<UserContextObj>(initialData);
 
 const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { userId, loadingUserId } = useOnAuthStateChanged();
-  const userExtraDataRef = useRef<{ name: string; dogName: string } | null>(
-    null
-  );
+  const [isDogCreated, setIsDogCreated] = useState(false);
 
   const {
     data: user,
@@ -56,46 +64,61 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     enabled: !!userId,
   });
 
-  const { mutate: addDog } = useMutation({
-    mutationFn: () => {
-      const dogToSet = {
-        owner: userId!,
-        name: userExtraDataRef.current!.dogName,
-      };
-      return createDog(dogToSet);
+  const { mutate: addDog, isPending: isCreatingDog } = useMutation({
+    mutationFn: (data: { owner: string; name: string }) => {
+      return createDog({ owner: data.owner, name: data.name });
     },
-    onSettled: () => {
-      userExtraDataRef.current = null;
-    },
+    onSuccess: () => setIsDogCreated(true),
   });
 
-  const { mutate: addUser } = useMutation({
-    mutationFn: (data: { userId: string }) => {
+  const { mutate: addUser, isPending: isCreatingUser } = useMutation({
+    mutationFn: (vars: {
+      userId: string;
+      userName: string;
+      dogName: string;
+    }) => {
       const userToSet = {
-        id: data.userId,
-        name: userExtraDataRef.current!.name,
+        id: vars.userId,
+        name: vars.userName,
       };
       return createUser(userToSet);
     },
-    onSuccess: async () => {
+    onSuccess: async (
+      _data,
+      vars: {
+        userId: string;
+        userName: string;
+        dogName: string;
+      }
+    ) => {
       refetchUser();
-      addDog();
+      addDog({ owner: vars.userId, name: vars.dogName });
     },
   });
 
-  const { mutate: userSignin, error: singinError } = useMutation({
+  const {
+    mutate: userSignin,
+    error: singinError,
+    isPending: isSigningIn,
+  } = useMutation({
     mutationFn: (vars: SigninProps) =>
       signin({ email: vars.email, password: vars.password }),
-    onSuccess: (_data, vars: SigninProps) => {
-      userExtraDataRef.current = { name: vars.name, dogName: vars.dogName };
+    onSuccess: async (data, vars: SigninProps) => {
+      const userId = data?.user.uid;
+      if (userId) {
+        addUser({ userId, userName: vars.name, dogName: vars.dogName });
+      }
     },
     onError: (error) => {
-      userExtraDataRef.current = null;
       throwError(error);
     },
   });
 
-  const { mutate: userLogin, error: loginError } = useMutation({
+  const {
+    mutate: userLogin,
+    error: loginError,
+    isPending: isLogingIn,
+  } = useMutation({
     mutationFn: (data: LoginProps) =>
       login({ email: data.email, password: data.password }),
     onError: (error) => {
@@ -105,19 +128,8 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   const { mutate: userLogout } = useMutation({
     mutationFn: () => logout(),
+    onSettled: () => queryClient.removeQueries({ queryKey: ['user', 'me'] }),
   });
-
-  useEffect(() => {
-    if (userId) {
-      if (userExtraDataRef.current) {
-        addUser({ userId });
-      } else {
-        refetchUser();
-      }
-    } else {
-      queryClient.removeQueries({ queryKey: ['user', 'me'] });
-    }
-  }, [userId, addUser, refetchUser]);
 
   const value: UserContextObj = {
     user,
@@ -129,6 +141,11 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     userSignin,
     singinError,
     loginError,
+    isCreatingDog,
+    isCreatingUser,
+    isLogingIn,
+    isSigningIn,
+    isDogCreated,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

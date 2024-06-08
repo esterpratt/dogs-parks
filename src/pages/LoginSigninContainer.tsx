@@ -2,7 +2,6 @@ import { FormEvent, useContext, useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 import styles from './LoginSigninContainer.module.scss';
 import { Button } from '../components/Button';
-import { useNavigate } from 'react-router';
 import { UserContext } from '../context/UserContext';
 import { SigninProps } from '../services/authentication';
 import { Link } from 'react-router-dom';
@@ -15,17 +14,19 @@ interface LoginSigninContainerProps {
 const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
   method,
 }) => {
-  const { userSignin, userLogin, user, singinError, loginError } =
-    useContext(UserContext);
+  const {
+    userSignin,
+    userLogin,
+    singinError,
+    loginError,
+    isCreatingDog,
+    isCreatingUser,
+    isLogingIn,
+    isSigningIn,
+  } = useContext(UserContext);
   const [error, setError] = useState<string>('');
-  const navigate = useNavigate();
   const isMethodChanged = useRef(false);
-
-  useEffect(() => {
-    if (user) {
-      navigate(`/profile/${user.id}`);
-    }
-  }, [user, navigate]);
+  console.log('error is: ', error);
 
   useEffect(() => {
     setError('');
@@ -34,11 +35,13 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
 
   useEffect(() => {
     if (!isMethodChanged.current) {
-      setError(singinError?.message || loginError?.message || '');
+      const error =
+        method === 'login' ? loginError?.message : singinError?.message;
+      setError(error || '');
     } else {
       isMethodChanged.current = false;
     }
-  }, [singinError, loginError]);
+  }, [singinError, loginError, method]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -52,11 +55,15 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
     }
   };
 
+  const isLoading =
+    isCreatingDog || isCreatingUser || isLogingIn || isSigningIn;
+
   return (
     <div className={styles.container}>
       <div className={styles.formContainer}>
         <h2 className={styles.title}>
-          {method === 'signin' ? 'Sign In' : 'Log In'}
+          <span>{method === 'signin' ? 'Sign In' : 'Log In'}</span>
+          {isLoading && <span className={styles.loading}>Loading...</span>}
         </h2>
         <div className={classnames(styles.error, error ? styles.show : '')}>
           {error}
