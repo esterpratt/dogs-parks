@@ -28,19 +28,9 @@ const UserDogs = () => {
   return (
     <>
       <div className={styles.container}>
-        <div className={styles.title}>
-          <span className={styles.titleText}>
-            {isSignedInUser ? 'My' : `${user.name}'s`} pack
-          </span>
-          {isSignedInUser && (
-            <div
-              className={styles.addDogText}
-              onClick={() => setIsEditDogsModalOpen(true)}
-            >
-              Add a Dog
-            </div>
-          )}
-        </div>
+        <span className={styles.titleText}>
+          {isSignedInUser ? 'My' : `${user.name}'s`} pack
+        </span>
         <div className={styles.dogs}>
           {dogs.map((dog, index) => (
             <Link

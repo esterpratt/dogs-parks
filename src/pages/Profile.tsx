@@ -1,5 +1,6 @@
 import { Suspense, useContext } from 'react';
 import { Await, Outlet, useLoaderData } from 'react-router';
+import classnames from 'classnames';
 import { User } from '../types/user';
 import { Dog } from '../types/dog';
 import { UserContext } from '../context/UserContext';
@@ -22,7 +23,12 @@ const Profile: React.FC = () => {
       <Suspense fallback={<Loading />}>
         <Await resolve={dogImages}>
           {(dogImages: (string | null)[]) => (
-            <div className={styles.container}>
+            <div
+              className={classnames(
+                styles.container,
+                isSignedInUser && styles.withMargin
+              )}
+            >
               <Outlet
                 context={{
                   user,

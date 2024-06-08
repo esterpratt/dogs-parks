@@ -2,7 +2,10 @@
 
 .container {
   max-height: calc(100dvh - $navbar-height * 2 - $tabs-height);
-  margin-top: $tabs-height;
   padding: 24px 16px 12px;
   overflow: auto;
+
+  &.with-margin {
+    margin-top: $tabs-height;
+  }
 }
