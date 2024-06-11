@@ -4,21 +4,21 @@ import { LuTrees } from 'react-icons/lu';
 import classnames from 'classnames';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '../services/react-query';
+import { IconContext } from 'react-icons';
+import { PiCameraFill } from 'react-icons/pi';
 import { ReviewsPreview } from '../components/park/ReviewsPreview';
 import { UserContext } from '../context/UserContext';
 import { FavoriteButton } from '../components/park/FavoriteButton';
 import styles from './Park.module.scss';
 import { ParkTabs } from '../components/park/ParkTabs';
-import { IconContext } from 'react-icons';
-import { PiCameraFill } from 'react-icons/pi';
 import {
   fetchPark,
   fetchParkPrimaryImage,
   uploadParkPrimaryImage,
 } from '../services/parks';
 import { Loading } from '../components/Loading';
+import { ParkCheckIn } from '../components/park/ParkCheckIn';
 
-const ParkCheckIn = lazy(() => import('../components/park/ParkCheckIn'));
 const CameraModal = lazy(() => import('../components/camera/CameraModal'));
 
 const Park: React.FC = () => {
@@ -87,13 +87,11 @@ const Park: React.FC = () => {
             <div className={styles.userEngagement}>
               <div>
                 <FavoriteButton parkId={parkId!} userId={user.id} />
-                <Suspense fallback={<Loading />}>
-                  <ParkCheckIn
-                    parkId={parkId!}
-                    userId={user.id}
-                    userName={user.name}
-                  />
-                </Suspense>
+                <ParkCheckIn
+                  parkId={parkId!}
+                  userId={user.id}
+                  userName={user.name}
+                />
               </div>
             </div>
           )}

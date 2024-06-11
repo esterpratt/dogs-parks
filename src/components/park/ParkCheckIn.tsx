@@ -131,4 +131,4 @@ const ParkCheckIn: React.FC<{
   );
 };
 
-export default ParkCheckIn;
+export { ParkCheckIn };
