@@ -10,20 +10,26 @@ const useDistance = <T>(items: GenericWithGeo<T>[] | undefined) => {
   );
 
   useEffect(() => {
-    if (!items || !navigator.geolocation) {
-      return;
-    }
+    if (!items?.length || !navigator.geolocation) {
+      setSortedItems(items ?? []);
+    } else {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const orderedItems = orderByDistance(
+            {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            },
+            items
+          );
 
-    navigator.geolocation.getCurrentPosition((position) => {
-      const orderedItems = orderByDistance(
-        {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
+          setSortedItems(orderedItems as GenericWithGeo<T>[]);
         },
-        items
+        () => {
+          setSortedItems(items ?? []);
+        }
       );
-      setSortedItems(orderedItems as GenericWithGeo<T>[]);
-    });
+    }
   }, [items]);
 
   return sortedItems;
