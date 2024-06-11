@@ -114,9 +114,9 @@ const UserDog = () => {
                 </IconContext.Provider>
               )}
             </div>
-            {age && (
+            {age !== null && (
               <div className={styles.age}>
-                {age} Year{age > 1 && 's'} old
+                {age.diff === 0 ? 'Just Born' : `${age.diff} ${age.unit} old`}
               </div>
             )}
           </div>

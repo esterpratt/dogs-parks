@@ -26,8 +26,18 @@ const getFormattedDate = (date: Date) => {
 const getAge = (birthday: Date) => {
   const currentDayjs = dayjs();
   const dateDayjs = dayjs(birthday);
-  const diff = currentDayjs.diff(dateDayjs, 'year');
-  return diff;
+  let diff = currentDayjs.diff(dateDayjs, 'year');
+  let unit = diff === 1 ? 'year' : 'years';
+
+  if (diff === 0) {
+    diff = currentDayjs.diff(dateDayjs, 'month');
+    unit = diff === 1 ? 'month' : 'months';
+  }
+
+  return {
+    diff,
+    unit,
+  };
 };
 
 export { getFormattedPastDate, getFormattedDate, getAge };
