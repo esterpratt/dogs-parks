@@ -26,7 +26,6 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
   } = useContext(UserContext);
   const [error, setError] = useState<string>('');
   const isMethodChanged = useRef(false);
-  console.log('error is: ', error);
 
   useEffect(() => {
     setError('');

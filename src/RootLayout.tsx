@@ -2,10 +2,25 @@ import { Outlet } from 'react-router';
 import { NavbarTop } from './components/NavbarTop';
 import { NavbarBottom } from './components/NavbarBottom';
 import styles from './RootLayout.module.scss';
-import { usePreventScrollOnFocus } from './hooks/usePreventScrollOnFocus';
+import { useCallback, useRef } from 'react';
+import { useInputFocus } from './hooks/useInputFocus';
 
 const RootLayout = () => {
-  usePreventScrollOnFocus();
+  const ref = useRef<HTMLElement>(null);
+
+  const onFocus = useCallback(() => {
+    if (ref.current) {
+      ref.current.style.display = 'none';
+    }
+  }, [ref]);
+
+  const onBlur = useCallback(() => {
+    if (ref.current) {
+      ref.current.style.display = 'flex';
+    }
+  }, [ref]);
+
+  useInputFocus(onFocus, onBlur);
 
   return (
     <>
@@ -13,7 +28,7 @@ const RootLayout = () => {
       <div className={styles.appContent}>
         <Outlet />
       </div>
-      <NavbarBottom />
+      <NavbarBottom ref={ref} />
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { forwardRef, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { IconContext } from 'react-icons';
 import { HiHome } from 'react-icons/hi';
@@ -8,11 +8,11 @@ import { GiSittingDog, GiThreeFriends } from 'react-icons/gi';
 import { UserContext } from '../context/UserContext';
 import styles from './NavbarBottom.module.scss';
 
-const NavbarBottom = () => {
+const NavbarBottom = forwardRef<HTMLElement>((_props, ref) => {
   const { userId, loadingUserId } = useContext(UserContext);
 
   return (
-    <nav className={styles.navbar}>
+    <nav className={styles.navbar} ref={ref}>
       <div className={styles.iconsContainer}>
         <IconContext.Provider value={{ className: styles.icons }}>
           {loadingUserId ? null : (
@@ -47,6 +47,6 @@ const NavbarBottom = () => {
       </div>
     </nav>
   );
-};
+});
 
 export { NavbarBottom };
