@@ -1,14 +1,15 @@
+import { useContext } from 'react';
 import { Modal } from './Modal';
 import { ReviewForm } from './park/ReviewForm';
 import styles from './ReviewModal.module.scss';
 import { Review } from '../types/review';
-import { useContext } from 'react';
 import { ThankYouModalContext } from '../context/ThankYouModalContext';
 
 interface ReviewModalProps {
   title?: string;
   isOpen: boolean;
   review?: Review;
+  showForm?: boolean;
   closeModal: () => void;
   onSubmitReview: (
     reviewData: {
@@ -26,6 +27,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
   title,
   review,
   onSubmitReview,
+  showForm = true,
 }) => {
   const { setIsOpen: setIsThankYouModalOpen } =
     useContext(ThankYouModalContext);
@@ -47,10 +49,11 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
       open={isOpen}
       onClose={() => onClose()}
       className={styles.content}
-      height="80%"
+      height={showForm ? '80%' : '20%'}
+      autoClose={!showForm}
     >
       {title && <div className={styles.title}>{title}</div>}
-      <ReviewForm onSubmitForm={onSubmitForm} review={review} />
+      {showForm && <ReviewForm onSubmitForm={onSubmitForm} review={review} />}
     </Modal>
   );
 };

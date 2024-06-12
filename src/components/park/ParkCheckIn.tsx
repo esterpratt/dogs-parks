@@ -9,10 +9,11 @@ import { Button } from '../Button';
 import styles from './ParkCheckIn.module.scss';
 import { IconContext } from 'react-icons';
 import { useAddReview } from '../../hooks/api/useAddReview';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '../../services/react-query';
 import { ThankYouModalContext } from '../../context/ThankYouModalContext';
 import { Loading } from '../Loading';
+import { fetchUserReviews } from '../../services/reviews';
 
 const ReviewModal = lazy(() => import('../ReviewModal'));
 
@@ -26,7 +27,9 @@ const ParkCheckIn: React.FC<{
   const [checkIn, setCheckIn] = useLocalStorage('checkin');
   const [openDogsCountModal, setOpenDogsCountModal] = useState(false);
   const [openReviewModal, setOpenReviewModal] = useState(false);
+  const [showForm, setShowForm] = useState(true);
   const { addReview } = useAddReview(parkId, userId);
+
   const { mutate: addDogCountReport } = useMutation({
     mutationFn: (dogsCount: number) =>
       reportDogsCount({
@@ -55,11 +58,23 @@ const ParkCheckIn: React.FC<{
     },
   });
 
+  const { data: userReviews } = useQuery({
+    queryKey: ['reviews', userId],
+    queryFn: () => fetchUserReviews(userId),
+  });
+
   const { mutate: parkCheckout } = useMutation({
     mutationFn: () => checkout(checkIn.id),
-    onSuccess: async () => {
+    onMutate: () => {
       setCheckIn(null);
+      if (userReviews?.find((review) => review.parkId === parkId)) {
+        setShowForm(false);
+      } else {
+        setShowForm(true);
+      }
       setOpenReviewModal(true);
+    },
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['parkVisitors', parkId],
       });
@@ -121,7 +136,10 @@ const ParkCheckIn: React.FC<{
       </Modal>
       <Suspense fallback={<Loading />}>
         <ReviewModal
-          title="Hope you had a tail-wagging time! Leave a review if you can!"
+          showForm={showForm}
+          title={`Hope you had a tail-wagging time! ${
+            showForm ? 'Leave a review if you can!' : ''
+          }`}
           isOpen={openReviewModal}
           closeModal={() => setOpenReviewModal(false)}
           onSubmitReview={onSubmitReview}
