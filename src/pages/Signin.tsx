@@ -4,14 +4,14 @@ import { UserContext } from '../context/UserContext';
 import { useNavigate } from 'react-router';
 
 const Signin = () => {
-  const { user, isDogCreated } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user && isDogCreated) {
+    if (user) {
       navigate(`/profile/${user.id}`);
     }
-  }, [user, isDogCreated, navigate]);
+  }, [user, navigate]);
 
   return <LoginSigninContainer method="signin" />;
 };

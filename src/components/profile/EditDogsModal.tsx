@@ -6,12 +6,14 @@ import styles from './EditDogsModal.module.scss';
 interface EditDogsModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onAddDog?: (dogId?: string) => void;
   dog?: Dog;
 }
 
 const EditDogsModal: React.FC<EditDogsModalProps> = ({
   isOpen,
   onClose,
+  onAddDog,
   dog,
 }) => {
   const onSubmitDogsForm = () => {
@@ -28,7 +30,7 @@ const EditDogsModal: React.FC<EditDogsModalProps> = ({
       <div className={styles.title}>
         {dog ? `Update ${dog.name}'s` : `Add your dog's`} details
       </div>
-      <EditDog dog={dog} onSubmitForm={onSubmitDogsForm} />
+      <EditDog dog={dog} onSubmitForm={onSubmitDogsForm} onAddDog={onAddDog} />
     </Modal>
   );
 };

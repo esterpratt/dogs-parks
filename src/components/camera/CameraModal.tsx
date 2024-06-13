@@ -12,14 +12,18 @@ import { CgClose } from 'react-icons/cg';
 
 interface CameraModalProps {
   open: boolean;
+  variant?: 'centerTop' | 'bottom';
   setOpen: (open: boolean) => void;
   onUploadImg: (img: string | File) => void;
+  title?: string;
 }
 
 const CameraModal: React.FC<CameraModalProps> = ({
   open,
   setOpen,
+  variant = 'bottom',
   onUploadImg,
+  title,
 }) => {
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [error, setError] = useState<string | DOMException | null>(null);
@@ -53,13 +57,15 @@ const CameraModal: React.FC<CameraModalProps> = ({
   return (
     <>
       <Modal
-        height="296px"
+        height={variant === 'bottom' ? '296px' : '370px'}
         open={open}
         onClose={onCloseModal}
-        variant="bottom"
-        className={styles.modal}
+        variant={variant}
+        className={classnames(styles.modal, styles[variant])}
         removeCloseButton
+        delay={variant !== 'bottom'}
       >
+        {title && <div className={styles.title}>{title}</div>}
         <div className={styles.buttonsContainer}>
           <FileInput
             onUploadFile={onUploadFile}
@@ -88,7 +94,7 @@ const CameraModal: React.FC<CameraModalProps> = ({
             <IconContext.Provider value={{ className: styles.icon }}>
               <CgClose />
             </IconContext.Provider>
-            <span>Cancel</span>
+            <span>{variant === 'bottom' ? 'Cancel' : 'Later'}</span>
           </Button>
         </div>
         <span className={styles.error}>

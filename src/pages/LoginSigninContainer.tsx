@@ -1,9 +1,9 @@
-import { FormEvent, useContext, useEffect, useRef, useState } from 'react';
+import { FormEvent, useContext, useEffect } from 'react';
 import classnames from 'classnames';
 import styles from './LoginSigninContainer.module.scss';
 import { Button } from '../components/Button';
 import { UserContext } from '../context/UserContext';
-import { SigninProps } from '../services/authentication';
+import { SigninProps } from '../context/UserContext';
 import { Link } from 'react-router-dom';
 import { FormInput } from '../components/inputs/FormInput';
 
@@ -14,48 +14,32 @@ interface LoginSigninContainerProps {
 const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
   method,
 }) => {
-  const {
-    userSignin,
-    userLogin,
-    singinError,
-    loginError,
-    isCreatingDog,
-    isCreatingUser,
-    isLogingIn,
-    isSigningIn,
-  } = useContext(UserContext);
-  const [error, setError] = useState<string>('');
-  const isMethodChanged = useRef(false);
+  const { userSignin, userLogin, error, setError, isLoading } =
+    useContext(UserContext);
 
   useEffect(() => {
     setError('');
-    isMethodChanged.current = true;
-  }, [method]);
+  }, [method, setError]);
 
-  useEffect(() => {
-    if (!isMethodChanged.current) {
-      const error =
-        method === 'login' ? loginError?.message : singinError?.message;
-      setError(error || '');
+  const googleSignin = async () => {
+    if (method === 'signin') {
+      userSignin({ withGoogle: true });
     } else {
-      isMethodChanged.current = false;
+      userLogin({ withGoogle: true });
     }
-  }, [singinError, loginError, method]);
+  };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = Object.fromEntries(
       new FormData(event.currentTarget)
-    ) as unknown as SigninProps;
+    ) as unknown as Required<Omit<SigninProps, 'withGoogle'>>;
     if (method === 'signin') {
       userSignin(formData);
     } else {
       userLogin(formData);
     }
   };
-
-  const isLoading =
-    isCreatingDog || isCreatingUser || isLogingIn || isSigningIn;
 
   return (
     <div className={styles.container}>
@@ -64,9 +48,14 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
           <span>{method === 'signin' ? 'Sign In' : 'Log In'}</span>
           {isLoading && <span className={styles.loading}>Loading...</span>}
         </h2>
-        <div className={classnames(styles.error, error ? styles.show : '')}>
-          {error}
-        </div>
+        <Button
+          variant="orange"
+          className={styles.googleLoginButton}
+          onClick={googleSignin}
+        >
+          {method === 'signin' ? 'Sign In' : 'Log In'} With Google
+        </Button>
+        <span>Or fill:</span>
         <form onSubmit={handleSubmit} className={styles.inputsContainer}>
           <FormInput
             onChange={() => setError('')}
@@ -91,22 +80,11 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
                 type="text"
                 required
               />
-              <FormInput
-                onChange={() => setError('')}
-                name="dogName"
-                label={
-                  <>
-                    Your Dog Name *
-                    <span>
-                      Got a pack? Awesome! You can add everyone later.
-                    </span>
-                  </>
-                }
-                type="text"
-                required
-              />
             </>
           )}
+          <div className={classnames(styles.error, error ? styles.show : '')}>
+            {error}
+          </div>
           <Button variant="green" type="submit" className={styles.button}>
             {method === 'signin' ? 'Sign In' : 'Log In'}
           </Button>

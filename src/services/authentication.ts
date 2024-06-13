@@ -1,10 +1,11 @@
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
   User,
 } from 'firebase/auth';
-import { auth } from './firebase-config';
+import { auth, provider } from './firebase-config';
 import { throwError } from './error';
 
 interface LoginProps {
@@ -12,10 +13,14 @@ interface LoginProps {
   password: string;
 }
 
-interface SigninProps extends LoginProps {
-  name: string;
-  dogName: string;
-}
+const signinWithGoogle = async () => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    return result;
+  } catch (error) {
+    throwError(error);
+  }
+};
 
 const signin = async ({ email, password }: LoginProps) => {
   try {
@@ -39,5 +44,5 @@ const logout = async () => {
   await signOut(auth);
 };
 
-export { login, logout, signin };
-export type { LoginProps, SigninProps, User };
+export { login, logout, signin, signinWithGoogle };
+export type { LoginProps, User };

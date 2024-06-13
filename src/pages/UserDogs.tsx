@@ -1,5 +1,5 @@
 import { Suspense, lazy, useContext, useState } from 'react';
-import { useOutletContext } from 'react-router';
+import { useOutletContext, useRevalidator } from 'react-router';
 import { Link } from 'react-router-dom';
 import { User } from '../types/user';
 import { Dog } from '../types/dog';
@@ -9,6 +9,10 @@ import { FriendRequestButton } from '../components/profile/FriendRequestButton';
 import { UserContext } from '../context/UserContext';
 import { Loading } from '../components/Loading';
 import { Button } from '../components/Button';
+import CameraModal from '../components/camera/CameraModal';
+import { useMutation } from '@tanstack/react-query';
+import { uploadDogPrimaryImage } from '../services/dogs';
+import { queryClient } from '../services/react-query';
 
 const EditDogsModal = lazy(() => import('../components/profile/EditDogsModal'));
 
@@ -24,13 +28,47 @@ const UserDogs = () => {
     useOutletContext() as UserDogsProps;
   const { userId: signedInUserId } = useContext(UserContext);
   const [isEditDogsModalOpen, setIsEditDogsModalOpen] = useState(false);
+  const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
+  const [newDogId, setNewDogId] = useState('');
+  const { revalidate } = useRevalidator();
+
+  const { mutate: setDogImage } = useMutation({
+    mutationFn: (img: string | File) => uploadDogPrimaryImage(img, newDogId!),
+    onSuccess: async () => {
+      queryClient.invalidateQueries({
+        queryKey: ['dogImage', newDogId],
+      });
+      revalidate();
+    },
+    onSettled: () => {
+      setIsCameraModalOpen(false);
+    },
+  });
+
+  const onAddDog = (dogId?: string) => {
+    if (dogId) {
+      setNewDogId(dogId);
+      setIsCameraModalOpen(true);
+    }
+
+    setIsEditDogsModalOpen(false);
+  };
 
   return (
     <>
       <div className={styles.container}>
-        <span className={styles.titleText}>
-          {isSignedInUser ? 'My' : `${user.name}'s`} pack
-        </span>
+        {dogs.length ? (
+          <span className={styles.titleText}>
+            {isSignedInUser ? 'My' : `${user.name}'s`} pack
+          </span>
+        ) : (
+          <span>
+            {isSignedInUser
+              ? `Your dog squad is looking pretty empty!
+              Time to recruit some furry friends!`
+              : `${user.name} pack seems to be empty`}
+          </span>
+        )}
         <div className={styles.dogs}>
           {dogs.map((dog, index) => (
             <Link
@@ -62,6 +100,16 @@ const UserDogs = () => {
         <EditDogsModal
           isOpen={isEditDogsModalOpen}
           onClose={() => setIsEditDogsModalOpen(false)}
+          onAddDog={onAddDog}
+        />
+      </Suspense>
+      <Suspense fallback={<Loading />}>
+        <CameraModal
+          title="Add your dog image"
+          variant="centerTop"
+          onUploadImg={setDogImage}
+          open={isCameraModalOpen}
+          setOpen={setIsCameraModalOpen}
         />
       </Suspense>
     </>

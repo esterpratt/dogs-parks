@@ -1,4 +1,11 @@
-import { ChangeEvent, FormEvent, useContext, useEffect, useMemo, useState } from 'react';
+import {
+  ChangeEvent,
+  FormEvent,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { Dog, DOG_ENERGY, DOG_SIZE, GENDER } from '../../types/dog';
 import { Button } from '../Button';
 import styles from './EditDog.module.scss';
@@ -20,9 +27,10 @@ import { getFormattedDate } from '../../utils/time';
 interface EditDogProps {
   dog?: Dog;
   onSubmitForm?: () => void;
+  onAddDog?: (dogId?: string) => void;
 }
 
-const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
+const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm, onAddDog }) => {
   const { setIsOpen: setIsThankYouModalOpen } =
     useContext(ThankYouModalContext);
   const [dogData, setDogData] = useState<
@@ -58,16 +66,24 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
       queryClient.invalidateQueries({ queryKey: ['dogs', vars.dogId] });
       queryClient.invalidateQueries({ queryKey: ['dogs', userId] });
       revalidate();
+      if (onSubmitForm) {
+        onSubmitForm();
+      }
     },
   });
 
-  const { mutate: addDog } = useMutation({
+  const { mutateAsync: addDog } = useMutation({
     mutationFn: (data: Omit<Dog, 'id'>) => createDog({ ...data }),
     onSuccess: async () => {
       queryClient.invalidateQueries({
         queryKey: ['dogs', userId],
       });
       revalidate();
+    },
+    onSettled: (data) => {
+      if (onAddDog) {
+        onAddDog(data);
+      }
     },
   });
 
@@ -118,15 +134,10 @@ const EditDog: React.FC<EditDogProps> = ({ dog, onSubmitForm }) => {
         dislikes,
       });
     }
-    if (onSubmitForm) {
-      onSubmitForm();
-    }
   };
 
   const formattedBirthday = useMemo(() => {
-    return !dogData?.birthday
-    ? ''
-    : getFormattedDate(dogData.birthday)
+    return !dogData?.birthday ? '' : getFormattedDate(dogData.birthday);
   }, [dogData?.birthday]);
 
   return (

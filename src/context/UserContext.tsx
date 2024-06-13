@@ -1,18 +1,25 @@
-import { PropsWithChildren, createContext, useState } from 'react';
+import { Dispatch, PropsWithChildren, createContext, useState } from 'react';
 import {
-  LoginProps,
-  SigninProps,
+  LoginProps as LoginWithEmailAndPasswordProps,
   login,
   logout,
   signin,
+  signinWithGoogle,
 } from '../services/authentication';
 import { createUser, fetchUser } from '../services/users';
 import { User } from '../types/user';
 import { useOnAuthStateChanged } from '../hooks/useOnAuthStateChanged';
-import { createDog } from '../services/dogs';
 import { queryClient } from '../services/react-query';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { throwError } from '../services/error';
+
+type SigninProps = Partial<LoginWithEmailAndPasswordProps> & {
+  name?: string;
+  withGoogle?: boolean;
+};
+
+type LoginProps = Partial<LoginWithEmailAndPasswordProps> & {
+  withGoogle?: boolean;
+};
 
 interface UserContextObj {
   userId: string | null;
@@ -22,13 +29,9 @@ interface UserContextObj {
   userLogin: (props: LoginProps) => void;
   userLogout: () => void;
   userSignin: (props: SigninProps) => void;
-  singinError: Error | null;
-  loginError: Error | null;
-  isCreatingDog: boolean;
-  isCreatingUser: boolean;
-  isLogingIn: boolean;
-  isSigningIn: boolean;
-  isDogCreated: boolean;
+  error: string;
+  setError: Dispatch<React.SetStateAction<string>>;
+  isLoading: boolean;
 }
 
 const initialData: UserContextObj = {
@@ -39,20 +42,16 @@ const initialData: UserContextObj = {
   userLogin: () => Promise.resolve(),
   userLogout: () => {},
   userSignin: () => Promise.resolve(),
-  singinError: null,
-  loginError: null,
-  isCreatingDog: false,
-  isCreatingUser: false,
-  isLogingIn: false,
-  isSigningIn: false,
-  isDogCreated: false,
+  setError: () => {},
+  error: '',
+  isLoading: false,
 };
 
 const UserContext = createContext<UserContextObj>(initialData);
 
 const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { userId, loadingUserId } = useOnAuthStateChanged();
-  const [isDogCreated, setIsDogCreated] = useState(false);
+  const [error, setError] = useState('');
 
   const {
     data: user,
@@ -64,72 +63,106 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     enabled: !!userId,
   });
 
-  const { mutate: addDog, isPending: isCreatingDog } = useMutation({
-    mutationFn: (data: { owner: string; name: string }) => {
-      return createDog({ owner: data.owner, name: data.name });
-    },
-    onSuccess: () => setIsDogCreated(true),
-  });
-
   const { mutate: addUser, isPending: isCreatingUser } = useMutation({
-    mutationFn: (vars: {
-      userId: string;
-      userName: string;
-      dogName: string;
-    }) => {
+    mutationFn: (vars: { userId: string; userName: string }) => {
       const userToSet = {
         id: vars.userId,
         name: vars.userName,
       };
       return createUser(userToSet);
     },
-    onSuccess: async (
-      _data,
-      vars: {
-        userId: string;
-        userName: string;
-        dogName: string;
-      }
-    ) => {
+    onSuccess: async () => {
       refetchUser();
-      addDog({ owner: vars.userId, name: vars.dogName });
     },
   });
 
-  const {
-    mutate: userSignin,
-    error: singinError,
-    isPending: isSigningIn,
-  } = useMutation({
-    mutationFn: (vars: SigninProps) =>
-      signin({ email: vars.email, password: vars.password }),
-    onSuccess: async (data, vars: SigninProps) => {
-      const userId = data?.user.uid;
-      if (userId) {
-        addUser({ userId, userName: vars.name, dogName: vars.dogName });
-      }
-    },
-    onError: (error) => {
-      throwError(error);
-    },
-  });
+  const { mutate: userSigninWithEmailAndPassowrd, isPending: isSigningIn } =
+    useMutation({
+      mutationFn: (vars: SigninProps) =>
+        signin({ email: vars.email!, password: vars.password! }),
+      onSuccess: async (data, vars: SigninProps) => {
+        const userId = data?.user.uid;
+        if (userId) {
+          addUser({ userId, userName: vars.name! });
+        }
+      },
+      onError: (error) => {
+        setError(error.message);
+      },
+    });
 
-  const {
-    mutate: userLogin,
-    error: loginError,
-    isPending: isLogingIn,
-  } = useMutation({
-    mutationFn: (data: LoginProps) =>
-      login({ email: data.email, password: data.password }),
-    onError: (error) => {
-      throwError(error);
-    },
-  });
+  const { mutate: userSinginWithGoogle, isPending: isSigninInWithGoogle } =
+    useMutation({
+      mutationFn: () => signinWithGoogle(),
+      onSuccess: async (data) => {
+        const userId = data?.user.uid;
+        if (userId) {
+          addUser({
+            userId,
+            userName: data.user.displayName || 'user',
+          });
+        }
+      },
+      onError: (error) => {
+        setError(error.message);
+      },
+    });
+
+  const { mutate: userLoginWithGoogle, isPending: isLoginInInWithGoogle } =
+    useMutation({
+      mutationFn: () => signinWithGoogle(),
+      onError: (error) => {
+        setError(error.message);
+      },
+    });
+
+  const userSignin = ({ withGoogle, email, password, name }: SigninProps) => {
+    setError('');
+    if (withGoogle) {
+      userSinginWithGoogle();
+    } else {
+      userSigninWithEmailAndPassowrd({
+        email: email!,
+        password: password!,
+        name: name!,
+      });
+    }
+  };
+
+  const { mutate: userLoginWithEmailAndPassword, isPending: isLogingIn } =
+    useMutation({
+      mutationFn: (data: LoginProps) => {
+        setError('');
+        return login({ email: data.email!, password: data.password! });
+      },
+      onError: (error) => {
+        setError(error.message);
+      },
+    });
+
+  const userLogin = ({ withGoogle, email, password }: LoginProps) => {
+    setError('');
+    if (withGoogle) {
+      userLoginWithGoogle();
+    } else {
+      userLoginWithEmailAndPassword({
+        email: email!,
+        password: password!,
+      });
+    }
+  };
 
   const { mutate: userLogout } = useMutation({
     mutationFn: () => logout(),
     onSettled: () => queryClient.removeQueries({ queryKey: ['user', 'me'] }),
   });
+
+  const isLoading =
+    isCreatingUser ||
+    isSigningIn ||
+    isLogingIn ||
+    isSigninInWithGoogle ||
+    isLoginInInWithGoogle;
 
   const value: UserContextObj = {
     user,
@@ -139,16 +172,13 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     userLogin,
     userLogout,
     userSignin,
-    singinError,
-    loginError,
-    isCreatingDog,
-    isCreatingUser,
-    isLogingIn,
-    isSigningIn,
-    isDogCreated,
+    error,
+    setError,
+    isLoading,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
 
 export { UserContextProvider, UserContext };
+export type { SigninProps };
