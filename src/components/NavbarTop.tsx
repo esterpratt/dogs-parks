@@ -22,7 +22,10 @@ const NavbarTop = () => {
             <IconContext.Provider value={{ className: styles.dogIcon }}>
               <GiSittingDog />
             </IconContext.Provider>
-            Paws Up, {user ? user.name : 'Guest'}!
+            Paws Up,{' '}
+            <span className={styles.userName}>
+              {user ? user.name : 'Guest'}!
+            </span>
           </Link>
         </div>
       )}
