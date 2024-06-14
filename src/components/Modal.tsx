@@ -41,12 +41,6 @@ const Modal: React.FC<ModalProps> = ({
           modal!.close();
         }, 2000);
       }
-
-      document.body.style.position = 'fixed';
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.position = 'unset';
-      document.body.style.overflow = 'unset';
     }
 
     return () => modal!.close();

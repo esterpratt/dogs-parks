@@ -1,11 +1,12 @@
 @import '../variables.scss';
 
 .navbar {
-  position: fixed;
-  z-index: 500;
+  position: sticky;
   bottom: 0;
+  z-index: 500;
   width: 100vw;
   height: $navbar-height;
+  flex-shrink: 0;
   background-color: $green;
   padding: 0 16px;
   display: flex;

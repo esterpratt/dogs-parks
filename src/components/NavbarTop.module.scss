@@ -1,15 +1,17 @@
 @import '../variables.scss';
 
 .navbar {
+  position: sticky;
+  top: 0;
+  z-index: 500;
+  width: 100vw;
   height: $navbar-height;
+  flex-shrink: 0;
   padding: 0 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: $green;
-  position: fixed;
-  z-index: 500;
-  width: 100vw;
 }
 
 .dog-icon {
