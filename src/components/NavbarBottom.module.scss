@@ -21,27 +21,35 @@
   height: 46px;
 
   a {
+    flex: 1 1 auto;
     height: 100%;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
     align-items: center;
     text-decoration: none;
     border: none;
     font-size: 14px;
     color: $white;
+    display: flex;
 
     &:not(:last-child) {
       &::after {
-        position: absolute;
         content: '';
-        top: 50%;
-        transform: translate(0, -50%);
-        right: -25px;
+        border: 1px solid $text-light;
         height: 36px;
-        border-right: 1px solid $text-light;
+        margin: auto;
       }
+    }
+
+    &:last-child {
+      flex: 0;
+    }
+
+    .item {
+      height: 100%;
+      width: 46px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
     }
   }
 }

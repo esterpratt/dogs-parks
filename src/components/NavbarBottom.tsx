@@ -9,40 +9,48 @@ import { UserContext } from '../context/UserContext';
 import styles from './NavbarBottom.module.scss';
 
 const NavbarBottom = () => {
-  const { userId, loadingUserId } = useContext(UserContext);
+  const { userId } = useContext(UserContext);
 
   return (
     <nav className={styles.navbar}>
       <div className={styles.iconsContainer}>
         <IconContext.Provider value={{ className: styles.icons }}>
-          {loadingUserId ? null : (
-            <>
-              <Link to="/" className={styles.map}>
+          <>
+            <Link to="/" className={styles.map}>
+              <div className={styles.item}>
                 <FaMapMarkedAlt />
                 <span>Map</span>
-              </Link>
-              <Link to="/parks" className={styles.parks}>
+              </div>
+            </Link>
+            <Link to="/parks" className={styles.parks}>
+              <div className={styles.item}>
                 <LuTrees />
                 <span>Parks</span>
-              </Link>
-              <Link to="/" className={styles.home}>
+              </div>
+            </Link>
+            <Link to="/" className={styles.home}>
+              <div className={styles.item}>
                 <HiHome />
-              </Link>
-              <Link to="/users" className={styles.users}>
+              </div>
+            </Link>
+            <Link to="/users" className={styles.users}>
+              <div className={styles.item}>
                 <GiThreeFriends />
                 <span>Users</span>
-              </Link>
-              <Link
-                to={userId ? `/profile/${userId}/dogs` : '/login'}
-                className={styles.user}
-              >
+              </div>
+            </Link>
+            <Link
+              to={userId ? `/profile/${userId}/dogs` : '/login'}
+              className={styles.user}
+            >
+              <div className={styles.item}>
                 <IconContext.Provider value={{ className: styles.dogIcon }}>
                   <GiSittingDog />
                 </IconContext.Provider>
                 <span>{userId ? 'Profile' : 'Dog In'}</span>
-              </Link>
-            </>
-          )}
+              </div>
+            </Link>
+          </>
         </IconContext.Provider>
       </div>
     </nav>
