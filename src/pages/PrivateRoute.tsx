@@ -4,9 +4,9 @@ import { UserContext } from '../context/UserContext';
 import { Loading } from '../components/Loading';
 
 const PrivateRoute = () => {
-  const { userId, loadingUserId } = useContext(UserContext);
+  const { userId, isLoadingAuthUser } = useContext(UserContext);
 
-  if (loadingUserId) {
+  if (isLoadingAuthUser) {
     return <Loading />;
   }
 

@@ -31,6 +31,7 @@ type LoginProps = Partial<LoginWithEmailAndPasswordProps> & {
 interface UserContextObj {
   userId: string | null;
   user?: User | null;
+  isLoadingAuthUser: boolean;
   userLogin: (props: LoginProps) => void;
   userLogout: () => void;
   userSignin: (props: SigninProps) => void;
@@ -42,6 +43,7 @@ interface UserContextObj {
 const initialData: UserContextObj = {
   userId: null,
   user: null,
+  isLoadingAuthUser: false,
   userLogin: () => Promise.resolve(),
   userLogout: () => {},
   userSignin: () => Promise.resolve(),
@@ -163,6 +165,7 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const value: UserContextObj = {
     user,
     userId,
+    isLoadingAuthUser,
     userLogin,
     userLogout,
     userSignin,
