@@ -49,7 +49,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
       open={isOpen}
       onClose={() => onClose()}
       className={styles.content}
-      height={showForm ? '80%' : '20%'}
+      height={showForm ? '80%' : '28%'}
       autoClose={!showForm}
     >
       {title && <div className={styles.title}>{title}</div>}
