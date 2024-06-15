@@ -31,7 +31,6 @@ type LoginProps = Partial<LoginWithEmailAndPasswordProps> & {
 interface UserContextObj {
   userId: string | null;
   user?: User | null;
-  isLoadingUser?: boolean;
   userLogin: (props: LoginProps) => void;
   userLogout: () => void;
   userSignin: (props: SigninProps) => void;
@@ -43,7 +42,6 @@ interface UserContextObj {
 const initialData: UserContextObj = {
   userId: null,
   user: null,
-  isLoadingUser: true,
   userLogin: () => Promise.resolve(),
   userLogout: () => {},
   userSignin: () => Promise.resolve(),
@@ -60,11 +58,7 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [error, setError] = useState('');
   const [userName, setUserName] = useLocalStorage('userName');
 
-  const {
-    data: user,
-    refetch: refetchUser,
-    isLoading: isLoadingUser,
-  } = useQuery({
+  const { data: user, refetch: refetchUser } = useQuery({
     queryKey: ['user', 'me', userId],
     queryFn: () => fetchUser(userId!),
     enabled: false,
@@ -168,7 +162,6 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   const value: UserContextObj = {
     user,
-    isLoadingUser: isLoadingUser || isLoadingAuthUser || isCreatingUser,
     userId,
     userLogin,
     userLogout,
