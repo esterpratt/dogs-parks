@@ -7,28 +7,23 @@ import { UserContext } from '../context/UserContext';
 import styles from './NavbarTop.module.scss';
 
 const NavbarTop = () => {
-  const { userId, loadingUserId, isLoadingUser, user } =
-    useContext(UserContext);
+  const { userId, user } = useContext(UserContext);
   const navigate = useNavigate();
 
   return (
     <nav className={styles.navbar}>
-      {isLoadingUser || loadingUserId ? null : (
-        <div className={styles.leftBar}>
-          <Link
-            to={userId ? `/profile/${userId}/dogs` : '/login'}
-            className={styles.user}
-          >
-            <IconContext.Provider value={{ className: styles.dogIcon }}>
-              <GiSittingDog />
-            </IconContext.Provider>
-            Paws Up,{' '}
-            <span className={styles.userName}>
-              {user ? user.name : 'Guest'}!
-            </span>
-          </Link>
-        </div>
-      )}
+      <div className={styles.leftBar}>
+        <Link
+          to={userId ? `/profile/${userId}/dogs` : '/login'}
+          className={styles.user}
+        >
+          <IconContext.Provider value={{ className: styles.dogIcon }}>
+            <GiSittingDog />
+          </IconContext.Provider>
+          Paws Up,{' '}
+          <span className={styles.userName}>{user ? user.name : 'Guest'}!</span>
+        </Link>
+      </div>
       <IconContext.Provider value={{ className: styles.homeIcon }}>
         <HiHome onClick={() => navigate('/')} />
       </IconContext.Provider>

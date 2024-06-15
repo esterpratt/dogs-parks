@@ -1,7 +1,7 @@
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signInWithPopup,
+  signInWithRedirect,
   signOut,
   User,
 } from 'firebase/auth';
@@ -15,8 +15,7 @@ interface LoginProps {
 
 const signinWithGoogle = async () => {
   try {
-    const result = await signInWithPopup(auth, provider);
-    return result;
+    await signInWithRedirect(auth, provider);
   } catch (error) {
     throwError(error);
   }

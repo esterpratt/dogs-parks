@@ -1,4 +1,10 @@
-import { Dispatch, PropsWithChildren, createContext, useState } from 'react';
+import {
+  Dispatch,
+  PropsWithChildren,
+  createContext,
+  useEffect,
+  useState,
+} from 'react';
 import {
   LoginProps as LoginWithEmailAndPasswordProps,
   login,
@@ -11,6 +17,7 @@ import { User } from '../types/user';
 import { useOnAuthStateChanged } from '../hooks/useOnAuthStateChanged';
 import { queryClient } from '../services/react-query';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 type SigninProps = Partial<LoginWithEmailAndPasswordProps> & {
   name?: string;
@@ -24,7 +31,6 @@ type LoginProps = Partial<LoginWithEmailAndPasswordProps> & {
 interface UserContextObj {
   userId: string | null;
   user?: User | null;
-  loadingUserId: boolean;
   isLoadingUser?: boolean;
   userLogin: (props: LoginProps) => void;
   userLogout: () => void;
@@ -37,7 +43,6 @@ interface UserContextObj {
 const initialData: UserContextObj = {
   userId: null,
   user: null,
-  loadingUserId: true,
   isLoadingUser: true,
   userLogin: () => Promise.resolve(),
   userLogout: () => {},
@@ -50,8 +55,10 @@ const initialData: UserContextObj = {
 const UserContext = createContext<UserContextObj>(initialData);
 
 const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const { userId, loadingUserId } = useOnAuthStateChanged();
+  const { userId, displayName, isNewUser, isLoadingAuthUser } =
+    useOnAuthStateChanged();
   const [error, setError] = useState('');
+  const [userName, setUserName] = useLocalStorage('userName');
 
   const {
     data: user,
@@ -60,7 +67,7 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   } = useQuery({
     queryKey: ['user', 'me', userId],
     queryFn: () => fetchUser(userId!),
-    enabled: !!userId,
+    enabled: false,
   });
 
   const { mutate: addUser, isPending: isCreatingUser } = useMutation({
@@ -76,15 +83,24 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     },
   });
 
+  useEffect(() => {
+    if (userId) {
+      if (isNewUser) {
+        addUser({
+          userId,
+          userName: userName || displayName || 'you',
+        });
+      } else {
+        refetchUser();
+      }
+    }
+  }, [userId, displayName, isNewUser, addUser, refetchUser, userName]);
+
   const { mutate: userSigninWithEmailAndPassowrd, isPending: isSigningIn } =
     useMutation({
-      mutationFn: (vars: SigninProps) =>
-        signin({ email: vars.email!, password: vars.password! }),
-      onSuccess: async (data, vars: SigninProps) => {
-        const userId = data?.user.uid;
-        if (userId) {
-          addUser({ userId, userName: vars.name! });
-        }
+      mutationFn: (vars: SigninProps) => {
+        setUserName(vars.name);
+        return signin({ email: vars.email!, password: vars.password! });
       },
       onError: (error) => {
         setError(error.message);
@@ -92,23 +108,6 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     });
 
   const { mutate: userSinginWithGoogle, isPending: isSigninInWithGoogle } =
-    useMutation({
-      mutationFn: () => signinWithGoogle(),
-      onSuccess: async (data) => {
-        const userId = data?.user.uid;
-        if (userId) {
-          addUser({
-            userId,
-            userName: data.user.displayName || 'user',
-          });
-        }
-      },
-      onError: (error) => {
-        setError(error.message);
-      },
-    });
-
-  const { mutate: userLoginWithGoogle, isPending: isLoginInInWithGoogle } =
     useMutation({
       mutationFn: () => signinWithGoogle(),
       onError: (error) => {
@@ -143,7 +142,7 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const userLogin = ({ withGoogle, email, password }: LoginProps) => {
     setError('');
     if (withGoogle) {
-      userLoginWithGoogle();
+      userSinginWithGoogle();
     } else {
       userLoginWithEmailAndPassword({
         email: email!,
@@ -154,7 +153,10 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   const { mutate: userLogout } = useMutation({
     mutationFn: () => logout(),
-    onSettled: () => queryClient.removeQueries({ queryKey: ['user', 'me'] }),
+    onSettled: () => {
+      queryClient.removeQueries({ queryKey: ['user', 'me'] });
+      setUserName();
+    },
   });
 
   const isLoading =
@@ -162,13 +164,12 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     isSigningIn ||
     isLogingIn ||
     isSigninInWithGoogle ||
-    isLoginInInWithGoogle;
+    isLoadingAuthUser;
 
   const value: UserContextObj = {
     user,
-    isLoadingUser,
+    isLoadingUser: isLoadingUser || isLoadingAuthUser || isCreatingUser,
     userId,
-    loadingUserId,
     userLogin,
     userLogout,
     userSignin,
