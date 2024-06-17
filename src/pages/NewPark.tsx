@@ -9,6 +9,7 @@ import { createPark } from '../services/parks';
 import { useNavigate } from 'react-router';
 import { useMutation } from '@tanstack/react-query';
 import { queryClient } from '../services/react-query';
+import { LeafletMouseEvent } from 'leaflet';
 
 const NewPark: React.FC = () => {
   const [markerLocation, setMarkerLocation] = useState<Location | null>(null);
@@ -41,10 +42,10 @@ const NewPark: React.FC = () => {
     });
   };
 
-  const onMapClick = (event: google.maps.MapMouseEvent) => {
+  const onMapClick = (event: LeafletMouseEvent) => {
     setMarkerLocation({
-      latitude: event.latLng!.lat(),
-      longitude: event.latLng!.lng(),
+      latitude: event.latlng.lat,
+      longitude: event.latlng.lng,
     });
   };
 
@@ -72,7 +73,7 @@ const NewPark: React.FC = () => {
         address: parkDetails.address,
         city: parkDetails.city,
         location: {
-          latitude: markerLocation?.latitude,
+          latitude: markerLocation.latitude,
           longitude: markerLocation.longitude,
         },
       };

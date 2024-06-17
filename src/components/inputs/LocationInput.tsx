@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react';
-import { GoogleMap } from '@react-google-maps/api';
 import classnames from 'classnames';
-import { useGoogleMapsLoader } from '../../hooks/useGoogleMapsLoader';
-import { Marker } from '../parks/Marker';
 import { Location } from '../../types/park';
 import styles from './LocationInput.module.scss';
+import { MapContainer, TileLayer } from 'react-leaflet';
+import { MapCenter } from '../map/mapHelpers/MapCenter';
+import { MapEventHandler } from '../map/mapHelpers/MapEventHandler';
+import { CustomMarker } from '../map/CustomMarker';
+import { LeafletMouseEvent } from 'leaflet';
 
 const DEFAULT_LOCATION = { lat: 32.09992, lng: 34.809212 };
 
 interface LocationInputProps {
   label: string;
-  onMapClick: (event: google.maps.MapMouseEvent) => void;
+  onMapClick: (event: LeafletMouseEvent) => void;
   markerLocation: Location | null;
   className?: string;
 }
@@ -21,7 +23,6 @@ const LocationInput: React.FC<LocationInputProps> = ({
   markerLocation,
   className,
 }) => {
-  const { isLoaded } = useGoogleMapsLoader();
   const [center, setCenter] = useState(DEFAULT_LOCATION);
 
   useEffect(() => {
@@ -42,28 +43,22 @@ const LocationInput: React.FC<LocationInputProps> = ({
   return (
     <div className={classnames(styles.container, className)}>
       <span>{label}</span>
-      {isLoaded && (
-        <div className={styles.map}>
-          <GoogleMap
-            onClick={onMapClick}
-            center={center}
-            zoom={15}
-            clickableIcons={false}
-            mapContainerStyle={{
-              width: '100%',
-              height: '100%',
-            }}
-            options={{
-              disableDefaultUI: true,
-              zoomControl: true,
-              zoomControlOptions: { position: 3 },
-              gestureHandling: 'greedy', // DELETE - only for testing
-            }}
-          >
-            {markerLocation && <Marker location={markerLocation} />}
-          </GoogleMap>
-        </div>
-      )}
+      <div className={styles.map}>
+        <MapContainer
+          className={styles.map}
+          center={center}
+          zoom={17}
+          scrollWheelZoom={false}
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          {markerLocation && <CustomMarker location={markerLocation} />}
+          <MapCenter center={center} />
+          <MapEventHandler onMapClick={onMapClick} />
+        </MapContainer>
+      </div>
     </div>
   );
 };

@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import { Marker } from './Marker';
 import { Park } from '../../types/park';
 import { fetchParksJSON } from '../../services/parks';
 import { Loading } from '../Loading';
+import { CustomMarker } from './CustomMarker';
 
 interface MarkerListProps {
   activePark: Park | null;
-  setActivePark: (event: google.maps.MapMouseEvent, park: Park | null) => void;
+  setActivePark: (park: Park | null) => void;
 }
 
 const MarkerList: React.FC<MarkerListProps> = ({
@@ -23,12 +23,10 @@ const MarkerList: React.FC<MarkerListProps> = ({
   }
 
   return parks?.map((park) => (
-    <Marker
+    <CustomMarker
       key={park.id}
       location={park.location}
-      onClick={(event) =>
-        setActivePark(event, park.id === activePark?.id ? null : park)
-      }
+      onClick={() => setActivePark(park.id === activePark?.id ? null : park)}
     />
   ));
 };

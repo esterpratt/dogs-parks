@@ -4,7 +4,7 @@
   height: 25vh;
   width: 99%;
   position: fixed;
-  z-index: 200;
+  z-index: 1000;
   bottom: -300px;
   left: 2px;
   background-color: $white;
@@ -141,7 +141,7 @@
 
 .favorite {
   position: absolute;
-  z-index: 400;
+  z-index: 600;
   top: -16px;
   left: 14px;
 }

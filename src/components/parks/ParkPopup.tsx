@@ -14,7 +14,7 @@ import { fetchFavoriteParks } from '../../services/favorites';
 interface ParkPopupProps {
   activePark: Park | null;
   onGetDirections: (location: Location) => void;
-  directions?: google.maps.DirectionsResult;
+  directions?: { distance: string; duration: string };
   onClose: () => void;
 }
 
@@ -87,13 +87,13 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
                 <IconContext.Provider value={{ className: styles.icon }}>
                   <FaWalking />
                 </IconContext.Provider>
-                <span>{directions?.routes[0].legs[0].distance?.text}</span>
+                <span>{directions?.distance}</span>
               </div>
               <div className={styles.duration}>
                 <IconContext.Provider value={{ className: styles.icon }}>
                   <FaRegClock />
                 </IconContext.Provider>
-                <span>{directions?.routes[0].legs[0].duration?.text}</span>
+                <span>{directions?.duration}</span>
               </div>
             </div>
           )}
