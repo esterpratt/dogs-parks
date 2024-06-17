@@ -5,8 +5,8 @@ import styles from './LocationInput.module.scss';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import { MapCenter } from '../map/mapHelpers/MapCenter';
 import { MapEventHandler } from '../map/mapHelpers/MapEventHandler';
-import { CustomMarker } from '../map/CustomMarker';
 import { LeafletMouseEvent } from 'leaflet';
+import { ParkMarker } from '../map/ParkMarker';
 
 const DEFAULT_LOCATION = { lat: 32.09992, lng: 34.809212 };
 
@@ -54,7 +54,7 @@ const LocationInput: React.FC<LocationInputProps> = ({
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          {markerLocation && <CustomMarker location={markerLocation} />}
+          {markerLocation && <ParkMarker location={markerLocation} />}
           <MapCenter center={center} />
           <MapEventHandler onMapClick={onMapClick} />
         </MapContainer>
