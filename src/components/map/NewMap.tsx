@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MapContainer, TileLayer } from 'react-leaflet';
+import { MdGpsFixed } from 'react-icons/md';
 import { Location, Park } from '../../types/park';
 import { MarkerList } from './MarkerList';
 import styles from './NewMap.module.scss';
@@ -10,6 +11,7 @@ import { MapEventHandler } from './mapHelpers/MapEventHandler';
 import { MapCenter } from './mapHelpers/MapCenter';
 import { Routing } from './mapHelpers/Routing';
 import { getRoute } from '../../services/map';
+import { IconContext } from 'react-icons';
 
 interface NewMapProps {
   className?: string;
@@ -89,6 +91,9 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
         {directions?.geoJSONObj && (
           <Routing geoJSONObj={directions?.geoJSONObj} />
         )}
+        <IconContext.Provider value={{ className: styles.centerButton }}>
+          <MdGpsFixed onClick={setUserCenter} />
+        </IconContext.Provider>
         <MapEventHandler onMapClick={onCloseParkPopup} />
       </MapContainer>
       <ParkPopup

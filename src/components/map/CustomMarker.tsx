@@ -1,23 +1,29 @@
 import L, { LeafletMouseEvent } from 'leaflet';
-import parkSVG from '../../assets/park.svg';
 import { Marker } from 'react-leaflet';
 import { Location } from '../../types/park';
 import { useMemo } from 'react';
 
 interface CustomMarkerProps {
   location: Location;
+  iconUrl: string;
+  iconSize?: number;
   onClick?: (event: LeafletMouseEvent) => void;
 }
 
-const CustomMarker: React.FC<CustomMarkerProps> = ({ location, onClick }) => {
+const CustomMarker: React.FC<CustomMarkerProps> = ({
+  location,
+  onClick,
+  iconUrl,
+  iconSize = 48,
+}) => {
   const customIcon = useMemo(
     () =>
       L.icon({
-        iconUrl: parkSVG,
-        iconSize: [48, 48],
-        iconAnchor: [24, 24],
+        iconUrl,
+        iconSize: [iconSize, iconSize],
+        iconAnchor: [iconSize / 2, iconSize / 2],
       }),
-    []
+    [iconUrl, iconSize]
   );
 
   return (

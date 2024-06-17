@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Park } from '../../types/park';
 import { fetchParksJSON } from '../../services/parks';
 import { Loading } from '../Loading';
-import { CustomMarker } from './CustomMarker';
+import { ParkMarker } from './ParkMarker';
 
 interface MarkerListProps {
   activePark: Park | null;
@@ -23,7 +23,7 @@ const MarkerList: React.FC<MarkerListProps> = ({
   }
 
   return parks?.map((park) => (
-    <CustomMarker
+    <ParkMarker
       key={park.id}
       location={park.location}
       onClick={() => setActivePark(park.id === activePark?.id ? null : park)}
