@@ -10,10 +10,12 @@ import { CgClose } from 'react-icons/cg';
 import { FavoriteRibbon } from '../FavoriteRibbon';
 import { useQuery } from '@tanstack/react-query';
 import { fetchFavoriteParks } from '../../services/favorites';
+import { Loading } from '../Loading';
 
 interface ParkPopupProps {
   activePark: Park | null;
   onGetDirections: (location: Location) => void;
+  isLoadingDirections: boolean;
   directions?: { distance: string; duration: string };
   onClose: () => void;
 }
@@ -23,6 +25,7 @@ const HOUR_IN_MS = 1000 * 60 * 60;
 const ParkPopup: React.FC<ParkPopupProps> = ({
   activePark,
   onGetDirections,
+  isLoadingDirections,
   directions,
   onClose,
 }) => {
@@ -45,6 +48,12 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
   const isFavorite =
     activePark && favoriteParkIds && favoriteParkIds.includes(activePark?.id);
 
+  const onClickGetDirections = () => {
+    if (activePark) {
+      onGetDirections(activePark!.location);
+    }
+  };
+
   return (
     <div className={classnames(styles.parkModal, !!activePark && styles.open)}>
       <CgClose onClick={onClose} size={24} className={styles.close} />
@@ -63,25 +72,25 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
           <Link to={`/parks/${activePark?.id}`} className={styles.name}>
             <span>{activePark?.name}</span>
           </Link>
-          <span className={styles.address}>
-            {activePark?.address}, {activePark?.city}
-          </span>
+          <div className={styles.addressContainer}>
+            <span className={styles.address}>{activePark?.address}</span>
+            <span className={styles.city}>{activePark?.city}</span>
+          </div>
         </div>
         <div className={styles.directionsContainer}>
           <div className={styles.buttons}>
             <button
               className={styles.directionsButton}
-              onClick={
-                activePark
-                  ? () => onGetDirections(activePark.location)
-                  : () => {}
-              }
+              onClick={onClickGetDirections}
             >
               Lead the way
             </button>
             <Link to={`/parks/${activePark?.id}`}>Fetch park page</Link>
           </div>
-          {directions && (
+          {isLoadingDirections && (
+            <Loading className={styles.loadingDirections} />
+          )}
+          {!isLoadingDirections && directions && (
             <div className={styles.directions}>
               <div className={styles.distance}>
                 <IconContext.Provider value={{ className: styles.icon }}>

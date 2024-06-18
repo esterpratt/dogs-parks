@@ -23,6 +23,7 @@ const DEFAULT_LOCATION = { lat: 32.09992, lng: 34.809212 };
 const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
   const [center, setCenter] = useState(DEFAULT_LOCATION);
   const [activePark, setActivePark] = useState<Park | null>(null);
+  const [isLoadingDirections, setIsLoadingDirections] = useState(false);
   const [directions, setDirections] = useState<{
     distance: string;
     duration: string;
@@ -59,6 +60,7 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
   };
 
   const getDirections = async () => {
+    setIsLoadingDirections(true);
     const res = await getRoute({
       startLocation: center,
       targetLocation: {
@@ -66,6 +68,7 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
         lng: activePark!.location.longitude,
       },
     });
+    setIsLoadingDirections(false);
     if (res) {
       setDirections(res);
     }
@@ -97,6 +100,7 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
         <MapEventHandler onMapClick={onCloseParkPopup} />
       </MapContainer>
       <ParkPopup
+        isLoadingDirections={isLoadingDirections}
         onClose={onCloseParkPopup}
         activePark={activePark}
         onGetDirections={getDirections}
