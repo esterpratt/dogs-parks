@@ -66,7 +66,6 @@ const ParkCheckIn: React.FC<{
   const { mutate: parkCheckout } = useMutation({
     mutationFn: () => checkout(checkIn.id),
     onMutate: () => {
-      setCheckIn(null);
       if (userReviews?.find((review) => review.parkId === parkId)) {
         setShowForm(false);
       } else {
@@ -78,6 +77,9 @@ const ParkCheckIn: React.FC<{
       queryClient.invalidateQueries({
         queryKey: ['parkVisitors', parkId],
       });
+    },
+    onSettled: () => {
+      setCheckIn(null);
     },
   });
 
