@@ -1,5 +1,12 @@
-.content {
+@import '../variables.scss';
+
+.modal {
+  position: relative;
+}
+
+.content-container {
   padding: 56px 24px 24px;
+  height: 100%;
 }
 
 .title {
@@ -10,4 +17,44 @@
     margin-top: 12px;
     margin-bottom: 0;
   }
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  color: $text;
+  height: 100%;
+}
+
+.form-title {
+  font-size: 18px;
+}
+
+.form {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.form-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.rank-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rank-title {
+  font-size: 18px;
+  padding-left: 4px;
+}
+
+.stars {
+  padding: 16px;
 }

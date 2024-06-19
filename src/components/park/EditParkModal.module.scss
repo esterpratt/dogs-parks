@@ -1,8 +1,26 @@
 .modal {
+  position: relative;
+}
+
+.modal-content {
   padding: 56px 24px 24px;
+  height: 100%;
 }
 
 .title {
   font-size: 18px;
   margin-bottom: 32px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+
+.form-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }

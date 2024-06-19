@@ -1,12 +1,12 @@
 import { ChangeEvent, useContext, useState } from 'react';
 import { Modal } from '../Modal';
 import { TextArea } from '../inputs/TextArea';
-import { Button } from '../Button';
 import { UserContext } from '../../context/UserContext';
 import styles from './ReportParkModal.module.scss';
 import { createReport } from '../../services/reports';
 import { useMutation } from '@tanstack/react-query';
 import { ThankYouModalContext } from '../../context/ThankYouModalContext';
+import { ModalSaveButton } from '../ModalSaveButton';
 
 interface ReportParkModalProps {
   open: boolean;
@@ -40,7 +40,7 @@ const ReportParkModal: React.FC<ReportParkModalProps> = ({
   };
 
   return (
-    <Modal open={open} onClose={onClose} height="80%">
+    <Modal open={open} onClose={onClose} height="80%" className={styles.modal}>
       <div className={styles.container}>
         <TextArea
           className={styles.textArea}
@@ -51,14 +51,8 @@ const ReportParkModal: React.FC<ReportParkModalProps> = ({
           onChange={onChangeText}
           maxLength={600}
         />
-        <Button
-          variant="green"
-          onClick={onSubmitReport}
-          className={styles.button}
-        >
-          Submit
-        </Button>
       </div>
+      <ModalSaveButton onClick={onSubmitReport} />
     </Modal>
   );
 };

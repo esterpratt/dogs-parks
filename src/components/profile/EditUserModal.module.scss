@@ -1,8 +1,20 @@
 .modal {
+  position: relative;
+}
+
+.content-container {
   padding: 56px 24px 24px;
+  height: 100%;
 }
 
 .title {
   font-size: 18px;
   margin-bottom: 32px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
 }

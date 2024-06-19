@@ -3,7 +3,6 @@ import { TbPennant, TbPennantOff } from 'react-icons/tb';
 import { checkin, checkout } from '../../services/checkins';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { Modal } from '../Modal';
-import { DogsCount } from './DogsCount';
 import { reportDogsCount } from '../../services/dogsCount';
 import { Button } from '../Button';
 import styles from './ParkCheckIn.module.scss';
@@ -14,6 +13,8 @@ import { queryClient } from '../../services/react-query';
 import { ThankYouModalContext } from '../../context/ThankYouModalContext';
 import { Loading } from '../Loading';
 import { fetchUserReviews } from '../../services/reviews';
+import { ControlledInput } from '../inputs/ControlledInput';
+import { ModalSaveButton } from '../ModalSaveButton';
 
 const ReviewModal = lazy(() => import('../ReviewModal'));
 
@@ -28,6 +29,7 @@ const ParkCheckIn: React.FC<{
   const [openDogsCountModal, setOpenDogsCountModal] = useState(false);
   const [openReviewModal, setOpenReviewModal] = useState(false);
   const [showForm, setShowForm] = useState(true);
+  const [dogsCount, setDogsCount] = useState<string>('');
   const { addReview } = useAddReview(parkId, userId);
 
   const { mutate: addDogCountReport } = useMutation({
@@ -133,8 +135,22 @@ const ParkCheckIn: React.FC<{
       >
         <div className={styles.modalContent}>
           <div className={styles.title}>Enjoy your stay, {userName}!</div>
-          <DogsCount onSubmitDogsCount={onSubmitDogsCount} />
+          <div className={styles.inputsContainer}>
+            <ControlledInput
+              type="number"
+              name="dogsCount"
+              label="How many dogs are with you?"
+              min={0}
+              max={99}
+              value={dogsCount}
+              onChange={(event) => setDogsCount(event.currentTarget.value)}
+            />
+          </div>
         </div>
+        <ModalSaveButton
+          onClick={() => onSubmitDogsCount(dogsCount)}
+          disabled={!dogsCount && dogsCount !== '0'}
+        />
       </Modal>
       <Suspense fallback={<Loading />}>
         <ReviewModal
