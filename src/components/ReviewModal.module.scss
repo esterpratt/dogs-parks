@@ -1,9 +1,5 @@
 @import '../variables.scss';
 
-.modal {
-  position: relative;
-}
-
 .content-container {
   padding: 56px 24px 24px;
   height: 100%;
@@ -24,7 +20,6 @@
   flex-direction: column;
   gap: 24px;
   color: $text;
-  height: 100%;
 }
 
 .form-title {

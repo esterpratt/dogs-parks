@@ -14,7 +14,6 @@ import { ThankYouModalContext } from '../../context/ThankYouModalContext';
 import { Loading } from '../Loading';
 import { fetchUserReviews } from '../../services/reviews';
 import { ControlledInput } from '../inputs/ControlledInput';
-import { ModalSaveButton } from '../ModalSaveButton';
 
 const ReviewModal = lazy(() => import('../ReviewModal'));
 
@@ -129,28 +128,24 @@ const ParkCheckIn: React.FC<{
       </Button>
       <Modal
         height="50%"
-        className={styles.dogsCountModal}
         open={openDogsCountModal}
         onClose={() => setOpenDogsCountModal(false)}
+        onSave={() => onSubmitDogsCount(dogsCount)}
+        saveButtonDisabled={!dogsCount && dogsCount !== '0'}
+        className={styles.modalContent}
       >
-        <div className={styles.modalContent}>
-          <div className={styles.title}>Enjoy your stay, {userName}!</div>
-          <div className={styles.inputsContainer}>
-            <ControlledInput
-              type="number"
-              name="dogsCount"
-              label="How many dogs are with you?"
-              min={0}
-              max={99}
-              value={dogsCount}
-              onChange={(event) => setDogsCount(event.currentTarget.value)}
-            />
-          </div>
+        <div className={styles.title}>Enjoy your stay, {userName}!</div>
+        <div className={styles.inputsContainer}>
+          <ControlledInput
+            type="number"
+            name="dogsCount"
+            label="How many dogs are with you?"
+            min={0}
+            max={99}
+            value={dogsCount}
+            onChange={(event) => setDogsCount(event.currentTarget.value)}
+          />
         </div>
-        <ModalSaveButton
-          onClick={() => onSubmitDogsCount(dogsCount)}
-          disabled={!dogsCount && dogsCount !== '0'}
-        />
       </Modal>
       <Suspense fallback={<Loading />}>
         <ReviewModal

@@ -11,7 +11,6 @@ import {
 import { queryClient } from '../../services/react-query';
 import { User } from '../../types/user';
 import { ControlledInput } from '../inputs/ControlledInput';
-import { ModalSaveButton } from '../ModalSaveButton';
 
 interface EditUserModalProps {
   isOpen: boolean;
@@ -76,22 +75,20 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose }) => {
     <Modal
       open={isOpen}
       onClose={onClose}
-      className={styles.modal}
       height="50%"
+      onSave={onSubmit}
+      className={styles.contentContainer}
     >
-      <div className={styles.contentContainer}>
-        <div className={styles.title}>Update your details</div>
-        <form className={styles.form}>
-          <ControlledInput
-            value={userData!.name || ''}
-            onChange={onInputChange}
-            name="name"
-            label="Name"
-            required
-          />
-        </form>
-      </div>
-      <ModalSaveButton onClick={onSubmit} />
+      <div className={styles.title}>Update your details</div>
+      <form className={styles.form}>
+        <ControlledInput
+          value={userData!.name || ''}
+          onChange={onInputChange}
+          name="name"
+          label="Name"
+          required
+        />
+      </form>
     </Modal>
   );
 };

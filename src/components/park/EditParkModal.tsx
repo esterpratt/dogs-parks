@@ -9,7 +9,6 @@ import { queryClient } from '../../services/react-query';
 import { ControlledInput } from '../inputs/ControlledInput';
 import { MultiSelectInputs } from '../inputs/MultiSelectInputs';
 import { RadioInputs } from '../inputs/RadioInputs';
-import { ModalSaveButton } from '../ModalSaveButton';
 
 interface EditParksModalProps {
   isOpen: boolean;
@@ -134,75 +133,73 @@ const EditParkModal: React.FC<EditParksModalProps> = ({
     <Modal
       open={isOpen}
       onClose={onClose}
-      className={styles.modal}
       height="90%"
+      onSave={onSubmit}
+      className={styles.modalContent}
     >
-      <div className={styles.modalContent}>
-        <div className={styles.title}>
-          Can you help us with missing details about this park?
-        </div>
-        <form className={styles.form}>
-          <div className={styles.formInputs}>
-            {!park.size && (
-              <ControlledInput
-                type="number"
-                value={parkDetails.size?.toString() || ''}
-                onChange={onInputChange}
-                name="size"
-                label="Size"
-              />
-            )}
-            {!park.materials && (
-              <MultiSelectInputs
-                options={[
-                  { id: ParkMaterial.SAND, value: ParkMaterial.SAND },
-                  { id: ParkMaterial.GRASS, value: ParkMaterial.GRASS },
-                ]}
-                value={parkDetails.materials || []}
-                onInputChange={onInputChange}
-                name="materials"
-              />
-            )}
-            {park.hasFacilities === undefined && (
-              <RadioInputs
-                value={parkDetails.hasFacilities || ''}
-                options={[
-                  { value: 'Y', id: 'yes' },
-                  { value: 'N', id: 'no' },
-                ]}
-                onOptionChange={onInputChange}
-                name="hasFacilities"
-                label="Has Facilities?"
-              />
-            )}
-            {park.hasShade === undefined && (
-              <RadioInputs
-                value={parkDetails.hasShade || ''}
-                options={[
-                  { value: 'Y', id: 'yes' },
-                  { value: 'N', id: 'no' },
-                ]}
-                onOptionChange={onInputChange}
-                name="hasShade"
-                label="Has Shade?"
-              />
-            )}
-            {park.hasWater === undefined && (
-              <RadioInputs
-                value={parkDetails.hasWater || ''}
-                options={[
-                  { value: 'Y', id: 'yes' },
-                  { value: 'N', id: 'no' },
-                ]}
-                onOptionChange={onInputChange}
-                name="hasWater"
-                label="Has Water?"
-              />
-            )}
-          </div>
-        </form>
+      <div className={styles.title}>
+        Can you help us with missing details about this park?
       </div>
-      <ModalSaveButton onClick={onSubmit} />
+      <form className={styles.form}>
+        <div className={styles.formInputs}>
+          {!park.size && (
+            <ControlledInput
+              type="number"
+              value={parkDetails.size?.toString() || ''}
+              onChange={onInputChange}
+              name="size"
+              label="Size"
+            />
+          )}
+          {!park.materials && (
+            <MultiSelectInputs
+              options={[
+                { id: ParkMaterial.SAND, value: ParkMaterial.SAND },
+                { id: ParkMaterial.GRASS, value: ParkMaterial.GRASS },
+              ]}
+              value={parkDetails.materials || []}
+              onInputChange={onInputChange}
+              name="materials"
+            />
+          )}
+          {park.hasFacilities === undefined && (
+            <RadioInputs
+              value={parkDetails.hasFacilities || ''}
+              options={[
+                { value: 'Y', id: 'yes' },
+                { value: 'N', id: 'no' },
+              ]}
+              onOptionChange={onInputChange}
+              name="hasFacilities"
+              label="Has Facilities?"
+            />
+          )}
+          {park.hasShade === undefined && (
+            <RadioInputs
+              value={parkDetails.hasShade || ''}
+              options={[
+                { value: 'Y', id: 'yes' },
+                { value: 'N', id: 'no' },
+              ]}
+              onOptionChange={onInputChange}
+              name="hasShade"
+              label="Has Shade?"
+            />
+          )}
+          {park.hasWater === undefined && (
+            <RadioInputs
+              value={parkDetails.hasWater || ''}
+              options={[
+                { value: 'Y', id: 'yes' },
+                { value: 'N', id: 'no' },
+              ]}
+              onOptionChange={onInputChange}
+              name="hasWater"
+              label="Has Water?"
+            />
+          )}
+        </div>
+      </form>
     </Modal>
   );
 };

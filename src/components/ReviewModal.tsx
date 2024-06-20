@@ -7,7 +7,6 @@ import { ControlledInput } from './inputs/ControlledInput';
 import { TextArea } from './inputs/TextArea';
 import { Stars } from './Stars';
 import { Checkbox } from './inputs/Checkbox';
-import { ModalSaveButton } from './ModalSaveButton';
 
 interface ReviewModalProps {
   title?: string;
@@ -99,57 +98,55 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
     <Modal
       open={isOpen}
       onClose={closeModal}
-      className={styles.modal}
       height={showForm ? '80%' : '28%'}
       autoClose={!showForm}
+      onSave={showForm ? onSubmit : undefined}
+      className={styles.contentContainer}
     >
-      <div className={styles.contentContainer}>
-        {title && <div className={styles.title}>{title}</div>}
-        {showForm && (
-          <div className={styles.formContainer}>
-            <span className={styles.fromTitle}>How did you dig the park?</span>
-            <form className={styles.form}>
-              <div className={styles.formInputs}>
-                <ControlledInput
-                  label="Title"
-                  name="title"
-                  value={reviewData.title}
-                  onChange={onChangeInput}
-                  placeholder="Review title"
-                  required
+      {title && <div className={styles.title}>{title}</div>}
+      {showForm && (
+        <div className={styles.formContainer}>
+          <span className={styles.fromTitle}>How did you dig the park?</span>
+          <form className={styles.form}>
+            <div className={styles.formInputs}>
+              <ControlledInput
+                label="Title"
+                name="title"
+                value={reviewData.title}
+                onChange={onChangeInput}
+                placeholder="Review title"
+                required
+              />
+              <TextArea
+                label="Content"
+                name="content"
+                rows={7}
+                maxLength={280}
+                value={reviewData.content}
+                onChange={onChangeInput}
+                placeholder="Please elaborate..."
+              />
+              <div className={styles.rankContainer}>
+                <span className={styles.rankTitle}>Rate the park</span>
+                <Stars
+                  className={styles.stars}
+                  rank={rank}
+                  setRank={setRank}
+                  size={32}
                 />
-                <TextArea
-                  label="Content"
-                  name="content"
-                  rows={7}
-                  maxLength={280}
-                  value={reviewData.content}
-                  onChange={onChangeInput}
-                  placeholder="Please elaborate..."
-                />
-                <div className={styles.rankContainer}>
-                  <span className={styles.rankTitle}>Rate the park</span>
-                  <Stars
-                    className={styles.stars}
-                    rank={rank}
-                    setRank={setRank}
-                    size={32}
-                  />
-                </div>
-                {!review && (
-                  <Checkbox
-                    id="isAnonymous"
-                    label="Report anonymously"
-                    isChecked={isAnonymous}
-                    onChange={onChangeAnonymousStatus}
-                  />
-                )}
               </div>
-            </form>
-          </div>
-        )}
-      </div>
-      <ModalSaveButton onClick={onSubmit} />
+              {!review && (
+                <Checkbox
+                  id="isAnonymous"
+                  label="Report anonymously"
+                  isChecked={isAnonymous}
+                  onChange={onChangeAnonymousStatus}
+                />
+              )}
+            </div>
+          </form>
+        </div>
+      )}
     </Modal>
   );
 };

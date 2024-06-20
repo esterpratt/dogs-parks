@@ -3,10 +3,13 @@ import { createPortal } from 'react-dom';
 import classnames from 'classnames';
 import { CgClose } from 'react-icons/cg';
 import styles from './Modal.module.scss';
+import { ModalSaveButton } from './ModalSaveButton';
 
 interface ModalProps {
   open: boolean;
   onClose?: () => void;
+  onSave?: () => void;
+  saveButtonDisabled?: boolean;
   className?: string;
   variant?: 'center' | 'centerTop' | 'bottom' | 'fullScreen' | 'appear';
   height?: string;
@@ -20,6 +23,8 @@ interface ModalProps {
 const Modal: React.FC<ModalProps> = ({
   open,
   onClose,
+  onSave,
+  saveButtonDisabled = false,
   variant = 'centerTop',
   height,
   width,
@@ -76,6 +81,9 @@ const Modal: React.FC<ModalProps> = ({
         )}
         {children}
       </div>
+      {onSave && (
+        <ModalSaveButton disabled={saveButtonDisabled} onClick={onSave} />
+      )}
     </dialog>,
     document.getElementById('modal')!
   );

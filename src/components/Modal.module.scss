@@ -5,7 +5,8 @@
   z-index: 1100;
   transition: all 0.5s;
   border: none;
-  display: block;
+  display: flex;
+  flex-direction: column;
   background-color: $grey-light;
   box-shadow: 0 0 0 100vmax rgba($text, 0.7);
   padding: 0;

@@ -6,7 +6,6 @@ import styles from './ReportParkModal.module.scss';
 import { createReport } from '../../services/reports';
 import { useMutation } from '@tanstack/react-query';
 import { ThankYouModalContext } from '../../context/ThankYouModalContext';
-import { ModalSaveButton } from '../ModalSaveButton';
 
 interface ReportParkModalProps {
   open: boolean;
@@ -40,19 +39,22 @@ const ReportParkModal: React.FC<ReportParkModalProps> = ({
   };
 
   return (
-    <Modal open={open} onClose={onClose} height="80%" className={styles.modal}>
-      <div className={styles.container}>
-        <TextArea
-          className={styles.textArea}
-          rows={15}
-          name="report"
-          label="Tell us what’s wrong here."
-          value={text}
-          onChange={onChangeText}
-          maxLength={600}
-        />
-      </div>
-      <ModalSaveButton onClick={onSubmitReport} />
+    <Modal
+      open={open}
+      onClose={onClose}
+      height="80%"
+      onSave={onSubmitReport}
+      className={styles.container}
+    >
+      <TextArea
+        className={styles.textArea}
+        rows={15}
+        name="report"
+        label="Tell us what’s wrong here."
+        value={text}
+        onChange={onChangeText}
+        maxLength={600}
+      />
     </Modal>
   );
 };
