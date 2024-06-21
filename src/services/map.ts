@@ -1,5 +1,6 @@
 // @ts-expect-error - no ts file for openrouteservice-js yet
 import Openrouteservice from 'openrouteservice-js';
+import { getDurationFromNow } from '../utils/time';
 
 interface GetRouteProps {
   startLocation: { lat: number; lng: number };
@@ -21,16 +22,18 @@ const getRoute = async ({ startLocation, targetLocation }: GetRouteProps) => {
       format: 'geojson',
     });
     const distance = Math.round(
-      res.features[0].properties.summary.distance / 1000
+      (res.features[0].properties.summary.distance || 0) / 1000
     ).toFixed(1);
 
-    const duration = Math.round(
-      res.features[0].properties.summary.duration / 60
+    console.log(res.features[0].properties.summary.distance);
+
+    const duration = getDurationFromNow(
+      res.features[0].properties.summary.duration * 1000
     );
 
     return {
       distance: `${distance} km`,
-      duration: `${duration} ${duration === 1 ? 'min' : 'mins'}`,
+      duration,
       geoJSONObj: res,
     };
   } catch (error) {

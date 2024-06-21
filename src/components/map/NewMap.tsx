@@ -21,6 +21,7 @@ interface NewMapProps {
 const DEFAULT_LOCATION = { lat: 32.09992, lng: 34.809212 };
 
 const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
+  const [userLocation, setUserLocation] = useState(DEFAULT_LOCATION);
   const [center, setCenter] = useState(DEFAULT_LOCATION);
   const [activePark, setActivePark] = useState<Park | null>(null);
   const [isLoadingDirections, setIsLoadingDirections] = useState(false);
@@ -30,23 +31,38 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
     geoJSONObj: GeoJSON.GeometryObject;
   }>();
 
-  const setUserCenter = () => {
+  const setUserLocationByPosition = (position: GeolocationPosition) => {
+    setUserLocation({
+      lat: position.coords.latitude,
+      lng: position.coords.longitude,
+    });
+  };
+
+  const setCenterByPosition = (position: GeolocationPosition) => {
+    setCenter({
+      lat: position.coords.latitude,
+      lng: position.coords.longitude,
+    });
+  };
+
+  const setUserCenter = (cbc: ((position: GeolocationPosition) => void)[]) => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
-        setCenter({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
+        cbc.forEach((cb) => {
+          cb(position);
         });
       });
     }
   };
 
   useEffect(() => {
+    const setStatesToRun = [setUserLocationByPosition];
     if (location) {
       setCenter({ lat: location.latitude, lng: location.longitude });
     } else {
-      setUserCenter();
+      setStatesToRun.push(setCenterByPosition);
     }
+    setUserCenter(setStatesToRun);
   }, [location]);
 
   const onCloseParkPopup = () => {
@@ -62,7 +78,7 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
   const getDirections = async () => {
     setIsLoadingDirections(true);
     const res = await getRoute({
-      startLocation: center,
+      startLocation: userLocation,
       targetLocation: {
         lat: activePark!.location.latitude,
         lng: activePark!.location.longitude,
@@ -95,7 +111,11 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
           <Routing geoJSONObj={directions?.geoJSONObj} />
         )}
         <IconContext.Provider value={{ className: styles.centerButton }}>
-          <MdGpsFixed onClick={setUserCenter} />
+          <MdGpsFixed
+            onClick={() =>
+              setUserCenter([setUserLocationByPosition, setCenterByPosition])
+            }
+          />
         </IconContext.Provider>
         <MapEventHandler onMapClick={onCloseParkPopup} />
       </MapContainer>
