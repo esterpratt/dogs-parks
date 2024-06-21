@@ -8,8 +8,8 @@
 }
 
 .input {
-  border-bottom-left-radius: 16px;
-  border-bottom-right-radius: 16px;
+  border-bottom-left-radius: 18px;
+  border-bottom-right-radius: 18px;
 
   &.list-open {
     border-bottom-left-radius: 0;
@@ -27,8 +27,8 @@
   border-top: none;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
-  border-bottom-left-radius: 16px;
-  border-bottom-right-radius: 16px;
+  border-bottom-left-radius: 18px;
+  border-bottom-right-radius: 18px;
   z-index: 200;
 
   &.no-results {

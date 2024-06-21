@@ -196,6 +196,7 @@ const EditDogsModal: React.FC<EditDogsModalProps> = ({
             name="birthday"
             label="Birthday *"
             type="date"
+            style={{ minHeight: '55px' }}
             required
           />
           <AutoComplete

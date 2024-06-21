@@ -13,7 +13,7 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
       open={open}
       onClose={onClose}
       variant="centerTop"
-      height="fit-content"
+      height="50%"
       className={styles.modalContent}
     >
       <h3>About Klavhub</h3>

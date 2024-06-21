@@ -1,7 +1,7 @@
 @import '../../variables.scss';
 
 .park-modal {
-  height: 25vh;
+  height: 28vh;
   width: 99%;
   position: fixed;
   z-index: 1000;
@@ -52,7 +52,7 @@
   padding: 2px 0;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
   overflow: hidden;
   text-wrap: nowrap;
 }
@@ -60,7 +60,7 @@
 .details {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
 }
 
 .name {

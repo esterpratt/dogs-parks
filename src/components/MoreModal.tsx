@@ -28,6 +28,7 @@ const MoreModal: React.FC<MoreModalProps> = ({ open, onClose }) => {
         variant="top"
         open={open}
         onClose={onClose}
+        height="53px"
         removeCloseButton
         className={styles.modalContent}
       >
