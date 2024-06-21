@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { isParentWithId } from '../utils/dom';
 
 const usePreventFocusOnScroll = () => {
   const isMoved = useRef(false);
@@ -8,8 +9,11 @@ const usePreventFocusOnScroll = () => {
       isMoved.current = false;
     };
 
-    const removeFocus = () => {
-      if (!isMoved.current) {
+    const removeFocus = (event: Event) => {
+      if (
+        !isMoved.current &&
+        !isParentWithId(event.target as HTMLElement, 'allow-scroll')
+      ) {
         isMoved.current = true;
         const focusedElement = document.activeElement as HTMLElement;
 

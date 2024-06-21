@@ -94,6 +94,7 @@ const AutoComplete = <T,>({
             items={filteredItems}
             itemKeyfn={itemKeyfn}
             className={styles.items}
+            isAutoCompleteList
           >
             {(item) => (
               <div

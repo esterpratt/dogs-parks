@@ -156,6 +156,10 @@ const EditDogsModal: React.FC<EditDogsModalProps> = ({
     return !dogData?.birthday ? '' : getFormattedDate(dogData.birthday);
   }, [dogData?.birthday]);
 
+  const formattedCurrentDate = useMemo(() => {
+    return getFormattedDate(new Date());
+  }, []);
+
   const isSaveButtonDisabled =
     !dogData?.name || !dogData.birthday || !dogData.gender || !dogData.breed;
 
@@ -196,6 +200,7 @@ const EditDogsModal: React.FC<EditDogsModalProps> = ({
             name="birthday"
             label="Birthday *"
             type="date"
+            max={formattedCurrentDate}
             style={{ minHeight: '55px' }}
             required
           />

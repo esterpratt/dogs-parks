@@ -7,6 +7,7 @@ interface SearchListItemProps<T> {
   className?: string;
   itemKeyfn: (item: T) => string;
   children: (item: T) => ReactNode;
+  isAutoCompleteList?: boolean;
 }
 
 const SearchListItems = <T,>({
@@ -14,9 +15,13 @@ const SearchListItems = <T,>({
   itemKeyfn,
   children,
   className,
+  isAutoCompleteList = false,
 }: SearchListItemProps<T>) => {
   return (
-    <ul className={classnames(styles.list, className)}>
+    <ul
+      className={classnames(styles.list, className)}
+      id={isAutoCompleteList ? 'allow-scroll' : 'prevent-scroll'}
+    >
       {items.map((item) => (
         <li key={itemKeyfn(item)}>{children(item)}</li>
       ))}

@@ -18,6 +18,7 @@ interface ModalProps {
   children: ReactNode;
   autoClose?: boolean;
   delay?: boolean;
+  hideBackdrop?: boolean;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -33,6 +34,7 @@ const Modal: React.FC<ModalProps> = ({
   removeCloseButton,
   autoClose = false,
   delay = false,
+  hideBackdrop = false,
 }) => {
   const dialogRef = useRef<HTMLDialogElement | null>(null);
 
@@ -68,7 +70,8 @@ const Modal: React.FC<ModalProps> = ({
       className={classnames(
         styles.modal,
         styles[variant],
-        delay && styles.delay
+        delay && styles.delay,
+        hideBackdrop && styles.hideBackdrop
       )}
       onClick={onClose}
     >

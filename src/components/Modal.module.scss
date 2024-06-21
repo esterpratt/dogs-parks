@@ -48,15 +48,15 @@
   }
 
   &.top {
-    width: 40%;
-    height: fit-content;
+    width: 50%;
     left: 100%;
     bottom: 100%;
+    top: 0;
     border-radius: 12px;
-    transform: translate(-105%, 0);
+    transform: translate(-106%, 0);
 
     &[open] {
-      transform: translate(-105%, calc(40% + $navbar-height));
+      transform: translate(-106%, calc(35% + $navbar-height));
     }
   }
 
@@ -89,6 +89,15 @@
     background-color: $text;
     transition: all 0.5s;
     opacity: 0.6;
+  }
+
+  &.hide-backdrop {
+    box-shadow: none;
+    border: 1px solid $text;
+
+    &::backdrop {
+      opacity: 0.2;
+    }
   }
 }
 
