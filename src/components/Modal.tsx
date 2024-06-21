@@ -11,7 +11,7 @@ interface ModalProps {
   onSave?: () => void;
   saveButtonDisabled?: boolean;
   className?: string;
-  variant?: 'center' | 'centerTop' | 'bottom' | 'fullScreen' | 'appear';
+  variant?: 'top' | 'center' | 'centerTop' | 'bottom' | 'fullScreen' | 'appear';
   height?: string;
   width?: string;
   removeCloseButton?: boolean;

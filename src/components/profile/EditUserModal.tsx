@@ -77,6 +77,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose }) => {
       onClose={onClose}
       height="50%"
       onSave={onSubmit}
+      saveButtonDisabled={!userData?.name}
       className={styles.contentContainer}
     >
       <div className={styles.title}>Update your details</div>

@@ -1,0 +1,50 @@
+@import '../../variables.scss';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+
+.input {
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+
+  &.list-open {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+
+.list-container {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: $white;
+  border: 1px solid $grey-bold;
+  border-top: none;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  z-index: 200;
+
+  &.no-results {
+    display: none;
+  }
+}
+
+.items {
+  max-height: 314px;
+  overflow: auto;
+
+  li:not(:last-child) {
+    border-bottom: 1px solid $text-light;
+  }
+}
+
+.chosen {
+  color: $green;
+}

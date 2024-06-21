@@ -24,10 +24,15 @@
   transform: scaleX(-1);
 }
 
-.home-icon {
+.more-button {
+  display: flex;
+}
+
+.more-icon {
   color: $white;
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
+  margin-right: -8px;
 }
 
 .left-bar {

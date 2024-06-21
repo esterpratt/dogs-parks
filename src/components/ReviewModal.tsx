@@ -101,6 +101,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
       height={showForm ? '80%' : '28%'}
       autoClose={!showForm}
       onSave={showForm ? onSubmit : undefined}
+      saveButtonDisabled={!reviewData.title}
       className={styles.contentContainer}
     >
       {title && <div className={styles.title}>{title}</div>}
@@ -114,7 +115,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                 name="title"
                 value={reviewData.title}
                 onChange={onChangeInput}
-                placeholder="Review title"
+                placeholder="Review title *"
                 required
               />
               <TextArea

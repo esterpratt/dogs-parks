@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import { useDebounce } from '../hooks/useDebounce';
 import styles from './SearchList.module.scss';
 import { Button } from './Button';
+import { SearchListItems } from './SearchListItems';
 
 interface SearchListProps<T> {
   items: T[];
@@ -58,13 +59,9 @@ const SearchList = <T,>({
         </Button>
       )}
       {!!filteredItems.length && (
-        <ul className={styles.list}>
-          {filteredItems.map((item) => (
-            <li key={itemKeyfn(item)} className={styles.item}>
-              {children(item)}
-            </li>
-          ))}
-        </ul>
+        <SearchListItems items={filteredItems} itemKeyfn={itemKeyfn}>
+          {children}
+        </SearchListItems>
       )}
       {(!isSearchToSee || (isSearchToSee && searchInput)) &&
         !filteredItems.length && (

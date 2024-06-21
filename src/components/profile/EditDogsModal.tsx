@@ -16,6 +16,8 @@ import { getFormattedDate } from '../../utils/time';
 import { ControlledInput } from '../inputs/ControlledInput';
 import { RadioInputs } from '../inputs/RadioInputs';
 import { TextArea } from '../inputs/TextArea';
+import { AutoComplete } from '../inputs/AutoComplete';
+import { dogBreeds } from '../../services/dog-breeds';
 
 interface EditDogsModalProps {
   isOpen: boolean;
@@ -39,7 +41,17 @@ const EditDogsModal: React.FC<EditDogsModalProps> = ({
           dislikes?: string;
         })
     | null
-  >(null);
+  >(() => {
+    if (dog) {
+      return {
+        ...dog,
+        likes: dog.likes?.join(', '),
+        dislikes: dog.dislikes?.join(', '),
+      };
+    } else {
+      return null;
+    }
+  });
   const { userId } = useContext(UserContext);
   const { revalidate } = useRevalidator();
 
@@ -108,6 +120,15 @@ const EditDogsModal: React.FC<EditDogsModalProps> = ({
     });
   };
 
+  const onAutoCompleteSelect = (name: string, value: string) => {
+    setDogData((prev) => {
+      return {
+        ...prev,
+        [name]: value,
+      };
+    });
+  };
+
   const onSubmit = async () => {
     const likes = dogData!.likes?.split(', ') || [];
     const dislikes = dogData!.dislikes?.split(', ') || [];
@@ -135,12 +156,16 @@ const EditDogsModal: React.FC<EditDogsModalProps> = ({
     return !dogData?.birthday ? '' : getFormattedDate(dogData.birthday);
   }, [dogData?.birthday]);
 
+  const isSaveButtonDisabled =
+    !dogData?.name || !dogData.birthday || !dogData.gender || !dogData.breed;
+
   return (
     <Modal
       open={isOpen}
       onClose={onClose}
       height="90%"
       onSave={onSubmit}
+      saveButtonDisabled={isSaveButtonDisabled}
       className={styles.contentContainer}
     >
       <div className={styles.title}>
@@ -173,13 +198,19 @@ const EditDogsModal: React.FC<EditDogsModalProps> = ({
             type="date"
             required
           />
-          <ControlledInput
-            value={dogData?.breed || ''}
-            onChange={onInputChange}
-            name="breed"
+          <AutoComplete
+            items={dogBreeds}
+            itemKeyfn={(item) => item}
+            filterFunc={(item, searchInput) =>
+              item.toLowerCase().includes(searchInput.toLowerCase())
+            }
+            equalityFunc={(item, selectedInput) => item === selectedInput}
+            setSelectedInput={(item) => onAutoCompleteSelect('breed', item)}
+            selectedInput={dogData?.breed || ''}
             label="Breed *"
-            required
-          />
+          >
+            {(item) => <div className={styles.breed}>{item}</div>}
+          </AutoComplete>
           <RadioInputs
             value={dogData?.size || ''}
             options={[

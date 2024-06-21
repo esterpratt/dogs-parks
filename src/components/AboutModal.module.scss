@@ -1,0 +1,23 @@
+@import '../variables.scss';
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-size: 18px;
+  padding: 52px 16px 32px;
+
+  h3 {
+    margin: 0 0 12px;
+    font-size: 20px;
+  }
+
+  span {
+    font-weight: $font-weight-medium;
+  }
+
+  a {
+    text-decoration: none;
+    color: $green;
+  }
+}

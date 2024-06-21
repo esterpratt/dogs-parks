@@ -47,6 +47,19 @@
     margin-top: 48px;
   }
 
+  &.top {
+    width: 40%;
+    height: fit-content;
+    left: 100%;
+    bottom: 100%;
+    border-radius: 12px;
+    transform: translate(-105%, 0);
+
+    &[open] {
+      transform: translate(-105%, calc(40% + $navbar-height));
+    }
+  }
+
   &.bottom {
     height: fit-content;
     top: 100%;
@@ -76,10 +89,6 @@
     background-color: $text;
     transition: all 0.5s;
     opacity: 0.6;
-  }
-
-  &.hide-backdrop::backdrop {
-    display: none;
   }
 }
 
