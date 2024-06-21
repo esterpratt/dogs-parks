@@ -25,8 +25,6 @@ const getRoute = async ({ startLocation, targetLocation }: GetRouteProps) => {
       (res.features[0].properties.summary.distance || 0) / 1000
     ).toFixed(1);
 
-    console.log(res.features[0].properties.summary.distance);
-
     const duration = getDurationFromNow(
       res.features[0].properties.summary.duration * 1000
     );

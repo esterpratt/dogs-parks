@@ -41,7 +41,6 @@ const getAge = (birthday: Date) => {
 };
 
 const getDurationFromNow = (ms: number) => {
-  console.log(ms);
   const now = new Date();
   const timeFromNow = new Date(Date.now() + ms);
   return dayjs(now).to(timeFromNow, true);
