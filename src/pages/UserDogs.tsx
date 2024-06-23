@@ -57,6 +57,21 @@ const UserDogs = () => {
   return (
     <>
       <div className={styles.container}>
+        {!isSignedInUser && (
+          <div className={styles.prevLinks}>
+            {signedInUserId && (
+              <Link
+                to={`/profile/${signedInUserId}/friends`}
+                className={styles.prevLink}
+              >
+                Go to My Friends
+              </Link>
+            )}
+            <Link to="/users" className={styles.prevLink}>
+              Go to Users
+            </Link>
+          </div>
+        )}
         {dogs.length ? (
           <span className={styles.titleText}>
             {isSignedInUser ? 'My' : `${user.name}'s`} pack

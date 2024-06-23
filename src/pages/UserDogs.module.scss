@@ -5,6 +5,18 @@
   flex-direction: column;
 }
 
+.prev-links {
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.prev-link {
+  font-size: 18px;
+  text-decoration: none;
+  color: $green;
+}
+
 .dogs {
   display: flex;
   flex-direction: column;
