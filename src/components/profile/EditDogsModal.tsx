@@ -1,6 +1,7 @@
 import { ChangeEvent, useContext, useEffect, useMemo, useState } from 'react';
 import { useRevalidator } from 'react-router';
 import { useMutation } from '@tanstack/react-query';
+import classnames from 'classnames';
 import { Modal } from '../Modal';
 import { DOG_ENERGY, DOG_SIZE, Dog, GENDER } from '../../types/dog';
 import styles from './EditDogsModal.module.scss';
@@ -215,7 +216,13 @@ const EditDogsModal: React.FC<EditDogsModalProps> = ({
             selectedInput={dogData?.breed || ''}
             label="Breed *"
           >
-            {(item) => <div className={styles.breed}>{item}</div>}
+            {(item, isChosen) => (
+              <div
+                className={classnames(styles.breed, isChosen && styles.chosen)}
+              >
+                {item}
+              </div>
+            )}
           </AutoComplete>
           <RadioInputs
             value={dogData?.size || ''}

@@ -1,5 +1,17 @@
 @import '../../variables.scss';
 
+.button {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+  width: 50px;
+
+  > span {
+    font-size: 10px;
+  }
+}
+
 .checkin-icon {
   color: $grey-bold;
   fill: $grey-bold;
@@ -26,6 +38,6 @@
 }
 
 .title {
-  font-size: 18px;
+  font-size: $second-title-font-size;
   margin-bottom: 32px;
 }

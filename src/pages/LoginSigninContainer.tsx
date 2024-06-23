@@ -1,10 +1,11 @@
 import { FormEvent, useContext, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import classnames from 'classnames';
+import { FcGoogle } from 'react-icons/fc';
 import styles from './LoginSigninContainer.module.scss';
 import { Button } from '../components/Button';
 import { UserContext } from '../context/UserContext';
 import { SigninProps } from '../context/UserContext';
-import { Link } from 'react-router-dom';
 import { FormInput } from '../components/inputs/FormInput';
 
 interface LoginSigninContainerProps {
@@ -49,13 +50,19 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
           {isLoading && <span className={styles.loading}>Loading...</span>}
         </h2>
         <Button
-          variant="orange"
+          variant="nuteral"
           className={styles.googleLoginButton}
           onClick={googleSignin}
         >
-          {method === 'signin' ? 'Sign In' : 'Log In'} With Google
+          <FcGoogle />
+          <span>{method === 'signin' ? 'Sign In' : 'Log In'} With Google</span>
         </Button>
-        <span>Or fill:</span>
+        <div className={styles.lineThrough}>
+          <span>Or</span>
+        </div>
+        <div className={classnames(styles.error, error ? styles.show : '')}>
+          {error}
+        </div>
         <form onSubmit={handleSubmit} className={styles.inputsContainer}>
           <FormInput
             onChange={() => setError('')}
@@ -82,9 +89,6 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
               />
             </>
           )}
-          <div className={classnames(styles.error, error ? styles.show : '')}>
-            {error}
-          </div>
           <Button variant="green" type="submit" className={styles.button}>
             {method === 'signin' ? 'Sign In' : 'Log In'}
           </Button>

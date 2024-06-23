@@ -59,7 +59,10 @@ const ReviewsPreview = () => {
       )}
       {userId && (
         <div className={styles.addReview}>
-          <Button onClick={() => setIsAddReviewModalOpen(true)}>
+          <Button
+            onClick={() => setIsAddReviewModalOpen(true)}
+            className={styles.addReviewButton}
+          >
             Add a review
           </Button>
           <Suspense fallback={<Loading />}>

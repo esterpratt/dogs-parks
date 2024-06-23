@@ -42,18 +42,21 @@ const Users = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.message}>
-        {!userId ? (
+      {!userId ? (
+        <div className={styles.message}>
           <>
-            To see user details and make friends, you need to{' '}
+            To see user's page and make friends, you need to{' '}
             <Link to="../login" className={styles.link}>
               log in
             </Link>
           </>
-        ) : (
+        </div>
+      ) : (
+        <div className={styles.title}>
           <span>Sniff out some friends</span>
-        )}
-      </div>
+        </div>
+      )}
+
       <SearchList
         isSearchToSee
         placeholder="Search by user or dog name"

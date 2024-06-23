@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { IoMdFemale, IoMdMale } from 'react-icons/io';
 import { MdOutlineModeEditOutline } from 'react-icons/md';
 import { PiCameraFill, PiDog } from 'react-icons/pi';
-import { FaArrowLeftLong } from 'react-icons/fa6';
 import classnames from 'classnames';
 import { DogDetails } from '../components/profile/DogDetails';
 import { DogGalleryContainer } from '../components/profile/DogGalleryContainer';
@@ -87,8 +86,7 @@ const UserDog = () => {
     <>
       <div className={styles.container}>
         <Link to=".." relative="path" className={styles.prevLink}>
-          <FaArrowLeftLong />
-          <span>{isSignedInUser ? 'My' : `${userName}'s`} Dogs</span>
+          <span>Back to {isSignedInUser ? 'My' : `${userName}'s`} Pack</span>
         </Link>
         <div className={styles.importantDetails}>
           <div className={styles.imgContainer}>

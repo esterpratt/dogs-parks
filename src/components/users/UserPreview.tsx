@@ -6,7 +6,6 @@ import { User } from '../../types/user';
 import { Dog } from '../../types/dog';
 import styles from './UserPreview.module.scss';
 import { fetchDogPrimaryImage } from '../../services/dogs';
-import { FriendRequestButton } from '../profile/FriendRequestButton';
 import { UserContext } from '../../context/UserContext';
 import { useQuery } from '@tanstack/react-query';
 
@@ -15,10 +14,7 @@ interface UserPreviewProps {
   showFriendshipButton?: boolean;
 }
 
-const UserPreview: React.FC<UserPreviewProps> = ({
-  user,
-  showFriendshipButton = true,
-}) => {
+const UserPreview: React.FC<UserPreviewProps> = ({ user }) => {
   const { userId } = useContext(UserContext);
   const { data: dogImage } = useQuery({
     queryKey: ['dogImage', user.dogs[0].id],
@@ -53,13 +49,6 @@ const UserPreview: React.FC<UserPreviewProps> = ({
           <span className={styles.userName}>Owner: {user.name}</span>
         </div>
       </Link>
-      {!!userId && showFriendshipButton && (
-        <FriendRequestButton
-          friendId={user.id}
-          buttonVariant="basic"
-          className={styles.button}
-        />
-      )}
     </div>
   );
 };

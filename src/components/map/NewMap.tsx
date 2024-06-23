@@ -93,7 +93,7 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
   return (
     <div className={className}>
       <Link to="/parks" className={styles.listViewButton}>
-        <Button variant="orange">List View</Button>
+        <Button variant="green">To List View</Button>
       </Link>
       <MapContainer
         className={styles.map}

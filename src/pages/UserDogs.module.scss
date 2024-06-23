@@ -8,7 +8,7 @@
 .dogs {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
 
   a {
     text-decoration: none;
@@ -17,11 +17,11 @@
 }
 
 .title-text {
-  margin-bottom: 12px;
+  margin-bottom: 18px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 18px;
+  font-size: $title-font-size;
 }
 
 .add-dog-button {

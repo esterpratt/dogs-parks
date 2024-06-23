@@ -98,7 +98,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
     <Modal
       open={isOpen}
       onClose={closeModal}
-      height={showForm ? '80%' : '28%'}
+      height={showForm ? '80%' : '25%'}
       autoClose={!showForm}
       onSave={showForm ? onSubmit : undefined}
       saveButtonDisabled={!reviewData.title}
@@ -107,7 +107,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
       {title && <div className={styles.title}>{title}</div>}
       {showForm && (
         <div className={styles.formContainer}>
-          <span className={styles.fromTitle}>How did you dig the park?</span>
+          <span className={styles.formTitle}>How did you dig the park?</span>
           <form className={styles.form}>
             <div className={styles.formInputs}>
               <ControlledInput

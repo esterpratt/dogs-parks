@@ -52,14 +52,17 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ parkId, userId }) => {
   };
 
   return (
-    <IconContext.Provider
-      value={{
-        size: '32',
-        className: classnames(styles.heart, isFavorite && styles.favorite),
-      }}
-    >
-      <TiHeartFullOutline onClick={toggleFavorite} />
-    </IconContext.Provider>
+    <div className={styles.container}>
+      <IconContext.Provider
+        value={{
+          size: '32',
+          className: classnames(styles.heart, isFavorite && styles.favorite),
+        }}
+      >
+        <TiHeartFullOutline onClick={toggleFavorite} />
+        <span>{isFavorite ? 'Unlike' : 'Like'}</span>
+      </IconContext.Provider>
+    </div>
   );
 };
 

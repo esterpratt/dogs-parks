@@ -1,10 +1,12 @@
+@import '../../variables.scss';
+
 .modal-content {
   padding: 56px 24px 24px;
   height: 100%;
 }
 
 .title {
-  font-size: 18px;
+  font-size: $second-title-font-size;
   margin-bottom: 32px;
 }
 

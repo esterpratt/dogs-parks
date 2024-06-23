@@ -7,6 +7,7 @@
 
 .title {
   margin-bottom: 24px;
+  font-size: $second-title-font-size;
 
   &:last-child {
     font-size: 20px;
@@ -23,7 +24,7 @@
 }
 
 .form-title {
-  font-size: 18px;
+  font-size: $second-title-font-size;
 }
 
 .form {

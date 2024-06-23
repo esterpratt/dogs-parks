@@ -92,25 +92,25 @@ const NewPark: React.FC = () => {
       </div>
       <div className={styles.inputsContainer}>
         <ControlledInput
-          label="Park Name*"
+          label="Park Name *"
           name="name"
           value={parkDetails.name}
           onChange={onChangeParkDetails}
         />
         <ControlledInput
-          label="City*"
+          label="City *"
           name="city"
           value={parkDetails.city}
           onChange={onChangeParkDetails}
         />
         <ControlledInput
-          label="Address*"
+          label="Address *"
           name="address"
           value={parkDetails.address}
           onChange={onChangeParkDetails}
         />
         <LocationInput
-          label="Click on the map to set the park location*"
+          label="Click on the map to set the park location *"
           markerLocation={markerLocation}
           onMapClick={onMapClick}
           className={styles.map}

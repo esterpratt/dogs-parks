@@ -45,7 +45,7 @@ const UserFavorites = () => {
 
   return (
     <div className={styles.container}>
-      <span className={styles.title}>Your Favorite Parks:</span>
+      <span className={styles.title}>Your Favorite Parks</span>
       <div className={styles.list}>
         {favoriteParks.map((park) => (
           <ParkPreview park={park} key={park.id} className={styles.park} />

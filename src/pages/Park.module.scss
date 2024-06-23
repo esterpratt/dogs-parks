@@ -38,7 +38,6 @@
   justify-content: space-between;
   margin-bottom: 8px;
   padding: 12px 16px;
-  margin-right: 12px;
 
   > :first-child {
     display: flex;
@@ -47,7 +46,7 @@
 }
 
 .name {
-  font-size: 20px;
+  font-size: $title-font-size;
   margin-bottom: 6px;
   font-weight: $font-weight-medium;
 }
@@ -59,16 +58,8 @@
 
 .user-engagement {
   display: flex;
-  align-items: start;
-  gap: 8px;
-  font-size: 12px;
-
-  > div {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-right: 4px;
-  }
+  align-items: flex-start;
+  gap: 2px;
 }
 
 .outletContainer {

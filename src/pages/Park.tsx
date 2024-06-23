@@ -85,14 +85,12 @@ const Park: React.FC = () => {
           </div>
           {user && (
             <div className={styles.userEngagement}>
-              <div>
-                <FavoriteButton parkId={parkId!} userId={user.id} />
-                <ParkCheckIn
-                  parkId={parkId!}
-                  userId={user.id}
-                  userName={user.name}
-                />
-              </div>
+              <FavoriteButton parkId={parkId!} userId={user.id} />
+              <ParkCheckIn
+                parkId={parkId!}
+                userId={user.id}
+                userName={user.name}
+              />
             </div>
           )}
         </div>

@@ -7,6 +7,10 @@
   gap: 24px;
 }
 
+.title {
+  font-size: $title-font-size;
+}
+
 .list {
   ul {
     gap: 24px;
@@ -16,7 +20,7 @@
 
 .link {
   text-decoration: none;
-  color: $orange;
+  color: $green;
 }
 
 .message {

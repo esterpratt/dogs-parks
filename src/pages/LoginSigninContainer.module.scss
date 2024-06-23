@@ -4,8 +4,7 @@
   margin: 12px 0 8px;
   font-weight: inherit;
   padding: 8px 4px;
-  border-bottom: 1px solid $grey-bold;
-  font-size: 24px;
+  font-size: $title-font-size;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -18,20 +17,34 @@
 }
 
 .inputs-container {
-  margin-bottom: 8px;
+  margin: 8px 0 12px;
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
 .google-login-button {
-  margin-top: 8px;
+  margin-top: 12px;
   width: 100%;
+  display: flex;
+  gap: 12px;
+  align-items: center;
 
-  + span {
-    display: block;
-    margin: 12px 0 8px;
-    font-size: 12px;
+  svg {
+    height: 24px;
+    width: 24px;
+  }
+}
+
+.line-through {
+  margin: 18px 4px 12px;
+  text-align: center;
+  border-bottom: 1px solid $grey-bold;
+  line-height: 0.1em;
+
+  > span {
+    padding: 0 12px;
+    background: $grey-light;
   }
 }
 
@@ -62,7 +75,6 @@
 }
 
 .change-method {
-  margin-top: 8px;
   align-self: center;
 
   a {

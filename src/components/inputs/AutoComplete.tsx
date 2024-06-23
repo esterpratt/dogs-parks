@@ -22,7 +22,7 @@ interface AutoCompleteProps<T> {
   setSelectedInput: (item: T) => void;
   equalityFunc: (item: T, selectedInput?: string) => boolean;
   filterFunc: (item: T, searchInput: string) => boolean;
-  children: (item: T) => ReactNode;
+  children: (item: T, isChosen: boolean) => ReactNode;
 }
 
 const AutoComplete = <T,>({
@@ -103,7 +103,7 @@ const AutoComplete = <T,>({
                   equalityFunc(item, selectedInput) ? styles.chosen : ''
                 }
               >
-                {children(item)}
+                {children(item, equalityFunc(item, selectedInput))}
               </div>
             )}
           </SearchListItems>

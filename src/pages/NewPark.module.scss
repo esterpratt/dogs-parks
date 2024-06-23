@@ -1,7 +1,7 @@
 @import '../variables.scss';
 
 .title {
-  font-size: 18px;
+  font-size: $second-title-font-size;
 }
 
 .map {
@@ -40,5 +40,5 @@
 }
 
 .button {
-  width: 116px;
+  width: 124px;
 }

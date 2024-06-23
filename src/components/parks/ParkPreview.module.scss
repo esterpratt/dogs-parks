@@ -16,7 +16,7 @@
 .details-container {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   width: 65%;
 }
 
@@ -42,6 +42,10 @@
   color: $green;
   justify-content: space-between;
   align-items: end;
+  font-size: 14px;
+}
+
+.map-link {
   font-size: 14px;
 }
 

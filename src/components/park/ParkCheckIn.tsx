@@ -113,17 +113,23 @@ const ParkCheckIn: React.FC<{
     <div>
       <Button onClick={onCheckIn} className={styles.button}>
         {!shouldCheckIn ? (
-          <IconContext.Provider
-            value={{ className: styles.checkoutIcon, size: '32' }}
-          >
-            <TbPennantOff />
-          </IconContext.Provider>
+          <>
+            <IconContext.Provider
+              value={{ className: styles.checkoutIcon, size: '32' }}
+            >
+              <TbPennantOff />
+            </IconContext.Provider>
+            <span>Check Out</span>
+          </>
         ) : (
-          <IconContext.Provider
-            value={{ className: styles.checkinIcon, size: '32' }}
-          >
-            <TbPennant />
-          </IconContext.Provider>
+          <>
+            <IconContext.Provider
+              value={{ className: styles.checkinIcon, size: '32' }}
+            >
+              <TbPennant />
+            </IconContext.Provider>
+            <span>Check In</span>
+          </>
         )}
       </Button>
       <Modal

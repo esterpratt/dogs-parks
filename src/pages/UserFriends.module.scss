@@ -31,11 +31,11 @@
 .friends-container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
 }
 
 .title {
-  font-size: 18px;
+  font-size: $title-font-size;
 }
 
 .link {

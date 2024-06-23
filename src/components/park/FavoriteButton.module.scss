@@ -1,5 +1,17 @@
 @import '../../variables.scss';
 
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+  width: 50px;
+
+  > span {
+    font-size: 10px;
+  }
+}
+
 .heart {
   transition: color 0.2s;
   color: $grey-bold;
