@@ -73,7 +73,7 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
             <span>{activePark?.name}</span>
           </Link>
           <div className={styles.addressContainer}>
-            <span className={styles.address}>{activePark?.address}</span>
+            <span className={styles.address}>{activePark?.address},</span>
             <span className={styles.city}>{activePark?.city}</span>
           </div>
         </div>

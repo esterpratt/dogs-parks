@@ -2,15 +2,15 @@ import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { IconContext } from 'react-icons';
 import { GiSittingDog } from 'react-icons/gi';
-import { IoMdMore } from 'react-icons/io';
+import { FaInfo } from 'react-icons/fa6';
 import { UserContext } from '../context/UserContext';
 import styles from './NavbarTop.module.scss';
 import { Button } from './Button';
-import { MoreModal } from './MoreModal';
+import { AboutModal } from './AboutModal';
 
 const NavbarTop = () => {
   const { userId, user } = useContext(UserContext);
-  const [isMoreOpen, setIsMoreOpen] = useState(false);
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
 
   return (
     <nav className={styles.navbar}>
@@ -26,12 +26,15 @@ const NavbarTop = () => {
           <span className={styles.userName}>{user ? user.name : 'Guest'}!</span>
         </Link>
       </div>
-      <Button onClick={() => setIsMoreOpen(true)} className={styles.moreButton}>
-        <IconContext.Provider value={{ className: styles.moreIcon }}>
-          <IoMdMore />
+      <Button
+        onClick={() => setIsAboutOpen(true)}
+        className={styles.aboutButton}
+      >
+        <IconContext.Provider value={{ className: styles.aboutIcon }}>
+          <FaInfo />
         </IconContext.Provider>
       </Button>
-      <MoreModal open={isMoreOpen} onClose={() => setIsMoreOpen(false)} />
+      <AboutModal open={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
     </nav>
   );
 };
