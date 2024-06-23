@@ -43,7 +43,9 @@ const Camera: React.FC<CustomWebcamProps> = ({
     <div className={styles.camera}>
       {img ? (
         <>
-          <img src={img} alt="screenshot" className={styles.cameraView} />
+          <div className={styles.imgContainer}>
+            <img src={img} alt="screenshot" className={styles.cameraView} />
+          </div>
           <div className={styles.buttonsContainer}>
             <Button className={styles.saveButton} onClick={onClickSaveImage}>
               Save
