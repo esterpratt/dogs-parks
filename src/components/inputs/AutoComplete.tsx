@@ -11,7 +11,6 @@ import { Input } from './Input';
 import { SearchListItems } from '../SearchListItems';
 import { useDebounce } from '../../hooks/useDebounce';
 import styles from './AutoComplete.module.scss';
-import { scrollRefToTop } from '../../utils/dom';
 
 interface AutoCompleteProps<T> {
   selectedInput?: string;
@@ -43,7 +42,6 @@ const AutoComplete = <T,>({
   const [filteredItems, setFilteredItems] = useState<T[]>([]);
   const [showItems, setShowItems] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const scrollRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     const filteredItems = items.filter((item) => filterFunc(item, searchInput));
@@ -70,17 +68,12 @@ const AutoComplete = <T,>({
     setInput(selectedInput || '');
   };
 
-  const onInputFocus = () => {
-    setShowItems(true);
-    scrollRefToTop(scrollRef);
-  };
-
   return (
-    <div ref={scrollRef} className={classnames(styles.container, className)}>
+    <div className={classnames(styles.container, className)}>
       <label className={styles.label}>{label}</label>
       <Input
         ref={inputRef}
-        onFocus={onInputFocus}
+        onFocus={() => setShowItems(true)}
         onBlur={onInputBlur}
         value={input}
         onChange={onChangeInput}
