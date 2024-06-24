@@ -1,3 +1,5 @@
+import { RefObject } from 'react';
+
 const isParentWithId = (target: HTMLElement | null, id: string) => {
   let elementTarget = target;
   while (elementTarget) {
@@ -9,4 +11,15 @@ const isParentWithId = (target: HTMLElement | null, id: string) => {
   return false;
 };
 
-export { isParentWithId };
+const scrollRefToTop = (ref: RefObject<HTMLElement>) => {
+  if (!ref.current) {
+    return;
+  }
+
+  ref.current.scrollIntoView({
+    block: 'start',
+    behavior: 'smooth',
+  });
+};
+
+export { isParentWithId, scrollRefToTop };

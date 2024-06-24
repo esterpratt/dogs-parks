@@ -75,7 +75,7 @@ const UserReviews = () => {
   return (
     <ReviewModalContextProvider onUpdateReview={onUpdateReview}>
       <div className={styles.container}>
-        <div className={styles.title}>Your Park Reviews</div>
+        <div className={styles.title}>My Park Reviews</div>
         {reviews.map((review) => {
           return (
             <ReviewPreview

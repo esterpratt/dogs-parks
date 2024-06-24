@@ -168,7 +168,7 @@ const EditDogsModal: React.FC<EditDogsModalProps> = ({
     <Modal
       open={isOpen}
       onClose={onClose}
-      height="90%"
+      height="95%"
       onSave={onSubmit}
       saveButtonDisabled={isSaveButtonDisabled}
       className={styles.contentContainer}
