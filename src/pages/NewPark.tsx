@@ -119,7 +119,17 @@ const NewPark: React.FC = () => {
           onChange={onChangeParkDetails}
         />
         <div className={styles.buttons}>
-          <Button variant="green" onClick={onAddPark} className={styles.button}>
+          <Button
+            variant="green"
+            onClick={onAddPark}
+            className={styles.button}
+            disabled={
+              !markerLocation ||
+              !parkDetails.name ||
+              !parkDetails.address ||
+              !parkDetails.city
+            }
+          >
             Add Park
           </Button>
           <Button variant="orange" onClick={onCancel} className={styles.button}>
