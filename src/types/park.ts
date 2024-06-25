@@ -22,7 +22,15 @@ interface Park {
   hasFacilities?: boolean;
 }
 
+interface NewParkDetails {
+  name: string;
+  city: string;
+  address: string;
+  size?: number;
+  location: Location;
+}
+
 type ParkForLists = Pick<Park, 'id' | 'location' | 'name' | 'city' | 'address'>;
 
-export type { Park, ParkForLists, Location };
+export type { Park, ParkForLists, Location, NewParkDetails };
 export { ParkMaterial };

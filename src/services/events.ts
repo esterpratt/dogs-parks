@@ -1,9 +1,9 @@
 import { getAnalytics, logEvent } from 'firebase/analytics';
-import { Park } from '../types/park';
+import { NewParkDetails } from '../types/park';
 
 const analytics = getAnalytics();
 
-const addParkEvent = (parkDetails: Park) => {
+const addParkEvent = (parkDetails: NewParkDetails) => {
   logEvent(analytics, 'add_park', { ...parkDetails });
 };
 

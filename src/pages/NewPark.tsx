@@ -1,7 +1,7 @@
 import { ChangeEvent, useState } from 'react';
 import styles from './NewPark.module.scss';
 import classnames from 'classnames';
-import { Location } from '../types/park';
+import { Location, NewParkDetails } from '../types/park';
 import { ControlledInput } from '../components/inputs/ControlledInput';
 import { Button } from '../components/Button';
 import { LocationInput } from '../components/inputs/LocationInput';
@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router';
 import { useMutation } from '@tanstack/react-query';
 import { queryClient } from '../services/react-query';
 import { LeafletMouseEvent } from 'leaflet';
+import { addParkEvent } from '../services/events';
 
 const NewPark: React.FC = () => {
   const [markerLocation, setMarkerLocation] = useState<Location | null>(null);
@@ -24,10 +25,11 @@ const NewPark: React.FC = () => {
 
   const { mutate } = useMutation({
     mutationFn: createPark,
-    onSuccess: async () => {
+    onSuccess: async (_data, vars: NewParkDetails) => {
       queryClient.invalidateQueries({
         queryKey: ['parks'],
       });
+      addParkEvent(vars);
       navigate('/parks');
     },
   });
@@ -62,13 +64,7 @@ const NewPark: React.FC = () => {
     ) {
       setError('Please fill in the missing details');
     } else {
-      const newPark: {
-        name: string;
-        city: string;
-        address: string;
-        size?: number;
-        location: Location;
-      } = {
+      const newPark: NewParkDetails = {
         name: parkDetails.name,
         address: parkDetails.address,
         city: parkDetails.city,
