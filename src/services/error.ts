@@ -1,4 +1,5 @@
 import { FirebaseError } from 'firebase/app';
+import { errorEvent } from './events';
 
 class AppError {
   message: string;
@@ -33,6 +34,8 @@ const FIREBASE_ERRORS: { [key: string]: { status: number; message: string } } =
 
 const throwError = (error: unknown, status?: number) => {
   console.log('there was an error: ', error);
+  errorEvent(error);
+
   if (error instanceof AppError) {
     throw error;
   }

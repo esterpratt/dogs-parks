@@ -7,4 +7,8 @@ const addParkEvent = (parkDetails: NewParkDetails) => {
   logEvent(analytics, 'add_park', { ...parkDetails });
 };
 
-export { addParkEvent };
+const errorEvent = (error: unknown) => {
+  logEvent(analytics, 'error', { error });
+};
+
+export { addParkEvent, errorEvent };
