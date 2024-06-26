@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import MarkerClusterGroup from 'react-leaflet-cluster';
 import { Park } from '../../types/park';
 import { fetchParksJSON } from '../../services/parks';
 import { Loading } from '../Loading';
@@ -22,13 +23,25 @@ const MarkerList: React.FC<MarkerListProps> = ({
     return <Loading />;
   }
 
-  return parks?.map((park) => (
-    <ParkMarker
-      key={park.id}
-      location={park.location}
-      onClick={() => setActivePark(park.id === activePark?.id ? null : park)}
-    />
-  ));
+  return (
+    <MarkerClusterGroup
+      chunkedLoading
+      polygonOptions={{
+        stroke: false,
+        fill: false,
+      }}
+    >
+      {parks?.map((park) => (
+        <ParkMarker
+          key={park.id}
+          location={park.location}
+          onClick={() =>
+            setActivePark(park.id === activePark?.id ? null : park)
+          }
+        />
+      ))}
+    </MarkerClusterGroup>
+  );
 };
 
 export { MarkerList };

@@ -8,8 +8,7 @@ body {
   color: $text;
   font-weight: $font-weight-light;
   letter-spacing: 0.5px;
-  font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: $font-family;
 }
 
 #root {
@@ -92,7 +91,43 @@ a {
   }
 }
 
-// .leaflet-container {
-//   height: 100dvh;
-//   width: 100wh;
-// }
+.marker-cluster {
+  &.marker-cluster-large {
+    background-color: rgba($red, 0.5);
+
+    div {
+      background-color: rgba($red, 0.9);
+
+      span {
+        font-family: $font-family;
+        color: $text;
+      }
+    }
+  }
+
+  &.marker-cluster-medium {
+    background-color: rgba($orange, 0.5);
+
+    div {
+      background-color: rgba($orange, 0.9);
+
+      span {
+        font-family: $font-family;
+        color: $text;
+      }
+    }
+  }
+
+  &.marker-cluster-small {
+    background-color: rgba($green, 0.5);
+
+    div {
+      background-color: rgba($green, 0.9);
+
+      span {
+        font-family: $font-family;
+        color: $text;
+      }
+    }
+  }
+}
