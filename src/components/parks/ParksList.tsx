@@ -30,7 +30,10 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
   const sortedParks = useDistance(parksToSort);
 
   const searchParksFunc = (park: Park, searchInput: string) => {
-    return park.name.toLowerCase().includes(searchInput.toLowerCase());
+    return (
+      park.name.toLowerCase().includes(searchInput.toLowerCase()) ||
+      park.address.toLowerCase().includes(searchInput.toLowerCase())
+    );
   };
 
   const NoResultsLayout = (
