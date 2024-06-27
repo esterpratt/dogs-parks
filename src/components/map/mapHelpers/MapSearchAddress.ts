@@ -16,6 +16,13 @@ const MapSearchAddress: React.FC<MapSearchAddressProps> = ({ setCenter }) => {
 
   useEffect(() => {
     const geocoderControl = new Geocoder({
+      // @ts-expect-error - nominatim exists on Gecoder
+      geocoder: new Geocoder.nominatim({
+        geocodingQueryParams: {
+          countrycodes: 'il',
+          limit: 3,
+        },
+      }),
       defaultMarkGeocode: false,
       errorMessage: "Oops! We couldn't sniff out that address",
       position: 'bottomleft',

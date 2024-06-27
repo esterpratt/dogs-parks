@@ -63,9 +63,9 @@
   width: 100%;
   top: 3px;
   left: 0;
-  padding: 4px 12px;
+  padding: 6px 12px 2px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   border: 1px solid $text-light;
   background-color: rgba($white, 0.75);
 }
