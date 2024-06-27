@@ -13,7 +13,7 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
       open={open}
       onClose={onClose}
       variant="centerTop"
-      height="50%"
+      height="65%"
       className={styles.modalContent}
     >
       <h3>About Klavhub</h3>
@@ -31,7 +31,7 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
       <div>
         <span>You can help! </span>I would greatly appreciate it if you could:
         Join the community, add friends, add details about your parks, and add
-        any missing parks you notice.
+        any missing parks you notice. Thanks!
       </div>
     </Modal>
   );
