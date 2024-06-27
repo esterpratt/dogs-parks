@@ -1,3 +1,4 @@
+@import 'leaflet-control-geocoder/dist/Control.Geocoder.css';
 @import './variables.scss';
 
 body {
@@ -127,6 +128,85 @@ a {
       span {
         font-family: $font-family;
         color: $text;
+      }
+    }
+  }
+}
+
+.leaflet-bottom.leaflet-left {
+  width: 100%;
+  display: flex;
+}
+
+.leaflet-control-geocoder {
+  width: 100%;
+
+  .leaflet-control-geocoder-icon {
+    display: none;
+  }
+
+  &.leaflet-bar.leaflet-control,
+  &.leaflet-bar.leaflet-control.leaflet-control-geocoder-expanded {
+    font-family: $font-family;
+    color: $text;
+    border: none;
+    margin: 0 24px 24px;
+
+    .leaflet-control-geocoder-form-no-error,
+    .leaflet-control-geocoder-alternatives {
+      position: absolute;
+      bottom: 100%;
+      left: 0;
+      width: 100%;
+      background-color: inherit;
+      font-weight: $font-weight-light;
+      letter-spacing: inherit;
+      border-radius: 4px;
+    }
+
+    .leaflet-control-geocoder-form-no-error {
+      margin: 0;
+      border-bottom: 1px solid $grey-bold;
+      color: $text;
+      padding: 8px 12px;
+      font-size: 14px;
+    }
+
+    .leaflet-control-geocoder-alternatives {
+      li {
+        border-bottom: 1px solid $grey-bold;
+        padding: 8px 12px;
+
+        a {
+          color: inherit;
+
+          .leaflet-control-geocoder-address-context {
+            color: $brown;
+          }
+        }
+      }
+    }
+
+    .leaflet-control-geocoder-form {
+      display: flex;
+
+      input {
+        width: 100%;
+        border-radius: 0;
+        border: none;
+        border-bottom: 1px solid $text-medium;
+        outline: none;
+        font-size: 20px;
+        font-family: inherit;
+        padding: 12px;
+        color: $text;
+        background-color: inherit;
+        font-weight: $font-weight-light;
+        letter-spacing: inherit;
+
+        &::placeholder {
+          color: $placeholder;
+        }
       }
     }
   }

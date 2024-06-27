@@ -19,6 +19,7 @@
     "firebase": "^10.11.0",
     "geolib": "^3.3.4",
     "leaflet": "^1.9.4",
+    "leaflet-control-geocoder": "^2.4.0",
     "openrouteservice-js": "^0.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

@@ -12,6 +12,7 @@ import { MapCenter } from './mapHelpers/MapCenter';
 import { Routing } from './mapHelpers/Routing';
 import { getRoute } from '../../services/map';
 import { IconContext } from 'react-icons';
+import { MapSearchAddress } from './mapHelpers/MapSearchAddress';
 
 interface NewMapProps {
   className?: string;
@@ -38,7 +39,11 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
     });
   };
 
-  const setCenterByPosition = (position: GeolocationPosition) => {
+  const setCenterByPosition = (
+    position:
+      | GeolocationPosition
+      | { coords: { latitude: number; longitude: number } }
+  ) => {
     setCenter({
       lat: position.coords.latitude,
       lng: position.coords.longitude,
@@ -117,6 +122,7 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
             }
           />
         </IconContext.Provider>
+        <MapSearchAddress setCenter={setCenterByPosition} />
         <MapEventHandler onMapClick={onCloseParkPopup} />
       </MapContainer>
       <ParkPopup

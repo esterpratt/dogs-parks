@@ -28,4 +28,5 @@ const Routing = ({ geoJSONObj }: RoutingProps) => {
 
   return null;
 };
+
 export { Routing };
