@@ -28,6 +28,11 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
       <div>
         <span>Special thanks to: </span>Kfir Arad, Rotem Koltz
       </div>
+      <div>
+        <span>You can help! </span>I would greatly appreciate it if you could:
+        Join the community, add friends, add details about your parks, and add
+        any missing parks you notice.
+      </div>
     </Modal>
   );
 };
