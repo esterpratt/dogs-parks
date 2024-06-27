@@ -37,7 +37,7 @@ const ThankYouModalContextProvider: React.FC<PropsWithChildren> = ({
     <ThankYouModalContext.Provider value={value}>
       {children}
       <Suspense fallback={<Loading />}>
-        <ThankYouModal />
+        <ThankYouModal open={isOpen} onClose={() => setIsOpen(false)} />
       </Suspense>
     </ThankYouModalContext.Provider>
   );

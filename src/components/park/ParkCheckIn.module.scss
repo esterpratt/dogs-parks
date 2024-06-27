@@ -1,25 +1,17 @@
 @import '../../variables.scss';
 
-.button {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  align-items: center;
-  width: 50px;
-
-  > span {
-    font-size: 10px;
-  }
+.checkin-icon,
+.checkout-icon {
+  color: $white;
+  fill: $white;
 }
 
 .checkin-icon {
-  color: $grey-bold;
-  fill: $grey-bold;
+  background-color: $text-medium;
 }
 
 .checkout-icon {
-  color: $green;
-  fill: $green;
+  background-color: $green;
 }
 
 .inputs-container {

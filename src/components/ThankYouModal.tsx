@@ -1,24 +1,24 @@
-import { useContext } from 'react';
 import { FaCheck } from 'react-icons/fa';
 import { IconContext } from 'react-icons';
 import { Modal } from './Modal';
 import styles from './ThankYouModal.module.scss';
-import { ThankYouModalContext } from '../context/ThankYouModalContext';
 
 interface ThankYouModalProps {
   title?: string;
+  open: boolean;
+  onClose: () => void;
 }
 
 const ThankYouModal: React.FC<ThankYouModalProps> = ({
   title = 'Good Boy!',
+  open,
+  onClose,
 }) => {
-  const { isOpen, setIsOpen } = useContext(ThankYouModalContext);
-
   return (
     <Modal
       autoClose
-      open={isOpen}
-      onClose={() => setIsOpen(false)}
+      open={open}
+      onClose={onClose}
       height="20%"
       className={styles.modal}
       variant="center"

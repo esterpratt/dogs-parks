@@ -1,9 +1,9 @@
 import { useContext, useState, lazy, Suspense } from 'react';
 import { Outlet, useParams } from 'react-router';
 import { LuTrees } from 'react-icons/lu';
+import { IoShareSocialSharp } from 'react-icons/io5';
 import classnames from 'classnames';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { queryClient } from '../services/react-query';
 import { IconContext } from 'react-icons';
 import { PiCameraFill } from 'react-icons/pi';
 import { ReviewsPreview } from '../components/park/ReviewsPreview';
@@ -16,14 +16,19 @@ import {
   fetchParkPrimaryImage,
   uploadParkPrimaryImage,
 } from '../services/parks';
+import { queryClient } from '../services/react-query';
 import { Loading } from '../components/Loading';
 import { ParkCheckIn } from '../components/park/ParkCheckIn';
+import { ParkIcon } from '../components/park/ParkIcon';
 
 const CameraModal = lazy(() => import('../components/camera/CameraModal'));
+const ThankYouModal = lazy(() => import('../components/ThankYouModal'));
 
 const Park: React.FC = () => {
   const { id: parkId } = useParams();
   const { user } = useContext(UserContext);
+  const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
+  const [isThankYouModalOpen, setIsThankYouModalOpen] = useState(false);
 
   const { data: park, isLoading } = useQuery({
     queryKey: ['parks', parkId],
@@ -38,8 +43,6 @@ const Park: React.FC = () => {
     },
   });
 
-  const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
-
   const { mutate } = useMutation({
     mutationFn: (img: string | File) => uploadParkPrimaryImage(img, parkId!),
     onSettled: () => {
@@ -52,6 +55,13 @@ const Park: React.FC = () => {
     mutate(img);
   };
 
+  const onClickShareButton = () => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(location.href);
+      setIsThankYouModalOpen(true);
+    }
+  };
+
   if (isLoading || isLoadingImage) {
     return <Loading />;
   }
@@ -62,20 +72,43 @@ const Park: React.FC = () => {
 
   return (
     <>
-      {primaryImage ? (
-        <img src={primaryImage} className={styles.image} />
-      ) : (
-        <div className={classnames(styles.image, styles.imageIcon)}>
-          <IconContext.Provider value={{ className: styles.parkIcon }}>
-            <LuTrees />
-          </IconContext.Provider>
-          {user && (
-            <IconContext.Provider value={{ className: styles.editPhotoIcon }}>
-              <PiCameraFill onClick={() => setIsAddImageModalOpen(true)} />
+      <div className={styles.imageContainer}>
+        {primaryImage ? (
+          <img src={primaryImage} className={styles.image} />
+        ) : (
+          <div className={classnames(styles.image, styles.imageIcon)}>
+            <IconContext.Provider value={{ className: styles.parkIcon }}>
+              <LuTrees />
             </IconContext.Provider>
-          )}
+          </div>
+        )}
+        <div className={styles.userEngagementRow}>
+          <div className={styles.userEngagementLeft}>
+            {user && !primaryImage && (
+              <IconContext.Provider value={{ className: styles.editPhotoIcon }}>
+                <PiCameraFill onClick={() => setIsAddImageModalOpen(true)} />
+              </IconContext.Provider>
+            )}
+          </div>
+          <div className={styles.userEngagementRight}>
+            <ParkIcon
+              iconCmp={<IoShareSocialSharp onClick={onClickShareButton} />}
+              iconClassName={styles.shareIcon}
+              textCmp={<span>Share</span>}
+            />
+            {user && (
+              <>
+                <FavoriteButton parkId={parkId!} userId={user.id} />
+                <ParkCheckIn
+                  parkId={parkId!}
+                  userId={user.id}
+                  userName={user.name}
+                />
+              </>
+            )}
+          </div>
         </div>
-      )}
+      </div>
       <div className={styles.contentContainer}>
         <div className={styles.basicDetails}>
           <div>
@@ -83,18 +116,8 @@ const Park: React.FC = () => {
             <span className={styles.address}>{park.address}</span>
             <ReviewsPreview />
           </div>
-          {user && (
-            <div className={styles.userEngagement}>
-              <FavoriteButton parkId={parkId!} userId={user.id} />
-              <ParkCheckIn
-                parkId={parkId!}
-                userId={user.id}
-                userName={user.name}
-              />
-            </div>
-          )}
         </div>
-        <ParkTabs parkId={parkId!} />
+        <ParkTabs parkId={parkId!} className={styles.tabs} />
         <div className={styles.outletContainer}>
           <Outlet context={park} />
         </div>
@@ -104,6 +127,13 @@ const Park: React.FC = () => {
           open={isAddImageModalOpen}
           setOpen={setIsAddImageModalOpen}
           onUploadImg={onUploadImg}
+        />
+      </Suspense>
+      <Suspense fallback={<Loading />}>
+        <ThankYouModal
+          open={isThankYouModalOpen}
+          onClose={() => setIsThankYouModalOpen(false)}
+          title="Park Copied to Clipboard"
         />
       </Suspense>
     </>

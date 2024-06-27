@@ -2,7 +2,6 @@ import { TiHeartFullOutline } from 'react-icons/ti';
 import classnames from 'classnames';
 import styles from './FavoriteButton.module.scss';
 import { useEffect, useState } from 'react';
-import { IconContext } from 'react-icons';
 import {
   addFavorite,
   fetchUserFavorites,
@@ -10,6 +9,7 @@ import {
 } from '../../services/favorites';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '../../services/react-query';
+import { ParkIcon } from './ParkIcon';
 
 interface FavoriteButtonProps {
   parkId: string;
@@ -52,17 +52,14 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ parkId, userId }) => {
   };
 
   return (
-    <div className={styles.container}>
-      <IconContext.Provider
-        value={{
-          size: '32',
-          className: classnames(styles.heart, isFavorite && styles.favorite),
-        }}
-      >
-        <TiHeartFullOutline onClick={toggleFavorite} />
-        <span>{isFavorite ? 'Unlike' : 'Like'}</span>
-      </IconContext.Provider>
-    </div>
+    <ParkIcon
+      iconCmp={<TiHeartFullOutline onClick={toggleFavorite} />}
+      iconClassName={classnames(
+        styles.heart,
+        isFavorite ? styles.favorite : styles.noFavorite
+      )}
+      textCmp={<span>{isFavorite ? 'Unlike' : 'Like'}</span>}
+    />
   );
 };
 

@@ -1,19 +1,18 @@
 import { useContext, useState, lazy, Suspense } from 'react';
 import { TbPennant, TbPennantOff } from 'react-icons/tb';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { checkin, checkout } from '../../services/checkins';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { Modal } from '../Modal';
 import { reportDogsCount } from '../../services/dogsCount';
-import { Button } from '../Button';
 import styles from './ParkCheckIn.module.scss';
-import { IconContext } from 'react-icons';
 import { useAddReview } from '../../hooks/api/useAddReview';
-import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '../../services/react-query';
 import { ThankYouModalContext } from '../../context/ThankYouModalContext';
 import { Loading } from '../Loading';
 import { fetchUserReviews } from '../../services/reviews';
 import { ControlledInput } from '../inputs/ControlledInput';
+import { ParkIcon } from './ParkIcon';
 
 const ReviewModal = lazy(() => import('../ReviewModal'));
 
@@ -21,7 +20,8 @@ const ParkCheckIn: React.FC<{
   parkId: string;
   userId: string;
   userName?: string;
-}> = ({ parkId, userId, userName }) => {
+  className?: string;
+}> = ({ parkId, userId, userName, className }) => {
   const { setIsOpen: setIsThankYouModalOpen } =
     useContext(ThankYouModalContext);
   const [checkIn, setCheckIn] = useLocalStorage('checkin');
@@ -110,28 +110,20 @@ const ParkCheckIn: React.FC<{
   };
 
   return (
-    <div>
-      <Button onClick={onCheckIn} className={styles.button}>
-        {!shouldCheckIn ? (
-          <>
-            <IconContext.Provider
-              value={{ className: styles.checkoutIcon, size: '32' }}
-            >
-              <TbPennantOff />
-            </IconContext.Provider>
-            <span>Check Out</span>
-          </>
-        ) : (
-          <>
-            <IconContext.Provider
-              value={{ className: styles.checkinIcon, size: '32' }}
-            >
-              <TbPennant />
-            </IconContext.Provider>
-            <span>Check In</span>
-          </>
-        )}
-      </Button>
+    <div className={className}>
+      <ParkIcon
+        iconCmp={
+          !shouldCheckIn ? (
+            <TbPennantOff onClick={onCheckIn} />
+          ) : (
+            <TbPennant onClick={onCheckIn} />
+          )
+        }
+        iconClassName={
+          !shouldCheckIn ? styles.checkoutIcon : styles.checkinIcon
+        }
+        textCmp={<span>{!shouldCheckIn ? 'Check Out' : 'Check In'}</span>}
+      />
       <Modal
         height="50%"
         open={openDogsCountModal}
