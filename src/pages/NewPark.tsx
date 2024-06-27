@@ -56,16 +56,11 @@ const NewPark: React.FC = () => {
   };
 
   const onAddPark = async () => {
-    if (
-      !markerLocation ||
-      !parkDetails.name ||
-      !parkDetails.address ||
-      !parkDetails.city
-    ) {
+    if (!markerLocation || !parkDetails.address || !parkDetails.city) {
       setError('Please fill in the missing details');
     } else {
       const newPark: NewParkDetails = {
-        name: parkDetails.name,
+        name: parkDetails.name || parkDetails.address,
         address: parkDetails.address,
         city: parkDetails.city,
         location: {
@@ -88,7 +83,7 @@ const NewPark: React.FC = () => {
       </div>
       <div className={styles.inputsContainer}>
         <ControlledInput
-          label="Park Name *"
+          label="Park Name"
           name="name"
           value={parkDetails.name}
           onChange={onChangeParkDetails}
@@ -124,10 +119,7 @@ const NewPark: React.FC = () => {
             onClick={onAddPark}
             className={styles.button}
             disabled={
-              !markerLocation ||
-              !parkDetails.name ||
-              !parkDetails.address ||
-              !parkDetails.city
+              !markerLocation || !parkDetails.address || !parkDetails.city
             }
           >
             Add Park
