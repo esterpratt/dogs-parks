@@ -37,25 +37,29 @@
 
 .basic-details {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
+  flex-direction: column;
   padding: 12px;
-
-  > :first-child {
-    display: flex;
-    flex-direction: column;
-  }
+  gap: 12px;
+  position: relative;
 }
 
 .name {
   font-size: $title-font-size;
-  margin-bottom: 10px;
   font-weight: $font-weight-medium;
 }
 
 .address {
   font-size: 14px;
-  margin-bottom: 10px;
+  margin-right: 10px;
+  padding-right: 10px;
+  position: relative;
+
+  &::after {
+    content: '|';
+    position: absolute;
+    right: -1px;
+    bottom: 1px;
+  }
 }
 
 .user-engagement-row {
@@ -88,6 +92,11 @@
 
 .tabs {
   padding: 0 12px;
+}
+
+.map-link {
+  color: $green;
+  font-size: 14px;
 }
 
 .outletContainer {

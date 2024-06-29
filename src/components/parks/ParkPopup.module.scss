@@ -73,6 +73,13 @@
   display: flex;
   justify-content: space-between;
   align-items: end;
+
+  span {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 .address-container {

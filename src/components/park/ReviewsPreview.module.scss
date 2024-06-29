@@ -1,3 +1,5 @@
+@import '../../variables.scss';
+
 .container {
   display: flex;
   align-items: center;
@@ -25,4 +27,5 @@
 
 .add-review-button {
   font-size: 12px;
+  color: $green;
 }

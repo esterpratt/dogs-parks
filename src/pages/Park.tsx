@@ -1,5 +1,5 @@
 import { useContext, useState, lazy, Suspense } from 'react';
-import { Outlet, useParams } from 'react-router';
+import { Outlet, useNavigate, useParams } from 'react-router';
 import { LuTrees } from 'react-icons/lu';
 import { IoShareSocialSharp } from 'react-icons/io5';
 import classnames from 'classnames';
@@ -20,6 +20,7 @@ import { queryClient } from '../services/react-query';
 import { Loading } from '../components/Loading';
 import { ParkCheckIn } from '../components/park/ParkCheckIn';
 import { ParkIcon } from '../components/park/ParkIcon';
+import { Button } from '../components/Button';
 
 const CameraModal = lazy(() => import('../components/camera/CameraModal'));
 const ThankYouModal = lazy(() => import('../components/ThankYouModal'));
@@ -27,6 +28,7 @@ const ThankYouModal = lazy(() => import('../components/ThankYouModal'));
 const Park: React.FC = () => {
   const { id: parkId } = useParams();
   const { user } = useContext(UserContext);
+  const navgiate = useNavigate();
   const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
   const [isThankYouModalOpen, setIsThankYouModalOpen] = useState(false);
 
@@ -60,6 +62,10 @@ const Park: React.FC = () => {
       navigator.clipboard.writeText(location.href);
       setIsThankYouModalOpen(true);
     }
+  };
+
+  const onClickMapLink = () => {
+    navgiate('/', { state: { location: park!.location } });
   };
 
   if (isLoading || isLoadingImage) {
@@ -111,11 +117,14 @@ const Park: React.FC = () => {
       </div>
       <div className={styles.contentContainer}>
         <div className={styles.basicDetails}>
+          <span className={styles.name}>{park.name}</span>
           <div>
-            <span className={styles.name}>{park.name}</span>
             <span className={styles.address}>{park.address}</span>
-            <ReviewsPreview />
+            <Button className={styles.mapLink} onClick={onClickMapLink}>
+              See in Map
+            </Button>
           </div>
+          <ReviewsPreview />
         </div>
         <ParkTabs parkId={parkId!} className={styles.tabs} />
         <div className={styles.outletContainer}>
