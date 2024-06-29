@@ -9,12 +9,20 @@ interface ParkGeneralsProps {
   size?: number;
   ground?: ParkMaterial[];
   facilities?: boolean;
-  shade?: boolean;
+  shade?: number;
   water?: boolean;
   parkId: string;
 }
 
 const NO_CONTENT = '?';
+
+const getNumberContent = (value?: number, sign?: string) => {
+  let content = NO_CONTENT;
+  if (value !== undefined && value !== null) {
+    content = `${value}${sign ? sign : ''}`;
+  }
+  return content;
+};
 
 const getBooleanContent = (value?: boolean) => {
   let content = NO_CONTENT;
@@ -68,7 +76,7 @@ const ParkGenerals = ({
   const sizeContent = getSizeContent(size);
   const groundContent = getListContent(ground);
   const facilitiesContent = getBooleanContent(facilities);
-  const shadeContent = getBooleanContent(shade);
+  const shadeContent = getNumberContent(shade, '%');
   const waterContent = getBooleanContent(water);
 
   return (
@@ -88,7 +96,22 @@ const ParkGenerals = ({
         content={facilitiesContent}
         color={styles.darkGreen}
       />
-      <DetailsSqaure title="Shade" content={shadeContent} color={styles.grey} />
+      <DetailsSqaure
+        title="Shade"
+        content={shadeContent}
+        color={styles.grey}
+        className={classnames(
+          styles.shade,
+          shadeContent === NO_CONTENT && styles.noContent
+        )}
+        style={{
+          background: `linear-gradient(to top, ${styles.grey} 0%, ${
+            styles.grey
+          } ${shade || 0}%, ${styles.transparentGrey} ${shade || 0}%, ${
+            styles.transparentGrey
+          } 100%)`,
+        }}
+      />
       <DetailsSqaure title="Water" content={waterContent} color={styles.blue} />
       <Link
         to="visitors"

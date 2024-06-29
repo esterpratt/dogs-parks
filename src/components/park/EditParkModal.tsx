@@ -9,6 +9,7 @@ import { queryClient } from '../../services/react-query';
 import { ControlledInput } from '../inputs/ControlledInput';
 import { MultiSelectInputs } from '../inputs/MultiSelectInputs';
 import { RadioInputs } from '../inputs/RadioInputs';
+import { RangeInput } from '../inputs/RangeInput';
 
 interface EditParksModalProps {
   isOpen: boolean;
@@ -39,11 +40,12 @@ const EditParkModal: React.FC<EditParksModalProps> = ({
     materials?: ParkMaterial[];
     hasFacilities?: string;
     size?: string;
-    hasShade?: string;
+    shade?: string;
     hasWater?: string;
   }>(() => {
     return {
       size: park.size?.toString(),
+      shade: park.shade?.toString(),
       hasFacilities:
         park.hasFacilities === false
           ? 'N'
@@ -51,7 +53,6 @@ const EditParkModal: React.FC<EditParksModalProps> = ({
           ? 'Y'
           : undefined,
       materials: park.materials,
-      hasShade: park.hasShade === false ? 'N' : park.hasShade ? 'Y' : undefined,
       hasWater: park.hasWater === false ? 'N' : park.hasWater ? 'Y' : undefined,
     };
   });
@@ -98,14 +99,15 @@ const EditParkModal: React.FC<EditParksModalProps> = ({
     const updatedData: {
       materials?: ParkMaterial[];
       size?: number;
-      hasShade?: boolean;
+      shade?: number;
       hasFacilities?: boolean;
       hasWater?: boolean;
     } = {};
 
     const materials = parkDetails.materials ? parkDetails.materials : undefined;
     const hasFacilities = getBooleanValue(parkDetails.hasFacilities);
-    const hasShade = getBooleanValue(parkDetails.hasShade);
+    const shade =
+      parkDetails.shade !== undefined ? Number(parkDetails.shade) : undefined;
     const hasWater = getBooleanValue(parkDetails.hasWater);
     const size =
       parkDetails.size !== undefined ? Number(parkDetails.size) : undefined;
@@ -113,11 +115,11 @@ const EditParkModal: React.FC<EditParksModalProps> = ({
     if (size !== undefined) {
       updatedData.size = size;
     }
+    if (shade !== undefined) {
+      updatedData.shade = shade;
+    }
     if (materials?.length) {
       updatedData.materials = materials;
-    }
-    if (hasShade !== undefined) {
-      updatedData.hasShade = hasShade;
     }
     if (hasWater !== undefined) {
       updatedData.hasWater = hasWater;
@@ -148,7 +150,7 @@ const EditParkModal: React.FC<EditParksModalProps> = ({
               value={parkDetails.size?.toString() || ''}
               onChange={onInputChange}
               name="size"
-              label="Size"
+              label="Size (in meters)"
             />
           )}
           {!park.materials && (
@@ -174,16 +176,12 @@ const EditParkModal: React.FC<EditParksModalProps> = ({
               label="Has Facilities?"
             />
           )}
-          {park.hasShade === undefined && (
-            <RadioInputs
-              value={parkDetails.hasShade || ''}
-              options={[
-                { value: 'Y', id: 'yes' },
-                { value: 'N', id: 'no' },
-              ]}
-              onOptionChange={onInputChange}
-              name="hasShade"
-              label="Has Shade?"
+          {park.shade === undefined && (
+            <RangeInput
+              label="Daily Shade Hours"
+              name="shade"
+              value={parkDetails.shade?.toString() || ''}
+              onChange={onInputChange}
             />
           )}
           {park.hasWater === undefined && (

@@ -17,7 +17,7 @@ interface Park {
   size?: number;
   pics?: [];
   materials?: ParkMaterial[];
-  hasShade?: boolean;
+  shade?: number;
   hasWater?: boolean;
   hasFacilities?: boolean;
 }

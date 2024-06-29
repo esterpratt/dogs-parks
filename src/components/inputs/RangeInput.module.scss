@@ -1,0 +1,86 @@
+@import '../../variables.scss';
+
+$bubbleWidth: 44;
+$thumbWidth: 20;
+
+.container {
+  position: relative;
+}
+
+.input {
+  padding: 36px 0 16px;
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
+  background-color: transparent;
+
+  &::-webkit-slider-runnable-track {
+    background-color: $text-light;
+    border: none;
+    border-radius: 24px;
+    width: 100%;
+    height: 12px;
+    padding: 0;
+    margin: 0;
+  }
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: #{$thumbWidth}px;
+    width: #{$thumbWidth}px;
+    background-color: $orange;
+    border-radius: 50%;
+    margin-top: -4px;
+  }
+}
+
+.min,
+.max {
+  position: absolute;
+  bottom: -4px;
+  font-size: 12px;
+}
+
+.min {
+  left: 4px;
+}
+
+.max {
+  right: 0;
+}
+
+.output {
+  position: absolute;
+  top: 28px;
+  left: 0;
+  width: #{$bubbleWidth}px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  border: 1px solid $orange;
+  border-radius: 4px;
+  background-color: $orange;
+  color: $white;
+  font-weight: $font-weight-medium;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -12px; /* Adjust this based on where you want the triangle */
+    left: 50%;
+    transform: translate(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid $orange;
+    border-bottom: 6px solid transparent;
+  }
+}
+
+:export {
+  bubbleWidth: $bubbleWidth;
+  thumbWidth: $thumbWidth;
+}

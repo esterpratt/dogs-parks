@@ -9,6 +9,10 @@
   font-size: 14px;
 }
 
+.shade:not(.no-content) {
+  font-size: 16px;
+}
+
 .link {
   text-decoration: none;
   color: inherit;
@@ -25,4 +29,5 @@
   orange: $orange;
   brown: $brown;
   grey: $grey;
+  transparentGrey: #95b2bb;
 }

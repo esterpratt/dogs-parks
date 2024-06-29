@@ -1,3 +1,4 @@
+import { CSSProperties } from 'react';
 import styles from './DetailsSquare.module.scss';
 import classnames from 'classnames';
 
@@ -6,6 +7,7 @@ interface DetailsSqaureProps {
   content?: string;
   title: string;
   className?: string;
+  style?: CSSProperties;
 }
 
 const DetailsSqaure = ({
@@ -13,6 +15,7 @@ const DetailsSqaure = ({
   content = '?',
   color,
   className,
+  style = {},
 }: DetailsSqaureProps) => {
   return (
     <div className={styles.container}>
@@ -20,6 +23,7 @@ const DetailsSqaure = ({
         className={classnames(styles.square, className)}
         style={{
           backgroundColor: color,
+          ...style,
         }}
       >
         {content}

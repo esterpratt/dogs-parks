@@ -34,7 +34,7 @@ const ParkDetails = () => {
             size={park.size}
             ground={park.materials}
             facilities={park.hasFacilities}
-            shade={park.hasShade}
+            shade={park.shade}
             water={park.hasWater}
           />
         </AccordionContainer.Content>
