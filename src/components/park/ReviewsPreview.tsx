@@ -21,7 +21,7 @@ const ReviewsPreview = () => {
     queryFn: () => fetchReviews(parkId!),
   });
   const { data: rank, isLoading: isLoadingRank } = useQuery({
-    queryKey: ['reviews', 'rank', parkId],
+    queryKey: ['reviews', parkId, 'rank'],
     queryFn: () => fetchParkRank(parkId!),
   });
 
