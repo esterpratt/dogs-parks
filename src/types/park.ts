@@ -28,6 +28,7 @@ interface NewParkDetails {
   address: string;
   size?: number;
   location: Location;
+  userId: string | null;
 }
 
 type ParkForLists = Pick<Park, 'id' | 'location' | 'name' | 'city' | 'address'>;

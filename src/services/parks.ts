@@ -13,6 +13,7 @@ import { Park, ParkForLists } from '../types/park';
 import { fetchImagesByDirectory, uploadImage } from './image';
 import { AppError, throwError } from './error';
 
+const mail = 'esterpratt@gmail.com';
 const parksCollection = collection(db, 'parks');
 const suggestedParksCollection = collection(db, 'suggestedParks');
 
@@ -70,11 +71,17 @@ const createPark = async (
 ) => {
   try {
     const res = await addDoc(suggestedParksCollection, {
-      ...parkDetails,
-      location: new GeoPoint(
-        parkDetails.location.latitude,
-        parkDetails.location.longitude
-      ),
+      to: [mail],
+      message: {
+        subject: 'A new park was suggested',
+        text: `The park details are: ${JSON.stringify({
+          ...parkDetails,
+          location: new GeoPoint(
+            parkDetails.location.latitude,
+            parkDetails.location.longitude
+          ),
+        })}`,
+      },
     });
     return res.id;
   } catch (error) {

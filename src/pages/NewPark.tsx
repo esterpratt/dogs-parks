@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useContext, useState } from 'react';
 import styles from './NewPark.module.scss';
 import classnames from 'classnames';
 import { Location, NewParkDetails } from '../types/park';
@@ -11,6 +11,7 @@ import { useMutation } from '@tanstack/react-query';
 import { queryClient } from '../services/react-query';
 import { LeafletMouseEvent } from 'leaflet';
 import { addParkEvent } from '../services/events';
+import { UserContext } from '../context/UserContext';
 
 const NewPark: React.FC = () => {
   const [markerLocation, setMarkerLocation] = useState<Location | null>(null);
@@ -21,6 +22,7 @@ const NewPark: React.FC = () => {
     size: '',
   });
   const [error, setError] = useState('');
+  const { user } = useContext(UserContext);
   const navigate = useNavigate();
 
   const { mutate } = useMutation({
@@ -67,10 +69,12 @@ const NewPark: React.FC = () => {
           latitude: markerLocation.latitude,
           longitude: markerLocation.longitude,
         },
+        userId: user ? user.id : null,
       };
       if (parkDetails.size) {
         newPark.size = Number(parkDetails.size);
       }
+
       mutate(newPark);
     }
   };
