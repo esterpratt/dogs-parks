@@ -63,7 +63,7 @@ const Camera: React.FC<CustomWebcamProps> = ({
               videoConstraints={{ facingMode }}
               onUserMediaError={onError}
               className={styles.cameraView}
-              mirrored
+              mirrored={facingMode === 'user'}
             />
           </div>
           <div className={styles.captureButtonsContainer}>
