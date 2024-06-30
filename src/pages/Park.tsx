@@ -119,7 +119,9 @@ const Park: React.FC = () => {
         <div className={styles.basicDetails}>
           <span className={styles.name}>{park.name}</span>
           <div>
-            <span className={styles.address}>{park.address}</span>
+            <span className={styles.address}>
+              {park.address}, {park.city}
+            </span>
             <Button className={styles.mapLink} onClick={onClickMapLink}>
               See in Map
             </Button>

@@ -94,6 +94,12 @@
   font-size: 14px;
 }
 
+.address {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .directions-container {
   display: flex;
   flex-direction: column;
