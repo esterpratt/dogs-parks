@@ -88,6 +88,7 @@ const ParkGenerals = ({
         color={styles.brown}
         className={classnames(
           styles.ground,
+          ground?.length && ground?.length > 2 && styles.long,
           groundContent === NO_CONTENT && styles.noContent
         )}
       />

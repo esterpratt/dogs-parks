@@ -6,7 +6,16 @@
 }
 
 .ground:not(.no-content) {
-  font-size: 14px;
+  letter-spacing: -0.2px;
+
+  &:not(.long) {
+    font-size: 12px;
+    word-spacing: 50px;
+  }
+
+  &.long {
+    font-size: 10px;
+  }
 }
 
 .shade:not(.no-content) {
