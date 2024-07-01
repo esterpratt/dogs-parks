@@ -38,6 +38,11 @@
   }
 }
 
+.rotation-buttons {
+  display: flex;
+  gap: 8px;
+}
+
 .recapture-button,
 .save-button,
 .cancel-button {

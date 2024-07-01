@@ -1,10 +1,13 @@
 import React, { useCallback, useRef, useState } from 'react';
 import Webcam from 'react-webcam';
+import { IconContext } from 'react-icons';
 import { FaArrowsRotate } from 'react-icons/fa6';
+import { CgClose } from 'react-icons/cg';
+import { AiOutlineRotateLeft } from 'react-icons/ai';
+import { AiOutlineRotateRight } from 'react-icons/ai';
 import styles from './Camera.module.scss';
 import { Button } from '../Button';
-import { IconContext } from 'react-icons';
-import { CgClose } from 'react-icons/cg';
+import { rotateImage } from '../../utils/dom';
 
 interface CustomWebcamProps {
   onSaveImg: (img: string) => void;
@@ -35,6 +38,14 @@ const Camera: React.FC<CustomWebcamProps> = ({
     onSaveImg(img!);
   };
 
+  const rotateImgLeft = () => {
+    rotateImage({ imageSrc: img!, rotation: -90, cb: setImg });
+  };
+
+  const rotateImgRight = () => {
+    rotateImage({ imageSrc: img!, rotation: 90, cb: setImg });
+  };
+
   if (!isOpen) {
     return null;
   }
@@ -47,11 +58,17 @@ const Camera: React.FC<CustomWebcamProps> = ({
             <img src={img} alt="screenshot" className={styles.cameraView} />
           </div>
           <div className={styles.buttonsContainer}>
-            <Button className={styles.saveButton} onClick={onClickSaveImage}>
-              Save
-            </Button>
+            <div className={styles.rotationButtons}>
+              <IconContext.Provider value={{ className: styles.icons }}>
+                <AiOutlineRotateLeft onClick={rotateImgLeft} />
+                <AiOutlineRotateRight onClick={rotateImgRight} />
+              </IconContext.Provider>
+            </div>
             <Button className={styles.recaptureButton} onClick={recapture}>
               Recapture
+            </Button>
+            <Button className={styles.saveButton} onClick={onClickSaveImage}>
+              Save
             </Button>
           </div>
         </>
