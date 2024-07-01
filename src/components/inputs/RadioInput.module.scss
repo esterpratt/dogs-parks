@@ -6,8 +6,23 @@
   justify-content: center;
   position: relative;
   padding: 16px 20px;
-  flex-grow: 1;
   color: $text-medium;
+  height: 50px;
+
+  &:first-child:nth-last-child(2),
+  &:first-child:nth-last-child(2) ~ .input {
+    width: fit-content;
+  }
+
+  &:first-child:nth-last-child(3),
+  &:first-child:nth-last-child(3) ~ .input {
+    width: 33.3333%;
+  }
+
+  &:first-child:nth-last-child(4),
+  &:first-child:nth-last-child(4) ~ .input {
+    width: 25%;
+  }
 
   &.checked {
     background-color: $orange;

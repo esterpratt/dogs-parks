@@ -158,6 +158,10 @@ const EditParkModal: React.FC<EditParksModalProps> = ({
               options={[
                 { id: ParkMaterial.SAND, value: ParkMaterial.SAND },
                 { id: ParkMaterial.GRASS, value: ParkMaterial.GRASS },
+                {
+                  id: ParkMaterial.SYNTHETIC_GRASS,
+                  value: ParkMaterial.SYNTHETIC_GRASS,
+                },
               ]}
               value={parkDetails.materials || []}
               onInputChange={onInputChange}

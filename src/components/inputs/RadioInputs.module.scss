@@ -8,11 +8,15 @@
 }
 
 .options {
-  width: fit-content;
   display: flex;
   background-color: white;
   border: 1px solid $grey-bold;
   border-radius: 18px;
+  width: fit-content;
+
+  &:has(> *:nth-child(3)) {
+    width: 100%;
+  }
 }
 
 .name {

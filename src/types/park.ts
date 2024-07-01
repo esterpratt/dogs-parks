@@ -5,6 +5,7 @@ interface Location {
 
 enum ParkMaterial {
   GRASS = 'grass',
+  SYNTHETIC_GRASS = 'Synthetic grass',
   SAND = 'sand',
 }
 
