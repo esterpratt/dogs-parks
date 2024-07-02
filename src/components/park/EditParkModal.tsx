@@ -166,6 +166,7 @@ const EditParkModal: React.FC<EditParksModalProps> = ({
               value={parkDetails.materials || []}
               onInputChange={onInputChange}
               name="materials"
+              label="Ground Covering"
             />
           )}
           {park.hasFacilities === undefined && (
@@ -177,7 +178,7 @@ const EditParkModal: React.FC<EditParksModalProps> = ({
               ]}
               onOptionChange={onInputChange}
               name="hasFacilities"
-              label="Has Facilities?"
+              label="Contains Facilities?"
             />
           )}
           {park.shade === undefined && (
@@ -197,7 +198,7 @@ const EditParkModal: React.FC<EditParksModalProps> = ({
               ]}
               onOptionChange={onInputChange}
               name="hasWater"
-              label="Has Water?"
+              label="Contains Drinking Fountains?"
             />
           )}
         </div>

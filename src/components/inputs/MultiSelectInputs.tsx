@@ -5,6 +5,7 @@ import { MultiSelectInput } from './MultiSelectInput';
 interface MultiSelectInputsProps {
   options: { id: string; value: string }[];
   name: string;
+  label: string;
   value?: string[];
   onInputChange: (
     event: ChangeEvent<HTMLInputElement>,
@@ -16,6 +17,7 @@ const MultiSelectInputs: React.FC<MultiSelectInputsProps> = ({
   options,
   name,
   value = [],
+  label,
   onInputChange,
 }) => {
   const onOptionChange = (
@@ -34,7 +36,7 @@ const MultiSelectInputs: React.FC<MultiSelectInputsProps> = ({
 
   return (
     <div className={styles.container}>
-      <div className={styles.name}>{name}</div>
+      <div className={styles.name}>{label}</div>
       <div className={styles.options}>
         {options.map((option) => {
           return (
