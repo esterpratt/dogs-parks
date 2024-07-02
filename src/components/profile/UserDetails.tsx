@@ -16,7 +16,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, className }) => {
             <div>Name:</div>
           </td>
           <td>
-            <div>{user.name}</div>
+            <div className={styles.name}>{user.name}</div>
           </td>
         </tr>
       </tbody>

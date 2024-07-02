@@ -48,7 +48,8 @@ const DogDetails: React.FC<DogProps> = ({
         >
           {isSignedInUser
             ? `Add your dog's details`
-            : `${userName} did not add their dog's details yet`}
+            : <span className={styles.userName}>{userName}</span> +
+              `did not add their dog's details yet`}
         </Button>
       )}
       {!!existedData.length && (

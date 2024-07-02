@@ -86,7 +86,13 @@ const UserDog = () => {
     <>
       <div className={styles.container}>
         <Link to=".." relative="path" className={styles.prevLink}>
-          <span>Back to {isSignedInUser ? 'My' : `${userName}'s`} Pack</span>
+          <span>Back to </span>
+          {isSignedInUser ? (
+            <span>my</span>
+          ) : (
+            <span className={styles.userName}>{userName}'s</span>
+          )}
+          <span> pack</span>
         </Link>
         <div className={styles.importantDetails}>
           <div className={styles.imgContainer}>

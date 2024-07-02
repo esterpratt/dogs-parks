@@ -30,9 +30,6 @@
 
 .title-text {
   margin-bottom: 18px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   font-size: $title-font-size;
 }
 
@@ -54,4 +51,8 @@
 .friend-request-button {
   margin: 32px 0;
   text-align: center;
+}
+
+.name {
+  text-transform: capitalize;
 }

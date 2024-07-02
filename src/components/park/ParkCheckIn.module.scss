@@ -32,4 +32,8 @@
 .title {
   font-size: $second-title-font-size;
   margin-bottom: 32px;
+
+  span {
+    text-transform: capitalize;
+  }
 }

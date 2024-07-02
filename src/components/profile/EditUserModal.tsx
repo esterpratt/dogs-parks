@@ -18,10 +18,14 @@ interface EditUserModalProps {
 }
 
 const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose }) => {
-  const { user } = useContext(UserContext);
+  const { user, refetchUser } = useContext(UserContext);
   const [userData, setUserData] = useState(user);
   const { setIsOpen: setIsThankYouModalOpen } =
     useContext(ThankYouModalContext);
+
+  useEffect(() => {
+    setUserData(user);
+  }, [user]);
 
   const { mutate: mutateUser } = useMutation({
     mutationFn: (data: UpdateUserProps) =>
@@ -45,7 +49,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose }) => {
       setIsThankYouModalOpen(true);
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['user', 'me', user!.id] });
+      refetchUser();
     },
   });
 
@@ -83,7 +87,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose }) => {
       <div className={styles.title}>Update your details</div>
       <form className={styles.form}>
         <ControlledInput
-          value={userData!.name || ''}
+          value={userData?.name || ''}
           onChange={onInputChange}
           name="name"
           label="Name"

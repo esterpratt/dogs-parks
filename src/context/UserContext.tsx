@@ -38,6 +38,7 @@ interface UserContextObj {
   error: string;
   setError: Dispatch<React.SetStateAction<string>>;
   isLoading: boolean;
+  refetchUser: () => void;
 }
 
 const initialData: UserContextObj = {
@@ -50,6 +51,7 @@ const initialData: UserContextObj = {
   setError: () => {},
   error: '',
   isLoading: false,
+  refetchUser: () => {},
 };
 
 const UserContext = createContext<UserContextObj>(initialData);
@@ -172,6 +174,7 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     error,
     setError,
     isLoading,
+    refetchUser,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

@@ -72,17 +72,25 @@ const UserDogs = () => {
             </Link>
           </div>
         )}
-        {dogs.length ? (
-          <span className={styles.titleText}>
-            {isSignedInUser ? 'My' : `${user.name}'s`} pack
-          </span>
-        ) : (
-          <span>
-            {isSignedInUser
-              ? `Your dog squad is looking pretty empty!
-              Time to recruit some furry friends!`
-              : `${user.name} pack seems to be empty`}
-          </span>
+        {!!dogs.length && (
+          <div className={styles.titleText}>
+            <span className={styles.name}>
+              {isSignedInUser ? 'My' : `${user.name}'s`}
+            </span>{' '}
+            pack
+          </div>
+        )}
+        {!dogs.length && isSignedInUser && (
+          <div>
+            Your dog squad is looking pretty empty! Time to recruit some furry
+            friends!
+          </div>
+        )}
+        {!dogs.length && !isSignedInUser && (
+          <div>
+            <span className={styles.name}>{user.name}'s </span>
+            <span>pack seems to be empty</span>
+          </div>
         )}
         <div className={styles.dogs}>
           {dogs.map((dog, index) => (

@@ -132,7 +132,9 @@ const ParkCheckIn: React.FC<{
         saveButtonDisabled={!dogsCount && dogsCount !== '0'}
         className={styles.modalContent}
       >
-        <div className={styles.title}>Enjoy your stay, {userName}!</div>
+        <div className={styles.title}>
+          Enjoy your stay, <span>{userName}!</span>
+        </div>
         <div className={styles.inputsContainer}>
           <ControlledInput
             type="number"
