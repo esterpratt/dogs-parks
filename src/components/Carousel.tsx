@@ -4,17 +4,34 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { FaPlus } from 'react-icons/fa';
 import classnames from 'classnames';
+import { IconContext } from 'react-icons';
+import { FaTrashAlt } from 'react-icons/fa';
 import styles from './Carousel.module.scss';
 import { Modal } from './Modal';
-import { IconContext } from 'react-icons';
+import { Button } from './Button';
 
 interface CarouselProps {
   images: string[];
   addImage?: (() => void) | null;
+  removeImage?: ((imgPath: string) => void) | null;
 }
 
-const Carousel: React.FC<CarouselProps> = ({ images = [], addImage }) => {
+const Carousel: React.FC<CarouselProps> = ({
+  images = [],
+  addImage,
+  removeImage,
+}) => {
   const [imageToEnlarge, setImageToEnlarge] = useState<string>('');
+  const [isApproveDeleteModalOpen, setIsApproveDeleteModalOpen] =
+    useState(false);
+
+  const onDeleteImage = () => {
+    if (removeImage) {
+      removeImage(imageToEnlarge);
+    }
+    setIsApproveDeleteModalOpen(false);
+    setImageToEnlarge('');
+  };
 
   const settings = {
     className: 'center',
@@ -55,6 +72,25 @@ const Carousel: React.FC<CarouselProps> = ({ images = [], addImage }) => {
         </Slider>
       </div>
       <Modal
+        open={isApproveDeleteModalOpen}
+        onClose={() => setIsApproveDeleteModalOpen(false)}
+        height="30%"
+        variant="center"
+        className={styles.approveModal}
+      >
+        <span className={styles.approveTitle}>
+          Hold your leash! Are you sure you want to send this pic to the
+          doghouse?
+        </span>
+        <Button
+          variant="danger"
+          onClick={onDeleteImage}
+          className={styles.deleteButton}
+        >
+          Delete
+        </Button>
+      </Modal>
+      <Modal
         open={!!imageToEnlarge}
         onClose={() => setImageToEnlarge('')}
         width="95%"
@@ -63,7 +99,12 @@ const Carousel: React.FC<CarouselProps> = ({ images = [], addImage }) => {
         className={styles.modal}
       >
         <div className={styles.modalImage}>
-          <img src={imageToEnlarge}></img>
+          <img src={imageToEnlarge} />
+          {!!removeImage && (
+            <IconContext.Provider value={{ className: styles.trashIcon }}>
+              <FaTrashAlt onClick={() => setIsApproveDeleteModalOpen(true)} />
+            </IconContext.Provider>
+          )}
         </div>
       </Modal>
     </>

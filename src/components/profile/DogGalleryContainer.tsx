@@ -7,6 +7,7 @@ import { AccordionContainer } from '../accordion/AccordionContainer';
 import { DogGallery } from './DogGallery';
 import { queryClient } from '../../services/react-query';
 import { Loading } from '../Loading';
+import { deleteImage } from '../../services/image';
 
 const CameraModal = lazy(() => import('../camera/CameraModal'));
 
@@ -33,6 +34,17 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
   const { mutate } = useMutation({
     mutationFn: (img: string | File) => uploadDogImage(img, dog.id),
     onSuccess: async () => {
+      queryClient.invalidateQueries({
+        queryKey: ['dogImages', dog.id],
+      });
+    },
+  });
+
+  const { mutate: removeImage } = useMutation({
+    mutationFn: (imgPath: string) => {
+      return deleteImage(imgPath);
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({
         queryKey: ['dogImages', dog.id],
       });
@@ -71,6 +83,7 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
             dog={dog}
             isSignedInUser={isSignedInUser}
             openCameraModal={openCameraModal}
+            removeImage={isSignedInUser ? removeImage : null}
           />
         </AccordionContainer.Content>
       </AccordionContainer>

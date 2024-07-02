@@ -15,9 +15,9 @@
   background-color: $black;
 
   img {
-    height: 100%;
+    height: 80%;
     width: 100%;
-    object-fit: contain;
+    object-fit: cover;
   }
 }
 
@@ -41,4 +41,28 @@
   color: $white;
   width: 42px;
   height: 42px;
+}
+
+.trash-icon {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 24px;
+  height: 24px;
+  color: $green;
+}
+
+.approve-modal {
+  padding: 56px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.approve-title {
+  font-size: $second-title-font-size;
+}
+
+.delete-button {
+  margin: 0 auto;
 }

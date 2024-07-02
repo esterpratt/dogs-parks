@@ -1,5 +1,12 @@
 import imageCompression from 'browser-image-compression';
-import { ref, uploadBytes, listAll, getDownloadURL } from 'firebase/storage';
+import {
+  ref,
+  uploadBytes,
+  listAll,
+  getDownloadURL,
+  deleteObject,
+  getStorage,
+} from 'firebase/storage';
 import { storage } from './firebase-config';
 import { v4 } from 'uuid';
 
@@ -33,4 +40,15 @@ const fetchImagesByDirectory = async (path: string) => {
   return images;
 };
 
-export { uploadImage, fetchImagesByDirectory };
+const deleteImage = async (path: string) => {
+  try {
+    const storage = getStorage();
+    const ImageRef = ref(storage, path);
+
+    await deleteObject(ImageRef);
+  } catch (error) {
+    console.error('sorry, there was a problem deleting the image');
+  }
+};
+
+export { uploadImage, fetchImagesByDirectory, deleteImage };

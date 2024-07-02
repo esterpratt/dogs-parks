@@ -19,6 +19,12 @@
     padding: 12px 24px;
   }
 
+  &.danger {
+    color: $white;
+    background-color: $red;
+    padding: 12px 24px;
+  }
+
   &.orange {
     color: $white;
     background-color: $orange;
