@@ -64,4 +64,4 @@ const createPark = async (
   }
 };
 
-export { createReport, createPark };
+export { createReport, createPark, MAIL };

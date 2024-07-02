@@ -1,6 +1,7 @@
 import { Modal } from './Modal';
 import styles from './AboutModal.module.scss';
 import { Link } from 'react-router-dom';
+import { MAIL } from '../services/reports';
 
 interface AboutModalProps {
   open: boolean;
@@ -16,22 +17,24 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
       height="65%"
       className={styles.modalContent}
     >
-      <h3>About Klavhub</h3>
+      <h3>ברוכים הבאים לקלאבהאב!</h3>
       <div>
-        <span>Created by: </span>
-        <Link to="https://github.com/esterpratt">Ester Pratt</Link>
+        <span>האפליקציה נוצרה על ידי: </span>
+        <Link to="https://github.com/esterpratt">אסתר פרת</Link>
       </div>
       <div>
-        <span>Inspired by: </span>
-        My special dog Nina, the dog that isn't hanging at dogs' parks
+        <span>בהשראת: </span>
+        הכלבה המיוחדת שלי נינה, הכלבה שלא הולכת לגינות כלבים
       </div>
       <div>
-        <span>Special thanks to: </span>Kfir Arad, Rotem Koltz
+        <span>תודה מיוחדת ל: </span>כפיר ארד, רותם קולץ
       </div>
       <div>
-        <span>You can help! </span>I would greatly appreciate it if you could:
-        Join the community, add friends, add details about your parks, and add
-        any missing parks you notice. Thanks!
+        <span>אשמח לעזרתכם! </span>
+        {`האפליקציה בתחילת דרכה. אשמח לעזרתכם בהצטרפות
+        לקהילה, הזמנת חברים, הוספת פרטים על הגינה שלכם, והוספת גינות אם אינן
+        קיימות באפליקציה. לכל הצעה, הערה והארה מוזמנים לשלוח לי מייל: 
+        ${MAIL}`}
       </div>
     </Modal>
   );
