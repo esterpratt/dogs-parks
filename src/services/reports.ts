@@ -1,3 +1,4 @@
+import { MAIL } from '../utils/constants';
 import { db } from './firebase-config';
 import { addDoc, collection } from 'firebase/firestore';
 
@@ -9,13 +10,24 @@ interface CreateReportProps {
   text: string;
 }
 
-const createReport = async ({ userId, parkId, text }: CreateReportProps) => {
+const createReport = async ({
+  userId,
+  parkId,
+  text: reportBody,
+}: CreateReportProps) => {
   try {
     const res = await addDoc(reportsCollection, {
-      userId,
-      parkId,
-      text,
+      to: [MAIL],
+      message: {
+        subject: 'A report regarding a park was created',
+        text: `${JSON.stringify({
+          userId,
+          parkId,
+          reportBody,
+        })}`,
+      },
     });
+
     return res.id;
   } catch (error) {
     console.error(
