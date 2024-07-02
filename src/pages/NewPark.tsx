@@ -5,7 +5,7 @@ import { Location, NewParkDetails } from '../types/park';
 import { ControlledInput } from '../components/inputs/ControlledInput';
 import { Button } from '../components/Button';
 import { LocationInput } from '../components/inputs/LocationInput';
-import { createPark } from '../services/parks';
+import { createPark } from '../services/reports';
 import { useNavigate } from 'react-router';
 import { useMutation } from '@tanstack/react-query';
 import { queryClient } from '../services/react-query';

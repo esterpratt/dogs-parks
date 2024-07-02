@@ -1,8 +1,10 @@
-import { MAIL } from '../utils/constants';
+import { Park } from '../types/park';
 import { db } from './firebase-config';
-import { addDoc, collection } from 'firebase/firestore';
+import { GeoPoint, addDoc, collection } from 'firebase/firestore';
 
 const reportsCollection = collection(db, 'reports');
+
+const MAIL = 'esterpratt@gmail.com';
 
 interface CreateReportProps {
   userId: string;
@@ -37,4 +39,29 @@ const createReport = async ({
   }
 };
 
-export { createReport };
+const createPark = async (
+  parkDetails: Pick<Park, 'address' | 'city' | 'name' | 'location'> &
+    Partial<Park>
+) => {
+  try {
+    const res = await addDoc(reportsCollection, {
+      to: [MAIL],
+      message: {
+        subject: 'A new park was suggested',
+        text: `The park details are: ${JSON.stringify({
+          ...parkDetails,
+          location: new GeoPoint(
+            parkDetails.location.latitude,
+            parkDetails.location.longitude
+          ),
+        })}`,
+      },
+    });
+    return res.id;
+  } catch (error) {
+    console.error(`there was an error while creating park: ${error}`);
+    return null;
+  }
+};
+
+export { createReport, createPark };

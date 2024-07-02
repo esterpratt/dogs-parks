@@ -4,7 +4,6 @@ import {
   collection,
   doc,
   getDoc,
-  addDoc,
   GeoPoint,
   updateDoc,
 } from 'firebase/firestore';
@@ -12,10 +11,8 @@ import { ref, getDownloadURL } from 'firebase/storage';
 import { Park, ParkForLists } from '../types/park';
 import { fetchImagesByDirectory, uploadImage } from './image';
 import { AppError, throwError } from './error';
-import { MAIL } from '../utils/constants';
 
 const parksCollection = collection(db, 'parks');
-const suggestedParksCollection = collection(db, 'suggestedParks');
 
 const fetchParksJSON = async () => {
   try {
@@ -62,31 +59,6 @@ const fetchPark = async (parkId: string) => {
     } as Park;
   } catch (error) {
     throwError(error);
-  }
-};
-
-const createPark = async (
-  parkDetails: Pick<Park, 'address' | 'city' | 'name' | 'location'> &
-    Partial<Park>
-) => {
-  try {
-    const res = await addDoc(suggestedParksCollection, {
-      to: [MAIL],
-      message: {
-        subject: 'A new park was suggested',
-        text: `The park details are: ${JSON.stringify({
-          ...parkDetails,
-          location: new GeoPoint(
-            parkDetails.location.latitude,
-            parkDetails.location.longitude
-          ),
-        })}`,
-      },
-    });
-    return res.id;
-  } catch (error) {
-    console.error(`there was an error while creating park: ${error}`);
-    return null;
   }
 };
 
@@ -157,6 +129,5 @@ export {
   uploadParkPrimaryImage,
   fetchParkPrimaryImage,
   fetchAllParkImages,
-  createPark,
   updatePark,
 };
