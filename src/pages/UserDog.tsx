@@ -42,7 +42,7 @@ const UserDog = () => {
     },
   });
 
-  const { data: primaryImage, isLoading: isLoadingImage } = useQuery({
+  const { data: primaryImage } = useQuery({
     queryKey: ['dogImage', dogId],
     queryFn: async () => {
       const images = await fetchDogPrimaryImage(dogId!);
@@ -81,7 +81,7 @@ const UserDog = () => {
     setDogImage(img);
   };
 
-  if (isLoadingDog || isLoadingImage) {
+  if (isLoadingDog) {
     return <Loader />;
   }
 
