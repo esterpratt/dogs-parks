@@ -85,7 +85,7 @@ const Modal: React.FC<ModalProps> = ({
         {children}
       </div>
       {onSave && (
-        <ModalSaveButton disabled={saveButtonDisabled} onClick={onSave} />
+        <ModalSaveButton disabled={saveButtonDisabled} onSave={onSave} />
       )}
     </dialog>,
     document.getElementById('modal')!

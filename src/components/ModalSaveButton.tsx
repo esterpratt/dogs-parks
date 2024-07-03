@@ -3,20 +3,23 @@ import { Button } from './Button';
 import styles from './ModalSaveButton.module.scss';
 
 interface ModalSaveButtonProps {
-  onClick: (event: MouseEvent<HTMLButtonElement>) => void;
+  onSave: (event: MouseEvent<HTMLButtonElement>) => void;
   disabled?: boolean;
 }
 
 const ModalSaveButton: React.FC<ModalSaveButtonProps> = ({
-  onClick,
+  onSave,
   disabled = false,
 }) => {
   return (
-    <div className={styles.buttonContainer}>
+    <div
+      className={styles.buttonContainer}
+      onClick={(event) => event?.stopPropagation()}
+    >
       <Button
         variant="green"
         className={styles.saveButton}
-        onClick={onClick}
+        onClick={onSave}
         disabled={disabled}
       >
         Save
