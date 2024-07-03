@@ -6,6 +6,8 @@ import styles from './DogPreview.module.scss';
 import { IconContext } from 'react-icons';
 import { getAge } from '../../utils/time';
 
+const LOADING = 'loading';
+
 interface DogPreviewProps {
   dog: Dog;
   image: string | null;
@@ -19,7 +21,13 @@ const DogPreview: React.FC<DogPreviewProps> = ({ dog, image }) => {
     <div className={styles.container}>
       <div className={styles.imgContainer}>
         {image ? (
-          <img src={image} className={styles.img} />
+          image === LOADING ? (
+            <div className={classnames(styles.img, styles.empty)}>
+              <span>Loading...</span>
+            </div>
+          ) : (
+            <img src={image} className={styles.img} />
+          )
         ) : (
           <div className={classnames(styles.img, styles.empty)}>
             <PiDog size={64} />
@@ -45,4 +53,4 @@ const DogPreview: React.FC<DogPreviewProps> = ({ dog, image }) => {
   );
 };
 
-export { DogPreview };
+export { DogPreview, LOADING };

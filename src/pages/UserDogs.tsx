@@ -3,7 +3,7 @@ import { useOutletContext, useRevalidator } from 'react-router';
 import { Link } from 'react-router-dom';
 import { User } from '../types/user';
 import { Dog } from '../types/dog';
-import { DogPreview } from '../components/profile/DogPreview';
+import { DogPreview, LOADING } from '../components/profile/DogPreview';
 import styles from './UserDogs.module.scss';
 import { FriendRequestButton } from '../components/profile/FriendRequestButton';
 import { UserContext } from '../context/UserContext';
@@ -32,15 +32,16 @@ const UserDogs = () => {
   const [newDogId, setNewDogId] = useState('');
   const { revalidate } = useRevalidator();
 
-  const { mutate: setDogImage } = useMutation({
+  const { mutate: setDogImage, isPending: isUploadingImage } = useMutation({
     mutationFn: (img: string | File) => uploadDogPrimaryImage(img, newDogId!),
-    onSuccess: async () => {
+    onMutate: async () => {
       queryClient.invalidateQueries({
         queryKey: ['dogImage', newDogId],
       });
+    },
+    onSettled: () => {
       revalidate();
     },
-    onSettled: () => {},
   });
 
   const onAddDog = (dogId?: string) => {
@@ -102,7 +103,14 @@ const UserDogs = () => {
               key={dog.id}
               state={{ isSignedInUser, userName: user.name }}
             >
-              <DogPreview dog={dog} image={dogImages[index]} />
+              <DogPreview
+                dog={dog}
+                image={
+                  dog.id === newDogId && isUploadingImage
+                    ? LOADING
+                    : dogImages[index]
+                }
+              />
             </Link>
           ))}
         </div>

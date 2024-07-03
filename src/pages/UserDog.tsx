@@ -21,6 +21,7 @@ import { queryClient } from '../services/react-query';
 import { Loader } from '../components/Loading';
 import { AccordionContainer } from '../components/accordion/AccordionContainer';
 import { getAge } from '../utils/time';
+import { LOADING } from '../components/profile/DogPreview';
 
 const CameraModal = lazy(() => import('../components/camera/CameraModal'));
 const EditDogsModal = lazy(() => import('../components/profile/EditDogsModal'));
@@ -49,12 +50,20 @@ const UserDog = () => {
     },
   });
 
-  const { mutate: setDogImage } = useMutation({
+  const { mutate: setDogImage, isPending: isUploadingImage } = useMutation({
     mutationFn: (img: string | File) => uploadDogPrimaryImage(img, dogId!),
-    onSuccess: async () => {
-      queryClient.invalidateQueries({
-        queryKey: ['dogImage', dogId],
-      });
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: ['dogImage', dogId] });
+      const prevImage = queryClient.getQueryData(['dogImage', dogId]);
+      queryClient.setQueryData(['dogImage', dogId], LOADING);
+
+      return { prevImage };
+    },
+    onError: (_error, _data, context) => {
+      queryClient.setQueryData(['dogImage', dogId], context?.prevImage);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['dogImage', dogId] });
       revalidate();
     },
   });
@@ -96,7 +105,11 @@ const UserDog = () => {
         </Link>
         <div className={styles.importantDetails}>
           <div className={styles.imgContainer}>
-            {primaryImage ? (
+            {isUploadingImage || primaryImage === LOADING ? (
+              <div className={classnames(styles.img, styles.empty)}>
+                <span>Loading...</span>
+              </div>
+            ) : primaryImage ? (
               <img src={primaryImage} className={styles.img} />
             ) : (
               <div className={classnames(styles.img, styles.empty)}>

@@ -185,6 +185,25 @@ const EditDogsModal: React.FC<EditDogsModalProps> = ({
             label="Name *"
             required
           />
+          <AutoComplete
+            items={dogBreeds}
+            itemKeyfn={(item) => item}
+            filterFunc={(item, searchInput) =>
+              item.toLowerCase().includes(searchInput.toLowerCase())
+            }
+            equalityFunc={(item, selectedInput) => item === selectedInput}
+            setSelectedInput={(item) => onAutoCompleteSelect('breed', item)}
+            selectedInput={dogData?.breed || ''}
+            label="Breed *"
+          >
+            {(item, isChosen) => (
+              <div
+                className={classnames(styles.breed, isChosen && styles.chosen)}
+              >
+                {item}
+              </div>
+            )}
+          </AutoComplete>
           <RadioInputs
             value={dogData?.gender || ''}
             options={[
@@ -205,25 +224,6 @@ const EditDogsModal: React.FC<EditDogsModalProps> = ({
             style={{ minHeight: '55px' }}
             required
           />
-          <AutoComplete
-            items={dogBreeds}
-            itemKeyfn={(item) => item}
-            filterFunc={(item, searchInput) =>
-              item.toLowerCase().includes(searchInput.toLowerCase())
-            }
-            equalityFunc={(item, selectedInput) => item === selectedInput}
-            setSelectedInput={(item) => onAutoCompleteSelect('breed', item)}
-            selectedInput={dogData?.breed || ''}
-            label="Breed *"
-          >
-            {(item, isChosen) => (
-              <div
-                className={classnames(styles.breed, isChosen && styles.chosen)}
-              >
-                {item}
-              </div>
-            )}
-          </AutoComplete>
           <RadioInputs
             value={dogData?.size || ''}
             options={[
