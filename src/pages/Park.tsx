@@ -17,7 +17,7 @@ import {
   uploadParkPrimaryImage,
 } from '../services/parks';
 import { queryClient } from '../services/react-query';
-import { Loading } from '../components/Loading';
+import { Loader } from '../components/Loading';
 import { ParkCheckIn } from '../components/park/ParkCheckIn';
 import { ParkIcon } from '../components/park/ParkIcon';
 import { Button } from '../components/Button';
@@ -69,7 +69,7 @@ const Park: React.FC = () => {
   };
 
   if (isLoading || isLoadingImage) {
-    return <Loading />;
+    return <Loader />;
   }
 
   if (!park) {
@@ -133,14 +133,14 @@ const Park: React.FC = () => {
           <Outlet context={park} />
         </div>
       </div>
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<Loader />}>
         <CameraModal
           open={isAddImageModalOpen}
           setOpen={setIsAddImageModalOpen}
           onUploadImg={onUploadImg}
         />
       </Suspense>
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<Loader />}>
         <ThankYouModal
           open={isThankYouModalOpen}
           onClose={() => setIsThankYouModalOpen(false)}

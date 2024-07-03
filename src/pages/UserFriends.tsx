@@ -2,7 +2,7 @@ import { Link, useOutletContext } from 'react-router-dom';
 import { UserPreview } from '../components/users/UserPreview';
 import styles from './UserFriends.module.scss';
 import { User } from '../types/user';
-import { Loading } from '../components/Loading';
+import { Loader } from '../components/Loading';
 import { useQuery } from '@tanstack/react-query';
 import { fetchFriendsWithDogs } from '../services/users';
 import { FRIENDSHIP_STATUS, USER_ROLE } from '../types/friendship';
@@ -46,7 +46,7 @@ const UserFriends = () => {
     isLoadingPendingFriends ||
     isLoadingMyPendingFriends
   ) {
-    return <Loading />;
+    return <Loader />;
   }
 
   if (

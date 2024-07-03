@@ -5,7 +5,7 @@ import styles from './ParkVisitors.module.scss';
 import { useQuery } from '@tanstack/react-query';
 import { UserContext } from '../context/UserContext';
 import { fetchUsersWithDogsByIds } from '../services/users';
-import { Loading } from '../components/Loading';
+import { Loader } from '../components/Loading';
 import { useGetParkVisitors } from '../hooks/api/useGetParkVisitors';
 
 const ParkVisitors: React.FC = () => {
@@ -31,7 +31,7 @@ const ParkVisitors: React.FC = () => {
     othersCount === 1 && friendsCount === 0 && visitorsIds[0] === userId;
 
   if (isLoadingDogs || isLoadingFriendsIds || isLoadingVisitors) {
-    return <Loading />;
+    return <Loader />;
   }
 
   if (!friendsCount && !othersCount) {

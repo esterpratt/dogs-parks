@@ -7,7 +7,7 @@ import { UserContext } from '../../context/UserContext';
 import { useQuery } from '@tanstack/react-query';
 import { fetchParkRank, fetchReviews } from '../../services/reviews';
 import { useAddReview } from '../../hooks/api/useAddReview';
-import { Loading } from '../Loading';
+import { Loader } from '../Loading';
 
 const ReviewModal = lazy(() => import('../ReviewModal'));
 
@@ -65,7 +65,7 @@ const ReviewsPreview = () => {
           >
             Add a review
           </Button>
-          <Suspense fallback={<Loading />}>
+          <Suspense fallback={<Loader />}>
             <ReviewModal
               onSubmitReview={onAddReview}
               isOpen={isAddReviewModalOpen}

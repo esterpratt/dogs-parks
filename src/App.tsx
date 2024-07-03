@@ -17,7 +17,7 @@ import { Users } from './pages/Users';
 import { UserDogs } from './pages/UserDogs';
 import { Park } from './pages/Park';
 import { NewPark } from './pages/NewPark';
-import { Loading } from './components/Loading';
+import { Loader } from './components/Loading';
 
 import { queryClient } from './services/react-query';
 
@@ -62,7 +62,7 @@ const App = () => {
             {
               index: true,
               element: (
-                <Suspense fallback={<Loading />}>
+                <Suspense fallback={<Loader />}>
                   <ParkDetails />
                 </Suspense>
               ),
@@ -70,7 +70,7 @@ const App = () => {
             {
               path: 'reviews',
               element: (
-                <Suspense fallback={<Loading />}>
+                <Suspense fallback={<Loader />}>
                   <ParkReviews />
                 </Suspense>
               ),
@@ -78,7 +78,7 @@ const App = () => {
             {
               path: 'visitors',
               element: (
-                <Suspense fallback={<Loading />}>
+                <Suspense fallback={<Loader />}>
                   <ParkVisitors />
                 </Suspense>
               ),
@@ -109,7 +109,7 @@ const App = () => {
             {
               path: 'dogs/:dogId',
               element: (
-                <Suspense fallback={<Loading />}>
+                <Suspense fallback={<Loader />}>
                   <UserDog />
                 </Suspense>
               ),
@@ -117,7 +117,7 @@ const App = () => {
             {
               path: 'reviews',
               element: (
-                <Suspense fallback={<Loading />}>
+                <Suspense fallback={<Loader />}>
                   <UserReviews />
                 </Suspense>
               ),
@@ -125,7 +125,7 @@ const App = () => {
             {
               path: 'friends',
               element: (
-                <Suspense fallback={<Loading />}>
+                <Suspense fallback={<Loader />}>
                   <UserFriends />
                 </Suspense>
               ),
@@ -133,7 +133,7 @@ const App = () => {
             {
               path: 'favorites',
               element: (
-                <Suspense fallback={<Loading />}>
+                <Suspense fallback={<Loader />}>
                   <UserFavorites />
                 </Suspense>
               ),
@@ -141,7 +141,7 @@ const App = () => {
             {
               path: 'info',
               element: (
-                <Suspense fallback={<Loading />}>
+                <Suspense fallback={<Loader />}>
                   <UserInfo />
                 </Suspense>
               ),

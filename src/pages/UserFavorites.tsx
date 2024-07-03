@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { fetchParks } from '../services/parks';
 import { useQuery } from '@tanstack/react-query';
 import { fetchUserFavorites } from '../services/favorites';
-import { Loading } from '../components/Loading';
+import { Loader } from '../components/Loading';
 
 const UserFavorites = () => {
   const { id: userId } = useParams();
@@ -29,7 +29,7 @@ const UserFavorites = () => {
     : [];
 
   if (isLoadingParks || isLoadingFavorites) {
-    return <Loading />;
+    return <Loader />;
   }
 
   if (!favoriteParkIds?.length) {

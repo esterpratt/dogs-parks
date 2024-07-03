@@ -9,7 +9,7 @@ import styles from './ParkCheckIn.module.scss';
 import { useAddReview } from '../../hooks/api/useAddReview';
 import { queryClient } from '../../services/react-query';
 import { ThankYouModalContext } from '../../context/ThankYouModalContext';
-import { Loading } from '../Loading';
+import { Loader } from '../Loading';
 import { fetchUserReviews } from '../../services/reviews';
 import { ControlledInput } from '../inputs/ControlledInput';
 import { ParkIcon } from './ParkIcon';
@@ -147,7 +147,7 @@ const ParkCheckIn: React.FC<{
           />
         </div>
       </Modal>
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<Loader />}>
         <ReviewModal
           showForm={showForm}
           title={`Hope you had a tail-wagging time! ${

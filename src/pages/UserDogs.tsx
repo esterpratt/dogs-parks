@@ -7,7 +7,7 @@ import { DogPreview } from '../components/profile/DogPreview';
 import styles from './UserDogs.module.scss';
 import { FriendRequestButton } from '../components/profile/FriendRequestButton';
 import { UserContext } from '../context/UserContext';
-import { Loading } from '../components/Loading';
+import { Loader } from '../components/Loading';
 import { Button } from '../components/Button';
 import CameraModal from '../components/camera/CameraModal';
 import { useMutation } from '@tanstack/react-query';
@@ -40,9 +40,7 @@ const UserDogs = () => {
       });
       revalidate();
     },
-    onSettled: () => {
-      setIsCameraModalOpen(false);
-    },
+    onSettled: () => {},
   });
 
   const onAddDog = (dogId?: string) => {
@@ -52,6 +50,11 @@ const UserDogs = () => {
     }
 
     setIsEditDogsModalOpen(false);
+  };
+
+  const onAddDogImage = (img: string | File) => {
+    setIsCameraModalOpen(false);
+    setDogImage(img);
   };
 
   return (
@@ -119,18 +122,18 @@ const UserDogs = () => {
           />
         )}
       </div>
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<Loader />}>
         <EditDogsModal
           isOpen={isEditDogsModalOpen}
           onClose={() => setIsEditDogsModalOpen(false)}
           onAddDog={onAddDog}
         />
       </Suspense>
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<Loader />}>
         <CameraModal
           title="Add your dog image"
           variant="centerTop"
-          onUploadImg={setDogImage}
+          onUploadImg={onAddDogImage}
           open={isCameraModalOpen}
           setOpen={setIsCameraModalOpen}
         />

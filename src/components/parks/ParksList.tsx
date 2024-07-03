@@ -7,7 +7,7 @@ import { ParkPreview } from './ParkPreview';
 import { useDistance } from '../../hooks/useDistance';
 import { fetchParksJSON } from '../../services/parks';
 import { useQuery } from '@tanstack/react-query';
-import { Loading } from '../Loading';
+import { Loader } from '../Loading';
 import { useMemo } from 'react';
 
 interface ParksListProps {
@@ -46,7 +46,7 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
   );
 
   if (isLoading) {
-    return <Loading />;
+    return <Loader />;
   }
 
   return (

@@ -6,7 +6,7 @@ import { fetchAllDogImages, uploadDogImage } from '../../services/dogs';
 import { AccordionContainer } from '../accordion/AccordionContainer';
 import { DogGallery } from './DogGallery';
 import { queryClient } from '../../services/react-query';
-import { Loading } from '../Loading';
+import { Loader } from '../Loading';
 import { deleteImage } from '../../services/image';
 
 const CameraModal = lazy(() => import('../camera/CameraModal'));
@@ -87,7 +87,7 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
           />
         </AccordionContainer.Content>
       </AccordionContainer>
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<Loader />}>
         <CameraModal
           open={isAddImageModalOpen}
           setOpen={setIsAddImageModalOpen}

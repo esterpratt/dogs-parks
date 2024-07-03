@@ -4,7 +4,7 @@ import { IconContext } from 'react-icons';
 import { MdLogout, MdOutlineModeEditOutline } from 'react-icons/md';
 import { UserContext } from '../context/UserContext';
 import styles from './UserInfo.module.scss';
-import { Loading } from '../components/Loading';
+import { Loader } from '../components/Loading';
 
 const EditUserModal = lazy(() => import('../components/profile/EditUserModal'));
 
@@ -42,7 +42,7 @@ const UserInfo = () => {
           <span>Logout</span>
         </div>
       </div>
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<Loader />}>
         <EditUserModal
           isOpen={isEditUserModalOpen}
           onClose={onCloseUserModal}

@@ -7,6 +7,7 @@ import { Button } from '../components/Button';
 import { UserContext } from '../context/UserContext';
 import { SigninProps } from '../context/UserContext';
 import { FormInput } from '../components/inputs/FormInput';
+import { Loader } from '../components/Loading';
 
 interface LoginSigninContainerProps {
   method: 'signin' | 'login';
@@ -42,12 +43,15 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
     }
   };
 
+  if (isLoading) {
+    return <Loader />;
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.formContainer}>
         <h2 className={styles.title}>
           <span>{method === 'signin' ? 'Sign In' : 'Log In'}</span>
-          {isLoading && <span className={styles.loading}>Loading...</span>}
         </h2>
         <Button
           variant="nuteral"

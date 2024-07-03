@@ -1,14 +1,16 @@
 import classnames from 'classnames';
 import styles from './Loading.module.scss';
 
-interface LoadingProps {
+interface LoaderProps {
   className?: string;
 }
 
-const Loading: React.FC<LoadingProps> = ({ className }) => {
+const Loader: React.FC<LoaderProps> = ({ className }) => {
   return (
-    <div className={classnames(styles.container, className)}>Loading...</div>
+    <div className={styles.container}>
+      <div className={classnames(styles.loader, className)}></div>
+    </div>
   );
 };
 
-export { Loading };
+export { Loader };

@@ -18,7 +18,7 @@ import { GENDER } from '../types/dog';
 import styles from './UserDog.module.scss';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '../services/react-query';
-import { Loading } from '../components/Loading';
+import { Loader } from '../components/Loading';
 import { AccordionContainer } from '../components/accordion/AccordionContainer';
 import { getAge } from '../utils/time';
 
@@ -73,7 +73,7 @@ const UserDog = () => {
   };
 
   if (isLoadingDog || isLoadingImage) {
-    return <Loading />;
+    return <Loader />;
   }
 
   if (!dog) {
@@ -150,14 +150,14 @@ const UserDog = () => {
           contentClassName={styles.contentContainer}
         />
       </div>
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<Loader />}>
         <EditDogsModal
           dog={dog}
           isOpen={isEditDogsModalOpen}
           onClose={onCloseDogsModal}
         />
       </Suspense>
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<Loader />}>
         <CameraModal
           open={isAddImageModalOpen}
           setOpen={setIsAddImageModalOpen}

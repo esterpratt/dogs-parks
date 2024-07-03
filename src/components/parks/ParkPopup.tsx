@@ -10,7 +10,6 @@ import { CgClose } from 'react-icons/cg';
 import { FavoriteRibbon } from '../FavoriteRibbon';
 import { useQuery } from '@tanstack/react-query';
 import { fetchFavoriteParks } from '../../services/favorites';
-import { Loading } from '../Loading';
 
 interface ParkPopupProps {
   activePark: Park | null;
@@ -88,7 +87,7 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
             <Link to={`/parks/${activePark?.id}`}>Fetch park page</Link>
           </div>
           {isLoadingDirections && (
-            <Loading className={styles.loadingDirections} />
+            <div className={styles.loadingDirections}>Loading...</div>
           )}
           {!isLoadingDirections && directions && (
             <div className={styles.directions}>

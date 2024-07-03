@@ -2,7 +2,6 @@ import { useQuery } from '@tanstack/react-query';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import { Park } from '../../types/park';
 import { fetchParksJSON } from '../../services/parks';
-import { Loading } from '../Loading';
 import { ParkMarker } from './ParkMarker';
 
 interface MarkerListProps {
@@ -14,14 +13,10 @@ const MarkerList: React.FC<MarkerListProps> = ({
   activePark,
   setActivePark,
 }) => {
-  const { isLoading, data: parks } = useQuery({
+  const { data: parks } = useQuery({
     queryKey: ['parks'],
     queryFn: fetchParksJSON,
   });
-
-  if (isLoading) {
-    return <Loading />;
-  }
 
   return (
     <MarkerClusterGroup
