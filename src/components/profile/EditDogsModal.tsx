@@ -196,7 +196,7 @@ const EditDogsModal: React.FC<EditDogsModalProps> = ({
             label="Gender *"
           />
           <ControlledInput
-            value={formattedBirthday}
+            defaultValue={formattedBirthday}
             onChange={onInputChange}
             name="birthday"
             label="Birthday *"

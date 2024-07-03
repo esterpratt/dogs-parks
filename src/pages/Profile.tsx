@@ -14,8 +14,12 @@ const Profile: React.FC = () => {
     dogs: Dog[];
     dogImages: Promise<string | null>[];
   };
-  const { user: signedInUser } = useContext(UserContext);
+  const { user: signedInUser, isLoading } = useContext(UserContext);
   const isSignedInUser = signedInUser?.id === user.id;
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <>

@@ -62,7 +62,11 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [error, setError] = useState('');
   const [userName, setUserName] = useLocalStorage('userName');
 
-  const { data: user, refetch: refetchUser } = useQuery({
+  const {
+    data: user,
+    refetch: refetchUser,
+    isLoading: isLoadingUser,
+  } = useQuery({
     queryKey: ['user', 'me', userId],
     queryFn: () => fetchUser(userId!),
     enabled: false,
@@ -158,6 +162,7 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   });
 
   const isLoading =
+    isLoadingUser ||
     isCreatingUser ||
     isSigningIn ||
     isLogingIn ||

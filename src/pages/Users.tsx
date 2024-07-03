@@ -45,7 +45,7 @@ const Users = () => {
       {!userId ? (
         <div className={styles.message}>
           <>
-            To see user's page and make friends, you need to{' '}
+            To see user's page and make friends, you must{' '}
             <Link to="../login" className={styles.link}>
               log in
             </Link>
