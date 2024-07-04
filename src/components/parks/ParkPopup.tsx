@@ -87,7 +87,7 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
             <Link to={`/parks/${activePark?.id}`}>Fetch park page</Link>
           </div>
           {isLoadingDirections && (
-            <div className={styles.loadingDirections}>Loading...</div>
+            <div className={styles.loadingDirections}>Sniffing the way...</div>
           )}
           {!isLoadingDirections && directions && (
             <div className={styles.directions}>

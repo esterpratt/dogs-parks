@@ -95,7 +95,7 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
             <span
               className={classnames(styles.loading, isLoading && styles.show)}
             >
-              Loading...
+              Paws a sec...
             </span>
           </h2>
           <Button
