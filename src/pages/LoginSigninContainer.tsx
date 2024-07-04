@@ -16,8 +16,14 @@ interface LoginSigninContainerProps {
 const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
   method,
 }) => {
-  const { userSignin, userLogin, error, setError, isLoading } =
-    useContext(UserContext);
+  const {
+    userSignin,
+    userLogin,
+    error,
+    setError,
+    isLoading,
+    isLoadingAuthUser,
+  } = useContext(UserContext);
 
   useEffect(() => {
     setError('');
@@ -43,7 +49,7 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
     }
   };
 
-  if (isLoading) {
+  if (isLoading || isLoadingAuthUser) {
     return <Loader />;
   }
 
