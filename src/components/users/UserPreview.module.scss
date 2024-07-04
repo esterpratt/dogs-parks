@@ -1,10 +1,10 @@
 @import '../../variables.scss';
 
-.container {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
+// .container {
+//   display: flex;
+//   flex-direction: column;
+//   gap: 4px;
+// }
 
 .button {
   width: 100%;
@@ -16,6 +16,7 @@
 }
 
 .card-container {
+  height: 122px;
   text-decoration: none;
   color: inherit;
   letter-spacing: inherit;
@@ -26,10 +27,6 @@
   border-radius: 12px;
   padding: 12px;
   font-size: 18px;
-
-  &:not(:last-child) {
-    border-radius: 12px 12px 2px 2px;
-  }
 
   &.disabled {
     pointer-events: none;
@@ -68,5 +65,6 @@
 }
 
 .user-name {
+  color: $brown;
   text-transform: capitalize;
 }

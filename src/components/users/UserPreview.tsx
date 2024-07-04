@@ -36,20 +36,18 @@ const UserPreview: React.FC<UserPreviewProps> = ({ user }) => {
   }
 
   return (
-    <div className={styles.container}>
-      <Link
-        to={`/profile/${user.id}`}
-        className={classnames(styles.cardContainer, !userId && styles.disabled)}
-      >
-        <div className={classnames(styles.dogImage, !dogImage && styles.empty)}>
-          {dogImage ? <img src={dogImage} /> : <PiDog size={64} />}
-        </div>
-        <div className={styles.details}>
-          <span className={styles.dogNames}>{dogNames}</span>
-          <span className={styles.userName}>Owner: {user.name}</span>
-        </div>
-      </Link>
-    </div>
+    <Link
+      to={`/profile/${user.id}`}
+      className={classnames(styles.cardContainer, !userId && styles.disabled)}
+    >
+      <div className={classnames(styles.dogImage, !dogImage && styles.empty)}>
+        {dogImage ? <img src={dogImage} /> : <PiDog size={64} />}
+      </div>
+      <div className={styles.details}>
+        <span className={styles.dogNames}>{dogNames}</span>
+        <span className={styles.userName}>Owner: {user.name}</span>
+      </div>
+    </Link>
   );
 };
 

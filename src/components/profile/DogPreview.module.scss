@@ -1,7 +1,7 @@
 @import '../../variables.scss';
 
 .container {
-  height: 120px;
+  height: 122px;
   width: 100%;
   display: flex;
   gap: 24px;
@@ -30,7 +30,7 @@
   flex-direction: column;
   justify-content: space-between;
   padding: 8px 0;
-  font-size: 16px;
+  font-size: 18px;
 
   .upper {
     display: flex;
