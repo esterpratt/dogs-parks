@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 import { FcGoogle } from 'react-icons/fc';
 import styles from './LoginSigninContainer.module.scss';
@@ -15,7 +15,6 @@ import { Button } from '../components/Button';
 import { UserContext } from '../context/UserContext';
 import { SigninProps } from '../context/UserContext';
 import { FormInput } from '../components/inputs/FormInput';
-import { Loader } from '../components/Loading';
 import ThankYouModal from '../components/ThankYouModal';
 import { useMutation } from '@tanstack/react-query';
 import { sendResetEmail } from '../services/authentication';
@@ -27,7 +26,7 @@ interface LoginSigninContainerProps {
 const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
   method,
 }) => {
-  const { userSignin, userLogin, error, setError, userId, isLoading } =
+  const { userSignin, userLogin, error, setError, isLoading } =
     useContext(UserContext);
   const mailRef = useRef<HTMLInputElement | null>(null);
   const [isThankYouModalOpen, setIsThankYouModalOpen] = useState(false);
@@ -87,20 +86,17 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
     }
   };
 
-  if (isLoading) {
-    return <Loader />;
-  }
-
-  if (userId) {
-    return <Navigate to={`/profile/${userId}`} />;
-  }
-
   return (
     <>
       <div className={styles.container}>
         <div className={styles.formContainer}>
           <h2 className={styles.title}>
             <span>{method === 'signin' ? 'Sign In' : 'Log In'}</span>
+            <span
+              className={classnames(styles.loading, isLoading && styles.show)}
+            >
+              Loading...
+            </span>
           </h2>
           <Button
             variant="nuteral"

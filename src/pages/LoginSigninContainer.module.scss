@@ -72,6 +72,12 @@
 
 .loading {
   font-size: 16px;
+  opacity: 0;
+  transition: opacity 0.5s;
+
+  &.show {
+    opacity: 1;
+  }
 }
 
 .change-method {

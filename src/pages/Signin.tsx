@@ -2,21 +2,16 @@ import { useContext, useEffect } from 'react';
 import { LoginSigninContainer } from './LoginSigninContainer';
 import { UserContext } from '../context/UserContext';
 import { useNavigate } from 'react-router';
-import { Loader } from '../components/Loading';
 
 const Signin = () => {
-  const { userId, isLoading } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (userId) {
-      navigate(`/profile/${userId}`);
+    if (user) {
+      navigate(`/profile/${user.id}`);
     }
-  }, [userId, navigate]);
-
-  if (isLoading) {
-    return <Loader />;
-  }
+  }, [user, navigate]);
 
   return <LoginSigninContainer method="signin" />;
 };
