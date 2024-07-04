@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import classnames from 'classnames';
 import { FcGoogle } from 'react-icons/fc';
 import styles from './LoginSigninContainer.module.scss';
@@ -27,7 +27,7 @@ interface LoginSigninContainerProps {
 const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
   method,
 }) => {
-  const { userSignin, userLogin, error, setError, user, userId, isLoading } =
+  const { userSignin, userLogin, error, setError, userId, isLoading } =
     useContext(UserContext);
   const mailRef = useRef<HTMLInputElement | null>(null);
   const [isThankYouModalOpen, setIsThankYouModalOpen] = useState(false);
@@ -91,8 +91,8 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
     return <Loader />;
   }
 
-  if (!!user || userId) {
-    return null;
+  if (userId) {
+    return <Navigate to={`/profile/${userId}`} />;
   }
 
   return (
