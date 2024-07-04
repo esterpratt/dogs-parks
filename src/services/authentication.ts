@@ -1,5 +1,6 @@
 import {
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithRedirect,
   signOut,
@@ -43,5 +44,13 @@ const logout = async () => {
   await signOut(auth);
 };
 
-export { login, logout, signin, signinWithGoogle };
+const sendResetEmail = async (email: string) => {
+  try {
+    await sendPasswordResetEmail(auth, email);
+  } catch (error) {
+    throwError(error);
+  }
+};
+
+export { login, logout, signin, signinWithGoogle, sendResetEmail };
 export type { LoginProps, User };
