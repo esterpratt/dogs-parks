@@ -133,14 +133,14 @@ const Park: React.FC = () => {
           <Outlet context={park} />
         </div>
       </div>
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={null}>
         <CameraModal
           open={isAddImageModalOpen}
           setOpen={setIsAddImageModalOpen}
           onUploadImg={onUploadImg}
         />
       </Suspense>
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={null}>
         <ThankYouModal
           open={isThankYouModalOpen}
           onClose={() => setIsThankYouModalOpen(false)}

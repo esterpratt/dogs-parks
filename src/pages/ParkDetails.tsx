@@ -6,7 +6,6 @@ import { Park } from '../types/park';
 import { ParkGenerals } from '../components/park/ParkGenerals';
 import { ParkGalleryContainer } from '../components/park/ParkGalleryContainer';
 import { UserContext } from '../context/UserContext';
-import { Loader } from '../components/Loading';
 import { AccordionContainer } from '../components/accordion/AccordionContainer';
 
 const ChooseEditParkOptionModal = lazy(
@@ -53,7 +52,7 @@ const ParkDetails = () => {
         </AccordionContainer.Content>
       </AccordionContainer>
       {!!userId && (
-        <Suspense fallback={<Loader />}>
+        <Suspense fallback={null}>
           <ChooseEditParkOptionModal
             isOpen={isEditParkModalOpen}
             onClose={() => setIsEditParkModalOpen(false)}

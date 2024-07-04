@@ -4,7 +4,6 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { fetchAllParkImages, uploadParkImage } from '../../services/parks';
 import { queryClient } from '../../services/react-query';
 import { ParkGallery } from './ParkGallery';
-import { Loader } from '../Loading';
 import { AccordionContainer } from '../accordion/AccordionContainer';
 
 const CameraModal = lazy(() => import('../camera/CameraModal'));
@@ -62,7 +61,7 @@ const ParkGalleryContainer: React.FC<ParkGalleryContainerProps> = ({
           />
         </AccordionContainer.Content>
       </AccordionContainer>
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={null}>
         <CameraModal
           open={isAddImageModalOpen}
           setOpen={setIsAddImageModalOpen}

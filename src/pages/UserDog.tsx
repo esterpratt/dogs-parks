@@ -7,7 +7,6 @@ import { PiCameraFill, PiDog } from 'react-icons/pi';
 import classnames from 'classnames';
 import { DogDetails } from '../components/profile/DogDetails';
 import { DogGalleryContainer } from '../components/profile/DogGalleryContainer';
-
 import {
   fetchDogPrimaryImage,
   fetchDogs,
@@ -18,7 +17,6 @@ import { GENDER } from '../types/dog';
 import styles from './UserDog.module.scss';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '../services/react-query';
-import { Loader } from '../components/Loading';
 import { AccordionContainer } from '../components/accordion/AccordionContainer';
 import { getAge } from '../utils/time';
 import { LOADING } from '../components/profile/DogPreview';
@@ -41,6 +39,8 @@ const UserDog = () => {
       return dogs?.[0];
     },
   });
+
+  console.log('loading dog? ', isLoadingDog);
 
   const { data: primaryImage } = useQuery({
     queryKey: ['dogImage', dogId],
@@ -81,11 +81,7 @@ const UserDog = () => {
     setDogImage(img);
   };
 
-  if (isLoadingDog) {
-    return <Loader />;
-  }
-
-  if (!dog) {
+  if (!dog || isLoadingDog) {
     return null;
   }
 
@@ -163,14 +159,14 @@ const UserDog = () => {
           contentClassName={styles.contentContainer}
         />
       </div>
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={null}>
         <EditDogsModal
           dog={dog}
           isOpen={isEditDogsModalOpen}
           onClose={onCloseDogsModal}
         />
       </Suspense>
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={null}>
         <CameraModal
           open={isAddImageModalOpen}
           setOpen={setIsAddImageModalOpen}

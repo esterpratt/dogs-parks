@@ -7,7 +7,6 @@ import { Button } from '../Button';
 import { Modal } from '../Modal';
 import styles from './ChooseEditParkOptionModal.module.scss';
 import { Park } from '../../types/park';
-import { Loader } from '../Loading';
 
 const EditParkModal = lazy(() => import('./EditParkModal'));
 const ReportParkModal = lazy(() => import('./ReportParkModal'));
@@ -79,14 +78,14 @@ const ChooseEditParkOptionModal: React.FC<ChooseEditParkOptionModalProps> = ({
           </Button>
         </div>
       </Modal>
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={null}>
         <ReportParkModal
           parkId={park.id}
           open={isReportModalOpen}
           onClose={() => setIsReportModalOpen(false)}
         />
       </Suspense>
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={null}>
         <EditParkModal
           park={park}
           isOpen={isEditModalOpen}
