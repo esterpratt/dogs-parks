@@ -40,8 +40,6 @@ const UserDog = () => {
     },
   });
 
-  console.log('loading dog? ', isLoadingDog);
-
   const { data: primaryImage } = useQuery({
     queryKey: ['dogImage', dogId],
     queryFn: async () => {

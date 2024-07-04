@@ -7,6 +7,7 @@ enum ParkMaterial {
   GRASS = 'grass',
   SYNTHETIC_GRASS = 'Synthetic grass',
   SAND = 'sand',
+  DIRT = 'dirt',
 }
 
 interface Park {

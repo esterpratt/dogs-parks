@@ -157,6 +157,7 @@ const EditParkModal: React.FC<EditParksModalProps> = ({
             <MultiSelectInputs
               options={[
                 { id: ParkMaterial.SAND, value: ParkMaterial.SAND },
+                { id: ParkMaterial.DIRT, value: ParkMaterial.DIRT },
                 { id: ParkMaterial.GRASS, value: ParkMaterial.GRASS },
                 {
                   id: ParkMaterial.SYNTHETIC_GRASS,
