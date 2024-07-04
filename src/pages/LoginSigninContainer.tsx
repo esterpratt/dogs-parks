@@ -27,7 +27,7 @@ interface LoginSigninContainerProps {
 const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
   method,
 }) => {
-  const { userSignin, userLogin, error, setError, isLoading } =
+  const { userSignin, userLogin, error, setError, user, userId, isLoading } =
     useContext(UserContext);
   const mailRef = useRef<HTMLInputElement | null>(null);
   const [isThankYouModalOpen, setIsThankYouModalOpen] = useState(false);
@@ -89,6 +89,10 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
 
   if (isLoading) {
     return <Loader />;
+  }
+
+  if (!!user || userId) {
+    return null;
   }
 
   return (
