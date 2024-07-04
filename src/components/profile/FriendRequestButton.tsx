@@ -16,7 +16,7 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
   buttonVariant = 'green',
 }) => {
   const { userId } = useContext(UserContext);
-  const { statusToUpdate, buttonText } = useFriendshipStatus({
+  const { statusToUpdate, buttonText, isLoading } = useFriendshipStatus({
     friendId,
     userId: userId!,
   });
@@ -29,6 +29,10 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
   const onUpdateFriend = async () => {
     onUpdateFriendship(statusToUpdate);
   };
+
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <div className={className}>

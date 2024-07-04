@@ -88,7 +88,7 @@ const useFriendshipStatus = ({
   userId: string;
   friendId: string;
 }) => {
-  const { friendsIds, pendingFriendsIds, myPendingFriendsIds } =
+  const { friendsIds, pendingFriendsIds, myPendingFriendsIds, isLoading } =
     useGetUserFriendsIds(userId);
 
   const { statusToUpdate, buttonText } = getButtonProps(
@@ -100,7 +100,7 @@ const useFriendshipStatus = ({
     })
   );
 
-  return { statusToUpdate, buttonText };
+  return { statusToUpdate, buttonText, isLoading };
 };
 
 export { useFriendshipStatus };
