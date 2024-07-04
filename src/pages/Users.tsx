@@ -27,10 +27,15 @@ const Users = () => {
       return false;
     }
 
+    if (userWithDogs.private) {
+      return false;
+    }
+
     const namesToSearch = [
       userWithDogs.name,
       ...userWithDogs.dogs.map((dog) => dog.name),
     ];
+
     return namesToSearch.some((name) => {
       return name?.toLowerCase().includes(searchInput.toLowerCase());
     });
