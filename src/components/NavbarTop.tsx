@@ -13,7 +13,12 @@ const NavbarTop = () => {
   const [isAboutOpen, setIsAboutOpen] = useState(false);
 
   return (
-    <nav className={styles.navbar}>
+    <nav
+      className={styles.navbar}
+      style={{
+        paddingTop: 'env(safe-area-inset-top)',
+      }}
+    >
       <div className={styles.leftBar}>
         <Link
           to={userId ? `/profile/${userId}/dogs` : '/login'}
