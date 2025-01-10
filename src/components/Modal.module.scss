@@ -44,7 +44,7 @@
   }
 
   &.center-top[open] {
-    margin-top: 48px;
+    margin-top: calc(48px + env(safe-area-inset-top));
   }
 
   &.top {

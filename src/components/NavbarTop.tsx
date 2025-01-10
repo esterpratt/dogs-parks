@@ -13,33 +13,32 @@ const NavbarTop = () => {
   const [isAboutOpen, setIsAboutOpen] = useState(false);
 
   return (
-    <nav
-      className={styles.navbar}
-      style={{
-        paddingTop: 'env(safe-area-inset-top)',
-      }}
-    >
-      <div className={styles.leftBar}>
-        <Link
-          to={userId ? `/profile/${userId}/dogs` : '/login'}
-          className={styles.user}
+    <nav className={styles.navbar}>
+      <div className={styles.content}>
+        <div className={styles.leftBar}>
+          <Link
+            to={userId ? `/profile/${userId}/dogs` : '/login'}
+            className={styles.user}
+          >
+            <IconContext.Provider value={{ className: styles.dogIcon }}>
+              <GiSittingDog />
+            </IconContext.Provider>
+            Paws Up,{' '}
+            <span className={styles.userName}>
+              {user ? user.name : 'Guest'}!
+            </span>
+          </Link>
+        </div>
+        <Button
+          onClick={() => setIsAboutOpen(true)}
+          className={styles.aboutButton}
         >
-          <IconContext.Provider value={{ className: styles.dogIcon }}>
-            <GiSittingDog />
+          <IconContext.Provider value={{ className: styles.aboutIcon }}>
+            <FaInfo />
           </IconContext.Provider>
-          Paws Up,{' '}
-          <span className={styles.userName}>{user ? user.name : 'Guest'}!</span>
-        </Link>
+        </Button>
+        <AboutModal open={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
       </div>
-      <Button
-        onClick={() => setIsAboutOpen(true)}
-        className={styles.aboutButton}
-      >
-        <IconContext.Provider value={{ className: styles.aboutIcon }}>
-          <FaInfo />
-        </IconContext.Provider>
-      </Button>
-      <AboutModal open={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
     </nav>
   );
 };

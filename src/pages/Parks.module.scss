@@ -13,5 +13,8 @@
 
 .parks-list {
   width: 100%;
-  max-height: calc(100dvh - $navbar-height * 2 - 68px);
+  max-height: calc(
+    100dvh - $navbar-height * 2 - 68px - env(safe-area-inset-top) -
+      env(safe-area-inset-bottom)
+  );
 }

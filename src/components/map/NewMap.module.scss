@@ -5,7 +5,7 @@
 
 .list-view-button {
   position: absolute;
-  top: 80px;
+  top: calc(80px + env(safe-area-inset-top));
   z-index: 600;
   left: 50%;
   transform: translate(-50%);

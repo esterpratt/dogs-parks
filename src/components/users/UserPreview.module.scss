@@ -1,11 +1,5 @@
 @import '../../variables.scss';
 
-// .container {
-//   display: flex;
-//   flex-direction: column;
-//   gap: 4px;
-// }
-
 .button {
   width: 100%;
   text-align: center;
@@ -27,10 +21,6 @@
   border-radius: 12px;
   padding: 12px;
   font-size: 18px;
-
-  &.disabled {
-    pointer-events: none;
-  }
 }
 
 .dog-image {
@@ -67,4 +57,19 @@
 .user-name {
   color: $brown;
   text-transform: capitalize;
+}
+
+.link {
+  text-decoration: none;
+  color: $green;
+}
+
+.message {
+  font-size: 24px;
+}
+
+.modal {
+  padding: 32px;
+  display: flex;
+  justify-content: center;
 }

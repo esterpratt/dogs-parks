@@ -6,7 +6,6 @@ import styles from './Users.module.scss';
 import { useContext } from 'react';
 import { UserContext } from '../context/UserContext';
 import { SearchList } from '../components/SearchList';
-import { Link } from 'react-router-dom';
 
 interface UserWithDogs extends User {
   dogs: Dog[];
@@ -47,20 +46,9 @@ const Users = () => {
 
   return (
     <div className={styles.container}>
-      {!userId ? (
-        <div className={styles.message}>
-          <>
-            To see user's page and make friends, you must{' '}
-            <Link to="../login" className={styles.link}>
-              log in
-            </Link>
-          </>
-        </div>
-      ) : (
-        <div className={styles.title}>
-          <span>Sniff out some friends</span>
-        </div>
-      )}
+      <div className={styles.title}>
+        <span>Sniff out some friends!</span>
+      </div>
 
       <SearchList
         isSearchToSee
