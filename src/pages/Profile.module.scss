@@ -1,18 +1,13 @@
 @import '../variables.scss';
 
 .container {
-  max-height: calc(
-    100dvh - $navbar-height * 2 - env(safe-area-inset-top) -
-      env(safe-area-inset-bottom)
-  );
+  max-height: $content-max-height;
+  height: 100%;
   padding: 24px 16px 12px;
   overflow: auto;
 
   &.with-margin {
-    max-height: calc(
-      100dvh - $navbar-height * 2 - $tabs-height - env(safe-area-inset-top) -
-        env(safe-area-inset-bottom)
-    );
+    max-height: calc($content-max-height - $tabs-height);
     margin-top: $tabs-height;
   }
 }

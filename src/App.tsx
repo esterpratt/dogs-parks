@@ -26,6 +26,8 @@ import { usersLoader } from './loaders/usersLoader';
 
 import { UserContextProvider } from './context/UserContext';
 import { ThankYouModalContextProvider } from './context/ThankYouModalContext';
+import { DeletionConfirmation } from './pages/DeletionConfirmation';
+import { PrivateRoute } from './pages/PrivateRoute';
 
 const UserDog = lazy(() => import('./pages/UserDog'));
 const UserReviews = lazy(() => import('./pages/UserReviews'));
@@ -94,8 +96,16 @@ const App = () => {
           element: <Login />,
         },
         {
+          path: '/user-deleted',
+          element: <DeletionConfirmation />,
+        },
+        {
           path: '/profile/:id',
-          element: <Profile />,
+          element: (
+            <PrivateRoute>
+              <Profile />
+            </PrivateRoute>
+          ),
           loader: userLoader,
           children: [
             {

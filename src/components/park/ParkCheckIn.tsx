@@ -35,7 +35,6 @@ const ParkCheckIn: React.FC<{
       reportDogsCount({
         parkId,
         dogsCount,
-        userId,
       }),
     onSuccess: async () => {
       queryClient.invalidateQueries({

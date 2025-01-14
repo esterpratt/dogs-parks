@@ -111,11 +111,11 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
           <form className={styles.form}>
             <div className={styles.formInputs}>
               <ControlledInput
-                label="Title"
+                label="Title *"
                 name="title"
                 value={reviewData.title}
                 onChange={onChangeInput}
-                placeholder="Review title *"
+                placeholder="Review title"
                 required
               />
               <TextArea

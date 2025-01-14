@@ -5,7 +5,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import { FaPlus } from 'react-icons/fa';
 import classnames from 'classnames';
 import { IconContext } from 'react-icons';
-import { FaTrashAlt } from 'react-icons/fa';
+import { IoTrashOutline } from 'react-icons/io5';
 import styles from './Carousel.module.scss';
 import { Modal } from './Modal';
 import { Button } from './Button';
@@ -102,7 +102,9 @@ const Carousel: React.FC<CarouselProps> = ({
           <img src={imageToEnlarge} />
           {!!removeImage && (
             <IconContext.Provider value={{ className: styles.trashIcon }}>
-              <FaTrashAlt onClick={() => setIsApproveDeleteModalOpen(true)} />
+              <IoTrashOutline
+                onClick={() => setIsApproveDeleteModalOpen(true)}
+              />
             </IconContext.Provider>
           )}
         </div>

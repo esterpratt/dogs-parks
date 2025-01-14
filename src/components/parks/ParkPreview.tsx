@@ -12,10 +12,10 @@ interface ParkPreviewProps {
 }
 
 const ParkPreview: React.FC<ParkPreviewProps> = ({ park, className }) => {
-  const navgiate = useNavigate();
+  const navigate = useNavigate();
   const onClickMapLink = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    navgiate('/', { state: { location: park.location } });
+    navigate('/', { state: { location: park.location } });
   };
 
   return (

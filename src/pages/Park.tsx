@@ -28,7 +28,7 @@ const ThankYouModal = lazy(() => import('../components/ThankYouModal'));
 const Park: React.FC = () => {
   const { id: parkId } = useParams();
   const { user } = useContext(UserContext);
-  const navgiate = useNavigate();
+  const navigate = useNavigate();
   const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
   const [isThankYouModalOpen, setIsThankYouModalOpen] = useState(false);
 
@@ -65,7 +65,7 @@ const Park: React.FC = () => {
   };
 
   const onClickMapLink = () => {
-    navgiate('/', { state: { location: park!.location } });
+    navigate('/', { state: { location: park!.location } });
   };
 
   if (isLoading || isLoadingImage) {

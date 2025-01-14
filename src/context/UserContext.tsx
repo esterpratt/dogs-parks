@@ -11,6 +11,7 @@ import {
   logout,
   signin,
   signinWithGoogle,
+  deleteUser,
 } from '../services/authentication';
 import { createUser, fetchUser } from '../services/users';
 import { User } from '../types/user';
@@ -35,6 +36,7 @@ interface UserContextObj {
   userLogin: (props: LoginProps) => void;
   userLogout: () => void;
   userSignin: (props: SigninProps) => void;
+  userDeletion: () => void;
   error: string;
   setError: Dispatch<React.SetStateAction<string>>;
   isLoading: boolean;
@@ -48,6 +50,7 @@ const initialData: UserContextObj = {
   userLogin: () => Promise.resolve(),
   userLogout: () => {},
   userSignin: () => Promise.resolve(),
+  userDeletion: () => {},
   setError: () => {},
   error: '',
   isLoading: false,
@@ -161,12 +164,24 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     },
   });
 
+  const { mutate: userDeletion, isPending: isPendingDeletion } = useMutation({
+    mutationFn: () => {
+      localStorage.setItem('userDeleted', '1');
+      return deleteUser();
+    },
+    onSettled: () => {
+      queryClient.removeQueries({ queryKey: ['user', 'me'] });
+      setUserName();
+    },
+  });
+
   const isLoading =
     isLoadingUser ||
     isCreatingUser ||
     isSigningIn ||
     isLogingIn ||
     isSigninInWithGoogle ||
+    isPendingDeletion ||
     isLoadingAuthUser;
 
   const value: UserContextObj = {
@@ -176,6 +191,7 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     userLogin,
     userLogout,
     userSignin,
+    userDeletion,
     error,
     setError,
     isLoading,

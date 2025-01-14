@@ -1,21 +1,29 @@
 @import '../variables.scss';
 
 .container {
+  height: 100%;
+  padding-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.rowsWrapper {
   font-size: 18px;
   display: flex;
   flex-direction: column;
   background-color: $white;
   border-radius: 12px;
+}
 
-  .row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 24px;
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 24px;
 
-    &:not(:last-child) {
-      border-bottom: 1px solid $text-light;
-    }
+  &:not(:last-child) {
+    border-bottom: 1px solid $text-light;
   }
 }
 
@@ -26,4 +34,27 @@
   padding: 4px;
   border: 1px solid $green;
   border-radius: 50%;
+}
+
+.deleteIcon {
+  color: $red;
+  border: 1px solid $red;
+}
+
+.approve-modal {
+  padding: 56px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.approve-content {
+  font-size: $second-title-font-size;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.delete-button {
+  margin: 0 auto;
 }

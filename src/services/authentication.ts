@@ -1,5 +1,6 @@
 import {
   createUserWithEmailAndPassword,
+  deleteUser as firebaseDeleteUser,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithRedirect,
@@ -52,5 +53,17 @@ const sendResetEmail = async (email: string) => {
   }
 };
 
-export { login, logout, signin, signinWithGoogle, sendResetEmail };
+const deleteUser = async () => {
+  try {
+    if (!auth.currentUser) {
+      return;
+    }
+
+    await firebaseDeleteUser(auth.currentUser);
+  } catch (error) {
+    throwError(error);
+  }
+};
+
+export { login, logout, signin, signinWithGoogle, sendResetEmail, deleteUser };
 export type { LoginProps, User };
