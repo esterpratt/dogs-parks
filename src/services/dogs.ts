@@ -4,12 +4,13 @@ import {
   collection,
   doc,
   documentId,
+  getDoc,
   getDocs,
   query,
   updateDoc,
   where,
 } from 'firebase/firestore';
-import { throwError } from './error';
+import { AppError, throwError } from './error';
 import { Dog } from '../types/dog';
 import { fetchImagesByDirectory, uploadImage } from './image';
 
@@ -21,6 +22,8 @@ interface EditDogProps {
   dogId: string;
   dogDetails: Partial<Dog>;
 }
+
+const dogOwnerCache = new Map<string, string>();
 
 const createDog = async (createDogProps: CreateDogProps) => {
   try {
@@ -42,6 +45,26 @@ const updateDog = async ({ dogId, dogDetails }: EditDogProps) => {
   } catch (error) {
     throwError(error);
   }
+};
+
+const getDogOwnerId = async (dogId: string) => {
+  if (dogOwnerCache.has(dogId)) {
+    console.log('fetching from cache');
+    return dogOwnerCache.get(dogId);
+  }
+
+  const dogRef = doc(db, 'dogs', dogId);
+  const dogSnap = await getDoc(dogRef);
+
+  if (!dogSnap.exists()) {
+    throw new AppError('dog does not exists', 404);
+  }
+
+  console.log('fetching from firebase');
+
+  const ownerId = dogSnap.data().owner;
+  dogOwnerCache.set(dogId, ownerId);
+  return ownerId;
 };
 
 const fetchDogs = async (ids?: string[]) => {
@@ -112,7 +135,11 @@ const fetchUsersDogs = async (userIds: string[]) => {
 
 const uploadDogImage = async (image: File | string, dogId: string) => {
   try {
-    const res = await uploadImage({ image, path: `dogs/${dogId}/other` });
+    const userId = await getDogOwnerId(dogId);
+    const res = await uploadImage({
+      image,
+      path: `users/${userId}/dogs/${dogId}/other`,
+    });
     return res;
   } catch (error) {
     throwError(error);
@@ -121,9 +148,10 @@ const uploadDogImage = async (image: File | string, dogId: string) => {
 
 const uploadDogPrimaryImage = async (image: File | string, dogId: string) => {
   try {
+    const userId = await getDogOwnerId(dogId);
     const res = await uploadImage({
       image,
-      path: `dogs/${dogId}/primary`,
+      path: `users/${userId}/dogs/${dogId}/primary`,
       name: 'primaryImage',
     });
     return res;
@@ -134,7 +162,10 @@ const uploadDogPrimaryImage = async (image: File | string, dogId: string) => {
 
 const fetchDogPrimaryImage = async (dogId: string) => {
   try {
-    const res = await fetchImagesByDirectory(`dogs/${dogId}/primary`);
+    const userId = await getDogOwnerId(dogId);
+    const res = await fetchImagesByDirectory(
+      `users/${userId}/dogs/${dogId}/primary`
+    );
     return res;
   } catch (error) {
     console.error(
@@ -146,7 +177,10 @@ const fetchDogPrimaryImage = async (dogId: string) => {
 
 const fetchAllDogImages = async (dogId: string) => {
   try {
-    const res = await fetchImagesByDirectory(`dogs/${dogId}/other`);
+    const userId = await getDogOwnerId(dogId);
+    const res = await fetchImagesByDirectory(
+      `users/${userId}/dogs/${dogId}/other`
+    );
     return res;
   } catch (error) {
     throwError(error);
