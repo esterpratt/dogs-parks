@@ -1,4 +1,4 @@
-import { Suspense, lazy, useContext, useState } from 'react';
+import { lazy, useContext, useState } from 'react';
 import { useOutletContext, useRevalidator } from 'react-router';
 import { Link } from 'react-router';
 import { User } from '../types/user';
@@ -129,22 +129,18 @@ const UserDogs = () => {
           />
         )}
       </div>
-      <Suspense fallback={null}>
-        <EditDogsModal
-          isOpen={isEditDogsModalOpen}
-          onClose={() => setIsEditDogsModalOpen(false)}
-          onAddDog={onAddDog}
-        />
-      </Suspense>
-      <Suspense fallback={null}>
-        <CameraModal
-          title="Add your dog image"
-          variant="centerTop"
-          onUploadImg={onAddDogImage}
-          open={isCameraModalOpen}
-          setOpen={setIsCameraModalOpen}
-        />
-      </Suspense>
+      <EditDogsModal
+        isOpen={isEditDogsModalOpen}
+        onClose={() => setIsEditDogsModalOpen(false)}
+        onAddDog={onAddDog}
+      />
+      <CameraModal
+        title="Add your dog image"
+        variant="centerTop"
+        onUploadImg={onAddDogImage}
+        open={isCameraModalOpen}
+        setOpen={setIsCameraModalOpen}
+      />
     </>
   );
 };

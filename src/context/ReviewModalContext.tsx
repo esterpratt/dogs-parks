@@ -3,13 +3,11 @@ import {
   SetStateAction,
   createContext,
   useState,
-  lazy,
-  Suspense,
   ReactNode,
 } from 'react';
 import { Review } from '../types/review';
 import { UpdateReviewProps } from '../services/reviews';
-const ReviewModal = lazy(() => import('../components/ReviewModal'));
+import { ReviewModal } from '../components/ReviewModal';
 
 interface ReviewModalContextObj {
   openedReview: Review | null;
@@ -59,14 +57,12 @@ const ReviewModalContextProvider: React.FC<ReviewModalContextProviderProps> = ({
   return (
     <ReviewModalContext.Provider value={value}>
       {children}
-      <Suspense fallback={null}>
-        <ReviewModal
-          review={openedReview ?? undefined}
-          isOpen={!!openedReview}
-          closeModal={() => setOpenedReview(null)}
-          onSubmitReview={onSubmitReview}
-        />
-      </Suspense>
+      <ReviewModal
+        review={openedReview ?? undefined}
+        isOpen={!!openedReview}
+        closeModal={() => setOpenedReview(null)}
+        onSubmitReview={onSubmitReview}
+      />
     </ReviewModalContext.Provider>
   );
 };

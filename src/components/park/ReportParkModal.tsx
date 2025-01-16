@@ -13,7 +13,7 @@ interface ReportParkModalProps {
   parkId: string;
 }
 
-const ReportParkModal: React.FC<ReportParkModalProps> = ({
+export const ReportParkModal: React.FC<ReportParkModalProps> = ({
   open,
   onClose,
   parkId,
@@ -58,5 +58,3 @@ const ReportParkModal: React.FC<ReportParkModalProps> = ({
     </Modal>
   );
 };
-
-export default ReportParkModal;

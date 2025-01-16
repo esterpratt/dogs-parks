@@ -1,4 +1,4 @@
-import { useContext, useState, lazy, Suspense } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { IconContext } from 'react-icons';
 import { MdLogout, MdOutlineModeEditOutline } from 'react-icons/md';
@@ -8,8 +8,7 @@ import { UserContext } from '../context/UserContext';
 import styles from './UserInfo.module.scss';
 import { Modal } from '../components/Modal';
 import { Button } from '../components/Button';
-
-const EditUserModal = lazy(() => import('../components/profile/EditUserModal'));
+import { EditUserModal } from '../components/profile/EditUserModal';
 
 const UserInfo = () => {
   const { userLogout, userDeletion } = useContext(UserContext);
@@ -65,13 +64,7 @@ const UserInfo = () => {
           </div>
         </div>
       </div>
-
-      <Suspense fallback={null}>
-        <EditUserModal
-          isOpen={isEditUserModalOpen}
-          onClose={onCloseUserModal}
-        />
-      </Suspense>
+      <EditUserModal isOpen={isEditUserModalOpen} onClose={onCloseUserModal} />
       <Modal
         open={isDeleteUserModalOpen}
         onClose={() => setIsDeleteUserModalOpen(false)}

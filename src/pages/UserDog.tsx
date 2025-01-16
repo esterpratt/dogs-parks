@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense } from 'react';
+import { useState, lazy } from 'react';
 import { useLocation, useParams, useRevalidator } from 'react-router';
 import { Link } from 'react-router';
 import { IoMdFemale, IoMdMale } from 'react-icons/io';
@@ -157,20 +157,16 @@ const UserDog = () => {
           contentClassName={styles.contentContainer}
         />
       </div>
-      <Suspense fallback={null}>
-        <EditDogsModal
-          dog={dog}
-          isOpen={isEditDogsModalOpen}
-          onClose={onCloseDogsModal}
-        />
-      </Suspense>
-      <Suspense fallback={null}>
-        <CameraModal
-          open={isAddImageModalOpen}
-          setOpen={setIsAddImageModalOpen}
-          onUploadImg={onUploadImg}
-        />
-      </Suspense>
+      <EditDogsModal
+        dog={dog}
+        isOpen={isEditDogsModalOpen}
+        onClose={onCloseDogsModal}
+      />
+      <CameraModal
+        open={isAddImageModalOpen}
+        setOpen={setIsAddImageModalOpen}
+        onUploadImg={onUploadImg}
+      />
     </>
   );
 };

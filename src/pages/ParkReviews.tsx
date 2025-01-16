@@ -1,4 +1,4 @@
-import { useContext, useState, lazy, Suspense } from 'react';
+import { useContext, useState } from 'react';
 import { UserContext } from '../context/UserContext';
 import { Button } from '../components/Button';
 import { ReviewPreview } from '../components/ReviewPreview';
@@ -14,8 +14,7 @@ import { queryClient } from '../services/react-query';
 import { Review, ReviewData } from '../types/review';
 import { useAddReview } from '../hooks/api/useAddReview';
 import { ReviewModalContextProvider } from '../context/ReviewModalContext';
-
-const ReviewModal = lazy(() => import('../components/ReviewModal'));
+import { ReviewModal } from '../components/ReviewModal';
 
 const Reviews: React.FC = () => {
   const { id: parkId } = useParams();
@@ -96,13 +95,11 @@ const Reviews: React.FC = () => {
             >
               Be the first to leave a review!
             </Button>
-            <Suspense fallback={null}>
-              <ReviewModal
-                onSubmitReview={onAddReview}
-                isOpen={isAddReviewModalOpen}
-                closeModal={() => setIsAddReviewModalOpen(false)}
-              />
-            </Suspense>
+            <ReviewModal
+              onSubmitReview={onAddReview}
+              isOpen={isAddReviewModalOpen}
+              closeModal={() => setIsAddReviewModalOpen(false)}
+            />
           </div>
         )}
       </div>

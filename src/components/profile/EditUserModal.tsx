@@ -17,7 +17,10 @@ interface EditUserModalProps {
   onClose: () => void;
 }
 
-const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose }) => {
+export const EditUserModal: React.FC<EditUserModalProps> = ({
+  isOpen,
+  onClose,
+}) => {
   const { user, refetchUser } = useContext(UserContext);
   const [userData, setUserData] = useState(user);
   const { setIsOpen: setIsThankYouModalOpen } =
@@ -97,5 +100,3 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose }) => {
     </Modal>
   );
 };
-
-export default EditUserModal;

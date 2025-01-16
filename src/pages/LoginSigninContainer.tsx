@@ -1,7 +1,6 @@
 import {
   FormEvent,
   MouseEvent,
-  Suspense,
   useContext,
   useEffect,
   useRef,
@@ -161,13 +160,11 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
           )}
         </div>
       </div>
-      <Suspense fallback={null}>
-        <ThankYouModal
-          open={isThankYouModalOpen}
-          onClose={() => setIsThankYouModalOpen(false)}
-          title="Check your mail for details"
-        />
-      </Suspense>
+      <ThankYouModal
+        open={isThankYouModalOpen}
+        onClose={() => setIsThankYouModalOpen(false)}
+        title="Check your mail for details"
+      />
     </>
   );
 };

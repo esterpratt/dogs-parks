@@ -24,7 +24,7 @@ interface ReviewModalProps {
   ) => void;
 }
 
-const ReviewModal: React.FC<ReviewModalProps> = ({
+export const ReviewModal: React.FC<ReviewModalProps> = ({
   isOpen,
   closeModal,
   title,
@@ -151,5 +151,3 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
     </Modal>
   );
 };
-
-export default ReviewModal;

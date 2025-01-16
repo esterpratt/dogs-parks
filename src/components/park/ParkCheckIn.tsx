@@ -1,4 +1,4 @@
-import { useContext, useState, lazy, Suspense } from 'react';
+import { useContext, useState } from 'react';
 import { TbPennant, TbPennantOff } from 'react-icons/tb';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { checkin, checkout } from '../../services/checkins';
@@ -12,8 +12,7 @@ import { ThankYouModalContext } from '../../context/ThankYouModalContext';
 import { fetchUserReviews } from '../../services/reviews';
 import { ControlledInput } from '../inputs/ControlledInput';
 import { ParkIcon } from './ParkIcon';
-
-const ReviewModal = lazy(() => import('../ReviewModal'));
+import { ReviewModal } from '../ReviewModal';
 
 const ParkCheckIn: React.FC<{
   parkId: string;
@@ -145,17 +144,15 @@ const ParkCheckIn: React.FC<{
           />
         </div>
       </Modal>
-      <Suspense fallback={null}>
-        <ReviewModal
-          showForm={showForm}
-          title={`Hope you had a tail-wagging time! ${
-            showForm ? 'Leave a review if you can!' : ''
-          }`}
-          isOpen={openReviewModal}
-          closeModal={() => setOpenReviewModal(false)}
-          onSubmitReview={onSubmitReview}
-        />
-      </Suspense>
+      <ReviewModal
+        showForm={showForm}
+        title={`Hope you had a tail-wagging time! ${
+          showForm ? 'Leave a review if you can!' : ''
+        }`}
+        isOpen={openReviewModal}
+        closeModal={() => setOpenReviewModal(false)}
+        onSubmitReview={onSubmitReview}
+      />
     </div>
   );
 };

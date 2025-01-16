@@ -5,7 +5,6 @@ import {
   createContext,
   useState,
   lazy,
-  Suspense,
 } from 'react';
 const ThankYouModal = lazy(() => import('../components/ThankYouModal'));
 
@@ -35,9 +34,7 @@ const ThankYouModalContextProvider: React.FC<PropsWithChildren> = ({
   return (
     <ThankYouModalContext.Provider value={value}>
       {children}
-      <Suspense fallback={null}>
-        <ThankYouModal open={isOpen} onClose={() => setIsOpen(false)} />
-      </Suspense>
+      <ThankYouModal open={isOpen} onClose={() => setIsOpen(false)} />
     </ThankYouModalContext.Provider>
   );
 };

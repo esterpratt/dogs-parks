@@ -1,4 +1,4 @@
-import { useContext, useState, lazy, Suspense } from 'react';
+import { useContext, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { Stars } from '../Stars';
 import styles from './ReviewsPreview.module.scss';
@@ -7,8 +7,7 @@ import { UserContext } from '../../context/UserContext';
 import { useQuery } from '@tanstack/react-query';
 import { fetchParkRank, fetchReviews } from '../../services/reviews';
 import { useAddReview } from '../../hooks/api/useAddReview';
-
-const ReviewModal = lazy(() => import('../ReviewModal'));
+import { ReviewModal } from '../ReviewModal';
 
 const ReviewsPreview = () => {
   const { id: parkId } = useParams();
@@ -64,13 +63,11 @@ const ReviewsPreview = () => {
           >
             Add a review
           </Button>
-          <Suspense fallback={null}>
-            <ReviewModal
-              onSubmitReview={onAddReview}
-              isOpen={isAddReviewModalOpen}
-              closeModal={() => setIsAddReviewModalOpen(false)}
-            />
-          </Suspense>
+          <ReviewModal
+            onSubmitReview={onAddReview}
+            isOpen={isAddReviewModalOpen}
+            closeModal={() => setIsAddReviewModalOpen(false)}
+          />
         </div>
       )}
     </div>

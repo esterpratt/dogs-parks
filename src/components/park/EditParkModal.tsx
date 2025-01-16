@@ -29,7 +29,7 @@ const getBooleanValue = (value?: string) => {
   return undefined;
 };
 
-const EditParkModal: React.FC<EditParksModalProps> = ({
+export const EditParkModal: React.FC<EditParksModalProps> = ({
   isOpen,
   onClose,
   park,
@@ -207,5 +207,3 @@ const EditParkModal: React.FC<EditParksModalProps> = ({
     </Modal>
   );
 };
-
-export default EditParkModal;

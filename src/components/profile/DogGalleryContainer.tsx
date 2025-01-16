@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense } from 'react';
+import { useState, lazy } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Dog } from '../../types/dog';
@@ -86,13 +86,11 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
           />
         </AccordionContainer.Content>
       </AccordionContainer>
-      <Suspense fallback={null}>
-        <CameraModal
-          open={isAddImageModalOpen}
-          setOpen={setIsAddImageModalOpen}
-          onUploadImg={onUploadImg}
-        />
-      </Suspense>
+      <CameraModal
+        open={isAddImageModalOpen}
+        setOpen={setIsAddImageModalOpen}
+        onUploadImg={onUploadImg}
+      />
     </>
   );
 };
