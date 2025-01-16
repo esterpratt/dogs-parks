@@ -12,7 +12,7 @@ const ChooseEditParkOptionModal = lazy(
   () => import('../components/park/ChooseEditParkOptionModal')
 );
 
-const ParkDetails = () => {
+export const ParkDetails = () => {
   const park = useOutletContext<Park>();
   const { userId } = useContext(UserContext);
   const [isEditParkModalOpen, setIsEditParkModalOpen] = useState(false);
@@ -64,5 +64,3 @@ const ParkDetails = () => {
     </div>
   );
 };
-
-export default ParkDetails;

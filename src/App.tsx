@@ -16,6 +16,7 @@ import { Parks } from './pages/Parks';
 import { Users } from './pages/Users';
 import { UserDogs } from './pages/UserDogs';
 import { Park } from './pages/Park';
+import { ParkDetails } from './pages/ParkDetails';
 import { NewPark } from './pages/NewPark';
 import { Loader } from './components/Loading';
 
@@ -35,7 +36,6 @@ const UserFriends = lazy(() => import('./pages/UserFriends'));
 const UserFavorites = lazy(() => import('./pages/UserFavorites'));
 const UserInfo = lazy(() => import('./pages/UserInfo'));
 const ParkReviews = lazy(() => import('./pages/ParkReviews'));
-const ParkDetails = lazy(() => import('./pages/ParkDetails'));
 const ParkVisitors = lazy(() => import('./pages/ParkVisitors'));
 
 const App = () => {
@@ -63,11 +63,7 @@ const App = () => {
           children: [
             {
               index: true,
-              element: (
-                <Suspense fallback={<Loader />}>
-                  <ParkDetails />
-                </Suspense>
-              ),
+              element: <ParkDetails />,
             },
             {
               path: 'reviews',
