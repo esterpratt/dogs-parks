@@ -1,4 +1,4 @@
-import { useContext, useState, lazy, Suspense } from 'react';
+import { useContext, useState, lazy } from 'react';
 import { useNavigate } from 'react-router';
 import { IconContext } from 'react-icons';
 import { MdLogout, MdOutlineModeEditOutline } from 'react-icons/md';
@@ -6,7 +6,7 @@ import { IoTrashOutline } from 'react-icons/io5';
 import classnames from 'classnames';
 import { UserContext } from '../context/UserContext';
 import styles from './UserInfo.module.scss';
-import { Loader } from '../components/Loading';
+// import { Loader } from '../components/Loading';
 import { Modal } from '../components/Modal';
 import { Button } from '../components/Button';
 
