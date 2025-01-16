@@ -33,8 +33,6 @@ const UserInfo = () => {
 
   const onDeleteUser = () => {
     userDeletion();
-    // setTimeout(() => {}, 3000);
-    // navigate('/user-deleted', { state: { fromUser: true } });
   };
 
   return (
@@ -69,12 +67,9 @@ const UserInfo = () => {
         </div>
       </div>
 
-      <Suspense fallback={<Loader />}>
-        <EditUserModal
-          isOpen={isEditUserModalOpen}
-          onClose={onCloseUserModal}
-        />
-      </Suspense>
+      {/* <Suspense fallback={<Loader />}> */}
+      <EditUserModal isOpen={isEditUserModalOpen} onClose={onCloseUserModal} />
+      {/* </Suspense> */}
       <Modal
         open={isDeleteUserModalOpen}
         onClose={() => setIsDeleteUserModalOpen(false)}
