@@ -1,4 +1,4 @@
-import { lazy, useContext, useState } from 'react';
+import { lazy, Suspense, useContext, useState } from 'react';
 import { useOutletContext, useRevalidator } from 'react-router';
 import { Link } from 'react-router';
 import { User } from '../types/user';
@@ -8,12 +8,12 @@ import styles from './UserDogs.module.scss';
 import { FriendRequestButton } from '../components/profile/FriendRequestButton';
 import { UserContext } from '../context/UserContext';
 import { Button } from '../components/Button';
-import CameraModal from '../components/camera/CameraModal';
 import { useMutation } from '@tanstack/react-query';
 import { uploadDogPrimaryImage } from '../services/dogs';
 import { queryClient } from '../services/react-query';
 
 const EditDogsModal = lazy(() => import('../components/profile/EditDogsModal'));
+const CameraModal = lazy(() => import('../components/camera/CameraModal'));
 
 interface UserDogsProps {
   user: User;
@@ -129,18 +129,22 @@ const UserDogs = () => {
           />
         )}
       </div>
-      <EditDogsModal
-        isOpen={isEditDogsModalOpen}
-        onClose={() => setIsEditDogsModalOpen(false)}
-        onAddDog={onAddDog}
-      />
-      <CameraModal
-        title="Add your dog image"
-        variant="centerTop"
-        onUploadImg={onAddDogImage}
-        open={isCameraModalOpen}
-        setOpen={setIsCameraModalOpen}
-      />
+      <Suspense fallback={null}>
+        <EditDogsModal
+          isOpen={isEditDogsModalOpen}
+          onClose={() => setIsEditDogsModalOpen(false)}
+          onAddDog={onAddDog}
+        />
+      </Suspense>
+      <Suspense fallback={null}>
+        <CameraModal
+          title="Add your dog image"
+          variant="centerTop"
+          onUploadImg={onAddDogImage}
+          open={isCameraModalOpen}
+          setOpen={setIsCameraModalOpen}
+        />
+      </Suspense>
     </>
   );
 };

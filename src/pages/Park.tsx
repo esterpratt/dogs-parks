@@ -1,4 +1,4 @@
-import { useContext, useState, lazy } from 'react';
+import { useContext, useState, lazy, Suspense } from 'react';
 import { Outlet, useNavigate, useParams } from 'react-router';
 import { LuTrees } from 'react-icons/lu';
 import { IoShareSocialSharp } from 'react-icons/io5';
@@ -133,16 +133,20 @@ const Park: React.FC = () => {
           <Outlet context={park} />
         </div>
       </div>
-      <CameraModal
-        open={isAddImageModalOpen}
-        setOpen={setIsAddImageModalOpen}
-        onUploadImg={onUploadImg}
-      />
-      <ThankYouModal
-        open={isThankYouModalOpen}
-        onClose={() => setIsThankYouModalOpen(false)}
-        title="Park Copied to Clipboard"
-      />
+      <Suspense fallback={null}>
+        <CameraModal
+          open={isAddImageModalOpen}
+          setOpen={setIsAddImageModalOpen}
+          onUploadImg={onUploadImg}
+        />
+      </Suspense>
+      <Suspense fallback={null}>
+        <ThankYouModal
+          open={isThankYouModalOpen}
+          onClose={() => setIsThankYouModalOpen(false)}
+          title="Park Copied to Clipboard"
+        />
+      </Suspense>
     </>
   );
 };

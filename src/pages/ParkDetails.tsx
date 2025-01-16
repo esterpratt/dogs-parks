@@ -1,4 +1,4 @@
-import { useContext, useState, lazy } from 'react';
+import { useContext, useState, lazy, Suspense } from 'react';
 import { useOutletContext } from 'react-router';
 import { MdOutlineModeEditOutline } from 'react-icons/md';
 import { BusyHours } from '../components/park/BusyHours';
@@ -52,11 +52,13 @@ export const ParkDetails = () => {
         </AccordionContainer.Content>
       </AccordionContainer>
       {!!userId && (
-        <ChooseEditParkOptionModal
-          isOpen={isEditParkModalOpen}
-          onClose={() => setIsEditParkModalOpen(false)}
-          park={park}
-        />
+        <Suspense fallback={null}>
+          <ChooseEditParkOptionModal
+            isOpen={isEditParkModalOpen}
+            onClose={() => setIsEditParkModalOpen(false)}
+            park={park}
+          />
+        </Suspense>
       )}
       <ParkGalleryContainer parkId={park.id} />
     </div>
