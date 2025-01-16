@@ -17,6 +17,7 @@ const Tab: React.FC<TabProps> = ({
 }) => {
   return (
     <NavLink
+      prefetch="render"
       end={end}
       to={url}
       className={({ isActive }: { isActive: boolean }) =>
