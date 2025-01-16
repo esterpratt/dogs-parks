@@ -10,6 +10,7 @@ import { CgClose } from 'react-icons/cg';
 import { FavoriteRibbon } from '../FavoriteRibbon';
 import { useQuery } from '@tanstack/react-query';
 import { fetchFavoriteParks } from '../../services/favorites';
+import { useState } from 'react';
 
 interface ParkPopupProps {
   activePark: Park | null;
@@ -44,6 +45,8 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
     gcTime: HOUR_IN_MS,
   });
 
+  const [isClosing, setIsClosing] = useState(false);
+
   const isFavorite =
     activePark && favoriteParkIds && favoriteParkIds.includes(activePark?.id);
 
@@ -53,9 +56,26 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
     }
   };
 
+  const handleTransitionEnd = () => {
+    if (isClosing) {
+      setIsClosing(false);
+      onClose();
+    }
+  };
+
   return (
-    <div className={classnames(styles.parkModal, !!activePark && styles.open)}>
-      <CgClose onClick={onClose} size={24} className={styles.close} />
+    <div
+      className={classnames(
+        styles.parkModal,
+        !!activePark && !isClosing && styles.open
+      )}
+      onTransitionEnd={handleTransitionEnd}
+    >
+      <CgClose
+        onClick={() => setIsClosing(true)}
+        size={24}
+        className={styles.close}
+      />
       <Link to={`/parks/${activePark?.id}`} className={styles.imgContainer}>
         {image ? (
           <img src={image} className={styles.img} />
