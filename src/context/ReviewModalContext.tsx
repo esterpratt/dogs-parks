@@ -7,7 +7,6 @@ import {
   Suspense,
   ReactNode,
 } from 'react';
-import { Loader } from '../components/Loading';
 import { Review } from '../types/review';
 import { UpdateReviewProps } from '../services/reviews';
 const ReviewModal = lazy(() => import('../components/ReviewModal'));
@@ -60,7 +59,7 @@ const ReviewModalContextProvider: React.FC<ReviewModalContextProviderProps> = ({
   return (
     <ReviewModalContext.Provider value={value}>
       {children}
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={null}>
         <ReviewModal
           review={openedReview ?? undefined}
           isOpen={!!openedReview}

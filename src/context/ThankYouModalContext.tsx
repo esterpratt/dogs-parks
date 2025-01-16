@@ -7,7 +7,6 @@ import {
   lazy,
   Suspense,
 } from 'react';
-import { Loader } from '../components/Loading';
 const ThankYouModal = lazy(() => import('../components/ThankYouModal'));
 
 interface ThankYouModalContextObj {
@@ -36,7 +35,7 @@ const ThankYouModalContextProvider: React.FC<PropsWithChildren> = ({
   return (
     <ThankYouModalContext.Provider value={value}>
       {children}
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={null}>
         <ThankYouModal open={isOpen} onClose={() => setIsOpen(false)} />
       </Suspense>
     </ThankYouModalContext.Provider>

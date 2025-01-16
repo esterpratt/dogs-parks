@@ -7,7 +7,6 @@ import { DogPreview, LOADING } from '../components/profile/DogPreview';
 import styles from './UserDogs.module.scss';
 import { FriendRequestButton } from '../components/profile/FriendRequestButton';
 import { UserContext } from '../context/UserContext';
-import { Loader } from '../components/Loading';
 import { Button } from '../components/Button';
 import CameraModal from '../components/camera/CameraModal';
 import { useMutation } from '@tanstack/react-query';
@@ -130,14 +129,14 @@ const UserDogs = () => {
           />
         )}
       </div>
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={null}>
         <EditDogsModal
           isOpen={isEditDogsModalOpen}
           onClose={() => setIsEditDogsModalOpen(false)}
           onAddDog={onAddDog}
         />
       </Suspense>
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={null}>
         <CameraModal
           title="Add your dog image"
           variant="centerTop"

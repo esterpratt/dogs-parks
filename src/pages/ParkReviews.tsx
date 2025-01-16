@@ -13,7 +13,6 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '../services/react-query';
 import { Review, ReviewData } from '../types/review';
 import { useAddReview } from '../hooks/api/useAddReview';
-import { Loader } from '../components/Loading';
 import { ReviewModalContextProvider } from '../context/ReviewModalContext';
 
 const ReviewModal = lazy(() => import('../components/ReviewModal'));
@@ -97,7 +96,7 @@ const Reviews: React.FC = () => {
             >
               Be the first to leave a review!
             </Button>
-            <Suspense fallback={<Loader />}>
+            <Suspense fallback={null}>
               <ReviewModal
                 onSubmitReview={onAddReview}
                 isOpen={isAddReviewModalOpen}
