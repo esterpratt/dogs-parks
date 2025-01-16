@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import classnames from 'classnames';
 import { FcGoogle } from 'react-icons/fc';
 import styles from './LoginSigninContainer.module.scss';

@@ -1,6 +1,6 @@
 import { useState, lazy, Suspense } from 'react';
 import { useLocation, useParams, useRevalidator } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { IoMdFemale, IoMdMale } from 'react-icons/io';
 import { MdOutlineModeEditOutline } from 'react-icons/md';
 import { PiCameraFill, PiDog } from 'react-icons/pi';

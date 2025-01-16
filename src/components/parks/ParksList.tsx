@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import classnames from 'classnames';
 import { Park } from '../../types/park';
 import { SearchList } from '../SearchList';

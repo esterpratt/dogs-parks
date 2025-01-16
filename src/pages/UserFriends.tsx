@@ -1,4 +1,4 @@
-import { Link, useOutletContext } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router';
 import { UserPreview } from '../components/users/UserPreview';
 import styles from './UserFriends.module.scss';
 import { User } from '../types/user';

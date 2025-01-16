@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { IconContext } from 'react-icons';
 import { HiHome } from 'react-icons/hi';
 import { FaMapMarkedAlt } from 'react-icons/fa';

@@ -1,5 +1,5 @@
 import { PropsWithChildren, useContext } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router';
 import { UserContext } from '../context/UserContext';
 import { Loader } from '../components/Loading';
 

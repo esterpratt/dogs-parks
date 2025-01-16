@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { PiDog } from 'react-icons/pi';
 import classnames from 'classnames';
 import { User } from '../../types/user';

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { ParksList } from '../components/parks/ParksList';
 import styles from './Parks.module.scss';
 import { Button } from '../components/Button';

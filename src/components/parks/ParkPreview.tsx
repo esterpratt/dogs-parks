@@ -1,6 +1,6 @@
 import React, { MouseEvent } from 'react';
 import { useNavigate } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import classnames from 'classnames';
 import { Park } from '../../types/park';
 import styles from './ParkPreview.module.scss';

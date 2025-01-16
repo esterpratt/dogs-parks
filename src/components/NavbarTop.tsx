@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { IconContext } from 'react-icons';
 import { GiSittingDog } from 'react-icons/gi';
 import { FaInfo } from 'react-icons/fa6';

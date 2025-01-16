@@ -30,7 +30,7 @@ const Profile: React.FC = () => {
       {isSignedInUser && <ProfileTabs />}
       <Suspense fallback={<Loader />}>
         <Await resolve={dogImages}>
-          {(dogImages: (string | null)[]) => (
+          {(dogImages) => (
             <div
               className={classnames(
                 styles.container,

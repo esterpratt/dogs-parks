@@ -1,9 +1,6 @@
 import { Suspense, lazy } from 'react';
-import {
-  Navigate,
-  RouterProvider,
-  createBrowserRouter,
-} from 'react-router-dom';
+import { Navigate, createBrowserRouter } from 'react-router';
+import { RouterProvider } from 'react-router/dom';
 import { QueryClientProvider } from '@tanstack/react-query';
 import './App.scss';
 import { Home } from './pages/Home';

@@ -1,6 +1,6 @@
 import { Suspense, lazy, useContext, useState } from 'react';
 import { useOutletContext, useRevalidator } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { User } from '../types/user';
 import { Dog } from '../types/dog';
 import { DogPreview, LOADING } from '../components/profile/DogPreview';

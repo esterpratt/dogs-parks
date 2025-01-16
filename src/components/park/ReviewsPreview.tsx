@@ -1,5 +1,5 @@
 import { useContext, useState, lazy, Suspense } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router';
 import { Stars } from '../Stars';
 import styles from './ReviewsPreview.module.scss';
 import { Button } from '../Button';

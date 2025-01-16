@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router';
 import { UserPreview } from '../components/users/UserPreview';
 import styles from './ParkVisitors.module.scss';
 import { useQuery } from '@tanstack/react-query';

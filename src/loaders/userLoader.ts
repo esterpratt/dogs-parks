@@ -1,4 +1,4 @@
-import { LoaderFunction, defer, redirect } from 'react-router';
+import { LoaderFunction, redirect } from 'react-router';
 import { fetchUser } from '../services/users';
 import { fetchDogPrimaryImage, fetchUserDogs } from '../services/dogs';
 import { queryClient } from '../services/react-query';
@@ -39,7 +39,7 @@ const userLoader: LoaderFunction = async ({ params }) => {
       return Promise.all(dogsImagesPromises);
     };
 
-    return defer({ user, dogs, dogImages: getDogsImages() });
+    return { user, dogs, dogImages: getDogsImages() };
   } catch (error) {
     return redirect('/login');
   }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import { MdGpsFixed } from 'react-icons/md';
 import { Location, Park } from '../../types/park';

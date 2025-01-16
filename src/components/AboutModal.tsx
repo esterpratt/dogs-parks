@@ -1,6 +1,6 @@
 import { Modal } from './Modal';
 import styles from './AboutModal.module.scss';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { MAIL } from '../services/reports';
 
 interface AboutModalProps {

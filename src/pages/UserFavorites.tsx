@@ -1,7 +1,7 @@
 import { useParams } from 'react-router';
 import styles from './UserFavorites.module.scss';
 import { ParkPreview } from '../components/parks/ParkPreview';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { fetchParks } from '../services/parks';
 import { useQuery } from '@tanstack/react-query';
 import { fetchUserFavorites } from '../services/favorites';
