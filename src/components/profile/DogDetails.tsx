@@ -28,7 +28,7 @@ const DogDetails: React.FC<DogProps> = ({
       { label: 'Energy', data: dog.energy },
       { label: 'Possessive', data: dog.possessive },
       { label: 'Likes', data: dog.likes?.join(', ') },
-      { label: 'dislikes', data: dog.dislikes?.join(', ') },
+      { label: 'Dislikes', data: dog.dislikes?.join(', ') },
       {
         label: `More About ${dog.name}`,
         data: dog.description,
