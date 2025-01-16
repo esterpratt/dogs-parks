@@ -49,7 +49,6 @@ const updateDog = async ({ dogId, dogDetails }: EditDogProps) => {
 
 const getDogOwnerId = async (dogId: string) => {
   if (dogOwnerCache.has(dogId)) {
-    console.log('fetching from cache');
     return dogOwnerCache.get(dogId);
   }
 
@@ -59,8 +58,6 @@ const getDogOwnerId = async (dogId: string) => {
   if (!dogSnap.exists()) {
     throw new AppError('dog does not exists', 404);
   }
-
-  console.log('fetching from firebase');
 
   const ownerId = dogSnap.data().owner;
   dogOwnerCache.set(dogId, ownerId);
