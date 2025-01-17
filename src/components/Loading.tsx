@@ -10,7 +10,7 @@ interface LoaderProps {
 
 const Loader: React.FC<LoaderProps> = ({
   delay = 100,
-  minDisplayTime = 1000,
+  minDisplayTime = 700,
   className,
 }) => {
   const [show, setShow] = useState(false);
