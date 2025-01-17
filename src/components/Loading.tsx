@@ -9,16 +9,16 @@ interface LoaderProps {
 }
 
 const Loader: React.FC<LoaderProps> = ({
-  delay = 200,
-  minDisplayTime = 500,
+  delay = 100,
+  minDisplayTime = 1000,
   className,
 }) => {
   const [show, setShow] = useState(false);
   const [forceDisplay, setForceDisplay] = useState(true);
 
   useEffect(() => {
-    const showTimer = setTimeout(() => setShow(true), delay); // Delay before showing
-    const hideTimer = setTimeout(() => setForceDisplay(false), minDisplayTime); // Minimum display time
+    const showTimer = setTimeout(() => setShow(true), delay);
+    const hideTimer = setTimeout(() => setForceDisplay(false), minDisplayTime);
 
     return () => {
       clearTimeout(showTimer);
