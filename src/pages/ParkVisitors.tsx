@@ -5,8 +5,9 @@ import styles from './ParkVisitors.module.scss';
 import { useQuery } from '@tanstack/react-query';
 import { UserContext } from '../context/UserContext';
 import { fetchUsersWithDogsByIds } from '../services/users';
-import { Loader } from '../components/Loading';
+import { Loader } from '../components/Loader';
 import { useGetParkVisitors } from '../hooks/api/useGetParkVisitors';
+import { useDelayedLoading } from '../hooks/useDelayedLoading';
 
 const ParkVisitors: React.FC = () => {
   const { userId } = useContext(UserContext);
@@ -25,14 +26,15 @@ const ParkVisitors: React.FC = () => {
     enabled: !!friendsInParkIds.length,
   });
 
+  const showLoader = useDelayedLoading({
+    isLoading: isLoadingDogs || isLoadingFriendsIds || isLoadingVisitors,
+    minDuration: 1000,
+  });
+
   const friendsCount = friendsInParkIds.length;
   const othersCount = visitorsIds.length - friendsCount;
   const userIsOnlyVisitor =
     othersCount === 1 && friendsCount === 0 && visitorsIds[0] === userId;
-
-  if (isLoadingDogs || isLoadingFriendsIds || isLoadingVisitors) {
-    return <Loader />;
-  }
 
   if (!friendsCount && !othersCount) {
     return null;
@@ -40,7 +42,8 @@ const ParkVisitors: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      {!!friendsCount && (
+      {showLoader && <Loader inside />}
+      {!showLoader && !!friendsCount && (
         <div className={styles.friendsContainer}>
           <span className={styles.friendsTitle}>
             Your Friends that in the park right now:
@@ -54,7 +57,7 @@ const ParkVisitors: React.FC = () => {
           ))}
         </div>
       )}
-      {!!othersCount && (
+      {!showLoader && !!othersCount && (
         <div className={styles.othersContainer}>
           <span className={styles.othersTitle}>
             {userIsOnlyVisitor ? (

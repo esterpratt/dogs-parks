@@ -4,6 +4,7 @@ import { useDebounce } from '../hooks/useDebounce';
 import styles from './SearchList.module.scss';
 import { Button } from './Button';
 import { SearchListItems } from './SearchListItems';
+import { Loader } from './Loader';
 
 interface SearchListProps<T> {
   items: T[];
@@ -29,6 +30,8 @@ const SearchList = <T,>({
   const [input, setInput] = useState<string>('');
   const { searchInput: debouncedInput } = useDebounce(input);
   const [blurredInput, setBlurredInput] = useState('');
+  const [showLoader, setShowLoader] = useState(false);
+  const [showNoResults, setShowNoResults] = useState(false);
 
   const searchInput = isSearchToSee ? blurredInput : debouncedInput;
 
@@ -38,10 +41,16 @@ const SearchList = <T,>({
 
   const onChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
     setInput(event.target.value);
+    setShowNoResults(false);
   };
 
-  const onBlur = () => {
-    setBlurredInput(input);
+  const onClickSearch = () => {
+    setShowLoader(true);
+    setShowNoResults(true);
+    setTimeout(() => {
+      setBlurredInput(input);
+      setShowLoader(false);
+    }, 1000);
   };
 
   return (
@@ -49,21 +58,27 @@ const SearchList = <T,>({
       <input
         value={input}
         onChange={onChangeInput}
-        onBlur={onBlur}
         placeholder={placeholder}
         className={styles.input}
       />
       {isSearchToSee && (
-        <Button variant="green" onClick={onBlur} className={styles.button}>
+        <Button
+          disabled={!input.length}
+          variant="green"
+          onClick={onClickSearch}
+          className={styles.button}
+        >
           Search
         </Button>
       )}
-      {!!filteredItems.length && (
+      {showLoader && <Loader inside />}
+      {!showLoader && !!filteredItems.length && (
         <SearchListItems items={filteredItems} itemKeyfn={itemKeyfn}>
           {children}
         </SearchListItems>
       )}
-      {(!isSearchToSee || (isSearchToSee && searchInput)) &&
+      {!showLoader &&
+        (!isSearchToSee || (isSearchToSee && showNoResults)) &&
         !filteredItems.length && (
           <span className={styles.noResults}>{noResultsLayout}</span>
         )}

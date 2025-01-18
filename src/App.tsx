@@ -15,7 +15,7 @@ import { UserDogs } from './pages/UserDogs';
 import { Park } from './pages/Park';
 import { ParkDetails } from './pages/ParkDetails';
 import { NewPark } from './pages/NewPark';
-import { Loader } from './components/Loading';
+import { Loader } from './components/Loader';
 
 import { queryClient } from './services/react-query';
 

@@ -15,16 +15,20 @@ import { Review, ReviewData } from '../types/review';
 import { useAddReview } from '../hooks/api/useAddReview';
 import { ReviewModalContextProvider } from '../context/ReviewModalContext';
 import { ReviewModal } from '../components/ReviewModal';
+import { useDelayedLoading } from '../hooks/useDelayedLoading';
+import { Loader } from '../components/Loader';
 
 const Reviews: React.FC = () => {
   const { id: parkId } = useParams();
   const { userId } = useContext(UserContext);
   const [isAddReviewModalOpen, setIsAddReviewModalOpen] = useState(false);
 
-  const { data: reviews } = useQuery({
+  const { data: reviews, isLoading } = useQuery({
     queryKey: ['reviews', parkId],
     queryFn: () => fetchReviews(parkId!),
   });
+
+  const showLoader = useDelayedLoading({ isLoading, minDuration: 1000 });
 
   const { addReview } = useAddReview(parkId!, userId);
 
@@ -108,14 +112,17 @@ const Reviews: React.FC = () => {
 
   return (
     <ReviewModalContextProvider onUpdateReview={onUpdateReview}>
-      <div>
-        <ul className={styles.list}>
-          {reviews.map((review) => (
-            <li key={review.id} className={styles.item}>
-              <ReviewPreview review={review} userId={userId} />
-            </li>
-          ))}
-        </ul>
+      <div className={styles.container}>
+        {showLoader && <Loader inside />}
+        {!showLoader && (
+          <ul className={styles.list}>
+            {reviews.map((review) => (
+              <li key={review.id} className={styles.item}>
+                <ReviewPreview review={review} userId={userId} />
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </ReviewModalContextProvider>
   );

@@ -17,10 +17,11 @@ import {
   uploadParkPrimaryImage,
 } from '../services/parks';
 import { queryClient } from '../services/react-query';
-import { Loader } from '../components/Loading';
+import { Loader } from '../components/Loader';
 import { ParkCheckIn } from '../components/park/ParkCheckIn';
 import { ParkIcon } from '../components/park/ParkIcon';
 import { Button } from '../components/Button';
+import { useDelayedLoading } from '../hooks/useDelayedLoading';
 
 const CameraModal = lazy(() => import('../components/camera/CameraModal'));
 const ThankYouModal = lazy(() => import('../components/ThankYouModal'));
@@ -43,6 +44,10 @@ const Park: React.FC = () => {
       const images = await fetchParkPrimaryImage(parkId!);
       return images?.length ? images[0] : null;
     },
+  });
+
+  const showLoader = useDelayedLoading({
+    isLoading: isLoading || isLoadingImage,
   });
 
   const { mutate } = useMutation({
@@ -68,7 +73,7 @@ const Park: React.FC = () => {
     navigate('/', { state: { location: park!.location } });
   };
 
-  if (isLoading || isLoadingImage) {
+  if (showLoader) {
     return <Loader />;
   }
 

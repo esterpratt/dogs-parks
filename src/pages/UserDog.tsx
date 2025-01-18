@@ -20,6 +20,8 @@ import { queryClient } from '../services/react-query';
 import { AccordionContainer } from '../components/accordion/AccordionContainer';
 import { getAge } from '../utils/time';
 import { LOADING } from '../components/profile/DogPreview';
+import { useDelayedLoading } from '../hooks/useDelayedLoading';
+import { Loader } from '../components/Loader';
 
 const CameraModal = lazy(() => import('../components/camera/CameraModal'));
 const EditDogsModal = lazy(() => import('../components/profile/EditDogsModal'));
@@ -40,12 +42,16 @@ const UserDog = () => {
     },
   });
 
-  const { data: primaryImage } = useQuery({
+  const { data: primaryImage, isLoading: isLoadingImage } = useQuery({
     queryKey: ['dogImage', dogId],
     queryFn: async () => {
       const images = await fetchDogPrimaryImage(dogId!);
       return images?.length ? images[0] : null;
     },
+  });
+
+  const showLoader = useDelayedLoading({
+    isLoading: isLoadingDog || isLoadingImage,
   });
 
   const { mutate: setDogImage, isPending: isUploadingImage } = useMutation({
@@ -79,7 +85,11 @@ const UserDog = () => {
     setDogImage(img);
   };
 
-  if (!dog || isLoadingDog) {
+  if (showLoader) {
+    return <Loader />;
+  }
+
+  if (!dog) {
     return null;
   }
 

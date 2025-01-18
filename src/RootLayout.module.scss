@@ -1,6 +1,8 @@
 @import './variables.scss';
 
 .app-content {
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
   overflow: auto;
   max-height: $content-max-height;

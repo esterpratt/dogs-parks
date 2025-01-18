@@ -7,8 +7,9 @@ import { ParkPreview } from './ParkPreview';
 import { useDistance } from '../../hooks/useDistance';
 import { fetchParksJSON } from '../../services/parks';
 import { useQuery } from '@tanstack/react-query';
-import { Loader } from '../Loading';
+import { Loader } from '../Loader';
 import { useMemo } from 'react';
+import { useDelayedLoading } from '../../hooks/useDelayedLoading';
 
 interface ParksListProps {
   className?: string;
@@ -19,6 +20,8 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
     queryKey: ['parks'],
     queryFn: fetchParksJSON,
   });
+
+  const showLoader = useDelayedLoading({ isLoading });
 
   const parksToSort = useMemo(() => {
     return parks?.map((park) => ({
@@ -45,7 +48,7 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
     </div>
   );
 
-  if (isLoading) {
+  if (showLoader) {
     return <Loader />;
   }
 

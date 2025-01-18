@@ -5,7 +5,8 @@ import { Link } from 'react-router';
 import { fetchParks } from '../services/parks';
 import { useQuery } from '@tanstack/react-query';
 import { fetchUserFavorites } from '../services/favorites';
-import { Loader } from '../components/Loading';
+import { Loader } from '../components/Loader';
+import { useDelayedLoading } from '../hooks/useDelayedLoading';
 
 const UserFavorites = () => {
   const { id: userId } = useParams();
@@ -24,11 +25,15 @@ const UserFavorites = () => {
     enabled: !!favoriteParkIds?.length,
   });
 
+  const showLoader = useDelayedLoading({
+    isLoading: isLoadingParks || isLoadingFavorites,
+  });
+
   const favoriteParks = parks?.length
     ? parks.filter((park) => favoriteParkIds?.includes(park.id))
     : [];
 
-  if (isLoadingParks || isLoadingFavorites) {
+  if (showLoader) {
     return <Loader />;
   }
 

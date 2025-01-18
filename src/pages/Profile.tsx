@@ -5,8 +5,9 @@ import { User } from '../types/user';
 import { Dog } from '../types/dog';
 import { UserContext } from '../context/UserContext';
 import { ProfileTabs } from '../components/profile/ProfileTabs';
-import { Loader } from '../components/Loading';
+import { Loader } from '../components/Loader';
 import styles from './Profile.module.scss';
+import { useDelayedLoading } from '../hooks/useDelayedLoading';
 
 const Profile: React.FC = () => {
   const { user, dogs, dogImages } = useLoaderData() as {
@@ -17,7 +18,9 @@ const Profile: React.FC = () => {
   const { user: signedInUser, isLoading } = useContext(UserContext);
   const isSignedInUser = signedInUser?.id === user.id;
 
-  if (isLoading) {
+  const showLoader = useDelayedLoading({ isLoading });
+
+  if (showLoader) {
     return <Loader />;
   }
 

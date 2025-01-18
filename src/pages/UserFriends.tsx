@@ -2,11 +2,12 @@ import { Link, useOutletContext } from 'react-router';
 import { UserPreview } from '../components/users/UserPreview';
 import styles from './UserFriends.module.scss';
 import { User } from '../types/user';
-import { Loader } from '../components/Loading';
+import { Loader } from '../components/Loader';
 import { useQuery } from '@tanstack/react-query';
 import { fetchFriendsWithDogs } from '../services/users';
 import { FRIENDSHIP_STATUS, USER_ROLE } from '../types/friendship';
 import { FRIENDS_KEY } from '../hooks/api/keys';
+import { useDelayedLoading } from '../hooks/useDelayedLoading';
 
 const UserFriends = () => {
   const { user } = useOutletContext() as { user: User };
@@ -41,11 +42,12 @@ const UserFriends = () => {
         }),
     });
 
-  if (
-    isLoadingFriends ||
-    isLoadingPendingFriends ||
-    isLoadingMyPendingFriends
-  ) {
+  const showLoader = useDelayedLoading({
+    isLoading:
+      isLoadingFriends || isLoadingPendingFriends || isLoadingMyPendingFriends,
+  });
+
+  if (showLoader) {
     return <Loader />;
   }
 
