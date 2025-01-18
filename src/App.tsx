@@ -1,4 +1,4 @@
-import { Suspense, lazy } from 'react';
+import { lazy } from 'react';
 import { Navigate, createBrowserRouter } from 'react-router';
 import { RouterProvider } from 'react-router/dom';
 import { QueryClientProvider } from '@tanstack/react-query';
@@ -15,7 +15,6 @@ import { UserDogs } from './pages/UserDogs';
 import { Park } from './pages/Park';
 import { ParkDetails } from './pages/ParkDetails';
 import { NewPark } from './pages/NewPark';
-import { Loader } from './components/Loader';
 
 import { queryClient } from './services/react-query';
 
@@ -64,19 +63,11 @@ const App = () => {
             },
             {
               path: 'reviews',
-              element: (
-                <Suspense fallback={<Loader />}>
-                  <ParkReviews />
-                </Suspense>
-              ),
+              element: <ParkReviews />,
             },
             {
               path: 'visitors',
-              element: (
-                <Suspense fallback={<Loader />}>
-                  <ParkVisitors />
-                </Suspense>
-              ),
+              element: <ParkVisitors />,
             },
           ],
         },
@@ -111,43 +102,23 @@ const App = () => {
             },
             {
               path: 'dogs/:dogId',
-              element: (
-                <Suspense fallback={<Loader />}>
-                  <UserDog />
-                </Suspense>
-              ),
+              element: <UserDog />,
             },
             {
               path: 'reviews',
-              element: (
-                <Suspense fallback={<Loader />}>
-                  <UserReviews />
-                </Suspense>
-              ),
+              element: <UserReviews />,
             },
             {
               path: 'friends',
-              element: (
-                <Suspense fallback={<Loader />}>
-                  <UserFriends />
-                </Suspense>
-              ),
+              element: <UserFriends />,
             },
             {
               path: 'favorites',
-              element: (
-                <Suspense fallback={<Loader />}>
-                  <UserFavorites />
-                </Suspense>
-              ),
+              element: <UserFavorites />,
             },
             {
               path: 'info',
-              element: (
-                <Suspense fallback={<Loader />}>
-                  <UserInfo />
-                </Suspense>
-              ),
+              element: <UserInfo />,
             },
           ],
         },

@@ -134,9 +134,11 @@ const Park: React.FC = () => {
           <ReviewsPreview />
         </div>
         <ParkTabs parkId={parkId!} className={styles.tabs} />
-        <div className={styles.outletContainer}>
-          <Outlet context={park} />
-        </div>
+        <Suspense fallback={<Loader />}>
+          <div className={styles.outletContainer}>
+            <Outlet context={park} />
+          </div>
+        </Suspense>
       </div>
       <Suspense fallback={null}>
         <CameraModal

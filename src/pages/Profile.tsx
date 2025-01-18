@@ -40,14 +40,16 @@ const Profile: React.FC = () => {
                 isSignedInUser && styles.withMargin
               )}
             >
-              <Outlet
-                context={{
-                  user,
-                  dogs,
-                  dogImages,
-                  isSignedInUser,
-                }}
-              />
+              <Suspense fallback={<Loader />}>
+                <Outlet
+                  context={{
+                    user,
+                    dogs,
+                    dogImages,
+                    isSignedInUser,
+                  }}
+                />
+              </Suspense>
             </div>
           )}
         </Await>
