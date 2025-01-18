@@ -46,7 +46,7 @@ const ParkVisitors: React.FC = () => {
       {!showLoader && !!friendsCount && (
         <div className={styles.friendsContainer}>
           <span className={styles.friendsTitle}>
-            Your Friends that in the park right now:
+            Friends in the park right now:
           </span>
           {friendsInParkWithDogs?.map((user) => (
             <UserPreview

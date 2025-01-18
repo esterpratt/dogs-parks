@@ -25,8 +25,10 @@ const UserFavorites = () => {
     enabled: !!favoriteParkIds?.length,
   });
 
+  const isLoading = isLoadingParks || isLoadingFavorites;
+
   const showLoader = useDelayedLoading({
-    isLoading: isLoadingParks || isLoadingFavorites,
+    isLoading,
   });
 
   const favoriteParks = parks?.length
@@ -37,7 +39,7 @@ const UserFavorites = () => {
     return <Loader />;
   }
 
-  if (!favoriteParkIds?.length) {
+  if (!isLoading && !favoriteParkIds?.length) {
     return (
       <div className={styles.container}>
         <span className={styles.noFavoritesTitle}>No favorite parks yet.</span>

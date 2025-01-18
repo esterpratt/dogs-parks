@@ -5,6 +5,8 @@ import { BarChart } from '../charts/BarChart';
 import styles from './BusyHours.module.scss';
 import barChartStyles from '../charts/BarChart.module.scss';
 import { useQuery } from '@tanstack/react-query';
+import { useContext } from 'react';
+import { UserContext } from '../../context/UserContext';
 
 const BUSINESS = {
   LIGHT: {
@@ -29,6 +31,8 @@ interface BusyHoursProps {
 }
 
 const BusyHours: React.FC<BusyHoursProps> = ({ parkId }) => {
+  const { userId } = useContext(UserContext);
+
   const { data: dogsCountReports } = useQuery({
     queryKey: ['dogsCount', parkId],
     queryFn: () => fetchDogsCount(parkId),
@@ -48,7 +52,8 @@ const BusyHours: React.FC<BusyHoursProps> = ({ parkId }) => {
   if (!dogsCount?.length) {
     return (
       <div className={styles.noData}>
-        No data yet. If you’re here, check in to add info!
+        No data yet.
+        {userId && <span> If you’re here, check in to add info!</span>}
       </div>
     );
   }
