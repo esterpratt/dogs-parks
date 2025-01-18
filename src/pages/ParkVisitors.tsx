@@ -33,8 +33,10 @@ const ParkVisitors: React.FC = () => {
 
   const friendsCount = friendsInParkIds.length;
   const othersCount = visitorsIds.length - friendsCount;
+  const userIsVisitor = userId && visitorsIds.includes(userId);
   const userIsOnlyVisitor =
-    othersCount === 1 && friendsCount === 0 && visitorsIds[0] === userId;
+    userIsVisitor && othersCount === 1 && friendsCount === 0;
+  const othersWithoutUserCount = userIsVisitor ? othersCount - 1 : othersCount;
 
   if (!friendsCount && !othersCount) {
     return null;
@@ -62,12 +64,13 @@ const ParkVisitors: React.FC = () => {
           <span className={styles.othersTitle}>
             {userIsOnlyVisitor ? (
               'You are the only visitor in the park right now'
-            ) : (
+            ) : othersWithoutUserCount ? (
               <>
-                {!!friendsCount && 'more'} visitor
-                {othersCount > 1 && 's'} in the park right now.
+                {othersWithoutUserCount}
+                {(!!friendsCount || userIsVisitor) && ' more'} visitor
+                {othersWithoutUserCount > 1 && 's'} in the park right now.
               </>
-            )}
+            ) : null}
           </span>
           {!friendsCount && !userIsOnlyVisitor && (
             <>

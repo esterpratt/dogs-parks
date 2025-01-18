@@ -68,7 +68,7 @@ const UserInfo = () => {
       <Modal
         open={isDeleteUserModalOpen}
         onClose={() => setIsDeleteUserModalOpen(false)}
-        height="40%"
+        height="60%"
         variant="center"
         className={styles.approveModal}
       >
