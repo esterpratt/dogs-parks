@@ -9,7 +9,7 @@ interface UseDelayedLoadingParams {
 export function useDelayedLoading({
   isLoading,
   minDuration = 1500,
-  threshold = 100,
+  threshold = 50,
 }: UseDelayedLoadingParams) {
   const [showLoader, setShowLoader] = useState(false);
   const [startTime, setStartTime] = useState<number | null>(null);
