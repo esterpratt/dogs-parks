@@ -22,10 +22,8 @@ export function useDelayedLoading({
       const elapsedTime = Date.now() - startTime;
 
       if (elapsedTime < threshold) {
-        // If loading was too fast, never show the loader
         setShowLoader(false);
       } else {
-        // Otherwise, ensure loader stays for at least `minDuration`
         const remainingTime = minDuration - elapsedTime;
         const delay = Math.max(remainingTime, 0);
 

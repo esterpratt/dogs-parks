@@ -42,9 +42,11 @@ const UserFriends = () => {
         }),
     });
 
+  const isLoading =
+    isLoadingFriends || isLoadingPendingFriends || isLoadingMyPendingFriends;
+
   const showLoader = useDelayedLoading({
-    isLoading:
-      isLoadingFriends || isLoadingPendingFriends || isLoadingMyPendingFriends,
+    isLoading,
   });
 
   if (showLoader) {
@@ -52,6 +54,7 @@ const UserFriends = () => {
   }
 
   if (
+    !isLoading &&
     !friends?.length &&
     !pendingFriends?.length &&
     !myPendingFriends?.length
