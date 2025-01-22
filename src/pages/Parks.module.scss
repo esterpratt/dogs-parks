@@ -1,4 +1,4 @@
-@import '../variables.scss';
+@use '../variables' as *;
 
 .container {
   padding: 24px 12px 8px;

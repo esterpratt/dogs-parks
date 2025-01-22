@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Keyboard } from '@capacitor/keyboard';
-import { PluginListenerHandle } from '@capacitor/core';
+import { Capacitor, PluginListenerHandle } from '@capacitor/core';
 
 const useKeyboardFix = () => {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
@@ -33,7 +33,9 @@ const useKeyboardFix = () => {
       });
     };
 
-    setupListeners();
+    if (Capacitor.getPlatform() !== 'web') {
+      setupListeners();
+    }
 
     return () => {
       willShowListener?.remove();

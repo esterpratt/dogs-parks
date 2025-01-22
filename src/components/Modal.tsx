@@ -43,8 +43,6 @@ const Modal: React.FC<ModalProps> = ({
 
   const [shouldMinHeight, setShouldMinHeight] = useState(false);
 
-  console.log('should? ', shouldMinHeight);
-
   useEffect(() => {
     const modal = dialogRef.current;
     if (open) {

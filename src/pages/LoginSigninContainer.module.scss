@@ -1,4 +1,4 @@
-@import '../variables.scss';
+@use '../variables' as *;
 
 .title {
   margin: 12px 0 4px;

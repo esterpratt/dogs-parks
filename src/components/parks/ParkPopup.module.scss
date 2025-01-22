@@ -1,4 +1,4 @@
-@import '../../variables.scss';
+@use '../../variables' as *;
 
 .park-modal {
   height: 28vh;

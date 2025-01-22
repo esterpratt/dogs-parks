@@ -4,9 +4,8 @@ const config: CapacitorConfig = {
   appId: 'com.klavhub.www',
   appName: 'dogs-parks',
   webDir: 'dist',
-  bundledWebRuntime: false,
   server: {
-    url: 'http://172.20.10.6:5173/',
+    url: 'http://10.100.102.53:5173/',
     cleartext: true,
   },
   plugins: {
@@ -14,6 +13,9 @@ const config: CapacitorConfig = {
       resize: 'body',
       disableScroll: false,
       style: 'dark',
+    },
+    Geolocation: {
+      androidBackgroundLocation: true,
     },
   },
 };

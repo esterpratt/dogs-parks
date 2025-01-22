@@ -13,6 +13,7 @@ import { Routing } from './mapHelpers/Routing';
 import { getRoute } from '../../services/map';
 import { IconContext } from 'react-icons';
 import { MapSearchAddress } from './mapHelpers/MapSearchAddress';
+import { getUserLocation } from './mapHelpers/getUserLocation';
 
 interface NewMapProps {
   className?: string;
@@ -50,13 +51,12 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
     });
   };
 
-  const setUserCenter = (cbc: ((position: GeolocationPosition) => void)[]) => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        cbc.forEach((cb) => {
-          cb(position);
-        });
-      });
+  const setUserCenter = async (
+    cbc: ((position: GeolocationPosition) => void)[]
+  ) => {
+    const position = await getUserLocation();
+    if (position) {
+      cbc.forEach((cb) => cb(position));
     }
   };
 
