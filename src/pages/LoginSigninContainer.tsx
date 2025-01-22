@@ -89,29 +89,15 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
     <>
       <div className={styles.container}>
         <div className={styles.formContainer}>
-          <h2 className={styles.title}>
-            <span>{method === 'signin' ? 'Sign In' : 'Log In'}</span>
+          <div className={styles.title}>
+            <div className={classnames(styles.error, error ? styles.show : '')}>
+              {error}
+            </div>
             <span
               className={classnames(styles.loading, isLoading && styles.show)}
             >
               Paws a sec...
             </span>
-          </h2>
-          <Button
-            variant="nuteral"
-            className={styles.googleLoginButton}
-            onClick={googleSignin}
-          >
-            <FcGoogle />
-            <span>
-              {method === 'signin' ? 'Sign In' : 'Log In'} With Google
-            </span>
-          </Button>
-          <div className={styles.lineThrough}>
-            <span>Or</span>
-          </div>
-          <div className={classnames(styles.error, error ? styles.show : '')}>
-            {error}
           </div>
           <form onSubmit={handleSubmit} className={styles.inputsContainer}>
             <FormInput
@@ -135,18 +121,23 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
                 type="text"
               />
             )}
-            {method === 'login' && (
-              <Button
-                onClick={onClickResetPassword}
-                className={styles.resetButton}
-              >
-                Reset Password
-              </Button>
-            )}
             <Button variant="green" type="submit" className={styles.button}>
               {method === 'signin' ? 'Sign In' : 'Log In'}
             </Button>
           </form>
+          <div className={styles.lineThrough}>
+            <span>Or</span>
+          </div>
+          <Button
+            variant="nuteral"
+            className={styles.googleLoginButton}
+            onClick={googleSignin}
+          >
+            <FcGoogle />
+            <span>
+              {method === 'signin' ? 'Sign In' : 'Log In'} With Google
+            </span>
+          </Button>
         </div>
         <div className={styles.changeMethod}>
           {method === 'signin' ? (
@@ -159,6 +150,11 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
             </>
           )}
         </div>
+        {method === 'login' && (
+          <Button onClick={onClickResetPassword} className={styles.resetButton}>
+            Reset Password
+          </Button>
+        )}
       </div>
       <ThankYouModal
         open={isThankYouModalOpen}

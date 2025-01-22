@@ -99,6 +99,10 @@
       opacity: 0.2;
     }
   }
+
+  &.with-minimize-height {
+    max-height: calc(85% - var(--keyboard-height));
+  }
 }
 
 .content {
@@ -124,4 +128,17 @@
   justify-content: center;
   width: 24px;
   height: 24px;
+}
+
+.button-container {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: $white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 0;
+  border-top: 1px solid $text-light;
 }

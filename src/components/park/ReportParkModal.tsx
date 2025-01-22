@@ -42,18 +42,18 @@ export const ReportParkModal: React.FC<ReportParkModalProps> = ({
     <Modal
       open={open}
       onClose={onClose}
-      height="80%"
+      height="70%"
       onSave={onSubmitReport}
       className={styles.container}
     >
       <TextArea
         className={styles.textArea}
-        rows={15}
+        rows={12}
         name="report"
         label="Tell us what’s wrong here."
         value={text}
         onChange={onChangeText}
-        maxLength={600}
+        maxLength={400}
       />
     </Modal>
   );

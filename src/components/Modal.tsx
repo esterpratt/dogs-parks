@@ -1,9 +1,10 @@
-import { CSSProperties, ReactNode, useEffect, useRef } from 'react';
+import { CSSProperties, ReactNode, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import classnames from 'classnames';
 import { CgClose } from 'react-icons/cg';
 import styles from './Modal.module.scss';
-import { ModalSaveButton } from './ModalSaveButton';
+import { Button } from './Button';
+import useKeyboardFix from '../hooks/useKeyboardFix';
 
 interface ModalProps {
   open: boolean;
@@ -38,6 +39,12 @@ const Modal: React.FC<ModalProps> = ({
 }) => {
   const dialogRef = useRef<HTMLDialogElement | null>(null);
 
+  const keyboardHeight = useKeyboardFix();
+
+  const [shouldMinHeight, setShouldMinHeight] = useState(false);
+
+  console.log('should? ', shouldMinHeight);
+
   useEffect(() => {
     const modal = dialogRef.current;
     if (open) {
@@ -62,16 +69,39 @@ const Modal: React.FC<ModalProps> = ({
     style.width = width;
   }
 
+  useEffect(() => {
+    const modal = dialogRef.current;
+
+    if (!modal) {
+      return;
+    }
+
+    if (!keyboardHeight) {
+      setShouldMinHeight(false);
+      return;
+    }
+
+    if (
+      keyboardHeight -
+        (window.innerHeight - modal.getBoundingClientRect().bottom) >
+      0
+    ) {
+      console.log('min!!!');
+      setShouldMinHeight(true);
+    }
+  }, [keyboardHeight]);
+
   return createPortal(
     <dialog
-      style={style}
+      style={{ ...style, '--keyboard-height': `${keyboardHeight}px` }}
       ref={dialogRef}
       onClose={onClose}
       className={classnames(
         styles.modal,
         styles[variant],
         delay && styles.delay,
-        hideBackdrop && styles.hideBackdrop
+        hideBackdrop && styles.hideBackdrop,
+        shouldMinHeight && styles.withMinimizeHeight
       )}
       onClick={onClose}
     >
@@ -85,7 +115,18 @@ const Modal: React.FC<ModalProps> = ({
         {children}
       </div>
       {onSave && (
-        <ModalSaveButton disabled={saveButtonDisabled} onSave={onSave} />
+        <div
+          className={styles.buttonContainer}
+          onClick={(event) => event?.stopPropagation()}
+        >
+          <Button
+            variant="green"
+            onClick={onSave}
+            disabled={saveButtonDisabled}
+          >
+            Save
+          </Button>
+        </div>
       )}
     </dialog>,
     document.getElementById('modal')!

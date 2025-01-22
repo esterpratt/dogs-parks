@@ -93,6 +93,13 @@ const NewPark: React.FC = () => {
           onChange={onChangeParkDetails}
         />
         <ControlledInput
+          type="number"
+          label="Size in meters (if known)"
+          name="size"
+          value={parkDetails.size}
+          onChange={onChangeParkDetails}
+        />
+        <ControlledInput
           label="City *"
           name="city"
           value={parkDetails.city}
@@ -109,13 +116,6 @@ const NewPark: React.FC = () => {
           markerLocation={markerLocation}
           onMapClick={onMapClick}
           className={styles.map}
-        />
-        <ControlledInput
-          type="number"
-          label="Size in meters (if known)"
-          name="size"
-          value={parkDetails.size}
-          onChange={onChangeParkDetails}
         />
         <div className={styles.buttons}>
           <Button

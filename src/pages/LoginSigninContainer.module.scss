@@ -1,10 +1,8 @@
 @import '../variables.scss';
 
 .title {
-  margin: 12px 0 8px;
+  margin: 12px 0 4px;
   font-weight: inherit;
-  padding: 8px 4px;
-  font-size: $title-font-size;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -14,6 +12,8 @@
   display: flex;
   flex-direction: column;
   margin: 0 24px 12px;
+  height: 100%;
+  overflow: auto;
 }
 
 .inputs-container {
@@ -24,11 +24,11 @@
 }
 
 .google-login-button {
-  margin-top: 12px;
   width: 100%;
   display: flex;
   gap: 12px;
   align-items: center;
+  margin-bottom: 24px;
 
   svg {
     height: 24px;
@@ -37,7 +37,7 @@
 }
 
 .line-through {
-  margin: 18px 4px 12px;
+  margin: 48px 4px 24px;
   text-align: center;
   border-bottom: 1px solid $grey-bold;
   line-height: 0.1em;
@@ -55,12 +55,11 @@
 
 .error {
   color: $red;
-  height: 20px;
   padding-left: 2px;
   visibility: hidden;
   opacity: 0;
   transition: all 0.2s;
-  font-size: 12px;
+  font-size: 14px;
   display: flex;
   align-items: center;
 
@@ -71,7 +70,7 @@
 }
 
 .loading {
-  font-size: 16px;
+  font-size: 14px;
   opacity: 0;
   transition: opacity 0.5s;
 
@@ -91,6 +90,8 @@
 }
 
 .reset-button {
+  margin-top: 12px;
+  align-self: center;
   color: $green;
   font-size: 16px;
 }

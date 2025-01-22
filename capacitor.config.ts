@@ -9,6 +9,13 @@ const config: CapacitorConfig = {
     url: 'http://172.20.10.6:5173/',
     cleartext: true,
   },
+  plugins: {
+    Keyboard: {
+      resize: 'body',
+      disableScroll: false,
+      style: 'dark',
+    },
+  },
 };
 
 export default config;
