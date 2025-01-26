@@ -80,7 +80,7 @@ const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
         open={open}
         onClose={onCloseModal}
         variant={variant}
-        className={classnames(styles.modal, styles[variant])}
+        className={styles.modal}
         removeCloseButton
         delay={variant !== 'bottom'}
       >

@@ -20,6 +20,7 @@ interface ModalProps {
   autoClose?: boolean;
   delay?: boolean;
   hideBackdrop?: boolean;
+  style?: CSSProperties;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -36,6 +37,7 @@ const Modal: React.FC<ModalProps> = ({
   autoClose = false,
   delay = false,
   hideBackdrop = false,
+  style = {},
 }) => {
   const dialogRef = useRef<HTMLDialogElement | null>(null);
 
@@ -57,8 +59,6 @@ const Modal: React.FC<ModalProps> = ({
 
     return () => modal!.close();
   }, [open, autoClose]);
-
-  const style: CSSProperties = {};
 
   if (height) {
     style.height = height;
@@ -84,7 +84,6 @@ const Modal: React.FC<ModalProps> = ({
         (window.innerHeight - modal.getBoundingClientRect().bottom) >
       0
     ) {
-      console.log('min!!!');
       setShouldMinHeight(true);
     }
   }, [keyboardHeight]);

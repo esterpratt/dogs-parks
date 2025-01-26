@@ -18,7 +18,11 @@
   }
 
   &.appear {
+    top: 0;
+    bottom: 0;
     border-radius: 12px;
+    width: 90%;
+    max-width: 90%;
   }
 
   &.full-screen {
@@ -63,14 +67,14 @@
   &.bottom {
     height: fit-content;
     top: 100%;
-    transform: translate(0, 55%);
+    bottom: 0;
     border-radius: 24px;
     width: 95%;
     max-width: 95%;
     opacity: 1;
 
     &[open] {
-      transform: translate(0, -54%);
+      transform: translate(0, -57%);
     }
   }
 

@@ -24,13 +24,15 @@ const Carousel: React.FC<CarouselProps> = ({
   const [imageToEnlarge, setImageToEnlarge] = useState<string>('');
   const [isApproveDeleteModalOpen, setIsApproveDeleteModalOpen] =
     useState(false);
+  const [isEnlargedImageModalOpen, setIsEnlargeImageModalOpen] =
+    useState(false);
 
   const onDeleteImage = () => {
     if (removeImage) {
       removeImage(imageToEnlarge);
     }
     setIsApproveDeleteModalOpen(false);
-    setImageToEnlarge('');
+    setIsEnlargeImageModalOpen(false);
   };
 
   const settings = {
@@ -42,6 +44,7 @@ const Carousel: React.FC<CarouselProps> = ({
 
   const onClickImage = (img: string) => {
     setImageToEnlarge(img);
+    setIsEnlargeImageModalOpen(true);
   };
 
   return (
@@ -94,14 +97,19 @@ const Carousel: React.FC<CarouselProps> = ({
         </Button>
       </Modal>
       <Modal
-        open={!!imageToEnlarge}
-        onClose={() => setImageToEnlarge('')}
-        width="95%"
+        open={isEnlargedImageModalOpen}
+        onClose={() => setIsEnlargeImageModalOpen(false)}
+        width="90%"
         height="65%"
         variant="appear"
-        className={styles.modal}
+        style={{ backgroundColor: 'rgba(0, 0, 0, 0.9)' }}
       >
-        <div className={styles.modalImage}>
+        <div
+          className={styles.modalImage}
+          onTransitionEnd={() =>
+            !isEnlargedImageModalOpen && setImageToEnlarge('')
+          }
+        >
           <img src={imageToEnlarge} />
           {!!removeImage && (
             <IconContext.Provider value={{ className: styles.trashIcon }}>
