@@ -1,17 +1,11 @@
-import { Capacitor } from '@capacitor/core';
 import { Geolocation } from '@capacitor/geolocation';
+import { isMobile } from '../../../utils/platform';
 
 export async function getUserLocation() {
   let position: GeolocationPosition | null = null;
 
   try {
-    if (Capacitor.getPlatform() === 'web') {
-      if ('geolocation' in navigator) {
-        position = await new Promise((resolve, reject) => {
-          navigator.geolocation.getCurrentPosition(resolve, reject);
-        });
-      }
-    } else {
+    if (isMobile) {
       const capPosition = await Geolocation.getCurrentPosition();
       position = {
         coords: {
@@ -20,6 +14,12 @@ export async function getUserLocation() {
         },
         timestamp: capPosition.timestamp,
       } as GeolocationPosition;
+    } else {
+      if ('geolocation' in navigator) {
+        position = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject);
+        });
+      }
     }
   } catch (error) {
     console.error('Error getting location:', error);

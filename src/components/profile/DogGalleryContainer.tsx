@@ -52,6 +52,7 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
 
   const onUploadImg = async (img: string | File) => {
     setIsAddImageModalOpen(false);
+    console.log('onUploadImg');
     mutate(img);
   };
 

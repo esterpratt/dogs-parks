@@ -12,6 +12,7 @@
   "dependencies": {
     "-": "^0.0.1",
     "@capacitor/android": "7.0.1",
+    "@capacitor/camera": "^7.0.0",
     "@capacitor/core": "7.0.1",
     "@capacitor/geolocation": "^7.0.0",
     "@capacitor/ios": "7.0.1",

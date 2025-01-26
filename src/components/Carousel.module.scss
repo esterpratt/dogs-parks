@@ -60,8 +60,11 @@
   justify-content: space-between;
 }
 
-.approve-title {
+.approve-content {
   font-size: $second-title-font-size;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
 .delete-button {

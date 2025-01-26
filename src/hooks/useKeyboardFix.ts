@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Keyboard } from '@capacitor/keyboard';
-import { Capacitor, PluginListenerHandle } from '@capacitor/core';
+import { PluginListenerHandle } from '@capacitor/core';
+import { isMobile } from '../utils/platform';
 
 const useKeyboardFix = () => {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
@@ -33,7 +34,7 @@ const useKeyboardFix = () => {
       });
     };
 
-    if (Capacitor.getPlatform() !== 'web') {
+    if (isMobile) {
       setupListeners();
     }
 

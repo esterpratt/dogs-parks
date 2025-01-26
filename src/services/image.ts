@@ -24,7 +24,10 @@ const uploadImage = async ({ image, path, name }: uploadImageProps) => {
       ? await imageCompression.getFilefromDataUrl(image, imageName)
       : image;
 
-  const compressedImage = await imageCompression(file, { maxSizeMB: 0.1 });
+  const compressedImage = await imageCompression(file, {
+    maxSizeMB: 0.1,
+    maxWidthOrHeight: 600,
+  });
 
   const storageRef = ref(storage, `${path}/${imageName}`);
   const snapshot = await uploadBytes(storageRef, compressedImage);

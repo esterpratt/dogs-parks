@@ -78,10 +78,13 @@ const Carousel: React.FC<CarouselProps> = ({
         variant="center"
         className={styles.approveModal}
       >
-        <span className={styles.approveTitle}>
-          Hold your leash! Are you sure you want to send this pic to the
-          doghouse?
-        </span>
+        <div className={styles.approveContent}>
+          <span>Hold your leash!</span>
+          <span>
+            Are you sure you want to send this pic to a farm up north where it
+            can run free forever?
+          </span>
+        </div>
         <Button
           variant="danger"
           onClick={onDeleteImage}

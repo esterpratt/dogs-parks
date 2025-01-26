@@ -6,6 +6,12 @@
 	<string>Your location is used to show relevant parks nearby.</string>
 	<key>NSLocationUsageDescription</key>
 	<string>Your location is used to show relevant parks nearby.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We need access to your camera to take photos.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to your photo library.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>We need permission to save photos.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>

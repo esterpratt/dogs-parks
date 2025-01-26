@@ -28,7 +28,7 @@ const Camera: React.FC<CustomWebcamProps> = ({
 
   const captureImg = useCallback(() => {
     setImg(webcamRef.current!.getScreenshot());
-  }, [webcamRef]);
+  }, [webcamRef, setImg]);
 
   const recapture = () => {
     setImg(null);
