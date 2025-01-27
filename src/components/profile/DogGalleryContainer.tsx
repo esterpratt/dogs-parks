@@ -72,7 +72,7 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
       <AccordionContainer className={className}>
         <AccordionContainer.TitleWithIcon
           title="Gallery"
-          showIcon={isSignedInUser}
+          showIcon={isSignedInUser && (dogImages ?? []).length < 8}
           Icon={FaPlus}
           onClickIcon={onClickAddPhoto}
         />

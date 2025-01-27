@@ -3,6 +3,7 @@ import {
   addDoc,
   collection,
   doc,
+  deleteDoc,
   documentId,
   getDoc,
   getDocs,
@@ -12,7 +13,7 @@ import {
 } from 'firebase/firestore';
 import { AppError, throwError } from './error';
 import { Dog } from '../types/dog';
-import { fetchImagesByDirectory, uploadImage } from './image';
+import { deleteFolder, fetchImagesByDirectory, uploadImage } from './image';
 
 const dogsCollection = collection(db, 'dogs');
 
@@ -24,6 +25,23 @@ interface EditDogProps {
 }
 
 const dogOwnerCache = new Map<string, string>();
+
+const getDogOwnerId = async (dogId: string) => {
+  if (dogOwnerCache.has(dogId)) {
+    return dogOwnerCache.get(dogId);
+  }
+
+  const dogRef = doc(db, 'dogs', dogId);
+  const dogSnap = await getDoc(dogRef);
+
+  if (!dogSnap.exists()) {
+    throw new AppError('dog does not exists', 404);
+  }
+
+  const ownerId = dogSnap.data().owner;
+  dogOwnerCache.set(dogId, ownerId);
+  return ownerId;
+};
 
 const createDog = async (createDogProps: CreateDogProps) => {
   try {
@@ -47,21 +65,20 @@ const updateDog = async ({ dogId, dogDetails }: EditDogProps) => {
   }
 };
 
-const getDogOwnerId = async (dogId: string) => {
-  if (dogOwnerCache.has(dogId)) {
-    return dogOwnerCache.get(dogId);
+const deleteDog = async (id: string) => {
+  try {
+    const userId = await getDogOwnerId(id);
+    const deleteFoldersPromises = [
+      deleteFolder(`users/${userId}/dogs/${id}/primary/`),
+      deleteFolder(`users/${userId}/dogs/${id}/other/`),
+    ];
+    await Promise.all(deleteFoldersPromises);
+    const dogRef = doc(db, 'dogs', id);
+    await deleteDoc(dogRef);
+  } catch (error) {
+    console.error(`there was an error deleting dog with id ${id}:  ${error}`);
+    return null;
   }
-
-  const dogRef = doc(db, 'dogs', dogId);
-  const dogSnap = await getDoc(dogRef);
-
-  if (!dogSnap.exists()) {
-    throw new AppError('dog does not exists', 404);
-  }
-
-  const ownerId = dogSnap.data().owner;
-  dogOwnerCache.set(dogId, ownerId);
-  return ownerId;
 };
 
 const fetchDogs = async (ids?: string[]) => {
@@ -188,6 +205,7 @@ export {
   fetchDogs,
   createDog,
   updateDog,
+  deleteDog,
   fetchUserDogs,
   fetchUsersDogs,
   fetchDogPrimaryImage,

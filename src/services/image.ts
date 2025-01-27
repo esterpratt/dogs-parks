@@ -50,8 +50,24 @@ const deleteImage = async (path: string) => {
 
     await deleteObject(ImageRef);
   } catch (error) {
-    console.error('sorry, there was a problem deleting the image');
+    console.error('sorry, there was a problem deleting the image: ', error);
   }
 };
 
-export { uploadImage, fetchImagesByDirectory, deleteImage };
+const deleteFolder = async (path: string) => {
+  try {
+    const storage = getStorage();
+    const folderRef = ref(storage, path);
+    const { items } = await listAll(folderRef);
+
+    const deletePromises = items.map((item) => deleteObject(item));
+    await Promise.all(deletePromises);
+  } catch (error) {
+    console.error(
+      `sorry, there was a problem deleting the folder in path: ${path} `,
+      error
+    );
+  }
+};
+
+export { uploadImage, fetchImagesByDirectory, deleteImage, deleteFolder };

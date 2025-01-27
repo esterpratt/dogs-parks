@@ -5,8 +5,8 @@ import { Dog, GENDER } from '../../types/dog';
 import styles from './DogPreview.module.scss';
 import { IconContext } from 'react-icons';
 import { getAge } from '../../utils/time';
-
-const LOADING = 'loading';
+import { LOADING } from '../../utils/consts';
+import { Loader } from '../Loader';
 
 interface DogPreviewProps {
   dog: Dog;
@@ -23,7 +23,7 @@ const DogPreview: React.FC<DogPreviewProps> = ({ dog, image }) => {
         {image ? (
           image === LOADING ? (
             <div className={classnames(styles.img, styles.empty)}>
-              <span>Loading...</span>
+              <Loader inside />
             </div>
           ) : (
             <img src={image} className={styles.img} />
@@ -53,4 +53,4 @@ const DogPreview: React.FC<DogPreviewProps> = ({ dog, image }) => {
   );
 };
 
-export { DogPreview, LOADING };
+export { DogPreview };

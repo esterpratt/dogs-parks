@@ -1,0 +1,19 @@
+@use '../../variables' as *;
+
+.approve-modal {
+  padding: 56px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.approve-content {
+  font-size: $second-title-font-size;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.delete-button {
+  margin: 0 auto;
+}

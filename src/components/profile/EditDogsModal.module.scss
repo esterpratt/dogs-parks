@@ -30,3 +30,23 @@
     color: $orange;
   }
 }
+
+.delete-dog-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 48px;
+  padding: 12px;
+  font-size: 16px;
+  background-color: $white;
+  border-radius: 12px;
+}
+
+.deleteIcon {
+  color: $red;
+  width: 32px;
+  height: 32px;
+  padding: 4px;
+  border: 1px solid $red;
+  border-radius: 50%;
+}

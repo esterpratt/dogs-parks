@@ -3,14 +3,15 @@ import { useOutletContext, useRevalidator } from 'react-router';
 import { Link } from 'react-router';
 import { User } from '../types/user';
 import { Dog } from '../types/dog';
-import { DogPreview, LOADING } from '../components/profile/DogPreview';
+import { DogPreview } from '../components/profile/DogPreview';
 import styles from './UserDogs.module.scss';
 import { FriendRequestButton } from '../components/profile/FriendRequestButton';
 import { UserContext } from '../context/UserContext';
 import { Button } from '../components/Button';
-import { useMutation } from '@tanstack/react-query';
+import { useIsFetching, useMutation } from '@tanstack/react-query';
 import { uploadDogPrimaryImage } from '../services/dogs';
 import { queryClient } from '../services/react-query';
+import { LOADING } from '../utils/consts';
 
 const EditDogsModal = lazy(() => import('../components/profile/EditDogsModal'));
 const CameraModal = lazy(() => import('../components/camera/CameraModal'));
@@ -30,6 +31,10 @@ const UserDogs = () => {
   const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
   const [newDogId, setNewDogId] = useState('');
   const { revalidate } = useRevalidator();
+
+  const isFetching = useIsFetching({
+    queryKey: ['dogImage', newDogId],
+  });
 
   const { mutate: setDogImage, isPending: isUploadingImage } = useMutation({
     mutationFn: (img: string | File) => uploadDogPrimaryImage(img, newDogId!),
@@ -105,7 +110,7 @@ const UserDogs = () => {
               <DogPreview
                 dog={dog}
                 image={
-                  dog.id === newDogId && isUploadingImage
+                  dog.id === newDogId && (isUploadingImage || isFetching > 0)
                     ? LOADING
                     : dogImages[index]
                 }

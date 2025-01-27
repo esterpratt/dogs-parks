@@ -19,9 +19,9 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '../services/react-query';
 import { AccordionContainer } from '../components/accordion/AccordionContainer';
 import { getAge } from '../utils/time';
-import { LOADING } from '../components/profile/DogPreview';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import { Loader } from '../components/Loader';
+import { LOADING } from '../utils/consts';
 
 const CameraModal = lazy(() => import('../components/camera/CameraModal'));
 const EditDogsModal = lazy(() => import('../components/profile/EditDogsModal'));
@@ -111,7 +111,7 @@ const UserDog = () => {
           <div className={styles.imgContainer}>
             {isUploadingImage || primaryImage === LOADING ? (
               <div className={classnames(styles.img, styles.empty)}>
-                <span>Loading...</span>
+                <Loader inside />
               </div>
             ) : primaryImage ? (
               <img src={primaryImage} className={styles.img} />

@@ -22,7 +22,9 @@ const DogGallery: React.FC<DogGalleryProps> = ({
         <Carousel
           images={images}
           removeImage={removeImage}
-          addImage={isSignedInUser ? openCameraModal : null}
+          addImage={
+            isSignedInUser && images.length < 8 ? openCameraModal : null
+          }
         />
       )}
     </div>
