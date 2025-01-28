@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface UseDelayedLoadingParams {
   isLoading: boolean;
@@ -12,14 +12,14 @@ export function useDelayedLoading({
   threshold = 50,
 }: UseDelayedLoadingParams) {
   const [showLoader, setShowLoader] = useState(false);
-  const [startTime, setStartTime] = useState<number | null>(null);
+  const startTimeRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (isLoading) {
-      setStartTime(Date.now());
+      startTimeRef.current = Date.now();
       setShowLoader(true);
-    } else if (startTime !== null) {
-      const elapsedTime = Date.now() - startTime;
+    } else if (startTimeRef.current !== null) {
+      const elapsedTime = Date.now() - startTimeRef.current;
 
       if (elapsedTime < threshold) {
         setShowLoader(false);
@@ -31,7 +31,7 @@ export function useDelayedLoading({
         return () => clearTimeout(timer);
       }
     }
-  }, [isLoading, minDuration, threshold, startTime]);
+  }, [isLoading, minDuration, threshold]);
 
   return showLoader;
 }

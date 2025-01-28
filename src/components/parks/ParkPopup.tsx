@@ -18,6 +18,7 @@ interface ParkPopupProps {
   isLoadingDirections: boolean;
   directions?: { distance: string; duration: string };
   onClose: () => void;
+  canGetDirections: boolean;
 }
 
 const HOUR_IN_MS = 1000 * 60 * 60;
@@ -28,6 +29,7 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
   isLoadingDirections,
   directions,
   onClose,
+  canGetDirections,
 }) => {
   const { data: image } = useQuery({
     queryKey: ['parkImage', activePark?.id],
@@ -96,36 +98,40 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
             <span className={styles.city}>{activePark?.city}</span>
           </div>
         </div>
-        <div className={styles.directionsContainer}>
-          <div className={styles.buttons}>
-            <button
-              className={styles.directionsButton}
-              onClick={onClickGetDirections}
-            >
-              Lead the way
-            </button>
-            <Link to={`/parks/${activePark?.id}`}>Fetch park page</Link>
-          </div>
-          {isLoadingDirections && (
-            <div className={styles.loadingDirections}>Sniffing the way...</div>
-          )}
-          {!isLoadingDirections && directions && (
-            <div className={styles.directions}>
-              <div className={styles.distance}>
-                <IconContext.Provider value={{ className: styles.icon }}>
-                  <FaWalking />
-                </IconContext.Provider>
-                <span>{directions?.distance}</span>
-              </div>
-              <div className={styles.duration}>
-                <IconContext.Provider value={{ className: styles.icon }}>
-                  <FaRegClock />
-                </IconContext.Provider>
-                <span>{directions?.duration}</span>
-              </div>
+        {canGetDirections && (
+          <div className={styles.directionsContainer}>
+            <div className={styles.buttons}>
+              <button
+                className={styles.directionsButton}
+                onClick={onClickGetDirections}
+              >
+                Lead the way
+              </button>
+              <Link to={`/parks/${activePark?.id}`}>Fetch park page</Link>
             </div>
-          )}
-        </div>
+            {isLoadingDirections && (
+              <div className={styles.loadingDirections}>
+                Sniffing the way...
+              </div>
+            )}
+            {!isLoadingDirections && directions && (
+              <div className={styles.directions}>
+                <div className={styles.distance}>
+                  <IconContext.Provider value={{ className: styles.icon }}>
+                    <FaWalking />
+                  </IconContext.Provider>
+                  <span>{directions?.distance}</span>
+                </div>
+                <div className={styles.duration}>
+                  <IconContext.Provider value={{ className: styles.icon }}>
+                    <FaRegClock />
+                  </IconContext.Provider>
+                  <span>{directions?.duration}</span>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

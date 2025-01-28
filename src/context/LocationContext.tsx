@@ -1,19 +1,18 @@
 import { createContext, useState, ReactNode } from 'react';
 import { Location } from '../types/park';
-import { DEFAULT_LOCATION } from '../utils/consts';
 
 interface LocationContextProps {
-  userLocation: Location;
+  userLocation: Location | undefined;
   setUserLocation: (location: Location) => void;
 }
 
 const LocationContext = createContext<LocationContextProps>({
-  userLocation: DEFAULT_LOCATION,
+  userLocation: undefined,
   setUserLocation: () => {},
 });
 
 const LocationContextProvider = ({ children }: { children: ReactNode }) => {
-  const [userLocation, setUserLocation] = useState<Location>(DEFAULT_LOCATION);
+  const [userLocation, setUserLocation] = useState<Location>();
 
   return (
     <LocationContext.Provider value={{ userLocation, setUserLocation }}>

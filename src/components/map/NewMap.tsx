@@ -15,6 +15,8 @@ import { IconContext } from 'react-icons';
 import { MapSearchAddress } from './mapHelpers/MapSearchAddress';
 import { getUserLocation } from './mapHelpers/getUserLocation';
 import { LocationContext } from '../../context/LocationContext';
+import { UserLocationMarker } from './UserLocationMarker';
+import { DEFAULT_LOCATION } from '../../utils/consts';
 
 interface NewMapProps {
   className?: string;
@@ -23,7 +25,7 @@ interface NewMapProps {
 
 const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
   const { userLocation, setUserLocation } = useContext(LocationContext);
-  const [center, setCenter] = useState(userLocation);
+  const [center, setCenter] = useState(DEFAULT_LOCATION);
   const [activePark, setActivePark] = useState<Park | null>(null);
   const [isLoadingDirections, setIsLoadingDirections] = useState(false);
   const [directions, setDirections] = useState<{
@@ -83,6 +85,9 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
   };
 
   const getDirections = async () => {
+    if (!userLocation) {
+      return;
+    }
     setIsLoadingDirections(true);
     const res = await getRoute({
       startLocation: {
@@ -116,6 +121,14 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <MarkerList setActivePark={onSetActivePark} activePark={activePark} />
+        {userLocation && (
+          <UserLocationMarker
+            location={{
+              latitude: userLocation.latitude,
+              longitude: userLocation.longitude,
+            }}
+          />
+        )}
         <MapCenter center={{ lat: center.latitude, lng: center.longitude }} />
         {directions?.geoJSONObj && (
           <Routing geoJSONObj={directions?.geoJSONObj} />
@@ -135,6 +148,7 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
         onClose={onCloseParkPopup}
         activePark={activePark}
         onGetDirections={getDirections}
+        canGetDirections={!!userLocation}
         directions={
           directions
             ? { distance: directions.distance, duration: directions.duration }
