@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "259543659292",
+    "project_id": "dogs-parks-8f00e",
+    "storage_bucket": "dogs-parks-8f00e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:259543659292:android:df21cceed55a3c007f40d9",
+        "android_client_info": {
+          "package_name": "com.klavhub.www"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "259543659292-7rl7tls44uhe0c2mr9np83gir0c5u78n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKgZ7B5LZn9sXpexLFG1prh-VM9F25aoA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "259543659292-7rl7tls44uhe0c2mr9np83gir0c5u78n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
