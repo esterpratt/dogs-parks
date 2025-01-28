@@ -1,0 +1,35 @@
+@use '../variables' as *;
+
+.wrapper {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  h1,
+  h2,
+  h3,
+  p,
+  ul,
+  li {
+    margin: 0;
+  }
+
+  h2 {
+    font-size: 22px;
+  }
+
+  h3 {
+    font-size: 16px;
+  }
+
+  .section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  a {
+    color: $green;
+  }
+}

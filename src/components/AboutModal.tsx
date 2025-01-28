@@ -17,24 +17,28 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
       height="65%"
       className={styles.modalContent}
     >
-      <h3>ברוכים הבאים לקלאבהאב!</h3>
+      <h3>Welcome to Klavhub!</h3>
+      <Link onClick={onClose} to="/privacy-policy">
+        See our Privacy Policy
+      </Link>
       <div>
-        <span>האפליקציה נוצרה על ידי: </span>
-        <Link to="https://github.com/esterpratt">אסתר פרת</Link>
+        <span>This app was created by: </span>
+        <Link to="https://github.com/esterpratt">Ester Pratt.</Link>
       </div>
       <div>
-        <span>בהשראת: </span>
-        הכלבה המיוחדת שלי נינה, הכלבה שלא הולכת לגינות כלבים
+        <span>Inspired by: </span>
+        My special dog Nina, the dog who doesn't go to dog parks.
       </div>
       <div>
-        <span>תודה מיוחדת ל: </span>כפיר ארד, רותם קולץ
+        <span>Special thanks to: </span>Kfir Arad, Rotem Koltz
       </div>
       <div>
-        <span>אשמח לעזרתכם! </span>
-        האפליקציה בתחילת דרכה. אשמח לעזרתכם בהצטרפות לקהילה, הזמנת חברים, הוספת
-        פרטים על הגינה שלכם, והוספת גינות אם אינן קיימות באפליקציה. לכל הצעה,
-        הערה והארה מוזמנים לשלוח לי מייל:
-        <Link to={`mailto:${MAIL}`}> {MAIL}</Link>
+        <span>Your support is greatly appreciated! </span>
+        This app is just getting started, and I would love your help in growing
+        the community. You can support by joining the community, sharing with
+        friends, adding details about your local dog park, and contributing
+        missing parks. For any suggestions or feedback, feel free to email me
+        at: <Link to={`mailto:${MAIL}`}>{MAIL}</Link>
       </div>
     </Modal>
   );

@@ -26,6 +26,7 @@ import { ThankYouModalContextProvider } from './context/ThankYouModalContext';
 import { DeletionConfirmation } from './pages/DeletionConfirmation';
 import { PrivateRoute } from './pages/PrivateRoute';
 import { LocationContextProvider } from './context/LocationContext';
+import { PrivacyPolicy } from './pages/PrivacyPolicy';
 
 const UserDog = lazy(() => import('./pages/UserDog'));
 const UserReviews = lazy(() => import('./pages/UserReviews'));
@@ -83,6 +84,10 @@ const App = () => {
         {
           path: '/user-deleted',
           element: <DeletionConfirmation />,
+        },
+        {
+          path: '/privacy-policy',
+          element: <PrivacyPolicy />,
         },
         {
           path: '/profile/:id',
