@@ -25,6 +25,7 @@ import { UserContextProvider } from './context/UserContext';
 import { ThankYouModalContextProvider } from './context/ThankYouModalContext';
 import { DeletionConfirmation } from './pages/DeletionConfirmation';
 import { PrivateRoute } from './pages/PrivateRoute';
+import { LocationContextProvider } from './context/LocationContext';
 
 const UserDog = lazy(() => import('./pages/UserDog'));
 const UserReviews = lazy(() => import('./pages/UserReviews'));
@@ -134,9 +135,11 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <ThankYouModalContextProvider>
-        <UserContextProvider>
-          <RouterProvider router={router} />
-        </UserContextProvider>
+        <LocationContextProvider>
+          <UserContextProvider>
+            <RouterProvider router={router} />
+          </UserContextProvider>
+        </LocationContextProvider>
       </ThankYouModalContextProvider>
     </QueryClientProvider>
   );

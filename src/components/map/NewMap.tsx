@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import { MdGpsFixed } from 'react-icons/md';
@@ -14,17 +14,16 @@ import { getRoute } from '../../services/map';
 import { IconContext } from 'react-icons';
 import { MapSearchAddress } from './mapHelpers/MapSearchAddress';
 import { getUserLocation } from './mapHelpers/getUserLocation';
+import { LocationContext } from '../../context/LocationContext';
 
 interface NewMapProps {
   className?: string;
   location?: Location | undefined;
 }
 
-const DEFAULT_LOCATION = { lat: 32.09992, lng: 34.809212 };
-
 const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
-  const [userLocation, setUserLocation] = useState(DEFAULT_LOCATION);
-  const [center, setCenter] = useState(DEFAULT_LOCATION);
+  const { userLocation, setUserLocation } = useContext(LocationContext);
+  const [center, setCenter] = useState(userLocation);
   const [activePark, setActivePark] = useState<Park | null>(null);
   const [isLoadingDirections, setIsLoadingDirections] = useState(false);
   const [directions, setDirections] = useState<{
@@ -33,12 +32,15 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
     geoJSONObj: GeoJSON.GeometryObject;
   }>();
 
-  const setUserLocationByPosition = (position: GeolocationPosition) => {
-    setUserLocation({
-      lat: position.coords.latitude,
-      lng: position.coords.longitude,
-    });
-  };
+  const setUserLocationByPosition = useCallback(
+    (position: GeolocationPosition) => {
+      setUserLocation({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      });
+    },
+    [setUserLocation]
+  );
 
   const setCenterByPosition = (
     position:
@@ -46,8 +48,8 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
       | { coords: { latitude: number; longitude: number } }
   ) => {
     setCenter({
-      lat: position.coords.latitude,
-      lng: position.coords.longitude,
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude,
     });
   };
 
@@ -63,12 +65,12 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
   useEffect(() => {
     const setStatesToRun = [setUserLocationByPosition];
     if (location) {
-      setCenter({ lat: location.latitude, lng: location.longitude });
+      setCenter({ latitude: location.latitude, longitude: location.longitude });
     } else {
       setStatesToRun.push(setCenterByPosition);
     }
     setUserCenter(setStatesToRun);
-  }, [location]);
+  }, [location, setUserLocationByPosition]);
 
   const onCloseParkPopup = () => {
     setDirections(undefined);
@@ -83,7 +85,10 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
   const getDirections = async () => {
     setIsLoadingDirections(true);
     const res = await getRoute({
-      startLocation: userLocation,
+      startLocation: {
+        lat: userLocation.latitude,
+        lng: userLocation.longitude,
+      },
       targetLocation: {
         lat: activePark!.location.latitude,
         lng: activePark!.location.longitude,
@@ -102,7 +107,7 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
       </Link>
       <MapContainer
         className={styles.map}
-        center={center}
+        center={{ lat: center.latitude, lng: center.longitude }}
         zoom={17}
         scrollWheelZoom={false}
       >
@@ -111,7 +116,7 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <MarkerList setActivePark={onSetActivePark} activePark={activePark} />
-        <MapCenter center={center} />
+        <MapCenter center={{ lat: center.latitude, lng: center.longitude }} />
         {directions?.geoJSONObj && (
           <Routing geoJSONObj={directions?.geoJSONObj} />
         )}

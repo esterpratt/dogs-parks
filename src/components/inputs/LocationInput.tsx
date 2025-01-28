@@ -7,8 +7,7 @@ import { MapCenter } from '../map/mapHelpers/MapCenter';
 import { MapEventHandler } from '../map/mapHelpers/MapEventHandler';
 import { LeafletMouseEvent } from 'leaflet';
 import { ParkMarker } from '../map/ParkMarker';
-
-const DEFAULT_LOCATION = { lat: 32.09992, lng: 34.809212 };
+import { DEFAULT_LOCATION } from '../../utils/consts';
 
 interface LocationInputProps {
   label: string;
@@ -30,8 +29,8 @@ const LocationInput: React.FC<LocationInputProps> = ({
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
           setCenter({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
           });
         });
       }
@@ -46,7 +45,7 @@ const LocationInput: React.FC<LocationInputProps> = ({
       <div className={styles.map}>
         <MapContainer
           className={styles.map}
-          center={center}
+          center={{ lat: center.latitude, lng: center.longitude }}
           zoom={17}
           scrollWheelZoom={false}
         >
@@ -55,7 +54,7 @@ const LocationInput: React.FC<LocationInputProps> = ({
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           {markerLocation && <ParkMarker location={markerLocation} />}
-          <MapCenter center={center} />
+          <MapCenter center={{ lat: center.latitude, lng: center.longitude }} />
           <MapEventHandler onMapClick={onMapClick} />
         </MapContainer>
       </div>
