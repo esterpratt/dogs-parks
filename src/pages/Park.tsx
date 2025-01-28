@@ -1,4 +1,4 @@
-import { useContext, useState, lazy, Suspense } from 'react';
+import { useContext, useState, lazy, Suspense, useRef } from 'react';
 import { Outlet, useNavigate, useParams } from 'react-router';
 import { LuTrees } from 'react-icons/lu';
 import { IoShareSocialSharp } from 'react-icons/io5';
@@ -22,6 +22,8 @@ import { ParkCheckIn } from '../components/park/ParkCheckIn';
 import { ParkIcon } from '../components/park/ParkIcon';
 import { Button } from '../components/Button';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
+import { Share } from '@capacitor/share';
+import { isMobile } from '../utils/platform';
 
 const CameraModal = lazy(() => import('../components/camera/CameraModal'));
 const ThankYouModal = lazy(() => import('../components/ThankYouModal'));
@@ -32,6 +34,7 @@ const Park: React.FC = () => {
   const navigate = useNavigate();
   const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
   const [isThankYouModalOpen, setIsThankYouModalOpen] = useState(false);
+  const thankYouModalTitle = useRef('Park Copied to Clipboard');
 
   const { data: park, isLoading } = useQuery({
     queryKey: ['parks', parkId],
@@ -62,9 +65,19 @@ const Park: React.FC = () => {
     mutate(img);
   };
 
-  const onClickShareButton = () => {
-    if (navigator.clipboard) {
+  const onClickShareButton = async () => {
+    if (isMobile) {
+      await Share.share({
+        title: 'Check this park out!',
+        text: 'Hey, check out this park:',
+        url: location.href,
+        dialogTitle: 'Share this park with friends',
+      });
+      thankYouModalTitle.current = 'Thanks for sharing!';
+      setIsThankYouModalOpen(true);
+    } else if (navigator.clipboard) {
       navigator.clipboard.writeText(location.href);
+      thankYouModalTitle.current = 'Park Copied to Clipboard';
       setIsThankYouModalOpen(true);
     }
   };
@@ -151,7 +164,7 @@ const Park: React.FC = () => {
         <ThankYouModal
           open={isThankYouModalOpen}
           onClose={() => setIsThankYouModalOpen(false)}
-          title="Park Copied to Clipboard"
+          title={thankYouModalTitle.current}
         />
       </Suspense>
     </>
