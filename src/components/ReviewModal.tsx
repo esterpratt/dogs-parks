@@ -7,6 +7,7 @@ import { ControlledInput } from './inputs/ControlledInput';
 import { TextArea } from './inputs/TextArea';
 import { Stars } from './Stars';
 import { Checkbox } from './inputs/Checkbox';
+import { sanitizContent } from '../utils/sanitize';
 
 interface ReviewModalProps {
   title?: string;
@@ -37,8 +38,8 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
 
   const [reviewData, setReviewData] = useState(() => {
     return {
-      title: review?.title || '',
-      content: review?.content || '',
+      title: sanitizContent(review?.title) || '',
+      content: sanitizContent(review?.content) || '',
     };
   });
   const [rank, setRank] = useState<number>(0);

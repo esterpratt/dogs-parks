@@ -8,6 +8,7 @@ import { Stars } from './Stars';
 import { fetchPark } from '../services/parks';
 import { useQuery } from '@tanstack/react-query';
 import { ReviewModalContext } from '../context/ReviewModalContext';
+import { sanitizContent } from '../utils/sanitize';
 
 interface ReviewPreviewProps {
   review: Review;
@@ -36,6 +37,9 @@ const ReviewPreview: React.FC<ReviewPreviewProps> = ({
     queryFn: () => fetchPark(review.parkId),
   });
 
+  const sanitizedReviewTitle = sanitizContent(review.title);
+  const sanitizedReviewContent = sanitizContent(review.content);
+
   return (
     <>
       <div className={styles.container}>
@@ -43,11 +47,11 @@ const ReviewPreview: React.FC<ReviewPreviewProps> = ({
           <div className={styles.parkName}>{park?.name || 'N/A'}</div>
         )}
         <div className={styles.preview}>
-          <div className={styles.title}>{review.title}</div>
+          <div className={styles.title}>{sanitizedReviewTitle}</div>
           <Stars rank={review.rank} className={styles.stars} />
         </div>
-        {review.content && (
-          <div className={styles.content}>{review.content}</div>
+        {sanitizedReviewContent && (
+          <div className={styles.content}>{sanitizedReviewContent}</div>
         )}
         <div className={styles.footer}>
           <div className={styles.time}>{reviewTime}</div>

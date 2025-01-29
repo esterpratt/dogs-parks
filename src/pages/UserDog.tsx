@@ -22,6 +22,7 @@ import { getAge } from '../utils/time';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import { Loader } from '../components/Loader';
 import { LOADING } from '../utils/consts';
+import { sanitizContent } from '../utils/sanitize';
 
 const CameraModal = lazy(() => import('../components/camera/CameraModal'));
 const EditDogsModal = lazy(() => import('../components/profile/EditDogsModal'));
@@ -49,6 +50,9 @@ const UserDog = () => {
       return images?.length ? images[0] : null;
     },
   });
+
+  const sanitizedUserName = sanitizContent(userName);
+  const sanitizedDogName = sanitizContent(dog?.name);
 
   const showLoader = useDelayedLoading({
     isLoading: isLoadingDog || isLoadingImage,
@@ -103,7 +107,7 @@ const UserDog = () => {
           {isSignedInUser ? (
             <span>my</span>
           ) : (
-            <span className={styles.userName}>{userName}'s</span>
+            <span className={styles.userName}>{sanitizedUserName}'s</span>
           )}
           <span> pack</span>
         </Link>
@@ -128,7 +132,7 @@ const UserDog = () => {
           </div>
           <div className={styles.details}>
             <div>
-              <span className={styles.name}>{dog.name}</span>
+              <span className={styles.name}>{sanitizedDogName}</span>
               {dog.gender && (
                 <IconContext.Provider value={{ className: styles.genderIcon }}>
                   {dog.gender === GENDER.FEMALE ? <IoMdFemale /> : <IoMdMale />}
@@ -155,7 +159,7 @@ const UserDog = () => {
               isSignedInUser={isSignedInUser}
               className={styles.content}
               dog={dog}
-              userName={userName}
+              userName={sanitizedUserName}
               onEditDog={onEditDog}
             />
           </AccordionContainer.Content>

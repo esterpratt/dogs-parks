@@ -4,6 +4,7 @@ import styles from './DogDetails.module.scss';
 import { Button } from '../Button';
 import { MouseEvent, useMemo } from 'react';
 import { TableRow } from '../table/TableRow';
+import { sanitizContent } from '../../utils/sanitize';
 
 interface DogProps {
   dog: Dog;
@@ -24,14 +25,14 @@ const DogDetails: React.FC<DogProps> = ({
     () => [
       { label: 'Breed', data: dog.breed },
       { label: 'Size', data: dog.size },
-      { label: 'Temperament', data: dog.temperament },
+      { label: 'Temperament', data: sanitizContent(dog.temperament) },
       { label: 'Energy', data: dog.energy },
-      { label: 'Possessive', data: dog.possessive },
-      { label: 'Likes', data: dog.likes?.join(', ') },
-      { label: 'Dislikes', data: dog.dislikes?.join(', ') },
+      { label: 'Possessive', data: sanitizContent(dog.possessive) },
+      { label: 'Likes', data: sanitizContent(dog.likes?.join(', ')) },
+      { label: 'Dislikes', data: sanitizContent(dog.dislikes?.join(', ')) },
       {
-        label: `More About ${dog.name}`,
-        data: dog.description,
+        label: `More About ${sanitizContent(dog.name)}`,
+        data: sanitizContent(dog.description),
       },
     ],
     [dog]
