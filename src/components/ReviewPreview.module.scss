@@ -45,6 +45,7 @@
 
 .footer {
   display: flex;
+  align-items: center;
   color: $text-medium;
 }
 
@@ -66,4 +67,10 @@
 .park-name {
   font-size: 18px;
   padding-bottom: 8px;
+}
+
+.report-icon {
+  width: 20px;
+  height: 20px;
+  color: $grey-bold;
 }

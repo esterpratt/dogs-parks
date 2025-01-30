@@ -7,7 +7,6 @@ import { IconContext } from 'react-icons';
 import { getAge } from '../../utils/time';
 import { LOADING } from '../../utils/consts';
 import { Loader } from '../Loader';
-import { sanitizContent } from '../../utils/sanitize';
 
 interface DogPreviewProps {
   dog: Dog;
@@ -17,8 +16,6 @@ interface DogPreviewProps {
 const DogPreview: React.FC<DogPreviewProps> = ({ dog, image }) => {
   const { name, birthday, gender } = dog;
   const age = !birthday ? null : getAge(birthday);
-
-  const sanitizedName = sanitizContent(name);
 
   return (
     <div className={styles.container}>
@@ -39,7 +36,7 @@ const DogPreview: React.FC<DogPreviewProps> = ({ dog, image }) => {
       </div>
       <div className={styles.details}>
         <div className={styles.upper}>
-          <span className={styles.name}>{sanitizedName}</span>
+          <span className={styles.name}>{name}</span>
           {gender && (
             <IconContext.Provider value={{ className: styles.icon }}>
               {gender === GENDER.FEMALE ? <IoMdFemale /> : <IoMdMale />}

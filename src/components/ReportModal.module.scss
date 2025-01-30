@@ -1,0 +1,64 @@
+@use '../variables' as *;
+
+.modal {
+  padding: 48px 24px 24px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.title {
+  font-size: $title-font-size;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  font-size: 16px;
+  border-radius: 12px;
+}
+
+.input {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 0 16px;
+  height: 72px;
+  display: flex;
+  color: $text-medium;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid $grey-bold;
+  }
+
+  &:first-child {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+  }
+
+  &:last-child {
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+  }
+
+  &.checked {
+    background-color: $orange;
+    color: $white;
+  }
+
+  label {
+    padding: 0;
+  }
+
+  input {
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+  }
+}

@@ -1,3 +1,4 @@
+import { ReportReason } from '../types/report';
 import { Review } from '../types/review';
 import { AppError, throwError } from './error';
 import { db } from './firebase-config';
@@ -28,6 +29,7 @@ interface UpdateReviewProps {
 }
 
 const reviewsCollection = collection(db, 'reviews');
+const reviewReportsCollection = collection(db, 'reviewReports');
 
 const fetchReviewsCount = async (parkId: string) => {
   try {
@@ -173,6 +175,24 @@ const createReview = async ({ parkId, userId, reviewData }: AddReviewProps) => {
   }
 };
 
+const reportReview = async ({
+  reviewId,
+  reason,
+}: {
+  reviewId: string;
+  reason: ReportReason;
+}) => {
+  try {
+    await addDoc(reviewReportsCollection, {
+      reviewId,
+      reason,
+      createdAt: serverTimestamp(),
+    });
+  } catch (error) {
+    console.error(`there was an error reporting review ${reviewId}: ${error}`);
+  }
+};
+
 export {
   fetchParkRank,
   fetchReviews,
@@ -181,6 +201,7 @@ export {
   createReview,
   updateReview,
   fetchUserReviews,
+  reportReview,
 };
 
 export type { UpdateReviewProps, AddReviewProps };

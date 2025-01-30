@@ -21,12 +21,14 @@ interface ModalProps {
   delay?: boolean;
   hideBackdrop?: boolean;
   style?: CSSProperties;
+  saveText?: string;
 }
 
 const Modal: React.FC<ModalProps> = ({
   open,
   onClose,
   onSave,
+  saveText = 'Save',
   saveButtonDisabled = false,
   variant = 'centerTop',
   height,
@@ -121,7 +123,7 @@ const Modal: React.FC<ModalProps> = ({
             onClick={onSave}
             disabled={saveButtonDisabled}
           >
-            Save
+            {saveText}
           </Button>
         </div>
       )}

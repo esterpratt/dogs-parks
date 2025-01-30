@@ -22,7 +22,6 @@ import { dogBreeds } from '../../services/dog-breeds';
 import { IconContext } from 'react-icons';
 import { IoTrashOutline } from 'react-icons/io5';
 import DeleteDogModal from './DeleteDogModal';
-import { sanitizContent } from '../../utils/sanitize';
 
 interface EditDogsModalProps {
   isOpen: boolean;
@@ -106,10 +105,6 @@ const EditDogsModal: React.FC<EditDogsModalProps> = ({
     if (dog) {
       setDogData({
         ...dog,
-        name: sanitizContent(dog.name)!,
-        temperament: sanitizContent(dog.temperament),
-        possessive: sanitizContent(dog.possessive),
-        description: sanitizContent(dog.description),
         likes: dog.likes?.join(', '),
         dislikes: dog.dislikes?.join(', '),
       });

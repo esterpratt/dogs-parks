@@ -9,7 +9,6 @@ import { fetchDogPrimaryImage } from '../../services/dogs';
 import { UserContext } from '../../context/UserContext';
 import { useQuery } from '@tanstack/react-query';
 import { Modal } from '../Modal';
-import { sanitizContent } from '../../utils/sanitize';
 
 interface UserPreviewProps {
   user: User & { dogs: Dog[] };
@@ -35,14 +34,10 @@ const UserPreview: React.FC<UserPreviewProps> = ({ user }) => {
     const names = user.dogs.map((dog) => dog.name);
     names.pop();
     const strNames = names.join(', ');
-    dogNames = sanitizContent(
-      `${strNames} & ${user.dogs[user.dogs.length - 1].name}`
-    )!;
+    dogNames = `${strNames} & ${user.dogs[user.dogs.length - 1].name}`;
   }
 
   const ComponentToRender = userId ? Link : 'div';
-
-  const sanitizedUserName = sanitizContent(user.name);
 
   return (
     <>
@@ -56,7 +51,7 @@ const UserPreview: React.FC<UserPreviewProps> = ({ user }) => {
         </div>
         <div className={styles.details}>
           <span className={styles.dogNames}>{dogNames}</span>
-          <span className={styles.userName}>Owner: {sanitizedUserName}</span>
+          <span className={styles.userName}>Owner: {user.name}</span>
         </div>
       </ComponentToRender>
       <Modal
