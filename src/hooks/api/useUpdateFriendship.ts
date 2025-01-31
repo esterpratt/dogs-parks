@@ -12,11 +12,13 @@ import { FRIENDS_KEY } from './keys';
 interface UseUpdateFriendshipProps {
   friendId: string;
   userId: string;
+  onSuccess?: (text: string) => void;
 }
 
 const useUpdateFriendship = ({
   friendId,
   userId,
+  onSuccess,
 }: UseUpdateFriendshipProps) => {
   const { data: friendship } = useQuery({
     queryKey: ['friendship', friendId, userId],
@@ -30,6 +32,9 @@ const useUpdateFriendship = ({
     useMutation({
       mutationFn: (friendshipId: string) => deleteFriendship(friendshipId),
       onSuccess: async () => {
+        if (onSuccess) {
+          onSuccess('Friend request Removed');
+        }
         return Promise.all([
           queryClient.invalidateQueries({
             queryKey: ['friends', userId, FRIENDS_KEY.FRIENDS],
@@ -52,6 +57,9 @@ const useUpdateFriendship = ({
           requesterId: userId,
         }),
       onSuccess: async () => {
+        if (onSuccess) {
+          onSuccess('Friend request sent!');
+        }
         return Promise.all([
           queryClient.invalidateQueries({
             queryKey: ['friends', userId, FRIENDS_KEY.MY_PENDING_FRIENDS],
@@ -73,6 +81,9 @@ const useUpdateFriendship = ({
         status: FRIENDSHIP_STATUS;
       }) => updateFriendship({ friendshipId, status }),
       onSuccess: async () => {
+        if (onSuccess) {
+          onSuccess('You are now friends!');
+        }
         return Promise.all([
           queryClient.invalidateQueries({
             queryKey: ['friends', userId, FRIENDS_KEY.FRIENDS],

@@ -18,7 +18,6 @@ const PrivateRoute: React.FC<PropsWithChildren> = ({ children }) => {
     return children;
   }
 
-  // check whether a friendship between the users exists. if so, if it its status is approved or pending, render children
   const pendingFriendsIds = pendingFriendships.map((friendship: Friendship) => {
     if (user.id === friendship.requesteeId) {
       return friendship.requesterId;

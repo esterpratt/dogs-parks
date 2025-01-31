@@ -1,8 +1,12 @@
-import { useContext } from 'react';
+import { useContext, useRef, useState } from 'react';
+import classnames from 'classnames';
 import { Button } from '../Button';
 import { useFriendshipStatus } from '../../hooks/api/useFriendshipStatus';
 import { UserContext } from '../../context/UserContext';
 import { useUpdateFriendship } from '../../hooks/api/useUpdateFriendship';
+import ThankYouModal from '../ThankYouModal';
+import { Loader } from '../Loader';
+import styles from './FriendRequestButton.module.scss';
 
 interface PublicProfileProps {
   friendId: string;
@@ -20,10 +24,16 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
     friendId,
     userId: userId!,
   });
+  const [isThankYouModalOpen, setIsThankYouModalOpen] = useState(false);
+  const modalTitle = useRef('Friend request sent!');
 
-  const { onUpdateFriendship } = useUpdateFriendship({
+  const { onUpdateFriendship, isPending } = useUpdateFriendship({
     friendId,
     userId: userId!,
+    onSuccess: (text) => {
+      modalTitle.current = text;
+      setIsThankYouModalOpen(true);
+    },
   });
 
   const onUpdateFriend = async () => {
@@ -35,11 +45,29 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
   }
 
   return (
-    <div className={className}>
-      <Button variant={buttonVariant} onClick={onUpdateFriend}>
-        {buttonText}
-      </Button>
-    </div>
+    <>
+      <div className={className}>
+        <Button
+          className={styles.button}
+          variant={buttonVariant}
+          onClick={onUpdateFriend}
+        >
+          {buttonText}
+          <div
+            className={classnames(styles.loaderContainer, {
+              [styles.shown]: isPending,
+            })}
+          >
+            <Loader className={styles.loader} inside />
+          </div>
+        </Button>
+      </div>
+      <ThankYouModal
+        title={modalTitle.current}
+        open={isThankYouModalOpen}
+        onClose={() => setIsThankYouModalOpen(false)}
+      />
+    </>
   );
 };
 
