@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import { MdGpsFixed } from 'react-icons/md';
@@ -25,7 +25,7 @@ interface NewMapProps {
 
 const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
   const { userLocation, setUserLocation } = useContext(LocationContext);
-  const [center, setCenter] = useState(DEFAULT_LOCATION);
+  const [center, setCenter] = useState(userLocation ?? DEFAULT_LOCATION);
   const [activePark, setActivePark] = useState<Park | null>(null);
   const [isLoadingDirections, setIsLoadingDirections] = useState(false);
   const [directions, setDirections] = useState<{
@@ -33,6 +33,10 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
     duration: string;
     geoJSONObj: GeoJSON.GeometryObject;
   }>();
+
+  const mapCenter = useMemo(() => {
+    return { lat: center.latitude, lng: center.longitude };
+  }, [center]);
 
   const setUserLocationByPosition = useCallback(
     (position: GeolocationPosition) => {
@@ -112,7 +116,7 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
       </Link>
       <MapContainer
         className={styles.map}
-        center={{ lat: center.latitude, lng: center.longitude }}
+        center={mapCenter}
         zoom={17}
         scrollWheelZoom={false}
       >
@@ -129,7 +133,7 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
             }}
           />
         )}
-        <MapCenter center={{ lat: center.latitude, lng: center.longitude }} />
+        <MapCenter center={mapCenter} />
         {directions?.geoJSONObj && (
           <Routing geoJSONObj={directions?.geoJSONObj} />
         )}
