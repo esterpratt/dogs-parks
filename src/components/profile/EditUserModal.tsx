@@ -11,6 +11,7 @@ import {
 import { queryClient } from '../../services/react-query';
 import { User } from '../../types/user';
 import { ControlledInput } from '../inputs/ControlledInput';
+import { Checkbox } from '../inputs/Checkbox';
 
 interface EditUserModalProps {
   isOpen: boolean;
@@ -69,6 +70,15 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
     });
   };
 
+  const onPrivacyChange = () => {
+    setUserData((prev) => {
+      return {
+        ...prev,
+        private: !prev?.private,
+      } as User;
+    });
+  };
+
   const onSubmit = async () => {
     mutateUser({ userId: user!.id, userDetails: userData! });
     onClose();
@@ -96,6 +106,19 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
           label="Name"
           required
         />
+        <div className={styles.privacyContainer}>
+          <Checkbox
+            id="visibility"
+            label="Hide me"
+            onChange={onPrivacyChange}
+            isChecked={userData?.private ?? false}
+          />
+          <span>
+            * If you are hidden, you won’t appear in search results. Only your
+            friends or users you have sent friend requests to will be able to
+            see your page.
+          </span>
+        </div>
       </form>
     </Modal>
   );

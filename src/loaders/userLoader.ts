@@ -4,12 +4,19 @@ import { fetchDogPrimaryImage, fetchUserDogs } from '../services/dogs';
 import { queryClient } from '../services/react-query';
 import { User } from '../types/user';
 import { Dog } from '../types/dog';
+import { fetchUserFriendships } from '../services/friendships';
+import { Friendship, FRIENDSHIP_STATUS } from '../types/friendship';
 
 const userLoader: LoaderFunction = async ({ params }) => {
   try {
     const { id: userId } = params;
 
-    const promises: [Promise<User>, Promise<Dog[]>] = [
+    const promises: [
+      Promise<User>,
+      Promise<Dog[]>,
+      Promise<Friendship | null>,
+      Promise<Friendship | null>
+    ] = [
       queryClient.fetchQuery({
         queryKey: ['user', userId],
         queryFn: () => fetchUser(userId!),
@@ -18,9 +25,25 @@ const userLoader: LoaderFunction = async ({ params }) => {
         queryKey: ['dogs', userId],
         queryFn: () => fetchUserDogs(userId!),
       }),
+      queryClient.fetchQuery({
+        queryKey: ['friendships', userId, 'pending'],
+        queryFn: () =>
+          fetchUserFriendships({
+            userId: userId!,
+            status: FRIENDSHIP_STATUS.PENDING,
+          }),
+      }),
+      queryClient.fetchQuery({
+        queryKey: ['friendships', userId, 'approved'],
+        queryFn: () =>
+          fetchUserFriendships({
+            userId: userId!,
+          }),
+      }),
     ];
 
-    const [user, dogs = []] = await Promise.all(promises);
+    const [user, dogs = [], pendingFriendships, approvedFriendships] =
+      await Promise.all(promises);
 
     const getDogsImages = async () => {
       const dogsImagesPromises: Promise<string | null>[] = [];
@@ -39,7 +62,13 @@ const userLoader: LoaderFunction = async ({ params }) => {
       return Promise.all(dogsImagesPromises);
     };
 
-    return { user, dogs, dogImages: getDogsImages() };
+    return {
+      user,
+      dogs,
+      dogImages: getDogsImages(),
+      pendingFriendships,
+      approvedFriendships,
+    };
   } catch (error) {
     return redirect('/login');
   }
