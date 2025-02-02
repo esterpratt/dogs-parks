@@ -7,6 +7,7 @@ import {
   Camera as CapacitorCamera,
   CameraResultType,
   CameraSource,
+  CameraPluginPermissions,
 } from '@capacitor/camera';
 import { Button } from '../Button';
 import { Modal } from '../Modal';
@@ -32,17 +33,30 @@ const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
   error,
   onCloseModal,
 }) => {
+  const requestPermission = async (options: CameraPluginPermissions) => {
+    const permission = await CapacitorCamera.requestPermissions(options);
+    return permission.camera === 'granted' || permission.photos === 'granted';
+  };
+
   const onClickMobileUploadFile = async () => {
     try {
+      const hasPermission = await requestPermission({
+        permissions: ['photos'],
+      });
+      if (!hasPermission) {
+        throw new Error('Gallery permission denied');
+      }
+
       const photo = await CapacitorCamera.getPhoto({
         quality: 80,
         resultType: CameraResultType.Base64,
         source: CameraSource.Photos,
       });
+
       if (photo.base64String) {
         onUploadImg(`data:image/jpeg;base64,${photo.base64String}`);
       } else {
-        throw Error('Image is not Base64');
+        throw new Error('Image is not Base64');
       }
     } catch (error) {
       if ((error as CapacitorException).message?.includes('cancel')) {
@@ -54,16 +68,24 @@ const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
 
   const captureImgMobile = async () => {
     try {
+      const hasPermission = await requestPermission({
+        permissions: ['camera'],
+      });
+      if (!hasPermission) {
+        throw new Error('Camera permission denied');
+      }
+
       const photo = await CapacitorCamera.getPhoto({
         quality: 80,
         resultType: CameraResultType.Base64,
         source: CameraSource.Camera,
         allowEditing: true,
       });
+
       if (photo.base64String) {
         onUploadImg(`data:image/jpeg;base64,${photo.base64String}`);
       } else {
-        throw Error('Image is not Base64');
+        throw new Error('Image is not Base64');
       }
     } catch (error) {
       if ((error as CapacitorException).message?.includes('cancel')) {

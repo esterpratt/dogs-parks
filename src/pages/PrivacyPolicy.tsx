@@ -4,7 +4,7 @@ const PrivacyPolicy = () => {
   return (
     <div className={styles.wrapper}>
       <h1>Privacy Policy</h1>
-      <p>Last Updated: 28.1.25</p>
+      <p>Last Updated: 1.2.25</p>
       <div className={styles.section}>
         <h2>1. Introduction</h2>
         <p>
@@ -17,21 +17,24 @@ const PrivacyPolicy = () => {
       <div className={styles.section}>
         <h2>2. Information We Collect</h2>
         <span>We may collect the following types of information:</span>
-        <h3>Personal Information:</h3>
+        <h3>Personal Information (when creating an account):</h3>
         <span>Name, email address.</span>
         <span>
           If you sign in using Google, we may collect profile details as per
           their policies.
         </span>
+        <span>
+          Any additional data you deliberately add to your profile, such as your
+          dog's details and park interactions.
+        </span>
         <h3>Usage Data:</h3>
         <span>
           Information about how you interact with the App (e.g. features used,
-          session duration)
+          session duration).
         </span>
         <h3>Device Information:</h3>
         <span>
-          Device type, operating system, IP address, and unique device
-          identifiers
+          Device type, operating system, and unique device identifiers.
         </span>
         <h3>Approximate or precise location (only with your permission).</h3>
         <h3>Photos and other content you upload to the App.</h3>
@@ -40,6 +43,11 @@ const PrivacyPolicy = () => {
         <h2>3. How We Use Your Information</h2>
         <span>We use your data to:</span>
         <ul>
+          <li>
+            Allow other dog parents to search for friends and view their dogs'
+            pages. If you prefer to keep your page private, you can change this
+            anytime in the profile settings.
+          </li>
           <li>Provide and improve our services.</li>
           <li>Personalize your experience.</li>
           <li>Communicate updates and support.</li>
@@ -71,14 +79,15 @@ const PrivacyPolicy = () => {
       </div>
       <div className={styles.section}>
         <h2>6. Your Rights & Choices</h2>
-        <span>Depending on your location, you may have rights such as:</span>
-        <ul>
-          <li>Access & Correction – Request a copy of your data.</li>
-          <li>Deletion – Request that we delete your information.</li>
-        </ul>
         <span>
-          To exercise these rights, contact us at{' '}
+          You can delete your account anytime from the profile settings. This
+          will remove all data related to you. If you encounter any issues, feel
+          free to contact us at{' '}
           <a href="mailto:esterpratt@gmail.com">esterpratt@gmail.com</a>
+        </span>
+        <span>
+          If you prefer to keep your page private, you can change this anytime
+          in the profile settings.
         </span>
       </div>
       <div className={styles.section}>
@@ -118,20 +127,3 @@ const PrivacyPolicy = () => {
 };
 
 export { PrivacyPolicy };
-
-// 8. Third-Party Services
-// (Include this if you use Google Analytics, Firebase, Facebook SDK, etc.)
-
-// We may use third-party services that collect data (e.g., Google Analytics, Firebase).
-// Each third party has its own privacy policy:
-// Google Analytics: https://policies.google.com/privacy
-// Firebase: https://firebase.google.com/support/privacy
-// 9. Changes to This Privacy Policy
-
-// We may update this policy periodically. We will notify you of significant changes by updating the "Last Updated" date.
-
-// 10. Contact Us
-
-// If you have questions about this Privacy Policy, contact us at:
-
-// 📧 Email: [your email] -->
