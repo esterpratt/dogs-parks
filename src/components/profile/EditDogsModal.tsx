@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import { Modal } from '../Modal';
 import { DOG_ENERGY, DOG_SIZE, Dog, GENDER } from '../../types/dog';
 import styles from './EditDogsModal.module.scss';
-import { ThankYouModalContext } from '../../context/ThankYouModalContext';
+import { useThankYouModalContext } from '../../context/ThankYouModalContext';
 import { UserContext } from '../../context/UserContext';
 import {
   createDog,
@@ -36,8 +36,9 @@ const EditDogsModal: React.FC<EditDogsModalProps> = ({
   onAddDog,
   dog,
 }) => {
-  const { setIsOpen: setIsThankYouModalOpen } =
-    useContext(ThankYouModalContext);
+  const setIsThankYouModalOpen = useThankYouModalContext(
+    (state) => state.setIsOpen
+  );
   const [dogData, setDogData] = useState<
     | (Partial<Omit<Dog, 'likes' | 'dislikes'>> &
         Required<Pick<Dog, 'name'>> & {

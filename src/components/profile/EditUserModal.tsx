@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { UserContext } from '../../context/UserContext';
 import { Modal } from '../Modal';
 import styles from './EditUserModal.module.scss';
-import { ThankYouModalContext } from '../../context/ThankYouModalContext';
+import { useThankYouModalContext } from '../../context/ThankYouModalContext';
 import {
   updateUser,
   EditUserProps as UpdateUserProps,
@@ -24,8 +24,9 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
 }) => {
   const { user, refetchUser } = useContext(UserContext);
   const [userData, setUserData] = useState(user);
-  const { setIsOpen: setIsThankYouModalOpen } =
-    useContext(ThankYouModalContext);
+  const setIsThankYouModalOpen = useThankYouModalContext(
+    (state) => state.setIsOpen
+  );
 
   useEffect(() => {
     setUserData(user);

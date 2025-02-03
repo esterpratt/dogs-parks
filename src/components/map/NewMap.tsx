@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import { MdGpsFixed } from 'react-icons/md';
@@ -14,9 +14,9 @@ import { getRoute } from '../../services/map';
 import { IconContext } from 'react-icons';
 import { MapSearchAddress } from './mapHelpers/MapSearchAddress';
 import { getUserLocation } from './mapHelpers/getUserLocation';
-import { LocationContext } from '../../context/LocationContext';
 import { UserLocationMarker } from './UserLocationMarker';
 import { DEFAULT_LOCATION } from '../../utils/consts';
+import { useUserLocation } from '../../context/LocationContext';
 
 interface NewMapProps {
   className?: string;
@@ -24,7 +24,8 @@ interface NewMapProps {
 }
 
 const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
-  const { userLocation, setUserLocation } = useContext(LocationContext);
+  const userLocation = useUserLocation((state) => state.userLocation);
+  const setUserLocation = useUserLocation((state) => state.setUserLocation);
   const [center, setCenter] = useState(userLocation ?? DEFAULT_LOCATION);
   const [activePark, setActivePark] = useState<Park | null>(null);
   const [isLoadingDirections, setIsLoadingDirections] = useState(false);

@@ -5,7 +5,7 @@ import { UserContext } from '../../context/UserContext';
 import styles from './ReportParkModal.module.scss';
 import { createReport } from '../../services/reports';
 import { useMutation } from '@tanstack/react-query';
-import { ThankYouModalContext } from '../../context/ThankYouModalContext';
+import { useThankYouModalContext } from '../../context/ThankYouModalContext';
 
 interface ReportParkModalProps {
   open: boolean;
@@ -19,8 +19,9 @@ export const ReportParkModal: React.FC<ReportParkModalProps> = ({
   parkId,
 }) => {
   const { userId } = useContext(UserContext);
-  const { setIsOpen: setIsThankYouModalOpen } =
-    useContext(ThankYouModalContext);
+  const setIsThankYouModalOpen = useThankYouModalContext(
+    (state) => state.setIsOpen
+  );
   const [text, setText] = useState('');
   const { mutate } = useMutation({
     mutationFn: () => createReport({ userId: userId!, parkId, text }),

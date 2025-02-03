@@ -1,39 +1,42 @@
+import { createStore, StoreApi, useStore } from 'zustand';
 import {
-  Dispatch,
-  PropsWithChildren,
-  SetStateAction,
   createContext,
+  ReactNode,
+  useContext,
   useState,
-  lazy,
   Suspense,
+  lazy,
 } from 'react';
 const ThankYouModal = lazy(() => import('../components/ThankYouModal'));
 
-interface ThankYouModalContextObj {
+interface ThankYouModalStoreProps {
   isOpen: boolean;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
+  setIsOpen: (isOpen: boolean) => void;
 }
 
-const initialData: ThankYouModalContextObj = {
-  isOpen: false,
-  setIsOpen: () => {},
-};
+const ThankYouModalContext = createContext<
+  StoreApi<ThankYouModalStoreProps> | undefined
+>(undefined);
 
-const ThankYouModalContext =
-  createContext<ThankYouModalContextObj>(initialData);
+interface ThankYouModalProviderProps {
+  children: ReactNode;
+}
 
-const ThankYouModalContextProvider: React.FC<PropsWithChildren> = ({
+export const ThankYouModalProvider = ({
   children,
-}) => {
-  const [isOpen, setIsOpen] = useState(false);
+}: ThankYouModalProviderProps) => {
+  const [store] = useState(() =>
+    createStore<ThankYouModalStoreProps>((set) => ({
+      isOpen: false,
+      setIsOpen: (isOpen) => set(() => ({ isOpen })),
+    }))
+  );
 
-  const value: ThankYouModalContextObj = {
-    isOpen,
-    setIsOpen,
-  };
+  const isOpen = useStore(store, (state) => state.isOpen);
+  const setIsOpen = useStore(store, (state) => state.setIsOpen);
 
   return (
-    <ThankYouModalContext.Provider value={value}>
+    <ThankYouModalContext.Provider value={store}>
       {children}
       <Suspense fallback={null}>
         <ThankYouModal open={isOpen} onClose={() => setIsOpen(false)} />
@@ -42,4 +45,14 @@ const ThankYouModalContextProvider: React.FC<PropsWithChildren> = ({
   );
 };
 
-export { ThankYouModalContextProvider, ThankYouModalContext };
+export const useThankYouModalContext = <T,>(
+  selector: (state: ThankYouModalStoreProps) => T
+) => {
+  const context = useContext(ThankYouModalContext);
+
+  if (!context) {
+    throw new Error('thank you modal context was used outside of its provider');
+  }
+
+  return useStore(context, selector);
+};

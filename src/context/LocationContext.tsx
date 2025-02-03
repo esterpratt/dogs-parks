@@ -1,24 +1,13 @@
-import { createContext, useState, ReactNode } from 'react';
+import { create } from 'zustand';
 import { Location } from '../types/park';
 
-interface LocationContextProps {
+interface LocationStoreProps {
   userLocation: Location | undefined;
   setUserLocation: (location: Location) => void;
 }
 
-const LocationContext = createContext<LocationContextProps>({
+export const useUserLocation = create<LocationStoreProps>((set) => ({
   userLocation: undefined,
-  setUserLocation: () => {},
-});
-
-const LocationContextProvider = ({ children }: { children: ReactNode }) => {
-  const [userLocation, setUserLocation] = useState<Location>();
-
-  return (
-    <LocationContext.Provider value={{ userLocation, setUserLocation }}>
-      {children}
-    </LocationContext.Provider>
-  );
-};
-
-export { LocationContextProvider, LocationContext };
+  setUserLocation: (location: Location) =>
+    set(() => ({ userLocation: location })),
+}));

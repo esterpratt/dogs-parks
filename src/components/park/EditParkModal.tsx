@@ -1,8 +1,8 @@
-import { ChangeEvent, useContext, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { Park, ParkMaterial } from '../../types/park';
 import { Modal } from '../Modal';
 import styles from './EditParkModal.module.scss';
-import { ThankYouModalContext } from '../../context/ThankYouModalContext';
+import { useThankYouModalContext } from '../../context/ThankYouModalContext';
 import { useMutation } from '@tanstack/react-query';
 import { updatePark } from '../../services/parks';
 import { queryClient } from '../../services/react-query';
@@ -34,8 +34,9 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
   onClose,
   park,
 }) => {
-  const { setIsOpen: setIsThankYouModalOpen } =
-    useContext(ThankYouModalContext);
+  const setIsThankYouModalOpen = useThankYouModalContext(
+    (state) => state.setIsOpen
+  );
   const [parkDetails, setParkDetails] = useState<{
     materials?: ParkMaterial[];
     hasFacilities?: string;

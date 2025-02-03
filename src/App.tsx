@@ -22,11 +22,10 @@ import { userLoader } from './loaders/userLoader';
 import { usersLoader } from './loaders/usersLoader';
 
 import { UserContextProvider } from './context/UserContext';
-import { ThankYouModalContextProvider } from './context/ThankYouModalContext';
 import { DeletionConfirmation } from './pages/DeletionConfirmation';
 import { PrivateRoute } from './pages/PrivateRoute';
-import { LocationContextProvider } from './context/LocationContext';
 import { PrivacyPolicy } from './pages/PrivacyPolicy';
+import { ThankYouModalProvider } from './context/ThankYouModalContext';
 
 const UserDog = lazy(() => import('./pages/UserDog'));
 const UserReviews = lazy(() => import('./pages/UserReviews'));
@@ -139,13 +138,11 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThankYouModalContextProvider>
-        <LocationContextProvider>
-          <UserContextProvider>
-            <RouterProvider router={router} />
-          </UserContextProvider>
-        </LocationContextProvider>
-      </ThankYouModalContextProvider>
+      <ThankYouModalProvider>
+        <UserContextProvider>
+          <RouterProvider router={router} />
+        </UserContextProvider>
+      </ThankYouModalProvider>
     </QueryClientProvider>
   );
 };

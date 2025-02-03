@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { TbPennant, TbPennantOff } from 'react-icons/tb';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { checkin, checkout } from '../../services/checkins';
@@ -8,7 +8,7 @@ import { reportDogsCount } from '../../services/dogsCount';
 import styles from './ParkCheckIn.module.scss';
 import { useAddReview } from '../../hooks/api/useAddReview';
 import { queryClient } from '../../services/react-query';
-import { ThankYouModalContext } from '../../context/ThankYouModalContext';
+import { useThankYouModalContext } from '../../context/ThankYouModalContext';
 import { fetchUserReviews } from '../../services/reviews';
 import { ControlledInput } from '../inputs/ControlledInput';
 import { ParkIcon } from './ParkIcon';
@@ -20,8 +20,9 @@ const ParkCheckIn: React.FC<{
   userName?: string;
   className?: string;
 }> = ({ parkId, userId, userName, className }) => {
-  const { setIsOpen: setIsThankYouModalOpen } =
-    useContext(ThankYouModalContext);
+  const setIsThankYouModalOpen = useThankYouModalContext(
+    (state) => state.setIsOpen
+  );
   const [checkIn, setCheckIn] = useLocalStorage('checkin');
   const [openDogsCountModal, setOpenDogsCountModal] = useState(false);
   const [openReviewModal, setOpenReviewModal] = useState(false);

@@ -1,8 +1,8 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import classnames from 'classnames';
 import { Modal } from './Modal';
 import styles from './ReportModal.module.scss';
-import { ThankYouModalContext } from '../context/ThankYouModalContext';
+import { useThankYouModalContext } from '../context/ThankYouModalContext';
 import { REPORT_DESCRIPTION, ReportReason } from '../types/report';
 import { reportReview } from '../services/reviews';
 
@@ -17,8 +17,9 @@ export const ReportModal: React.FC<ReportModalProps> = ({
   onClose,
   reviewId,
 }) => {
-  const { setIsOpen: setIsThankYouModalOpen } =
-    useContext(ThankYouModalContext);
+  const setIsThankYouModalOpen = useThankYouModalContext(
+    (state) => state.setIsOpen
+  );
   const [chosenReason, setChosenReason] = useState<ReportReason | null>(null);
 
   const onSubmitReport = async () => {

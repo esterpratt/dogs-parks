@@ -1,8 +1,8 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Modal } from './Modal';
 import styles from './ReviewModal.module.scss';
 import { Review } from '../types/review';
-import { ThankYouModalContext } from '../context/ThankYouModalContext';
+import { useThankYouModalContext } from '../context/ThankYouModalContext';
 import { ControlledInput } from './inputs/ControlledInput';
 import { TextArea } from './inputs/TextArea';
 import { Stars } from './Stars';
@@ -32,8 +32,9 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
   onSubmitReview,
   showForm = true,
 }) => {
-  const { setIsOpen: setIsThankYouModalOpen } =
-    useContext(ThankYouModalContext);
+  const setIsThankYouModalOpen = useThankYouModalContext(
+    (state) => state.setIsOpen
+  );
 
   const [reviewData, setReviewData] = useState(() => {
     return {
