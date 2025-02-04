@@ -3,46 +3,25 @@ import { TbPennant, TbPennantOff } from 'react-icons/tb';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { checkin, checkout } from '../../services/checkins';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
-import { Modal } from '../Modal';
-import { reportDogsCount } from '../../services/dogsCount';
 import styles from './ParkCheckIn.module.scss';
 import { useAddReview } from '../../hooks/api/useAddReview';
 import { queryClient } from '../../services/react-query';
-import { useThankYouModalContext } from '../../context/ThankYouModalContext';
 import { fetchUserReviews } from '../../services/reviews';
-import { ControlledInput } from '../inputs/ControlledInput';
 import { ParkIcon } from './ParkIcon';
 import { ReviewModal } from '../ReviewModal';
+import { DogsCountModal } from './DogsCountModal';
 
 const ParkCheckIn: React.FC<{
   parkId: string;
-  userId: string;
+  userId: string | null;
   userName?: string;
   className?: string;
 }> = ({ parkId, userId, userName, className }) => {
-  const setIsThankYouModalOpen = useThankYouModalContext(
-    (state) => state.setIsOpen
-  );
   const [checkIn, setCheckIn] = useLocalStorage('checkin');
   const [openDogsCountModal, setOpenDogsCountModal] = useState(false);
   const [openReviewModal, setOpenReviewModal] = useState(false);
   const [showForm, setShowForm] = useState(true);
-  const [dogsCount, setDogsCount] = useState<string>('');
   const { addReview } = useAddReview(parkId, userId);
-
-  const { mutate: addDogCountReport } = useMutation({
-    mutationFn: (dogsCount: number) =>
-      reportDogsCount({
-        parkId,
-        dogsCount,
-      }),
-    onSuccess: async () => {
-      queryClient.invalidateQueries({
-        queryKey: ['dogsCount', parkId],
-      });
-      setIsThankYouModalOpen(true);
-    },
-  });
 
   const { mutateAsync: parkCheckIn } = useMutation({
     mutationFn: async () => {
@@ -59,7 +38,8 @@ const ParkCheckIn: React.FC<{
 
   const { data: userReviews } = useQuery({
     queryKey: ['reviews', userId],
-    queryFn: () => fetchUserReviews(userId),
+    queryFn: () => fetchUserReviews(userId!),
+    enabled: !!userId,
   });
 
   const { mutate: parkCheckout } = useMutation({
@@ -93,11 +73,6 @@ const ParkCheckIn: React.FC<{
     }
   };
 
-  const onSubmitDogsCount = async (dogsCount: string) => {
-    setOpenDogsCountModal(false);
-    addDogCountReport(Number(dogsCount));
-  };
-
   const onSubmitReview = async (review: {
     title: string;
     content?: string;
@@ -122,29 +97,12 @@ const ParkCheckIn: React.FC<{
         }
         textCmp={<span>{!shouldCheckIn ? 'Check Out' : 'Check In'}</span>}
       />
-      <Modal
-        height="50%"
-        open={openDogsCountModal}
+      <DogsCountModal
+        parkId={parkId}
+        userName={userName}
+        isOpen={openDogsCountModal}
         onClose={() => setOpenDogsCountModal(false)}
-        onSave={() => onSubmitDogsCount(dogsCount)}
-        saveButtonDisabled={!dogsCount && dogsCount !== '0'}
-        className={styles.modalContent}
-      >
-        <div className={styles.title}>
-          Enjoy your stay, <span>{userName}!</span>
-        </div>
-        <div className={styles.inputsContainer}>
-          <ControlledInput
-            type="number"
-            name="dogsCount"
-            label="How many dogs are with you?"
-            min={0}
-            max={99}
-            value={dogsCount}
-            onChange={(event) => setDogsCount(event.currentTarget.value)}
-          />
-        </div>
-      </Modal>
+      />
       <ReviewModal
         showForm={showForm}
         title={`Hope you had a tail-wagging time! ${

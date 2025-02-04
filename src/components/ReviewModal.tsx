@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Modal } from './Modal';
 import styles from './ReviewModal.module.scss';
 import { Review } from '../types/review';
@@ -7,6 +7,7 @@ import { ControlledInput } from './inputs/ControlledInput';
 import { TextArea } from './inputs/TextArea';
 import { Stars } from './Stars';
 import { Checkbox } from './inputs/Checkbox';
+import { UserContext } from '../context/UserContext';
 
 interface ReviewModalProps {
   title?: string;
@@ -43,7 +44,8 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
     };
   });
   const [rank, setRank] = useState<number>(0);
-  const [isAnonymous, setIsAnonymous] = useState(false);
+  const { userId } = useContext(UserContext);
+  const [isAnonymous, setIsAnonymous] = useState(userId ? false : true);
 
   useEffect(() => {
     if (review) {
@@ -137,7 +139,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
                   size={32}
                 />
               </div>
-              {!review && (
+              {!review && !!userId && (
                 <Checkbox
                   id="isAnonymous"
                   label="Report anonymously"

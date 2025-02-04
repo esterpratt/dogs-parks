@@ -13,27 +13,3 @@
 .checkout-icon {
   background-color: $green;
 }
-
-.inputs-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.modal-content {
-  padding: 56px 24px 24px;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  color: $text;
-}
-
-.title {
-  font-size: $second-title-font-size;
-  margin-bottom: 32px;
-
-  span {
-    text-transform: capitalize;
-  }
-}

@@ -115,21 +115,21 @@ const Park: React.FC = () => {
             )}
           </div>
           <div className={styles.userEngagementRight}>
+            {user && (
+              <>
+                <FavoriteButton parkId={parkId!} userId={user.id} />
+              </>
+            )}
             <ParkIcon
               iconCmp={<IoShareSocialSharp onClick={onClickShareButton} />}
               iconClassName={styles.shareIcon}
               textCmp={<span>Share</span>}
             />
-            {user && (
-              <>
-                <FavoriteButton parkId={parkId!} userId={user.id} />
-                <ParkCheckIn
-                  parkId={parkId!}
-                  userId={user.id}
-                  userName={user.name}
-                />
-              </>
-            )}
+            <ParkCheckIn
+              parkId={parkId!}
+              userId={user?.id ?? null}
+              userName={user?.name}
+            />
           </div>
         </div>
       </div>
@@ -141,7 +141,7 @@ const Park: React.FC = () => {
               {park.address}, {park.city}
             </span>
             <Button className={styles.mapLink} onClick={onClickMapLink}>
-              See in Map
+              See in map
             </Button>
           </div>
           <ReviewsPreview />
