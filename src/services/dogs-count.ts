@@ -33,28 +33,22 @@ const reportDogsCount = async ({
   }
 };
 
-const fetchDogsCount = async (parkId: string) => {
-  try {
-    const dogsCountQuery: Query = query(
-      dogsCountReportsCollection,
-      where('parkId', '==', parkId)
-    );
+const fetchDogsCountByReports = async (parkId: string) => {
+  const dogsCountQuery: Query = query(
+    dogsCountReportsCollection,
+    where('parkId', '==', parkId)
+  );
 
-    const querySnapshot = await getDocs(dogsCountQuery);
-    const res: DogsCountReport[] = [];
-    querySnapshot.forEach((doc) => {
-      res.push({
-        ...doc.data(),
-        timestamp: doc.data().timestamp.toDate(),
-        id: doc.id,
-      } as DogsCountReport);
-    });
-    return res;
-  } catch (error) {
-    console.error(
-      `there was a problem fetching dogs count of park ${parkId}: ${error}`
-    );
-  }
+  const querySnapshot = await getDocs(dogsCountQuery);
+  const res: DogsCountReport[] = [];
+  querySnapshot.forEach((doc) => {
+    res.push({
+      ...doc.data(),
+      timestamp: doc.data().timestamp.toDate(),
+      id: doc.id,
+    } as DogsCountReport);
+  });
+  return res;
 };
 
-export { reportDogsCount, fetchDogsCount };
+export { reportDogsCount, fetchDogsCountByReports };

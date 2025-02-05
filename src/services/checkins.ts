@@ -48,6 +48,32 @@ const checkout = async (checkinId: string) => {
   }
 };
 
+const fetchAllDayParkCheckins = async (parkId: string) => {
+  try {
+    const parkCheckinsQuery = query(
+      checkinsCollection,
+      and(where('parkId', '==', parkId))
+    );
+
+    const querySnapshot = await getDocs(parkCheckinsQuery);
+    const res: Checkin[] = [];
+    querySnapshot.forEach((doc) => {
+      res.push({
+        ...doc.data(),
+        checkinTimestamp: doc.data().checkinTimestamp.toDate(),
+        checkoutTimestamp: doc.data().checkoutTimestamp.toDate(),
+        id: doc.id,
+      } as Checkin);
+    });
+    return res;
+  } catch (error) {
+    console.error(
+      `there was an error while fetching all day checkins for park ${parkId}: ${error}`
+    );
+    return null;
+  }
+};
+
 const fetchParkCheckins = async (parkId: string) => {
   try {
     const parkCheckinsQuery = query(
@@ -81,4 +107,4 @@ const fetchParkCheckins = async (parkId: string) => {
   }
 };
 
-export { checkin, checkout, fetchParkCheckins };
+export { checkin, checkout, fetchParkCheckins, fetchAllDayParkCheckins };

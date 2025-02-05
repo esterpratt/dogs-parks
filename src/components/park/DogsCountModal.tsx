@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { Modal } from '../Modal';
-import { reportDogsCount } from '../../services/dogsCount';
+import { reportDogsCount } from '../../services/dogs-count';
 import styles from './DogsCountModal.module.scss';
 import { queryClient } from '../../services/react-query';
 import { useThankYouModalContext } from '../../context/ThankYouModalContext';
@@ -45,7 +45,6 @@ const DogsCountModal: React.FC<{
   const onSave = async (dogsCount: string) => {
     setShouldHideDogsModal(shouldHideDogsModalLocal);
     if (dogsCount) {
-      console.log('adding dog count');
       addDogCountReport(Number(dogsCount));
     }
     onClose();
@@ -89,7 +88,7 @@ const DogsCountModal: React.FC<{
             <ControlledInput
               type="number"
               name="dogsCount"
-              label="How many dogs are with you?"
+              label="How many dogs are currently in the park?"
               min={0}
               max={99}
               value={dogsCount}

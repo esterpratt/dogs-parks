@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getHoursChartData, getStrHour } from '../charts/getHoursChartData';
-import { fetchDogsCount } from '../../services/dogsCount';
+import { fetchDogsCount } from '../../services/dogs-count-orchestrator';
 import { getMean, getSTD } from '../../utils/calcs';
 import { BarChart } from '../charts/BarChart';
 import styles from './BusyHours.module.scss';
@@ -34,20 +34,9 @@ interface BusyHoursProps {
 const BusyHours: React.FC<BusyHoursProps> = ({ parkId }) => {
   const [isDogsCountModalOpen, setIsDogsCountModalOpen] = useState(false);
 
-  const { data: dogsCountReports } = useQuery({
+  const { data: dogsCount } = useQuery({
     queryKey: ['dogsCount', parkId],
     queryFn: () => fetchDogsCount(parkId),
-  });
-
-  const dogsCount = dogsCountReports?.map((report) => {
-    const hour = report.timestamp.getHours();
-    const fullDate = `${report.timestamp.getDate()}, ${report.timestamp.getMonth()}, ${report.timestamp.getFullYear()}`;
-
-    return {
-      count: report.dogsCount,
-      hour,
-      fullDate,
-    };
   });
 
   let currentStrHour;
