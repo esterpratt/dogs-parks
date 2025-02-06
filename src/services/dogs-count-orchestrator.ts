@@ -4,7 +4,7 @@ import { fetchAllDayParkCheckins } from './checkins';
 import { fetchDogsCountByReports } from './dogs-count';
 
 const processReportsToDogsCount = (reports: DogsCountReport[]) => {
-  reports.map((report) => {
+  return reports.map((report) => {
     const hour = report.timestamp.getHours();
     const fullDate = `${report.timestamp.getDate()}, ${report.timestamp.getMonth()}, ${report.timestamp.getFullYear()}`;
 

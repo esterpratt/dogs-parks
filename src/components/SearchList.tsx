@@ -55,22 +55,24 @@ const SearchList = <T,>({
 
   return (
     <div className={classnames(styles.container, containerClassName)}>
-      <input
-        value={input}
-        onChange={onChangeInput}
-        placeholder={placeholder}
-        className={styles.input}
-      />
-      {isSearchToSee && (
-        <Button
-          disabled={!input.length}
-          variant="green"
-          onClick={onClickSearch}
-          className={styles.button}
-        >
-          Search
-        </Button>
-      )}
+      <div className={styles.inputContainer}>
+        <input
+          value={input}
+          onChange={onChangeInput}
+          placeholder={placeholder}
+          className={styles.input}
+        />
+        {isSearchToSee && (
+          <Button
+            disabled={!input.length}
+            variant="green"
+            onClick={onClickSearch}
+            className={styles.button}
+          >
+            Search
+          </Button>
+        )}
+      </div>
       {showLoader && <Loader inside />}
       {!showLoader && !!filteredItems.length && (
         <SearchListItems items={filteredItems} itemKeyfn={itemKeyfn}>

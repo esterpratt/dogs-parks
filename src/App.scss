@@ -139,6 +139,10 @@ a {
   display: flex;
 }
 
+.leaflet-left .leaflet-control {
+  margin-left: calc(10px + env(safe-area-inset-left));
+}
+
 .leaflet-control-geocoder {
   width: 100%;
 
@@ -151,7 +155,8 @@ a {
     font-family: $font-family;
     color: $text;
     border: none;
-    margin: 0 24px 24px;
+    margin: 0 calc(24px + env(safe-area-inset-right)) 24px
+      calc(24px + env(safe-area-inset-left));
 
     .leaflet-control-geocoder-form-no-error,
     .leaflet-control-geocoder-alternatives {

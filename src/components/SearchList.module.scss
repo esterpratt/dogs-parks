@@ -8,6 +8,11 @@
   overflow: hidden;
 }
 
+.input-container {
+  display: flex;
+  flex-direction: column;
+}
+
 .input {
   border-radius: 0;
   border: none;
@@ -35,4 +40,22 @@
   margin: 20px auto;
   text-align: center;
   color: $grey;
+}
+
+@media (orientation: landscape) {
+  .container {
+    .input-container {
+      flex-direction: row;
+      margin-bottom: 24px;
+    }
+
+    .input {
+      flex-grow: 1;
+      padding: 8px;
+    }
+
+    .button {
+      margin: 0 0 0 12px;
+    }
+  }
 }

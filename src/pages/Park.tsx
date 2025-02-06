@@ -96,44 +96,46 @@ const Park: React.FC = () => {
 
   return (
     <>
-      <div className={styles.imageContainer}>
-        {primaryImage ? (
-          <img src={primaryImage} className={styles.image} />
-        ) : (
-          <div className={classnames(styles.image, styles.imageIcon)}>
-            <IconContext.Provider value={{ className: styles.parkIcon }}>
-              <LuTrees />
-            </IconContext.Provider>
-          </div>
-        )}
-        <div className={styles.userEngagementRow}>
-          <div className={styles.userEngagementLeft}>
-            {user && !primaryImage && (
-              <IconContext.Provider value={{ className: styles.editPhotoIcon }}>
-                <PiCameraFill onClick={() => setIsAddImageModalOpen(true)} />
+      <div className={styles.upperDetailsContainer}>
+        <div className={styles.imageContainer}>
+          {primaryImage ? (
+            <img src={primaryImage} className={styles.image} />
+          ) : (
+            <div className={classnames(styles.image, styles.imageIcon)}>
+              <IconContext.Provider value={{ className: styles.parkIcon }}>
+                <LuTrees />
               </IconContext.Provider>
-            )}
-          </div>
-          <div className={styles.userEngagementRight}>
-            {user && (
-              <>
-                <FavoriteButton parkId={parkId!} userId={user.id} />
-              </>
-            )}
-            <ParkIcon
-              iconCmp={<IoShareSocialSharp onClick={onClickShareButton} />}
-              iconClassName={styles.shareIcon}
-              textCmp={<span>Share</span>}
-            />
-            <ParkCheckIn
-              parkId={parkId!}
-              userId={user?.id ?? null}
-              userName={user?.name}
-            />
+            </div>
+          )}
+          <div className={styles.userEngagementRow}>
+            <div className={styles.userEngagementLeft}>
+              {user && !primaryImage && (
+                <IconContext.Provider
+                  value={{ className: styles.editPhotoIcon }}
+                >
+                  <PiCameraFill onClick={() => setIsAddImageModalOpen(true)} />
+                </IconContext.Provider>
+              )}
+            </div>
+            <div className={styles.userEngagementRight}>
+              {user && (
+                <>
+                  <FavoriteButton parkId={parkId!} userId={user.id} />
+                </>
+              )}
+              <ParkIcon
+                iconCmp={<IoShareSocialSharp onClick={onClickShareButton} />}
+                iconClassName={styles.shareIcon}
+                textCmp={<span>Share</span>}
+              />
+              <ParkCheckIn
+                parkId={parkId!}
+                userId={user?.id ?? null}
+                userName={user?.name}
+              />
+            </div>
           </div>
         </div>
-      </div>
-      <div className={styles.contentContainer}>
         <div className={styles.basicDetails}>
           <span className={styles.name}>{park.name}</span>
           <div>
@@ -146,6 +148,8 @@ const Park: React.FC = () => {
           </div>
           <ReviewsPreview />
         </div>
+      </div>
+      <div className={styles.contentContainer}>
         <ParkTabs parkId={parkId!} className={styles.tabs} />
         <Suspense fallback={<Loader />}>
           <div className={styles.outletContainer}>

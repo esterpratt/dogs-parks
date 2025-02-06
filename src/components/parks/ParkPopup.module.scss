@@ -8,7 +8,8 @@
   bottom: -300px;
   left: 2px;
   background-color: $white;
-  padding: 36px 14px 14px;
+  padding: 36px calc(14px + env(safe-area-inset-right)) 14px
+    calc(14px + env(safe-area-inset-left));
   border: 1px solid $grey-bold;
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
@@ -183,4 +184,12 @@
   z-index: 600;
   top: -16px;
   left: 14px;
+}
+
+@media (orientation: landscape) {
+  .park-modal {
+    height: 60vh;
+    padding-bottom: 24px;
+    gap: 24px;
+  }
 }

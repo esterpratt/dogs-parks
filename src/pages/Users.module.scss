@@ -1,7 +1,8 @@
 @use '../variables' as *;
 
 .container {
-  padding: 32px 24px;
+  padding: 32px calc(24px + env(safe-area-inset-right)) 32px
+    calc(24px + env(safe-area-inset-left));
   max-height: $content-max-height;
   display: flex;
   flex-direction: column;
@@ -15,5 +16,16 @@
 .list {
   ul {
     gap: 12px;
+  }
+}
+
+@media (orientation: landscape) {
+  .title {
+    display: none;
+  }
+
+  .container {
+    padding: 18px calc(24px + env(safe-area-inset-right)) 12px
+      calc(24px + env(safe-area-inset-left));
   }
 }

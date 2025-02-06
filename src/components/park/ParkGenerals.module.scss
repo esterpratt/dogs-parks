@@ -41,3 +41,10 @@
   grey: $grey;
   transparentGrey: #95b2bb;
 }
+
+@media (orientation: landscape) {
+  .container {
+    justify-content: start;
+    gap: 18px;
+  }
+}

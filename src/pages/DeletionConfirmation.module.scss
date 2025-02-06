@@ -1,7 +1,8 @@
 @use '../variables' as *;
 
 .content {
-  padding: 48px 24px 0;
+  padding: 48px calc(24px + env(safe-area-inset-right)) 0
+    calc(24px + env(safe-area-inset-left));
   color: $text;
   font-size: 18px;
   display: flex;
