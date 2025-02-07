@@ -26,6 +26,7 @@ import { DeletionConfirmation } from './pages/DeletionConfirmation';
 import { PrivateRoute } from './pages/PrivateRoute';
 import { PrivacyPolicy } from './pages/PrivacyPolicy';
 import { ThankYouModalProvider } from './context/ThankYouModalContext';
+import { OrientationProvider } from './context/OrientationContext';
 
 const UserDog = lazy(() => import('./pages/UserDog'));
 const UserReviews = lazy(() => import('./pages/UserReviews'));
@@ -137,13 +138,15 @@ const App = () => {
   ]);
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <OrientationProvider>
       <ThankYouModalProvider>
-        <UserContextProvider>
-          <RouterProvider router={router} />
-        </UserContextProvider>
+        <QueryClientProvider client={queryClient}>
+          <UserContextProvider>
+            <RouterProvider router={router} />
+          </UserContextProvider>
+        </QueryClientProvider>
       </ThankYouModalProvider>
-    </QueryClientProvider>
+    </OrientationProvider>
   );
 };
 

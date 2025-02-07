@@ -11,3 +11,10 @@
     margin-top: $tabs-height;
   }
 }
+
+@media (orientation: landscape) {
+  .container {
+    padding: 12px calc(16px + env(safe-area-inset-right)) 12px
+      calc(16px + env(safe-area-inset-left));
+  }
+}

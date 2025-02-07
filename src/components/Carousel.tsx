@@ -9,6 +9,7 @@ import { IoTrashOutline } from 'react-icons/io5';
 import styles from './Carousel.module.scss';
 import { Modal } from './Modal';
 import { Button } from './Button';
+import { useOrientationContext } from '../context/OrientationContext';
 
 interface CarouselProps {
   images: string[];
@@ -26,6 +27,7 @@ const Carousel: React.FC<CarouselProps> = ({
     useState(false);
   const [isEnlargedImageModalOpen, setIsEnlargeImageModalOpen] =
     useState(false);
+  const orientation = useOrientationContext((state) => state.orientation);
 
   const onDeleteImage = () => {
     if (removeImage) {
@@ -77,7 +79,8 @@ const Carousel: React.FC<CarouselProps> = ({
       <Modal
         open={isApproveDeleteModalOpen}
         onClose={() => setIsApproveDeleteModalOpen(false)}
-        height="30%"
+        height={orientation === 'landscape' ? '95%' : '40%'}
+        style={orientation === 'landscape' ? { margin: 'auto' } : {}}
         variant="center"
         className={styles.approveModal}
       >
@@ -100,9 +103,13 @@ const Carousel: React.FC<CarouselProps> = ({
         open={isEnlargedImageModalOpen}
         onClose={() => setIsEnlargeImageModalOpen(false)}
         width="90%"
-        height="65%"
+        height={orientation === 'landscape' ? '95%' : '65%'}
         variant="appear"
-        style={{ backgroundColor: 'rgba(0, 0, 0, 0.9)' }}
+        style={
+          orientation === 'landscape'
+            ? { margin: 'auto', backgroundColor: 'rgba(0, 0, 0, 0.9)' }
+            : { backgroundColor: 'rgba(0, 0, 0, 0.9)' }
+        }
       >
         <div
           className={styles.modalImage}

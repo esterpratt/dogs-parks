@@ -6,10 +6,10 @@ import classnames from 'classnames';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { IconContext } from 'react-icons';
 import { PiCameraFill } from 'react-icons/pi';
+import { Share } from '@capacitor/share';
 import { ReviewsPreview } from '../components/park/ReviewsPreview';
 import { UserContext } from '../context/UserContext';
 import { FavoriteButton } from '../components/park/FavoriteButton';
-import styles from './Park.module.scss';
 import { ParkTabs } from '../components/park/ParkTabs';
 import {
   fetchPark,
@@ -22,11 +22,11 @@ import { ParkCheckIn } from '../components/park/ParkCheckIn';
 import { ParkIcon } from '../components/park/ParkIcon';
 import { Button } from '../components/Button';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
-import { Share } from '@capacitor/share';
 import { isMobile } from '../utils/platform';
+import styles from './Park.module.scss';
+import { ThankYouModal } from '../components/ThankYouModal';
 
 const CameraModal = lazy(() => import('../components/camera/CameraModal'));
-const ThankYouModal = lazy(() => import('../components/ThankYouModal'));
 
 const Park: React.FC = () => {
   const { id: parkId } = useParams();
@@ -164,13 +164,11 @@ const Park: React.FC = () => {
           onUploadImg={onUploadImg}
         />
       </Suspense>
-      <Suspense fallback={null}>
-        <ThankYouModal
-          open={isThankYouModalOpen}
-          onClose={() => setIsThankYouModalOpen(false)}
-          title={thankYouModalTitle.current}
-        />
-      </Suspense>
+      <ThankYouModal
+        open={isThankYouModalOpen}
+        onClose={() => setIsThankYouModalOpen(false)}
+        title={thankYouModalTitle.current}
+      />
     </>
   );
 };

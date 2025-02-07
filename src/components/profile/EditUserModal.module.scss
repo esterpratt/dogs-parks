@@ -26,3 +26,17 @@
     font-size: 12px;
   }
 }
+
+@media (orientation: landscape) {
+  .content-container {
+    padding-top: 24px;
+  }
+
+  .title {
+    margin-bottom: 16px;
+  }
+
+  .form {
+    gap: 16px;
+  }
+}

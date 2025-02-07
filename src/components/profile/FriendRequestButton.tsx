@@ -4,7 +4,7 @@ import { Button } from '../Button';
 import { useFriendshipStatus } from '../../hooks/api/useFriendshipStatus';
 import { UserContext } from '../../context/UserContext';
 import { useUpdateFriendship } from '../../hooks/api/useUpdateFriendship';
-import ThankYouModal from '../ThankYouModal';
+import { ThankYouModal } from '../ThankYouModal';
 import { Loader } from '../Loader';
 import styles from './FriendRequestButton.module.scss';
 

@@ -58,3 +58,18 @@
 .delete-button {
   margin: 0 auto;
 }
+
+@media (orientation: landscape) {
+  .container {
+    height: unset;
+    padding-bottom: 0;
+  }
+
+  .rowsWrapper:not(:first-child) {
+    margin-top: 48px;
+  }
+
+  .approve-modal {
+    padding-top: 24px;
+  }
+}

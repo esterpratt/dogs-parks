@@ -1,13 +1,6 @@
 import { createStore, StoreApi, useStore } from 'zustand';
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useState,
-  Suspense,
-  lazy,
-} from 'react';
-const ThankYouModal = lazy(() => import('../components/ThankYouModal'));
+import { createContext, ReactNode, useContext, useState } from 'react';
+import { ThankYouModal } from '../components/ThankYouModal';
 
 interface ThankYouModalStoreProps {
   isOpen: boolean;
@@ -38,9 +31,7 @@ export const ThankYouModalProvider = ({
   return (
     <ThankYouModalContext.Provider value={store}>
       {children}
-      <Suspense fallback={null}>
-        <ThankYouModal open={isOpen} onClose={() => setIsOpen(false)} />
-      </Suspense>
+      <ThankYouModal open={isOpen} onClose={() => setIsOpen(false)} />
     </ThankYouModalContext.Provider>
   );
 };

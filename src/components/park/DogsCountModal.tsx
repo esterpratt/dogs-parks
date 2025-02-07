@@ -9,6 +9,7 @@ import { queryClient } from '../../services/react-query';
 import { useThankYouModalContext } from '../../context/ThankYouModalContext';
 import { ControlledInput } from '../inputs/ControlledInput';
 import { Checkbox } from '../inputs/Checkbox';
+import { useOrientationContext } from '../../context/OrientationContext';
 
 const DogsCountModal: React.FC<{
   parkId: string;
@@ -20,6 +21,8 @@ const DogsCountModal: React.FC<{
   const setIsThankYouModalOpen = useThankYouModalContext(
     (state) => state.setIsOpen
   );
+
+  const orientation = useOrientationContext((state) => state.orientation);
 
   const [shouldHideDogsModalStorage, setShouldHideDogsModal] =
     useLocalStorage('hideDogsModal');
@@ -52,7 +55,14 @@ const DogsCountModal: React.FC<{
 
   return (
     <Modal
-      height={!showOnlyCount && shouldHideDogsModal ? '20%' : '50%'}
+      height={
+        orientation === 'landscape'
+          ? '95%'
+          : !showOnlyCount && shouldHideDogsModal
+          ? '20%'
+          : '50%'
+      }
+      style={orientation === 'landscape' ? { margin: 'auto' } : {}}
       open={isOpen}
       autoClose={!showOnlyCount && shouldHideDogsModal}
       onClose={() => onClose()}
@@ -61,7 +71,9 @@ const DogsCountModal: React.FC<{
           ? undefined
           : () => onSave(dogsCount)
       }
-      className={styles.modalContent}
+      className={classnames(styles.modalContent, {
+        [styles.keepPadding]: showOnlyCount,
+      })}
       saveButtonDisabled={
         !dogsCount && dogsCount !== '0' && !shouldHideDogsModalLocal
       }

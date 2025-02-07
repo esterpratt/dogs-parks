@@ -11,14 +11,19 @@
 .container {
   display: flex;
   flex-direction: column;
-  margin: 0 calc(24px + env(safe-area-inset-right)) 12px
-    calc(24px + env(safe-area-inset-left));
+  margin: 0 24px 12px;
   height: 100%;
   overflow: auto;
 }
 
 .inputs-container {
+  display: flex;
+  flex-direction: column;
   margin: 8px 0 12px;
+  gap: 16px;
+}
+
+.inputs {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -38,7 +43,7 @@
 }
 
 .line-through {
-  margin: 48px 4px 24px;
+  margin: 36px 4px 24px;
   text-align: center;
   border-bottom: 1px solid $grey-bold;
   line-height: 0.1em;
@@ -95,4 +100,38 @@
   align-self: center;
   color: $green;
   font-size: 16px;
+}
+
+@media (orientation: landscape) {
+  .container {
+    margin: 0 calc(8px + env(safe-area-inset-right)) 12px
+      calc(8px + env(safe-area-inset-left));
+  }
+
+  .title {
+    margin-top: 4px;
+  }
+
+  .inputs {
+    flex-direction: row;
+    justify-content: space-between;
+
+    > * {
+      flex-grow: 1;
+    }
+  }
+
+  .button {
+    font-size: 16px;
+  }
+
+  .line-through {
+    margin-top: 24px;
+  }
+
+  .google-login-button {
+    width: fit-content;
+    justify-content: center;
+    margin: 0 auto 12px;
+  }
 }

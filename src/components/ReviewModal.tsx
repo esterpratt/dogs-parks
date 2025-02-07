@@ -8,6 +8,7 @@ import { TextArea } from './inputs/TextArea';
 import { Stars } from './Stars';
 import { Checkbox } from './inputs/Checkbox';
 import { UserContext } from '../context/UserContext';
+import { useOrientationContext } from '../context/OrientationContext';
 
 interface ReviewModalProps {
   title?: string;
@@ -46,6 +47,8 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
   const [rank, setRank] = useState<number>(0);
   const { userId } = useContext(UserContext);
   const [isAnonymous, setIsAnonymous] = useState(userId ? false : true);
+
+  const orientation = useOrientationContext((state) => state.orientation);
 
   useEffect(() => {
     if (review) {
@@ -101,7 +104,8 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
     <Modal
       open={isOpen}
       onClose={closeModal}
-      height={showForm ? '80%' : '25%'}
+      height={orientation === 'landscape' ? '95%' : showForm ? '80%' : '25%'}
+      style={orientation === 'landscape' && isOpen ? { margin: 'auto' } : {}}
       autoClose={!showForm}
       onSave={showForm ? onSubmit : undefined}
       saveButtonDisabled={!reviewData.title}

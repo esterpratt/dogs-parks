@@ -9,12 +9,14 @@ import styles from './UserInfo.module.scss';
 import { Modal } from '../components/Modal';
 import { Button } from '../components/Button';
 import { EditUserModal } from '../components/profile/EditUserModal';
+import { useOrientationContext } from '../context/OrientationContext';
 
 const UserInfo = () => {
   const { userLogout, userDeletion } = useContext(UserContext);
   const [isEditUserModalOpen, setIsEditUserModalOpen] = useState(false);
   const [isDeleteUserModalOpen, setIsDeleteUserModalOpen] = useState(false);
   const navigate = useNavigate();
+  const orientation = useOrientationContext((state) => state.orientation);
 
   const logout = () => {
     userLogout();
@@ -68,7 +70,12 @@ const UserInfo = () => {
       <Modal
         open={isDeleteUserModalOpen}
         onClose={() => setIsDeleteUserModalOpen(false)}
-        height="60%"
+        height={orientation === 'landscape' ? '95%' : '60%'}
+        style={
+          orientation === 'landscape' && isDeleteUserModalOpen
+            ? { margin: 'auto' }
+            : {}
+        }
         variant="center"
         className={styles.approveModal}
       >

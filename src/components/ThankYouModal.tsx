@@ -2,6 +2,7 @@ import { FaCheck } from 'react-icons/fa';
 import { IconContext } from 'react-icons';
 import { Modal } from './Modal';
 import styles from './ThankYouModal.module.scss';
+import { useOrientationContext } from '../context/OrientationContext';
 
 interface ThankYouModalProps {
   title?: string;
@@ -14,12 +15,15 @@ const ThankYouModal: React.FC<ThankYouModalProps> = ({
   open,
   onClose,
 }) => {
+  const orientation = useOrientationContext((state) => state.orientation);
+
   return (
     <Modal
       autoClose
       open={open}
       onClose={onClose}
-      height="20%"
+      height={orientation === 'landscape' ? '50%' : '20%'}
+      style={orientation === 'landscape' && open ? { marginTop: 'auto' } : {}}
       className={styles.modal}
       variant="center"
       delay
@@ -32,4 +36,4 @@ const ThankYouModal: React.FC<ThankYouModalProps> = ({
   );
 };
 
-export default ThankYouModal;
+export { ThankYouModal };

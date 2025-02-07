@@ -1,7 +1,8 @@
 @use '../variables' as *;
 
 .wrapper {
-  padding: 24px;
+  padding: 24px calc(24px + env(safe-area-inset-right)) 24px
+    calc(24px + env(safe-area-inset-left));
   display: flex;
   flex-direction: column;
   gap: 24px;

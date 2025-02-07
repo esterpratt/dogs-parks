@@ -136,7 +136,7 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
     <Modal
       open={isOpen}
       onClose={onClose}
-      height="90%"
+      height="95%"
       onSave={onSubmit}
       className={styles.modalContent}
     >

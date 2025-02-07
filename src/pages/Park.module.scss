@@ -122,8 +122,9 @@
     align-items: center;
     position: relative;
     width: 100%;
-    gap: 36px;
-    padding: 0 env(safe-area-inset-right) 0 env(safe-area-inset-left);
+    gap: 24px;
+    padding: 0 calc(16px + env(safe-area-inset-right)) 0
+      calc(16px + env(safe-area-inset-left));
     border-bottom: 1px solid $text-light;
   }
 
@@ -132,6 +133,7 @@
     flex-shrink: 1;
     width: 40%;
     height: 180px;
+    margin-top: 12px;
   }
 
   .image {
@@ -145,13 +147,22 @@
   .user-engagement-row {
     background-color: transparent;
     border: none;
+    padding-right: 24px;
   }
 
   .user-engagement-left {
     margin-left: env(safe-area-inset-left);
   }
 
-  .content-container {
-    padding: 12px env(safe-area-inset-right) 12px env(safe-area-inset-left);
+  .outlet-container {
+    padding: 12px calc(16px + env(safe-area-inset-right)) 12px
+      calc(16px + env(safe-area-inset-left));
+  }
+
+  .tabs {
+    gap: 48px;
+    margin: 0;
+    padding: 0 calc(16px + env(safe-area-inset-right)) 0
+      calc(16px + env(safe-area-inset-left));
   }
 }

@@ -62,3 +62,9 @@
     margin: 0;
   }
 }
+
+@media (orientation: landscape) {
+  .modal {
+    padding-top: 24px;
+  }
+}

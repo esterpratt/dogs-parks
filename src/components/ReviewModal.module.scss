@@ -54,3 +54,9 @@
 .stars {
   padding: 16px;
 }
+
+@media (orientation: landscape) {
+  .content-container {
+    padding-top: 24px;
+  }
+}

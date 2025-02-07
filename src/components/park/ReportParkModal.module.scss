@@ -9,3 +9,9 @@
 .button {
   margin: 24px auto;
 }
+
+@media (orientation: landscape) {
+  .container {
+    padding-top: 24px;
+  }
+}

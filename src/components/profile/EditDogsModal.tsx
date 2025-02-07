@@ -4,7 +4,6 @@ import { useMutation } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { Modal } from '../Modal';
 import { DOG_ENERGY, DOG_SIZE, Dog, GENDER } from '../../types/dog';
-import styles from './EditDogsModal.module.scss';
 import { useThankYouModalContext } from '../../context/ThankYouModalContext';
 import { UserContext } from '../../context/UserContext';
 import {
@@ -22,6 +21,7 @@ import { dogBreeds } from '../../services/dog-breeds';
 import { IconContext } from 'react-icons';
 import { IoTrashOutline } from 'react-icons/io5';
 import DeleteDogModal from './DeleteDogModal';
+import styles from './EditDogsModal.module.scss';
 
 interface EditDogsModalProps {
   isOpen: boolean;

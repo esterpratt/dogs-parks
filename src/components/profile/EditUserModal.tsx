@@ -12,6 +12,7 @@ import { queryClient } from '../../services/react-query';
 import { User } from '../../types/user';
 import { ControlledInput } from '../inputs/ControlledInput';
 import { Checkbox } from '../inputs/Checkbox';
+import { useOrientationContext } from '../../context/OrientationContext';
 
 interface EditUserModalProps {
   isOpen: boolean;
@@ -27,6 +28,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
   const setIsThankYouModalOpen = useThankYouModalContext(
     (state) => state.setIsOpen
   );
+  const orientation = useOrientationContext((state) => state.orientation);
 
   useEffect(() => {
     setUserData(user);
@@ -93,7 +95,8 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
     <Modal
       open={isOpen}
       onClose={onClose}
-      height="50%"
+      height={orientation === 'landscape' ? '95%' : '50%'}
+      style={orientation === 'landscape' && isOpen ? { margin: 'auto' } : {}}
       onSave={onSubmit}
       saveButtonDisabled={!userData?.name}
       className={styles.contentContainer}

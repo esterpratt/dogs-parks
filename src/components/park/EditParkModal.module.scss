@@ -22,3 +22,17 @@
   flex-direction: column;
   gap: 24px;
 }
+
+@media (orientation: landscape) {
+  .modal-content {
+    padding-top: 24px;
+  }
+
+  .title {
+    margin-bottom: 16px;
+  }
+
+  .form-inputs {
+    gap: 16px;
+  }
+}

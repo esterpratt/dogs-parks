@@ -17,3 +17,9 @@
 .delete-button {
   margin: 0 auto;
 }
+
+@media (orientation: landscape) {
+  .approve-modal {
+    padding-top: 24px;
+  }
+}

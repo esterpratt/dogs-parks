@@ -1,6 +1,11 @@
 @use 'leaflet-control-geocoder/dist/Control.Geocoder.css';
 @use './variables' as *;
 
+html {
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   display: flex;
   width: 100%;
@@ -215,5 +220,11 @@ a {
         }
       }
     }
+  }
+}
+
+@media (orientation: landscape) {
+  .slick-slider .slick-track .slick-slide {
+    height: 180px;
   }
 }

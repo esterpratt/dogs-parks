@@ -74,3 +74,16 @@
 .delete-button {
   margin: 0 auto;
 }
+
+@media (orientation: landscape) {
+  .plus-content {
+    justify-content: center;
+    padding-top: 12px;
+  }
+
+  .modal-image {
+    img {
+      object-fit: contain;
+    }
+  }
+}

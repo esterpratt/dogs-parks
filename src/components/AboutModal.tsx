@@ -2,6 +2,7 @@ import { Modal } from './Modal';
 import styles from './AboutModal.module.scss';
 import { Link } from 'react-router';
 import { MAIL } from '../services/reports';
+import { useOrientationContext } from '../context/OrientationContext';
 
 interface AboutModalProps {
   open: boolean;
@@ -9,12 +10,15 @@ interface AboutModalProps {
 }
 
 const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
+  const orientation = useOrientationContext((state) => state.orientation);
+
   return (
     <Modal
       open={open}
       onClose={onClose}
       variant="centerTop"
-      height="65%"
+      height={orientation === 'landscape' ? '95%' : '65%'}
+      style={orientation === 'landscape' && open ? { margin: 'auto' } : {}}
       className={styles.modalContent}
     >
       <h3>Welcome to Klavhub!</h3>

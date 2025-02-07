@@ -50,3 +50,17 @@
   border: 1px solid $red;
   border-radius: 50%;
 }
+
+@media (orientation: landscape) {
+  .content-container {
+    padding-top: 24px;
+  }
+
+  .title {
+    margin-bottom: 24px;
+  }
+
+  .form-inputs {
+    gap: 18px;
+  }
+}

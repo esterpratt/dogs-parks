@@ -9,6 +9,7 @@ import { deleteDog } from '../../services/dogs';
 import { queryClient } from '../../services/react-query';
 import { Button } from '../Button';
 import { Loader } from '../Loader';
+import { useOrientationContext } from '../../context/OrientationContext';
 
 interface DeleteDogModalProps {
   isOpen: boolean;
@@ -24,6 +25,7 @@ const DeleteDogModal: React.FC<DeleteDogModalProps> = ({
   const { userId } = useContext(UserContext);
   const { revalidate } = useRevalidator();
   const navigate = useNavigate();
+  const orientation = useOrientationContext((state) => state.orientation);
 
   const { mutateAsync: onDeleteDog, isPending } = useMutation({
     mutationFn: (id: string) => deleteDog(id),
@@ -42,7 +44,8 @@ const DeleteDogModal: React.FC<DeleteDogModalProps> = ({
     <Modal
       open={isOpen}
       onClose={onClose}
-      height="50%"
+      height={orientation === 'landscape' ? '95%' : '50%'}
+      style={orientation === 'landscape' && isOpen ? { margin: 'auto' } : {}}
       variant="center"
       className={styles.approveModal}
     >

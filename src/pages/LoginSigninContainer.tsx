@@ -9,14 +9,14 @@ import {
 import { Link } from 'react-router';
 import classnames from 'classnames';
 import { FcGoogle } from 'react-icons/fc';
-import styles from './LoginSigninContainer.module.scss';
 import { Button } from '../components/Button';
 import { UserContext } from '../context/UserContext';
 import { SigninProps } from '../context/UserContext';
 import { FormInput } from '../components/inputs/FormInput';
-import ThankYouModal from '../components/ThankYouModal';
+import { ThankYouModal } from '../components/ThankYouModal';
 import { useMutation } from '@tanstack/react-query';
 import { sendResetEmail } from '../services/authentication';
+import styles from './LoginSigninContainer.module.scss';
 
 interface LoginSigninContainerProps {
   method: 'signin' | 'login';
@@ -100,27 +100,29 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
             </span>
           </div>
           <form onSubmit={handleSubmit} className={styles.inputsContainer}>
-            <FormInput
-              ref={mailRef}
-              onChange={() => setError('')}
-              name="email"
-              label="Email *"
-              type="email"
-            />
-            <FormInput
-              onChange={() => setError('')}
-              name="password"
-              label="Password *"
-              type="password"
-            />
-            {method === 'signin' && (
+            <div className={styles.inputs}>
+              <FormInput
+                ref={mailRef}
+                onChange={() => setError('')}
+                name="email"
+                label="Email *"
+                type="email"
+              />
               <FormInput
                 onChange={() => setError('')}
-                name="name"
-                label="Your Name *"
-                type="text"
+                name="password"
+                label="Password *"
+                type="password"
               />
-            )}
+              {method === 'signin' && (
+                <FormInput
+                  onChange={() => setError('')}
+                  name="name"
+                  label="Your Name *"
+                  type="text"
+                />
+              )}
+            </div>
             <Button variant="green" type="submit" className={styles.button}>
               {method === 'signin' ? 'Sign In' : 'Log In'}
             </Button>
