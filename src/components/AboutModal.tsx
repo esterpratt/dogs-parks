@@ -18,7 +18,6 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
       onClose={onClose}
       variant="centerTop"
       height={orientation === 'landscape' ? '95%' : '65%'}
-      style={orientation === 'landscape' && open ? { margin: 'auto' } : {}}
       className={styles.modalContent}
     >
       <h3>Welcome to Klavhub!</h3>

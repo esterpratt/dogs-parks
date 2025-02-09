@@ -6,6 +6,7 @@ import styles from './ReportParkModal.module.scss';
 import { createReport } from '../../services/reports';
 import { useMutation } from '@tanstack/react-query';
 import { useThankYouModalContext } from '../../context/ThankYouModalContext';
+import { useOrientationContext } from '../../context/OrientationContext';
 
 interface ReportParkModalProps {
   open: boolean;
@@ -19,6 +20,7 @@ export const ReportParkModal: React.FC<ReportParkModalProps> = ({
   parkId,
 }) => {
   const { userId } = useContext(UserContext);
+  const orientation = useOrientationContext((state) => state.orientation);
   const setIsThankYouModalOpen = useThankYouModalContext(
     (state) => state.setIsOpen
   );
@@ -49,7 +51,7 @@ export const ReportParkModal: React.FC<ReportParkModalProps> = ({
     >
       <TextArea
         className={styles.textArea}
-        rows={12}
+        rows={orientation === 'landscape' ? 3 : 12}
         name="report"
         label="Tell us what’s wrong here."
         value={text}

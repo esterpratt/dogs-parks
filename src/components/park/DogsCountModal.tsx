@@ -57,12 +57,11 @@ const DogsCountModal: React.FC<{
     <Modal
       height={
         orientation === 'landscape'
-          ? '95%'
+          ? '98%'
           : !showOnlyCount && shouldHideDogsModal
           ? '20%'
           : '50%'
       }
-      style={orientation === 'landscape' ? { margin: 'auto' } : {}}
       open={isOpen}
       autoClose={!showOnlyCount && shouldHideDogsModal}
       onClose={() => onClose()}

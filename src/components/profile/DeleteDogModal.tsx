@@ -45,7 +45,6 @@ const DeleteDogModal: React.FC<DeleteDogModalProps> = ({
       open={isOpen}
       onClose={onClose}
       height={orientation === 'landscape' ? '95%' : '50%'}
-      style={orientation === 'landscape' && isOpen ? { margin: 'auto' } : {}}
       variant="center"
       className={styles.approveModal}
     >

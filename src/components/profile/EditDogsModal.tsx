@@ -22,6 +22,7 @@ import { IconContext } from 'react-icons';
 import { IoTrashOutline } from 'react-icons/io5';
 import DeleteDogModal from './DeleteDogModal';
 import styles from './EditDogsModal.module.scss';
+import { useOrientationContext } from '../../context/OrientationContext';
 
 interface EditDogsModalProps {
   isOpen: boolean;
@@ -36,6 +37,7 @@ const EditDogsModal: React.FC<EditDogsModalProps> = ({
   onAddDog,
   dog,
 }) => {
+  const orientation = useOrientationContext((state) => state.orientation);
   const setIsThankYouModalOpen = useThankYouModalContext(
     (state) => state.setIsOpen
   );
@@ -177,7 +179,7 @@ const EditDogsModal: React.FC<EditDogsModalProps> = ({
       <Modal
         open={isOpen}
         onClose={onClose}
-        height="95%"
+        height={orientation === 'landscape' ? '98%' : '95%'}
         onSave={onSubmit}
         saveButtonDisabled={isSaveButtonDisabled}
         className={styles.contentContainer}
@@ -283,7 +285,7 @@ const EditDogsModal: React.FC<EditDogsModalProps> = ({
               label="Dislikes"
             />
             <TextArea
-              rows={9}
+              rows={orientation === 'landscape' ? 3 : 9}
               maxLength={330}
               value={dogData?.description || ''}
               onChange={onInputChange}

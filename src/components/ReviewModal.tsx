@@ -104,8 +104,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
     <Modal
       open={isOpen}
       onClose={closeModal}
-      height={orientation === 'landscape' ? '95%' : showForm ? '80%' : '25%'}
-      style={orientation === 'landscape' && isOpen ? { margin: 'auto' } : {}}
+      height={orientation === 'landscape' ? '98%' : showForm ? '80%' : '25%'}
       autoClose={!showForm}
       onSave={showForm ? onSubmit : undefined}
       saveButtonDisabled={!reviewData.title}
@@ -128,7 +127,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
               <TextArea
                 label="Content"
                 name="content"
-                rows={7}
+                rows={orientation === 'landscape' ? 3 : 7}
                 maxLength={280}
                 value={reviewData.content}
                 onChange={onChangeInput}

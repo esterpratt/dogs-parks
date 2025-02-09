@@ -95,8 +95,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
     <Modal
       open={isOpen}
       onClose={onClose}
-      height={orientation === 'landscape' ? '95%' : '50%'}
-      style={orientation === 'landscape' && isOpen ? { margin: 'auto' } : {}}
+      height={orientation === 'landscape' ? '98%' : '50%'}
       onSave={onSubmit}
       saveButtonDisabled={!userData?.name}
       className={styles.contentContainer}

@@ -23,7 +23,6 @@ const ThankYouModal: React.FC<ThankYouModalProps> = ({
       open={open}
       onClose={onClose}
       height={orientation === 'landscape' ? '50%' : '20%'}
-      style={orientation === 'landscape' && open ? { marginTop: 'auto' } : {}}
       className={styles.modal}
       variant="center"
       delay

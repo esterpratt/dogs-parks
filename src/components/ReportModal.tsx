@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import classnames from 'classnames';
-import { Modal } from './Modal';
-import styles from './ReportModal.module.scss';
 import { useThankYouModalContext } from '../context/ThankYouModalContext';
 import { REPORT_DESCRIPTION, ReportReason } from '../types/report';
 import { reportReview } from '../services/reviews';
+import { Modal } from './Modal';
+import styles from './ReportModal.module.scss';
 
 interface ReportModalProps {
   isOpen: boolean;

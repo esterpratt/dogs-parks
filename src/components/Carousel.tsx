@@ -80,7 +80,6 @@ const Carousel: React.FC<CarouselProps> = ({
         open={isApproveDeleteModalOpen}
         onClose={() => setIsApproveDeleteModalOpen(false)}
         height={orientation === 'landscape' ? '95%' : '40%'}
-        style={orientation === 'landscape' ? { margin: 'auto' } : {}}
         variant="center"
         className={styles.approveModal}
       >
@@ -105,11 +104,7 @@ const Carousel: React.FC<CarouselProps> = ({
         width="90%"
         height={orientation === 'landscape' ? '95%' : '65%'}
         variant="appear"
-        style={
-          orientation === 'landscape'
-            ? { margin: 'auto', backgroundColor: 'rgba(0, 0, 0, 0.9)' }
-            : { backgroundColor: 'rgba(0, 0, 0, 0.9)' }
-        }
+        style={{ backgroundColor: 'rgba(0, 0, 0, 0.9)' }}
       >
         <div
           className={styles.modalImage}

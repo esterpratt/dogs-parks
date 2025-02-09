@@ -71,11 +71,6 @@ const UserInfo = () => {
         open={isDeleteUserModalOpen}
         onClose={() => setIsDeleteUserModalOpen(false)}
         height={orientation === 'landscape' ? '95%' : '60%'}
-        style={
-          orientation === 'landscape' && isDeleteUserModalOpen
-            ? { margin: 'auto' }
-            : {}
-        }
         variant="center"
         className={styles.approveModal}
       >

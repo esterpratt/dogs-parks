@@ -10,6 +10,7 @@ import { ControlledInput } from '../inputs/ControlledInput';
 import { MultiSelectInputs } from '../inputs/MultiSelectInputs';
 import { RadioInputs } from '../inputs/RadioInputs';
 import { RangeInput } from '../inputs/RangeInput';
+import { useOrientationContext } from '../../context/OrientationContext';
 
 interface EditParksModalProps {
   isOpen: boolean;
@@ -34,6 +35,7 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
   onClose,
   park,
 }) => {
+  const orientation = useOrientationContext((state) => state.orientation);
   const setIsThankYouModalOpen = useThankYouModalContext(
     (state) => state.setIsOpen
   );
@@ -136,7 +138,7 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
     <Modal
       open={isOpen}
       onClose={onClose}
-      height="95%"
+      height={orientation === 'landscape' ? '98%' : '95%'}
       onSave={onSubmit}
       className={styles.modalContent}
     >

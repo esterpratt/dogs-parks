@@ -24,7 +24,7 @@ const useKeyboardFix = () => {
         requestAnimationFrame(() => {
           focusedElement?.scrollIntoView({
             behavior: 'smooth',
-            block: 'center',
+            block: 'start',
           });
         });
       });

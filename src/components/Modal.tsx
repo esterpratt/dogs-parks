@@ -5,6 +5,7 @@ import { CgClose } from 'react-icons/cg';
 import styles from './Modal.module.scss';
 import { Button } from './Button';
 import useKeyboardFix from '../hooks/useKeyboardFix';
+import { useOrientationContext } from '../context/OrientationContext';
 
 interface ModalProps {
   open: boolean;
@@ -44,6 +45,7 @@ const Modal: React.FC<ModalProps> = ({
   const dialogRef = useRef<HTMLDialogElement | null>(null);
 
   const keyboardHeight = useKeyboardFix();
+  const orientation = useOrientationContext((state) => state.orientation);
 
   const [shouldMinHeight, setShouldMinHeight] = useState(false);
 
@@ -100,7 +102,8 @@ const Modal: React.FC<ModalProps> = ({
         styles[variant],
         delay && styles.delay,
         hideBackdrop && styles.hideBackdrop,
-        shouldMinHeight && styles.withMinimizeHeight
+        shouldMinHeight && styles.withMinimizeHeight,
+        (!!keyboardHeight || orientation === 'landscape') && styles.minMarginTop
       )}
       onClick={onClose}
     >
@@ -113,7 +116,7 @@ const Modal: React.FC<ModalProps> = ({
         )}
         {children}
       </div>
-      {onSave && (
+      {onSave && (orientation !== 'landscape' || !keyboardHeight) && (
         <div
           className={styles.buttonContainer}
           onClick={(event) => event?.stopPropagation()}
