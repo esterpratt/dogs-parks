@@ -7,9 +7,11 @@ const usersLoader = async () => {
     queryFn: () => fetchUsersWithDogsByIds(),
   });
 
-  const onlyUsersWithDogs = users?.filter((user) => user.dogs?.length);
+  const nonPrivateUsersWithDogs = users?.filter(
+    (user) => user.dogs?.length && !user.private
+  );
 
-  return { usersWithDogs: onlyUsersWithDogs };
+  return { usersWithDogs: nonPrivateUsersWithDogs };
 };
 
 export { usersLoader };
