@@ -5,11 +5,11 @@ import 'slick-carousel/slick/slick-theme.css';
 import { FaPlus } from 'react-icons/fa';
 import classnames from 'classnames';
 import { IconContext } from 'react-icons';
-import { IoTrashOutline } from 'react-icons/io5';
-import styles from './Carousel.module.scss';
 import { Modal } from './Modal';
 import { Button } from './Button';
 import { useOrientationContext } from '../context/OrientationContext';
+import { EnlargeImageModal } from './EnlargeImageModal';
+import styles from './Carousel.module.scss';
 
 interface CarouselProps {
   images: string[];
@@ -98,30 +98,13 @@ const Carousel: React.FC<CarouselProps> = ({
           Delete
         </Button>
       </Modal>
-      <Modal
-        open={isEnlargedImageModalOpen}
+      <EnlargeImageModal
+        isOpen={isEnlargedImageModalOpen}
         onClose={() => setIsEnlargeImageModalOpen(false)}
-        width="90%"
-        height={orientation === 'landscape' ? '95%' : '65%'}
-        variant="appear"
-        style={{ backgroundColor: 'rgba(0, 0, 0, 0.9)' }}
-      >
-        <div
-          className={styles.modalImage}
-          onTransitionEnd={() =>
-            !isEnlargedImageModalOpen && setImageToEnlarge('')
-          }
-        >
-          <img src={imageToEnlarge} />
-          {!!removeImage && (
-            <IconContext.Provider value={{ className: styles.trashIcon }}>
-              <IoTrashOutline
-                onClick={() => setIsApproveDeleteModalOpen(true)}
-              />
-            </IconContext.Provider>
-          )}
-        </div>
-      </Modal>
+        imgSrc={imageToEnlarge}
+        setImgSrc={setImageToEnlarge}
+        onClickDeleteImage={() => setIsApproveDeleteModalOpen(true)}
+      />
     </>
   );
 };

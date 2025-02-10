@@ -1,5 +1,5 @@
 import { createStore, StoreApi, useStore } from 'zustand';
-import { createContext, ReactNode, useContext, useState } from 'react';
+import { createContext, ReactNode, useContext, useRef } from 'react';
 import { ThankYouModal } from '../components/ThankYouModal';
 
 interface ThankYouModalStoreProps {
@@ -18,18 +18,18 @@ interface ThankYouModalProviderProps {
 export const ThankYouModalProvider = ({
   children,
 }: ThankYouModalProviderProps) => {
-  const [store] = useState(() =>
+  const storeRef = useRef(
     createStore<ThankYouModalStoreProps>((set) => ({
       isOpen: false,
       setIsOpen: (isOpen) => set(() => ({ isOpen })),
     }))
   );
 
-  const isOpen = useStore(store, (state) => state.isOpen);
-  const setIsOpen = useStore(store, (state) => state.setIsOpen);
+  const isOpen = useStore(storeRef.current, (state) => state.isOpen);
+  const setIsOpen = useStore(storeRef.current, (state) => state.setIsOpen);
 
   return (
-    <ThankYouModalContext.Provider value={store}>
+    <ThankYouModalContext.Provider value={storeRef.current}>
       {children}
       <ThankYouModal open={isOpen} onClose={() => setIsOpen(false)} />
     </ThankYouModalContext.Provider>

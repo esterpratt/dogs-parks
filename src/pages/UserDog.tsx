@@ -22,6 +22,7 @@ import { getAge } from '../utils/time';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import { Loader } from '../components/Loader';
 import { LOADING } from '../utils/consts';
+import { EnlargeImageModal } from '../components/EnlargeImageModal';
 
 const CameraModal = lazy(() => import('../components/camera/CameraModal'));
 const EditDogsModal = lazy(() => import('../components/profile/EditDogsModal'));
@@ -31,6 +32,9 @@ const UserDog = () => {
   const { state } = useLocation();
   const [isEditDogsModalOpen, setIsEditDogsModalOpen] = useState(false);
   const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
+  const [imageToEnlarge, setImageToEnlarge] = useState<string>('');
+  const [isEnlargedImageModalOpen, setIsEnlargeImageModalOpen] =
+    useState(false);
   const { revalidate } = useRevalidator();
   const { isSignedInUser, userName } = state;
 
@@ -85,6 +89,11 @@ const UserDog = () => {
     setDogImage(img);
   };
 
+  const onClickImage = (img: string) => {
+    setImageToEnlarge(img);
+    setIsEnlargeImageModalOpen(true);
+  };
+
   if (showLoader) {
     return <Loader />;
   }
@@ -114,7 +123,11 @@ const UserDog = () => {
                 <Loader inside />
               </div>
             ) : primaryImage ? (
-              <img src={primaryImage} className={styles.img} />
+              <img
+                onClick={() => onClickImage(primaryImage)}
+                src={primaryImage}
+                className={styles.img}
+              />
             ) : (
               <div className={classnames(styles.img, styles.empty)}>
                 <PiDog size={64} />
@@ -167,6 +180,12 @@ const UserDog = () => {
           contentClassName={styles.contentContainer}
         />
       </div>
+      <EnlargeImageModal
+        isOpen={isEnlargedImageModalOpen}
+        onClose={() => setIsEnlargeImageModalOpen(false)}
+        imgSrc={imageToEnlarge}
+        setImgSrc={setImageToEnlarge}
+      />
       <Suspense fallback={null}>
         <EditDogsModal
           dog={dog}

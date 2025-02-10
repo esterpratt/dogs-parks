@@ -25,6 +25,7 @@ import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import { isMobile } from '../utils/platform';
 import styles from './Park.module.scss';
 import { ThankYouModal } from '../components/ThankYouModal';
+import { EnlargeImageModal } from '../components/EnlargeImageModal';
 
 const CameraModal = lazy(() => import('../components/camera/CameraModal'));
 
@@ -34,6 +35,9 @@ const Park: React.FC = () => {
   const navigate = useNavigate();
   const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
   const [isThankYouModalOpen, setIsThankYouModalOpen] = useState(false);
+  const [imageToEnlarge, setImageToEnlarge] = useState<string>('');
+  const [isEnlargedImageModalOpen, setIsEnlargeImageModalOpen] =
+    useState(false);
   const thankYouModalTitle = useRef('Park Copied to Clipboard');
 
   const { data: park, isLoading } = useQuery({
@@ -86,6 +90,11 @@ const Park: React.FC = () => {
     navigate('/', { state: { location: park!.location } });
   };
 
+  const onClickImage = (img: string) => {
+    setImageToEnlarge(img);
+    setIsEnlargeImageModalOpen(true);
+  };
+
   if (showLoader) {
     return <Loader />;
   }
@@ -99,7 +108,11 @@ const Park: React.FC = () => {
       <div className={styles.upperDetailsContainer}>
         <div className={styles.imageContainer}>
           {primaryImage ? (
-            <img src={primaryImage} className={styles.image} />
+            <img
+              src={primaryImage}
+              onClick={() => onClickImage(primaryImage)}
+              className={styles.image}
+            />
           ) : (
             <div className={classnames(styles.image, styles.imageIcon)}>
               <IconContext.Provider value={{ className: styles.parkIcon }}>
@@ -157,6 +170,17 @@ const Park: React.FC = () => {
           </div>
         </Suspense>
       </div>
+      <ThankYouModal
+        open={isThankYouModalOpen}
+        onClose={() => setIsThankYouModalOpen(false)}
+        title={thankYouModalTitle.current}
+      />
+      <EnlargeImageModal
+        isOpen={isEnlargedImageModalOpen}
+        onClose={() => setIsEnlargeImageModalOpen(false)}
+        imgSrc={imageToEnlarge}
+        setImgSrc={setImageToEnlarge}
+      />
       <Suspense fallback={null}>
         <CameraModal
           open={isAddImageModalOpen}
@@ -164,11 +188,6 @@ const Park: React.FC = () => {
           onUploadImg={onUploadImg}
         />
       </Suspense>
-      <ThankYouModal
-        open={isThankYouModalOpen}
-        onClose={() => setIsThankYouModalOpen(false)}
-        title={thankYouModalTitle.current}
-      />
     </>
   );
 };

@@ -1,0 +1,36 @@
+@use '../variables' as *;
+
+.modal-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  background-color: $black;
+
+  img {
+    padding-top: 4px;
+    height: 80%;
+    width: 100%;
+    object-fit: cover;
+  }
+}
+
+.trash-icon {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 24px;
+  height: 24px;
+  color: $green;
+}
+
+@media (orientation: landscape) {
+  .modal-image {
+    img {
+      object-fit: contain;
+    }
+  }
+}
