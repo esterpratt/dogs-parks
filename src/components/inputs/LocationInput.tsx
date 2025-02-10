@@ -8,6 +8,7 @@ import { MapEventHandler } from '../map/mapHelpers/MapEventHandler';
 import { LeafletMouseEvent } from 'leaflet';
 import { ParkMarker } from '../map/ParkMarker';
 import { DEFAULT_LOCATION } from '../../utils/consts';
+import { getUserLocation } from '../map/mapHelpers/getUserLocation';
 
 interface LocationInputProps {
   label: string;
@@ -25,13 +26,12 @@ const LocationInput: React.FC<LocationInputProps> = ({
   const [center, setCenter] = useState(DEFAULT_LOCATION);
 
   useEffect(() => {
-    const setUserCenter = () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          setCenter({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          });
+    const setUserCenter = async () => {
+      const userLocation = await getUserLocation();
+      if (userLocation) {
+        setCenter({
+          latitude: userLocation.coords.latitude,
+          longitude: userLocation.coords.longitude,
         });
       }
     };

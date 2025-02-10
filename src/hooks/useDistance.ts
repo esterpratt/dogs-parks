@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import orderByDistance from 'geolib/es/orderByDistance';
 import { GeolibInputCoordinates } from 'geolib/es/types';
+import { getUserLocation } from '../components/map/mapHelpers/getUserLocation';
 
 type GenericWithGeo<T> = T & GeolibInputCoordinates;
 
@@ -10,26 +11,28 @@ const useDistance = <T>(items: GenericWithGeo<T>[] | undefined) => {
   );
 
   useEffect(() => {
-    if (!items?.length || !navigator.geolocation) {
-      setSortedItems(items ?? []);
-    } else {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
+    const sortItems = async () => {
+      if (!items?.length) {
+        setSortedItems(items ?? []);
+      } else {
+        const userLocation = await getUserLocation();
+        if (!userLocation) {
+          setSortedItems(items ?? []);
+        } else {
           const orderedItems = orderByDistance(
             {
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
+              latitude: userLocation.coords.latitude,
+              longitude: userLocation.coords.longitude,
             },
             items
           );
 
           setSortedItems(orderedItems as GenericWithGeo<T>[]);
-        },
-        () => {
-          setSortedItems(items ?? []);
         }
-      );
-    }
+      }
+    };
+
+    sortItems();
   }, [items]);
 
   return sortedItems;
