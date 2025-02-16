@@ -8,14 +8,16 @@ import { useDistance } from '../../hooks/useDistance';
 import { fetchParksJSON } from '../../services/parks';
 import { useQuery } from '@tanstack/react-query';
 import { Loader } from '../Loader';
-import { useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import { useDelayedLoading } from '../../hooks/useDelayedLoading';
+import { UserContext } from '../../context/UserContext';
 
 interface ParksListProps {
   className?: string;
 }
 
 const ParksList: React.FC<ParksListProps> = ({ className }) => {
+  const { user } = useContext(UserContext);
   const { isLoading, data: parks } = useQuery({
     queryKey: ['parks'],
     queryFn: fetchParksJSON,
@@ -39,11 +41,18 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
     );
   };
 
-  const NoResultsLayout = (
+  const NoResultsLayout = user ? (
     <div className={styles.noResults}>
       <span>Can’t sniff out your park?</span>
       <span>
         Help us by <Link to="new">adding the park details!</Link>
+      </span>
+    </div>
+  ) : (
+    <div className={styles.noResults}>
+      <span>Sorry, can’t sniff out your park</span>
+      <span>
+        <Link to="/signin">Sign In</Link> to add your park!
       </span>
     </div>
   );

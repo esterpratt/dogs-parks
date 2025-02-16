@@ -1,19 +1,10 @@
 @use '../../variables' as *;
 
-.title {
-  justify-content: space-between;
+.no-data {
+  font-size: 12px;
+  text-align: center;
 
-  .left {
-    display: flex;
-    gap: 2px;
-    align-items: center;
+  a {
+    color: $green;
   }
-}
-
-.add-photo-button {
-  display: flex;
-}
-
-.plus {
-  color: $green;
 }

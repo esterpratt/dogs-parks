@@ -48,13 +48,9 @@ const throwError = (error: unknown, status?: number) => {
     };
   }
 
-  if (status && typeof error === 'string') {
-    throw new AppError(error, status);
-  }
-
   throw {
-    status: 500,
-    message: error || 'We hate google',
+    status: status || 500,
+    message: 'Oh oh! It seems my dog ate the code. Please try again later.',
   };
 };
 

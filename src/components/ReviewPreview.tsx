@@ -41,44 +41,38 @@ const ReviewPreview: React.FC<ReviewPreviewProps> = ({
   });
 
   return (
-    <>
-      <div className={styles.container}>
-        {showPark && (
-          <div className={styles.parkName}>{park?.name || 'N/A'}</div>
-        )}
-        <div className={styles.preview}>
-          <div className={styles.title}>{review.title}</div>
-          <Stars rank={review.rank} className={styles.stars} />
-        </div>
-        {review.content && (
-          <div className={styles.content}>{review.content}</div>
-        )}
-        <div className={styles.footer}>
-          <div className={styles.time}>{reviewTime}</div>
-          <div className={styles.name}>by: {user?.name || 'Anonymous'}</div>
-          {!!userId &&
-            (userId === review.userId ? (
-              <Button
-                onClick={() => setOpenedReview(review)}
-                className={styles.button}
-              >
-                Update Review
-              </Button>
-            ) : (
-              <>
-                <IconContext.Provider value={{ className: styles.reportIcon }}>
-                  <FiAlertCircle onClick={() => setIsReportModalOpen(true)} />
-                </IconContext.Provider>
-                <ReportModal
-                  isOpen={isReportModalOpen}
-                  onClose={() => setIsReportModalOpen(false)}
-                  reviewId={review.id}
-                />
-              </>
-            ))}
-        </div>
+    <div className={styles.container}>
+      {showPark && <div className={styles.parkName}>{park?.name || 'N/A'}</div>}
+      <div className={styles.preview}>
+        <div className={styles.title}>{review.title}</div>
+        <Stars rank={review.rank} className={styles.stars} />
       </div>
-    </>
+      {review.content && <div className={styles.content}>{review.content}</div>}
+      <div className={styles.footer}>
+        <div className={styles.time}>{reviewTime}</div>
+        <div className={styles.name}>by: {user?.name || 'Anonymous'}</div>
+        {!!userId &&
+          (userId === review.userId ? (
+            <Button
+              onClick={() => setOpenedReview(review)}
+              className={styles.button}
+            >
+              Update Review
+            </Button>
+          ) : (
+            <>
+              <IconContext.Provider value={{ className: styles.reportIcon }}>
+                <FiAlertCircle onClick={() => setIsReportModalOpen(true)} />
+              </IconContext.Provider>
+              <ReportModal
+                isOpen={isReportModalOpen}
+                onClose={() => setIsReportModalOpen(false)}
+                reviewId={review.id}
+              />
+            </>
+          ))}
+      </div>
+    </div>
   );
 };
 

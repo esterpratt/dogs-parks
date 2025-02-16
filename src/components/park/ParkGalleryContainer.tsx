@@ -1,10 +1,13 @@
-import { useState, lazy, Suspense } from 'react';
+import { useState, lazy, Suspense, useContext } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { fetchAllParkImages, uploadParkImage } from '../../services/parks';
 import { queryClient } from '../../services/react-query';
 import { ParkGallery } from './ParkGallery';
 import { AccordionContainer } from '../accordion/AccordionContainer';
+import { UserContext } from '../../context/UserContext';
+import { Link } from 'react-router';
+import styles from './ParkGalleryContainer.module.scss';
 
 const CameraModal = lazy(() => import('../camera/CameraModal'));
 
@@ -16,6 +19,7 @@ const ParkGalleryContainer: React.FC<ParkGalleryContainerProps> = ({
   parkId,
 }) => {
   const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
+  const { userId } = useContext(UserContext);
 
   const { data: parkImages, isLoading } = useQuery({
     queryKey: ['parkImages', parkId],
@@ -49,25 +53,36 @@ const ParkGalleryContainer: React.FC<ParkGalleryContainerProps> = ({
       <AccordionContainer>
         <AccordionContainer.TitleWithIcon
           title="Gallery"
-          showIcon
+          showIcon={!!userId}
           Icon={FaPlus}
           onClickIcon={onClickAddPhoto}
           iconSize={14}
         />
         <AccordionContainer.Content>
-          <ParkGallery
-            images={parkImages ?? []}
-            openCameraModal={() => setIsAddImageModalOpen(true)}
-          />
+          {userId ? (
+            <ParkGallery
+              images={parkImages ?? []}
+              openCameraModal={() => setIsAddImageModalOpen(true)}
+            />
+          ) : (
+            <div className={styles.noData}>
+              <span>No photos for this park yet. </span>
+              <span>
+                <Link to="/signin"> Sign In</Link> to add data.
+              </span>
+            </div>
+          )}
         </AccordionContainer.Content>
       </AccordionContainer>
-      <Suspense fallback={null}>
-        <CameraModal
-          open={isAddImageModalOpen}
-          setOpen={setIsAddImageModalOpen}
-          onUploadImg={onUploadImg}
-        />
-      </Suspense>
+      {!!userId && (
+        <Suspense fallback={null}>
+          <CameraModal
+            open={isAddImageModalOpen}
+            setOpen={setIsAddImageModalOpen}
+            onUploadImg={onUploadImg}
+          />
+        </Suspense>
+      )}
     </>
   );
 };

@@ -131,21 +131,21 @@ const Park: React.FC = () => {
               )}
             </div>
             <div className={styles.userEngagementRight}>
-              {user && (
-                <>
-                  <FavoriteButton parkId={parkId!} userId={user.id} />
-                </>
-              )}
               <ParkIcon
                 iconCmp={<IoShareSocialSharp onClick={onClickShareButton} />}
                 iconClassName={styles.shareIcon}
                 textCmp={<span>Share</span>}
               />
-              <ParkCheckIn
-                parkId={parkId!}
-                userId={user?.id ?? null}
-                userName={user?.name}
-              />
+              {user && (
+                <>
+                  <FavoriteButton parkId={parkId!} userId={user.id} />
+                  <ParkCheckIn
+                    parkId={parkId!}
+                    userId={user?.id ?? null}
+                    userName={user?.name}
+                  />
+                </>
+              )}
             </div>
           </div>
         </div>

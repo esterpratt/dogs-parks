@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getHoursChartData, getStrHour } from '../charts/getHoursChartData';
 import { fetchDogsCount } from '../../services/dogs-count-orchestrator';
@@ -8,6 +8,8 @@ import styles from './BusyHours.module.scss';
 import barChartStyles from '../charts/BarChart.module.scss';
 import { DogsCountModal } from './DogsCountModal';
 import { Button } from '../Button';
+import { UserContext } from '../../context/UserContext';
+import { Link } from 'react-router';
 
 const BUSINESS = {
   LIGHT: {
@@ -33,6 +35,7 @@ interface BusyHoursProps {
 
 const BusyHours: React.FC<BusyHoursProps> = ({ parkId }) => {
   const [isDogsCountModalOpen, setIsDogsCountModalOpen] = useState(false);
+  const { userId } = useContext(UserContext);
 
   const { data: dogsCount } = useQuery({
     queryKey: ['dogsCount', parkId],
@@ -67,12 +70,14 @@ const BusyHours: React.FC<BusyHoursProps> = ({ parkId }) => {
             Around this time, the park is usually{' '}
             <span className={styles[business.className]}>{business.str}.</span>
           </span>
-          <Button
-            onClick={() => setIsDogsCountModalOpen(true)}
-            className={styles.dogsCountButton}
-          >
-            Report dog count
-          </Button>
+          {userId && (
+            <Button
+              onClick={() => setIsDogsCountModalOpen(true)}
+              className={styles.dogsCountButton}
+            >
+              Report dog count
+            </Button>
+          )}
           <div className={styles.chartContainer}>
             <BarChart
               data={hoursChartData}
@@ -86,12 +91,18 @@ const BusyHours: React.FC<BusyHoursProps> = ({ parkId }) => {
         <>
           <div className={styles.noData}>
             <span>No data yet.</span>
-            <Button
-              onClick={() => setIsDogsCountModalOpen(true)}
-              className={styles.dogsCountButton}
-            >
-              Report dog count
-            </Button>
+            {userId ? (
+              <Button
+                onClick={() => setIsDogsCountModalOpen(true)}
+                className={styles.dogsCountButton}
+              >
+                Report dog count
+              </Button>
+            ) : (
+              <span>
+                <Link to="/signin"> Sign In</Link> to add data.
+              </span>
+            )}
           </div>
         </>
       )}
