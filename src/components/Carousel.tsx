@@ -103,7 +103,9 @@ const Carousel: React.FC<CarouselProps> = ({
         onClose={() => setIsEnlargeImageModalOpen(false)}
         imgSrc={imageToEnlarge}
         setImgSrc={setImageToEnlarge}
-        onClickDeleteImage={() => setIsApproveDeleteModalOpen(true)}
+        onClickDeleteImage={
+          removeImage ? () => setIsApproveDeleteModalOpen(true) : null
+        }
       />
     </>
   );

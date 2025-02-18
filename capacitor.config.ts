@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'dogs-parks',
   webDir: 'dist',
   server: {
-    url: 'http://10.100.102.53:5173/',
+    url: 'http://10.0.0.33:5173/',
     cleartext: true,
   },
   plugins: {

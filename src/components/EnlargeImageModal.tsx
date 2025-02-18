@@ -11,7 +11,7 @@ interface CarouselProps {
   imgSrc: string;
   setImgSrc: (imgSrc: string) => void;
   onClose: () => void;
-  onClickDeleteImage?: () => void;
+  onClickDeleteImage?: (() => void) | null;
 }
 
 const EnlargeImageModal: React.FC<CarouselProps> = ({
