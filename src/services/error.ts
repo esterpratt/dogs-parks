@@ -25,7 +25,10 @@ const FIREBASE_ERRORS: { [key: string]: { status: number; message: string } } =
       status: 404,
       message: 'Email or password are wrong',
     },
-
+    'auth/invalid-email': {
+      status: 404,
+      message: 'Email is invalid',
+    },
     'auth/popup-closed-by-user': {
       status: 500,
       message: 'Google popup closed',

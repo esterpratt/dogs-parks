@@ -66,18 +66,18 @@ const BusyHours: React.FC<BusyHoursProps> = ({ parkId }) => {
     <>
       {dogsCount?.length ? (
         <div>
-          <span className={styles.text}>
+          <div className={styles.text}>
             Around this time, the park is usually{' '}
             <span className={styles[business.className]}>{business.str}.</span>
-          </span>
-          {userId && (
-            <Button
-              onClick={() => setIsDogsCountModalOpen(true)}
-              className={styles.dogsCountButton}
-            >
-              Report dog count
-            </Button>
-          )}
+            {userId && (
+              <Button
+                onClick={() => setIsDogsCountModalOpen(true)}
+                className={styles.dogsCountButton}
+              >
+                Report dog count
+              </Button>
+            )}
+          </div>
           <div className={styles.chartContainer}>
             <BarChart
               data={hoursChartData}
