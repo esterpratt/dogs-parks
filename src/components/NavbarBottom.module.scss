@@ -5,10 +5,10 @@
   bottom: 0;
   z-index: 2000;
   width: 100vw;
-  height: calc($navbar-height + env(safe-area-inset-bottom));
+  height: calc($navbar-height + var(--safe-area-inset-bottom, 0px));
   flex-shrink: 0;
   background-color: $green;
-  padding: 0 4px env(safe-area-inset-bottom);
+  padding: 0 4px var(--safe-area-inset-bottom, 0px);
   display: flex;
   align-items: center;
 }

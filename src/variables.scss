@@ -30,6 +30,6 @@ $second-title-font-size: 18px;
 $navbar-height: 60px;
 $tabs-height: 42px;
 $content-max-height: calc(
-  100dvh - $navbar-height * 2 - env(safe-area-inset-top) -
-    env(safe-area-inset-bottom)
+  100dvh - $navbar-height * 2 - var(--safe-area-inset-top, 0px) -
+    var(--safe-area-inset-bottom, 0px)
 );

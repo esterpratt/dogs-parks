@@ -10,8 +10,8 @@
 }
 
 .container {
-  padding: 18px calc(24px + env(safe-area-inset-right)) 12px
-    calc(24px + env(safe-area-inset-left));
+  padding: 18px calc(24px + var(--safe-area-inset-right, 0px)) 12px
+    calc(24px + var(--safe-area-inset-left, 0px));
 }
 
 .inputs-container {

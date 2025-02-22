@@ -1,8 +1,8 @@
 @use '../variables' as *;
 
 .container {
-  padding: 32px calc(24px + env(safe-area-inset-right)) 32px
-    calc(24px + env(safe-area-inset-left));
+  padding: 32px calc(24px + var(--safe-area-inset-right, 0px)) 32px
+    calc(24px + var(--safe-area-inset-left, 0px));
   max-height: $content-max-height;
   display: flex;
   flex-direction: column;
@@ -25,7 +25,7 @@
   }
 
   .container {
-    padding: 18px calc(24px + env(safe-area-inset-right)) 12px
-      calc(24px + env(safe-area-inset-left));
+    padding: 18px calc(24px + var(--safe-area-inset-right, 0px)) 12px
+      calc(24px + var(--safe-area-inset-left, 0px));
   }
 }

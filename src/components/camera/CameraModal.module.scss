@@ -1,8 +1,8 @@
 @use '../../variables' as *;
 
 .modal {
-  padding: 12px calc(12px + env(safe-area-inset-right)) 12px
-    calc(12px + env(safe-area-inset-left));
+  padding: 12px calc(12px + var(--safe-area-inset-right, 0px)) 12px
+    calc(12px + var(--safe-area-inset-left, 0px));
 }
 
 .title {

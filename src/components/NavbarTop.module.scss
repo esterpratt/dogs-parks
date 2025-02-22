@@ -5,14 +5,14 @@
   top: 0;
   z-index: 2000;
   width: 100vw;
-  height: calc($navbar-height + env(safe-area-inset-top));
+  height: calc($navbar-height + var(--safe-area-inset-top, 0px));
   background-color: $green;
   display: flex;
 }
 
 .content {
   width: 100%;
-  margin-top: env(safe-area-inset-top);
+  margin-top: var(--safe-area-inset-top, 0px);
   padding: 0 16px;
   display: flex;
   flex-shrink: 0;
@@ -38,7 +38,7 @@
   color: $white;
   width: 20px;
   height: 20px;
-  margin-right: -8px;
+  margin-right: calc(-8px + var(--safe-area-inset-right, 0px));
 }
 
 .left-bar {

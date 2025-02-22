@@ -8,6 +8,8 @@ PODS:
     - Capacitor
   - CapacitorKeyboard (7.0.0):
     - Capacitor
+  - CapacitorPluginSafeArea (4.0.0):
+    - Capacitor
   - CapacitorPushNotifications (7.0.0):
     - Capacitor
   - CapacitorScreenOrientation (7.0.0):
@@ -23,6 +25,7 @@ DEPENDENCIES:
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorGeolocation (from `../../node_modules/@capacitor/geolocation`)"
   - "CapacitorKeyboard (from `../../node_modules/@capacitor/keyboard`)"
+  - CapacitorPluginSafeArea (from `../../node_modules/capacitor-plugin-safe-area`)
   - "CapacitorPushNotifications (from `../../node_modules/@capacitor/push-notifications`)"
   - "CapacitorScreenOrientation (from `../../node_modules/@capacitor/screen-orientation`)"
   - "CapacitorShare (from `../../node_modules/@capacitor/share`)"
@@ -39,6 +42,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/geolocation"
   CapacitorKeyboard:
     :path: "../../node_modules/@capacitor/keyboard"
+  CapacitorPluginSafeArea:
+    :path: "../../node_modules/capacitor-plugin-safe-area"
   CapacitorPushNotifications:
     :path: "../../node_modules/@capacitor/push-notifications"
   CapacitorScreenOrientation:
@@ -54,11 +59,12 @@ SPEC CHECKSUMS:
   CapacitorCordova: 63d476958d5022d76f197031e8b7ea3519988c64
   CapacitorGeolocation: 8c81945cc5da62974d94699c347e7d88888745c0
   CapacitorKeyboard: 4db71e694e7afb5d7c0be09b05495c19f7d6c914
+  CapacitorPluginSafeArea: 22031c3436269ca80fac90ec2c94bc7c1e59a81d
   CapacitorPushNotifications: 2e0132cd2f1a5d696bcbfc3725c2b6ffcb9275d4
   CapacitorScreenOrientation: 45e36e1121cdba1634eb12077c5e99391055116f
   CapacitorShare: d94c53d7656f1ce8f6712ae8d19ab0c18a69259f
   CapacitorStatusBar: a8c4c83ed2e973bdafb979e80e4b00d027832cb7
 
-PODFILE CHECKSUM: 9e44153a21eee0fa090cf4e564313bce7215710a
+PODFILE CHECKSUM: f41b52253641165bd1f491a3b9263bb9a78b0bbd
 
 COCOAPODS: 1.16.2

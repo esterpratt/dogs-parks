@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router';
-import { MapContainer, TileLayer } from 'react-leaflet';
+import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
 import { MdGpsFixed } from 'react-icons/md';
 import { Location, Park } from '../../types/park';
 import { MarkerList } from './MarkerList';
@@ -112,12 +112,10 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
 
   return (
     <div className={className}>
-      <Link to="/parks" className={styles.listViewButton}>
-        <Button variant="green">To List View</Button>
-      </Link>
       <MapContainer
         className={styles.map}
         center={mapCenter}
+        zoomControl={false}
         zoom={17}
         scrollWheelZoom={false}
       >
@@ -125,6 +123,8 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+        <MapSearchAddress setCenter={setCenterByPosition} />
+        <ZoomControl position="bottomright" />
         <MarkerList setActivePark={onSetActivePark} activePark={activePark} />
         {userLocation && (
           <UserLocationMarker
@@ -145,9 +145,11 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
             }
           />
         </IconContext.Provider>
-        <MapSearchAddress setCenter={setCenterByPosition} />
         <MapEventHandler onMapClick={onCloseParkPopup} />
       </MapContainer>
+      <Link to="/parks" className={styles.listViewButton}>
+        <Button variant="green">To List View</Button>
+      </Link>
       <ParkPopup
         isLoadingDirections={isLoadingDirections}
         onClose={onCloseParkPopup}

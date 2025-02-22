@@ -5,7 +5,7 @@
 
 .list-view-button {
   position: absolute;
-  top: calc(80px + env(safe-area-inset-top));
+  bottom: calc(80px + var(--safe-area-inset-bottom, 0px));
   z-index: 600;
   left: 50%;
   transform: translate(-50%);
@@ -15,8 +15,8 @@
 .center-button {
   position: absolute;
   z-index: 1000;
-  top: 80px;
-  left: 10px;
+  bottom: 130px;
+  right: 10px;
   height: 34px;
   width: 34px;
   border: 2px solid rgba(0, 0, 0, 0.2);

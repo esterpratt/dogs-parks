@@ -123,8 +123,8 @@
     position: relative;
     width: 100%;
     gap: 24px;
-    padding: 0 calc(16px + env(safe-area-inset-right)) 0
-      calc(16px + env(safe-area-inset-left));
+    padding: 0 calc(16px + var(--safe-area-inset-right, 0px)) 0
+      calc(16px + var(--safe-area-inset-left, 0px));
     border-bottom: 1px solid $text-light;
   }
 
@@ -151,18 +151,18 @@
   }
 
   .user-engagement-left {
-    margin-left: env(safe-area-inset-left);
+    margin-left: var(--safe-area-inset-left, 0px);
   }
 
   .outlet-container {
-    padding: 12px calc(16px + env(safe-area-inset-right)) 12px
-      calc(16px + env(safe-area-inset-left));
+    padding: 12px calc(16px + var(--safe-area-inset-right, 0px)) 12px
+      calc(16px + var(--safe-area-inset-left, 0px));
   }
 
   .tabs {
     gap: 48px;
     margin: 0;
-    padding: 0 calc(16px + env(safe-area-inset-right)) 0
-      calc(16px + env(safe-area-inset-left));
+    padding: 0 calc(16px + var(--safe-area-inset-right, 0px)) 0
+      calc(16px + var(--safe-area-inset-left, 0px));
   }
 }

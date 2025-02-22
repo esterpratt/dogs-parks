@@ -106,7 +106,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
           value={userData?.name || ''}
           onChange={onInputChange}
           name="name"
-          label="Name"
+          label="Name *"
           required
         />
         <div className={styles.privacyContainer}>

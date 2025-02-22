@@ -47,15 +47,15 @@
     margin-top: 112px;
 
     &.min-margin-top {
-      margin-top: calc(16px + env(safe-area-inset-top));
+      margin-top: calc(16px + var(--safe-area-inset-top, 0px));
     }
   }
 
   &.center-top[open] {
-    margin-top: calc(48px + env(safe-area-inset-top));
+    margin-top: calc(48px + var(--safe-area-inset-top, 0px));
 
     &.min-margin-top {
-      margin-top: calc(16px + env(safe-area-inset-top));
+      margin-top: calc(16px + var(--safe-area-inset-top, 0px));
     }
   }
 

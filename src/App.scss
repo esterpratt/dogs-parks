@@ -144,13 +144,23 @@ a {
   display: flex;
 }
 
+.leaflet-control-zoom {
+  bottom: 30px;
+}
+
 .leaflet-left .leaflet-control {
-  margin-left: calc(10px + env(safe-area-inset-left));
+  margin-left: 0px;
+}
+
+.leaflet-top.leaflet-left {
+  width: 100%;
+}
+
+.leaflet-control {
+  float: none;
 }
 
 .leaflet-control-geocoder {
-  width: 100%;
-
   .leaflet-control-geocoder-icon {
     display: none;
   }
@@ -160,8 +170,8 @@ a {
     font-family: $font-family;
     color: $text;
     border: none;
-    margin: 0 calc(24px + env(safe-area-inset-right)) 24px
-      calc(24px + env(safe-area-inset-left));
+    margin: 10px calc(24px + var(--safe-area-inset-right, 0px)) 24px
+      calc(24px + var(--safe-area-inset-left, 0px));
 
     .leaflet-control-geocoder-form-no-error,
     .leaflet-control-geocoder-alternatives {
