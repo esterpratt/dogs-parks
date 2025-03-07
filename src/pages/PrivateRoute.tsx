@@ -14,6 +14,10 @@ const PrivateRoute: React.FC<PropsWithChildren> = ({ children }) => {
     return <Loader />;
   }
 
+  if (localStorage.getItem('userDeleted')) {
+    return <Navigate to="/user-deleted" state={{ userDeleted: true }} />;
+  }
+
   if (userId && (userId === user.id || !user.private)) {
     return children;
   }
@@ -36,10 +40,6 @@ const PrivateRoute: React.FC<PropsWithChildren> = ({ children }) => {
 
   if (userId && pendingFriendsIds.concat(approvedFriendsIds).includes(userId)) {
     return children;
-  }
-
-  if (localStorage.getItem('userDeleted')) {
-    return <Navigate to="/user-deleted" state={{ userDeleted: true }} />;
   }
 
   return <Navigate to="/" />;

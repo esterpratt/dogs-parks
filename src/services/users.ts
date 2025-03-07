@@ -1,26 +1,21 @@
 import { db } from './firebase-config';
 import {
   collection,
-  doc,
   documentId,
-  getDoc,
   getDocs,
   query,
-  setDoc,
-  updateDoc,
   where,
 } from 'firebase/firestore';
 import { User } from '../types/user';
 import { fetchUserFriendships } from './friendships';
 import { FRIENDSHIP_STATUS, USER_ROLE } from '../types/friendship';
 import { fetchParkCheckins } from './checkins';
-import { AppError, throwError } from './error';
+import { throwError } from './error';
 import { fetchDogs, fetchUsersDogs } from './dogs';
 import { Dog } from '../types/dog';
+import { supabase } from './supabase-client';
 
 const usersCollection = collection(db, 'users');
-
-type createUserProps = Pick<User, 'id' | 'name'>;
 
 interface EditUserProps {
   userId: string;
@@ -33,22 +28,15 @@ interface FetchFriendsProps {
   status?: FRIENDSHIP_STATUS;
 }
 
-const createUser = async ({ id, name }: createUserProps) => {
-  try {
-    await setDoc(doc(db, 'users', id), {
-      name,
-    });
-  } catch (error) {
-    throwError(error);
-  }
-};
-
 const updateUser = async ({ userId, userDetails }: EditUserProps) => {
   try {
-    const userRef = doc(db, 'users', userId);
-    await updateDoc(userRef, {
-      ...userDetails,
-    });
+    const { error } = await supabase
+      .from('users')
+      .update({ ...userDetails })
+      .eq('id', userId);
+    if (error) {
+      throw error;
+    }
   } catch (error) {
     throwError(error);
   }
@@ -56,15 +44,14 @@ const updateUser = async ({ userId, userDetails }: EditUserProps) => {
 
 const fetchUser = async (id: string) => {
   try {
-    const docRef = doc(db, 'users', id);
-    const docSnap = await getDoc(docRef);
-
-    if (!docSnap.exists()) {
-      throw new AppError('user does not exists', 404);
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('id', id);
+    if (error) {
+      throw error;
     }
-
-    const user = docSnap.data() as User;
-    return { ...user, id: docSnap.id };
+    return data[0];
   } catch (error) {
     throwError(error);
   }
@@ -189,7 +176,6 @@ const fetchCheckedInUsers = async (parkId: string) => {
 };
 
 export {
-  createUser,
   updateUser,
   fetchUser,
   fetchFriends,

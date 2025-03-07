@@ -1,5 +1,4 @@
-import { FirebaseError } from 'firebase/app';
-import { errorEvent } from './events';
+import { AuthError } from '@supabase/supabase-js';
 
 class AppError {
   message: string;
@@ -11,44 +10,15 @@ class AppError {
   }
 }
 
-const FIREBASE_ERRORS: { [key: string]: { status: number; message: string } } =
-  {
-    'auth/email-already-in-use': {
-      status: 401,
-      message: 'Email already is use',
-    },
-    'auth/weak-password': {
-      status: 400,
-      message: 'Password must contain at least 6 characters',
-    },
-    'auth/invalid-credential': {
-      status: 404,
-      message: 'Email or password are wrong',
-    },
-    'auth/invalid-email': {
-      status: 404,
-      message: 'Email is invalid',
-    },
-    'auth/popup-closed-by-user': {
-      status: 500,
-      message: 'Google popup closed',
-    },
-  };
-
 const throwError = (error: unknown, status?: number) => {
   console.log('there was an error: ', error);
-  errorEvent(error);
 
   if (error instanceof AppError) {
     throw error;
   }
 
-  if (error instanceof FirebaseError) {
-    const firebaseErrorMsg = FIREBASE_ERRORS[error.code];
-    throw {
-      status: firebaseErrorMsg.status,
-      message: firebaseErrorMsg.message,
-    };
+  if (error instanceof AuthError) {
+    throw error;
   }
 
   throw {

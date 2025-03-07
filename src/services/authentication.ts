@@ -1,32 +1,42 @@
-import {
-  createUserWithEmailAndPassword,
-  deleteUser as firebaseDeleteUser,
-  sendPasswordResetEmail,
-  signInWithEmailAndPassword,
-  signInWithRedirect,
-  signOut,
-  User,
-} from 'firebase/auth';
-import { auth, provider } from './firebase-config';
 import { throwError } from './error';
+import { supabase } from './supabase-client';
 
 interface LoginProps {
   email: string;
   password: string;
 }
 
+interface SigninProps extends LoginProps {
+  name: string;
+}
+
 const signinWithGoogle = async () => {
   try {
-    await signInWithRedirect(auth, provider);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+    });
+    if (error) {
+      console.log('error here: ', error);
+      throw error;
+    }
   } catch (error) {
     throwError(error);
   }
 };
 
-const signin = async ({ email, password }: LoginProps) => {
+const signin = async ({ email, password, name }: SigninProps) => {
   try {
-    const user = await createUserWithEmailAndPassword(auth, email, password);
-    return user;
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { full_name: name },
+      },
+    });
+    if (error) {
+      throw error;
+    }
+    return data;
   } catch (error) {
     throwError(error);
   }
@@ -34,36 +44,57 @@ const signin = async ({ email, password }: LoginProps) => {
 
 const login = async ({ email, password }: LoginProps) => {
   try {
-    const user = await signInWithEmailAndPassword(auth, email, password);
-    return user;
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    if (error) {
+      throw error;
+    }
+    return data;
   } catch (error) {
     throwError(error);
   }
 };
 
 const logout = async () => {
-  await signOut(auth);
-};
-
-const sendResetEmail = async (email: string) => {
   try {
-    await sendPasswordResetEmail(auth, email);
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      throw error;
+    }
   } catch (error) {
     throwError(error);
   }
 };
 
-const deleteUser = async () => {
+const sendResetEmail = async (email: string) => {
   try {
-    if (!auth.currentUser) {
+    console.log('TODO: reset password for email: ', email);
+  } catch (error) {
+    throwError(error);
+  }
+};
+
+const deleteUser = async (id: string | null) => {
+  try {
+    if (!id) {
       return;
     }
 
-    await firebaseDeleteUser(auth.currentUser);
+    const { error } = await supabase.functions.invoke("delete-user", {
+      body: { id },
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    await supabase.auth.signOut();
   } catch (error) {
     throwError(error);
   }
 };
 
 export { login, logout, signin, signinWithGoogle, sendResetEmail, deleteUser };
-export type { LoginProps, User };
+export type { LoginProps };
