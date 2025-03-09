@@ -1,16 +1,16 @@
-import { storage } from './firebase-config';
-import { ref, getDownloadURL } from 'firebase/storage';
-import { Park, ParkForLists } from '../types/park';
+import { Park } from '../types/park';
 // import { fetchImagesByDirectory, uploadImage } from './image';
 import { throwError } from './error';
 import { supabase } from './supabase-client';
+import { getJsonFileUrl } from './supabase-storage';
 
 const fetchParksJSON = async () => {
   try {
-    const jsonRef = ref(storage, 'parks.json');
-    const parksURL = await getDownloadURL(jsonRef);
-    const res = await fetch(parksURL);
-    return res.json() as Promise<ParkForLists[]>;
+    const url = await getJsonFileUrl({bucketName: 'parks', fileName: 'parks.json'});
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Failed to fetch parks file');
+    const parks = await response.json();
+    return parks;
   } catch (error) {
     throwError(error);
   }
