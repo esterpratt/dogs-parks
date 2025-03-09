@@ -10,7 +10,6 @@ import { Link, useNavigate } from 'react-router';
 import { useMutation } from '@tanstack/react-query';
 import { queryClient } from '../services/react-query';
 import { LeafletMouseEvent } from 'leaflet';
-import { addParkEvent } from '../services/events';
 import { UserContext } from '../context/UserContext';
 import { Modal } from '../components/Modal';
 
@@ -29,11 +28,10 @@ const NewPark: React.FC = () => {
 
   const { mutate } = useMutation({
     mutationFn: createPark,
-    onSuccess: async (_data, vars: NewParkDetails) => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({
         queryKey: ['parks'],
       });
-      addParkEvent(vars);
       navigate('/parks');
     },
   });

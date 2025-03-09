@@ -1,11 +1,3 @@
-import { db } from './firebase-config';
-import {
-  collection,
-  documentId,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore';
 import { User } from '../types/user';
 import { fetchUserFriendships } from './friendships';
 import { FRIENDSHIP_STATUS, USER_ROLE } from '../types/friendship';
@@ -14,8 +6,6 @@ import { throwError } from './error';
 import { fetchDogs, fetchUsersDogs } from './dogs';
 import { Dog } from '../types/dog';
 import { supabase } from './supabase-client';
-
-const usersCollection = collection(db, 'users');
 
 interface EditUserProps {
   userId: string;
@@ -34,7 +24,8 @@ const updateUser = async ({ userId, userDetails }: EditUserProps) => {
       .from('users')
       .update({ ...userDetails })
       .eq('id', userId);
-    if (error) {
+    
+      if (error) {
       throw error;
     }
   } catch (error) {
@@ -44,14 +35,17 @@ const updateUser = async ({ userId, userDetails }: EditUserProps) => {
 
 const fetchUser = async (id: string) => {
   try {
-    const { data, error } = await supabase
+    const { data: user, error } = await supabase
       .from('users')
       .select('*')
-      .eq('id', id);
+      .eq('id', id)
+      .single();
+    
     if (error) {
       throw error;
     }
-    return data[0];
+
+    return user;
   } catch (error) {
     throwError(error);
   }
@@ -60,22 +54,26 @@ const fetchUser = async (id: string) => {
 const fetchUsers = async (ids?: string[]) => {
   try {
     if (!ids || !ids.length) {
-      const data = await getDocs(usersCollection);
-      const users = data.docs.map((doc) => {
-        return {
-          ...doc.data(),
-          id: doc.id,
-        };
-      }) as User[];
+      const { data: users, error } = await supabase
+      .from('users')
+      .select("*")
+      
+      if (error) {
+        throw error;
+      }
+
       return users;
     } else {
-      const usersQuery = query(usersCollection, where(documentId(), 'in', ids));
-      const querySnapshot = await getDocs(usersQuery);
-      const res: User[] = [];
-      querySnapshot.forEach((doc) => {
-        res.push({ ...doc.data(), id: doc.id } as User);
-      });
-      return res;
+      const { data: users, error } = await supabase
+        .from('users')
+        .select("*")
+        .in('id', ids)
+
+      if (error) {
+        throw error;
+      }
+
+      return users;
     }
   } catch (error) {
     throwError(error);

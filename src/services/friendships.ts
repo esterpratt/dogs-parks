@@ -1,20 +1,5 @@
-import { db } from './firebase-config';
-import {
-  Query,
-  addDoc,
-  and,
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  or,
-  query,
-  updateDoc,
-  where,
-} from 'firebase/firestore';
-import { Friendship, FRIENDSHIP_STATUS, USER_ROLE } from '../types/friendship';
-
-const friendshipsCollection = collection(db, 'friendships');
+import { FRIENDSHIP_STATUS, USER_ROLE } from '../types/friendship';
+import { supabase } from './supabase-client';
 
 interface CreateFriendshipProps {
   requesterId: string;
@@ -39,12 +24,19 @@ const createFriendship = async ({
   requesteeId,
 }: CreateFriendshipProps) => {
   try {
-    const res = await addDoc(friendshipsCollection, {
-      requesteeId,
-      requesterId,
-      status: FRIENDSHIP_STATUS.PENDING,
-    });
-    return res.id;
+    const { data: friendship, error } = await supabase
+      .from('friendships')
+      .insert([
+        { requestee_id: requesteeId, requester_id: requesterId, status: FRIENDSHIP_STATUS.PENDING },
+      ])
+      .select('id')
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return friendship.id;
   } catch (error) {
     console.error(
       `there was an error while creating friendship for users ${requesteeId}, ${requesterId}: ${error}`
@@ -55,26 +47,19 @@ const createFriendship = async ({
 
 const fetchFriendship = async (ids: FetchFriendshipProps) => {
   try {
-    const friendshipQuery = query(
-      friendshipsCollection,
-      or(
-        and(
-          where('requesterId', '==', ids[0]),
-          where('requesteeId', '==', ids[1])
-        ),
-        and(
-          where('requesterId', '==', ids[1]),
-          where('requesteeId', '==', ids[0])
-        )
-      )
-    );
+    const { data: friendship, error } = await supabase
+    .from('friendships')
+    .select('*')
+    .or(
+      `and(requester_id.eq.${ids[0]},requestee_id.eq.${ids[1]}),and(requester_id.eq.${ids[1]},requestee_id.eq.${ids[0]})`
+    )
+    .single();
 
-    const querySnapshot = await getDocs(friendshipQuery);
-    const res: Friendship[] = [];
-    querySnapshot.forEach((doc) => {
-      res.push({ ...doc.data(), id: doc.id } as Friendship);
-    });
-    return res[0];
+    if (error) {
+      throw error;
+    }
+
+    return friendship;
   } catch (error) {
     console.error(
       `there was an error while fetching friendship for users ${ids[0]}, ${ids[1]}: ${error}`
@@ -86,18 +71,28 @@ const fetchFriendship = async (ids: FetchFriendshipProps) => {
 const getFriendshipUserQuery = ({
   userId,
   userRole,
+  status
 }: FetchUserFriendshipsProps) => {
   switch (userRole) {
     case USER_ROLE.REQUESTEE:
-      return where('requesteeId', '==', userId);
+      return supabase
+        .from('friendships')
+        .select('*')
+        .eq('status', status)
+        .eq('requestee_id', userId);
     case USER_ROLE.REQUESTER:
-      return where('requesterId', '==', userId);
+      return supabase
+        .from('friendships')
+        .select('*')
+        .eq('status', status)
+        .eq('requester_id', userId);
     case USER_ROLE.ANY:
     default:
-      return or(
-        where('requesterId', '==', userId),
-        where('requesteeId', '==', userId)
-      );
+      return supabase
+        .from('friendships')
+        .select('*')
+        .eq('status', status)
+        .or(`requester_id.eq.${userId}, requestee_id.eq.${userId}`);
   }
 };
 
@@ -107,23 +102,15 @@ const fetchUserFriendships = async ({
   status = FRIENDSHIP_STATUS.APPROVED,
 }: FetchUserFriendshipsProps) => {
   try {
-    const friendshipsQuery: Query = query(
-      friendshipsCollection,
-      and(
-        getFriendshipUserQuery({
-          userId,
-          userRole,
-        }),
-        where('status', '==', status)
-      )
-    );
+    const query = getFriendshipUserQuery({ userId, userRole, status });
 
-    const querySnapshot = await getDocs(friendshipsQuery);
-    const res: Friendship[] = [];
-    querySnapshot.forEach((doc) => {
-      res.push({ ...doc.data(), id: doc.id } as Friendship);
-    });
-    return res;
+    const { data: friendships, error } = await query;
+    
+    if (error) {
+      throw error;
+    }
+
+    return friendships;
   } catch (error) {
     console.error(
       `there was an error while fetching friendships for user ${userId}: ${error}`
@@ -137,28 +124,35 @@ const updateFriendship = async ({
   status,
 }: UpdateFriendshipProps) => {
   try {
-    const friendshipRef = doc(db, 'friendships', friendshipId);
-    await updateDoc(friendshipRef, {
-      status,
-    });
-    return friendshipId;
+    const { error } = await supabase
+    .from('friendships')
+    .update({ status })
+    .eq('id', friendshipId)
+
+    if (error) {
+      throw error;
+    }
   } catch (error) {
     console.error(
       `there was an error while updating friendship with id ${friendshipId}:  ${error}`
     );
-    return null;
   }
 };
 
 const deleteFriendship = async (friendshipId: string) => {
   try {
-    const friendshipRef = doc(db, 'friendships', friendshipId);
-    await deleteDoc(friendshipRef);
+    const { error } = await supabase
+    .from('friendships')
+    .delete()
+    .eq('id', friendshipId)
+
+    if (error) {
+      throw error;
+    }
   } catch (error) {
     console.error(
       `there was an error deleting friendship with id ${friendshipId}:  ${error}`
     );
-    return null;
   }
 };
 

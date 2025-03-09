@@ -1,36 +1,21 @@
-import {
-  doc,
-  updateDoc,
-  addDoc,
-  serverTimestamp,
-  collection,
-  query,
-  and,
-  where,
-  getDocs,
-} from 'firebase/firestore';
-import { db } from './firebase-config';
-import { Checkin } from '../types/checkin';
-
-const allowedCheckinHours = 3;
-const hoursInMiliSeconds = 1000 * 60 * 60 * allowedCheckinHours;
+import { supabase } from './supabase-client';
 
 interface CheckinProps {
   userId?: string | null;
   parkId: string;
 }
 
-const checkinsCollection = collection(db, 'checkins');
-
 const checkin = async ({ userId = null, parkId }: CheckinProps) => {
   try {
-    const res = await addDoc(checkinsCollection, {
-      parkId,
-      checkinTimestamp: serverTimestamp(),
-      checkoutTimestamp: null,
-      userId,
-    });
-    return res.id;
+    const { error } = await supabase
+      .from('checkins')
+      .insert([
+        { user_id: userId, park_id: parkId },
+      ])
+
+    if (error) {
+      throw error;
+    }
   } catch (error) {
     console.error(`there was an error while checking in: ${error}`);
     return null;
@@ -39,10 +24,11 @@ const checkin = async ({ userId = null, parkId }: CheckinProps) => {
 
 const checkout = async (checkinId: string) => {
   try {
-    const checkinRef = doc(db, 'checkins', checkinId);
-    await updateDoc(checkinRef, {
-      checkoutTimestamp: serverTimestamp(),
-    });
+    const { error } = await supabase.rpc('update_checkout', { checkin_id: checkinId });
+
+    if (error) {
+      throw error;
+    }
   } catch (error) {
     console.error('there was an error while checking out: ', error);
   }
@@ -50,22 +36,16 @@ const checkout = async (checkinId: string) => {
 
 const fetchAllDayParkCheckins = async (parkId: string) => {
   try {
-    const parkCheckinsQuery = query(
-      checkinsCollection,
-      and(where('parkId', '==', parkId))
-    );
+    const { data: checkins, error } = await supabase
+      .from('checkins')
+      .select('*')
+      .eq('park_id', parkId)
 
-    const querySnapshot = await getDocs(parkCheckinsQuery);
-    const res: Checkin[] = [];
-    querySnapshot.forEach((doc) => {
-      res.push({
-        ...doc.data(),
-        checkinTimestamp: doc.data().checkinTimestamp.toDate(),
-        checkoutTimestamp: doc.data().checkoutTimestamp.toDate(),
-        id: doc.id,
-      } as Checkin);
-    });
-    return res;
+    if (error) {
+      throw error;
+    }
+    
+    return checkins;
   } catch (error) {
     console.error(
       `there was an error while fetching all day checkins for park ${parkId}: ${error}`
@@ -76,29 +56,13 @@ const fetchAllDayParkCheckins = async (parkId: string) => {
 
 const fetchParkCheckins = async (parkId: string) => {
   try {
-    const parkCheckinsQuery = query(
-      checkinsCollection,
-      and(
-        where('parkId', '==', parkId),
-        where('checkoutTimestamp', '==', null),
-        where(
-          'checkinTimestamp',
-          '>',
-          new Date(Date.now() - hoursInMiliSeconds)
-        )
-      )
-    );
+    const { data: checkins, error } = await supabase.rpc('get_park_checkins', { p_park_id: parkId });
+    
+    if (error) {
+      throw error;
+    }
 
-    const querySnapshot = await getDocs(parkCheckinsQuery);
-    const res: Checkin[] = [];
-    querySnapshot.forEach((doc) => {
-      res.push({
-        ...doc.data(),
-        checkinTimestamp: doc.data().checkinTimestamp.toDate(),
-        id: doc.id,
-      } as Checkin);
-    });
-    return res;
+    return checkins;
   } catch (error) {
     console.error(
       `there was an error while fetching checkins for park ${parkId}: ${error}`

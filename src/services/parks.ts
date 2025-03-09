@@ -1,9 +1,9 @@
-import { db, storage } from './firebase-config';
-import { doc, getDoc, GeoPoint, updateDoc } from 'firebase/firestore';
+import { storage } from './firebase-config';
 import { ref, getDownloadURL } from 'firebase/storage';
 import { Park, ParkForLists } from '../types/park';
-import { fetchImagesByDirectory, uploadImage } from './image';
-import { AppError, throwError } from './error';
+// import { fetchImagesByDirectory, uploadImage } from './image';
+import { throwError } from './error';
+import { supabase } from './supabase-client';
 
 const fetchParksJSON = async () => {
   try {
@@ -18,19 +18,17 @@ const fetchParksJSON = async () => {
 
 const fetchPark = async (parkId: string) => {
   try {
-    const docRef = doc(db, 'parks', parkId);
-    const docSnap = await getDoc(docRef);
+    const { data: park, error } = await supabase
+    .from('parks')
+    .select('*')
+    .eq('id', parkId)
+    .single();
 
-    if (!docSnap.exists()) {
-      throw new AppError('No such park', 404);
+    if (error) {
+      throw error;
     }
 
-    const park = docSnap.data();
-    return {
-      ...park,
-      location: park.location.toJSON(),
-      id: docSnap.id,
-    } as Park;
+    return park;
   } catch (error) {
     throwError(error);
   }
@@ -38,27 +36,31 @@ const fetchPark = async (parkId: string) => {
 
 const updatePark = async (parkId: string, parkDetails: Partial<Park>) => {
   try {
-    const parkRef = doc(db, 'parks', parkId);
-    if (parkDetails.location) {
-      parkDetails.location = new GeoPoint(
-        parkDetails.location.latitude,
-        parkDetails.location.longitude
-      );
-    }
+    const { error } = await supabase
+    .from('parks')
+    .update({
+      size: parkDetails.size,
+      materials: parkDetails.materials,
+      shade: parkDetails.shade,
+      has_water: parkDetails.hasWater,
+      has_facilities: parkDetails.hasFacilities
+    })
+    .eq('id', parkId)
 
-    await updateDoc(parkRef, {
-      ...parkDetails,
-    });
+    if (error) {
+      throw error;
+    }
   } catch (error) {
     console.error(`there was an error while updating park ${parkId}: ${error}`);
-    return null;
   }
 };
 
 const uploadParkImage = async (image: File | string, parkId: string) => {
   try {
-    const res = await uploadImage({ image, path: `parks/${parkId}/other` });
-    return res;
+    // TODO: upload park image
+
+    // const res = await uploadImage({ image, path: `parks/${parkId}/other` });
+    // return res;
   } catch (error) {
     throwError(error);
   }
@@ -66,12 +68,14 @@ const uploadParkImage = async (image: File | string, parkId: string) => {
 
 const uploadParkPrimaryImage = async (image: File | string, parkId: string) => {
   try {
-    const res = await uploadImage({
-      image,
-      path: `parks/${parkId}/primary`,
-      name: 'primaryImage',
-    });
-    return res;
+    // TODO: upload park primary image
+
+    // const res = await uploadImage({
+    //   image,
+    //   path: `parks/${parkId}/primary`,
+    //   name: 'primaryImage',
+    // });
+    // return res;
   } catch (error) {
     throwError(error);
   }
@@ -79,8 +83,10 @@ const uploadParkPrimaryImage = async (image: File | string, parkId: string) => {
 
 const fetchParkPrimaryImage = async (parkId: string) => {
   try {
-    const res = await fetchImagesByDirectory(`parks/${parkId}/primary`);
-    return res;
+    // TODO: fetch park primary image
+
+    // const res = await fetchImagesByDirectory(`parks/${parkId}/primary`);
+    // return res;
   } catch (error) {
     throwError(error);
   }
@@ -88,8 +94,10 @@ const fetchParkPrimaryImage = async (parkId: string) => {
 
 const fetchAllParkImages = async (parkId: string) => {
   try {
-    const res = await fetchImagesByDirectory(`parks/${parkId}/other`);
-    return res;
+    // TODO: fetch park images
+
+    // const res = await fetchImagesByDirectory(`parks/${parkId}/other`);
+    // return res;
   } catch (error) {
     throwError(error);
   }

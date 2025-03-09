@@ -1,21 +1,6 @@
-import { db } from './firebase-config';
-import {
-  addDoc,
-  collection,
-  doc,
-  deleteDoc,
-  documentId,
-  getDoc,
-  getDocs,
-  query,
-  updateDoc,
-  where,
-} from 'firebase/firestore';
-import { AppError, throwError } from './error';
+import { throwError } from './error';
 import { Dog } from '../types/dog';
-import { deleteFolder, fetchImagesByDirectory, uploadImage } from './image';
-
-const dogsCollection = collection(db, 'dogs');
+import { supabase } from './supabase-client';
 
 type CreateDogProps = Omit<Dog, 'id'>;
 
@@ -31,24 +16,36 @@ const getDogOwnerId = async (dogId: string) => {
     return dogOwnerCache.get(dogId);
   }
 
-  const dogRef = doc(db, 'dogs', dogId);
-  const dogSnap = await getDoc(dogRef);
+  const { data: dog, error } = await supabase
+  .from('dogs')
+  .select('owner')
+  .eq('id', dogId)
+  .single();
 
-  if (!dogSnap.exists()) {
-    throw new AppError('dog does not exists', 404);
+  if (error) {
+    throw error;
   }
 
-  const ownerId = dogSnap.data().owner;
+  const ownerId = dog.owner;
   dogOwnerCache.set(dogId, ownerId);
   return ownerId;
 };
 
 const createDog = async (createDogProps: CreateDogProps) => {
   try {
-    const res = await addDoc(dogsCollection, {
-      ...createDogProps,
-    });
-    return res.id;
+    const { data: dog, error } = await supabase
+    .from('dogs')
+    .insert([
+      { ...createDogProps },
+    ])
+    .select('id')
+    .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return dog.id
   } catch (error) {
     throwError(error);
   }
@@ -56,10 +53,14 @@ const createDog = async (createDogProps: CreateDogProps) => {
 
 const updateDog = async ({ dogId, dogDetails }: EditDogProps) => {
   try {
-    const dogRef = doc(db, 'dogs', dogId);
-    await updateDoc(dogRef, {
-      ...dogDetails,
-    });
+    const { error } = await supabase
+    .from('dogs')
+    .update({ ...dogDetails })
+    .eq('id', dogId)
+
+    if (error) {
+      throw error;
+    }
   } catch (error) {
     throwError(error);
   }
@@ -67,14 +68,23 @@ const updateDog = async ({ dogId, dogDetails }: EditDogProps) => {
 
 const deleteDog = async (id: string) => {
   try {
-    const userId = await getDogOwnerId(id);
-    const deleteFoldersPromises = [
-      deleteFolder(`users/${userId}/dogs/${id}/primary/`),
-      deleteFolder(`users/${userId}/dogs/${id}/other/`),
-    ];
-    await Promise.all(deleteFoldersPromises);
-    const dogRef = doc(db, 'dogs', id);
-    await deleteDoc(dogRef);
+    // TODO: delete dogs images
+
+    // const userId = await getDogOwnerId(id);
+    // const deleteFoldersPromises = [
+    //   deleteFolder(`users/${userId}/dogs/${id}/primary/`),
+    //   deleteFolder(`users/${userId}/dogs/${id}/other/`),
+    // ];
+    // await Promise.all(deleteFoldersPromises);
+
+    const { error } = await supabase
+    .from('dogs')
+    .delete()
+    .eq('id', id)
+
+    if (error) {
+        throw error;
+    }
   } catch (error) {
     console.error(`there was an error deleting dog with id ${id}:  ${error}`);
     return null;
@@ -84,27 +94,25 @@ const deleteDog = async (id: string) => {
 const fetchDogs = async (ids?: string[]) => {
   try {
     if (!ids || !ids.length) {
-      const data = await getDocs(dogsCollection);
-      const dogs = data.docs.map((doc) => {
-        return {
-          ...doc.data(),
-          birthday: doc.data().birthday?.toDate(),
-          id: doc.id,
-        };
-      }) as Dog[];
+      const { data: dogs, error } = await supabase
+      .from('dogs')
+      .select('*')
+
+      if (error) {
+        throw error;
+      }
+
       return dogs;
     } else {
-      const usersQuery = query(dogsCollection, where(documentId(), 'in', ids));
-      const querySnapshot = await getDocs(usersQuery);
-      const res: Dog[] = [];
-      querySnapshot.forEach((doc) => {
-        res.push({
-          ...doc.data(),
-          birthday: doc.data().birthday?.toDate(),
-          id: doc.id,
-        } as Dog);
-      });
-      return res;
+      const { data: dogs, error } = await supabase
+      .from('dogs')
+      .select('*')
+      .in('id', ids)
+
+      if (error) {
+        throw error;
+      }
+      return dogs;
     }
   } catch (error) {
     throwError(error);
@@ -113,17 +121,16 @@ const fetchDogs = async (ids?: string[]) => {
 
 const fetchUserDogs = async (userId: string) => {
   try {
-    const dogsQuery = query(dogsCollection, where('owner', '==', userId));
-    const querySnapshot = await getDocs(dogsQuery);
-    const res: Dog[] = [];
-    querySnapshot.forEach((doc) => {
-      res.push({
-        ...doc.data(),
-        birthday: doc.data().birthday?.toDate(),
-        id: doc.id,
-      } as Dog);
-    });
-    return res;
+    const { data: dogs, error } = await supabase
+    .from('dogs')
+    .select('*')
+    .eq('owner', userId)
+
+    if (error) {
+      throw error;
+    }
+
+    return dogs;
   } catch (error) {
     throwError(error);
   }
@@ -131,17 +138,16 @@ const fetchUserDogs = async (userId: string) => {
 
 const fetchUsersDogs = async (userIds: string[]) => {
   try {
-    const dogsQuery = query(dogsCollection, where('owner', 'in', userIds));
-    const querySnapshot = await getDocs(dogsQuery);
-    const res: Dog[] = [];
-    querySnapshot.forEach((doc) => {
-      res.push({
-        ...doc.data(),
-        birthday: doc.data().birthday?.toDate(),
-        id: doc.id,
-      } as Dog);
-    });
-    return res;
+    const { data: dogs, error } = await supabase
+    .from('dogs')
+    .select('*')
+    .in('owner', userIds)
+
+    if (error) {
+      throw error;
+    }
+
+    return dogs;
   } catch (error) {
     throwError(error);
   }
@@ -150,11 +156,13 @@ const fetchUsersDogs = async (userIds: string[]) => {
 const uploadDogImage = async (image: File | string, dogId: string) => {
   try {
     const userId = await getDogOwnerId(dogId);
-    const res = await uploadImage({
-      image,
-      path: `users/${userId}/dogs/${dogId}/other`,
-    });
-    return res;
+    // TODO: upload image
+
+    // const res = await uploadImage({
+    //   image,
+    //   path: `users/${userId}/dogs/${dogId}/other`,
+    // });
+    // return res;
   } catch (error) {
     throwError(error);
   }
@@ -163,12 +171,14 @@ const uploadDogImage = async (image: File | string, dogId: string) => {
 const uploadDogPrimaryImage = async (image: File | string, dogId: string) => {
   try {
     const userId = await getDogOwnerId(dogId);
-    const res = await uploadImage({
-      image,
-      path: `users/${userId}/dogs/${dogId}/primary`,
-      name: 'primaryImage',
-    });
-    return res;
+    // TODO: upload primary image
+
+    // const res = await uploadImage({
+    //   image,
+    //   path: `users/${userId}/dogs/${dogId}/primary`,
+    //   name: 'primaryImage',
+    // });
+    // return res;
   } catch (error) {
     throwError(error);
   }
@@ -177,10 +187,12 @@ const uploadDogPrimaryImage = async (image: File | string, dogId: string) => {
 const fetchDogPrimaryImage = async (dogId: string) => {
   try {
     const userId = await getDogOwnerId(dogId);
-    const res = await fetchImagesByDirectory(
-      `users/${userId}/dogs/${dogId}/primary`
-    );
-    return res;
+    // TODO: fetch primary image
+
+    // const res = await fetchImagesByDirectory(
+    //   `users/${userId}/dogs/${dogId}/primary`
+    // );
+    // return res;
   } catch (error) {
     console.error(
       `there was a problem fetching primary image for dog ${dogId}: ${error}`
@@ -192,10 +204,12 @@ const fetchDogPrimaryImage = async (dogId: string) => {
 const fetchAllDogImages = async (dogId: string) => {
   try {
     const userId = await getDogOwnerId(dogId);
-    const res = await fetchImagesByDirectory(
-      `users/${userId}/dogs/${dogId}/other`
-    );
-    return res;
+    // TODO: fetch images
+
+    // const res = await fetchImagesByDirectory(
+    //   `users/${userId}/dogs/${dogId}/other`
+    // );
+    // return res;
   } catch (error) {
     throwError(error);
   }

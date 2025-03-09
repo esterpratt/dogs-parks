@@ -1,14 +1,4 @@
-import {
-  Query,
-  addDoc,
-  collection,
-  getDocs,
-  query,
-  serverTimestamp,
-  where,
-} from 'firebase/firestore';
-import { db } from './firebase-config';
-import { DogsCountReport } from '../types/dogsCount';
+import { supabase } from './supabase-client';
 
 interface ReportParkDogsCountProps {
   parkId: string;
@@ -16,39 +6,41 @@ interface ReportParkDogsCountProps {
   userId?: string | null;
 }
 
-const dogsCountReportsCollection = collection(db, 'dogsCountReports');
-
 const reportDogsCount = async ({
   parkId,
   dogsCount,
 }: ReportParkDogsCountProps) => {
   try {
-    await addDoc(dogsCountReportsCollection, {
-      parkId,
-      dogsCount,
-      timestamp: serverTimestamp(),
-    });
+    const { error } = await supabase
+    .from('dogs_count_reports')
+    .insert([
+      { park_id: parkId, count: dogsCount },
+    ])
+  
+    if (error) {
+      throw error;
+    }
   } catch (error) {
     console.error('there was an error reporting dogs count');
   }
 };
 
 const fetchDogsCountByReports = async (parkId: string) => {
-  const dogsCountQuery: Query = query(
-    dogsCountReportsCollection,
-    where('parkId', '==', parkId)
-  );
+  try {
+    const { data: dogsCountReport, error } = await supabase
+    .from('dogs_count_reports')
+    .select('*')
+    .eq('park_id', parkId)
 
-  const querySnapshot = await getDocs(dogsCountQuery);
-  const res: DogsCountReport[] = [];
-  querySnapshot.forEach((doc) => {
-    res.push({
-      ...doc.data(),
-      timestamp: doc.data().timestamp.toDate(),
-      id: doc.id,
-    } as DogsCountReport);
-  });
-  return res;
+    if (error) {
+      throw error;
+    }
+
+    return dogsCountReport;
+  } catch (error) {
+    console.error(`there was an error fetching dogs count: ${error}`);
+    return []
+  }
 };
 
 export { reportDogsCount, fetchDogsCountByReports };

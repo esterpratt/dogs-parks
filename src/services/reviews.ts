@@ -1,21 +1,7 @@
 import { ReportReason } from '../types/report';
 import { Review } from '../types/review';
-import { AppError, throwError } from './error';
-import { db } from './firebase-config';
-import {
-  collection,
-  where,
-  query,
-  getCountFromServer,
-  average,
-  getAggregateFromServer,
-  addDoc,
-  serverTimestamp,
-  doc,
-  updateDoc,
-  getDoc,
-  getDocs,
-} from 'firebase/firestore';
+import { throwError } from './error';
+import { supabase } from './supabase-client';
 
 interface AddReviewProps {
   parkId: string;
@@ -28,17 +14,19 @@ interface UpdateReviewProps {
   reviewData: Omit<Review, 'id' | 'parkId' | 'createdAt' | 'userId'>;
 }
 
-const reviewsCollection = collection(db, 'reviews');
-const reviewReportsCollection = collection(db, 'reviewReports');
-
 const fetchReviewsCount = async (parkId: string) => {
   try {
-    const reviewsCountQuery = query(
-      reviewsCollection,
-      where('parkId', '==', parkId)
-    );
-    const snapshot = await getCountFromServer(reviewsCountQuery);
-    return snapshot.data().count;
+    const { count, error } = await supabase
+    .from('reviews')
+    .select('*', { count: 'exact', head: true })
+    .eq('park_id', parkId);
+
+
+    if (error) {
+      throw error;
+    }
+
+    return count;
   } catch (error) {
     console.error(error);
     return null;
@@ -47,14 +35,17 @@ const fetchReviewsCount = async (parkId: string) => {
 
 const fetchParkRank = async (parkId: string) => {
   try {
-    const parkRankQuery = query(
-      reviewsCollection,
-      where('parkId', '==', parkId)
-    );
-    const snapshot = await getAggregateFromServer(parkRankQuery, {
-      average: average('rank'),
-    });
-    return snapshot.data().average;
+    const { data, error } = await supabase
+    .from('reviews')
+    .select('rank.avg()', { head: true })
+    .eq('park_id', parkId)
+    .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return data.avg;
   } catch (error) {
     console.error(error);
     return null;
@@ -63,22 +54,16 @@ const fetchParkRank = async (parkId: string) => {
 
 const fetchReviews = async (parkId: string) => {
   try {
-    const reviewsQuery = query(
-      reviewsCollection,
-      where('parkId', '==', parkId)
-    );
+    const { data: reviews, error } = await supabase
+    .from('reviews')
+    .select('*')
+    .eq('park_id', parkId)
 
-    const querySnapshot = await getDocs(reviewsQuery);
-    const res: Review[] = [];
-    querySnapshot.forEach((doc) => {
-      res.push({
-        ...doc.data(),
-        id: doc.id,
-        createdAt: doc.data().createdAt.toDate(),
-        updatedAt: doc.data().updatedAt?.toDate(),
-      } as Review);
-    });
-    return res;
+    if (error) {
+      throw error;
+    }
+
+    return reviews;
   } catch (error) {
     console.error(
       `there was an error while fetching reviews for park ${parkId}: ${error}`
@@ -89,22 +74,16 @@ const fetchReviews = async (parkId: string) => {
 
 const fetchUserReviews = async (userId: string) => {
   try {
-    const reviewsQuery = query(
-      reviewsCollection,
-      where('userId', '==', userId)
-    );
+    const { data: reviews, error } = await supabase
+    .from('reviews')
+    .select('*')
+    .eq('user_id', userId)
 
-    const querySnapshot = await getDocs(reviewsQuery);
-    const res: Review[] = [];
-    querySnapshot.forEach((doc) => {
-      res.push({
-        ...doc.data(),
-        id: doc.id,
-        createdAt: doc.data().createdAt.toDate(),
-        updatedAt: doc.data().updatedAt?.toDate(),
-      } as Review);
-    });
-    return res;
+    if (error) {
+      throw error;
+    }
+
+    return reviews;
   } catch (error) {
     console.error(
       `there was an error while fetching reviews pf user ${userId}: ${error}`
@@ -115,15 +94,17 @@ const fetchUserReviews = async (userId: string) => {
 
 const fetchReview = async (reviewId: string) => {
   try {
-    const docRef = doc(db, 'reviews', reviewId);
-    const docSnap = await getDoc(docRef);
+    const { data: review, error } = await supabase
+    .from('reviews')
+    .select('*')
+    .eq('id', reviewId)
+    .single();
 
-    if (!docSnap.exists()) {
-      throw new AppError('review does not exists', 404);
+    if (error) {
+      throw error;
     }
 
-    const review = docSnap.data() as Review;
-    return { ...review, id: docSnap.id };
+    return review;
   } catch (error) {
     throwError(error);
   }
@@ -131,18 +112,18 @@ const fetchReview = async (reviewId: string) => {
 
 const updateReview = async ({ reviewId, reviewData }: UpdateReviewProps) => {
   try {
-    const reviewRef = doc(db, 'reviews', reviewId);
-    await updateDoc(reviewRef, {
-      ...reviewData,
-      updatedAt: serverTimestamp(),
-    });
-    const reviewSnap = await getDoc(reviewRef);
-    return {
-      ...reviewSnap.data(),
-      id: reviewSnap.id,
-      updatedAt: reviewSnap.data()?.updatedAt.toDate(),
-      createdAt: reviewSnap.data()?.createdAt.toDate(),
-    } as Review;
+    const { data: reviews, error } = await supabase
+    .from('reviews')
+    .update({ ...reviewData })
+    .eq('id', reviewId)
+    .select()
+    .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return reviews;
   } catch (error) {
     console.error(`there was an error updating review ${reviewId}: ${error}`);
     return null;
@@ -151,22 +132,19 @@ const updateReview = async ({ reviewId, reviewData }: UpdateReviewProps) => {
 
 const createReview = async ({ parkId, userId, reviewData }: AddReviewProps) => {
   try {
-    const docRef = await addDoc(reviewsCollection, {
-      title: reviewData.title,
-      content: reviewData.content,
-      rank: reviewData.rank,
-      parkId,
-      userId,
-      createdAt: serverTimestamp(),
-      updatedAt: null,
-    });
-    const savedReview = await getDoc(docRef);
-    return {
-      ...savedReview.data(),
-      id: savedReview.id,
-      updatedAt: savedReview.data()?.updatedAt?.toDate(),
-      createdAt: savedReview.data()?.createdAt.toDate(),
-    } as Review;
+    const { data: review, error } = await supabase
+    .from('dogs_count_reports')
+    .insert([
+      { 'park_id': parkId, 'user_id': userId, 'title': reviewData.title, 'content': reviewData.content, 'rank': reviewData.rank},
+    ])
+    .select()
+    .single();
+  
+    if (error) {
+      throw error;
+    }
+    
+    return review;
   } catch (error) {
     console.error(
       `there was an error creating review for park ${parkId}: ${error}`
@@ -183,11 +161,15 @@ const reportReview = async ({
   reason: ReportReason;
 }) => {
   try {
-    await addDoc(reviewReportsCollection, {
-      reviewId,
-      reason,
-      createdAt: serverTimestamp(),
-    });
+    const { error } = await supabase
+    .from('review_reports')
+    .insert([
+      { 'review_id': reviewId, 'reason': reason },
+    ])
+
+    if (error) {
+      throw error;
+    }
   } catch (error) {
     console.error(`there was an error reporting review ${reviewId}: ${error}`);
   }
