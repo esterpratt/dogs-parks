@@ -10,7 +10,7 @@ const fetchParksJSON = async () => {
     const response = await fetch(url);
     if (!response.ok) throw new Error('Failed to fetch parks file');
     const parks = await response.json();
-    return parks;
+    return parks as Park[];
   } catch (error) {
     throwError(error);
   }
@@ -42,8 +42,8 @@ const updatePark = async (parkId: string, parkDetails: Partial<Park>) => {
       size: parkDetails.size,
       materials: parkDetails.materials,
       shade: parkDetails.shade,
-      has_water: parkDetails.hasWater,
-      has_facilities: parkDetails.hasFacilities
+      has_water: parkDetails.has_water,
+      has_facilities: parkDetails.has_facilities
     })
     .eq('id', parkId)
 
@@ -51,7 +51,7 @@ const updatePark = async (parkId: string, parkDetails: Partial<Park>) => {
       throw error;
     }
   } catch (error) {
-    console.error(`there was an error while updating park ${parkId}: ${error}`);
+    console.error(`there was an error while updating park ${parkId}: ${JSON.stringify(error)}`);
   }
 };
 

@@ -1,8 +1,8 @@
 interface DogsCountReport {
   id: string;
-  dogsCount: number;
-  parkId: string;
-  userId: string;
+  count: number;
+  park_id: string;
+  user_id: string;
   timestamp: Date;
 }
 

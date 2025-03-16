@@ -1,9 +1,9 @@
 interface Checkin {
   id: string;
-  parkId: string;
-  userId?: string;
-  checkinTimestamp: Date;
-  checkoutTimestamp?: Date;
+  park_id: string;
+  user_id?: string;
+  checkin_timestamp: Date;
+  checkout_timestamp?: Date;
 }
 
 export type { Checkin };

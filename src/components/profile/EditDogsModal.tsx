@@ -138,8 +138,9 @@ const EditDogsModal: React.FC<EditDogsModalProps> = ({
   };
 
   const onSubmit = async () => {
-    const likes = dogData!.likes?.split(', ') || [];
-    const dislikes = dogData!.dislikes?.split(', ') || [];
+    const likes = dogData!.likes?.split(',').map((like) => like.trim()) || [];
+    const dislikes =
+      dogData!.dislikes?.split(',').map((like) => like.trim()) || [];
     const birthday = !dogData!.birthday
       ? dogData!.birthday
       : new Date(dogData!.birthday);

@@ -1,3 +1,4 @@
+import { Checkin } from '../types/checkin';
 import { supabase } from './supabase-client';
 
 interface CheckinProps {
@@ -7,17 +8,21 @@ interface CheckinProps {
 
 const checkin = async ({ userId = null, parkId }: CheckinProps) => {
   try {
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('checkins')
       .insert([
         { user_id: userId, park_id: parkId },
       ])
+      .select('id')
+      .single();
 
     if (error) {
       throw error;
     }
+
+    return data.id;
   } catch (error) {
-    console.error(`there was an error while checking in: ${error}`);
+    console.error(`there was an error while checking in: ${JSON.stringify(error)}`);
     return null;
   }
 };
@@ -30,7 +35,7 @@ const checkout = async (checkinId: string) => {
       throw error;
     }
   } catch (error) {
-    console.error('there was an error while checking out: ', error);
+    console.error('there was an error while checking out: ', JSON.stringify(error));
   }
 };
 
@@ -48,13 +53,13 @@ const fetchAllDayParkCheckins = async (parkId: string) => {
     return checkins;
   } catch (error) {
     console.error(
-      `there was an error while fetching all day checkins for park ${parkId}: ${error}`
+      `there was an error while fetching all day checkins for park ${parkId}: ${JSON.stringify(error)}`
     );
     return null;
   }
 };
 
-const fetchParkCheckins = async (parkId: string) => {
+const fetchParkCheckins = async (parkId: string): Promise<Checkin[] | null> => {
   try {
     const { data: checkins, error } = await supabase.rpc('get_park_checkins', { p_park_id: parkId });
     
@@ -65,7 +70,7 @@ const fetchParkCheckins = async (parkId: string) => {
     return checkins;
   } catch (error) {
     console.error(
-      `there was an error while fetching checkins for park ${parkId}: ${error}`
+      `there was an error while fetching checkins for park ${parkId}: ${JSON.stringify(error)}`
     );
     return null;
   }

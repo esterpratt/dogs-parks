@@ -1,6 +1,6 @@
 interface Location {
-  latitude: number;
-  longitude: number;
+  lat: number;
+  long: number;
 }
 
 enum ParkMaterial {
@@ -16,12 +16,12 @@ interface Park {
   name: string;
   city: string;
   address: string;
-  size?: number;
+  size: number | null;
   pics?: [];
-  materials?: ParkMaterial[];
-  shade?: number;
-  hasWater?: boolean;
-  hasFacilities?: boolean;
+  materials: ParkMaterial[] | null;
+  shade: number | null;
+  has_water: boolean | null;
+  has_facilities: boolean | null;
 }
 
 interface NewParkDetails {
@@ -30,7 +30,7 @@ interface NewParkDetails {
   address: string;
   size?: number;
   location: Location;
-  userId: string | null;
+  user_id: string | null;
 }
 
 type ParkForLists = Pick<Park, 'id' | 'location' | 'name' | 'city' | 'address'>;

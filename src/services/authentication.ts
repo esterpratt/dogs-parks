@@ -15,8 +15,9 @@ const signinWithGoogle = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
     });
+
     if (error) {
-      console.log('error here: ', error);
+      console.error('error here: ', JSON.stringify(error));
       throw error;
     }
   } catch (error) {

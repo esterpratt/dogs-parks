@@ -28,7 +28,8 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
   const parksToSort = useMemo(() => {
     return parks?.map((park) => ({
       ...park,
-      ...park.location,
+      latitude: park.location.lat,
+      longitude: park.location.long,
     }));
   }, [parks]);
 

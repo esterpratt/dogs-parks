@@ -23,7 +23,7 @@ const useLocalStorage = (key: string) => {
 
       setStoredValue(value);
     } catch (e) {
-      console.log('there was an error saving to local storage: ', e);
+      console.error('there was an error saving to local storage: ', e);
     }
   };
 

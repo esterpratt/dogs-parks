@@ -5,8 +5,8 @@ import Geocoder from 'leaflet-control-geocoder';
 interface MapSearchAddressProps {
   setCenter: (center: {
     coords: {
-      latitude: number;
-      longitude: number;
+      lat: number;
+      long: number;
     };
   }) => void;
 }
@@ -31,7 +31,7 @@ const MapSearchAddress: React.FC<MapSearchAddressProps> = ({ setCenter }) => {
     geocoderControl.addTo(map);
     geocoderControl.on('markgeocode', (event) => {
       const location = event.geocode.center;
-      const coords = { latitude: location.lat, longitude: location.lng };
+      const coords = { lat: location.lat, long: location.lng };
       setCenter({ coords });
     });
 

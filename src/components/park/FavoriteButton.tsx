@@ -22,7 +22,7 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ parkId, userId }) => {
     queryKey: ['favorites', userId],
     queryFn: async () => {
       const favorites = await fetchUserFavorites(userId);
-      return favorites?.parkIds ?? [];
+      return favorites ?? [];
     },
   });
 

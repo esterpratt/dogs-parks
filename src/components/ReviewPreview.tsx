@@ -25,19 +25,19 @@ const ReviewPreview: React.FC<ReviewPreviewProps> = ({
 }) => {
   const { setOpenedReview } = useContext(ReviewModalContext);
   const reviewTime = useMemo<string>(() => {
-    return getFormattedPastDate(review.updatedAt || review.createdAt);
-  }, [review.createdAt, review.updatedAt]);
+    return getFormattedPastDate(review.updated_at || review.created_at);
+  }, [review.created_at, review.updated_at]);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
   const { data: user } = useQuery({
-    queryKey: ['user', review.userId],
-    queryFn: () => fetchUser(review.userId!),
-    enabled: !!review.userId,
+    queryKey: ['user', review.user_id],
+    queryFn: () => fetchUser(review.user_id!),
+    enabled: !!review.user_id,
   });
 
   const { data: park } = useQuery({
-    queryKey: ['park', review.parkId],
-    queryFn: () => fetchPark(review.parkId),
+    queryKey: ['park', review.park_id],
+    queryFn: () => fetchPark(review.park_id),
   });
 
   return (
@@ -52,7 +52,7 @@ const ReviewPreview: React.FC<ReviewPreviewProps> = ({
         <div className={styles.time}>{reviewTime}</div>
         <div className={styles.name}>by: {user?.name || 'Anonymous'}</div>
         {!!userId &&
-          (userId === review.userId ? (
+          (userId === review.user_id ? (
             <Button
               onClick={() => setOpenedReview(review)}
               className={styles.button}

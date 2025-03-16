@@ -23,18 +23,18 @@ const PrivateRoute: React.FC<PropsWithChildren> = ({ children }) => {
   }
 
   const pendingFriendsIds = pendingFriendships.map((friendship: Friendship) => {
-    if (user.id === friendship.requesteeId) {
-      return friendship.requesterId;
+    if (user.id === friendship.requestee_id) {
+      return friendship.requester_id;
     }
-    return friendship.requesteeId;
+    return friendship.requestee_id;
   });
 
   const approvedFriendsIds = approvedFriendships.map(
     (friendship: Friendship) => {
-      if (user.id === friendship.requesteeId) {
-        return friendship.requesterId;
+      if (user.id === friendship.requestee_id) {
+        return friendship.requester_id;
       }
-      return friendship.requesteeId;
+      return friendship.requestee_id;
     }
   );
 

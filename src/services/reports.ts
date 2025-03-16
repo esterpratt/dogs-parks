@@ -33,7 +33,7 @@ const createReport = async ({
     return res.id;
   } catch (error) {
     console.error(
-      `there was an error while sending report for park ${parkId} by user ${userId}: ${error}`
+      `there was an error while sending report for park ${parkId} by user ${userId}: ${JSON.stringify(error)}`
     );
     return null;
   }
@@ -51,15 +51,15 @@ const createPark = async (
         text: `The park details are: ${JSON.stringify({
           ...parkDetails,
           location: new GeoPoint(
-            parkDetails.location.latitude,
-            parkDetails.location.longitude
+            parkDetails.location.lat,
+            parkDetails.location.long
           ),
         })}`,
       },
     });
     return res.id;
   } catch (error) {
-    console.error(`there was an error while creating park: ${error}`);
+    console.error(`there was an error while creating park: ${JSON.stringify(error)}`);
     return null;
   }
 };

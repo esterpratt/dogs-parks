@@ -36,43 +36,48 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
   }>();
 
   const mapCenter = useMemo(() => {
-    return { lat: center.latitude, lng: center.longitude };
+    return { lat: center.lat, lng: center.long };
   }, [center]);
 
   const setUserLocationByPosition = useCallback(
-    (position: GeolocationPosition) => {
+    (position: { coords: Location }) => {
       setUserLocation({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
+        lat: position.coords.lat,
+        long: position.coords.long,
       });
     },
     [setUserLocation]
   );
 
-  const setCenterByPosition = (
-    position:
-      | GeolocationPosition
-      | { coords: { latitude: number; longitude: number } }
-  ) => {
+  const setCenterByPosition = (position: {
+    coords: { lat: number; long: number };
+  }) => {
     setCenter({
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude,
+      lat: position.coords.lat,
+      long: position.coords.long,
     });
   };
 
   const setUserCenter = async (
-    cbc: ((position: GeolocationPosition) => void)[]
+    cbc: ((position: { coords: Location }) => void)[]
   ) => {
-    const position = await getUserLocation();
-    if (position) {
-      cbc.forEach((cb) => cb(position));
+    const userPosition = await getUserLocation();
+    if (userPosition) {
+      cbc.forEach((cb) =>
+        cb({
+          coords: {
+            lat: userPosition.coords.latitude,
+            long: userPosition.coords.longitude,
+          },
+        })
+      );
     }
   };
 
   useEffect(() => {
     const setStatesToRun = [setUserLocationByPosition];
     if (location) {
-      setCenter({ latitude: location.latitude, longitude: location.longitude });
+      setCenter({ lat: location.lat, long: location.long });
     } else {
       setStatesToRun.push(setCenterByPosition);
     }
@@ -96,12 +101,12 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
     setIsLoadingDirections(true);
     const res = await getRoute({
       startLocation: {
-        lat: userLocation.latitude,
-        lng: userLocation.longitude,
+        lat: userLocation.lat,
+        lng: userLocation.long,
       },
       targetLocation: {
-        lat: activePark!.location.latitude,
-        lng: activePark!.location.longitude,
+        lat: activePark!.location.lat,
+        lng: activePark!.location.long,
       },
     });
     setIsLoadingDirections(false);
@@ -129,8 +134,8 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
         {userLocation && (
           <UserLocationMarker
             location={{
-              latitude: userLocation.latitude,
-              longitude: userLocation.longitude,
+              lat: userLocation.lat,
+              long: userLocation.long,
             }}
           />
         )}

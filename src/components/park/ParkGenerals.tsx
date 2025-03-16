@@ -6,25 +6,25 @@ import styles from './ParkGenerals.module.scss';
 import { useGetParkVisitors } from '../../hooks/api/useGetParkVisitors';
 
 interface ParkGeneralsProps {
-  size?: number;
-  ground?: ParkMaterial[];
-  facilities?: boolean;
-  shade?: number;
-  water?: boolean;
+  size: number | null;
+  ground: ParkMaterial[] | null;
+  facilities: boolean | null;
+  shade: number | null;
+  water: boolean | null;
   parkId: string;
 }
 
 const NO_CONTENT = '?';
 
-const getNumberContent = (value?: number, sign?: string) => {
+const getNumberContent = (value: number | null, sign?: string) => {
   let content = NO_CONTENT;
-  if (value !== undefined && value !== null) {
+  if (value !== null) {
     content = `${value}${sign ? sign : ''}`;
   }
   return content;
 };
 
-const getBooleanContent = (value?: boolean) => {
+const getBooleanContent = (value: boolean | null) => {
   let content = NO_CONTENT;
   if (value) {
     content = 'Y';
@@ -34,7 +34,7 @@ const getBooleanContent = (value?: boolean) => {
   return content;
 };
 
-const getListContent = (values?: string[]) => {
+const getListContent = (values: string[] | null) => {
   let content = NO_CONTENT;
   if (values && values.length) {
     content = values
@@ -44,7 +44,7 @@ const getListContent = (values?: string[]) => {
   return content;
 };
 
-const getSizeContent = (value?: number) => {
+const getSizeContent = (value: number | null) => {
   let content = NO_CONTENT;
   if (value) {
     content = 'M';

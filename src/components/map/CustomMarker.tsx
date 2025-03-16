@@ -30,7 +30,7 @@ const CustomMarker: React.FC<CustomMarkerProps> = ({
 
   return (
     <Marker
-      position={{ lat: location.latitude, lng: location.longitude }}
+      position={{ lat: location.lat, lng: location.long }}
       icon={customIcon}
       eventHandlers={onClick ? { click: onClick } : undefined}
     />

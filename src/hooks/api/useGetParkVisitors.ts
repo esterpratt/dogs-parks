@@ -9,7 +9,7 @@ const useGetParkVisitors = (parkId: string, userId?: string | null) => {
     queryKey: ['parkVisitors', parkId],
     queryFn: async () => {
       const checkins = await fetchParkCheckins(parkId);
-      return checkins ? checkins.map((checkin) => checkin.userId) : [];
+      return checkins ? checkins.map((checkin) => checkin.user_id) : [];
     },
     staleTime: FIVE_MINUTES,
     gcTime: FIVE_MINUTES,

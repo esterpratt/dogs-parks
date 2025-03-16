@@ -15,7 +15,7 @@ const UserFavorites = () => {
     queryKey: ['favorites', userId],
     queryFn: async () => {
       const favorites = await fetchUserFavorites(userId!);
-      return favorites?.parkIds ?? [];
+      return favorites ?? [];
     },
   });
 

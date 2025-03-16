@@ -32,10 +32,10 @@ const useGetFriendsIds = ({
         return [];
       }
       return friendships.map((friendship) => {
-        if (friendship.requesteeId !== userId) {
-          return friendship.requesteeId;
+        if (friendship.requestee_id !== userId) {
+          return friendship.requestee_id;
         }
-        return friendship.requesterId;
+        return friendship.requester_id;
       });
     },
     staleTime: FIVE_MINUTES,

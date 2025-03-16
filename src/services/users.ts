@@ -1,7 +1,6 @@
 import { User } from '../types/user';
 import { fetchUserFriendships } from './friendships';
 import { FRIENDSHIP_STATUS, USER_ROLE } from '../types/friendship';
-import { fetchParkCheckins } from './checkins';
 import { throwError } from './error';
 import { fetchDogs, fetchUsersDogs } from './dogs';
 import { Dog } from '../types/dog';
@@ -115,10 +114,10 @@ const fetchFriends = async ({
       return [];
     }
     const friendsIds = friendships.map((friendship) => {
-      if (friendship.requesteeId !== userId) {
-        return friendship.requesteeId;
+      if (friendship.requestee_id !== userId) {
+        return friendship.requestee_id;
       }
-      return friendship.requesterId;
+      return friendship.requester_id;
     });
 
     const friends = await fetchUsers(friendsIds);
@@ -158,26 +157,10 @@ const fetchFriendsWithDogs = async ({
   }
 };
 
-const fetchCheckedInUsers = async (parkId: string) => {
-  try {
-    const parkCheckins = await fetchParkCheckins(parkId);
-    if (!parkCheckins || !parkCheckins.length) {
-      return [];
-    }
-
-    const userIds = parkCheckins.map((checkin) => checkin.userId);
-    const checkedInUsers = await fetchUsers(userIds);
-    return checkedInUsers;
-  } catch (error) {
-    throwError(error);
-  }
-};
-
 export {
   updateUser,
   fetchUser,
   fetchFriends,
-  fetchCheckedInUsers,
   fetchUsers,
   fetchFriendsWithDogs,
   fetchUsersWithDogsByIds,

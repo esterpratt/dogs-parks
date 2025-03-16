@@ -32,9 +32,9 @@ export const ParkDetails = () => {
             parkId={park.id}
             size={park.size}
             ground={park.materials}
-            facilities={park.hasFacilities}
+            facilities={park.has_facilities}
             shade={park.shade}
-            water={park.hasWater}
+            water={park.has_water}
           />
         </AccordionContainer.Content>
       </AccordionContainer>

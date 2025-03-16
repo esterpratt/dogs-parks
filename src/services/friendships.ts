@@ -39,7 +39,7 @@ const createFriendship = async ({
     return friendship.id;
   } catch (error) {
     console.error(
-      `there was an error while creating friendship for users ${requesteeId}, ${requesterId}: ${error}`
+      `there was an error while creating friendship for users ${requesteeId}, ${requesterId}: ${JSON.stringify(error)}`
     );
     return null;
   }
@@ -53,7 +53,7 @@ const fetchFriendship = async (ids: FetchFriendshipProps) => {
     .or(
       `and(requester_id.eq.${ids[0]},requestee_id.eq.${ids[1]}),and(requester_id.eq.${ids[1]},requestee_id.eq.${ids[0]})`
     )
-    .single();
+    .maybeSingle();
 
     if (error) {
       throw error;
@@ -62,7 +62,7 @@ const fetchFriendship = async (ids: FetchFriendshipProps) => {
     return friendship;
   } catch (error) {
     console.error(
-      `there was an error while fetching friendship for users ${ids[0]}, ${ids[1]}: ${error}`
+      `there was an error while fetching friendship for users ${ids[0]}, ${ids[1]}: ${JSON.stringify(error)}`
     );
     return null;
   }
@@ -102,9 +102,7 @@ const fetchUserFriendships = async ({
   status = FRIENDSHIP_STATUS.APPROVED,
 }: FetchUserFriendshipsProps) => {
   try {
-    const query = getFriendshipUserQuery({ userId, userRole, status });
-
-    const { data: friendships, error } = await query;
+    const { data: friendships, error } = await getFriendshipUserQuery({ userId, userRole, status });
     
     if (error) {
       throw error;
@@ -113,7 +111,7 @@ const fetchUserFriendships = async ({
     return friendships;
   } catch (error) {
     console.error(
-      `there was an error while fetching friendships for user ${userId}: ${error}`
+      `there was an error while fetching friendships for user ${userId}: ${JSON.stringify(error)}`
     );
     return null;
   }
@@ -134,7 +132,7 @@ const updateFriendship = async ({
     }
   } catch (error) {
     console.error(
-      `there was an error while updating friendship with id ${friendshipId}:  ${error}`
+      `there was an error while updating friendship with id ${friendshipId}: ${JSON.stringify(error)}`
     );
   }
 };
@@ -151,7 +149,7 @@ const deleteFriendship = async (friendshipId: string) => {
     }
   } catch (error) {
     console.error(
-      `there was an error deleting friendship with id ${friendshipId}:  ${error}`
+      `there was an error deleting friendship with id ${friendshipId}: ${JSON.stringify(error)}`
     );
   }
 };

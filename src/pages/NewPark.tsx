@@ -48,8 +48,8 @@ const NewPark: React.FC = () => {
 
   const onMapClick = (event: LeafletMouseEvent) => {
     setMarkerLocation({
-      latitude: event.latlng.lat,
-      longitude: event.latlng.lng,
+      lat: event.latlng.lat,
+      long: event.latlng.lng,
     });
   };
 
@@ -68,10 +68,10 @@ const NewPark: React.FC = () => {
         address: parkDetails.address,
         city: parkDetails.city,
         location: {
-          latitude: markerLocation.latitude,
-          longitude: markerLocation.longitude,
+          lat: markerLocation.lat,
+          long: markerLocation.long,
         },
-        userId: user.id,
+        user_id: user.id,
       };
       if (parkDetails.size) {
         newPark.size = Number(parkDetails.size);

@@ -2,8 +2,8 @@ import { User } from './user';
 
 interface Friendship {
   id: string;
-  requesterId: User['id'];
-  requesteeId: User['id'];
+  requester_id: User['id'];
+  requestee_id: User['id'];
   status: FRIENDSHIP_STATUS;
 }
 

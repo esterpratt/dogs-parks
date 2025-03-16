@@ -12,7 +12,8 @@ const getFormattedPastDate = (date?: Date) => {
   const diff = currentDayjs.diff(dateDayjs, 'day');
 
   if (diff < 31) {
-    return dateDayjs.fromNow();
+    // a solution for a bug where sometimes it returned 'in a few seconds' instead of 'a few seconds ago'
+    return dateDayjs.subtract(1, 'second').fromNow();
   }
 
   return dateDayjs.format('DD/MM/YYYY');

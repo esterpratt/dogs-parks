@@ -1,7 +1,7 @@
 interface Favorites {
   id: string;
-  userId: string;
-  parkIds: string[];
+  user_id: string;
+  park_id: string;
 }
 
 export type { Favorites };

@@ -30,8 +30,8 @@ const LocationInput: React.FC<LocationInputProps> = ({
       const userLocation = await getUserLocation();
       if (userLocation) {
         setCenter({
-          latitude: userLocation.coords.latitude,
-          longitude: userLocation.coords.longitude,
+          lat: userLocation.coords.latitude,
+          long: userLocation.coords.longitude,
         });
       }
     };
@@ -45,7 +45,7 @@ const LocationInput: React.FC<LocationInputProps> = ({
       <div className={styles.map}>
         <MapContainer
           className={styles.map}
-          center={{ lat: center.latitude, lng: center.longitude }}
+          center={{ lat: center.lat, lng: center.long }}
           zoom={17}
           scrollWheelZoom={false}
         >
@@ -54,7 +54,7 @@ const LocationInput: React.FC<LocationInputProps> = ({
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           {markerLocation && <ParkMarker location={markerLocation} />}
-          <MapCenter center={{ lat: center.latitude, lng: center.longitude }} />
+          <MapCenter center={{ lat: center.lat, lng: center.long }} />
           <MapEventHandler onMapClick={onMapClick} />
         </MapContainer>
       </div>

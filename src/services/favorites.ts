@@ -1,3 +1,4 @@
+import { Favorites } from '../types/favorites';
 import { supabase } from './supabase-client';
 
 interface ActionFavoriteProps {
@@ -17,7 +18,7 @@ const addFavorite = async ({ userId, parkId }: ActionFavoriteProps) => {
       throw error;
     }
   } catch(error) {
-    console.error(`there was an error adding favorite park: ${parkId} for user: ${userId}`)
+    console.error(`there was an error adding favorite park: ${parkId} for user: ${userId}: ${JSON.stringify(error)}`)
   }
 };
 
@@ -34,7 +35,7 @@ const removeFavorite = async ({ userId, parkId }: ActionFavoriteProps) => {
     }
   } catch (error) {
     console.error(
-      `there was an error removing favorite park ${parkId} from user ${userId}: ${error}`
+      `there was an error removing favorite park ${parkId} from user ${userId}: ${JSON.stringify(error)}`
     );
   }
 };
@@ -43,17 +44,17 @@ const fetchUserFavorites = async (userId: string) => {
   try {
     const { data: favorites, error } = await supabase
       .from('favorites')
-      .select('*')
+      .select('park_id')
       .eq('user_id', userId)
 
     if (error) {
       throw error;
     }
 
-    return favorites;
+    return favorites.map(favorite => favorite.park_id);
   } catch (error) {
     console.error(
-      `there was an error fetching favorites parks for user ${userId}: ${error}`
+      `there was an error fetching favorites parks for user ${userId}: ${JSON.stringify(error)}`
     );
     return null;
   }
@@ -61,16 +62,15 @@ const fetchUserFavorites = async (userId: string) => {
 
 const fetchFavoriteParks = async () => {
   try {
-    const { data: favoritesParks, error } = await supabase.rpc('get_favorite_park');
+    const { data: favorites, error } = await supabase.rpc('get_favorite_park');
 
     if (error) {
       throw error;
     }
 
-    console.log(favoritesParks);
-    return favoritesParks;
+    return (favorites as Favorites[]).map(favorite => favorite.park_id);
   } catch (error) {
-    console.error(`there was an error fetching favorite park: ${error}`);
+    console.error(`there was an error fetching favorite park: ${JSON.stringify(error)}`);
     return [];
   }
 };

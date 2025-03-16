@@ -86,7 +86,7 @@ const deleteDog = async (id: string) => {
         throw error;
     }
   } catch (error) {
-    console.error(`there was an error deleting dog with id ${id}:  ${error}`);
+    console.error(`there was an error deleting dog with id ${id}: ${JSON.stringify(error)}`);
     return null;
   }
 };
@@ -193,9 +193,10 @@ const fetchDogPrimaryImage = async (dogId: string) => {
     //   `users/${userId}/dogs/${dogId}/primary`
     // );
     // return res;
+    return []
   } catch (error) {
     console.error(
-      `there was a problem fetching primary image for dog ${dogId}: ${error}`
+      `there was a problem fetching primary image for dog ${dogId}: ${JSON.stringify(error)}`
     );
     return null;
   }
@@ -210,6 +211,7 @@ const fetchAllDogImages = async (dogId: string) => {
     //   `users/${userId}/dogs/${dogId}/other`
     // );
     // return res;
+    return []
   } catch (error) {
     throwError(error);
   }

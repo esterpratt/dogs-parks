@@ -1,3 +1,3 @@
 export const LOADING = 'loading';
 
-export const DEFAULT_LOCATION = { latitude: 32.09992, longitude: 34.809212 };
+export const DEFAULT_LOCATION = { lat: 32.09992, long: 34.809212 };
