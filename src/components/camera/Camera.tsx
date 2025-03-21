@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Webcam from 'react-webcam';
 import { IconContext } from 'react-icons';
 import { FaArrowsRotate } from 'react-icons/fa6';
@@ -25,6 +25,12 @@ const Camera: React.FC<CustomWebcamProps> = ({
   const webcamRef = useRef<Webcam>(null);
   const [img, setImg] = useState<string | null>(null);
   const [facingMode, setFacingMode] = useState('environment');
+
+  useEffect(() => {
+    if (isOpen) {
+      setImg(null);
+    }
+  }, [isOpen]);
 
   const captureImg = useCallback(() => {
     setImg(webcamRef.current!.getScreenshot());

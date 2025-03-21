@@ -37,7 +37,12 @@ const UserDogs = () => {
   });
 
   const { mutate: setDogImage, isPending: isUploadingImage } = useMutation({
-    mutationFn: (img: string | File) => uploadDogPrimaryImage(img, newDogId!),
+    mutationFn: (img: string | File) =>
+      uploadDogPrimaryImage({
+        image: img,
+        dogId: newDogId!,
+        upsert: true,
+      }),
     onMutate: async () => {
       queryClient.invalidateQueries({
         queryKey: ['dogImage', newDogId],

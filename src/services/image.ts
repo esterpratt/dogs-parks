@@ -1,73 +1,111 @@
 import imageCompression from 'browser-image-compression';
-import {
-  ref,
-  uploadBytes,
-  listAll,
-  getDownloadURL,
-  deleteObject,
-  getStorage,
-} from 'firebase/storage';
-import { storage } from './firebase-config';
 import { v4 } from 'uuid';
+import { supabase } from './supabase-client';
+import { throwError } from './error';
+import { getFileUrl } from './supabase-storage';
 
-interface uploadImageProps {
+interface UploadImageProps {
   image: File | string;
   path: string;
   name?: string;
+  bucket: string;
+  upsert?: boolean;
 }
 
-const uploadImage = async ({ image, path, name }: uploadImageProps) => {
-  const prefix = typeof image === 'string' ? '' : image.name;
-  const imageName = name ? name : prefix + v4();
-  const file =
-    typeof image === 'string'
-      ? await imageCompression.getFilefromDataUrl(image, imageName)
-      : image;
+interface HandleImageProps {
+  bucket: string;
+  path: string
+}
 
-  const compressedImage = await imageCompression(file, {
-    maxSizeMB: 0.1,
-    maxWidthOrHeight: 600,
-  });
+const removeBasePath = (url: string, marker: string) => {
+  const index = url.lastIndexOf(marker);
+  return index !== -1 ? url.slice(index + marker.length) : url;
+}
 
-  const storageRef = ref(storage, `${path}/${imageName}`);
-  const snapshot = await uploadBytes(storageRef, compressedImage);
-
-  const imageUrl = await getDownloadURL(snapshot.ref);
-  return imageUrl;
-};
-
-const fetchImagesByDirectory = async (path: string) => {
-  const imagesRef = ref(storage, path);
-  const res = await listAll(imagesRef);
-  const images = Promise.all(res.items.map((image) => getDownloadURL(image)));
-  return images;
-};
-
-const deleteImage = async (path: string) => {
+const deleteOldImage = async ({ bucket, path }: HandleImageProps) => {
   try {
-    const storage = getStorage();
-    const ImageRef = ref(storage, path);
+    const imagePath = await fetchImagesByDirectory({ bucket, path });
+    if (!imagePath || !imagePath.length) {
+      return;
+    }
 
-    await deleteObject(ImageRef);
+    const imagePathWithName = removeBasePath(imagePath[0], 'users/');
+    await deleteImage({ bucket, path: imagePathWithName });
   } catch (error) {
-    console.error('sorry, there was a problem deleting the image: ', error);
+    throwError(error);
   }
 };
 
-const deleteFolder = async (path: string) => {
+const uploadImage = async ({ image, bucket, path, name, upsert }: UploadImageProps) => {
   try {
-    const storage = getStorage();
-    const folderRef = ref(storage, path);
-    const { items } = await listAll(folderRef);
+    const prefix = typeof image === 'string' ? '' : image.name;
+    const imageName = name ? name + v4() : prefix + v4();
+    const file =
+      typeof image === 'string'
+        ? await imageCompression.getFilefromDataUrl(image, imageName)
+        : image;
 
-    const deletePromises = items.map((item) => deleteObject(item));
-    await Promise.all(deletePromises);
+    const compressedImage = await imageCompression(file, {
+      maxSizeMB: 0.1,
+      maxWidthOrHeight: 600,
+    });
+
+    if (upsert) {
+      await deleteOldImage({ bucket, path });
+    }
+
+    const { data, error } = await supabase
+    .storage
+    .from(bucket)
+    .update(`${path}/${imageName}`, compressedImage, {
+      cacheControl: '2592000',
+      upsert: true
+    })
+
+    if (error) {
+      throw error;
+    }
+
+    return getFileUrl({bucketName: bucket, fileName: data?.path || ''});
   } catch (error) {
-    console.error(
-      `sorry, there was a problem deleting the folder in path: ${path} `,
-      error
-    );
+    throwError(error);
   }
 };
 
-export { uploadImage, fetchImagesByDirectory, deleteImage, deleteFolder };
+const fetchImagesByDirectory = async ({path, bucket}: HandleImageProps) => {
+  try {
+    const { data, error } = await supabase
+    .storage
+    .from(bucket)
+    .list(path)
+
+    if (error) {
+      throw error
+    }
+
+    const imagesUrl = data.map(image => {
+      return getFileUrl({bucketName: bucket, fileName: `${path}${image.name}`})
+    })
+
+    return imagesUrl;
+  } catch (error) {
+    throwError(error);
+  }
+};
+
+const deleteImage = async ({path, bucket}: HandleImageProps) => {
+  try {
+    const { error } = await supabase
+    .storage
+    .from(bucket)
+    .remove([path])
+
+    if (error) {
+      throw error
+    }
+  } catch (error) {
+    console.error('Sorry, there was a problem deleting the image: ', JSON.stringify(error));
+  }
+};
+
+export { uploadImage, fetchImagesByDirectory, deleteImage, removeBasePath };

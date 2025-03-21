@@ -52,8 +52,8 @@ const userLoader: LoaderFunction = async ({ params }) => {
           queryClient.fetchQuery({
             queryKey: ['dogImage', dog.id],
             queryFn: async () => {
-              const images = await fetchDogPrimaryImage(dog.id);
-              return images?.length ? images[0] : null;
+              const image = await fetchDogPrimaryImage(dog.id);
+              return image || null;
             },
           })
         );

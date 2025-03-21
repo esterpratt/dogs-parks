@@ -34,8 +34,8 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
   const { data: image } = useQuery({
     queryKey: ['parkImage', activePark?.id],
     queryFn: async () => {
-      const images = await fetchParkPrimaryImage(activePark!.id);
-      return images?.length ? images[0] : null;
+      const image = await fetchParkPrimaryImage(activePark!.id);
+      return image ? image : null;
     },
     enabled: !!activePark,
   });

@@ -49,8 +49,8 @@ const UserDog = () => {
   const { data: primaryImage, isLoading: isLoadingImage } = useQuery({
     queryKey: ['dogImage', dogId],
     queryFn: async () => {
-      const images = await fetchDogPrimaryImage(dogId!);
-      return images?.length ? images[0] : null;
+      const image = await fetchDogPrimaryImage(dogId!);
+      return image || null;
     },
   });
 
@@ -59,7 +59,12 @@ const UserDog = () => {
   });
 
   const { mutate: setDogImage, isPending: isUploadingImage } = useMutation({
-    mutationFn: (img: string | File) => uploadDogPrimaryImage(img, dogId!),
+    mutationFn: (img: string | File) =>
+      uploadDogPrimaryImage({
+        image: img,
+        dogId: dogId!,
+        upsert: !!primaryImage,
+      }),
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: ['dogImage', dogId] });
       const prevImage = queryClient.getQueryData(['dogImage', dogId]);

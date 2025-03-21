@@ -1,6 +1,7 @@
 import { throwError } from './error';
 import { Dog } from '../types/dog';
 import { supabase } from './supabase-client';
+import { deleteImage, fetchImagesByDirectory, removeBasePath, uploadImage } from './image';
 
 type CreateDogProps = Omit<Dog, 'id'>;
 
@@ -68,15 +69,6 @@ const updateDog = async ({ dogId, dogDetails }: EditDogProps) => {
 
 const deleteDog = async (id: string) => {
   try {
-    // TODO: delete dogs images
-
-    // const userId = await getDogOwnerId(id);
-    // const deleteFoldersPromises = [
-    //   deleteFolder(`users/${userId}/dogs/${id}/primary/`),
-    //   deleteFolder(`users/${userId}/dogs/${id}/other/`),
-    // ];
-    // await Promise.all(deleteFoldersPromises);
-
     const { error } = await supabase
     .from('dogs')
     .delete()
@@ -156,29 +148,28 @@ const fetchUsersDogs = async (userIds: string[]) => {
 const uploadDogImage = async (image: File | string, dogId: string) => {
   try {
     const userId = await getDogOwnerId(dogId);
-    // TODO: upload image
-
-    // const res = await uploadImage({
-    //   image,
-    //   path: `users/${userId}/dogs/${dogId}/other`,
-    // });
-    // return res;
+    const res = await uploadImage({
+      image,
+      path: `${userId}/dogs/${dogId}/other/`,
+      bucket: 'users',
+    });
+    return res;
   } catch (error) {
     throwError(error);
   }
 };
 
-const uploadDogPrimaryImage = async (image: File | string, dogId: string) => {
+const uploadDogPrimaryImage = async ({image, dogId, upsert}: {image: File | string, dogId: string, upsert: boolean}) => {
   try {
     const userId = await getDogOwnerId(dogId);
-    // TODO: upload primary image
-
-    // const res = await uploadImage({
-    //   image,
-    //   path: `users/${userId}/dogs/${dogId}/primary`,
-    //   name: 'primaryImage',
-    // });
-    // return res;
+    const res = await uploadImage({
+      image,
+      bucket: 'users',
+      path: `${userId}/dogs/${dogId}/primary/`,
+      name: 'primary',
+      upsert
+    });
+    return res;
   } catch (error) {
     throwError(error);
   }
@@ -187,13 +178,9 @@ const uploadDogPrimaryImage = async (image: File | string, dogId: string) => {
 const fetchDogPrimaryImage = async (dogId: string) => {
   try {
     const userId = await getDogOwnerId(dogId);
-    // TODO: fetch primary image
 
-    // const res = await fetchImagesByDirectory(
-    //   `users/${userId}/dogs/${dogId}/primary`
-    // );
-    // return res;
-    return []
+    const res = await fetchImagesByDirectory({bucket: 'users', path: `${userId}/dogs/${dogId}/primary/`});
+    return res?.[0];
   } catch (error) {
     console.error(
       `there was a problem fetching primary image for dog ${dogId}: ${JSON.stringify(error)}`
@@ -205,17 +192,21 @@ const fetchDogPrimaryImage = async (dogId: string) => {
 const fetchAllDogImages = async (dogId: string) => {
   try {
     const userId = await getDogOwnerId(dogId);
-    // TODO: fetch images
 
-    // const res = await fetchImagesByDirectory(
-    //   `users/${userId}/dogs/${dogId}/other`
-    // );
-    // return res;
-    return []
+    const res = await fetchImagesByDirectory({bucket: 'users', path: `${userId}/dogs/${dogId}/other/`});
+    return res;
   } catch (error) {
-    throwError(error);
+    console.error(
+      `there was a problem fetching images for dog ${dogId}: ${JSON.stringify(error)}`
+    );
+    return null;
   }
 };
+
+const deleteDogImage = async (imgPath: string) => {
+  const relevantPath = removeBasePath(imgPath, 'users/');
+  return deleteImage({bucket: 'users', path: relevantPath});
+}
 
 export {
   fetchDogs,
@@ -228,6 +219,7 @@ export {
   fetchAllDogImages,
   uploadDogImage,
   uploadDogPrimaryImage,
+  deleteDogImage
 };
 
 export type { EditDogProps };

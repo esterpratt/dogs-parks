@@ -2,11 +2,14 @@ import { useState, lazy, Suspense } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Dog } from '../../types/dog';
-import { fetchAllDogImages, uploadDogImage } from '../../services/dogs';
+import {
+  deleteDogImage,
+  fetchAllDogImages,
+  uploadDogImage,
+} from '../../services/dogs';
 import { AccordionContainer } from '../accordion/AccordionContainer';
 import { DogGallery } from './DogGallery';
 import { queryClient } from '../../services/react-query';
-import { deleteImage } from '../../services/image';
 
 const CameraModal = lazy(() => import('../camera/CameraModal'));
 
@@ -27,7 +30,7 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
 
   const { data: dogImages, isLoading } = useQuery({
     queryKey: ['dogImages', dog.id],
-    queryFn: () => fetchAllDogImages(dog.id),
+    queryFn: async () => fetchAllDogImages(dog.id),
   });
 
   const { mutate } = useMutation({
@@ -40,10 +43,8 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
   });
 
   const { mutate: removeImage } = useMutation({
-    mutationFn: (imgPath: string) => {
-      return deleteImage(imgPath);
-    },
-    onSettled: () => {
+    mutationFn: (imgPath: string) => deleteDogImage(imgPath),
+    onSuccess: async () => {
       queryClient.invalidateQueries({
         queryKey: ['dogImages', dog.id],
       });

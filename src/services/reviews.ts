@@ -86,7 +86,7 @@ const fetchUserReviews = async (userId: string) => {
     return reviews;
   } catch (error) {
     console.error(
-      `there was an error while fetching reviews pf user ${userId}: ${JSON.stringify(error)}`
+      `there was an error while fetching reviews of user ${userId}: ${JSON.stringify(error)}`
     );
     return [];
   }

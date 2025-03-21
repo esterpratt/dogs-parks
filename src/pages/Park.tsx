@@ -48,8 +48,8 @@ const Park: React.FC = () => {
   const { data: primaryImage, isLoading: isLoadingImage } = useQuery({
     queryKey: ['parkImage', parkId],
     queryFn: async () => {
-      const images = await fetchParkPrimaryImage(parkId!);
-      return images?.length ? images[0] : null;
+      const image = await fetchParkPrimaryImage(parkId!);
+      return image ? image : null;
     },
   });
 

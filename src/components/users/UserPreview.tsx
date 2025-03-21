@@ -21,11 +21,8 @@ const UserPreview: React.FC<UserPreviewProps> = ({ user }) => {
   const { data: dogImage } = useQuery({
     queryKey: ['dogImage', user.dogs[0].id],
     queryFn: async () => {
-      const images = await fetchDogPrimaryImage(user.dogs[0].id);
-      if (images?.length) {
-        return images[0];
-      }
-      return null;
+      const image = await fetchDogPrimaryImage(user.dogs[0].id);
+      return image || null;
     },
   });
 
