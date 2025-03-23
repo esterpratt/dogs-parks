@@ -17,6 +17,10 @@ interface HandleImageProps {
   path: string
 }
 
+const cleanName = (str: string) => {
+  return str.replace(/[\u0590-\u05FF]+|\s+/g, '-');
+}
+
 const removeBasePath = (url: string, marker: string) => {
   const index = url.lastIndexOf(marker);
   return index !== -1 ? url.slice(index + marker.length) : url;
@@ -40,9 +44,10 @@ const uploadImage = async ({ image, bucket, path, name, upsert }: UploadImagePro
   try {
     const prefix = typeof image === 'string' ? '' : image.name;
     const imageName = name ? name + v4() : prefix + v4();
+    const cleanedImageName = cleanName(imageName);
     const file =
       typeof image === 'string'
-        ? await imageCompression.getFilefromDataUrl(image, imageName)
+        ? await imageCompression.getFilefromDataUrl(image, cleanedImageName)
         : image;
 
     const compressedImage = await imageCompression(file, {
@@ -57,9 +62,8 @@ const uploadImage = async ({ image, bucket, path, name, upsert }: UploadImagePro
     const { data, error } = await supabase
     .storage
     .from(bucket)
-    .update(`${path}/${imageName}`, compressedImage, {
-      cacheControl: '2592000',
-      upsert: true
+    .upload(`${path}/${cleanedImageName}`, compressedImage, {
+      cacheControl: '2592000'
     })
 
     if (error) {

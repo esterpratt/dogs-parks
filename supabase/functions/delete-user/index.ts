@@ -7,7 +7,50 @@ import "jsr:@supabase/functions-js/edge-runtime.d.ts"
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js";
-import { corsHeaders } from '../_shared/cors.ts'
+import { corsHeaders } from '../_shared/cors.ts';
+
+const deleteUserStorage = async (id: string, supabase) => {
+  const listAllFiles = async (bucketName, folderPath = '') => {
+    const { data, error: listError } = await supabase.storage.from(bucketName).list(folderPath);
+
+    if (listError) {
+      throw listError;
+    }
+
+    let allFiles = [];
+
+    for (const item of data) {
+      const fullPath = folderPath ? `${folderPath}/${item.name}` : item.name;
+
+      if (item.metadata) {
+        allFiles.push(fullPath);
+      } else {
+        const subFiles = await listAllFiles(bucketName, fullPath);
+        allFiles = allFiles.concat(subFiles);
+      }
+    }
+
+    return allFiles;
+  };
+
+  const files = await listAllFiles('users', `${id}`);
+
+  const filesPaths = files.map(file => {
+    const index = file.lastIndexOf('users/');
+    return index !== -1 ? file.slice(index + 'users/'.length) : file;
+  })
+  
+  if (filesPaths?.length) {
+    const { error: deleteFilesError } = await supabase
+    .storage
+    .from('users')
+    .remove(filesPaths)
+
+    if (deleteFilesError) {
+      throw deleteFilesError;
+    }
+  }
+}
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -25,11 +68,13 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
-    const { error } = await supabase.auth.admin.deleteUser(id);
+    const { error: authError } = await supabase.auth.admin.deleteUser(id);
     
-    if (error) {
-      return new Response(JSON.stringify({ error: error.message }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 });
+    if (authError) {
+      return new Response(JSON.stringify({ error: authError.message }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 });
     }
+
+    await deleteUserStorage(id, supabase);
 
     return new Response(JSON.stringify({ message: "User deleted successfully" }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 });
   } catch (error) {
