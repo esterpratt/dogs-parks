@@ -85,7 +85,6 @@ const EditDogsModal: React.FC<EditDogsModalProps> = ({
       queryClient.invalidateQueries({ queryKey: ['dogs', vars.dogId] });
       queryClient.invalidateQueries({ queryKey: ['dogs', userId] });
       revalidate();
-      onClose();
     },
   });
 
@@ -162,6 +161,7 @@ const EditDogsModal: React.FC<EditDogsModalProps> = ({
         dislikes,
       });
     }
+    onClose();
   };
 
   const formattedBirthday = useMemo(() => {

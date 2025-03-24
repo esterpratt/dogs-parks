@@ -32,6 +32,7 @@ const UserInfo = () => {
   };
 
   const onDeleteUser = () => {
+    setIsDeleteUserModalOpen(false);
     userDeletion();
   };
 

@@ -1,20 +1,16 @@
 import { Suspense, useContext } from 'react';
-import { Await, Outlet, useLoaderData } from 'react-router';
+import { Await, Navigate, Outlet, useLoaderData } from 'react-router';
 import classnames from 'classnames';
-import { User } from '../types/user';
-import { Dog } from '../types/dog';
 import { UserContext } from '../context/UserContext';
 import { ProfileTabs } from '../components/profile/ProfileTabs';
 import { Loader } from '../components/Loader';
 import styles from './Profile.module.scss';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
+import { Friendship } from '../types/friendship';
 
 const Profile: React.FC = () => {
-  const { user, dogs, dogImages } = useLoaderData() as {
-    user: User;
-    dogs: Dog[];
-    dogImages: Promise<string | null>[];
-  };
+  const { user, dogs, dogImages, pendingFriendships, approvedFriendships } =
+    useLoaderData();
   const { user: signedInUser, isLoading } = useContext(UserContext);
   const isSignedInUser = signedInUser?.id === user.id;
 
@@ -26,6 +22,32 @@ const Profile: React.FC = () => {
 
   if (!user) {
     return null;
+  }
+
+  if (!isSignedInUser && user.private) {
+    const pendingFriendsIds = pendingFriendships.map(
+      (friendship: Friendship) => {
+        if (user.id === friendship.requestee_id) {
+          return friendship.requester_id;
+        }
+        return friendship.requestee_id;
+      }
+    );
+
+    const approvedFriendsIds = approvedFriendships.map(
+      (friendship: Friendship) => {
+        if (user.id === friendship.requestee_id) {
+          return friendship.requester_id;
+        }
+        return friendship.requestee_id;
+      }
+    );
+
+    if (
+      !pendingFriendsIds.concat(approvedFriendsIds).includes(signedInUser?.id)
+    ) {
+      return <Navigate to="/" />;
+    }
   }
 
   return (

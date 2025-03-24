@@ -3,7 +3,7 @@
 .modal {
   position: fixed;
   z-index: 1100;
-  transition: all 0.5s;
+  transition: all 0.3s;
   border: none;
   display: flex;
   flex-direction: column;
@@ -14,7 +14,7 @@
   max-height: 100%;
 
   &.delay[open] {
-    transition-delay: 0.5s;
+    transition-delay: 0.3s;
   }
 
   &.appear {
@@ -99,7 +99,7 @@
 
   &::backdrop {
     background-color: $text;
-    transition: all 0.5s;
+    transition: all 0.3s;
     opacity: 0.6;
   }
 

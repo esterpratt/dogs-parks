@@ -116,7 +116,6 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { mutate: userLoginWithEmailAndPassword, isPending: isLogingIn } =
     useMutation({
       mutationFn: (data: LoginProps) => {
-        setError('');
         return login({ email: data.email!, password: data.password! });
       },
       onError: (error) => {
@@ -148,7 +147,11 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
       localStorage.setItem('userDeleted', '1');
       return deleteUser(session?.user.id || null);
     },
+    onError: () => {
+      localStorage.removeItem('userDeleted');
+    },
     onSettled: () => {
+      userLogout();
       queryClient.removeQueries({ queryKey: ['user', 'me'] });
     },
   });

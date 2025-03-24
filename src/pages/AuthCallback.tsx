@@ -1,9 +1,9 @@
-import { useContext, useEffect } from 'react';
-import { LoginSigninContainer } from './LoginSigninContainer';
 import { UserContext } from '../context/UserContext';
+import { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router';
+import { Loader } from '../components/Loader';
 
-const Login = () => {
+const AuthCallback = () => {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
 
@@ -13,7 +13,7 @@ const Login = () => {
     }
   }, [user, navigate]);
 
-  return <LoginSigninContainer method="login" />;
+  return <Loader />;
 };
 
-export { Login };
+export { AuthCallback };

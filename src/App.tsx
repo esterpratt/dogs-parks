@@ -27,6 +27,7 @@ import { PrivateRoute } from './pages/PrivateRoute';
 import { PrivacyPolicy } from './pages/PrivacyPolicy';
 import { ThankYouModalProvider } from './context/ThankYouModalContext';
 import { OrientationProvider } from './context/OrientationContext';
+import { AuthCallback } from './pages/AuthCallback';
 
 const UserDog = lazy(() => import('./pages/UserDog'));
 const UserReviews = lazy(() => import('./pages/UserReviews'));
@@ -46,6 +47,10 @@ const App = () => {
         {
           index: true,
           element: <Home />,
+        },
+        {
+          path: '/auth-callback',
+          element: <AuthCallback />,
         },
         {
           path: '/parks',
