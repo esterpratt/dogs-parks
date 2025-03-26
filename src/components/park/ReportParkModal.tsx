@@ -3,7 +3,7 @@ import { Modal } from '../Modal';
 import { TextArea } from '../inputs/TextArea';
 import { UserContext } from '../../context/UserContext';
 import styles from './ReportParkModal.module.scss';
-import { createReport } from '../../services/reports';
+import { createReport } from '../../services/park-suggestions';
 import { useMutation } from '@tanstack/react-query';
 import { useThankYouModalContext } from '../../context/ThankYouModalContext';
 import { useOrientationContext } from '../../context/OrientationContext';

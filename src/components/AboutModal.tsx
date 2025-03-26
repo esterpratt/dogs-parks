@@ -1,8 +1,9 @@
 import { Modal } from './Modal';
 import styles from './AboutModal.module.scss';
 import { Link } from 'react-router';
-import { MAIL } from '../services/reports';
 import { useOrientationContext } from '../context/OrientationContext';
+
+const MAIL = 'esterpratt@gmail.com';
 
 interface AboutModalProps {
   open: boolean;

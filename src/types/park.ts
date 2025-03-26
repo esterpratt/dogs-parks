@@ -17,7 +17,6 @@ interface Park {
   city: string;
   address: string;
   size: number | null;
-  pics?: [];
   materials: ParkMaterial[] | null;
   shade: number | null;
   has_water: boolean | null;
@@ -28,9 +27,9 @@ interface NewParkDetails {
   name: string;
   city: string;
   address: string;
-  size?: number;
+  size: number | null;
   location: Location;
-  user_id: string | null;
+  user_id: string;
 }
 
 type ParkForLists = Pick<Park, 'id' | 'location' | 'name' | 'city' | 'address'>;

@@ -5,10 +5,9 @@ import { Location, NewParkDetails } from '../types/park';
 import { ControlledInput } from '../components/inputs/ControlledInput';
 import { Button } from '../components/Button';
 import { LocationInput } from '../components/inputs/LocationInput';
-import { createPark } from '../services/reports';
+import { createParkSuggestion } from '../services/park-suggestions';
 import { Link, useNavigate } from 'react-router';
 import { useMutation } from '@tanstack/react-query';
-import { queryClient } from '../services/react-query';
 import { LeafletMouseEvent } from 'leaflet';
 import { UserContext } from '../context/UserContext';
 import { Modal } from '../components/Modal';
@@ -27,11 +26,8 @@ const NewPark: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { mutate } = useMutation({
-    mutationFn: createPark,
+    mutationFn: createParkSuggestion,
     onSuccess: async () => {
-      queryClient.invalidateQueries({
-        queryKey: ['parks'],
-      });
       navigate('/parks');
     },
   });
@@ -72,10 +68,8 @@ const NewPark: React.FC = () => {
           long: markerLocation.long,
         },
         user_id: user.id,
+        size: parkDetails.size ? Number(parkDetails.size) : null,
       };
-      if (parkDetails.size) {
-        newPark.size = Number(parkDetails.size);
-      }
 
       mutate(newPark);
     }
