@@ -65,12 +65,12 @@ const Reviews: React.FC = () => {
 
   if (reviews?.length) {
     reviews.sort((a, b) => {
-      const aDate = a.updatedAt
-        ? a.updatedAt.getTime()
-        : a.createdAt!.getTime();
-      const bDate = b.updatedAt
-        ? b.updatedAt.getTime()
-        : b.createdAt!.getTime();
+      const aDate = a.updated_at
+        ? new Date(a.updated_at).getTime()
+        : new Date(a.created_at).getTime();
+      const bDate = b.update_aAt
+        ? new Date(b.updated_at).getTime()
+        : new Date(b.created_at).getTime();
       return bDate - aDate;
     });
   }

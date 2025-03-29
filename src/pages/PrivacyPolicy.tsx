@@ -105,7 +105,6 @@ const PrivacyPolicy = () => {
         </p>
         <ul>
           <li>Google Analytics: https://policies.google.com/privacy</li>
-          <li>Firebase: https://firebase.google.com/support/privacy</li>
         </ul>
       </div>
       <div className={styles.section}>

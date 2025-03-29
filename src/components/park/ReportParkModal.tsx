@@ -3,7 +3,7 @@ import { Modal } from '../Modal';
 import { TextArea } from '../inputs/TextArea';
 import { UserContext } from '../../context/UserContext';
 import styles from './ReportParkModal.module.scss';
-import { createReport } from '../../services/park-suggestions';
+import { createParkReport } from '../../services/park-reports';
 import { useMutation } from '@tanstack/react-query';
 import { useThankYouModalContext } from '../../context/ThankYouModalContext';
 import { useOrientationContext } from '../../context/OrientationContext';
@@ -26,7 +26,8 @@ export const ReportParkModal: React.FC<ReportParkModalProps> = ({
   );
   const [text, setText] = useState('');
   const { mutate } = useMutation({
-    mutationFn: () => createReport({ userId: userId!, parkId, text }),
+    mutationFn: () =>
+      createParkReport({ user_id: userId!, park_id: parkId, text }),
     onSuccess: () => setIsThankYouModalOpen(true),
   });
 
