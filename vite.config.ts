@@ -1,12 +1,15 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import vercel from 'vite-plugin-vercel';
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), vercel()],
   css: {
     modules: {
       localsConvention: 'camelCaseOnly',
     },
+  },
+  vercel: {
+    // optional configuration options, see "Advanced usage" below for details
   },
 });
