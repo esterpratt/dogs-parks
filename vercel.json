@@ -1,0 +1,22 @@
+{
+  "routes": [
+    { "src": "/auth-callback", "dest": "/" },
+    { "src": "/parks", "dest": "/" },
+    { "src": "/parks/new", "dest": "/" },
+    { "src": "/parks/:id", "dest": "/" },
+    { "src": "/parks/:id/reviews", "dest": "/" },
+    { "src": "/parks/:id/visitors", "dest": "/" },
+    { "src": "/signin", "dest": "/" },
+    { "src": "/login", "dest": "/" },
+    { "src": "/user-deleted", "dest": "/" },
+    { "src": "/privacy-policy", "dest": "/" },
+    { "src": "/profile/:id", "dest": "/" },
+    { "src": "/profile/:id/dogs", "dest": "/" },
+    { "src": "/profile/:id/dogs/:id", "dest": "/" },
+    { "src": "/profile/:id/reviews", "dest": "/" },
+    { "src": "/profile/:id/friends", "dest": "/" },
+    { "src": "/profile/:id/favorites", "dest": "/" },
+    { "src": "/profile/:id/info", "dest": "/" },
+    { "src": "/users", "dest": "/" }
+  ]
+}
