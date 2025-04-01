@@ -37,9 +37,7 @@ const CameraWebModal: React.FC<CameraWebModalProps> = ({
   };
 
   const onUploadFile = (event: FormEvent<HTMLInputElement>) => {
-    console.log('im here');
     if (event.currentTarget.files) {
-      console.log('and file is: ', event.currentTarget.files);
       onUploadImg(event.currentTarget.files[0]);
     }
   };
