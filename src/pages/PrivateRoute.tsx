@@ -5,13 +5,13 @@ import { Loader } from '../components/Loader';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
 
 const PrivateRoute: React.FC<PropsWithChildren> = ({ children }) => {
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
   const { userId, isLoadingAuthUser } = useContext(UserContext);
   const showLoader = useDelayedLoading({ isLoading: isLoadingAuthUser });
 
-  useEffect(() => {
-    setIsLoading(isLoadingAuthUser);
-  }, [isLoadingAuthUser]);
+  // useEffect(() => {
+  //   setIsLoading(isLoadingAuthUser);
+  // }, [isLoadingAuthUser]);
 
   console.log(
     'wtf? userId is: ',
@@ -20,7 +20,7 @@ const PrivateRoute: React.FC<PropsWithChildren> = ({ children }) => {
     isLoadingAuthUser
   );
 
-  if (isLoading || showLoader) {
+  if (isLoadingAuthUser || showLoader) {
     return <Loader />;
   }
 
