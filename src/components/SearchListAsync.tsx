@@ -1,39 +1,37 @@
-import { ChangeEvent, ReactNode, useState } from 'react';
+import { ChangeEvent, ReactNode } from 'react';
 import classnames from 'classnames';
-import { useDebounce } from '../hooks/useDebounce';
 import styles from './SearchList.module.scss';
+import { Button } from './Button';
 import { SearchListItems } from './SearchListItems';
+import { Loader } from './Loader';
 
-interface SearchListProps<T> {
-  items: T[];
+interface SearchListAsyncProps<T> {
+  filteredItems: T[];
+  input: string;
+  onChangeInput: (event: ChangeEvent<HTMLInputElement>) => void;
+  onSearch: () => void;
+  showLoader: boolean;
+  showNoResults: boolean;
   placeholder?: string;
   containerClassName?: string;
   noResultsLayout?: string | ReactNode;
   itemKeyfn: (item: T) => string;
-  filterFunc: (item: T, searchInput: string) => boolean;
   children: (item: T) => ReactNode;
 }
 
-const SearchList = <T,>({
-  items,
+const SearchListAsync = <T,>({
+  filteredItems,
+  input,
+  onChangeInput,
+  onSearch,
+  showLoader,
+  showNoResults,
   placeholder = 'Search',
-  filterFunc,
   itemKeyfn,
   containerClassName,
   noResultsLayout = 'No Results',
   children,
-}: SearchListProps<T>) => {
-  const [input, setInput] = useState<string>('');
-  const { searchInput } = useDebounce(input);
-
-  const filteredItems: T[] = items.filter((item) =>
-    filterFunc(item, searchInput)
-  );
-
-  const onChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
-    setInput(event.target.value);
-  };
-
+}: SearchListAsyncProps<T>) => {
   return (
     <div className={classnames(styles.container, containerClassName)}>
       <div className={styles.inputContainer}>
@@ -43,17 +41,26 @@ const SearchList = <T,>({
           placeholder={placeholder}
           className={styles.input}
         />
+        <Button
+          disabled={!input.length}
+          variant="green"
+          onClick={onSearch}
+          className={styles.button}
+        >
+          Search
+        </Button>
       </div>
-      {!!filteredItems.length && (
+      {showLoader && <Loader inside />}
+      {!showLoader && !!filteredItems.length && (
         <SearchListItems items={filteredItems} itemKeyfn={itemKeyfn}>
           {children}
         </SearchListItems>
       )}
-      {!filteredItems.length && !!noResultsLayout && (
+      {!showLoader && showNoResults && !filteredItems.length && (
         <span className={styles.noResults}>{noResultsLayout}</span>
       )}
     </div>
   );
 };
 
-export { SearchList };
+export { SearchListAsync };

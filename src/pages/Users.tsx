@@ -1,11 +1,11 @@
-import { useLoaderData } from 'react-router';
 import { User } from '../types/user';
 import { Dog } from '../types/dog';
 import { UserPreview } from '../components/users/UserPreview';
 import styles from './Users.module.scss';
-import { useContext } from 'react';
+import { ChangeEvent, useContext, useState } from 'react';
 import { UserContext } from '../context/UserContext';
-import { SearchList } from '../components/SearchList';
+import { SearchListAsync } from '../components/SearchListAsync';
+import { filterUsersAndDogs } from '../services/users';
 
 interface UserWithDogs extends User {
   dogs: Dog[];
@@ -13,27 +13,36 @@ interface UserWithDogs extends User {
 
 const Users = () => {
   const { userId } = useContext(UserContext);
-  const { usersWithDogs } = useLoaderData() as {
-    usersWithDogs: UserWithDogs[];
+
+  const [input, setInput] = useState<string>('');
+  const [showLoader, setShowLoader] = useState(false);
+  const [filteredUsers, setFilteredUsers] = useState<UserWithDogs[]>([]);
+  const [showNoResults, setShowNoResults] = useState(false);
+
+  const onChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
+    setInput(event.target.value);
+    setShowNoResults(false);
   };
 
-  const usersWithoutCurrentUser = usersWithDogs.filter(
-    (user) => user.id !== userId
-  );
-
-  const filterUsers = (userWithDogs: UserWithDogs, searchInput: string) => {
-    if (!searchInput) {
+  const onSearch = async () => {
+    if (!input) {
       return false;
     }
 
-    const namesToSearch = [
-      userWithDogs.name,
-      ...userWithDogs.dogs.map((dog) => dog.name),
-    ];
+    setShowLoader(true);
 
-    return namesToSearch.some((name) => {
-      return name?.toLowerCase().includes(searchInput.toLowerCase());
-    });
+    const res = await filterUsersAndDogs(input);
+
+    if (!res.length) {
+      setShowNoResults(true);
+    }
+
+    const filterUsersWithoutSelf = res.filter(
+      (user: UserWithDogs) => user.id !== userId
+    );
+
+    setFilteredUsers(filterUsersWithoutSelf);
+    setShowLoader(false);
   };
 
   const NoResultsLayout = (
@@ -46,17 +55,20 @@ const Users = () => {
         <span>Sniff out some friends!</span>
       </div>
 
-      <SearchList
-        isSearchToSee
+      <SearchListAsync
+        input={input}
+        onChangeInput={onChangeInput}
+        showLoader={showLoader}
+        showNoResults={showNoResults}
         placeholder="Search by user or dog name"
         itemKeyfn={(userWithDog) => userWithDog.id}
-        items={usersWithoutCurrentUser}
-        filterFunc={filterUsers}
+        filteredItems={filteredUsers}
+        onSearch={onSearch}
         noResultsLayout={NoResultsLayout}
         containerClassName={styles.list}
       >
         {(user) => <UserPreview user={user} showFriendshipButton={false} />}
-      </SearchList>
+      </SearchListAsync>
     </div>
   );
 };

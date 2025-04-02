@@ -18,9 +18,6 @@ import { NewPark } from './pages/NewPark';
 
 import { queryClient } from './services/react-query';
 
-import { userLoader } from './loaders/userLoader';
-import { usersLoader } from './loaders/usersLoader';
-
 import { UserContextProvider } from './context/UserContext';
 import { DeletionConfirmation } from './pages/DeletionConfirmation';
 import { PrivateRoute } from './pages/PrivateRoute';
@@ -101,7 +98,6 @@ const App = () => {
               <Profile />
             </PrivateRoute>
           ),
-          loader: userLoader,
           children: [
             {
               index: true,
@@ -136,7 +132,6 @@ const App = () => {
         {
           path: '/users',
           element: <Users />,
-          loader: usersLoader,
         },
       ],
     },

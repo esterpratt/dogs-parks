@@ -157,6 +157,21 @@ const fetchFriendsWithDogs = async ({
   }
 };
 
+const filterUsersAndDogs = async (input: string) => {
+  try {
+    const { data, error } = await supabase.rpc('search_users_with_dogs', { input });
+
+    if (error) {
+      throw error;
+    }
+    
+    return data;
+  } catch (error) {
+    console.error(`there was an error searching users: ${JSON.stringify(error)}`);
+    return [];
+  }
+};
+
 export {
   updateUser,
   fetchUser,
@@ -164,6 +179,7 @@ export {
   fetchUsers,
   fetchFriendsWithDogs,
   fetchUsersWithDogsByIds,
+  filterUsersAndDogs
 };
 
 export type { EditUserProps };
