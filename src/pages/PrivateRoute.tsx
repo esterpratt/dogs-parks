@@ -1,12 +1,17 @@
-import { PropsWithChildren, useContext } from 'react';
+import { PropsWithChildren, useContext, useEffect, useState } from 'react';
 import { Navigate } from 'react-router';
 import { UserContext } from '../context/UserContext';
 import { Loader } from '../components/Loader';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
 
 const PrivateRoute: React.FC<PropsWithChildren> = ({ children }) => {
+  const [isLoading, setIsLoading] = useState(true);
   const { userId, isLoadingAuthUser } = useContext(UserContext);
   const showLoader = useDelayedLoading({ isLoading: isLoadingAuthUser });
+
+  useEffect(() => {
+    setIsLoading(isLoadingAuthUser);
+  }, [isLoadingAuthUser]);
 
   console.log(
     'wtf? userId is: ',
@@ -15,7 +20,7 @@ const PrivateRoute: React.FC<PropsWithChildren> = ({ children }) => {
     isLoadingAuthUser
   );
 
-  if (showLoader) {
+  if (isLoading || showLoader) {
     return <Loader />;
   }
 
