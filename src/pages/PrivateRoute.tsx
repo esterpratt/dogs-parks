@@ -5,22 +5,13 @@ import { Loader } from '../components/Loader';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
 
 const PrivateRoute: React.FC<PropsWithChildren> = ({ children }) => {
-  // const [isLoading, setIsLoading] = useState(true);
   const { userId, isLoadingAuthUser } = useContext(UserContext);
-  const showLoader = useDelayedLoading({ isLoading: isLoadingAuthUser });
+  const showLoader = useDelayedLoading({
+    isLoading: isLoadingAuthUser,
+    threshold: 0,
+  });
 
-  // useEffect(() => {
-  //   setIsLoading(isLoadingAuthUser);
-  // }, [isLoadingAuthUser]);
-
-  console.log(
-    'wtf? userId is: ',
-    userId,
-    'isLoadingAuthUser: ',
-    isLoadingAuthUser
-  );
-
-  if (isLoadingAuthUser || showLoader) {
+  if (showLoader) {
     return <Loader />;
   }
 
@@ -32,7 +23,11 @@ const PrivateRoute: React.FC<PropsWithChildren> = ({ children }) => {
     return <Navigate to="/user-deleted" state={{ userDeleted: true }} />;
   }
 
-  return <Navigate to="/" />;
+  if (!isLoadingAuthUser) {
+    return <Navigate to="/" />;
+  }
+
+  return children;
 };
 
 export { PrivateRoute };
