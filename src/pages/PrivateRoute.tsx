@@ -8,6 +8,13 @@ const PrivateRoute: React.FC<PropsWithChildren> = ({ children }) => {
   const { userId, isLoadingAuthUser } = useContext(UserContext);
   const showLoader = useDelayedLoading({ isLoading: isLoadingAuthUser });
 
+  console.log(
+    'wtf? userId is: ',
+    userId,
+    'isLoadingAuthUser: ',
+    isLoadingAuthUser
+  );
+
   if (showLoader) {
     return <Loader />;
   }
