@@ -47,7 +47,10 @@ const Profile: React.FC = () => {
   const dogImageQueries = useQueries({
     queries: (dogs ?? []).map((dog) => ({
       queryKey: ['dogImage', dog.id],
-      queryFn: async () => fetchDogPrimaryImage(dog.id),
+      queryFn: async () => {
+        const image = await fetchDogPrimaryImage(dog.id);
+        return image || null;
+      },
       enabled: !!dogs?.length,
     })),
   });
