@@ -1,4 +1,4 @@
-import { PropsWithChildren, useContext, useEffect, useState } from 'react';
+import { PropsWithChildren, useContext } from 'react';
 import { Navigate } from 'react-router';
 import { UserContext } from '../context/UserContext';
 import { Loader } from '../components/Loader';
