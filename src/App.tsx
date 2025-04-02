@@ -20,7 +20,7 @@ import { queryClient } from './services/react-query';
 
 import { UserContextProvider } from './context/UserContext';
 import { DeletionConfirmation } from './pages/DeletionConfirmation';
-import { PrivateRoute } from './pages/PrivateRoute';
+// import { PrivateRoute } from './pages/PrivateRoute';
 import { PrivacyPolicy } from './pages/PrivacyPolicy';
 import { ThankYouModalProvider } from './context/ThankYouModalContext';
 import { OrientationProvider } from './context/OrientationContext';
