@@ -47,6 +47,7 @@ const UserFriends = () => {
 
   const showLoader = useDelayedLoading({
     isLoading,
+    minDuration: 250,
   });
 
   if (showLoader) {

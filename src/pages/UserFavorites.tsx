@@ -29,6 +29,7 @@ const UserFavorites = () => {
 
   const showLoader = useDelayedLoading({
     isLoading,
+    minDuration: 250,
   });
 
   const favoriteParks = parks?.length

@@ -66,6 +66,7 @@ const Profile: React.FC = () => {
       isLoadingPendingFriendships ||
       isLoadingApprovedFriendships ||
       isLoadingImages,
+    minDuration: 750,
   });
 
   if (showLoader) {
