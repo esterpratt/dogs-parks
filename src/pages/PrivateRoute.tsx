@@ -5,14 +5,14 @@ import { Loader } from '../components/Loader';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
 
 const PrivateRoute: React.FC<PropsWithChildren> = ({ children }) => {
-  const { user, isLoadingAuthUser } = useContext(UserContext);
+  const { userId, isLoadingAuthUser } = useContext(UserContext);
   const showLoader = useDelayedLoading({ isLoading: isLoadingAuthUser });
 
   if (showLoader) {
     return <Loader />;
   }
 
-  if (user?.id) {
+  if (userId) {
     return children;
   }
 
