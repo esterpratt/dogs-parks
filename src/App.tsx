@@ -94,9 +94,9 @@ const App = () => {
         {
           path: '/profile/:id',
           element: (
-            <PrivateRoute>
-              <Profile />
-            </PrivateRoute>
+            // <PrivateRoute>
+            <Profile />
+            // </PrivateRoute>
           ),
           children: [
             {
