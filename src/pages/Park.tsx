@@ -53,7 +53,7 @@ const Park: React.FC = () => {
     },
   });
 
-  const showLoader = useDelayedLoading({
+  const { showLoader } = useDelayedLoading({
     isLoading: isLoading || isLoadingImage,
   });
 

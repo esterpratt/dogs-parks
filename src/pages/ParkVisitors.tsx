@@ -26,7 +26,7 @@ const ParkVisitors: React.FC = () => {
     enabled: !!friendsInParkIds.length,
   });
 
-  const showLoader = useDelayedLoading({
+  const { showLoader } = useDelayedLoading({
     isLoading: isLoadingDogs || isLoadingFriendsIds || isLoadingVisitors,
     minDuration: 1000,
   });

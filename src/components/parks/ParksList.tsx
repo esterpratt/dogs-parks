@@ -23,7 +23,7 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
     queryFn: fetchParksJSON,
   });
 
-  const showLoader = useDelayedLoading({ isLoading });
+  const { showLoader } = useDelayedLoading({ isLoading });
 
   const parksToSort = useMemo(() => {
     return parks?.map((park) => ({

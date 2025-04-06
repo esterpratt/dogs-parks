@@ -24,9 +24,10 @@ interface UserDogsProps {
 }
 
 const UserDogs = () => {
-  const { dogs, dogImages, isSignedInUser, user } =
+  const { user, dogs, dogImages, isSignedInUser } =
     useOutletContext() as UserDogsProps;
   const { userId: signedInUserId } = useContext(UserContext);
+
   const [isEditDogsModalOpen, setIsEditDogsModalOpen] = useState(false);
   const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
   const [newDogId, setNewDogId] = useState('');
@@ -85,7 +86,7 @@ const UserDogs = () => {
             </Link>
           </div>
         )}
-        {!!dogs.length && (
+        {!!dogs?.length && (
           <div className={styles.titleText}>
             <span className={styles.name}>
               {isSignedInUser ? 'My' : `${user.name}'s`}
@@ -93,25 +94,21 @@ const UserDogs = () => {
             pack
           </div>
         )}
-        {!dogs.length && isSignedInUser && (
+        {!dogs?.length && isSignedInUser && (
           <div>
             Your dog squad is looking pretty empty! Time to recruit some furry
             friends!
           </div>
         )}
-        {!dogs.length && !isSignedInUser && (
+        {!dogs?.length && !isSignedInUser && (
           <div>
             <span className={styles.name}>{user.name}'s </span>
             <span>pack seems to be empty</span>
           </div>
         )}
         <div className={styles.dogs}>
-          {dogs.map((dog, index) => (
-            <Link
-              to={dog.id}
-              key={dog.id}
-              state={{ isSignedInUser, userName: user.name }}
-            >
+          {dogs?.map((dog, index) => (
+            <Link to={dog.id} key={dog.id} state={{ userName: user.name }}>
               <DogPreview
                 dog={dog}
                 image={

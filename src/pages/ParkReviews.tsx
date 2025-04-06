@@ -28,7 +28,7 @@ const Reviews: React.FC = () => {
     queryFn: () => fetchReviews(parkId!),
   });
 
-  const showLoader = useDelayedLoading({ isLoading, minDuration: 1000 });
+  const { showLoader } = useDelayedLoading({ isLoading, minDuration: 1000 });
 
   const { addReview } = useAddReview(parkId!, userId);
 

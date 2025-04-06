@@ -25,6 +25,7 @@ import { PrivacyPolicy } from './pages/PrivacyPolicy';
 import { ThankYouModalProvider } from './context/ThankYouModalContext';
 import { OrientationProvider } from './context/OrientationContext';
 import { AuthCallback } from './pages/AuthCallback';
+import { userLoader } from './loaders/userLoader';
 
 const UserDog = lazy(() => import('./pages/UserDog'));
 const UserReviews = lazy(() => import('./pages/UserReviews'));
@@ -98,6 +99,7 @@ const App = () => {
               <Profile />
             </PrivateRoute>
           ),
+          loader: userLoader,
           children: [
             {
               index: true,

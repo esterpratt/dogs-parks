@@ -45,9 +45,9 @@ const UserFriends = () => {
   const isLoading =
     isLoadingFriends || isLoadingPendingFriends || isLoadingMyPendingFriends;
 
-  const showLoader = useDelayedLoading({
+  const { showLoader } = useDelayedLoading({
     isLoading,
-    minDuration: 250,
+    minDuration: 750,
   });
 
   if (showLoader) {

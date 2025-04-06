@@ -54,8 +54,9 @@ const UserDog = () => {
     },
   });
 
-  const showLoader = useDelayedLoading({
+  const { showLoader } = useDelayedLoading({
     isLoading: isLoadingDog || isLoadingImage,
+    minDuration: 750,
   });
 
   const { mutate: setDogImage, isPending: isUploadingImage } = useMutation({

@@ -17,9 +17,9 @@
 
   &.full {
     position: absolute;
-    top: 0;
+    top: $navbar-height;
     left: 0;
-    height: 100dvh;
+    height: $content-max-height;
     width: 100dvw;
     z-index: 10000;
     background-color: rgba($white, 0.8);

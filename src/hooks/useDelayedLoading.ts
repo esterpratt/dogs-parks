@@ -12,6 +12,7 @@ export function useDelayedLoading({
   threshold = 50,
 }: UseDelayedLoadingParams) {
   const [showLoader, setShowLoader] = useState(false);
+  const [isPending, setIsPending] = useState(true);
   const startTimeRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -31,7 +32,8 @@ export function useDelayedLoading({
         return () => clearTimeout(timer);
       }
     }
+    setIsPending(false);
   }, [isLoading, minDuration, threshold]);
 
-  return showLoader;
+  return { showLoader, isPending };
 }
