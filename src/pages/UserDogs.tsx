@@ -108,7 +108,11 @@ const UserDogs = () => {
         )}
         <div className={styles.dogs}>
           {dogs?.map((dog, index) => (
-            <Link to={dog.id} key={dog.id} state={{ userName: user.name }}>
+            <Link
+              to={dog.id}
+              key={dog.id}
+              state={{ userName: user.name, isSignedInUser }}
+            >
               <DogPreview
                 dog={dog}
                 image={

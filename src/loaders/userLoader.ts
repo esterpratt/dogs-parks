@@ -1,4 +1,4 @@
-import { LoaderFunction, redirect } from 'react-router';
+import { LoaderFunction } from 'react-router';
 import { fetchUser } from '../services/users';
 import { fetchDogPrimaryImage, fetchUserDogs } from '../services/dogs';
 import { queryClient } from '../services/react-query';
@@ -8,70 +8,66 @@ import { fetchUserFriendships } from '../services/friendships';
 import { Friendship, FRIENDSHIP_STATUS } from '../types/friendship';
 
 const userLoader: LoaderFunction = async ({ params }) => {
-  try {
-    const { id: userId } = params;
+  const { id: userId } = params;
 
-    const promises: [
-      Promise<User>,
-      Promise<Dog[]>,
-      Promise<Friendship | null>,
-      Promise<Friendship | null>
-    ] = [
-      queryClient.fetchQuery({
-        queryKey: ['user', userId],
-        queryFn: () => fetchUser(userId!),
-      }),
-      queryClient.fetchQuery({
-        queryKey: ['dogs', userId],
-        queryFn: () => fetchUserDogs(userId!),
-      }),
-      queryClient.fetchQuery({
-        queryKey: ['friendships', userId, 'pending'],
-        queryFn: () =>
-          fetchUserFriendships({
-            userId: userId!,
-            status: FRIENDSHIP_STATUS.PENDING,
-          }),
-      }),
-      queryClient.fetchQuery({
-        queryKey: ['friendships', userId, 'approved'],
-        queryFn: () =>
-          fetchUserFriendships({
-            userId: userId!,
-          }),
-      }),
-    ];
+  const promises: [
+    Promise<User>,
+    Promise<Dog[]>,
+    Promise<Friendship | null>,
+    Promise<Friendship | null>
+  ] = [
+    queryClient.fetchQuery({
+      queryKey: ['user', userId],
+      queryFn: () => fetchUser(userId!),
+    }),
+    queryClient.fetchQuery({
+      queryKey: ['dogs', userId],
+      queryFn: () => fetchUserDogs(userId!),
+    }),
+    queryClient.fetchQuery({
+      queryKey: ['friendships', userId, 'pending'],
+      queryFn: () =>
+        fetchUserFriendships({
+          userId: userId!,
+          status: FRIENDSHIP_STATUS.PENDING,
+        }),
+    }),
+    queryClient.fetchQuery({
+      queryKey: ['friendships', userId, 'approved'],
+      queryFn: () =>
+        fetchUserFriendships({
+          userId: userId!,
+        }),
+    }),
+  ];
 
-    const [user, dogs = [], pendingFriendships, approvedFriendships] =
-      await Promise.all(promises);
+  const [user, dogs = [], pendingFriendships, approvedFriendships] =
+    await Promise.all(promises);
 
-    const getDogsImages = async () => {
-      const dogsImagesPromises: Promise<string | null>[] = [];
-      dogs.forEach((dog) => {
-        dogsImagesPromises.push(
-          queryClient.fetchQuery({
-            queryKey: ['dogImage', dog.id],
-            queryFn: async () => {
-              const image = await fetchDogPrimaryImage(dog.id);
-              return image || null;
-            },
-          })
-        );
-      });
+  const getDogsImages = async () => {
+    const dogsImagesPromises: Promise<string | null>[] = [];
+    dogs.forEach((dog) => {
+      dogsImagesPromises.push(
+        queryClient.fetchQuery({
+          queryKey: ['dogImage', dog.id],
+          queryFn: async () => {
+            const image = await fetchDogPrimaryImage(dog.id);
+            return image || null;
+          },
+        })
+      );
+    });
 
-      return Promise.all(dogsImagesPromises);
-    };
+    return Promise.all(dogsImagesPromises);
+  };
 
-    return {
-      user,
-      dogs,
-      dogImages: getDogsImages(),
-      pendingFriendships,
-      approvedFriendships,
-    };
-  } catch (error) {
-    return redirect('/login');
-  }
+  return {
+    user,
+    dogs,
+    dogImages: getDogsImages(),
+    pendingFriendships,
+    approvedFriendships,
+  };
 };
 
 export { userLoader };

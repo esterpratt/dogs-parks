@@ -69,10 +69,7 @@ const updateDog = async ({ dogId, dogDetails }: EditDogProps) => {
 
 const deleteDog = async (id: string) => {
   try {
-    const { error } = await supabase
-    .from('dogs')
-    .delete()
-    .eq('id', id)
+    const { error } = await supabase.rpc('delete_dog', { dog_id: id });
 
     if (error) {
         throw error;
@@ -89,6 +86,7 @@ const fetchDogs = async (ids?: string[]) => {
       const { data: dogs, error } = await supabase
       .from('dogs')
       .select('*')
+      .is('deleted_at', null)
 
       if (error) {
         throw error;
@@ -100,6 +98,7 @@ const fetchDogs = async (ids?: string[]) => {
       .from('dogs')
       .select('*')
       .in('id', ids)
+      .is('deleted_at', null)
 
       if (error) {
         throw error;
@@ -117,6 +116,7 @@ const fetchUserDogs = async (userId: string) => {
     .from('dogs')
     .select('*')
     .eq('owner', userId)
+    .is('deleted_at', null)
 
     if (error) {
       throw error;
@@ -134,6 +134,7 @@ const fetchUsersDogs = async (userIds: string[]) => {
     .from('dogs')
     .select('*')
     .in('owner', userIds)
+    .is('deleted_at', null)
 
     if (error) {
       throw error;
