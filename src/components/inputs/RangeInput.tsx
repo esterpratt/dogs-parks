@@ -32,7 +32,11 @@ const RangeInput: React.FC<RangeInputProps> = ({
   }, [max]);
 
   return (
-    <div className={styles.container} ref={inputContainerRef}>
+    <div
+      className={styles.container}
+      ref={inputContainerRef}
+      style={{ '--range-value': `${value || 0}%` }}
+    >
       <ControlledInput
         inputClassName={styles.input}
         label={label}

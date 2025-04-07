@@ -15,7 +15,13 @@ $thumbWidth: 20;
   background-color: transparent;
 
   &::-webkit-slider-runnable-track {
-    background-color: $text-light;
+    background: linear-gradient(
+      to right,
+      $orange 0%,
+      $orange var(--range-value),
+      $text-light var(--range-value),
+      $text-light 100%
+    );
     border: none;
     border-radius: 24px;
     width: 100%;
