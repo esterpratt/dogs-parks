@@ -8,7 +8,7 @@ interface ThankYouModalProps {
   title?: string;
   open: boolean;
   onClose: () => void;
-  onAfterClose: () => void;
+  onAfterClose?: () => void;
 }
 
 const ThankYouModal: React.FC<ThankYouModalProps> = ({

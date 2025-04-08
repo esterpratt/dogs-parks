@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router';
 
 const UpdatePassowrd = () => {
   const [error, setError] = useState('');
-  const { userId } = useContext(UserContext);
+  const { userId, isLoadingAuthUser } = useContext(UserContext);
   const [isThankYouModalOpen, setIsThankYouModalOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -20,10 +20,10 @@ const UpdatePassowrd = () => {
   }, [setError]);
 
   useEffect(() => {
-    // if (!userId) {
-    //   navigate('/login');
-    // }
-  }, [userId, navigate]);
+    if (!isLoadingAuthUser && !userId) {
+      navigate('/login');
+    }
+  }, [userId, isLoadingAuthUser, navigate]);
 
   const { mutate: resetPassword, isPending: isLoadingResetPassword } =
     useMutation({
