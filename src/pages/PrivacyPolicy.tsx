@@ -101,7 +101,7 @@ const PrivacyPolicy = () => {
         <h2>8. Third-Party Services</h2>
         <p>
           We may use third-party services that collect data (e.g., Google
-          Analytics, Firebase). Each third party has its own privacy policy:
+          Analytics, Supabase). Each third party has its own privacy policy:
         </p>
         <ul>
           <li>Google Analytics: https://policies.google.com/privacy</li>
