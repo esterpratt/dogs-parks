@@ -10,6 +10,7 @@ import { useOrientationContext } from '../context/OrientationContext';
 interface ModalProps {
   open: boolean;
   onClose?: () => void;
+  onAfterClose?: () => void;
   onSave?: () => void;
   saveButtonDisabled?: boolean;
   className?: string;
@@ -28,6 +29,7 @@ interface ModalProps {
 const Modal: React.FC<ModalProps> = ({
   open,
   onClose,
+  onAfterClose,
   onSave,
   saveText = 'Save',
   saveButtonDisabled = false,
@@ -51,18 +53,24 @@ const Modal: React.FC<ModalProps> = ({
 
   useEffect(() => {
     const modal = dialogRef.current;
+
     if (open) {
       modal!.showModal();
 
       if (autoClose) {
         setTimeout(() => {
           modal!.close();
+          if (onAfterClose) {
+            onAfterClose();
+          }
         }, 2000);
       }
     }
 
-    return () => modal!.close();
-  }, [open, autoClose]);
+    return () => {
+      modal!.close();
+    };
+  }, [open, autoClose, onAfterClose]);
 
   if (height) {
     style.height = height;

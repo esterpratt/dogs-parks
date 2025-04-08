@@ -8,18 +8,21 @@ interface ThankYouModalProps {
   title?: string;
   open: boolean;
   onClose: () => void;
+  onAfterClose: () => void;
 }
 
 const ThankYouModal: React.FC<ThankYouModalProps> = ({
   title = 'Good Boy!',
   open,
   onClose,
+  onAfterClose,
 }) => {
   const orientation = useOrientationContext((state) => state.orientation);
 
   return (
     <Modal
       autoClose
+      onAfterClose={onAfterClose}
       open={open}
       onClose={onClose}
       height={orientation === 'landscape' ? '50%' : '20%'}

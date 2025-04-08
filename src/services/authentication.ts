@@ -74,7 +74,29 @@ const logout = async () => {
 
 const sendResetEmail = async (email: string) => {
   try {
-    console.log('TODO: reset password for email: ', email);
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: import.meta.env.DEV ? 'http://localhost:5173/update-password' : 'https://klavhub.com/update-password',
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  } catch (error) {
+    throwError(error);
+  }
+};
+
+const updatePassword = async (password: string) => {
+  try {
+    const { error } = await supabase.auth.updateUser({
+      password,
+    });
+
+    if (error) {
+      throw error;
+    }
   } catch (error) {
     throwError(error);
   }
@@ -100,5 +122,5 @@ const deleteUser = async (id: string | null) => {
   }
 };
 
-export { login, logout, signin, signinWithGoogle, sendResetEmail, deleteUser };
+export { login, logout, signin, signinWithGoogle, sendResetEmail, deleteUser, updatePassword };
 export type { LoginProps };

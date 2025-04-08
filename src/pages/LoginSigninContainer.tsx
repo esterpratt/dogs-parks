@@ -34,18 +34,19 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
     setError('');
   }, [method, setError]);
 
-  const { mutate: resetPassword } = useMutation({
-    mutationFn: (email: string) => {
-      return sendResetEmail(email);
-    },
-    onError: (error) => {
-      setError(error.message);
-    },
-    onSuccess: () => {
-      setIsThankYouModalOpen(true);
-      setError('');
-    },
-  });
+  const { mutate: resetPassword, isPending: isPendingResetPassword } =
+    useMutation({
+      mutationFn: (email: string) => {
+        return sendResetEmail(email);
+      },
+      onError: (error) => {
+        setError(error.message);
+      },
+      onSuccess: () => {
+        setIsThankYouModalOpen(true);
+        setError('');
+      },
+    });
 
   const googleSignin = async () => {
     if (method === 'signin') {
@@ -94,7 +95,10 @@ const LoginSigninContainer: React.FC<LoginSigninContainerProps> = ({
               {error}
             </div>
             <span
-              className={classnames(styles.loading, isLoading && styles.show)}
+              className={classnames(
+                styles.loading,
+                (isLoading || isPendingResetPassword) && styles.show
+              )}
             >
               Paws a sec...
             </span>

@@ -26,6 +26,7 @@ import { ThankYouModalProvider } from './context/ThankYouModalContext';
 import { OrientationProvider } from './context/OrientationContext';
 import { AuthCallback } from './pages/AuthCallback';
 import { userLoader } from './loaders/userLoader';
+import { UpdatePassowrd } from './pages/UpdatePassword';
 
 const UserDog = lazy(() => import('./pages/UserDog'));
 const UserReviews = lazy(() => import('./pages/UserReviews'));
@@ -49,6 +50,10 @@ const App = () => {
         {
           path: '/auth-callback',
           element: <AuthCallback />,
+        },
+        {
+          path: '/update-password',
+          element: <UpdatePassowrd />,
         },
         {
           path: '/parks',
