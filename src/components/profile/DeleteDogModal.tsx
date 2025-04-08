@@ -44,17 +44,12 @@ const DeleteDogModal: React.FC<DeleteDogModalProps> = ({
     <Modal
       open={isOpen}
       onClose={onClose}
-      height={orientation === 'landscape' ? '95%' : '50%'}
+      height={orientation === 'landscape' ? '95%' : '30%'}
       variant="center"
       className={styles.approveModal}
     >
       <div className={styles.approveContent}>
-        <span>Hold your leash!</span>
-        <span>
-          By clicking 'Delete', all your dog's data will be sent to a farm up
-          north where it can run free forever.
-        </span>
-        <span>Are you sure you want to say goodbye?</span>
+        <span>Are you sure you want to say goodbye to {dog.name}?</span>
       </div>
       {isPending && <Loader inside />}
       <Button

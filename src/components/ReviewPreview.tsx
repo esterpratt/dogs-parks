@@ -50,7 +50,10 @@ const ReviewPreview: React.FC<ReviewPreviewProps> = ({
       {review.content && <div className={styles.content}>{review.content}</div>}
       <div className={styles.footer}>
         <div className={styles.time}>{reviewTime}</div>
-        <div className={styles.name}>by: {user?.name || 'Anonymous'}</div>
+        <div className={styles.name}>
+          by:{' '}
+          <span className={styles.userName}>{user?.name || 'Anonymous'}</span>
+        </div>
         {!!userId &&
           (userId === review.user_id ? (
             <Button
