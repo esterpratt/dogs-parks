@@ -6,7 +6,7 @@
   max-height: $content-max-height;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 24px;
 }
 
 .title {
@@ -15,7 +15,8 @@
 
 .list {
   ul {
-    gap: 12px;
+    gap: 24px;
+    padding-bottom: 24px;
   }
 }
 

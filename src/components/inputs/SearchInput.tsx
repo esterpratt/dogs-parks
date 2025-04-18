@@ -1,0 +1,29 @@
+import { ChangeEvent } from 'react';
+import classnames from 'classnames';
+import styles from './SearchInput.module.scss';
+import { Search } from 'lucide-react';
+
+export interface SearchInputProps {
+  value: string;
+  onChangeInput: (event: ChangeEvent<HTMLInputElement>) => void;
+  placeholder?: string;
+  className?: string;
+}
+
+const SearchInput = (props: SearchInputProps) => {
+  const { value, onChangeInput, placeholder, className } = props;
+
+  return (
+    <div className={classnames(styles.inputContainer, className)}>
+      <Search className={styles.icon} />
+      <input
+        value={value}
+        onChange={onChangeInput}
+        placeholder={placeholder}
+        className={styles.input}
+      />
+    </div>
+  );
+};
+
+export { SearchInput };

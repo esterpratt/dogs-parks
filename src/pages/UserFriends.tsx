@@ -82,15 +82,17 @@ const UserFriends = () => {
       )}
       {!!pendingFriends?.length && (
         <div className={styles.friendsContainer}>
-          <div className={styles.title}>Want to be my friends</div>
+          <div className={styles.title}>Friend requests</div>
           {pendingFriends.map((friend) => {
-            return <UserPreview key={friend.id} user={friend} />;
+            return (
+              <UserPreview key={friend.id} user={friend} showFriendshipButton />
+            );
           })}
         </div>
       )}
       {!!myPendingFriends?.length && (
         <div className={styles.friendsContainer}>
-          <div className={styles.title}>Waiting for their Responses</div>
+          <div className={styles.title}>Pending requests</div>
           {myPendingFriends.map((friend) => {
             return <UserPreview key={friend.id} user={friend} />;
           })}

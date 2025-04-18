@@ -17,7 +17,7 @@ const Routing = ({ geoJSONObj }: RoutingProps) => {
 
     if (geoJSONObj) {
       layers
-        .addLayer(L.geoJSON(geoJSONObj, { style: { color: styles.grey } }))
+        .addLayer(L.geoJSON(geoJSONObj, { style: { color: styles.pink } }))
         .addTo(map);
     }
 

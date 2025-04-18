@@ -68,7 +68,7 @@
     transform: translate(-106%, 0);
 
     &[open] {
-      transform: translate(-106%, calc(35% + $navbar-height));
+      transform: translate(-106%, 35%);
     }
   }
 

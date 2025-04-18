@@ -11,6 +11,9 @@ import { Loader } from '../Loader';
 import { useContext, useMemo } from 'react';
 import { useDelayedLoading } from '../../hooks/useDelayedLoading';
 import { UserContext } from '../../context/UserContext';
+import { Button } from '../Button';
+import { Map } from 'lucide-react';
+import { SearchInput, SearchInputProps } from '../inputs/SearchInput';
 
 interface ParksListProps {
   className?: string;
@@ -65,11 +68,23 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
   return (
     <SearchList
       items={sortedParks}
-      placeholder="Search Dogs Park"
+      placeholder="Search Park"
       noResultsLayout={NoResultsLayout}
       itemKeyfn={(park) => park.id}
       filterFunc={searchParksFunc}
       containerClassName={classnames(styles.list, className)}
+      renderSearchInput={(props: SearchInputProps) => {
+        return (
+          <div className={styles.searchContainer}>
+            <SearchInput {...props} className={styles.inputContainer} />
+            <Link to="/" className={styles.mapLink}>
+              <Button variant="round">
+                <Map size={24} />
+              </Button>
+            </Link>
+          </div>
+        );
+      }}
     >
       {(park) => <ParkPreview park={park} className={styles.park} />}
     </SearchList>

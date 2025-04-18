@@ -1,67 +1,41 @@
 @use '../../variables' as *;
 
-.button {
-  width: 100%;
-  text-align: center;
-  padding: 4px 0;
-  background-color: $orange;
-  border-radius: 2px 2px 12px 12px;
-  color: $white;
-}
-
-.card-container {
-  height: 122px;
-  text-decoration: none;
-  color: inherit;
-  letter-spacing: inherit;
+.no-img {
+  width: 108px;
+  height: 108px;
   display: flex;
-  gap: 24px;
-  border: 1px solid $grey-bold;
-  background-color: $white;
-  border-radius: 12px;
-  padding: 12px;
-  font-size: 18px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid $text-light;
 }
 
-.dog-image {
-  width: 96px;
-  height: 96px;
-  border-radius: 12px;
-
-  > img {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-    border-radius: 12px;
-  }
-
-  &.empty {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid $text-light;
-  }
-}
-
-.details {
+.details-container {
   display: flex;
   flex-direction: column;
-  padding: 8px 0;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 .dog-names {
-  font-weight: $font-weight-medium;
+  text-transform: capitalize;
+  font-size: 18px;
+}
+
+.user-name-container {
+  font-size: 12px;
 }
 
 .user-name {
-  color: $brown;
   text-transform: capitalize;
+}
+
+.loader {
+  height: 24px;
 }
 
 .link {
   text-decoration: none;
-  color: $green;
+  color: $pink;
 }
 
 .message {
@@ -72,4 +46,8 @@
   padding: 32px;
   display: flex;
   justify-content: center;
+}
+
+:export {
+  green: $green;
 }

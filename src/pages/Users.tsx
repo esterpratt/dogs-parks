@@ -6,6 +6,7 @@ import { ChangeEvent, useContext, useState } from 'react';
 import { UserContext } from '../context/UserContext';
 import { SearchListAsync } from '../components/SearchListAsync';
 import { filterUsersAndDogs } from '../services/users';
+import { useDelayedLoading } from '../hooks/useDelayedLoading';
 
 interface UserWithDogs extends User {
   dogs: Dog[];
@@ -15,9 +16,11 @@ const Users = () => {
   const { userId } = useContext(UserContext);
 
   const [input, setInput] = useState<string>('');
-  const [showLoader, setShowLoader] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [filteredUsers, setFilteredUsers] = useState<UserWithDogs[]>([]);
   const [showNoResults, setShowNoResults] = useState(false);
+
+  const { showLoader } = useDelayedLoading({ isLoading });
 
   const onChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
     setInput(event.target.value);
@@ -29,7 +32,7 @@ const Users = () => {
       return false;
     }
 
-    setShowLoader(true);
+    setIsLoading(true);
 
     const res = await filterUsersAndDogs(input);
 
@@ -42,7 +45,7 @@ const Users = () => {
     );
 
     setFilteredUsers(filterUsersWithoutSelf);
-    setShowLoader(false);
+    setIsLoading(false);
   };
 
   const NoResultsLayout = (

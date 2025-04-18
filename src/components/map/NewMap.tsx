@@ -1,22 +1,21 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router';
 import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
-import { MdGpsFixed } from 'react-icons/md';
 import { Location, Park } from '../../types/park';
 import { MarkerList } from './MarkerList';
-import styles from './NewMap.module.scss';
-import { Button } from '../Button';
+import { AlignJustify, Locate } from 'lucide-react';
 import { ParkPopup } from '../parks/ParkPopup';
 import { MapEventHandler } from './mapHelpers/MapEventHandler';
 import { MapCenter } from './mapHelpers/MapCenter';
 import { Routing } from './mapHelpers/Routing';
 import { getRoute } from '../../services/map';
-import { IconContext } from 'react-icons';
 import { MapSearchAddress } from './mapHelpers/MapSearchAddress';
 import { getUserLocation } from './mapHelpers/getUserLocation';
 import { UserLocationMarker } from './UserLocationMarker';
 import { DEFAULT_LOCATION } from '../../utils/consts';
 import { useUserLocation } from '../../context/LocationContext';
+import styles from './NewMap.module.scss';
+import { Button } from '../Button';
 
 interface NewMapProps {
   className?: string;
@@ -129,7 +128,12 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <MapSearchAddress setCenter={setCenterByPosition} />
-        <ZoomControl position="bottomright" />
+        <Link to="/parks">
+          <Button variant="round" className={styles.listViewButton}>
+            <AlignJustify />
+          </Button>
+        </Link>
+        <ZoomControl position="topright" />
         <MarkerList setActivePark={onSetActivePark} activePark={activePark} />
         {userLocation && (
           <UserLocationMarker
@@ -143,18 +147,17 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
         {directions?.geoJSONObj && (
           <Routing geoJSONObj={directions?.geoJSONObj} />
         )}
-        <IconContext.Provider value={{ className: styles.centerButton }}>
-          <MdGpsFixed
-            onClick={() =>
-              setUserCenter([setUserLocationByPosition, setCenterByPosition])
-            }
-          />
-        </IconContext.Provider>
+        <Button
+          variant="round"
+          onClick={() =>
+            setUserCenter([setUserLocationByPosition, setCenterByPosition])
+          }
+          className={styles.centerButton}
+        >
+          <Locate />
+        </Button>
         <MapEventHandler onMapClick={onCloseParkPopup} />
       </MapContainer>
-      <Link to="/parks" className={styles.listViewButton}>
-        <Button variant="green">To List View</Button>
-      </Link>
       <ParkPopup
         isLoadingDirections={isLoadingDirections}
         onClose={onCloseParkPopup}

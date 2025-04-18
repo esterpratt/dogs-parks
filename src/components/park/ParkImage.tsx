@@ -1,0 +1,62 @@
+import { useInView } from 'react-intersection-observer';
+import { useQuery } from '@tanstack/react-query';
+import classnames from 'classnames';
+import { TreeDeciduous } from 'lucide-react';
+import { fetchParkPrimaryImage } from '../../services/parks';
+import styles from './ParkImage.module.scss';
+
+interface ParkImageProps {
+  parkId: string;
+  alt?: string;
+  lazy?: boolean;
+  onClick?: (image: string) => void;
+  className?: string;
+  noImgClassName?: string;
+  iconSize?: number;
+}
+
+const ParkImage = ({
+  parkId,
+  alt = '',
+  lazy,
+  onClick,
+  className,
+  noImgClassName,
+  iconSize,
+}: ParkImageProps) => {
+  const { ref, inView } = useInView({ triggerOnce: true, rootMargin: '100px' });
+
+  const { data: primaryImage } = useQuery({
+    queryKey: ['parkImage', parkId],
+    queryFn: async () => {
+      const image = await fetchParkPrimaryImage(parkId!);
+      return image ? image : null;
+    },
+    enabled: inView || !lazy,
+  });
+
+  return (
+    <div ref={ref} className={classnames(styles.container, className)}>
+      {primaryImage && (
+        <img
+          src={primaryImage}
+          alt={alt}
+          loading={lazy ? 'lazy' : 'eager'}
+          onClick={() => onClick?.(primaryImage)}
+          className={styles.img}
+        />
+      )}
+      {!primaryImage && (
+        <div className={classnames(styles.noImg, noImgClassName)}>
+          <TreeDeciduous
+            size={iconSize || 24}
+            color={styles.green}
+            strokeWidth={1}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
+export { ParkImage };

@@ -6,7 +6,7 @@ import { FaInfo } from 'react-icons/fa6';
 import { UserContext } from '../context/UserContext';
 import styles from './NavbarTop.module.scss';
 import { Button } from './Button';
-import { AboutModal } from './AboutModal';
+import { AboutModal } from '../pages/About';
 
 const NavbarTop = () => {
   const { userId, user } = useContext(UserContext);

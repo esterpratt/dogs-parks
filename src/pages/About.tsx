@@ -1,30 +1,13 @@
-import { Modal } from './Modal';
-import styles from './AboutModal.module.scss';
+import styles from './About.module.scss';
 import { Link } from 'react-router';
-import { useOrientationContext } from '../context/OrientationContext';
 
 const MAIL = 'esterpratt@gmail.com';
 
-interface AboutModalProps {
-  open: boolean;
-  onClose: () => void;
-}
-
-const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
-  const orientation = useOrientationContext((state) => state.orientation);
-
+const About = () => {
   return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      variant="centerTop"
-      height={orientation === 'landscape' ? '95%' : '65%'}
-      className={styles.modalContent}
-    >
+    <div className={styles.container}>
       <h3>Welcome to Klavhub!</h3>
-      <Link onClick={onClose} to="/privacy-policy">
-        See our Privacy Policy
-      </Link>
+      <Link to="/privacy-policy">See our Privacy Policy</Link>
       <div>
         <span>This app was created by: </span>
         <Link to="https://github.com/esterpratt">Ester Pratt.</Link>
@@ -44,8 +27,8 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
         missing parks. For any suggestions or feedback, feel free to email me
         at: <Link to={`mailto:${MAIL}`}>{MAIL}</Link>
       </div>
-    </Modal>
+    </div>
   );
 };
 
-export { AboutModal };
+export { About };

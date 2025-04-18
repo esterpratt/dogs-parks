@@ -80,6 +80,7 @@ const UserReviews = () => {
           return (
             <ReviewPreview
               showPark
+              withName={false}
               key={review.id}
               review={review}
               userId={user.id}

@@ -1,0 +1,29 @@
+@use '../../variables' as *;
+
+.input-container {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  box-shadow: $box-shadow;
+  border-radius: 50px;
+  background-color: $white;
+  color: $text;
+  padding: 12px;
+}
+
+.icon {
+  color: $pink;
+}
+
+.input {
+  outline: none;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  border: none;
+  padding-left: 12px;
+
+  &::placeholder {
+    color: $placeholder;
+  }
+}

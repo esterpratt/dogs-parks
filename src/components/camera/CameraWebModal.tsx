@@ -74,6 +74,7 @@ const CameraWebModal: React.FC<CameraWebModalProps> = ({
           <Button
             onClick={() => setIsCameraOpen(true)}
             className={classnames(styles.button, styles.buttonContainer)}
+            variant="simple"
           >
             <IconContext.Provider value={{ className: styles.icon }}>
               <PiCamera />
@@ -83,6 +84,7 @@ const CameraWebModal: React.FC<CameraWebModalProps> = ({
           <Button
             onClick={onCloseModal}
             className={classnames(styles.button, styles.buttonContainer)}
+            variant="simple"
           >
             <IconContext.Provider value={{ className: styles.icon }}>
               <CgClose />

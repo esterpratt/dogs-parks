@@ -56,20 +56,32 @@ const ChooseEditParkOptionModal: React.FC<ChooseEditParkOptionModalProps> = ({
       >
         <div className={styles.buttonsContainer}>
           {isEditable && (
-            <Button onClick={onEditPark} className={styles.buttonContainer}>
+            <Button
+              onClick={onEditPark}
+              className={styles.buttonContainer}
+              variant="simple"
+            >
               <IconContext.Provider value={{ className: styles.icon }}>
                 <MdOutlineModeEditOutline />
               </IconContext.Provider>
               <span>Update Park Details</span>
             </Button>
           )}
-          <Button onClick={onReportPark} className={styles.buttonContainer}>
+          <Button
+            onClick={onReportPark}
+            className={styles.buttonContainer}
+            variant="simple"
+          >
             <IconContext.Provider value={{ className: styles.icon }}>
               <FaExclamation />
             </IconContext.Provider>
             <span>Report Incorrect Details</span>
           </Button>
-          <Button onClick={onClose} className={styles.buttonContainer}>
+          <Button
+            onClick={onClose}
+            className={styles.buttonContainer}
+            variant="simple"
+          >
             <IconContext.Provider value={{ className: styles.icon }}>
               <CgClose />
             </IconContext.Provider>

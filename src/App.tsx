@@ -27,6 +27,7 @@ import { OrientationProvider } from './context/OrientationContext';
 import { AuthCallback } from './pages/AuthCallback';
 import { userLoader } from './loaders/userLoader';
 import { UpdatePassowrd } from './pages/UpdatePassword';
+import { About } from './pages/About';
 
 const UserDog = lazy(() => import('./pages/UserDog'));
 const UserReviews = lazy(() => import('./pages/UserReviews'));
@@ -50,6 +51,10 @@ const App = () => {
         {
           path: '/auth-callback',
           element: <AuthCallback />,
+        },
+        {
+          path: '/about',
+          element: <About />,
         },
         {
           path: '/update-password',

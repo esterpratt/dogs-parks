@@ -1,16 +1,14 @@
-import { Link } from 'react-router';
-import { FaWalking, FaRegClock } from 'react-icons/fa';
-import classnames from 'classnames';
-import { Location, Park } from '../../types/park';
-import styles from './ParkPopup.module.scss';
-import { fetchParkPrimaryImage } from '../../services/parks';
-import { IconContext } from 'react-icons';
-import { LuTrees } from 'react-icons/lu';
-import { CgClose } from 'react-icons/cg';
-import { FavoriteRibbon } from '../FavoriteRibbon';
-import { useQuery } from '@tanstack/react-query';
-import { fetchFavoriteParks } from '../../services/favorites';
 import { useState } from 'react';
+import { Footprints, Hourglass, X } from 'lucide-react';
+import { Link } from 'react-router';
+import classnames from 'classnames';
+import { useQuery } from '@tanstack/react-query';
+import { Location, Park } from '../../types/park';
+import { fetchParkPrimaryImage } from '../../services/parks';
+import { FavoriteRibbon } from '../FavoriteRibbon';
+import { fetchFavoriteParks } from '../../services/favorites';
+import { Button } from '../Button';
+import styles from './ParkPopup.module.scss';
 
 interface ParkPopupProps {
   activePark: Park | null;
@@ -69,23 +67,21 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
     <div
       className={classnames(
         styles.parkModal,
-        !!activePark && !isClosing && styles.open
+        !!activePark && !isClosing && styles.open,
+        { [styles.noImg]: !image }
       )}
       onTransitionEnd={handleTransitionEnd}
     >
-      <CgClose
-        onClick={() => setIsClosing(true)}
-        size={24}
-        className={styles.close}
-      />
-      <Link to={`/parks/${activePark?.id}`} className={styles.imgContainer}>
-        {image ? (
-          <img src={image} className={styles.img} />
-        ) : (
-          <IconContext.Provider value={{ className: styles.parkIcon }}>
-            <LuTrees />
-          </IconContext.Provider>
-        )}
+      <Button variant="round" className={styles.close}>
+        <X onClick={() => setIsClosing(true)} size={18} />
+      </Button>
+      <Link
+        to={`/parks/${activePark?.id}`}
+        className={classnames(styles.imgContainer, {
+          [styles.hidden]: directions || !image,
+        })}
+      >
+        <img src={image!} className={styles.img} />
         {isFavorite && <FavoriteRibbon className={styles.favorite} />}
       </Link>
       <div className={styles.detailsContainer}>
@@ -99,37 +95,38 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
           </div>
         </div>
         {canGetDirections && (
-          <div className={styles.directionsContainer}>
+          <div className={styles.bottomContainer}>
+            <div className={styles.directionsContainer}>
+              {isLoadingDirections && (
+                <div className={styles.loadingDirections}>
+                  Sniffing the way...
+                </div>
+              )}
+              {!isLoadingDirections && directions && (
+                <div className={styles.directions}>
+                  <div className={styles.distance}>
+                    <Footprints className={styles.icon} size={16} />
+                    <span>{directions?.distance}</span>
+                  </div>
+                  <div className={styles.duration}>
+                    <Hourglass className={styles.icon} size={16} />
+                    <span>{directions?.duration}</span>
+                  </div>
+                </div>
+              )}
+            </div>
             <div className={styles.buttons}>
-              <button
-                className={styles.directionsButton}
+              <Button
+                variant="secondary"
+                className={styles.button}
                 onClick={onClickGetDirections}
               >
                 Lead the way
-              </button>
-              <Link to={`/parks/${activePark?.id}`}>Fetch park page</Link>
+              </Button>
+              <Button className={styles.button}>
+                <Link to={`/parks/${activePark?.id}`}>View park</Link>
+              </Button>
             </div>
-            {isLoadingDirections && (
-              <div className={styles.loadingDirections}>
-                Sniffing the way...
-              </div>
-            )}
-            {!isLoadingDirections && directions && (
-              <div className={styles.directions}>
-                <div className={styles.distance}>
-                  <IconContext.Provider value={{ className: styles.icon }}>
-                    <FaWalking />
-                  </IconContext.Provider>
-                  <span>{directions?.distance}</span>
-                </div>
-                <div className={styles.duration}>
-                  <IconContext.Provider value={{ className: styles.icon }}>
-                    <FaRegClock />
-                  </IconContext.Provider>
-                  <span>{directions?.duration}</span>
-                </div>
-              </div>
-            )}
           </div>
         )}
       </div>

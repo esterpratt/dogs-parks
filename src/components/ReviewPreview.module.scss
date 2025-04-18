@@ -1,80 +1,74 @@
 @use '../variables' as *;
 
 .container {
+  list-style: none;
+  text-decoration: none;
+  background-color: #fff;
+  color: $text;
+  border: none;
+  margin: 0;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: $box-shadow;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  border: 1px solid $grey-bold;
-  border-radius: 12px;
-  background-color: $white;
-  padding: 16px;
-  font-size: 14px;
-  position: relative;
-
-  > :not(:last-child) {
-    border-bottom: 1px solid $text-light;
-  }
-
-  .park-name {
-    border: none;
-  }
+  justify-content: space-between;
+  gap: 16px;
 }
 
-.preview {
-  padding-bottom: 12px;
+.review {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.content {
+  display: flex;
+}
+
+.top,
+.bottom {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
+.bottom {
+  align-items: flex-end;
+  font-size: 12px;
+
+  .details {
+    flex-grow: 1;
+    text-align: left;
+    display: flex;
+
+    .user-name {
+      text-transform: capitalize;
+
+      &::after {
+        content: '•';
+        margin: 0 4px;
+      }
+    }
+  }
+}
+
 .title {
-  font-size: 16px;
-  color: $orange;
-  font-weight: $font-weight-medium;
+  font-size: $second-title-font-size;
   margin-right: 12px;
-}
-
-.time {
-  margin-right: 12px;
-}
-
-.content {
-  display: flex;
-  padding: 0 0 12px;
-}
-
-.footer {
-  display: flex;
-  align-items: center;
-  color: $text-medium;
-}
-
-.name {
-  flex-grow: 1;
-  text-align: left;
-}
-
-.time,
-.name {
-  color: $brown;
 }
 
 .button {
-  color: $green;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .park-name {
-  font-size: 18px;
-  padding-bottom: 8px;
+  font-size: $title-font-size;
+  padding-bottom: 4px;
+  border-bottom: 1px solid $text-light;
 }
 
-.user-name {
-  text-transform: capitalize;
-}
-
-.report-icon {
-  width: 20px;
-  height: 20px;
-  color: $grey-bold;
+:export {
+  red: $red;
 }

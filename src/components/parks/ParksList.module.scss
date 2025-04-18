@@ -1,14 +1,24 @@
 @use '../../variables' as *;
 
-.park {
-  border-bottom: 1px solid $text-light;
+.list {
+  padding: 24px calc(16px + var(--safe-area-inset-right, 0px)) 8px
+    calc(16px + var(--safe-area-inset-left, 0px));
+  display: flex;
+  gap: 36px;
+  width: 100%;
+  max-height: calc($content-max-height - 68px);
+
+  ul {
+    gap: 24px;
+    padding-bottom: 24px;
+  }
 }
 
 .no-results {
   font-size: 18px;
   display: flex;
   flex-direction: column;
-  margin-top: 12px;
+  margin-top: 36px;
   gap: 8px;
 
   span {
@@ -16,7 +26,18 @@
   }
 
   a {
-    color: $green;
+    color: $pink;
     text-decoration: none;
+  }
+}
+
+.search-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+
+  .input-container {
+    flex: 1;
+    margin-right: 12px;
   }
 }

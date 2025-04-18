@@ -21,7 +21,6 @@
   width: 100%;
 
   &:not(:last-child) {
-    border-bottom: 1px solid $text-light;
     border-radius: 0;
   }
 }
@@ -31,6 +30,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  color: $pink;
 }
 
 .icon {

@@ -4,6 +4,7 @@ import styles from './SearchList.module.scss';
 import { Button } from './Button';
 import { SearchListItems } from './SearchListItems';
 import { Loader } from './Loader';
+import { SearchInput, SearchInputProps } from './inputs/SearchInput';
 
 interface SearchListAsyncProps<T> {
   filteredItems: T[];
@@ -17,6 +18,11 @@ interface SearchListAsyncProps<T> {
   noResultsLayout?: string | ReactNode;
   itemKeyfn: (item: T) => string;
   children: (item: T) => ReactNode;
+  renderSearchInput?: ({
+    value,
+    onChangeInput,
+    placeholder,
+  }: SearchInputProps) => ReactNode;
 }
 
 const SearchListAsync = <T,>({
@@ -31,19 +37,26 @@ const SearchListAsync = <T,>({
   containerClassName,
   noResultsLayout = 'No Results',
   children,
+  renderSearchInput,
 }: SearchListAsyncProps<T>) => {
   return (
     <div className={classnames(styles.container, containerClassName)}>
       <div className={styles.inputContainer}>
-        <input
-          value={input}
-          onChange={onChangeInput}
-          placeholder={placeholder}
-          className={styles.input}
-        />
+        {renderSearchInput ? (
+          renderSearchInput({
+            value: input,
+            onChangeInput,
+            placeholder,
+          })
+        ) : (
+          <SearchInput
+            value={input}
+            onChangeInput={onChangeInput}
+            placeholder={placeholder}
+          />
+        )}
         <Button
           disabled={!input.length}
-          variant="green"
           onClick={onSearch}
           className={styles.button}
         >

@@ -5,24 +5,14 @@
 
 .list-view-button {
   position: absolute;
-  bottom: calc(80px + var(--safe-area-inset-bottom, 0px));
+  top: calc(32px + var(--safe-area-inset-bottom, 0px));
   z-index: 600;
-  left: 50%;
-  transform: translate(-50%);
-  font-size: 16px;
+  right: 12px;
 }
 
 .center-button {
   position: absolute;
   z-index: 1000;
-  bottom: 130px;
-  right: 10px;
-  height: 34px;
-  width: 34px;
-  border: 2px solid rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
-  background-color: #fafafa;
-  background-clip: padding-box;
-  color: #4d4d4d;
-  padding: 4px;
+  top: 120px;
+  right: 12px;
 }

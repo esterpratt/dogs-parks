@@ -1,8 +1,9 @@
 import { ChangeEvent, ReactNode, useState } from 'react';
 import classnames from 'classnames';
 import { useDebounce } from '../hooks/useDebounce';
-import styles from './SearchList.module.scss';
 import { SearchListItems } from './SearchListItems';
+import styles from './SearchList.module.scss';
+import { SearchInput, SearchInputProps } from './inputs/SearchInput';
 
 interface SearchListProps<T> {
   items: T[];
@@ -11,6 +12,11 @@ interface SearchListProps<T> {
   noResultsLayout?: string | ReactNode;
   itemKeyfn: (item: T) => string;
   filterFunc: (item: T, searchInput: string) => boolean;
+  renderSearchInput?: ({
+    value,
+    onChangeInput,
+    placeholder,
+  }: SearchInputProps) => ReactNode;
   children: (item: T) => ReactNode;
 }
 
@@ -21,6 +27,7 @@ const SearchList = <T,>({
   itemKeyfn,
   containerClassName,
   noResultsLayout = 'No Results',
+  renderSearchInput,
   children,
 }: SearchListProps<T>) => {
   const [input, setInput] = useState<string>('');
@@ -36,14 +43,19 @@ const SearchList = <T,>({
 
   return (
     <div className={classnames(styles.container, containerClassName)}>
-      <div className={styles.inputContainer}>
-        <input
+      {renderSearchInput ? (
+        renderSearchInput({
+          value: input,
+          onChangeInput,
+          placeholder,
+        })
+      ) : (
+        <SearchInput
           value={input}
-          onChange={onChangeInput}
+          onChangeInput={onChangeInput}
           placeholder={placeholder}
-          className={styles.input}
         />
-      </div>
+      )}
       {!!filteredItems.length && (
         <SearchListItems items={filteredItems} itemKeyfn={itemKeyfn}>
           {children}

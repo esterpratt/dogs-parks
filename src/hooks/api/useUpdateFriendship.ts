@@ -40,6 +40,9 @@ const useUpdateFriendship = ({
             queryKey: ['friends', userId, FRIENDS_KEY.FRIENDS],
           }),
           queryClient.invalidateQueries({
+            queryKey: ['friends', userId, FRIENDS_KEY.PENDING_FRIENDS],
+          }),
+          queryClient.invalidateQueries({
             queryKey: ['friends', userId, FRIENDS_KEY.MY_PENDING_FRIENDS],
           }),
           queryClient.invalidateQueries({
@@ -118,7 +121,7 @@ const useUpdateFriendship = ({
     }
   };
 
-  return { onUpdateFriendship, isPending };
+  return { onUpdateFriendship, isPending, isPendingRemoveFriendship, isPendingMutateFriendship };
 };
 
 export { useUpdateFriendship };

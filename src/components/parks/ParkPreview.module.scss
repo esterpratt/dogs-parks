@@ -1,54 +1,34 @@
 @use '../../variables' as *;
 
-.park {
-  list-style: none;
-  text-decoration: none;
-  background-color: #fff;
-  color: inherit;
-  border: none;
-  margin: 0;
-  padding: 16px;
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
+.no-img {
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  border: 1px solid $text-light;
 }
 
 .details-container {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  width: 65%;
+  justify-content: space-around;
 }
 
 .name,
 .address {
   margin: 0;
   padding: 0;
+  word-break: break-word;
 }
 
 .name {
   font-size: 18px;
-  color: $text;
 }
 
 .address {
-  font-size: 14px;
-  color: $brown;
+  font-size: 12px;
 }
 
-.buttons-container {
-  display: flex;
-  flex-direction: column;
-  color: $green;
-  justify-content: space-between;
-  align-items: end;
-  font-size: 14px;
-}
-
-.map-link {
-  font-size: 14px;
-}
-
-.name {
-  font-weight: $font-weight-medium;
+.view-park-button {
+  text-decoration: none;
+  color: inherit;
 }

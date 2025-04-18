@@ -12,6 +12,34 @@
   background-color: inherit;
   color: inherit;
   padding: 0;
+  transition: all 0.2s ease;
+
+  &.primary {
+    color: $white;
+    background-color: $pink;
+    padding: 12px 24px;
+  }
+
+  &.secondary {
+    color: $pink;
+    background-color: $white;
+    border: 1px solid $pink;
+    padding: 12px 24px;
+  }
+
+  &.simple {
+    color: $pink;
+  }
+
+  &.round {
+    color: $pink;
+    background-color: $white;
+    border-radius: 50%;
+    padding: 12px;
+    width: 48px;
+    height: 48px;
+    box-shadow: $box-shadow;
+  }
 
   &.green {
     color: $white;
@@ -38,6 +66,10 @@
   }
 
   &:disabled {
-    background-color: $grey-bold;
+    background-color: $disabled;
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.95);
   }
 }

@@ -17,7 +17,7 @@ interface PublicProfileProps {
 const FriendRequestButton: React.FC<PublicProfileProps> = ({
   friendId,
   className,
-  buttonVariant = 'green',
+  buttonVariant = 'primary',
 }) => {
   const { userId } = useContext(UserContext);
   const { statusToUpdate, buttonText, isLoading } = useFriendshipStatus({

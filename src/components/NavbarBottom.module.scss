@@ -7,67 +7,87 @@
   width: 100vw;
   height: calc($navbar-height + var(--safe-area-inset-bottom, 0px));
   flex-shrink: 0;
-  background-color: $green;
-  padding: 0 4px var(--safe-area-inset-bottom, 0px);
+  background-color: $blue;
+  padding: 0 12px var(--safe-area-inset-bottom, 0px);
+  border-top: 1px solid $white;
   display: flex;
   align-items: center;
+  box-shadow: 0 -4px 6px -2px rgba(0, 0, 0, 0.1);
 }
 
 .icons-container {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   height: 48px;
 
-  a {
-    height: 100%;
+  a,
+  .more-container {
     text-decoration: none;
-    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .item {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     color: $white;
-    text-align: center;
+    border-radius: 50%;
+    height: 48px;
+    width: 48px;
+  }
 
-    .item {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      position: relative;
-    }
-
-    &:not(:last-child) .item {
-      &::after {
-        content: '';
-        position: absolute;
-        top: 10%;
-        bottom: 10%;
-        right: 0;
-        width: 1px;
-        background-color: $text-light;
-      }
-    }
+  .active .item {
+    background-color: rgba($white, 0.1);
   }
 }
 
-.icons {
-  color: $white;
-  width: 24px;
-  height: 24px;
-}
-
-.dog-icon {
-  color: $green;
+.menu-container {
+  position: absolute;
+  z-index: 3000;
+  width: 50%;
+  border: 1px solid $blue;
+  bottom: 72px;
+  right: 12px;
   background-color: $white;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  padding: 2px;
-  transform: scaleX(-1);
-}
+  box-shadow: $box-shadow;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform-origin: bottom right;
+  transform: scale(0);
+  transition: transform 0.2s ease;
+  padding: 8px 0;
 
-.home {
-  svg {
-    width: 48px;
-    height: 48px;
+  &.open {
+    transform: scale(1);
+  }
+
+  .menu-item {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    width: 100%;
+
+    .inner {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      padding: 18px 24px;
+      gap: 12px;
+      color: $blue;
+
+      &.active {
+        background-color: rgba($blue, 0.1);
+      }
+    }
+  }
+
+  a {
+    text-decoration: none;
   }
 }

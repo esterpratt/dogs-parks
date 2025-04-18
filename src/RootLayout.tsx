@@ -14,7 +14,7 @@ const RootLayout = () => {
 
   return (
     <>
-      <NavbarTop />
+      {/* <NavbarTop /> */}
       <div className={styles.appContent}>
         <Outlet />
         <div

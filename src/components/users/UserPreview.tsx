@@ -1,28 +1,49 @@
 import { useContext, useState } from 'react';
 import { Link } from 'react-router';
-import { PiDog } from 'react-icons/pi';
 import classnames from 'classnames';
+import { useQuery } from '@tanstack/react-query';
+import { Check, Dog as DogIcon, X } from 'lucide-react';
 import { User } from '../../types/user';
 import { Dog } from '../../types/dog';
-import styles from './UserPreview.module.scss';
 import { fetchDogPrimaryImage } from '../../services/dogs';
 import { UserContext } from '../../context/UserContext';
-import { useQuery } from '@tanstack/react-query';
 import { Modal } from '../Modal';
+import { useUpdateFriendship } from '../../hooks/api/useUpdateFriendship';
+import { FRIENDSHIP_STATUS } from '../../types/friendship';
+import { Loader } from '../Loader';
+import { Card } from '../card/Card';
+import styles from './UserPreview.module.scss';
 
 interface UserPreviewProps {
   user: User & { dogs: Dog[] };
   showFriendshipButton?: boolean;
 }
 
-const UserPreview: React.FC<UserPreviewProps> = ({ user }) => {
+const UserPreview: React.FC<UserPreviewProps> = ({
+  user,
+  showFriendshipButton,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { userId } = useContext(UserContext);
+
   const { data: dogImage } = useQuery({
     queryKey: ['dogImage', user.dogs[0].id],
     queryFn: async () => {
       const image = await fetchDogPrimaryImage(user.dogs[0].id);
       return image || null;
+    },
+  });
+
+  const {
+    onUpdateFriendship,
+    isPendingMutateFriendship,
+    isPendingRemoveFriendship,
+  } = useUpdateFriendship({
+    friendId: user.id,
+    userId: userId!,
+    onSuccess: () => {
+      // modalTitle.current = text;
+      // setIsThankYouModalOpen(true);
     },
   });
 
@@ -34,23 +55,70 @@ const UserPreview: React.FC<UserPreviewProps> = ({ user }) => {
     dogNames = `${strNames} & ${user.dogs[user.dogs.length - 1].name}`;
   }
 
-  const ComponentToRender = userId ? Link : 'div';
-
   return (
     <>
-      <ComponentToRender
-        onClick={() => !userId && setIsModalOpen(true)}
-        to={userId ? `/profile/${user.id}` : ''}
-        className={classnames(styles.cardContainer)}
-      >
-        <div className={classnames(styles.dogImage, !dogImage && styles.empty)}>
-          {dogImage ? <img src={dogImage} /> : <PiDog size={64} />}
-        </div>
-        <div className={styles.details}>
-          <span className={styles.dogNames}>{dogNames}</span>
-          <span className={styles.userName}>Owner: {user.name}</span>
-        </div>
-      </ComponentToRender>
+      <Card
+        url={userId ? `/profile/${user.id}` : null}
+        imgCmp={
+          <div className={classnames(styles.img, !dogImage && styles.noImg)}>
+            {dogImage ? (
+              <img src={dogImage} />
+            ) : (
+              <DogIcon size={64} color={styles.green} strokeWidth={1} />
+            )}
+          </div>
+        }
+        detailsCmp={
+          <div className={styles.detailsContainer}>
+            <span className={styles.dogNames}>{dogNames}</span>
+            <span className={styles.userNameContainer}>
+              <span className={styles.userName}>{user.name}'s</span>
+              <span> dog{user.dogs.length > 1 ? 's' : ''}</span>
+            </span>
+          </div>
+        }
+        buttons={
+          showFriendshipButton
+            ? [
+                {
+                  children: (
+                    <>
+                      {isPendingMutateFriendship ? (
+                        <Loader
+                          variant="secondary"
+                          className={styles.loader}
+                          inside
+                        />
+                      ) : (
+                        <>
+                          <Check size={12} />
+                          <span>Accept</span>
+                        </>
+                      )}
+                    </>
+                  ),
+                  onClick: () => onUpdateFriendship(FRIENDSHIP_STATUS.APPROVED),
+                },
+                {
+                  children: (
+                    <>
+                      {isPendingRemoveFriendship ? (
+                        <Loader className={styles.loader} inside />
+                      ) : (
+                        <>
+                          <X size={12} />
+                          <span>Decline</span>
+                        </>
+                      )}
+                    </>
+                  ),
+                  variant: 'secondary',
+                  onClick: () => onUpdateFriendship(FRIENDSHIP_STATUS.REMOVED),
+                },
+              ]
+            : []
+        }
+      />
       <Modal
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}

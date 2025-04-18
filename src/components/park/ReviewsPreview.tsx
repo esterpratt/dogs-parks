@@ -60,6 +60,7 @@ const ReviewsPreview = () => {
           <Button
             onClick={() => setIsAddReviewModalOpen(true)}
             className={styles.addReviewButton}
+            variant="simple"
           >
             Add a review
           </Button>

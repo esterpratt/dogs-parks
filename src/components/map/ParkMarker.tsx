@@ -1,5 +1,5 @@
 import { LeafletMouseEvent } from 'leaflet';
-import parkSVG from '../../assets/park.svg';
+import pawSVG from '../../assets/paw.svg';
 import { Location } from '../../types/park';
 import { CustomMarker } from './CustomMarker';
 
@@ -10,7 +10,7 @@ interface ParkMarkerProps {
 
 const ParkMarker: React.FC<ParkMarkerProps> = ({ location, onClick }) => {
   return (
-    <CustomMarker location={location} onClick={onClick} iconUrl={parkSVG} />
+    <CustomMarker location={location} onClick={onClick} iconUrl={pawSVG} />
   );
 };
 

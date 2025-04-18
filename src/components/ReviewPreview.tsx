@@ -1,27 +1,28 @@
 import { useMemo, useContext, useState } from 'react';
-import { FiAlertCircle } from 'react-icons/fi';
+import { Flag } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
 import { Review } from '../types/review';
 import { Button } from './Button';
 import { getFormattedPastDate } from '../utils/time';
 import { fetchUser } from '../services/users';
-import styles from './ReviewPreview.module.scss';
 import { Stars } from './Stars';
 import { fetchPark } from '../services/parks';
-import { useQuery } from '@tanstack/react-query';
 import { ReviewModalContext } from '../context/ReviewModalContext';
-import { IconContext } from 'react-icons';
 import { ReportModal } from './ReportModal';
+import styles from './ReviewPreview.module.scss';
 
 interface ReviewPreviewProps {
   review: Review;
   userId?: string | null;
   showPark?: boolean;
+  withName?: boolean;
 }
 
 const ReviewPreview: React.FC<ReviewPreviewProps> = ({
   review,
   userId,
   showPark = false,
+  withName = true,
 }) => {
   const { setOpenedReview } = useContext(ReviewModalContext);
   const reviewTime = useMemo<string>(() => {
@@ -43,37 +44,45 @@ const ReviewPreview: React.FC<ReviewPreviewProps> = ({
   return (
     <div className={styles.container}>
       {showPark && <div className={styles.parkName}>{park?.name || 'N/A'}</div>}
-      <div className={styles.preview}>
-        <div className={styles.title}>{review.title}</div>
-        <Stars rank={review.rank} className={styles.stars} />
-      </div>
-      {review.content && <div className={styles.content}>{review.content}</div>}
-      <div className={styles.footer}>
-        <div className={styles.time}>{reviewTime}</div>
-        <div className={styles.name}>
-          by:{' '}
-          <span className={styles.userName}>{user?.name || 'Anonymous'}</span>
+      <div className={styles.review}>
+        <div className={styles.top}>
+          <div className={styles.title}>{review.title}</div>
+          <Stars rank={review.rank} className={styles.stars} />
         </div>
-        {!!userId &&
-          (userId === review.user_id ? (
-            <Button
-              onClick={() => setOpenedReview(review)}
-              className={styles.button}
-            >
-              Update Review
-            </Button>
-          ) : (
-            <>
-              <IconContext.Provider value={{ className: styles.reportIcon }}>
-                <FiAlertCircle onClick={() => setIsReportModalOpen(true)} />
-              </IconContext.Provider>
-              <ReportModal
-                isOpen={isReportModalOpen}
-                onClose={() => setIsReportModalOpen(false)}
-                reviewId={review.id}
-              />
-            </>
-          ))}
+        {review.content && (
+          <div className={styles.content}>{review.content}</div>
+        )}
+        <div className={styles.bottom}>
+          <div className={styles.details}>
+            {withName && (
+              <div className={styles.userName}>{user?.name || 'Anonymous'}</div>
+            )}
+            <div className={styles.time}>{reviewTime}</div>
+          </div>
+          {!!userId &&
+            (userId === review.user_id ? (
+              <Button
+                onClick={() => setOpenedReview(review)}
+                className={styles.button}
+                variant="simple"
+              >
+                Update Review
+              </Button>
+            ) : (
+              <>
+                <Flag
+                  onClick={() => setIsReportModalOpen(true)}
+                  size={18}
+                  color={styles.red}
+                />
+                <ReportModal
+                  isOpen={isReportModalOpen}
+                  onClose={() => setIsReportModalOpen(false)}
+                  reviewId={review.id}
+                />
+              </>
+            ))}
+        </div>
       </div>
     </div>
   );

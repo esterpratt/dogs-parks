@@ -70,10 +70,18 @@ const Camera: React.FC<CustomWebcamProps> = ({
                 <AiOutlineRotateRight onClick={rotateImgRight} />
               </IconContext.Provider>
             </div>
-            <Button className={styles.recaptureButton} onClick={recapture}>
+            <Button
+              className={styles.recaptureButton}
+              onClick={recapture}
+              variant="simple"
+            >
               Recapture
             </Button>
-            <Button className={styles.saveButton} onClick={onClickSaveImage}>
+            <Button
+              className={styles.saveButton}
+              onClick={onClickSaveImage}
+              variant="simple"
+            >
               Save
             </Button>
           </div>
@@ -91,10 +99,14 @@ const Camera: React.FC<CustomWebcamProps> = ({
           </div>
           <div className={styles.captureButtonsContainer}>
             <IconContext.Provider value={{ className: styles.icons }}>
-              <Button onClick={onClose}>
+              <Button onClick={onClose} variant="simple">
                 <CgClose />
               </Button>
-              <Button onClick={captureImg} className={styles.captureButton}>
+              <Button
+                onClick={captureImg}
+                className={styles.captureButton}
+                variant="simple"
+              >
                 <div className={styles.inner} />
               </Button>
               <Button
@@ -104,6 +116,7 @@ const Camera: React.FC<CustomWebcamProps> = ({
                   )
                 }
                 className={styles.rotateButton}
+                variant="simple"
               >
                 <FaArrowsRotate />
               </Button>

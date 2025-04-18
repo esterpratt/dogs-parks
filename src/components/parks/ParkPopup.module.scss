@@ -1,79 +1,97 @@
 @use '../../variables' as *;
 
 .park-modal {
-  height: 28vh;
-  width: 99%;
   position: fixed;
   z-index: 1000;
-  bottom: -300px;
-  left: 2px;
+  bottom: -400px;
+  left: 12px;
+  right: 12px;
   background-color: $white;
-  padding: 36px calc(14px + var(--safe-area-inset-right, 0px)) 14px
-    calc(14px + var(--safe-area-inset-left, 0px));
-  border: 1px solid $grey-bold;
-  border-top-left-radius: 24px;
-  border-top-right-radius: 24px;
+  box-shadow: $box-shadow;
+  border-radius: 24px;
   transition: all 0.3s;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
+
+  &.no-img {
+    bottom: -200px;
+  }
 
   &.open {
-    bottom: calc($navbar-height + var(--safe-area-inset-bottom, 0px));
+    bottom: calc(12px + $navbar-height + var(--safe-area-inset-bottom, 0px));
+  }
+
+  .close {
+    position: absolute;
+    z-index: 100;
+    top: 12px;
+    right: 12px;
+    color: $pink;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+  }
+
+  a {
+    color: inherit;
   }
 }
 
 .img-container {
-  width: 40%;
-  height: 100%;
+  width: 100%;
+  height: 180px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
-  border: 1px solid $grey-bold;
+  border-top-right-radius: 24px;
+  border-top-left-radius: 24px;
   flex-shrink: 0;
+  background-image: linear-gradient(
+    to bottom right,
+    rgba($blue, 0.2),
+    rgba($pink, 0.2)
+  );
+  max-height: 180px;
+  transition: all 0.2s;
+
+  &.hidden {
+    height: 0;
+  }
 }
 
 .img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 12px;
-}
-
-.park-icon {
-  width: 64px;
-  height: 64px;
-  color: $brown;
+  border-top-right-radius: 24px;
+  border-top-left-radius: 24px;
 }
 
 .details-container {
-  height: 100%;
   width: 100%;
-  padding: 2px 0;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
   overflow: hidden;
   text-wrap: nowrap;
+  padding: 24px calc(24px + var(--safe-area-inset-right, 0px)) 24px
+    calc(24px + var(--safe-area-inset-left, 0px));
+  color: $text;
 }
 
 .details {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px;
 }
 
 .name {
   text-decoration: none;
-  padding-bottom: 4px;
-  border-bottom: 1px solid $orange;
-  color: $orange;
-  font-size: 16px;
-  font-weight: $font-weight-medium;
-  display: flex;
-  justify-content: space-between;
-  align-items: end;
+  font-size: $title-font-size;
 
   span {
     display: block;
@@ -85,7 +103,6 @@
 
 .address-container {
   display: flex;
-  flex-direction: column;
   gap: 8px;
 }
 
@@ -95,64 +112,40 @@
   font-size: 14px;
 }
 
-.address {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.directions-container {
+.buttons {
   display: flex;
-  flex-direction: column;
   position: relative;
   flex-grow: 1;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  margin-top: 12px;
 
-  .buttons {
+  .button {
+    font-size: 12px;
+    width: 100%;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-
-    > * {
-      color: $green;
-      text-decoration: none;
-      border: none;
-      font-size: 13px;
-      padding: 0;
-      background-color: inherit;
-      font-weight: $font-weight-light;
-      flex-grow: 1;
-
-      &:first-child {
-        border-right: 1px solid $green;
-        text-align: left;
-      }
-
-      &:last-child {
-        text-align: right;
-      }
-    }
+    gap: 4px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    height: 100%;
   }
 }
 
-.loading-directions {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  margin: 0;
+.directions-container {
+  height: 20px;
 }
 
 .directions {
-  position: absolute;
-  bottom: 0;
-  left: 0;
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 16px;
 }
 
 .icon {
-  color: $orange;
+  color: $pink;
   margin-right: 4px;
 }
 
@@ -161,22 +154,6 @@
   display: flex;
   align-items: center;
   font-size: 14px;
-}
-
-.close {
-  position: absolute;
-  z-index: 100;
-  top: 12px;
-  right: 12px;
-  color: $green;
-  padding: 3px;
-  border: 1px solid $green;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
 }
 
 .favorite {

@@ -5,14 +5,23 @@ import styles from './Button.module.scss';
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
   children: ReactNode;
-  variant?: 'basic' | 'green' | 'orange' | 'nuteral' | 'danger';
+  variant?:
+    | 'primary'
+    | 'secondary'
+    | 'simple'
+    | 'basic'
+    | 'green'
+    | 'orange'
+    | 'nuteral'
+    | 'danger'
+    | 'round';
   className?: string;
 }
 
 const Button: React.FC<ButtonProps> = ({
   onClick,
   children,
-  variant = 'basic',
+  variant = 'primary',
   className,
   ...props
 }) => {

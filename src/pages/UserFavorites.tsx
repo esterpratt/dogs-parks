@@ -56,7 +56,7 @@ const UserFavorites = () => {
       <span className={styles.title}>My Favorite Parks</span>
       <div className={styles.list}>
         {favoriteParks.map((park) => (
-          <ParkPreview park={park} key={park.id} className={styles.park} />
+          <ParkPreview park={park} key={park.id} />
         ))}
       </div>
     </div>

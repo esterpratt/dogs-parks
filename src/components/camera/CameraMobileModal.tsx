@@ -111,6 +111,7 @@ const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
           <Button
             onClick={onClickMobileUploadFile}
             className={classnames(styles.button, styles.buttonContainer)}
+            variant="simple"
           >
             <div className={styles.button}>
               <IconContext.Provider value={{ className: styles.icon }}>
@@ -122,6 +123,7 @@ const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
           <Button
             onClick={() => captureImgMobile()}
             className={classnames(styles.button, styles.buttonContainer)}
+            variant="simple"
           >
             <IconContext.Provider value={{ className: styles.icon }}>
               <PiCamera />
@@ -131,6 +133,7 @@ const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
           <Button
             onClick={onCloseModal}
             className={classnames(styles.button, styles.buttonContainer)}
+            variant="simple"
           >
             <IconContext.Provider value={{ className: styles.icon }}>
               <CgClose />

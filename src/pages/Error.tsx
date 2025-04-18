@@ -21,7 +21,7 @@ const ErrorPage: React.FC = () => {
 
   return (
     <>
-      <NavbarTop />
+      {/* <NavbarTop /> */}
       <div className={styles.content}>
         <span>Uh-oh! {message}</span>
         <span>Toss me more treats and try again!</span>

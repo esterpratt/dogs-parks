@@ -155,7 +155,11 @@ const Park: React.FC = () => {
             <span className={styles.address}>
               {park.address}, {park.city}
             </span>
-            <Button className={styles.mapLink} onClick={onClickMapLink}>
+            <Button
+              className={styles.mapLink}
+              onClick={onClickMapLink}
+              variant="simple"
+            >
               See in map
             </Button>
           </div>
