@@ -62,10 +62,13 @@ const UserFriends = () => {
   ) {
     return (
       <div className={styles.noFriends}>
-        <span className={styles.noFriendsTitle}>No friends yet.</span>
-        <Link to="/users" className={styles.link}>
-          Sniff out some friends!
-        </Link>
+        <div>No friends yet.</div>
+        <div>
+          Sniff out some friends{' '}
+          <Link to="/users" className={styles.link}>
+            here!
+          </Link>
+        </div>
       </div>
     );
   }

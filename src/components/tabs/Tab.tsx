@@ -27,7 +27,7 @@ const Tab: React.FC<TabProps> = ({
         )
       }
     >
-      {text}
+      <div>{text}</div>
     </NavLink>
   );
 };

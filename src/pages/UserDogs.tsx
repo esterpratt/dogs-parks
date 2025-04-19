@@ -1,12 +1,10 @@
-import { lazy, Suspense, useContext, useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { useOutletContext, useRevalidator } from 'react-router';
 import { Link } from 'react-router';
 import { User } from '../types/user';
 import { Dog } from '../types/dog';
 import { DogPreview } from '../components/profile/DogPreview';
 import styles from './UserDogs.module.scss';
-import { FriendRequestButton } from '../components/profile/FriendRequestButton';
-import { UserContext } from '../context/UserContext';
 import { Button } from '../components/Button';
 import { useIsFetching, useMutation } from '@tanstack/react-query';
 import { uploadDogPrimaryImage } from '../services/dogs';
@@ -26,7 +24,6 @@ interface UserDogsProps {
 const UserDogs = () => {
   const { user, dogs, dogImages, isSignedInUser } =
     useOutletContext() as UserDogsProps;
-  const { userId: signedInUserId } = useContext(UserContext);
 
   const [isEditDogsModalOpen, setIsEditDogsModalOpen] = useState(false);
   const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
@@ -71,33 +68,36 @@ const UserDogs = () => {
   return (
     <>
       <div className={styles.container}>
-        {!isSignedInUser && (
-          <div className={styles.prevLinks}>
-            {signedInUserId && (
-              <Link
-                to={`/profile/${signedInUserId}/friends`}
-                className={styles.prevLink}
-              >
-                Go to My Friends
-              </Link>
-            )}
-            <Link to="/users" className={styles.prevLink}>
-              Go to Users
-            </Link>
-          </div>
-        )}
         {!!dogs?.length && (
-          <div className={styles.titleText}>
-            <span className={styles.name}>
-              {isSignedInUser ? 'My' : `${user.name}'s`}
-            </span>{' '}
-            pack
+          <div className={styles.titleContainer}>
+            <div className={styles.titleText}>
+              <span className={styles.name}>
+                {isSignedInUser ? 'My' : `${user.name}'s`}
+              </span>{' '}
+              pack
+            </div>
+            {isSignedInUser && (
+              <Button
+                className={styles.addDogButton}
+                onClick={() => setIsEditDogsModalOpen(true)}
+              >
+                Add dog
+              </Button>
+            )}
           </div>
         )}
         {!dogs?.length && isSignedInUser && (
-          <div>
-            Your dog squad is looking pretty empty! Time to recruit some furry
-            friends!
+          <div className={styles.noDogsTitleContainer}>
+            <span>Your dog squad is looking pretty empty.</span>
+            <span>Time to recruit some furry friends!</span>
+            {isSignedInUser && (
+              <Button
+                className={styles.addDogButton}
+                onClick={() => setIsEditDogsModalOpen(true)}
+              >
+                Add dog
+              </Button>
+            )}
           </div>
         )}
         {!dogs?.length && !isSignedInUser && (
@@ -124,21 +124,6 @@ const UserDogs = () => {
             </Link>
           ))}
         </div>
-        {isSignedInUser && (
-          <Button
-            variant="green"
-            className={styles.addDogButton}
-            onClick={() => setIsEditDogsModalOpen(true)}
-          >
-            Add a dog
-          </Button>
-        )}
-        {!isSignedInUser && signedInUserId && (
-          <FriendRequestButton
-            className={styles.friendRequestButton}
-            friendId={user.id}
-          />
-        )}
       </div>
       <Suspense fallback={null}>
         <EditDogsModal

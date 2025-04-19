@@ -1,12 +1,11 @@
 import classnames from 'classnames';
-import { PiDog } from 'react-icons/pi';
-import { IoMdFemale, IoMdMale } from 'react-icons/io';
+import { DogIcon, Mars, Venus } from 'lucide-react';
 import { Dog, GENDER } from '../../types/dog';
-import styles from './DogPreview.module.scss';
-import { IconContext } from 'react-icons';
 import { getAge } from '../../utils/time';
 import { LOADING } from '../../utils/consts';
 import { Loader } from '../Loader';
+import { Card } from '../card/Card';
+import styles from './DogPreview.module.scss';
 
 interface DogPreviewProps {
   dog: Dog;
@@ -18,38 +17,46 @@ const DogPreview: React.FC<DogPreviewProps> = ({ dog, image }) => {
   const age = !birthday ? null : getAge(birthday);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.imgContainer}>
-        {image ? (
-          image === LOADING ? (
-            <div className={classnames(styles.img, styles.empty)}>
-              <Loader inside />
-            </div>
+    <Card
+      imgCmp={
+        <>
+          {image ? (
+            image === LOADING ? (
+              <div className={classnames(styles.img, styles.empty)}>
+                <Loader inside />
+              </div>
+            ) : (
+              <img src={image} className={styles.img} />
+            )
           ) : (
-            <img src={image} className={styles.img} />
-          )
-        ) : (
-          <div className={classnames(styles.img, styles.empty)}>
-            <PiDog size={64} />
+            <div className={classnames(styles.img, styles.empty)}>
+              <DogIcon size={64} color={styles.green} strokeWidth={1} />
+            </div>
+          )}
+        </>
+      }
+      detailsCmp={
+        <div className={styles.details}>
+          <div className={styles.upper}>
+            <span className={styles.name}>{name}</span>
+            {gender && (
+              <>
+                {gender === GENDER.FEMALE ? (
+                  <Venus size={18} color={styles.green} />
+                ) : (
+                  <Mars size={18} color={styles.green} />
+                )}
+              </>
+            )}
           </div>
-        )}
-      </div>
-      <div className={styles.details}>
-        <div className={styles.upper}>
-          <span className={styles.name}>{name}</span>
-          {gender && (
-            <IconContext.Provider value={{ className: styles.icon }}>
-              {gender === GENDER.FEMALE ? <IoMdFemale /> : <IoMdMale />}
-            </IconContext.Provider>
+          {age !== null && (
+            <div className={styles.age}>
+              {age.diff === 0 ? 'Just Born' : `${age.diff} ${age.unit} old`}
+            </div>
           )}
         </div>
-        {age !== null && (
-          <div className={styles.age}>
-            {age.diff === 0 ? 'Just Born' : `${age.diff} ${age.unit} old`}
-          </div>
-        )}
-      </div>
-    </div>
+      }
+    />
   );
 };
 

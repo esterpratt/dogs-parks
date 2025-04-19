@@ -1,28 +1,16 @@
 @use '../../variables' as *;
 
-.container {
-  height: 122px;
+.img {
   width: 100%;
-  display: flex;
-  gap: 24px;
-  border: 1px solid $grey-bold;
-  background-color: $white;
-  border-radius: 12px;
-  padding: 12px;
+  height: 100%;
 }
 
-.img {
-  width: 96px;
-  height: 96px;
-  border-radius: 12px;
-  object-fit: cover;
-
-  &.empty {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid $text-light;
-  }
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid $text-light;
+  border-radius: 50%;
 }
 
 .details {
@@ -43,12 +31,6 @@
   margin-right: 8px;
 }
 
-.icon {
-  color: $orange;
-  width: 20px;
-  height: 20px;
-}
-
-.age {
-  color: $brown;
+:export {
+  green: $green;
 }

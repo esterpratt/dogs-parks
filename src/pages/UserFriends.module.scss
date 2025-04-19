@@ -9,23 +9,16 @@
 .no-friends {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 24px;
   align-items: center;
-}
-
-.no-friends-title {
-  margin: 24px auto;
+  margin: 24px;
   font-size: 18px;
 }
 
 .link {
   font-size: 18px;
-  margin: 0 auto;
-
-  a {
-    text-decoration: none;
-    color: $green;
-  }
+  text-decoration: none;
+  color: $pink;
 }
 
 .friends-container {
@@ -36,10 +29,11 @@
 
 .title {
   font-size: $title-font-size;
+  height: 34px;
 }
 
 .link {
   text-decoration: none;
   border: none;
-  color: $green;
+  color: $pink;
 }

@@ -167,7 +167,7 @@ const Park: React.FC = () => {
         </div>
       </div>
       <div className={styles.contentContainer}>
-        <ParkTabs parkId={parkId!} className={styles.tabs} />
+        <ParkTabs parkId={parkId!} />
         <Suspense fallback={<Loader />}>
           <div className={styles.outletContainer}>
             <Outlet context={park} />

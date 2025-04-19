@@ -12,6 +12,7 @@ import { useUpdateFriendship } from '../../hooks/api/useUpdateFriendship';
 import { FRIENDSHIP_STATUS } from '../../types/friendship';
 import { Loader } from '../Loader';
 import { Card } from '../card/Card';
+import { getDogNames } from '../../utils/getDogNames';
 import styles from './UserPreview.module.scss';
 
 interface UserPreviewProps {
@@ -47,13 +48,7 @@ const UserPreview: React.FC<UserPreviewProps> = ({
     },
   });
 
-  let dogNames = user.dogs[0].name;
-  if (user.dogs.length > 1) {
-    const names = user.dogs.map((dog) => dog.name);
-    names.pop();
-    const strNames = names.join(', ');
-    dogNames = `${strNames} & ${user.dogs[user.dogs.length - 1].name}`;
-  }
+  const dogNames = getDogNames(user.dogs);
 
   return (
     <>

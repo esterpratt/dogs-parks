@@ -43,10 +43,13 @@ const UserFavorites = () => {
   if (!isLoading && !favoriteParkIds?.length) {
     return (
       <div className={styles.container}>
-        <span className={styles.noFavoritesTitle}>No favorite parks yet.</span>
-        <span className={styles.link}>
-          Sniff out nearby parks <Link to="/">here!</Link>
-        </span>
+        <div>No favorite parks yet.</div>
+        <div>
+          Sniff out nearby parks{' '}
+          <Link to="/" className={styles.link}>
+            here!
+          </Link>
+        </div>
       </div>
     );
   }

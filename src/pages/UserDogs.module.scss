@@ -3,18 +3,7 @@
 .container {
   display: flex;
   flex-direction: column;
-}
-
-.prev-links {
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.prev-link {
-  font-size: 18px;
-  text-decoration: none;
-  color: $green;
+  gap: 18px;
 }
 
 .dogs {
@@ -28,29 +17,36 @@
   }
 }
 
+.title-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 34px;
+
+  .add-dog-button {
+    font-size: 14px;
+    padding: 8px 16px;
+    box-shadow: $box-shadow;
+    border-radius: 8px;
+  }
+}
+
+.no-dogs-title-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+  margin: 24px;
+  font-size: 18px;
+
+  .add-dog-button {
+    font-size: 14px;
+    box-shadow: $box-shadow;
+  }
+}
+
 .title-text {
-  margin-bottom: 18px;
   font-size: $title-font-size;
-}
-
-.add-dog-button {
-  margin: 32px auto;
-}
-
-.plus {
-  color: $green;
-  width: 24px;
-  height: 24px;
-}
-
-.add-dog-text {
-  font-size: 16px;
-  color: $green;
-}
-
-.friend-request-button {
-  margin: 32px 0;
-  text-align: center;
 }
 
 .name {

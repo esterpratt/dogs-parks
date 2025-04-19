@@ -1,43 +1,40 @@
-import { useContext, useRef, useState } from 'react';
-import classnames from 'classnames';
+import { useContext } from 'react';
+import { Check, X } from 'lucide-react';
 import { Button } from '../Button';
 import { useFriendshipStatus } from '../../hooks/api/useFriendshipStatus';
 import { UserContext } from '../../context/UserContext';
 import { useUpdateFriendship } from '../../hooks/api/useUpdateFriendship';
-import { ThankYouModal } from '../ThankYouModal';
+import { FRIENDSHIP_STATUS } from '../../types/friendship';
 import { Loader } from '../Loader';
 import styles from './FriendRequestButton.module.scss';
 
 interface PublicProfileProps {
   friendId: string;
-  className?: string;
-  buttonVariant?: 'green' | 'basic' | 'orange';
+  userName: string;
 }
 
 const FriendRequestButton: React.FC<PublicProfileProps> = ({
   friendId,
-  className,
-  buttonVariant = 'primary',
+  userName,
 }) => {
   const { userId } = useContext(UserContext);
-  const { statusToUpdate, buttonText, isLoading } = useFriendshipStatus({
+  const { status, isFriendIsRequester, isLoading } = useFriendshipStatus({
     friendId,
     userId: userId!,
   });
-  const [isThankYouModalOpen, setIsThankYouModalOpen] = useState(false);
-  const modalTitle = useRef('Friend request sent!');
 
-  const { onUpdateFriendship, isPending } = useUpdateFriendship({
+  const {
+    onUpdateFriendship,
+    isPendingAddFriendship,
+    isPendingMutateFriendship,
+    isPendingRemoveFriendship,
+  } = useUpdateFriendship({
     friendId,
     userId: userId!,
-    onSuccess: (text) => {
-      modalTitle.current = text;
-      setIsThankYouModalOpen(true);
-    },
   });
 
-  const onUpdateFriend = async () => {
-    onUpdateFriendship(statusToUpdate);
+  const onUpdateFriend = async (status: FRIENDSHIP_STATUS) => {
+    onUpdateFriendship(status);
   };
 
   if (isLoading) {
@@ -45,29 +42,105 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
   }
 
   return (
-    <>
-      <div className={className}>
-        <Button
-          className={styles.button}
-          variant={buttonVariant}
-          onClick={onUpdateFriend}
-        >
-          {buttonText}
-          <div
-            className={classnames(styles.loaderContainer, {
-              [styles.shown]: isPending,
-            })}
-          >
-            <Loader className={styles.loader} inside />
+    <div className={styles.container}>
+      {status === FRIENDSHIP_STATUS.APPROVED && (
+        <>
+          <span>
+            <Check size={12} />
+            You are friends
+          </span>
+          <div className={styles.buttons}>
+            <Button
+              variant="secondary"
+              onClick={() => onUpdateFriend(FRIENDSHIP_STATUS.REMOVED)}
+              className={styles.button}
+            >
+              {isPendingRemoveFriendship ? (
+                <Loader inside className={styles.loader} />
+              ) : (
+                <>
+                  <X size={12} />
+                  <span>Unfriend</span>
+                </>
+              )}
+            </Button>
           </div>
-        </Button>
-      </div>
-      <ThankYouModal
-        title={modalTitle.current}
-        open={isThankYouModalOpen}
-        onClose={() => setIsThankYouModalOpen(false)}
-      />
-    </>
+        </>
+      )}
+      {status === FRIENDSHIP_STATUS.PENDING && isFriendIsRequester && (
+        <>
+          <div className={styles.userName}>
+            {userName} wants to be your friend!
+          </div>
+          <div className={styles.buttons}>
+            <Button
+              className={styles.button}
+              variant="primary"
+              onClick={() => onUpdateFriend(FRIENDSHIP_STATUS.APPROVED)}
+            >
+              {isPendingMutateFriendship ? (
+                <Loader inside variant="secondary" className={styles.loader} />
+              ) : (
+                <>
+                  <Check size={12} />
+                  <span>Accept</span>
+                </>
+              )}
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => onUpdateFriend(FRIENDSHIP_STATUS.ABORTED)}
+              className={styles.button}
+            >
+              {isPendingRemoveFriendship ? (
+                <Loader inside className={styles.loader} />
+              ) : (
+                <>
+                  <X size={12} />
+                  <span>Decline</span>
+                </>
+              )}
+            </Button>
+          </div>
+        </>
+      )}
+      {status === FRIENDSHIP_STATUS.PENDING && !isFriendIsRequester && (
+        <>
+          <span>Waiting friend's response</span>
+          <div className={styles.buttons}>
+            <Button
+              variant="secondary"
+              onClick={() => onUpdateFriend(FRIENDSHIP_STATUS.REMOVED)}
+              className={styles.button}
+            >
+              {isPendingRemoveFriendship ? (
+                <Loader inside className={styles.loader} />
+              ) : (
+                <>
+                  <X size={12} />
+                  <span>Remove request</span>
+                </>
+              )}
+            </Button>
+          </div>
+        </>
+      )}
+      {!status && (
+        <div className={styles.buttons}>
+          <Button
+            variant="primary"
+            onClick={() => onUpdateFriend(FRIENDSHIP_STATUS.PENDING)}
+            className={styles.button}
+          >
+            {isPendingAddFriendship ? (
+              <Loader inside variant="secondary" className={styles.loader} />
+            ) : (
+              <span>Add friend</span>
+            )}
+          </Button>
+        </div>
+      )}
+    </div>
   );
 };
 

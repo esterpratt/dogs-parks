@@ -8,50 +8,6 @@ interface GetFriendshipStatusProps {
   myPendingFriendsIds: string[];
 }
 
-const getButtonProps = (
-  friendshipData: {
-    status: FRIENDSHIP_STATUS;
-    isFriendIsRequester?: boolean;
-  } | null
-) => {
-  if (!friendshipData) {
-    return {
-      buttonText: 'Add Friend',
-      statusToUpdate: FRIENDSHIP_STATUS.PENDING,
-    };
-  }
-
-  const { status, isFriendIsRequester } = friendshipData;
-
-  switch (status) {
-    case FRIENDSHIP_STATUS.APPROVED: {
-      return {
-        buttonText: 'Unfriend',
-        statusToUpdate: FRIENDSHIP_STATUS.REMOVED,
-      };
-    }
-    case FRIENDSHIP_STATUS.PENDING: {
-      if (isFriendIsRequester) {
-        return {
-          buttonText: 'Approve Friend Request',
-          statusToUpdate: FRIENDSHIP_STATUS.APPROVED,
-        };
-      } else {
-        return {
-          buttonText: 'Remove Friend Request',
-          statusToUpdate: FRIENDSHIP_STATUS.ABORTED,
-        };
-      }
-    }
-    default: {
-      return {
-        buttonText: 'Add friend',
-        statusToUpdate: FRIENDSHIP_STATUS.PENDING,
-      };
-    }
-  }
-};
-
 const getFriendshipStatus = ({
   friendId,
   friendsIds,
@@ -91,16 +47,15 @@ const useFriendshipStatus = ({
   const { friendsIds, pendingFriendsIds, myPendingFriendsIds, isLoading } =
     useGetUserFriendsIds(userId);
 
-  const { statusToUpdate, buttonText } = getButtonProps(
+  const friendshipStatus = 
     getFriendshipStatus({
       friendId,
       friendsIds,
       pendingFriendsIds,
       myPendingFriendsIds,
     })
-  );
 
-  return { statusToUpdate, buttonText, isLoading };
+  return { status: friendshipStatus?.status, isFriendIsRequester: friendshipStatus?.isFriendIsRequester, isLoading };
 };
 
 export { useFriendshipStatus };

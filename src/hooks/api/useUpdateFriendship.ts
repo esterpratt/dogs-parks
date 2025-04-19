@@ -33,7 +33,7 @@ const useUpdateFriendship = ({
       mutationFn: (friendshipId: string) => deleteFriendship(friendshipId),
       onSuccess: async () => {
         if (onSuccess) {
-          onSuccess('Friend request Removed');
+          onSuccess('Done');
         }
         return Promise.all([
           queryClient.invalidateQueries({
@@ -61,7 +61,7 @@ const useUpdateFriendship = ({
         }),
       onSuccess: async () => {
         if (onSuccess) {
-          onSuccess('Friend request sent!');
+          onSuccess('Friend request was sent!');
         }
         return Promise.all([
           queryClient.invalidateQueries({
@@ -121,7 +121,7 @@ const useUpdateFriendship = ({
     }
   };
 
-  return { onUpdateFriendship, isPending, isPendingRemoveFriendship, isPendingMutateFriendship };
+  return { onUpdateFriendship, isPending, isPendingRemoveFriendship, isPendingMutateFriendship, isPendingAddFriendship };
 };
 
 export { useUpdateFriendship };
