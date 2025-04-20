@@ -21,17 +21,17 @@ import { dogBreeds } from '../../services/dog-breeds';
 import { IconContext } from 'react-icons';
 import { IoTrashOutline } from 'react-icons/io5';
 import DeleteDogModal from './DeleteDogModal';
-import styles from './EditDogsModal.module.scss';
+import styles from './EditDogModal.module.scss';
 import { useOrientationContext } from '../../context/OrientationContext';
 
-interface EditDogsModalProps {
+interface EditDogModalProps {
   isOpen: boolean;
   onClose: () => void;
   onAddDog?: (dogId?: string) => void;
   dog?: Dog;
 }
 
-const EditDogsModal: React.FC<EditDogsModalProps> = ({
+const EditDogModal: React.FC<EditDogModalProps> = ({
   isOpen,
   onClose,
   onAddDog,
@@ -318,4 +318,4 @@ const EditDogsModal: React.FC<EditDogsModalProps> = ({
   );
 };
 
-export default EditDogsModal;
+export default EditDogModal;

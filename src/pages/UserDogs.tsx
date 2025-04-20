@@ -11,7 +11,7 @@ import { uploadDogPrimaryImage } from '../services/dogs';
 import { queryClient } from '../services/react-query';
 import { LOADING } from '../utils/consts';
 
-const EditDogsModal = lazy(() => import('../components/profile/EditDogsModal'));
+const EditDogModal = lazy(() => import('../components/dog/EditDogModal'));
 const CameraModal = lazy(() => import('../components/camera/CameraModal'));
 
 interface UserDogsProps {
@@ -109,7 +109,7 @@ const UserDogs = () => {
         <div className={styles.dogs}>
           {dogs?.map((dog, index) => (
             <Link
-              to={dog.id}
+              to={`/dogs/${dog.id}`}
               key={dog.id}
               state={{ userName: user.name, isSignedInUser }}
             >
@@ -126,7 +126,7 @@ const UserDogs = () => {
         </div>
       </div>
       <Suspense fallback={null}>
-        <EditDogsModal
+        <EditDogModal
           isOpen={isEditDogsModalOpen}
           onClose={() => setIsEditDogsModalOpen(false)}
           onAddDog={onAddDog}

@@ -1,0 +1,14 @@
+@use '../../variables.scss' as *;
+
+.container {
+  background-color: $white;
+  box-shadow: $box-shadow;
+}
+
+.title {
+  height: 42px;
+}
+
+.content {
+  padding: 16px;
+}

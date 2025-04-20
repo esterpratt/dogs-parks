@@ -1,21 +1,26 @@
 import { useState, lazy, Suspense } from 'react';
 import { useLocation, useParams, useRevalidator } from 'react-router';
 import { Link } from 'react-router';
-import { IoMdFemale, IoMdMale } from 'react-icons/io';
+import {
+  Cake,
+  Camera,
+  DogIcon,
+  Mars,
+  MoveLeft,
+  Tag,
+  Venus,
+} from 'lucide-react';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { MdOutlineModeEditOutline } from 'react-icons/md';
-import { PiCameraFill, PiDog } from 'react-icons/pi';
-import classnames from 'classnames';
-import { DogDetails } from '../components/profile/DogDetails';
-import { DogGalleryContainer } from '../components/profile/DogGalleryContainer';
+// import classnames from 'classnames';
+import { DogDetails } from '../components/dog/DogDetails';
+import { DogGalleryContainer } from '../components/dog/DogGalleryContainer';
 import {
   fetchDogPrimaryImage,
   fetchDogs,
   uploadDogPrimaryImage,
 } from '../services/dogs';
-import { IconContext } from 'react-icons';
 import { GENDER } from '../types/dog';
-import styles from './UserDog.module.scss';
-import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '../services/react-query';
 import { AccordionContainer } from '../components/accordion/AccordionContainer';
 import { getAge } from '../utils/time';
@@ -23,9 +28,11 @@ import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import { Loader } from '../components/Loader';
 import { LOADING } from '../utils/consts';
 import { EnlargeImageModal } from '../components/EnlargeImageModal';
+import { Button } from '../components/Button';
+import styles from './UserDog.module.scss';
 
 const CameraModal = lazy(() => import('../components/camera/CameraModal'));
-const EditDogsModal = lazy(() => import('../components/profile/EditDogsModal'));
+const EditDogModal = lazy(() => import('../components/dog/EditDogModal'));
 
 const UserDog = () => {
   const { dogId } = useParams();
@@ -113,20 +120,22 @@ const UserDog = () => {
   return (
     <>
       <div className={styles.container}>
-        <Link to=".." relative="path" className={styles.prevLink}>
-          <span>Back to </span>
-          {isSignedInUser ? (
-            <span>my</span>
-          ) : (
-            <span className={styles.userName}>{userName}'s</span>
-          )}
-          <span> pack</span>
-        </Link>
-        <div className={styles.importantDetails}>
+        <div className={styles.header}>
+          <Link to={`/profile/${dog.owner}/dogs`} className={styles.prevLink}>
+            <MoveLeft size={16} />
+            {isSignedInUser ? (
+              <span>My</span>
+            ) : (
+              <span className={styles.userName}>{userName}'s</span>
+            )}
+            <span> pack</span>
+          </Link>
           <div className={styles.imgContainer}>
             {isUploadingImage || primaryImage === LOADING ? (
-              <div className={classnames(styles.img, styles.empty)}>
-                <Loader inside />
+              <div className={styles.img}>
+                <div className={styles.noImg}>
+                  <Loader inside />
+                </div>
               </div>
             ) : primaryImage ? (
               <img
@@ -135,30 +144,60 @@ const UserDog = () => {
                 className={styles.img}
               />
             ) : (
-              <div className={classnames(styles.img, styles.empty)}>
-                <PiDog size={64} />
+              <div className={styles.img}>
+                <div className={styles.noImg}>
+                  <DogIcon size={64} color={styles.green} strokeWidth={1} />
+                </div>
               </div>
             )}
             {isSignedInUser && (
-              <IconContext.Provider value={{ className: styles.editPhotoIcon }}>
-                <PiCameraFill onClick={() => setIsAddImageModalOpen(true)} />
-              </IconContext.Provider>
+              <Button
+                variant="round"
+                className={styles.editPhotoIcon}
+                onClick={() => setIsAddImageModalOpen(true)}
+              >
+                <Camera size={18} />
+              </Button>
             )}
           </div>
           <div className={styles.details}>
-            <div>
+            <div className={styles.top}>
               <span className={styles.name}>{dog.name}</span>
               {dog.gender && (
-                <IconContext.Provider value={{ className: styles.genderIcon }}>
-                  {dog.gender === GENDER.FEMALE ? <IoMdFemale /> : <IoMdMale />}
-                </IconContext.Provider>
+                <span className={styles.gender}>
+                  {dog.gender === GENDER.FEMALE ? (
+                    <Venus color={styles.green} size={18} />
+                  ) : (
+                    <Mars color={styles.green} size={18} />
+                  )}
+                </span>
+              )}
+              {!isSignedInUser && (
+                <span className={styles.userName}>{userName}'s dog</span>
               )}
             </div>
-            {age !== null && (
-              <div className={styles.age}>
-                {age.diff === 0 ? 'Just Born' : `${age.diff} ${age.unit} old`}
-              </div>
-            )}
+            <div className={styles.bottom}>
+              {age !== null && (
+                <span className={styles.age}>
+                  <Cake color={styles.green} size={14} />
+                  <span>
+                    {age.diff === 0
+                      ? 'Just Born'
+                      : `${age.diff} ${age.unit} old`}
+                  </span>
+                </span>
+              )}
+              {dog.breed && (
+                <span className={styles.breed}>
+                  <Tag color={styles.green} size={14} />
+                  <span>
+                    {dog.breed.toLowerCase() === 'other' && 'Breed: '}
+                    {dog.breed}
+                    {dog.breed.toLowerCase() === 'mixed' && ' Breed'}
+                  </span>
+                </span>
+              )}
+            </div>
           </div>
         </div>
         <AccordionContainer className={styles.accordion}>
@@ -193,7 +232,7 @@ const UserDog = () => {
         setImgSrc={setImageToEnlarge}
       />
       <Suspense fallback={null}>
-        <EditDogsModal
+        <EditDogModal
           dog={dog}
           isOpen={isEditDogsModalOpen}
           onClose={onCloseDogsModal}

@@ -120,10 +120,6 @@ const App = () => {
               element: <UserDogs />,
             },
             {
-              path: 'dogs/:dogId',
-              element: <UserDog />,
-            },
-            {
               path: 'reviews',
               element: <UserReviews />,
             },
@@ -140,6 +136,14 @@ const App = () => {
               element: <UserInfo />,
             },
           ],
+        },
+        {
+          path: 'dogs/:dogId',
+          element: (
+            <PrivateRoute>
+              <UserDog />
+            </PrivateRoute>
+          ),
         },
         {
           path: '/users',
