@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Footprints, Hourglass, X } from 'lucide-react';
+import { Eye, Footprints, Hourglass, Navigation, X } from 'lucide-react';
 import { Link } from 'react-router';
 import classnames from 'classnames';
 import { useQuery } from '@tanstack/react-query';
@@ -121,10 +121,14 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
                 className={styles.button}
                 onClick={onClickGetDirections}
               >
-                Lead the way
+                <Navigation size={12} />
+                <span>Lead the way</span>
               </Button>
               <Button className={styles.button}>
-                <Link to={`/parks/${activePark?.id}`}>View park</Link>
+                <Link to={`/parks/${activePark?.id}`}>
+                  <Eye size={12} />
+                  <span>View park</span>
+                </Link>
               </Button>
             </div>
           </div>

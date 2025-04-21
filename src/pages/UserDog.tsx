@@ -7,12 +7,11 @@ import {
   DogIcon,
   Mars,
   MoveLeft,
+  Pencil,
   Tag,
   Venus,
 } from 'lucide-react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { MdOutlineModeEditOutline } from 'react-icons/md';
-// import classnames from 'classnames';
 import { DogDetails } from '../components/dog/DogDetails';
 import { DogGalleryContainer } from '../components/dog/DogGalleryContainer';
 import {
@@ -22,13 +21,13 @@ import {
 } from '../services/dogs';
 import { GENDER } from '../types/dog';
 import { queryClient } from '../services/react-query';
-import { AccordionContainer } from '../components/accordion/AccordionContainer';
 import { getAge } from '../utils/time';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import { Loader } from '../components/Loader';
 import { LOADING } from '../utils/consts';
 import { EnlargeImageModal } from '../components/EnlargeImageModal';
 import { Button } from '../components/Button';
+import { DogPreferences } from '../components/dog/DogPreferences';
 import styles from './UserDog.module.scss';
 
 const CameraModal = lazy(() => import('../components/camera/CameraModal'));
@@ -160,70 +159,70 @@ const UserDog = () => {
               </Button>
             )}
           </div>
-          <div className={styles.details}>
-            <div className={styles.top}>
-              <span className={styles.name}>{dog.name}</span>
-              {dog.gender && (
-                <span className={styles.gender}>
-                  {dog.gender === GENDER.FEMALE ? (
-                    <Venus color={styles.green} size={18} />
-                  ) : (
-                    <Mars color={styles.green} size={18} />
-                  )}
-                </span>
-              )}
-              {!isSignedInUser && (
-                <span className={styles.userName}>{userName}'s dog</span>
-              )}
-            </div>
-            <div className={styles.bottom}>
-              {age !== null && (
-                <span className={styles.age}>
-                  <Cake color={styles.green} size={14} />
-                  <span>
-                    {age.diff === 0
-                      ? 'Just Born'
-                      : `${age.diff} ${age.unit} old`}
+          <div className={styles.bottom}>
+            <div className={styles.details}>
+              <div>
+                <span className={styles.name}>{dog.name}</span>
+                {dog.gender && (
+                  <span className={styles.gender}>
+                    {dog.gender === GENDER.FEMALE ? (
+                      <Venus color={styles.green} size={18} />
+                    ) : (
+                      <Mars color={styles.green} size={18} />
+                    )}
                   </span>
-                </span>
-              )}
-              {dog.breed && (
-                <span className={styles.breed}>
-                  <Tag color={styles.green} size={14} />
-                  <span>
-                    {dog.breed.toLowerCase() === 'other' && 'Breed: '}
-                    {dog.breed}
-                    {dog.breed.toLowerCase() === 'mixed' && ' Breed'}
+                )}
+                {!isSignedInUser && (
+                  <span className={styles.userName}>{userName}'s dog</span>
+                )}
+              </div>
+              <div>
+                {age !== null && (
+                  <span className={styles.age}>
+                    <Cake color={styles.green} size={14} />
+                    <span>
+                      {age.diff === 0
+                        ? 'Just Born'
+                        : `${age.diff} ${age.unit} old`}
+                    </span>
                   </span>
-                </span>
-              )}
+                )}
+                {dog.breed && (
+                  <span className={styles.breed}>
+                    <Tag color={styles.green} size={14} />
+                    <span>
+                      {dog.breed.toLowerCase() === 'other' && 'Breed: '}
+                      {dog.breed}
+                      {dog.breed.toLowerCase() === 'mixed' && ' Breed'}
+                    </span>
+                  </span>
+                )}
+              </div>
             </div>
+            <Button
+              variant="secondary"
+              onClick={onEditDog}
+              className={styles.editButton}
+            >
+              <Pencil size={18} />
+            </Button>
           </div>
         </div>
-        <AccordionContainer className={styles.accordion}>
-          <AccordionContainer.TitleWithIcon
-            title="Dog Details"
-            showIcon={isSignedInUser}
-            Icon={MdOutlineModeEditOutline}
-            onClickIcon={onEditDog}
-            iconSize={18}
+        <div className={styles.content}>
+          <DogDetails
+            isSignedInUser={isSignedInUser}
+            dog={dog}
+            userName={userName}
+            onEditDog={onEditDog}
           />
-          <AccordionContainer.Content className={styles.contentContainer}>
-            <DogDetails
-              isSignedInUser={isSignedInUser}
-              className={styles.content}
-              dog={dog}
-              userName={userName}
-              onEditDog={onEditDog}
-            />
-          </AccordionContainer.Content>
-        </AccordionContainer>
-        <DogGalleryContainer
-          dog={dog}
-          isSignedInUser={isSignedInUser}
-          className={styles.accordion}
-          contentClassName={styles.contentContainer}
-        />
+          <DogPreferences
+            dog={dog}
+            isSignedInUser={isSignedInUser}
+            userName={userName}
+            onEditDog={onEditDog}
+          />
+          <DogGalleryContainer dog={dog} isSignedInUser={isSignedInUser} />
+        </div>
       </div>
       <EnlargeImageModal
         isOpen={isEnlargedImageModalOpen}

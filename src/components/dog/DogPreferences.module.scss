@@ -1,0 +1,70 @@
+@use '../../variables' as *;
+
+.user-name {
+  text-transform: capitalize;
+}
+
+.title {
+  color: $white;
+  font-size: $second-title-font-size;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  color: $text;
+  width: 100%;
+
+  .button {
+    border-radius: 8px;
+    margin: 8px auto;
+    font-size: 14px;
+  }
+
+  .empty {
+    margin: auto;
+  }
+}
+
+.likes,
+.dislikes {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.likes {
+  .items > * {
+    background-color: rgba($blue, 0.8);
+  }
+}
+
+.dislikes {
+  .items > * {
+    background-color: $red;
+  }
+}
+
+.items {
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+  flex-wrap: wrap;
+
+  > * {
+    padding: 8px;
+    border-radius: 4px;
+    color: $white;
+  }
+}
+
+:export {
+  blue: rgba($blue, 0.8);
+  red: $red;
+}

@@ -31,4 +31,18 @@
 .view-park-button {
   text-decoration: none;
   color: inherit;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.map-link {
+  line-height: 1;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }

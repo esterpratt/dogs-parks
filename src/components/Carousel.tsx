@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import Slider from 'react-slick';
+import { Plus } from 'lucide-react';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { FaPlus } from 'react-icons/fa';
-import classnames from 'classnames';
-import { IconContext } from 'react-icons';
 import { Modal } from './Modal';
 import { Button } from './Button';
 import { useOrientationContext } from '../context/OrientationContext';
@@ -52,7 +50,7 @@ const Carousel: React.FC<CarouselProps> = ({
   return (
     <>
       <div className="slider-container">
-        <Slider {...settings}>
+        <Slider {...settings} className={styles.container}>
           {images.map((img) => (
             <img
               className={styles.image}
@@ -62,16 +60,15 @@ const Carousel: React.FC<CarouselProps> = ({
             />
           ))}
           {addImage && (
-            <div
-              className={classnames(styles.image, styles.addImage)}
-              onClick={addImage}
-            >
-              <div className={styles.plusContent}>
-                <IconContext.Provider value={{ className: styles.plusIcon }}>
-                  <FaPlus />
-                </IconContext.Provider>
+            <div className={styles.buttonContainer}>
+              <Button
+                onClick={addImage}
+                variant="secondary"
+                className={styles.addImage}
+              >
+                <Plus size={48} className={styles.plus} />
                 <span>Add photo</span>
-              </div>
+              </Button>
             </div>
           )}
         </Slider>

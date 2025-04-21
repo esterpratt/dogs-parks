@@ -37,6 +37,13 @@ a {
   letter-spacing: inherit;
   font-size: inherit;
   line-height: inherit;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-focus-ring-color: transparent;
+
+  &:focus {
+    outline: none;
+  }
 }
 
 input,
@@ -57,7 +64,7 @@ textarea {
     &.slick-prev,
     &.slick-next {
       &::before {
-        color: $text;
+        color: $pink;
         content: '›';
         font-family: inherit;
         font-size: 32px;
@@ -83,6 +90,10 @@ textarea {
       padding-bottom: 6px;
       right: -6px;
     }
+  }
+
+  .slick-list {
+    padding: 12px 0;
   }
 
   .slick-track {

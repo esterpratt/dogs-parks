@@ -1,15 +1,12 @@
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { IconContext } from 'react-icons';
-import { MdLogout, MdOutlineModeEditOutline } from 'react-icons/md';
-import { IoTrashOutline } from 'react-icons/io5';
-import classnames from 'classnames';
 import { UserContext } from '../context/UserContext';
-import styles from './UserInfo.module.scss';
+import { LogOut, Pencil, Trash2 } from 'lucide-react';
 import { Modal } from '../components/Modal';
 import { Button } from '../components/Button';
 import { EditUserModal } from '../components/profile/EditUserModal';
 import { useOrientationContext } from '../context/OrientationContext';
+import styles from './UserInfo.module.scss';
 
 const UserInfo = () => {
   const { userLogout, userDeletion } = useContext(UserContext);
@@ -39,33 +36,28 @@ const UserInfo = () => {
   return (
     <>
       <div className={styles.container}>
-        <div className={styles.rowsWrapper}>
-          <div onClick={onEditUser} className={styles.row}>
-            <IconContext.Provider value={{ className: styles.icon }}>
-              <MdOutlineModeEditOutline />
-            </IconContext.Provider>
-            <span>Edit Details</span>
-          </div>
-          <div onClick={logout} className={styles.row}>
-            <IconContext.Provider value={{ className: styles.icon }}>
-              <MdLogout />
-            </IconContext.Provider>
-            <span>Logout</span>
-          </div>
-        </div>
-        <div className={styles.rowsWrapper}>
-          <div
-            onClick={() => setIsDeleteUserModalOpen(true)}
-            className={styles.row}
-          >
-            <IconContext.Provider
-              value={{ className: classnames(styles.icon, styles.deleteIcon) }}
-            >
-              <IoTrashOutline />
-            </IconContext.Provider>
-            <span>Delete My User Profile</span>
-          </div>
-        </div>
+        <Button onClick={onEditUser} className={styles.button}>
+          <Pencil size={24} />
+          <span>Edit details</span>
+        </Button>
+        <Button
+          onClick={logout}
+          className={styles.button}
+          variant="secondary"
+          color={styles.blue}
+        >
+          <LogOut size={24} />
+          <span>Logout</span>
+        </Button>
+        <Button
+          variant="secondary"
+          color={styles.red}
+          onClick={() => setIsDeleteUserModalOpen(true)}
+          className={styles.button}
+        >
+          <Trash2 size={24} />
+          <span>Delete my profile</span>
+        </Button>
       </div>
       <EditUserModal isOpen={isEditUserModalOpen} onClose={onCloseUserModal} />
       <Modal

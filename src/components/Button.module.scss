@@ -16,19 +16,19 @@
 
   &.primary {
     color: $white;
-    background-color: $pink;
+    background-color: var(--color, $pink);
     padding: 12px 24px;
   }
 
   &.secondary {
-    color: $pink;
+    color: var(--color, $pink);
     background-color: $white;
-    border: 1px solid $pink;
+    border: 1px solid var(--color, $pink);
     padding: 12px 24px;
   }
 
   &.simple {
-    color: $pink;
+    color: var(--color, $pink);
   }
 
   &.round {

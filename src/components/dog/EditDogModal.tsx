@@ -255,6 +255,7 @@ const EditDogModal: React.FC<EditDogModalProps> = ({
               onChange={onInputChange}
               name="temperament"
               label="Temperament"
+              maxLength={50}
             />
             <RadioInputs
               value={dogData?.energy || ''}
@@ -272,6 +273,7 @@ const EditDogModal: React.FC<EditDogModalProps> = ({
               onChange={onInputChange}
               name="possessive"
               label="Possessive"
+              maxLength={50}
             />
             <ControlledInput
               value={dogData?.likes || ''}

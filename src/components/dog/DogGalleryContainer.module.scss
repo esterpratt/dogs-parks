@@ -1,9 +1,24 @@
 @use '../../variables' as *;
 
-.add-photo-button {
+.title {
+  color: $white;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+
+  .button {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 4px;
+    height: 36px;
+    width: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
-.plus {
-  color: $green;
+:export {
+  white: $white;
 }

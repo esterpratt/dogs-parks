@@ -1,5 +1,6 @@
 import React, { MouseEvent } from 'react';
 import { Link, useNavigate } from 'react-router';
+import { Eye, Navigation } from 'lucide-react';
 import { Park } from '../../types/park';
 import { ParkImage } from '../park/ParkImage';
 import { Card } from '../card/Card';
@@ -42,12 +43,18 @@ const ParkPreview: React.FC<ParkPreviewProps> = ({ park, className }) => {
         {
           children: (
             <Link to={`/parks/${park.id}`} className={styles.viewParkButton}>
-              View park
+              <Eye size={12} />
+              <span>View park</span>
             </Link>
           ),
         },
         {
-          children: 'See in map',
+          children: (
+            <>
+              <Navigation size={12} />
+              <span>'See in map'</span>
+            </>
+          ),
           onClick: onClickMapLink,
           className: styles.mapLink,
           variant: 'secondary',
@@ -55,37 +62,6 @@ const ParkPreview: React.FC<ParkPreviewProps> = ({ park, className }) => {
       ]}
       className={className}
     />
-    // <div className={styles.container}>
-    //   <Link
-    //     to={`/parks/${park.id}`}
-    //     className={classnames(styles.park, className)}
-    //   >
-    //     <ParkImage
-    //       parkId={park.id}
-    //       alt={park.name}
-    //       className={styles.img}
-    //       noImgClassName={styles.noImg}
-    //       iconSize={48}
-    //       lazy
-    //     />
-    // <div className={styles.detailsContainer}>
-    //   <span className={styles.name}>{park.name}</span>
-    //   <span className={styles.address}>
-    //     {park.address}, {park.city}
-    //   </span>
-    // </div>
-    //   </Link>
-    //   <div className={styles.buttonsContainer}>
-    //     <Button className={styles.viewParkButton}>View park</Button>
-    //     <Button
-    //       variant="secondary"
-    //       onClick={onClickMapLink}
-    //       className={styles.mapLink}
-    //     >
-    //       See in map
-    //     </Button>
-    //   </div>
-    // </div>
   );
 };
 

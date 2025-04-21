@@ -16,6 +16,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     | 'danger'
     | 'round';
   className?: string;
+  color?: string;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -23,12 +24,14 @@ const Button: React.FC<ButtonProps> = ({
   children,
   variant = 'primary',
   className,
+  color = '',
   ...props
 }) => {
   return (
     <button
       onClick={onClick}
       className={classnames(styles.button, styles[variant], className)}
+      style={{ '--color': color }}
       {...props}
     >
       {children}

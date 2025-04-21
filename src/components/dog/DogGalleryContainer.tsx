@@ -1,30 +1,28 @@
 import { useState, lazy, Suspense } from 'react';
-import { FaPlus } from 'react-icons/fa';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { Plus } from 'lucide-react';
 import { Dog } from '../../types/dog';
 import {
   deleteDogImage,
   fetchAllDogImages,
   uploadDogImage,
 } from '../../services/dogs';
-import { AccordionContainer } from '../accordion/AccordionContainer';
 import { DogGallery } from './DogGallery';
 import { queryClient } from '../../services/react-query';
+import { Section } from '../section/Section';
+import { Button } from '../Button';
+import styles from './DogGalleryContainer.module.scss';
 
 const CameraModal = lazy(() => import('../camera/CameraModal'));
 
 interface DogGalleryContainerProps {
   dog: Dog;
   isSignedInUser: boolean;
-  className?: string;
-  contentClassName?: string;
 }
 
 const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
   dog,
   isSignedInUser,
-  className,
-  contentClassName,
 }) => {
   const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
 
@@ -70,14 +68,18 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
 
   return (
     <>
-      <AccordionContainer className={className}>
-        <AccordionContainer.TitleWithIcon
-          title="Gallery"
-          showIcon={isSignedInUser && (dogImages ?? []).length < 8}
-          Icon={FaPlus}
-          onClickIcon={onClickAddPhoto}
-        />
-        <AccordionContainer.Content className={contentClassName}>
+      <Section
+        titleCmp={
+          <div className={styles.title}>
+            <span>Gallery</span>
+            {isSignedInUser && (dogImages ?? []).length < 8 && (
+              <Button className={styles.button} onClick={onClickAddPhoto}>
+                <Plus color={styles.white} size={24} />
+              </Button>
+            )}
+          </div>
+        }
+        contentCmp={
           <DogGallery
             images={dogImages ?? []}
             dog={dog}
@@ -85,8 +87,8 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
             openCameraModal={openCameraModal}
             removeImage={isSignedInUser ? removeImage : null}
           />
-        </AccordionContainer.Content>
-      </AccordionContainer>
+        }
+      />
       <Suspense fallback={null}>
         <CameraModal
           open={isAddImageModalOpen}

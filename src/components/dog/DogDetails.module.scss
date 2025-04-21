@@ -1,27 +1,88 @@
 @use '../../variables' as *;
 
-.details {
-  td {
-    padding-top: 4px;
-    padding-right: 16px;
-    vertical-align: top;
-    font-weight: inherit;
+.user-name {
+  text-transform: capitalize;
+}
 
-    div {
-      max-height: 272px;
-      overflow: hidden;
+.title {
+  color: $white;
+  font-size: $second-title-font-size;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  color: $text;
+  width: 100%;
+
+  .button {
+    border-radius: 8px;
+    margin: 8px auto;
+    font-size: 14px;
+  }
+
+  .empty {
+    margin: auto;
+  }
+}
+
+.characters-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.character {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.text-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  :first-child {
+    font-size: 14px;
+
+    &::first-letter {
+      text-transform: capitalize;
     }
+  }
 
-    &:first-child {
-      width: 35%;
-    }
+  :last-child {
+    font-size: 12px;
 
-    &:last-child {
-      color: rgba($text, 0.6);
+    &::first-letter {
+      text-transform: capitalize;
     }
   }
 }
 
-.user-name {
-  text-transform: capitalize;
+.description {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.description-title {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  font-size: 14px;
+}
+
+.description-text {
+  font-size: 12px;
+}
+
+:export {
+  green: $green;
 }
