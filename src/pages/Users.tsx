@@ -69,6 +69,7 @@ const Users = () => {
         onSearch={onSearch}
         noResultsLayout={NoResultsLayout}
         containerClassName={styles.list}
+        inputContainerClassName={styles.inputContainer}
       >
         {(user) => <UserPreview user={user} showFriendshipButton={false} />}
       </SearchListAsync>

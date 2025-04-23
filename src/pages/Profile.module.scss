@@ -4,12 +4,7 @@
   position: relative;
   height: 268px;
   flex-shrink: 0;
-  background-image: linear-gradient(
-      to bottom right,
-      rgba($blue, 0.5),
-      rgba($pink, 0.5)
-    ),
-    linear-gradient($white, $white);
+  background-image: $linear-gradient;
   background-repeat: no-repeat;
   background-size: 100% 108px, 100% 160px;
   background-position: top, bottom;
@@ -17,6 +12,7 @@
 
   &.small {
     height: 220px;
+    background-size: 100% 108px, 100% 108px;
   }
 }
 

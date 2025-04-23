@@ -1,6 +1,5 @@
 import { useState, lazy, Suspense } from 'react';
-import { useLocation, useParams, useRevalidator } from 'react-router';
-import { Link } from 'react-router';
+import { useLocation, useParams, useRevalidator, Link } from 'react-router';
 import {
   Cake,
   Camera,
@@ -12,6 +11,7 @@ import {
   Venus,
 } from 'lucide-react';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import classnames from 'classnames';
 import { DogDetails } from '../components/dog/DogDetails';
 import { DogGalleryContainer } from '../components/dog/DogGalleryContainer';
 import {
@@ -159,7 +159,11 @@ const UserDog = () => {
               </Button>
             )}
           </div>
-          <div className={styles.bottom}>
+          <div
+            className={classnames(styles.bottom, {
+              [styles.center]: !isSignedInUser,
+            })}
+          >
             <div className={styles.details}>
               <div>
                 <span className={styles.name}>{dog.name}</span>
@@ -199,13 +203,15 @@ const UserDog = () => {
                 )}
               </div>
             </div>
-            <Button
-              variant="secondary"
-              onClick={onEditDog}
-              className={styles.editButton}
-            >
-              <Pencil size={18} />
-            </Button>
+            {isSignedInUser && (
+              <Button
+                variant="secondary"
+                onClick={onEditDog}
+                className={styles.editButton}
+              >
+                <Pencil size={18} />
+              </Button>
+            )}
           </div>
         </div>
         <div className={styles.content}>

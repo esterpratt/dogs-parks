@@ -50,11 +50,7 @@
   border-top-right-radius: 24px;
   border-top-left-radius: 24px;
   flex-shrink: 0;
-  background-image: linear-gradient(
-    to bottom right,
-    rgba($blue, 0.2),
-    rgba($pink, 0.2)
-  );
+  background-image: $linear-gradient;
   max-height: 180px;
   transition: all 0.2s;
 

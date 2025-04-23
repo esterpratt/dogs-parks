@@ -15,6 +15,7 @@ interface SearchListAsyncProps<T> {
   showNoResults: boolean;
   placeholder?: string;
   containerClassName?: string;
+  inputContainerClassName?: string;
   noResultsLayout?: string | ReactNode;
   itemKeyfn: (item: T) => string;
   children: (item: T) => ReactNode;
@@ -35,13 +36,16 @@ const SearchListAsync = <T,>({
   placeholder = 'Search',
   itemKeyfn,
   containerClassName,
+  inputContainerClassName,
   noResultsLayout = 'No Results',
   children,
   renderSearchInput,
 }: SearchListAsyncProps<T>) => {
   return (
     <div className={classnames(styles.container, containerClassName)}>
-      <div className={styles.inputContainer}>
+      <div
+        className={classnames(styles.inputContainer, inputContainerClassName)}
+      >
         {renderSearchInput ? (
           renderSearchInput({
             value: input,

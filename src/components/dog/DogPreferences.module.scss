@@ -41,7 +41,7 @@
 
 .likes {
   .items > * {
-    background-color: rgba($blue, 0.8);
+    background-color: $blue;
   }
 }
 
@@ -65,6 +65,6 @@
 }
 
 :export {
-  blue: rgba($blue, 0.8);
+  blue: $blue;
   red: $red;
 }

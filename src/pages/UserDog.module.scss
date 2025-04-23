@@ -18,14 +18,10 @@
   position: relative;
   height: 268px;
   flex-shrink: 0;
-  background-image: linear-gradient(
-      to bottom right,
-      rgba($blue, 0.5),
-      rgba($pink, 0.5)
-    ),
-    linear-gradient($white, $white);
+  background-image: $linear-gradient;
   background-repeat: no-repeat;
   background-size: 100% 116px, 100% 152px;
+  background-repeat: no-repeat;
   background-position: top, bottom;
   border-bottom: 1px solid $text-light;
 
@@ -104,6 +100,14 @@
   width: 100%;
   justify-content: space-between;
   align-items: flex-end;
+
+  &.center {
+    justify-content: center;
+
+    .details {
+      align-items: center;
+    }
+  }
 
   .edit-button {
     padding: 8px;
