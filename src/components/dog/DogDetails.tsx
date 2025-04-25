@@ -6,6 +6,7 @@ import {
   ShieldX,
   Thermometer,
 } from 'lucide-react';
+import classnames from 'classnames';
 import { Dog } from '../../types/dog';
 import { Button } from '../Button';
 import { Section } from '../section/Section';
@@ -61,7 +62,11 @@ const DogDetails: React.FC<DogDeatilsProps> = ({
         </div>
       }
       contentCmp={
-        <div className={styles.content}>
+        <div
+          className={classnames(styles.content, {
+            [styles.withData]: !!existedData.length,
+          })}
+        >
           {!existedData.length && (
             <>
               {isSignedInUser ? (

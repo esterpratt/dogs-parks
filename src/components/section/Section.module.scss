@@ -7,8 +7,10 @@
 }
 
 .title {
-  height: 48px;
-  background-color: $orange;
+  height: 36px;
+  background-color: rgba($blue, 0.5);
+  font-size: 16px;
+  color: $white;
   padding: 6px 6px 6px 12px;
   display: flex;
   align-items: center;
@@ -19,6 +21,7 @@
 .content {
   padding: 16px 12px;
   color: $text;
-  min-height: 72px;
+  min-height: 108px;
   display: flex;
+  align-items: center;
 }

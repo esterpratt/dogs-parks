@@ -8,6 +8,8 @@ import { Loader } from '../components/Loader';
 import { Friendship } from '../types/friendship';
 import { getDogNames } from '../utils/getDogNames';
 import { FriendRequestButton } from '../components/profile/FriendRequestButton';
+import { Header } from '../components/Header';
+import { HeaderImage } from '../components/HeaderImage';
 import styles from './Profile.module.scss';
 
 const Profile: React.FC = () => {
@@ -52,29 +54,27 @@ const Profile: React.FC = () => {
 
   return (
     <>
-      <div
-        className={classnames(styles.header, {
-          [styles.small]: isSignedInUser || !signedInUser,
-        })}
-      >
-        {!isSignedInUser && (
-          <div className={styles.prevLinks}>
-            <Link to="/users" className={styles.prevLink}>
-              <MoveLeft size={16} />
-              <span>Users</span>
-            </Link>
-            {!!signedInUser && (
-              <Link
-                to={`/profile/${signedInUser.id}/friends`}
-                className={styles.prevLink}
-              >
-                <span>My friends</span>
-                <MoveRight size={16} />
+      <Header
+        containerClassName={
+          isSignedInUser || !signedInUser ? styles.small : undefined
+        }
+        prevLinksCmp={
+          !isSignedInUser ? (
+            <>
+              <Link to="/users">
+                <MoveLeft size={16} />
+                <span>Users</span>
               </Link>
-            )}
-          </div>
-        )}
-        <div className={styles.imgsContainer}>
+              {!!signedInUser && (
+                <Link to={`/profile/${signedInUser.id}/friends`}>
+                  <span>My friends</span>
+                  <MoveRight size={16} />
+                </Link>
+              )}
+            </>
+          ) : null
+        }
+        imgCmp={
           <Suspense fallback={null}>
             <Await resolve={dogImages}>
               {(dogImages) => {
@@ -87,44 +87,36 @@ const Profile: React.FC = () => {
                 return dogImagesToDisplay.map(
                   (dogImage: string, index: number) => {
                     return (
-                      <div
+                      <HeaderImage
                         key={index}
+                        imgSrc={dogImage}
                         className={styles.img}
                         style={{ zIndex: dogImagesToDisplay.length - index }}
-                      >
-                        {dogImage ? (
-                          <img src={dogImage} />
-                        ) : (
-                          <div className={styles.noImg}>
-                            <DogIcon
-                              size={64}
-                              color={styles.green}
-                              strokeWidth={1}
-                            />
-                          </div>
-                        )}
-                      </div>
+                        NoImgIcon={DogIcon}
+                        size={100}
+                      />
                     );
                   }
                 );
               }}
             </Await>
           </Suspense>
-        </div>
-        {isSignedInUser && (
-          <div className={styles.welcome}>Paws up, {user.name}!</div>
-        )}
-        {!!signedInUser && !isSignedInUser && (
-          <div className={styles.title}>
-            <div className={styles.text}>
-              <span>Meet </span>
-              <span className={styles.userName}>{user.name}</span>
-              <span>'s Pack: {getDogNames(dogs)}</span>
+        }
+        bottomCmp={
+          isSignedInUser ? (
+            <div className={styles.welcome}>Paws up, {user.name}!</div>
+          ) : !!signedInUser && !isSignedInUser ? (
+            <div className={styles.title}>
+              <div className={styles.text}>
+                <span>Meet </span>
+                <span className={styles.userName}>{user.name}</span>
+                <span>'s Pack: {getDogNames(dogs)}</span>
+              </div>
+              <FriendRequestButton friendId={user.id} userName={user.name} />
             </div>
-            <FriendRequestButton friendId={user.id} userName={user.name} />
-          </div>
-        )}
-      </div>
+          ) : null
+        }
+      />
       {isSignedInUser && <ProfileTabs />}
       <Suspense fallback={<Loader />}>
         <Await resolve={dogImages}>

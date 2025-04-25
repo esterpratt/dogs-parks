@@ -1,12 +1,13 @@
 import { useParams } from 'react-router';
-import styles from './UserFavorites.module.scss';
-import { ParkPreview } from '../components/parks/ParkPreview';
 import { Link } from 'react-router';
-import { fetchParksJSON } from '../services/parks';
 import { useQuery } from '@tanstack/react-query';
+import classnames from 'classnames';
+import { ParkPreview } from '../components/parks/ParkPreview';
+import { fetchParksJSON } from '../services/parks';
 import { fetchUserFavorites } from '../services/favorites';
 import { Loader } from '../components/Loader';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
+import styles from './UserFavorites.module.scss';
 
 const UserFavorites = () => {
   const { id: userId } = useParams();
@@ -42,7 +43,7 @@ const UserFavorites = () => {
 
   if (!isLoading && !favoriteParkIds?.length) {
     return (
-      <div className={styles.container}>
+      <div className={classnames(styles.container, styles.empty)}>
         <div>No favorite parks yet.</div>
         <div>
           Sniff out nearby parks{' '}

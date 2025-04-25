@@ -48,6 +48,7 @@ const NavbarBottom = () => {
             </NavLink>
             <NavLink
               to="/parks"
+              end
               className={({ isActive }) =>
                 isActive ? `${[styles.active]}` : ''
               }
@@ -57,7 +58,7 @@ const NavbarBottom = () => {
               </div>
             </NavLink>
             <NavLink
-              to={userId ? `/profile/${userId}/dogs` : '/login'}
+              to={userId ? `/profile/${userId}` : '/login'}
               className={({ isActive }) =>
                 isActive ? `${[styles.active]}` : ''
               }

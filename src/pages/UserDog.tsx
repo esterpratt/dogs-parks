@@ -2,7 +2,6 @@ import { useState, lazy, Suspense } from 'react';
 import { useLocation, useParams, useRevalidator, Link } from 'react-router';
 import {
   Cake,
-  Camera,
   DogIcon,
   Mars,
   MoveLeft,
@@ -28,6 +27,8 @@ import { LOADING } from '../utils/consts';
 import { EnlargeImageModal } from '../components/EnlargeImageModal';
 import { Button } from '../components/Button';
 import { DogPreferences } from '../components/dog/DogPreferences';
+import { Header } from '../components/Header';
+import { HeaderImage } from '../components/HeaderImage';
 import styles from './UserDog.module.scss';
 
 const CameraModal = lazy(() => import('../components/camera/CameraModal'));
@@ -119,101 +120,84 @@ const UserDog = () => {
   return (
     <>
       <div className={styles.container}>
-        <div className={styles.header}>
-          <Link to={`/profile/${dog.owner}/dogs`} className={styles.prevLink}>
-            <MoveLeft size={16} />
-            {isSignedInUser ? (
-              <span>My</span>
-            ) : (
-              <span className={styles.userName}>{userName}'s</span>
-            )}
-            <span> pack</span>
-          </Link>
-          <div className={styles.imgContainer}>
-            {isUploadingImage || primaryImage === LOADING ? (
-              <div className={styles.img}>
-                <div className={styles.noImg}>
-                  <Loader inside />
+        <Header
+          prevLinksCmp={
+            <Link to={`/profile/${dog.owner}/dogs`}>
+              <MoveLeft size={16} />
+              {isSignedInUser ? (
+                <span>My</span>
+              ) : (
+                <span className={styles.userName}>{userName}'s</span>
+              )}
+              <span> pack</span>
+            </Link>
+          }
+          imgCmp={
+            <HeaderImage
+              showLoader={isUploadingImage || primaryImage === LOADING}
+              imgSrc={primaryImage}
+              onClickImg={onClickImage}
+              NoImgIcon={DogIcon}
+              onClickEditPhoto={() => setIsAddImageModalOpen(true)}
+            />
+          }
+          imgsClassName={styles.imgContainer}
+          bottomCmp={
+            <>
+              <div className={styles.details}>
+                <div>
+                  <span className={styles.name}>{dog.name}</span>
+                  {dog.gender && (
+                    <span className={styles.gender}>
+                      {dog.gender === GENDER.FEMALE ? (
+                        <Venus color={styles.green} size={18} />
+                      ) : (
+                        <Mars color={styles.green} size={18} />
+                      )}
+                    </span>
+                  )}
+                  {!isSignedInUser && (
+                    <span className={styles.userName}>{userName}'s dog</span>
+                  )}
+                </div>
+                <div>
+                  {age !== null && (
+                    <span className={styles.age}>
+                      <Cake color={styles.green} size={14} />
+                      <span>
+                        {age.diff === 0
+                          ? 'Just Born'
+                          : `${age.diff} ${age.unit} old`}
+                      </span>
+                    </span>
+                  )}
+                  {dog.breed && (
+                    <span className={styles.breed}>
+                      <Tag color={styles.green} size={14} />
+                      <span>
+                        {dog.breed.toLowerCase() === 'other' && 'Breed: '}
+                        {dog.breed}
+                        {dog.breed.toLowerCase() === 'mixed' && ' Breed'}
+                      </span>
+                    </span>
+                  )}
                 </div>
               </div>
-            ) : primaryImage ? (
-              <img
-                onClick={() => onClickImage(primaryImage)}
-                src={primaryImage}
-                className={styles.img}
-              />
-            ) : (
-              <div className={styles.img}>
-                <div className={styles.noImg}>
-                  <DogIcon size={64} color={styles.green} strokeWidth={1} />
-                </div>
-              </div>
-            )}
-            {isSignedInUser && (
-              <Button
-                variant="round"
-                className={styles.editPhotoIcon}
-                onClick={() => setIsAddImageModalOpen(true)}
-              >
-                <Camera size={18} />
-              </Button>
-            )}
-          </div>
-          <div
-            className={classnames(styles.bottom, {
-              [styles.center]: !isSignedInUser,
-            })}
-          >
-            <div className={styles.details}>
-              <div>
-                <span className={styles.name}>{dog.name}</span>
-                {dog.gender && (
-                  <span className={styles.gender}>
-                    {dog.gender === GENDER.FEMALE ? (
-                      <Venus color={styles.green} size={18} />
-                    ) : (
-                      <Mars color={styles.green} size={18} />
-                    )}
-                  </span>
-                )}
-                {!isSignedInUser && (
-                  <span className={styles.userName}>{userName}'s dog</span>
-                )}
-              </div>
-              <div>
-                {age !== null && (
-                  <span className={styles.age}>
-                    <Cake color={styles.green} size={14} />
-                    <span>
-                      {age.diff === 0
-                        ? 'Just Born'
-                        : `${age.diff} ${age.unit} old`}
-                    </span>
-                  </span>
-                )}
-                {dog.breed && (
-                  <span className={styles.breed}>
-                    <Tag color={styles.green} size={14} />
-                    <span>
-                      {dog.breed.toLowerCase() === 'other' && 'Breed: '}
-                      {dog.breed}
-                      {dog.breed.toLowerCase() === 'mixed' && ' Breed'}
-                    </span>
-                  </span>
-                )}
-              </div>
-            </div>
-            {isSignedInUser && (
-              <Button
-                variant="secondary"
-                onClick={onEditDog}
-                className={styles.editButton}
-              >
-                <Pencil size={18} />
-              </Button>
-            )}
-          </div>
-        </div>
+              {isSignedInUser && (
+                <Button
+                  variant="secondary"
+                  onClick={onEditDog}
+                  className={styles.editButton}
+                >
+                  <Pencil size={18} />
+                </Button>
+              )}
+            </>
+          }
+          bottomClassName={classnames(styles.bottom, {
+            [styles.center]: !isSignedInUser,
+          })}
+        />
         <div className={styles.content}>
           <DogDetails
             isSignedInUser={isSignedInUser}

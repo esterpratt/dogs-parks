@@ -5,8 +5,6 @@
 }
 
 .title {
-  color: $white;
-  font-size: $second-title-font-size;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -20,6 +18,10 @@
   gap: 24px;
   color: $text;
   width: 100%;
+
+  &.with-data {
+    align-self: flex-start;
+  }
 
   .button {
     border-radius: 8px;

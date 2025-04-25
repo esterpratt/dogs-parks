@@ -1,8 +1,9 @@
 import { MouseEvent } from 'react';
+import { ThumbsDown, ThumbsUp } from 'lucide-react';
+import classnames from 'classnames';
 import { Dog } from '../../types/dog';
 import { Button } from '../Button';
 import { Section } from '../section/Section';
-import { ThumbsDown, ThumbsUp } from 'lucide-react';
 import styles from './DogPreferences.module.scss';
 
 interface DogPreferencesProps {
@@ -30,7 +31,11 @@ const DogPreferences: React.FC<DogPreferencesProps> = ({
         </div>
       }
       contentCmp={
-        <div className={styles.content}>
+        <div
+          className={classnames(styles.content, {
+            [styles.withData]: likes.length || dislikes.length,
+          })}
+        >
           {!likes.length && !dislikes.length && (
             <>
               {isSignedInUser ? (
