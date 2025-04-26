@@ -52,6 +52,17 @@
       }
     }
   }
+
+  .report-button {
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    background-color: rgba($red, 0.05);
+  }
 }
 
 .title {

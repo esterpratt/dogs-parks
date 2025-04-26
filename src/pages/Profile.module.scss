@@ -1,8 +1,15 @@
 @use '../variables' as *;
 
-.small {
-  height: 220px;
-  background-size: 100% 108px, 100% 108px;
+.header {
+  &.medium {
+    background-size: 100% 96px, 100% 172px;
+  }
+}
+
+.imgs-container {
+  &.medium {
+    top: 96px;
+  }
 }
 
 .title {

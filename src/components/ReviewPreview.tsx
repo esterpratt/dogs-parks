@@ -70,11 +70,14 @@ const ReviewPreview: React.FC<ReviewPreviewProps> = ({
               </Button>
             ) : (
               <>
-                <Flag
-                  onClick={() => setIsReportModalOpen(true)}
-                  size={18}
+                <Button
                   color={styles.red}
-                />
+                  onClick={() => setIsReportModalOpen(true)}
+                  variant="secondary"
+                  className={styles.reportButton}
+                >
+                  <Flag size={11} />
+                </Button>
                 <ReportModal
                   isOpen={isReportModalOpen}
                   onClose={() => setIsReportModalOpen(false)}

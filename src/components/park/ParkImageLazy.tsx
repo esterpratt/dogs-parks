@@ -3,9 +3,9 @@ import { useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { TreeDeciduous } from 'lucide-react';
 import { fetchParkPrimaryImage } from '../../services/parks';
-import styles from './ParkImage.module.scss';
+import styles from './ParkImageLazy.module.scss';
 
-interface ParkImageProps {
+interface ParkImageLazyProps {
   parkId: string;
   alt?: string;
   lazy?: boolean;
@@ -15,7 +15,7 @@ interface ParkImageProps {
   iconSize?: number;
 }
 
-const ParkImage = ({
+const ParkImageLazy = ({
   parkId,
   alt = '',
   lazy,
@@ -23,7 +23,7 @@ const ParkImage = ({
   className,
   noImgClassName,
   iconSize,
-}: ParkImageProps) => {
+}: ParkImageLazyProps) => {
   const { ref, inView } = useInView({ triggerOnce: true, rootMargin: '100px' });
 
   const { data: primaryImage } = useQuery({
@@ -59,4 +59,4 @@ const ParkImage = ({
   );
 };
 
-export { ParkImage };
+export { ParkImageLazy };

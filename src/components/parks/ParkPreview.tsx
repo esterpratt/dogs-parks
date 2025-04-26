@@ -2,7 +2,7 @@ import React, { MouseEvent } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { Eye, Navigation } from 'lucide-react';
 import { Park } from '../../types/park';
-import { ParkImage } from '../park/ParkImage';
+import { ParkImageLazy } from '../park/ParkImageLazy';
 import { Card } from '../card/Card';
 import styles from './ParkPreview.module.scss';
 
@@ -22,7 +22,7 @@ const ParkPreview: React.FC<ParkPreviewProps> = ({ park, className }) => {
     <Card
       url={`/parks/${park.id}`}
       imgCmp={
-        <ParkImage
+        <ParkImageLazy
           parkId={park.id}
           alt={park.name}
           className={styles.img}

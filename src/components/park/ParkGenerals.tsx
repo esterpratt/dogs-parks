@@ -1,17 +1,20 @@
 import { Link } from 'react-router';
+import { lazy, Suspense, useContext, useMemo, useState } from 'react';
+import { Dumbbell, Pencil, Ruler, Sprout, Sun } from 'lucide-react';
 import classnames from 'classnames';
-import { ParkMaterial } from '../../types/park';
-import { DetailsSqaure } from './DetailsSquare';
-import styles from './ParkGenerals.module.scss';
+import { Park } from '../../types/park';
 import { useGetParkVisitors } from '../../hooks/api/useGetParkVisitors';
+import { Section } from '../section/Section';
+import { Button } from '../Button';
+import { UserContext } from '../../context/UserContext';
+import styles from './ParkGenerals.module.scss';
+
+const ChooseEditParkOptionModal = lazy(
+  () => import('./ChooseEditParkOptionModal')
+);
 
 interface ParkGeneralsProps {
-  size: number | null;
-  ground: ParkMaterial[] | null;
-  facilities: boolean | null;
-  shade: number | null;
-  water: boolean | null;
-  parkId: string;
+  park: Park;
 }
 
 const NO_CONTENT = '?';
@@ -27,9 +30,9 @@ const getNumberContent = (value: number | null, sign?: string) => {
 const getBooleanContent = (value: boolean | null) => {
   let content = NO_CONTENT;
   if (value) {
-    content = 'Y';
+    content = 'Yes';
   } else if (value === false) {
-    content = 'N';
+    content = 'No';
   }
   return content;
 };
@@ -47,25 +50,27 @@ const getListContent = (values: string[] | null) => {
 const getSizeContent = (value: number | null) => {
   let content = NO_CONTENT;
   if (value) {
-    content = 'M';
+    content = 'Medium';
     if (value >= 100) {
-      content = 'L';
+      content = 'Large';
     } else if (value < 50) {
-      content = 'S';
+      content = 'Small';
     }
   }
   return content;
 };
 
-const ParkGenerals = ({
-  size,
-  ground,
-  facilities,
-  shade,
-  water,
-  parkId,
-}: ParkGeneralsProps) => {
+const ParkGenerals = ({ park }: ParkGeneralsProps) => {
+  const {
+    id: parkId,
+    size,
+    materials: ground,
+    has_facilities: facilities,
+    shade,
+  } = park;
+  const { userId } = useContext(UserContext);
   const { friendsInParkIds, visitorsIds } = useGetParkVisitors(parkId);
+  const [isEditParkModalOpen, setIsEditParkModalOpen] = useState(false);
 
   const friendsCount = friendsInParkIds.length;
   const othersCount = visitorsIds.length - friendsCount;
@@ -73,61 +78,150 @@ const ParkGenerals = ({
   const visitorsContent = friendsCount
     ? friendsCount.toString()
     : othersCount.toString();
-  const sizeContent = getSizeContent(size);
-  const groundContent = getListContent(ground);
-  const facilitiesContent = getBooleanContent(facilities);
-  const shadeContent = getNumberContent(shade, '%');
-  const waterContent = getBooleanContent(water);
+
+  const existedData = useMemo(
+    () => [
+      {
+        label: 'Size',
+        data: getSizeContent(size),
+        icon: (
+          <div
+            style={{
+              border:
+                !shade || shade >= 50
+                  ? `1px solid ${styles.orange}`
+                  : `1px solid ${styles.blue}`,
+              backgroundColor:
+                !shade || shade >= 50 ? styles.lightOrange : styles.lightBlue,
+            }}
+          >
+            <Ruler
+              color={!shade || shade >= 50 ? styles.orange : styles.blue}
+              size={28}
+            />
+          </div>
+        ),
+      },
+      {
+        label: 'Ground',
+        data: getListContent(ground),
+        icon: (
+          <div
+            style={{
+              border: `1px solid ${styles.green}`,
+              backgroundColor: styles.lightGreen,
+            }}
+          >
+            <Sprout color={styles.green} size={28} />
+          </div>
+        ),
+      },
+      {
+        label: 'Shade',
+        data: getNumberContent(shade, '%'),
+        icon: (
+          <div
+            style={{
+              border:
+                !shade || shade >= 50
+                  ? `1px solid ${styles.blue}`
+                  : `1px solid ${styles.orange}`,
+              backgroundColor:
+                !shade || shade >= 50 ? styles.lightBlue : styles.lightOrange,
+            }}
+          >
+            <Sun
+              color={!shade || shade >= 50 ? styles.blue : styles.orange}
+              size={28}
+            />
+          </div>
+        ),
+      },
+      {
+        label: 'Facilities',
+        data: getBooleanContent(facilities),
+        icon: (
+          <div
+            style={{
+              border: `1px solid ${styles.red}`,
+              backgroundColor: styles.lightRed,
+              '--current-color': styles.red,
+            }}
+            className={classnames({ [styles.no]: facilities === false })}
+          >
+            <Dumbbell color={styles.red} size={28} />
+          </div>
+        ),
+      },
+    ],
+    [facilities, ground, shade, size]
+  );
 
   return (
-    <div className={styles.container}>
-      <DetailsSqaure title="Size" content={sizeContent} color={styles.orange} />
-      <DetailsSqaure
-        title="Ground"
-        content={groundContent}
-        color={styles.brown}
-        className={classnames(
-          styles.ground,
-          ground?.length && ground?.length > 2 && styles.long,
-          groundContent === NO_CONTENT && styles.noContent
-        )}
+    <>
+      <Section
+        titleCmp={
+          <div className={styles.title}>
+            <span>About</span>
+            {!!userId && (
+              <Button
+                variant="simple"
+                color={styles.white}
+                className={styles.button}
+                onClick={() => setIsEditParkModalOpen(true)}
+              >
+                <Pencil size={18} />
+              </Button>
+            )}
+          </div>
+        }
+        contentCmp={
+          <div className={styles.container}>
+            <div className={styles.charactersContainer}>
+              {existedData.map((rowData, index) => {
+                return (
+                  <div key={index} className={styles.character}>
+                    {rowData.icon}
+                    <div className={styles.textContainer}>
+                      <div>{rowData.label}</div>
+                      <div>{rowData.data}</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className={styles.visitors}>
+              <Button
+                disabled={!friendsCount && !othersCount}
+                className={styles.visitorsButton}
+              >
+                <Link
+                  to="visitors"
+                  className={classnames(styles.link, {
+                    [styles.disabled]: !friendsCount && !othersCount,
+                  })}
+                >
+                  {visitorsContent}
+                </Link>
+              </Button>
+              <div className={styles.visitorsText}>
+                <div>{friendsCount ? 'Friends' : 'Visitors'}</div>
+                <div> at the park right now</div>
+              </div>
+            </div>
+          </div>
+        }
       />
-      <DetailsSqaure
-        title="Facilities"
-        content={facilitiesContent}
-        color={styles.darkGreen}
-      />
-      <DetailsSqaure
-        title="Shade"
-        content={shadeContent}
-        color={styles.grey}
-        className={classnames(
-          styles.shade,
-          shadeContent === NO_CONTENT && styles.noContent
-        )}
-        style={{
-          background: `linear-gradient(to top, ${styles.grey} 0%, ${
-            styles.grey
-          } ${shade || 0}%, ${styles.transparentGrey} ${shade || 0}%, ${
-            styles.transparentGrey
-          } 100%)`,
-        }}
-      />
-      <DetailsSqaure title="Water" content={waterContent} color={styles.blue} />
-      <Link
-        to="visitors"
-        className={classnames(
-          styles.link,
-          !friendsCount && !othersCount && styles.disabled
-        )}
-      >
-        <DetailsSqaure
-          title={friendsCount ? 'Friends here' : 'Visitors'}
-          content={visitorsContent}
-          color={styles.green}
-        />
-      </Link>
-    </div>
+      {!!userId && (
+        <Suspense fallback={null}>
+          <ChooseEditParkOptionModal
+            isOpen={isEditParkModalOpen}
+            onClose={() => setIsEditParkModalOpen(false)}
+            park={park}
+          />
+        </Suspense>
+      )}
+    </>
   );
 };
 

@@ -1,26 +1,86 @@
 @use '../../variables' as *;
 
-.container {
+.title {
+  width: 100%;
+  padding-right: 6px;
   display: flex;
+  align-items: center;
   justify-content: space-between;
+
+  .button {
+    display: flex;
+  }
 }
 
-.ground:not(.no-content) {
-  letter-spacing: -0.2px;
-  line-height: 1;
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+}
 
-  &:not(.long) {
+.characters-container {
+  padding: 0 8px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  row-gap: 24px;
+}
+
+.character {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+
+  > :first-child {
+    border-radius: 50%;
+    height: 48px;
+    width: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+
+    &.no::before {
+      content: '';
+      position: absolute;
+      width: 1px;
+      height: 48px;
+      background-color: var(--current-color);
+      top: 0;
+      left: 50%;
+      transform: rotate(45deg);
+      transform-origin: center;
+    }
+
+    svg {
+      fill: $white;
+    }
+  }
+}
+
+.text-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  :first-child {
+    font-size: 14px;
+
+    &::first-letter {
+      text-transform: capitalize;
+    }
+  }
+
+  :last-child {
     font-size: 12px;
-    word-spacing: 50px;
-  }
 
-  &.long {
-    font-size: 10px;
+    &::first-letter {
+      text-transform: capitalize;
+    }
   }
-}
-
-.shade:not(.no-content) {
-  font-size: 16px;
 }
 
 .link {
@@ -32,14 +92,45 @@
   }
 }
 
+.visitors {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 8px;
+
+  .visitors-button {
+    border-radius: 50%;
+    padding: 0;
+    height: 48px;
+    width: 48px;
+  }
+
+  .visitors-text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    :first-child {
+      font-size: 14px;
+    }
+
+    :last-child {
+      font-size: 12px;
+    }
+  }
+}
+
 :export {
   green: $green;
-  darkGreen: $green-dark;
   blue: $blue;
   orange: $orange;
-  brown: $brown;
-  grey: $grey;
-  transparentGrey: #95b2bb;
+  red: $red;
+  pink: $pink;
+  white: $white;
+  lightGreen: rgba($green, 0.2);
+  lightBlue: rgba($blue, 0.2);
+  lightOrange: rgba($orange, 0.2);
+  lightRed: rgba($red, 0.2);
 }
 
 @media (orientation: landscape) {

@@ -3,24 +3,23 @@
 .container {
   display: flex;
   align-items: center;
+  gap: 6px;
   font-size: 12px;
 }
 
 .review-count {
-  margin-left: 8px;
   text-decoration: none;
   color: inherit;
 }
 
 .add-review {
-  margin-left: 10px;
-  padding-left: 10px;
   position: relative;
+  padding-left: 10px;
 
   &::before {
     content: '|';
     position: absolute;
-    left: -1px;
+    left: 0;
     bottom: 1px;
   }
 }

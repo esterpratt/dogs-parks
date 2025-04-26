@@ -1,12 +1,12 @@
 @use '../variables' as *;
 
-.header {
-  background-size: 100% 116px, 100% 152px;
-}
+// .header {
+//   background-size: 100% 116px, 100% 152px;
+// }
 
-.img-container {
-  top: 116px;
-}
+// .img-container {
+//   top: 116px;
+// }
 
 .img {
   &:not(:first-child) {

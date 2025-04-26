@@ -35,15 +35,30 @@
 }
 
 .characters-container {
+  padding: 0 8px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  row-gap: 24px;
 }
 
 .character {
   display: flex;
   gap: 8px;
   align-items: center;
+
+  > :first-child {
+    border-radius: 50%;
+    height: 48px;
+    width: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    svg {
+      fill: $white;
+    }
+  }
 }
 
 .text-container {
@@ -69,6 +84,7 @@
 }
 
 .description {
+  padding: 0 8px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -76,7 +92,7 @@
 
 .description-title {
   display: flex;
-  gap: 4px;
+  gap: 6px;
   align-items: center;
   font-size: 14px;
 }
@@ -87,4 +103,11 @@
 
 :export {
   green: $green;
+  orange: $orange;
+  blue: $blue;
+  red: $red;
+  lightGreen: rgba($green, 0.2);
+  lightOrange: rgba($orange, 0.2);
+  lightBlue: rgba($blue, 0.2);
+  lightRed: rgba($red, 0.2);
 }

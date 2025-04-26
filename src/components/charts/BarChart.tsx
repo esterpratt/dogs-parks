@@ -55,7 +55,7 @@ const BarChart: React.FC<BarChartProps> = ({
                 fill={
                   entry.hour === currentHour.hour
                     ? currentHour.color
-                    : styles.grey
+                    : styles.lightBlue
                 }
               />
             );

@@ -56,7 +56,7 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
     <div className={styles.noResults}>
       <span>Sorry, can’t sniff out your park</span>
       <span>
-        <Link to="/signin">Sign In</Link> to add your park!
+        <Link to="/login">Log In</Link> to add your park!
       </span>
     </div>
   );

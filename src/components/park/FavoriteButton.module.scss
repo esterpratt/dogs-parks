@@ -1,14 +1,6 @@
 @use '../../variables' as *;
 
-.heart {
-  transition: color 0.2s;
-  color: $white;
-
-  &.no-favorite {
-    background-color: $text-medium;
-  }
-
-  &.favorite {
-    background-color: $red;
-  }
+:export {
+  grey: $text-medium;
+  pink: $pink;
 }

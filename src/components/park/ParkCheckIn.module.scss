@@ -1,15 +1,6 @@
 @use '../../variables' as *;
 
-.checkin-icon,
-.checkout-icon {
-  color: $white;
-  fill: $white;
-}
-
-.checkin-icon {
-  background-color: $text-medium;
-}
-
-.checkout-icon {
-  background-color: $green;
+:export {
+  green: $green;
+  orange: $orange;
 }

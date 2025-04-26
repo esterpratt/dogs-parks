@@ -1,15 +1,15 @@
 import { useState } from 'react';
-import { TbPennant, TbPennantOff } from 'react-icons/tb';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { MapPinCheckInside, MapPinXInside } from 'lucide-react';
 import { checkin, checkout } from '../../services/checkins';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
-import styles from './ParkCheckIn.module.scss';
 import { useAddReview } from '../../hooks/api/useAddReview';
 import { queryClient } from '../../services/react-query';
 import { fetchUserReviews } from '../../services/reviews';
 import { ParkIcon } from './ParkIcon';
 import { ReviewModal } from '../ReviewModal';
 import { DogsCountModal } from './DogsCountModal';
+import styles from './ParkCheckIn.module.scss';
 
 const ParkCheckIn: React.FC<{
   parkId: string;
@@ -85,17 +85,10 @@ const ParkCheckIn: React.FC<{
   return (
     <div className={className}>
       <ParkIcon
-        iconCmp={
-          !shouldCheckIn ? (
-            <TbPennantOff onClick={onCheckIn} />
-          ) : (
-            <TbPennant onClick={onCheckIn} />
-          )
-        }
-        iconClassName={
-          !shouldCheckIn ? styles.checkoutIcon : styles.checkinIcon
-        }
-        textCmp={<span>{!shouldCheckIn ? 'Check Out' : 'Check In'}</span>}
+        IconCmp={!shouldCheckIn ? MapPinXInside : MapPinCheckInside}
+        iconColor={!shouldCheckIn ? styles.orange : styles.green}
+        onClick={onCheckIn}
+        textCmp={<span>{!shouldCheckIn ? 'Checkout' : 'Checkin'}</span>}
       />
       <DogsCountModal
         parkId={parkId}

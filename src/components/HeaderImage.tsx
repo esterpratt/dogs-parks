@@ -10,7 +10,7 @@ interface HeaderImageProps {
   showLoader?: boolean;
   onClickImg?: (imgSrc: string) => void;
   NoImgIcon: LucideIcon;
-  onClickEditPhoto?: () => void;
+  onClickEditPhoto?: null | (() => void);
   className?: string;
   style?: CSSProperties;
   size?: number;

@@ -1,28 +1,33 @@
 import { ReactNode } from 'react';
-import { IconContext } from 'react-icons';
-import classnames from 'classnames';
+import { LucideIcon } from 'lucide-react';
+import { Button } from '../Button';
 import styles from './ParkIcon.module.scss';
 
 interface ParkIconProps {
-  iconCmp: ReactNode;
+  IconCmp: LucideIcon;
   textCmp: ReactNode;
-  iconClassName?: string;
+  onClick: () => void;
+  iconColor?: string;
 }
 
 const ParkIcon: React.FC<ParkIconProps> = ({
-  iconCmp,
+  IconCmp,
   textCmp,
-  iconClassName,
+  onClick,
+  iconColor,
 }) => {
   return (
     <div className={styles.container}>
-      <IconContext.Provider
-        value={{
-          className: classnames(styles.icon, iconClassName),
+      <Button
+        style={{
+          '--icon-bgcolor': `${iconColor ?? styles.pink}30`,
+          '--icon-color': iconColor ?? styles.pink,
         }}
+        className={styles.button}
+        onClick={onClick}
       >
-        {iconCmp}
-      </IconContext.Provider>
+        <IconCmp size={18} />
+      </Button>
       {textCmp}
     </div>
   );

@@ -1,15 +1,18 @@
 import { useContext, useState } from 'react';
+import { Link } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
+import { Info, Plus } from 'lucide-react';
+import classnames from 'classnames';
 import { getHoursChartData, getStrHour } from '../charts/getHoursChartData';
 import { fetchDogsCount } from '../../services/dogs-count-orchestrator';
 import { getMean, getSTD } from '../../utils/calcs';
 import { BarChart } from '../charts/BarChart';
-import styles from './BusyHours.module.scss';
 import barChartStyles from '../charts/BarChart.module.scss';
 import { DogsCountModal } from './DogsCountModal';
 import { Button } from '../Button';
 import { UserContext } from '../../context/UserContext';
-import { Link } from 'react-router';
+import { Section } from '../section/Section';
+import styles from './BusyHours.module.scss';
 
 const BUSINESS = {
   LIGHT: {
@@ -64,50 +67,68 @@ const BusyHours: React.FC<BusyHoursProps> = ({ parkId }) => {
 
   return (
     <>
-      {dogsCount?.length ? (
-        <div>
-          <div className={styles.text}>
-            Around this time, the park is usually{' '}
-            <span className={styles[business.className]}>{business.str}.</span>
-            {userId && (
+      <Section
+        titleCmp={
+          <div className={styles.title}>
+            <span>Busy hours</span>
+            {!!userId && (
               <Button
-                onClick={() => setIsDogsCountModalOpen(true)}
-                className={styles.dogsCountButton}
                 variant="simple"
+                color={styles.white}
+                className={styles.button}
+                onClick={() => {}}
               >
-                Report dog count
+                <Plus size={24} />
               </Button>
             )}
           </div>
-          <div className={styles.chartContainer}>
-            <BarChart
-              data={hoursChartData}
-              xDataKey="hour"
-              yDataKey="count"
-              currentHour={{ hour: currentStrHour!, color: business.color }}
-            />
-          </div>
-        </div>
-      ) : (
-        <>
-          <div className={styles.noData}>
-            <span>No data yet.</span>
-            {userId ? (
-              <Button
-                onClick={() => setIsDogsCountModalOpen(true)}
-                className={styles.dogsCountButton}
-                variant="simple"
+        }
+        contentCmp={
+          <div className={styles.container}>
+            <div
+              className={classnames(styles.textContainer, {
+                [styles.empty]: !userId && !dogsCount?.length,
+              })}
+            >
+              <div
+                className={classnames(styles.text, {
+                  [styles.empty]: !userId && !dogsCount?.length,
+                })}
               >
-                Report dog count
-              </Button>
-            ) : (
-              <span>
-                <Link to="/signin"> Sign In</Link> to add data.
-              </span>
+                <Info size={12} color={styles.green} />
+                {dogsCount?.length ? (
+                  <>
+                    <span>Currently:</span>
+                    <span className={styles[business.className]}>
+                      {business.str}
+                    </span>
+                  </>
+                ) : (
+                  <span>No data yet.</span>
+                )}
+              </div>
+              {!userId && !dogsCount?.length && (
+                <div>
+                  <Button variant="simple" className={styles.link}>
+                    <Link to="/login">Log In</Link>
+                  </Button>
+                  <span> to add data.</span>
+                </div>
+              )}
+            </div>
+            {!!dogsCount?.length && (
+              <div className={styles.chartContainer}>
+                <BarChart
+                  data={hoursChartData}
+                  xDataKey="hour"
+                  yDataKey="count"
+                  currentHour={{ hour: currentStrHour!, color: business.color }}
+                />
+              </div>
             )}
           </div>
-        </>
-      )}
+        }
+      />
       <DogsCountModal
         showOnlyCount
         parkId={parkId}

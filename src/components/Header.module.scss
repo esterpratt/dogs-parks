@@ -1,14 +1,61 @@
 @use '../variables' as *;
 
+.prev-links {
+  position: absolute;
+  top: 0;
+  background-color: $white;
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 12px;
+  width: 100%;
+
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    color: $pink;
+    font-size: 14px;
+  }
+}
+
 .header {
   position: relative;
   height: 268px;
   flex-shrink: 0;
   background-image: $linear-gradient;
   background-repeat: no-repeat;
-  background-size: 100% 108px, 100% 160px;
+  background-size: 100% 114px, 100% 154px;
   background-position: top, bottom;
   border-bottom: 1px solid $text-light;
+
+  &.small {
+    height: 220px;
+    background-size: 100% 92px, 100% 128px;
+
+    .imgs-container {
+      top: 92px;
+    }
+  }
+
+  &.large {
+    height: 280px;
+    background-size: 100% 114px, 100% 166px;
+
+    .imgs-container {
+      top: 114px;
+    }
+  }
+}
+
+.imgs-container {
+  position: absolute;
+  top: 114px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .bottom {
@@ -21,33 +68,4 @@
   gap: 12px;
   align-items: center;
   width: 100%;
-}
-
-.imgs-container {
-  position: absolute;
-  top: 108px;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.prev-links {
-  position: absolute;
-  top: 0;
-  background-color: $white;
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 12px;
-  width: 100%;
-
-  a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    color: $pink;
-    font-size: 14px;
-  }
 }

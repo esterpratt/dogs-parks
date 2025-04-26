@@ -55,9 +55,15 @@ const Profile: React.FC = () => {
   return (
     <>
       <Header
-        containerClassName={
-          isSignedInUser || !signedInUser ? styles.small : undefined
-        }
+        size={isSignedInUser ? 'small' : 'medium'}
+        containerClassName={classnames(
+          styles.header,
+          isSignedInUser || !signedInUser ? styles.small : styles.medium
+        )}
+        imgsClassName={classnames(
+          styles.imgsContainer,
+          isSignedInUser || !signedInUser ? styles.small : styles.medium
+        )}
         prevLinksCmp={
           !isSignedInUser ? (
             <>
@@ -93,7 +99,7 @@ const Profile: React.FC = () => {
                         className={styles.img}
                         style={{ zIndex: dogImagesToDisplay.length - index }}
                         NoImgIcon={DogIcon}
-                        size={100}
+                        size={112}
                       />
                     );
                   }

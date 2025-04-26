@@ -96,6 +96,7 @@ const Reviews: React.FC = () => {
             <Button
               onClick={() => setIsAddReviewModalOpen(true)}
               className={styles.button}
+              variant="simple"
             >
               Be the first to leave a review!
             </Button>

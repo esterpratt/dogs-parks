@@ -30,22 +30,58 @@ const DogDetails: React.FC<DogDeatilsProps> = ({
       {
         label: 'Size',
         data: dog.size,
-        icon: <Ruler color={styles.green} size={32} />,
+        icon: (
+          <div
+            style={{
+              border: `1px solid ${styles.green}`,
+              backgroundColor: styles.lightGreen,
+            }}
+          >
+            <Ruler color={styles.green} size={28} />
+          </div>
+        ),
       },
       {
         label: 'Temperament',
         data: dog.temperament,
-        icon: <Thermometer color={styles.green} size={32} />,
+        icon: (
+          <div
+            style={{
+              border: `1px solid ${styles.orange}`,
+              backgroundColor: styles.lightOrange,
+            }}
+          >
+            <Thermometer color={styles.orange} size={28} />
+          </div>
+        ),
       },
       {
         label: 'Energy',
         data: dog.energy,
-        icon: <Activity color={styles.green} size={32} />,
+        icon: (
+          <div
+            style={{
+              border: `1px solid ${styles.red}`,
+              backgroundColor: styles.lightRed,
+            }}
+          >
+            <Activity color={styles.red} size={28} />
+          </div>
+        ),
       },
       {
         label: 'Possessive',
         data: dog.possessive,
-        icon: <ShieldX color={styles.green} size={32} />,
+        icon: (
+          <div
+            style={{
+              border: `1px solid ${styles.blue}`,
+              backgroundColor: styles.lightBlue,
+            }}
+          >
+            <ShieldX color={styles.blue} size={28} />
+          </div>
+        ),
       },
     ],
     [dog]
@@ -90,7 +126,7 @@ const DogDetails: React.FC<DogDeatilsProps> = ({
               {existedData.map((rowData, index) => {
                 return (
                   <div key={index} className={styles.character}>
-                    <div className={styles.iconContainer}>{rowData.icon}</div>
+                    {rowData.icon}
                     <div className={styles.textContainer}>
                       <div>{rowData.label}</div>
                       <div>{rowData.data}</div>

@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import styles from './Section.module.scss';
 
 interface SectionProps {
-  titleCmp: ReactNode;
+  titleCmp: ReactNode | string;
   contentCmp: ReactNode;
   className?: string;
 }

@@ -1,10 +1,35 @@
 @use '../../variables' as *;
 
-.no-data {
-  font-size: 12px;
-  text-align: center;
+.title {
+  width: 100%;
+  padding-right: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-  a {
-    color: $green;
+  .button {
+    display: flex;
   }
+}
+
+.gallery-container {
+  width: 100%;
+}
+
+.no-data {
+  width: 100%;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  .link a {
+    font-size: 13px;
+    color: inherit;
+  }
+}
+
+:export {
+  white: $white;
 }

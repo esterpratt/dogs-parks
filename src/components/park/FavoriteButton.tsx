@@ -1,15 +1,14 @@
-import { TiHeartFullOutline } from 'react-icons/ti';
-import classnames from 'classnames';
-import styles from './FavoriteButton.module.scss';
+import { Heart } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   addFavorite,
   fetchUserFavorites,
   removeFavorite,
 } from '../../services/favorites';
-import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '../../services/react-query';
 import { ParkIcon } from './ParkIcon';
+import styles from './FavoriteButton.module.scss';
 
 interface FavoriteButtonProps {
   parkId: string;
@@ -53,11 +52,9 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ parkId, userId }) => {
 
   return (
     <ParkIcon
-      iconCmp={<TiHeartFullOutline onClick={toggleFavorite} />}
-      iconClassName={classnames(
-        styles.heart,
-        isFavorite ? styles.favorite : styles.noFavorite
-      )}
+      IconCmp={Heart}
+      onClick={toggleFavorite}
+      iconColor={isFavorite ? styles.pink : styles.grey}
       textCmp={<span>{isFavorite ? 'Unlike' : 'Like'}</span>}
     />
   );

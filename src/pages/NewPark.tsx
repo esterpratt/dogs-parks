@@ -145,7 +145,7 @@ const NewPark: React.FC = () => {
         <div className={styles.modalContainer}>
           <span>Only klavhub members can add a new park.</span>
           <span>
-            <Link to="/signin">Sign In</Link> to be part of the pack!
+            <Link to="/login">Log In</Link> to be part of the pack!
           </span>
         </div>
       </Modal>

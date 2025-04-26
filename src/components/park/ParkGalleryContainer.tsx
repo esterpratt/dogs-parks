@@ -1,12 +1,13 @@
 import { useState, lazy, Suspense, useContext } from 'react';
-import { FaPlus } from 'react-icons/fa';
+import { Link } from 'react-router';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { Plus } from 'lucide-react';
 import { fetchAllParkImages, uploadParkImage } from '../../services/parks';
 import { queryClient } from '../../services/react-query';
-import { ParkGallery } from './ParkGallery';
-import { AccordionContainer } from '../accordion/AccordionContainer';
 import { UserContext } from '../../context/UserContext';
-import { Link } from 'react-router';
+import { Section } from '../section/Section';
+import { Button } from '../Button';
+import { Carousel } from '../Carousel';
 import styles from './ParkGalleryContainer.module.scss';
 
 const CameraModal = lazy(() => import('../camera/CameraModal'));
@@ -50,30 +51,43 @@ const ParkGalleryContainer: React.FC<ParkGalleryContainerProps> = ({
 
   return (
     <>
-      <AccordionContainer>
-        <AccordionContainer.TitleWithIcon
-          title="Gallery"
-          showIcon={!!userId}
-          Icon={FaPlus}
-          onClickIcon={onClickAddPhoto}
-          iconSize={14}
-        />
-        <AccordionContainer.Content>
-          {userId ? (
-            <ParkGallery
-              images={parkImages ?? []}
-              openCameraModal={() => setIsAddImageModalOpen(true)}
-            />
+      <Section
+        titleCmp={
+          <div className={styles.title}>
+            <span>Gallery</span>
+            {!!userId && (
+              <Button
+                variant="simple"
+                color={styles.white}
+                className={styles.button}
+                onClick={onClickAddPhoto}
+              >
+                <Plus size={24} />
+              </Button>
+            )}
+          </div>
+        }
+        contentCmp={
+          !!parkImages?.length || !!userId ? (
+            <div className={styles.galleryContainer}>
+              <Carousel
+                images={parkImages || []}
+                addImage={userId ? () => setIsAddImageModalOpen(true) : null}
+              />
+            </div>
           ) : (
             <div className={styles.noData}>
               <span>No photos for this park yet. </span>
-              <span>
-                <Link to="/signin"> Sign In</Link> to add data.
-              </span>
+              <div>
+                <Button variant="simple" className={styles.link}>
+                  <Link to="/login">Log In</Link>
+                </Button>
+                <span> to add data.</span>
+              </div>
             </div>
-          )}
-        </AccordionContainer.Content>
-      </AccordionContainer>
+          )
+        }
+      />
       {!!userId && (
         <Suspense fallback={null}>
           <CameraModal
