@@ -118,7 +118,11 @@ const Profile: React.FC = () => {
                 <span className={styles.userName}>{user.name}</span>
                 <span>'s Pack: {getDogNames(dogs)}</span>
               </div>
-              <FriendRequestButton friendId={user.id} userName={user.name} />
+              <FriendRequestButton
+                className={styles.friendRequestContainer}
+                friendId={user.id}
+                userName={user.name}
+              />
             </div>
           ) : null
         }

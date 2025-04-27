@@ -1,31 +1,21 @@
 @use '../../variables' as *;
 
-.container {
+.button.button {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
-  justify-content: flex-end;
+  gap: 4px;
+  justify-content: center;
   align-items: center;
-  padding: 0;
-  font-size: 9px;
-  width: 40px;
+  padding: 6px 12px;
+  font-size: 11px;
+  border-radius: 4px;
+  box-shadow: $box-shadow;
+  border: 1px solid var(--icon-color);
+  background-color: var(--icon-bgcolor);
+  width: 96px;
 
-  .button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    border-radius: 8px;
-    box-shadow: $box-shadow;
-    border: 1px solid var(--icon-color);
-    background-color: var(--icon-bgcolor);
-
-    svg {
-      fill: $white;
-      stroke: var(--icon-color);
-    }
+  svg {
+    fill: $white;
+    stroke: var(--icon-color);
   }
 }
 

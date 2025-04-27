@@ -12,13 +12,16 @@ interface HeaderImageProps {
   NoImgIcon: LucideIcon;
   onClickEditPhoto?: null | (() => void);
   className?: string;
+  editButtonClassName?: string;
   style?: CSSProperties;
   size?: number;
+  variant?: 'round' | 'square';
 }
 
 const HeaderImage = (props: HeaderImageProps) => {
   const {
     size = 152,
+    variant = 'round',
     imgSrc,
     showLoader = false,
     onClickImg,
@@ -26,6 +29,7 @@ const HeaderImage = (props: HeaderImageProps) => {
     onClickEditPhoto,
     className,
     style,
+    editButtonClassName,
   } = props;
 
   return (
@@ -43,10 +47,10 @@ const HeaderImage = (props: HeaderImageProps) => {
         <img
           onClick={onClickImg && (() => onClickImg(imgSrc))}
           src={imgSrc}
-          className={styles.img}
+          className={classnames(styles.img, styles[variant])}
         />
       ) : (
-        <div className={styles.img}>
+        <div className={classnames(styles.img, styles[variant])}>
           <div className={styles.noImg}>
             <NoImgIcon size={64} color={styles.green} strokeWidth={1} />
           </div>
@@ -55,7 +59,7 @@ const HeaderImage = (props: HeaderImageProps) => {
       {!!onClickEditPhoto && (
         <Button
           variant="round"
-          className={styles.editPhotoIcon}
+          className={classnames(styles.editPhotoIcon, editButtonClassName)}
           onClick={onClickEditPhoto}
         >
           <Camera size={18} />

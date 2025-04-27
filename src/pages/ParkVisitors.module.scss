@@ -1,40 +1,57 @@
 @use '../variables' as *;
 
+.loader {
+  margin-top: 36px;
+}
+
 .container {
-  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
 .friends-container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
 }
 
 .friends-title {
-  font-size: $second-title-font-size;
-  text-align: center;
+  font-size: $title-font-size;
 }
 
 .othersContainer {
-  margin-top: 12px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  text-align: center;
+  gap: 18px;
 
   a {
     text-decoration: none;
     border: none;
-    color: $green;
   }
 }
 
 .othersContainer:only-child {
   .othersTitle {
     font-size: 18px;
+    text-align: center;
   }
 }
 
-.othersContainer:not(:only-child) {
-  margin-top: 24px;
+.not-friends {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  font-size: 14px;
+
+  a {
+    text-decoration: none;
+    color: inherit;
+    font-size: 14px;
+  }
 }
+
+// .othersContainer:not(:only-child) {
+//   margin-top: 24px;
+// }

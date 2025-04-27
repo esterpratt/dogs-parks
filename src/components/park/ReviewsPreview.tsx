@@ -1,15 +1,22 @@
 import { useContext, useState } from 'react';
 import { Link, useParams } from 'react-router';
+import { useQuery } from '@tanstack/react-query';
+import classnames from 'classnames';
 import { Stars } from '../Stars';
-import styles from './ReviewsPreview.module.scss';
 import { Button } from '../Button';
 import { UserContext } from '../../context/UserContext';
-import { useQuery } from '@tanstack/react-query';
 import { fetchParkRank, fetchReviews } from '../../services/reviews';
 import { useAddReview } from '../../hooks/api/useAddReview';
 import { ReviewModal } from '../ReviewModal';
+import styles from './ReviewsPreview.module.scss';
 
-const ReviewsPreview = () => {
+interface ReviewsPreviewProps {
+  variant?: 'title' | 'reviews';
+  className?: string;
+}
+
+const ReviewsPreview = (props: ReviewsPreviewProps) => {
+  const { variant = 'title', className } = props;
   const { id: parkId } = useParams();
   const [isAddReviewModalOpen, setIsAddReviewModalOpen] = useState(false);
   const { userId } = useContext(UserContext);
@@ -22,6 +29,8 @@ const ReviewsPreview = () => {
     queryKey: ['reviews', parkId, 'rank'],
     queryFn: () => fetchParkRank(parkId!),
   });
+
+  const isReviewsPage = variant === 'reviews';
 
   const reviewsCount = reviews?.length;
 
@@ -44,25 +53,29 @@ const ReviewsPreview = () => {
   };
 
   return (
-    <div className={styles.container}>
-      {reviewsCount ? (
+    <div className={classnames(styles.container, styles[variant], className)}>
+      {!!reviewsCount && !isReviewsPage && (
         <>
           <Stars rank={rank || 0} />
           <Link to="reviews" className={styles.reviewCount}>
             {reviewsCount === 1 ? '1 Review' : `${reviewsCount} Reviews`}
           </Link>
         </>
-      ) : (
-        <span>No reviews yet</span>
       )}
-      {userId && (
+      {!reviewsCount && !isReviewsPage && <span>No reviews yet</span>}
+      {!!reviewsCount && isReviewsPage && (
+        <div className={styles.rank}>
+          Average rank: {(rank || 0).toFixed(1)}
+        </div>
+      )}
+      {userId && isReviewsPage && (
         <div className={styles.addReview}>
           <Button
             onClick={() => setIsAddReviewModalOpen(true)}
             className={styles.addReviewButton}
-            variant="simple"
+            variant="primary"
           >
-            Add a review
+            Add review
           </Button>
           <ReviewModal
             onSubmitReview={onAddReview}

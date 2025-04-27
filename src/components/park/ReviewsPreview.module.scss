@@ -5,26 +5,44 @@
   align-items: center;
   gap: 6px;
   font-size: 12px;
+
+  &.title {
+    .add-review {
+      position: relative;
+      padding-left: 10px;
+
+      &::before {
+        content: '|';
+        position: absolute;
+        left: 0;
+        bottom: 1px;
+      }
+    }
+
+    .add-review-button {
+      font-size: 12px;
+    }
+  }
+
+  &.reviews {
+    justify-content: space-between;
+    align-items: flex-end;
+
+    .rank {
+      font-size: 18px;
+    }
+
+    .add-review-button {
+      font-size: 14px;
+      padding: 8px 16px;
+      box-shadow: $box-shadow;
+      border-radius: 8px;
+      align-self: flex-end;
+    }
+  }
 }
 
 .review-count {
   text-decoration: none;
   color: inherit;
-}
-
-.add-review {
-  position: relative;
-  padding-left: 10px;
-
-  &::before {
-    content: '|';
-    position: absolute;
-    left: 0;
-    bottom: 1px;
-  }
-}
-
-.add-review-button {
-  font-size: 12px;
-  color: $green;
 }

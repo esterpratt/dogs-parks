@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { Check, X } from 'lucide-react';
+import classnames from 'classnames';
 import { Button } from '../Button';
 import { useFriendshipStatus } from '../../hooks/api/useFriendshipStatus';
 import { UserContext } from '../../context/UserContext';
@@ -11,11 +12,13 @@ import styles from './FriendRequestButton.module.scss';
 interface PublicProfileProps {
   friendId: string;
   userName: string;
+  className?: string;
 }
 
 const FriendRequestButton: React.FC<PublicProfileProps> = ({
   friendId,
   userName,
+  className,
 }) => {
   const { userId } = useContext(UserContext);
   const { status, isFriendIsRequester, isLoading } = useFriendshipStatus({
@@ -38,11 +41,11 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
   };
 
   if (isLoading) {
-    return null;
+    return <div className={classnames(styles.container, className)} />;
   }
 
   return (
-    <div className={styles.container}>
+    <div className={classnames(styles.container, className)}>
       {status === FRIENDSHIP_STATUS.APPROVED && (
         <>
           <span>

@@ -1,11 +1,12 @@
 import { useContext, useState, lazy, Suspense, useRef } from 'react';
-import { Link, Outlet, useNavigate, useParams } from 'react-router';
+import { Link, Outlet, useParams } from 'react-router';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   TreeDeciduous,
   MoveLeft,
   MapPin,
   Share as ShareIcon,
+  MoveRight,
 } from 'lucide-react';
 import { Share } from '@capacitor/share';
 import { ReviewsPreview } from '../components/park/ReviewsPreview';
@@ -21,7 +22,6 @@ import { queryClient } from '../services/react-query';
 import { Loader } from '../components/Loader';
 import { ParkCheckIn } from '../components/park/ParkCheckIn';
 import { ParkIcon } from '../components/park/ParkIcon';
-import { Button } from '../components/Button';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import { isMobile } from '../utils/platform';
 import { ThankYouModal } from '../components/ThankYouModal';
@@ -35,7 +35,6 @@ const CameraModal = lazy(() => import('../components/camera/CameraModal'));
 const Park: React.FC = () => {
   const { id: parkId } = useParams();
   const { user } = useContext(UserContext);
-  const navigate = useNavigate();
   const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
   const [isThankYouModalOpen, setIsThankYouModalOpen] = useState(false);
   const [imageToEnlarge, setImageToEnlarge] = useState<string>('');
@@ -89,10 +88,6 @@ const Park: React.FC = () => {
     }
   };
 
-  const onClickMapLink = () => {
-    navigate('/', { state: { location: park!.location } });
-  };
-
   const onClickImage = (img: string) => {
     setImageToEnlarge(img);
     setIsEnlargeImageModalOpen(true);
@@ -109,17 +104,24 @@ const Park: React.FC = () => {
   return (
     <>
       <Header
-        size="large"
+        size="extraLarge"
         containerClassName={styles.header}
         imgsClassName={styles.imgContainer}
         prevLinksCmp={
-          <Link to="/parks">
-            <MoveLeft size={16} />
-            <span>All parks</span>
-          </Link>
+          <>
+            <Link to="/parks">
+              <MoveLeft size={16} />
+              <span>All parks</span>
+            </Link>
+            <Link to="/" state={{ location: park!.location }}>
+              <span>See in map</span>
+              <MoveRight size={16} />
+            </Link>
+          </>
         }
         imgCmp={
           <HeaderImage
+            size={132}
             imgSrc={primaryImage}
             NoImgIcon={TreeDeciduous}
             onClickImg={onClickImage}
@@ -132,43 +134,37 @@ const Park: React.FC = () => {
         }
         bottomCmp={
           <div className={styles.basicDetails}>
-            <div className={styles.name}>{park.name}</div>
-            <div className={styles.addressContainer}>
-              <MapPin size={12} />
-              <span className={styles.address}>
-                {park.address}, {park.city}
-              </span>
-              <Button
-                className={styles.button}
-                onClick={onClickMapLink}
-                variant="simple"
-              >
-                See in map
-              </Button>
+            <div className={styles.top}>
+              <div className={styles.name}>{park.name}</div>
+              <ReviewsPreview className={styles.reviews} />
             </div>
-            <ReviewsPreview />
+            <div className={styles.addressContainer}>
+              <MapPin size={14} />
+              <div className={styles.address}>
+                {park.address}, {park.city}
+              </div>
+            </div>
+            <div className={styles.userEngagementRow}>
+              {user && (
+                <>
+                  <FavoriteButton parkId={parkId!} userId={user.id} />
+                  <ParkCheckIn
+                    parkId={parkId!}
+                    userId={user?.id ?? null}
+                    userName={user?.name}
+                  />
+                </>
+              )}
+              <ParkIcon
+                iconColor={styles.blue}
+                IconCmp={ShareIcon}
+                onClick={onClickShareButton}
+                textCmp={<span>Share</span>}
+              />
+            </div>
           </div>
         }
-      >
-        <div className={styles.userEngagementRow}>
-          <ParkIcon
-            iconColor={styles.blue}
-            IconCmp={ShareIcon}
-            onClick={onClickShareButton}
-            textCmp={<span>Share</span>}
-          />
-          {user && (
-            <>
-              <FavoriteButton parkId={parkId!} userId={user.id} />
-              <ParkCheckIn
-                parkId={parkId!}
-                userId={user?.id ?? null}
-                userName={user?.name}
-              />
-            </>
-          )}
-        </div>
-      </Header>
+      ></Header>
       <div className={styles.contentContainer}>
         <ParkTabs parkId={parkId!} />
         <div className={styles.outletContainer}>

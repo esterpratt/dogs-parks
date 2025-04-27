@@ -17,19 +17,17 @@ const ParkIcon: React.FC<ParkIconProps> = ({
   iconColor,
 }) => {
   return (
-    <div className={styles.container}>
-      <Button
-        style={{
-          '--icon-bgcolor': `${iconColor ?? styles.pink}30`,
-          '--icon-color': iconColor ?? styles.pink,
-        }}
-        className={styles.button}
-        onClick={onClick}
-      >
-        <IconCmp size={18} />
-      </Button>
+    <Button
+      style={{
+        '--icon-bgcolor': `${iconColor ?? styles.pink}90`,
+        '--icon-color': iconColor ?? styles.pink,
+      }}
+      className={styles.button}
+      onClick={onClick}
+    >
+      <IconCmp size={14} />
       {textCmp}
-    </div>
+    </Button>
   );
 };
 

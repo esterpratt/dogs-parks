@@ -1,15 +1,14 @@
 import { useContext, useState } from 'react';
+import { useParams } from 'react-router';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { UserContext } from '../context/UserContext';
 import { Button } from '../components/Button';
 import { ReviewPreview } from '../components/ReviewPreview';
-import styles from './ParkReviews.module.scss';
 import {
   UpdateReviewProps,
   fetchReviews,
   updateReview,
 } from '../services/reviews';
-import { useParams } from 'react-router';
-import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '../services/react-query';
 import { Review, ReviewData } from '../types/review';
 import { useAddReview } from '../hooks/api/useAddReview';
@@ -17,6 +16,8 @@ import { ReviewModalContextProvider } from '../context/ReviewModalContext';
 import { ReviewModal } from '../components/ReviewModal';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import { Loader } from '../components/Loader';
+import { ReviewsPreview } from '../components/park/ReviewsPreview';
+import styles from './ParkReviews.module.scss';
 
 const Reviews: React.FC = () => {
   const { id: parkId } = useParams();
@@ -114,6 +115,7 @@ const Reviews: React.FC = () => {
   return (
     <ReviewModalContextProvider onUpdateReview={onUpdateReview}>
       <div className={styles.container}>
+        <ReviewsPreview variant="reviews" />
         {showLoader && <Loader inside />}
         {!showLoader && (
           <ul className={styles.list}>

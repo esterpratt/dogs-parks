@@ -9,18 +9,22 @@
 .star {
   &.full {
     color: $orange;
+    fill: rgba($orange, 0.4);
   }
 
   &.half {
     color: $orange;
+    fill: rgba($orange, 0.4);
   }
 
   &.second-half {
     transform: scale(-1, 1);
     color: $grey-bold;
+    fill: rgba($grey-bold, 0.3);
   }
 
   &.empty {
     color: $grey-bold;
+    fill: rgba($grey-bold, 0.3);
   }
 }

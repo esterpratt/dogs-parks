@@ -1,13 +1,14 @@
 import { useContext } from 'react';
 import { Link, useParams } from 'react-router';
-import { UserPreview } from '../components/users/UserPreview';
-import styles from './ParkVisitors.module.scss';
 import { useQuery } from '@tanstack/react-query';
+import { UserPreview } from '../components/users/UserPreview';
 import { UserContext } from '../context/UserContext';
 import { fetchUsersWithDogsByIds } from '../services/users';
 import { Loader } from '../components/Loader';
 import { useGetParkVisitors } from '../hooks/api/useGetParkVisitors';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
+import { Button } from '../components/Button';
+import styles from './ParkVisitors.module.scss';
 
 const ParkVisitors: React.FC = () => {
   const { userId } = useContext(UserContext);
@@ -44,11 +45,11 @@ const ParkVisitors: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      {showLoader && <Loader inside />}
+      {showLoader && <Loader className={styles.loader} inside />}
       {!showLoader && !!friendsCount && (
         <div className={styles.friendsContainer}>
           <span className={styles.friendsTitle}>
-            Friends in the park right now:
+            Friends at the park right now
           </span>
           {friendsInParkWithDogs?.map((user) => (
             <UserPreview
@@ -68,15 +69,20 @@ const ParkVisitors: React.FC = () => {
               <>
                 {othersWithoutUserCount}
                 {(!!friendsCount || userIsVisitor) && ' more'} visitor
-                {othersWithoutUserCount > 1 && 's'} in the park right now.
+                {othersWithoutUserCount > 1 && 's'} at the park right now
               </>
             ) : null}
           </span>
           {!friendsCount && !userIsOnlyVisitor && (
-            <>
-              <span>You can only see friends' details.</span>
-              <Link to="/users">Search for new friends here</Link>
-            </>
+            <div className={styles.notFriends}>
+              <span>You can only see friends' details</span>
+              <div>
+                <span>Sniff out some friends </span>
+                <Button variant="simple">
+                  <Link to="/users">here!</Link>
+                </Button>
+              </div>
+            </div>
           )}
         </div>
       )}
