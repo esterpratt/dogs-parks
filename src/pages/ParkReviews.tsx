@@ -21,7 +21,6 @@ import styles from './ParkReviews.module.scss';
 
 const Reviews: React.FC = () => {
   const { id: parkId } = useParams();
-  const { userId } = useContext(UserContext);
   const [isAddReviewModalOpen, setIsAddReviewModalOpen] = useState(false);
 
   const { data: reviews, isLoading } = useQuery({
@@ -29,7 +28,12 @@ const Reviews: React.FC = () => {
     queryFn: () => fetchReviews(parkId!),
   });
 
-  const { showLoader } = useDelayedLoading({ isLoading, minDuration: 1000 });
+  const { userId } = useContext(UserContext);
+
+  const { showLoader } = useDelayedLoading({
+    isLoading,
+    minDuration: 1000,
+  });
 
   const { addReview } = useAddReview(parkId!, userId);
 
@@ -88,6 +92,10 @@ const Reviews: React.FC = () => {
     mutateReview({ reviewData, reviewId });
   };
 
+  if (!reviews || showLoader) {
+    return <Loader />;
+  }
+
   if (!reviews?.length) {
     return (
       <div className={styles.noReviews}>
@@ -116,16 +124,13 @@ const Reviews: React.FC = () => {
     <ReviewModalContextProvider onUpdateReview={onUpdateReview}>
       <div className={styles.container}>
         <ReviewsPreview variant="reviews" />
-        {showLoader && <Loader inside />}
-        {!showLoader && (
-          <ul className={styles.list}>
-            {reviews.map((review) => (
-              <li key={review.id} className={styles.item}>
-                <ReviewPreview review={review} userId={userId} />
-              </li>
-            ))}
-          </ul>
-        )}
+        <ul className={styles.list}>
+          {reviews.map((review) => (
+            <li key={review.id} className={styles.item}>
+              <ReviewPreview review={review} userId={userId} />
+            </li>
+          ))}
+        </ul>
       </div>
     </ReviewModalContextProvider>
   );

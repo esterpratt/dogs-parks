@@ -21,14 +21,16 @@ const ParkVisitors: React.FC = () => {
     isLoadingVisitors,
   } = useGetParkVisitors(parkId!, userId);
 
-  const { data: friendsInParkWithDogs, isLoading: isLoadingDogs } = useQuery({
-    queryKey: ['parkVisitorsWithDogs', parkId],
-    queryFn: () => fetchUsersWithDogsByIds(friendsInParkIds),
-    enabled: !!friendsInParkIds.length,
-  });
+  const { data: friendsInParkWithDogs, isLoading: isLoadingFriends } = useQuery(
+    {
+      queryKey: ['parkVisitorsWithDogs', parkId],
+      queryFn: () => fetchUsersWithDogsByIds(friendsInParkIds),
+      enabled: !!friendsInParkIds.length,
+    }
+  );
 
   const { showLoader } = useDelayedLoading({
-    isLoading: isLoadingDogs || isLoadingFriendsIds || isLoadingVisitors,
+    isLoading: isLoadingFriends || isLoadingFriendsIds || isLoadingVisitors,
     minDuration: 1000,
   });
 
@@ -43,10 +45,13 @@ const ParkVisitors: React.FC = () => {
     return null;
   }
 
+  if (showLoader) {
+    return <Loader />;
+  }
+
   return (
     <div className={styles.container}>
-      {showLoader && <Loader className={styles.loader} inside />}
-      {!showLoader && !!friendsCount && (
+      {!!friendsCount && (
         <div className={styles.friendsContainer}>
           <span className={styles.friendsTitle}>
             Friends at the park right now
