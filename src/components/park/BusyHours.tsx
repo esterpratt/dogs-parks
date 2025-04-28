@@ -76,7 +76,7 @@ const BusyHours: React.FC<BusyHoursProps> = ({ parkId }) => {
                 variant="simple"
                 color={styles.white}
                 className={styles.button}
-                onClick={() => {}}
+                onClick={() => setIsDogsCountModalOpen(true)}
               >
                 <Plus size={24} />
               </Button>

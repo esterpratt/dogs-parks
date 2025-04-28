@@ -165,7 +165,7 @@ const UserDog = () => {
                     <span className={styles.age}>
                       <Cake color={styles.green} size={14} />
                       <span>
-                        {age.diff === 0
+                        {age.diff <= 0
                           ? 'Just Born'
                           : `${age.diff} ${age.unit} old`}
                       </span>

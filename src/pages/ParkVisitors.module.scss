@@ -13,7 +13,7 @@
 .friends-container {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
 }
 
 .friends-title {
@@ -32,6 +32,8 @@
 }
 
 .othersContainer:only-child {
+  margin: 24px;
+
   .othersTitle {
     font-size: 18px;
     text-align: center;
@@ -43,15 +45,11 @@
   flex-direction: column;
   gap: 16px;
   align-items: center;
-  font-size: 14px;
+  font-size: 16px;
 
   a {
     text-decoration: none;
     color: inherit;
-    font-size: 14px;
+    font-size: 16px;
   }
 }
-
-// .othersContainer:not(:only-child) {
-//   margin-top: 24px;
-// }

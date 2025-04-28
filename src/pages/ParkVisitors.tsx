@@ -67,9 +67,9 @@ const ParkVisitors: React.FC = () => {
       )}
       {!showLoader && !!othersCount && (
         <div className={styles.othersContainer}>
-          <span className={styles.othersTitle}>
+          <div className={styles.othersTitle}>
             {userIsOnlyVisitor ? (
-              'You are the only visitor in the park right now'
+              'You are the only visitor at the park right now'
             ) : othersWithoutUserCount ? (
               <>
                 {othersWithoutUserCount}
@@ -77,7 +77,7 @@ const ParkVisitors: React.FC = () => {
                 {othersWithoutUserCount > 1 && 's'} at the park right now
               </>
             ) : null}
-          </span>
+          </div>
           {!friendsCount && !userIsOnlyVisitor && (
             <div className={styles.notFriends}>
               <span>You can only see friends' details</span>

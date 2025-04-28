@@ -104,7 +104,6 @@ const Park: React.FC = () => {
   return (
     <>
       <Header
-        size="extraLarge"
         containerClassName={styles.header}
         imgsClassName={styles.imgContainer}
         prevLinksCmp={

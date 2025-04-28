@@ -61,7 +61,11 @@ const Carousel: React.FC<CarouselProps> = ({
           ))}
           {addImage && (
             <div className={styles.buttonContainer}>
-              <Button onClick={addImage} className={styles.addImage}>
+              <Button
+                variant="secondary"
+                onClick={addImage}
+                className={styles.addImage}
+              >
                 <Plus size={48} className={styles.plus} />
                 <span>Add photo</span>
               </Button>

@@ -51,7 +51,13 @@ const DogPreview: React.FC<DogPreviewProps> = ({ dog, image }) => {
           </div>
           {age !== null && (
             <div className={styles.age}>
-              {age.diff === 0 ? 'Just Born' : `${age.diff} ${age.unit} old`}
+              {age.diff === 0
+                ? 'Just Born'
+                : age.diff > 0
+                ? `${age.diff} ${age.unit} old`
+                : `${age.diff} ${age.unit} old. No wonder ${
+                    gender === GENDER.FEMALE ? 'she' : 'he'
+                  } looks so good!`}
             </div>
           )}
         </div>

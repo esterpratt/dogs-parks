@@ -99,7 +99,7 @@ const Reviews: React.FC = () => {
   if (!reviews?.length) {
     return (
       <div className={styles.noReviews}>
-        <span className={styles.title}>No barks about this park yet.</span>
+        <span className={styles.title}>No barks about this park yet</span>
         {userId && (
           <div>
             <Button
