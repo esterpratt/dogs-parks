@@ -4,6 +4,7 @@ import { useDebounce } from '../hooks/useDebounce';
 import { SearchListItems } from './SearchListItems';
 import styles from './SearchList.module.scss';
 import { SearchInput, SearchInputProps } from './inputs/SearchInput';
+import { SearchListInfiniteItems } from './SearchListInfiniteItems';
 
 interface SearchListProps<T> {
   items: T[];
@@ -18,6 +19,7 @@ interface SearchListProps<T> {
     placeholder,
   }: SearchInputProps) => ReactNode;
   children: (item: T) => ReactNode;
+  isInfinite?: boolean;
 }
 
 const SearchList = <T,>({
@@ -29,6 +31,7 @@ const SearchList = <T,>({
   noResultsLayout = 'No Results',
   renderSearchInput,
   children,
+  isInfinite,
 }: SearchListProps<T>) => {
   const [input, setInput] = useState<string>('');
   const { searchInput } = useDebounce(input);
@@ -57,9 +60,17 @@ const SearchList = <T,>({
         />
       )}
       {!!filteredItems.length && (
-        <SearchListItems items={filteredItems} itemKeyfn={itemKeyfn}>
-          {children}
-        </SearchListItems>
+        <>
+          {isInfinite ? (
+            <SearchListInfiniteItems items={filteredItems}>
+              {children}
+            </SearchListInfiniteItems>
+          ) : (
+            <SearchListItems items={filteredItems} itemKeyfn={itemKeyfn}>
+              {children}
+            </SearchListItems>
+          )}
+        </>
       )}
       {!filteredItems.length && !!noResultsLayout && (
         <span className={styles.noResults}>{noResultsLayout}</span>

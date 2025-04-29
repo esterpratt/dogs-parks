@@ -28,6 +28,7 @@ import { AuthCallback } from './pages/AuthCallback';
 import { userLoader } from './loaders/userLoader';
 import { UpdatePassowrd } from './pages/UpdatePassword';
 import { About } from './pages/About';
+import { UserLocationProvider } from './context/LocationContext';
 
 const UserDog = lazy(() => import('./pages/UserDog'));
 const UserReviews = lazy(() => import('./pages/UserReviews'));
@@ -154,15 +155,17 @@ const App = () => {
   ]);
 
   return (
-    <OrientationProvider>
-      <ThankYouModalProvider>
-        <QueryClientProvider client={queryClient}>
-          <UserContextProvider>
-            <RouterProvider router={router} />
-          </UserContextProvider>
-        </QueryClientProvider>
-      </ThankYouModalProvider>
-    </OrientationProvider>
+    <UserLocationProvider>
+      <OrientationProvider>
+        <ThankYouModalProvider>
+          <QueryClientProvider client={queryClient}>
+            <UserContextProvider>
+              <RouterProvider router={router} />
+            </UserContextProvider>
+          </QueryClientProvider>
+        </ThankYouModalProvider>
+      </OrientationProvider>
+    </UserLocationProvider>
   );
 };
 

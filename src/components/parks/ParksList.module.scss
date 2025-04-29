@@ -6,12 +6,6 @@
   gap: 24px;
   width: 100%;
   max-height: calc($content-max-height - $navbar-height);
-
-  ul {
-    padding: 8px calc(16px + var(--safe-area-inset-right, 0px)) 24px
-      calc(16px + var(--safe-area-inset-left, 0px));
-    gap: 24px;
-  }
 }
 
 .no-results {

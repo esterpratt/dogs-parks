@@ -1,19 +1,20 @@
 import { Link } from 'react-router';
+import { useContext } from 'react';
 import classnames from 'classnames';
+import { useQuery } from '@tanstack/react-query';
+import { Map } from 'lucide-react';
 import { Park } from '../../types/park';
 import { SearchList } from '../SearchList';
-import styles from './ParksList.module.scss';
 import { ParkPreview } from './ParkPreview';
-import { useDistance } from '../../hooks/useDistance';
+import { fetchSortedParks } from '../../utils/fetchSortedParks';
 import { fetchParksJSON } from '../../services/parks';
-import { useQuery } from '@tanstack/react-query';
 import { Loader } from '../Loader';
-import { useContext, useMemo } from 'react';
-import { useDelayedLoading } from '../../hooks/useDelayedLoading';
 import { UserContext } from '../../context/UserContext';
 import { Button } from '../Button';
-import { Map } from 'lucide-react';
 import { SearchInput, SearchInputProps } from '../inputs/SearchInput';
+import { useUserLocation } from '../../context/LocationContext';
+import styles from './ParksList.module.scss';
+import { useDelayedLoading } from '../../hooks/useDelayedLoading';
 
 interface ParksListProps {
   className?: string;
@@ -21,22 +22,22 @@ interface ParksListProps {
 
 const ParksList: React.FC<ParksListProps> = ({ className }) => {
   const { user } = useContext(UserContext);
-  const { isLoading, data: parks } = useQuery({
+  const { data: parks, isLoading: isLoadingParks } = useQuery({
     queryKey: ['parks'],
     queryFn: fetchParksJSON,
   });
 
-  const { showLoader } = useDelayedLoading({ isLoading });
+  const userLocation = useUserLocation((state) => state.userLocation);
 
-  const parksToSort = useMemo(() => {
-    return parks?.map((park) => ({
-      ...park,
-      latitude: park.location.lat,
-      longitude: park.location.long,
-    }));
-  }, [parks]);
+  const { data: sortedParks, isLoading: isLoadingSortedParks } = useQuery({
+    queryKey: ['sortedParks', userLocation],
+    queryFn: () => fetchSortedParks(parks!, userLocation),
+    enabled: !!parks && !!userLocation,
+  });
 
-  const sortedParks = useDistance(parksToSort);
+  const { showLoader } = useDelayedLoading({
+    isLoading: isLoadingParks || isLoadingSortedParks,
+  });
 
   const searchParksFunc = (park: Park, searchInput: string) => {
     return (
@@ -61,12 +62,13 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
     </div>
   );
 
-  if (showLoader) {
+  if (showLoader || !sortedParks) {
     return <Loader />;
   }
 
   return (
     <SearchList
+      isInfinite
       items={sortedParks}
       placeholder="Search Park"
       noResultsLayout={NoResultsLayout}
