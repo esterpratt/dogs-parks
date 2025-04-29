@@ -1,3 +1,4 @@
+import { Button } from '../components/Button';
 import styles from './PrivacyPolicy.module.scss';
 
 const PrivacyPolicy = () => {
@@ -83,7 +84,11 @@ const PrivacyPolicy = () => {
           You can delete your account anytime from the profile settings. This
           will remove all data related to you. If you encounter any issues, feel
           free to contact us at{' '}
-          <a href="mailto:esterpratt@gmail.com">esterpratt@gmail.com</a>
+          <a href="mailto:esterpratt@gmail.com">
+            <Button variant="simple" className={styles.button}>
+              esterpratt@gmail.com
+            </Button>
+          </a>
         </span>
         <span>
           If you prefer to keep your page private, you can change this anytime
@@ -118,7 +123,11 @@ const PrivacyPolicy = () => {
         <h2>10. Contact Us</h2>
         <p>
           If you have questions about this Privacy Policy, contact us at:{' '}
-          <a href="mailto:esterpratt@gmail.com">esterpratt@gmail.com</a>
+          <a href="mailto:esterpratt@gmail.com">
+            <Button variant="simple" className={styles.button}>
+              esterpratt@gmail.com
+            </Button>
+          </a>
         </p>
       </div>
     </div>

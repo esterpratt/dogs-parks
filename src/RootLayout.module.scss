@@ -8,7 +8,8 @@
   max-height: $content-max-height;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
-  background-color: rgba($blue, 0.01);
+  // background-color: rgba($blue, 0.01);
+  background-color: $white;
 }
 
 .keyboard-height-container {

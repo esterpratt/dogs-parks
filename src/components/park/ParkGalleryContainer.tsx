@@ -80,7 +80,7 @@ const ParkGalleryContainer: React.FC<ParkGalleryContainerProps> = ({
               <span>No photos for this park yet. </span>
               <div>
                 <Button variant="simple" className={styles.link}>
-                  <Link to="/login">Log In</Link>
+                  <Link to="/login?mode=login">Log In</Link>
                 </Button>
                 <span> to add data.</span>
               </div>

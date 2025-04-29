@@ -74,6 +74,7 @@
     width: 100%;
 
     .inner {
+      font-size: inherit;
       width: 100%;
       display: flex;
       align-items: center;
@@ -90,4 +91,8 @@
   a {
     text-decoration: none;
   }
+}
+
+:export {
+  blue: $blue;
 }

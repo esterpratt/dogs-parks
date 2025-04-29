@@ -1,9 +1,11 @@
 import { useContext, useRef, useState } from 'react';
-import { NavLink } from 'react-router';
+import { NavLink, useNavigate } from 'react-router';
 import {
   Ellipsis,
   House,
   Info,
+  LogIn,
+  LogOut,
   Map,
   PawPrint,
   Plus,
@@ -15,9 +17,11 @@ import classnames from 'classnames';
 import { UserContext } from '../context/UserContext';
 import styles from './NavbarBottom.module.scss';
 import { useClickOutside } from '../hooks/useClickOutside';
+import { Button } from './Button';
 
 const NavbarBottom = () => {
-  const { userId } = useContext(UserContext);
+  const { userId, userLogout } = useContext(UserContext);
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
   useClickOutside({
@@ -26,6 +30,11 @@ const NavbarBottom = () => {
       setIsMenuOpen(false);
     },
   });
+
+  const logout = () => {
+    userLogout();
+    navigate('/');
+  };
 
   const handleLinkClick = () => {
     setIsMenuOpen(false);
@@ -58,7 +67,7 @@ const NavbarBottom = () => {
               </div>
             </NavLink>
             <NavLink
-              to={userId ? `/profile/${userId}` : '/login'}
+              to={userId ? `/profile/${userId}` : '/login?mode=login'}
               className={({ isActive }) =>
                 isActive ? `${[styles.active]}` : ''
               }
@@ -146,6 +155,32 @@ const NavbarBottom = () => {
             <span>About</span>
           </NavLink>
         </div>
+        {userId ? (
+          <div className={styles.menuItem}>
+            <Button
+              variant="simple"
+              color={styles.blue}
+              onClick={logout}
+              className={styles.inner}
+            >
+              <LogOut size={18} strokeWidth={2} />
+              <span>Logout</span>
+            </Button>
+          </div>
+        ) : (
+          <div className={styles.menuItem}>
+            <NavLink
+              to="/login?mode=login"
+              onClick={handleLinkClick}
+              className={({ isActive }) =>
+                classnames(styles.inner, { [styles.active]: isActive })
+              }
+            >
+              <LogIn size={18} strokeWidth={2} />
+              <span>Login</span>
+            </NavLink>
+          </div>
+        )}
       </div>
     </>
   );

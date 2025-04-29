@@ -21,13 +21,12 @@ const DeletionConfirmation: React.FC = () => {
   return (
     <div className={styles.content}>
       <span>Your data has been sent to a farm up north.</span>
-      <span>Don't worry - The app's still here wagging its tail for you.</span>
       <span>
         Thanks for being part of the pack! The doggy door is always open — come
         back anytime!
       </span>
       <Link to="/">
-        <Button variant="green">Go Home</Button>
+        <Button>Go Home</Button>
       </Link>
     </div>
   );

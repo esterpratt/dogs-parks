@@ -2,12 +2,12 @@ import { FormEvent, useContext, useEffect, useState } from 'react';
 import classnames from 'classnames';
 import { Button } from '../components/Button';
 import { UserContext } from '../context/UserContext';
-import { FormInput } from '../components/inputs/FormInput';
 import { ThankYouModal } from '../components/ThankYouModal';
-import styles from './UpdatePassword.module.scss';
 import { updatePassword } from '../services/authentication';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
+import { Input } from '../components/inputs/Input';
+import styles from './UpdatePassword.module.scss';
 
 const UpdatePassowrd = () => {
   const [error, setError] = useState('');
@@ -21,7 +21,7 @@ const UpdatePassowrd = () => {
 
   useEffect(() => {
     if (!isLoadingAuthUser && !userId) {
-      navigate('/login');
+      navigate('/login?mode=login');
     }
   }, [userId, isLoadingAuthUser, navigate]);
 
@@ -70,15 +70,13 @@ const UpdatePassowrd = () => {
           </span>
         </div>
         <form onSubmit={handleSubmit} className={styles.inputsContainer}>
-          <div className={styles.inputs}>
-            <FormInput
-              onChange={() => setError('')}
-              name="password"
-              label="Enter new password"
-              type="password"
-            />
-          </div>
-          <Button variant="green" type="submit" className={styles.button}>
+          <Input
+            onChange={() => setError('')}
+            name="password"
+            placeholder="Enter new password"
+            type="password"
+          />
+          <Button type="submit" className={styles.button}>
             Change Passowrd
           </Button>
         </form>

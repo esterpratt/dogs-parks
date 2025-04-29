@@ -2,8 +2,8 @@
 
 .input {
   font-weight: inherit;
-  color: $text-medium;
-  border: 1px solid $grey-bold;
+  color: $text;
+  border: 1px solid $pink;
   background-color: $white;
   border-radius: 18px;
   font-size: 16px;
@@ -23,6 +23,6 @@
   }
 
   &::placeholder {
-    color: $text-light;
+    color: $placeholder;
   }
 }

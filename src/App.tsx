@@ -6,7 +6,6 @@ import './App.scss';
 import { Home } from './pages/Home';
 import { RootLayout } from './RootLayout';
 import { ErrorPage } from './pages/Error';
-import { Signin } from './pages/Signin';
 import { Login } from './pages/Login';
 import { Profile } from './pages/Profile';
 import { Parks } from './pages/Parks';
@@ -15,9 +14,7 @@ import { UserDogs } from './pages/UserDogs';
 import { Park } from './pages/Park';
 import { ParkDetails } from './pages/ParkDetails';
 import { NewPark } from './pages/NewPark';
-
 import { queryClient } from './services/react-query';
-
 import { UserContextProvider } from './context/UserContext';
 import { DeletionConfirmation } from './pages/DeletionConfirmation';
 import { PrivateRoute } from './pages/PrivateRoute';
@@ -86,10 +83,6 @@ const App = () => {
               element: <ParkVisitors />,
             },
           ],
-        },
-        {
-          path: '/signin',
-          element: <Signin />,
         },
         {
           path: '/login',

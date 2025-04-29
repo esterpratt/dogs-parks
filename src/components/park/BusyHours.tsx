@@ -110,7 +110,7 @@ const BusyHours: React.FC<BusyHoursProps> = ({ parkId }) => {
               {!userId && !dogsCount?.length && (
                 <div>
                   <Button variant="simple" className={styles.link}>
-                    <Link to="/login">Log In</Link>
+                    <Link to="/login?mode=login">Log In</Link>
                   </Button>
                   <span> to add data.</span>
                 </div>

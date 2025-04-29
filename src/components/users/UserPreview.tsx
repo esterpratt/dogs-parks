@@ -124,7 +124,7 @@ const UserPreview: React.FC<UserPreviewProps> = ({
         <div className={styles.message}>
           <>
             To see user's page and make friends, you must{' '}
-            <Link to="../login" className={styles.link}>
+            <Link to="../login?mode=login" className={styles.link}>
               log in
             </Link>
           </>

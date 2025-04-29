@@ -12,6 +12,14 @@
   border: 1px solid $grey-bold;
   border-radius: 12px;
 
+  :global(.leaflet-touch .leaflet-bar.leaflet-control-zoom) {
+    top: 0;
+  }
+
+  :global(.leaflet-left .leaflet-control) {
+    margin-left: 10px;
+  }
+
   > div {
     border-radius: 12px;
   }

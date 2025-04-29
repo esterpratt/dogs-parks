@@ -1,16 +1,17 @@
 import { ChangeEvent, useContext, useState } from 'react';
-import styles from './NewPark.module.scss';
 import classnames from 'classnames';
-import { Location, NewParkDetails } from '../types/park';
-import { ControlledInput } from '../components/inputs/ControlledInput';
-import { Button } from '../components/Button';
-import { LocationInput } from '../components/inputs/LocationInput';
-import { createParkSuggestion } from '../services/park-suggestions';
 import { Link, useNavigate } from 'react-router';
 import { useMutation } from '@tanstack/react-query';
 import { LeafletMouseEvent } from 'leaflet';
+import { Location, NewParkDetails } from '../types/park';
+import { Button } from '../components/Button';
+import { LocationInput } from '../components/inputs/LocationInput';
+import { createParkSuggestion } from '../services/park-suggestions';
 import { UserContext } from '../context/UserContext';
 import { Modal } from '../components/Modal';
+import { Input } from '../components/inputs/Input';
+import styles from './NewPark.module.scss';
+import { MoveLeft } from 'lucide-react';
 
 const NewPark: React.FC = () => {
   const [markerLocation, setMarkerLocation] = useState<Location | null>(null);
@@ -49,10 +50,6 @@ const NewPark: React.FC = () => {
     });
   };
 
-  const onCancel = () => {
-    navigate('/parks');
-  };
-
   const onAddPark = async () => {
     if (!user?.id) {
       setIsModalOpen(true);
@@ -77,33 +74,41 @@ const NewPark: React.FC = () => {
 
   return (
     <>
+      <div className={styles.prevLinks}>
+        {
+          <Link to="/parks">
+            <MoveLeft size={16} />
+            <span>All parks</span>
+          </Link>
+        }
+      </div>
       <div className={styles.container}>
         <div className={styles.title}>Fill the park details to add it</div>
         <div className={classnames(styles.error, error && styles.show)}>
           {error}
         </div>
         <div className={styles.inputsContainer}>
-          <ControlledInput
-            label="Park Name"
+          <Input
+            placeholder="Park Name"
             name="name"
             value={parkDetails.name}
             onChange={onChangeParkDetails}
           />
-          <ControlledInput
+          <Input
             type="number"
-            label="Size in meters (if known)"
+            placeholder="Size in meters (if known)"
             name="size"
             value={parkDetails.size}
             onChange={onChangeParkDetails}
           />
-          <ControlledInput
-            label="City *"
+          <Input
+            placeholder="City *"
             name="city"
             value={parkDetails.city}
             onChange={onChangeParkDetails}
           />
-          <ControlledInput
-            label="Address *"
+          <Input
+            placeholder="Address *"
             name="address"
             value={parkDetails.address}
             onChange={onChangeParkDetails}
@@ -114,25 +119,15 @@ const NewPark: React.FC = () => {
             onMapClick={onMapClick}
             className={styles.map}
           />
-          <div className={styles.buttons}>
-            <Button
-              variant="green"
-              onClick={onAddPark}
-              className={styles.button}
-              disabled={
-                !markerLocation || !parkDetails.address || !parkDetails.city
-              }
-            >
-              Add Park
-            </Button>
-            <Button
-              variant="orange"
-              onClick={onCancel}
-              className={styles.button}
-            >
-              Cancel
-            </Button>
-          </div>
+          <Button
+            onClick={onAddPark}
+            className={styles.button}
+            disabled={
+              !markerLocation || !parkDetails.address || !parkDetails.city
+            }
+          >
+            Add Park
+          </Button>
         </div>
       </div>
       <Modal
@@ -145,7 +140,7 @@ const NewPark: React.FC = () => {
         <div className={styles.modalContainer}>
           <span>Only klavhub members can add a new park.</span>
           <span>
-            <Link to="/login">Log In</Link> to be part of the pack!
+            <Link to="/login?mode=login">Log In</Link> to be part of the pack!
           </span>
         </div>
       </Modal>

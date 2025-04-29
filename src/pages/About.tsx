@@ -1,3 +1,4 @@
+import { Button } from '../components/Button';
 import styles from './About.module.scss';
 import { Link } from 'react-router';
 
@@ -7,10 +8,18 @@ const About = () => {
   return (
     <div className={styles.container}>
       <h3>Welcome to Klavhub!</h3>
-      <Link to="/privacy-policy">See our Privacy Policy</Link>
+      <Link to="/privacy-policy">
+        <Button variant="simple" className={styles.button}>
+          See our Privacy Policy
+        </Button>
+      </Link>
       <div>
         <span>This app was created by: </span>
-        <Link to="https://github.com/esterpratt">Ester Pratt.</Link>
+        <Link to="https://github.com/esterpratt">
+          <Button className={styles.button} variant="simple">
+            Ester Pratt.
+          </Button>
+        </Link>
       </div>
       <div>
         <span>Inspired by: </span>
@@ -25,7 +34,12 @@ const About = () => {
         the community. You can support by joining the community, sharing with
         friends, adding details about your local dog park, and contributing
         missing parks. For any suggestions or feedback, feel free to email me
-        at: <Link to={`mailto:${MAIL}`}>{MAIL}</Link>
+        at:{' '}
+        <Link to={`mailto:${MAIL}`}>
+          <Button className={styles.button} variant="simple">
+            {MAIL}
+          </Button>
+        </Link>
       </div>
     </div>
   );
