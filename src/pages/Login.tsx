@@ -1,22 +1,15 @@
-import {
-  FormEvent,
-  MouseEvent,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { FormEvent, MouseEvent, useContext, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 import classnames from 'classnames';
 import GoogleIcon from '../assets/google.svg?react';
 import { Button } from '../components/Button';
 import { UserContext } from '../context/UserContext';
 import { SigninProps } from '../context/UserContext';
-import { ThankYouModal } from '../components/ThankYouModal';
 import { useMutation } from '@tanstack/react-query';
 import { sendResetEmail } from '../services/authentication';
 import { Input } from '../components/inputs/Input';
 import styles from './Login.module.scss';
+import { useNotification } from '../context/NotificationContext';
 
 const Login = () => {
   const { user, userSignin, userLogin, error, setError, isLoading } =
@@ -24,8 +17,8 @@ const Login = () => {
   const [searchParams, setSearchParams] = useSearchParams({ mode: 'signup' });
   const isSignup = searchParams.get('mode') === 'signup';
   const mailRef = useRef<HTMLInputElement | null>(null);
-  const [isThankYouModalOpen, setIsThankYouModalOpen] = useState(false);
   const navigate = useNavigate();
+  const { notify } = useNotification();
 
   useEffect(() => {
     if (user) {
@@ -46,7 +39,7 @@ const Login = () => {
         setError(error.message);
       },
       onSuccess: () => {
-        setIsThankYouModalOpen(true);
+        notify('Check your mail for details');
         setError('');
       },
     });
@@ -192,11 +185,6 @@ const Login = () => {
           </div>
         )}
       </div>
-      <ThankYouModal
-        open={isThankYouModalOpen}
-        onClose={() => setIsThankYouModalOpen(false)}
-        title="Check your mail for details"
-      />
     </>
   );
 };

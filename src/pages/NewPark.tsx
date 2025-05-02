@@ -8,10 +8,10 @@ import { Button } from '../components/Button';
 import { LocationInput } from '../components/inputs/LocationInput';
 import { createParkSuggestion } from '../services/park-suggestions';
 import { UserContext } from '../context/UserContext';
-import { Modal } from '../components/Modal';
 import { Input } from '../components/inputs/Input';
-import styles from './NewPark.module.scss';
 import { MoveLeft } from 'lucide-react';
+import { TopModal } from '../components/modals/TopModal';
+import styles from './NewPark.module.scss';
 
 const NewPark: React.FC = () => {
   const [markerLocation, setMarkerLocation] = useState<Location | null>(null);
@@ -130,20 +130,25 @@ const NewPark: React.FC = () => {
           </Button>
         </div>
       </div>
-      <Modal
+      <TopModal
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        height={'30%'}
-        saveButtonDisabled
         className={styles.modal}
       >
         <div className={styles.modalContainer}>
-          <span>Only klavhub members can add a new park.</span>
+          <span>Only Klavhub members can add a new park.</span>
           <span>
             <Link to="/login?mode=login">Log In</Link> to be part of the pack!
           </span>
+          <Button
+            variant="secondary"
+            className={styles.button}
+            onClick={() => setIsModalOpen(false)}
+          >
+            Exit
+          </Button>
         </div>
-      </Modal>
+      </TopModal>
     </>
   );
 };

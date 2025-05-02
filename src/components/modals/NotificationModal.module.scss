@@ -1,0 +1,36 @@
+@use '../../variables.scss' as *;
+@use './shared' as shared;
+
+.modal {
+  @extend %modal;
+  transition-delay: 0.1s;
+  margin: auto 12px calc($navbar-height + 12px) auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 80%;
+  padding: 24px 16px;
+  color: $text;
+  font-size: 20px;
+  z-index: 1200;
+  transform: translateX(150%);
+
+  &[open] {
+    transform: translateX(0);
+  }
+
+  &:not([open]) {
+    transform: translateX(150%);
+  }
+}
+
+.message-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+:export {
+  green: $green;
+}

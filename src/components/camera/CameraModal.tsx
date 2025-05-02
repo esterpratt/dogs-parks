@@ -2,10 +2,13 @@ import { useState } from 'react';
 import { isMobile } from '../../utils/platform';
 import CameraMobileModal from './CameraMobileModal';
 import CameraWebModal from './CameraWebModal';
+import { BottomModal } from '../modals/BottomModal';
+import styles from './CameraModal.module.scss';
+import { TopModal } from '../modals/TopModal';
 
 interface CameraModalProps {
   open: boolean;
-  variant?: 'centerTop' | 'bottom';
+  variant?: 'top' | 'bottom';
   setOpen: (open: boolean) => void;
   onUploadImg: (img: string | File) => void;
   title?: string;
@@ -30,26 +33,36 @@ const CameraModal: React.FC<CameraModalProps> = ({
     setError(error);
   };
 
-  return isMobile ? (
-    <CameraMobileModal
-      error={error}
-      onCameraError={onCameraError}
-      onCloseModal={onCloseModal}
-      open={open}
-      onUploadImg={onUploadImg}
-      variant={variant}
-      title={title}
-    />
+  const renderInnerModal = () => {
+    return isMobile ? (
+      <CameraMobileModal
+        error={error}
+        onCameraError={onCameraError}
+        onCloseModal={onCloseModal}
+        onUploadImg={onUploadImg}
+        variant={variant}
+        title={title}
+      />
+    ) : (
+      <CameraWebModal
+        error={error}
+        onCameraError={onCameraError}
+        onCloseModal={onCloseModal}
+        onUploadImg={onUploadImg}
+        variant={variant}
+        title={title}
+      />
+    );
+  };
+
+  return variant === 'bottom' ? (
+    <BottomModal open={open} onClose={onCloseModal} className={styles.modal}>
+      {renderInnerModal()}
+    </BottomModal>
   ) : (
-    <CameraWebModal
-      error={error}
-      onCameraError={onCameraError}
-      onCloseModal={onCloseModal}
-      open={open}
-      onUploadImg={onUploadImg}
-      variant={variant}
-      title={title}
-    />
+    <TopModal open={open} onClose={onCloseModal} className={styles.modal}>
+      {renderInnerModal()}
+    </TopModal>
   );
 };
 

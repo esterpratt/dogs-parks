@@ -1,58 +1,34 @@
 @use '../variables' as *;
 
-.content-container {
-  padding: 56px 24px 24px;
-  height: 100%;
+.modal {
+  padding: 24px;
 }
 
-.title {
-  margin-bottom: 24px;
-  font-size: $second-title-font-size;
-
-  &:last-child {
-    font-size: 20px;
-    margin-top: 12px;
-    margin-bottom: 0;
-  }
-}
-
-.form-container {
+.form {
   display: flex;
   flex-direction: column;
   gap: 24px;
   color: $text;
-}
-
-.form-title {
-  font-size: $second-title-font-size;
-}
-
-.form {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.form-inputs {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+  width: 100%;
+  font-size: 16px;
 }
 
 .rank-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 12px;
 }
 
 .rank-title {
-  font-size: 18px;
   padding-left: 4px;
 }
 
 .stars {
-  padding: 16px;
+  width: fit-content;
+}
+
+.checkbox {
+  padding-top: 12px;
 }
 
 @media (orientation: landscape) {

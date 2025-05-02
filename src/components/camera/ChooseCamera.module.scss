@@ -1,0 +1,26 @@
+@use '../../variables.scss' as *;
+
+.container {
+  padding-top: 12px;
+  width: 100%;
+}
+
+.title {
+  font-size: 18px;
+  margin-bottom: 24px;
+}
+
+.buttons-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  gap: 12px;
+}
+
+.error {
+  height: 16px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: $red;
+}

@@ -1,13 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { RefreshCcw, RotateCcw, RotateCw, X } from 'lucide-react';
 import Webcam from 'react-webcam';
-import { IconContext } from 'react-icons';
-import { FaArrowsRotate } from 'react-icons/fa6';
-import { CgClose } from 'react-icons/cg';
-import { AiOutlineRotateLeft } from 'react-icons/ai';
-import { AiOutlineRotateRight } from 'react-icons/ai';
-import styles from './Camera.module.scss';
 import { Button } from '../Button';
 import { rotateImage } from '../../utils/dom';
+import styles from './Camera.module.scss';
 
 interface CustomWebcamProps {
   onSaveImg: (img: string) => void;
@@ -60,15 +56,25 @@ const Camera: React.FC<CustomWebcamProps> = ({
     <div className={styles.camera}>
       {img ? (
         <>
+          <Button
+            onClick={onClose}
+            variant="simple"
+            className={styles.closeButton}
+          >
+            <X size={24} />
+          </Button>
+
           <div className={styles.imgContainer}>
             <img src={img} alt="screenshot" className={styles.cameraView} />
           </div>
           <div className={styles.buttonsContainer}>
             <div className={styles.rotationButtons}>
-              <IconContext.Provider value={{ className: styles.icons }}>
-                <AiOutlineRotateLeft onClick={rotateImgLeft} />
-                <AiOutlineRotateRight onClick={rotateImgRight} />
-              </IconContext.Provider>
+              <Button variant="simple" onClick={rotateImgLeft}>
+                <RotateCcw size={24} />
+              </Button>
+              <Button variant="simple" onClick={rotateImgRight}>
+                <RotateCw size={24} />
+              </Button>
             </div>
             <Button
               className={styles.recaptureButton}
@@ -98,29 +104,27 @@ const Camera: React.FC<CustomWebcamProps> = ({
             />
           </div>
           <div className={styles.captureButtonsContainer}>
-            <IconContext.Provider value={{ className: styles.icons }}>
-              <Button onClick={onClose} variant="simple">
-                <CgClose />
-              </Button>
-              <Button
-                onClick={captureImg}
-                className={styles.captureButton}
-                variant="simple"
-              >
-                <div className={styles.inner} />
-              </Button>
-              <Button
-                onClick={() =>
-                  setFacingMode((prev) =>
-                    prev === 'environment' ? 'user' : 'environment'
-                  )
-                }
-                className={styles.rotateButton}
-                variant="simple"
-              >
-                <FaArrowsRotate />
-              </Button>
-            </IconContext.Provider>
+            <Button onClick={onClose} variant="simple">
+              <X size={36} />
+            </Button>
+            <Button
+              onClick={captureImg}
+              className={styles.captureButton}
+              variant="simple"
+            >
+              <div className={styles.inner} />
+            </Button>
+            <Button
+              onClick={() =>
+                setFacingMode((prev) =>
+                  prev === 'environment' ? 'user' : 'environment'
+                )
+              }
+              className={styles.rotateButton}
+              variant="simple"
+            >
+              <RefreshCcw size={36} />
+            </Button>
           </div>
         </>
       )}

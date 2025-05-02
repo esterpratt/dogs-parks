@@ -1,10 +1,10 @@
 @use '../../variables' as *;
 
 .approve-modal {
-  padding: 56px 24px 24px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 36px;
 }
 
 .approve-content {
@@ -14,12 +14,24 @@
   gap: 24px;
 }
 
-.delete-button {
-  margin: 0 auto;
+.buttons-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+
+  .modal-button {
+    width: 100%;
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
 }
 
-@media (orientation: landscape) {
-  .approve-modal {
-    padding-top: 24px;
-  }
+.loader {
+  width: 24px;
+  height: 24px;
 }

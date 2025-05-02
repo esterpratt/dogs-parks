@@ -19,7 +19,6 @@ interface Park {
   size: number | null;
   materials: ParkMaterial[] | null;
   shade: number | null;
-  has_water: boolean | null;
   has_facilities: boolean | null;
 }
 

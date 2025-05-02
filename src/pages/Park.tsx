@@ -1,4 +1,4 @@
-import { useContext, useState, lazy, Suspense, useRef } from 'react';
+import { useContext, useState, lazy, Suspense } from 'react';
 import { Link, Outlet, useParams } from 'react-router';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
@@ -24,11 +24,11 @@ import { ParkCheckIn } from '../components/park/ParkCheckIn';
 import { ParkIcon } from '../components/park/ParkIcon';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import { isMobile } from '../utils/platform';
-import { ThankYouModal } from '../components/ThankYouModal';
 import { EnlargeImageModal } from '../components/EnlargeImageModal';
 import { Header } from '../components/Header';
 import { HeaderImage } from '../components/HeaderImage';
 import styles from './Park.module.scss';
+import { useNotification } from '../context/NotificationContext';
 
 const CameraModal = lazy(() => import('../components/camera/CameraModal'));
 
@@ -36,11 +36,10 @@ const Park: React.FC = () => {
   const { id: parkId } = useParams();
   const { user } = useContext(UserContext);
   const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
-  const [isThankYouModalOpen, setIsThankYouModalOpen] = useState(false);
   const [imageToEnlarge, setImageToEnlarge] = useState<string>('');
   const [isEnlargedImageModalOpen, setIsEnlargeImageModalOpen] =
     useState(false);
-  const thankYouModalTitle = useRef('Park Copied to Clipboard');
+  const { notify } = useNotification();
 
   const { data: park, isLoading } = useQuery({
     queryKey: ['parks', parkId],
@@ -79,12 +78,10 @@ const Park: React.FC = () => {
         url: location.href,
         dialogTitle: 'Share this park with friends',
       });
-      thankYouModalTitle.current = 'Thanks for sharing!';
-      setIsThankYouModalOpen(true);
+      notify('Thanks for sharing!');
     } else if (navigator.clipboard) {
       navigator.clipboard.writeText(location.href);
-      thankYouModalTitle.current = 'Park Copied to Clipboard';
-      setIsThankYouModalOpen(true);
+      notify('Park Copied to Clipboard');
     }
   };
 
@@ -170,11 +167,6 @@ const Park: React.FC = () => {
           <Outlet context={park} />
         </div>
       </div>
-      <ThankYouModal
-        open={isThankYouModalOpen}
-        onClose={() => setIsThankYouModalOpen(false)}
-        title={thankYouModalTitle.current}
-      />
       <EnlargeImageModal
         isOpen={isEnlargedImageModalOpen}
         onClose={() => setIsEnlargeImageModalOpen(false)}

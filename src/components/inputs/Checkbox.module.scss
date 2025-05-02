@@ -10,7 +10,7 @@
 
 .label {
   padding-left: 28px;
-  font-size: 18px;
+  font-size: 16px;
 
   &::before {
     content: '';
@@ -20,7 +20,7 @@
     left: 0;
     bottom: 0;
     background-color: $white;
-    border: 1px solid $grey-bold;
+    border: 1px solid rgba($pink, 0.4);
     border-radius: 4px;
     color: $white;
     font-size: 14px;
@@ -41,7 +41,7 @@
 
   &:checked + .label::before {
     content: '\2713';
-    background-color: $orange;
-    border-color: $orange;
+    background-color: $pink;
+    border-color: $pink;
   }
 }

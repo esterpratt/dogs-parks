@@ -1,14 +1,11 @@
 import { useEffect, useState } from 'react';
-import { IconContext } from 'react-icons';
-import { MdOutlineModeEditOutline } from 'react-icons/md';
-import { FaExclamation } from 'react-icons/fa6';
-import { CgClose } from 'react-icons/cg';
+import { FlagIcon, Pencil, X } from 'lucide-react';
 import { Button } from '../Button';
-import { Modal } from '../Modal';
-import styles from './ChooseEditParkOptionModal.module.scss';
 import { Park } from '../../types/park';
 import { EditParkModal } from './EditParkModal';
 import { ReportParkModal } from './ReportParkModal';
+import { BottomModal } from '../modals/BottomModal';
+import styles from './ChooseEditParkOptionModal.module.scss';
 
 interface ChooseEditParkOptionModalProps {
   isOpen: boolean;
@@ -34,7 +31,6 @@ const ChooseEditParkOptionModal: React.FC<ChooseEditParkOptionModalProps> = ({
     !park.size ||
     !park.materials?.length ||
     park.shade === undefined ||
-    park.has_water === undefined ||
     park.has_facilities === undefined;
 
   const onEditPark = () => {
@@ -47,48 +43,28 @@ const ChooseEditParkOptionModal: React.FC<ChooseEditParkOptionModalProps> = ({
 
   return (
     <>
-      <Modal
-        open={isOpen}
-        onClose={onClose}
-        className={styles.modal}
-        variant="bottom"
-        height={isEditable ? '296px' : '205px'}
-      >
+      <BottomModal open={isOpen} onClose={onClose} className={styles.modal}>
         <div className={styles.buttonsContainer}>
           {isEditable && (
-            <Button
-              onClick={onEditPark}
-              className={styles.buttonContainer}
-              variant="simple"
-            >
-              <IconContext.Provider value={{ className: styles.icon }}>
-                <MdOutlineModeEditOutline />
-              </IconContext.Provider>
+            <Button onClick={onEditPark} className={styles.button}>
+              <Pencil size={20} />
               <span>Update Park Details</span>
             </Button>
           )}
-          <Button
-            onClick={onReportPark}
-            className={styles.buttonContainer}
-            variant="simple"
-          >
-            <IconContext.Provider value={{ className: styles.icon }}>
-              <FaExclamation />
-            </IconContext.Provider>
+          <Button onClick={onReportPark} className={styles.button}>
+            <FlagIcon size={20} />
             <span>Report Incorrect Details</span>
           </Button>
           <Button
+            variant="secondary"
             onClick={onClose}
-            className={styles.buttonContainer}
-            variant="simple"
+            className={styles.button}
           >
-            <IconContext.Provider value={{ className: styles.icon }}>
-              <CgClose />
-            </IconContext.Provider>
+            <X size={20} />
             <span>Cancel</span>
           </Button>
         </div>
-      </Modal>
+      </BottomModal>
       <ReportParkModal
         parkId={park.id}
         open={isReportModalOpen}

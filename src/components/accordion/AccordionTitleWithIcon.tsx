@@ -1,4 +1,3 @@
-import { IconContext } from 'react-icons';
 import { AccordionArrow } from './AccordionArrow';
 import { AccordionTitle } from './AccordionTitle';
 import styles from './AccordionTitleWithIcon.module.scss';
@@ -34,9 +33,7 @@ const AccordionTitleWithIcon: React.FC<AccordionTitleWithIconProps> = ({
           </div>
           {showIcon && (
             <div onClick={onClick} className={styles.iconContainer}>
-              <IconContext.Provider value={{ className: styles.icon }}>
-                <Icon size={iconSize} />
-              </IconContext.Provider>
+              <Icon size={iconSize} />
             </div>
           )}
         </>

@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import classnames from 'classnames';
-import { useThankYouModalContext } from '../context/ThankYouModalContext';
 import { REPORT_DESCRIPTION, ReportReason } from '../types/report';
 import { reportReview } from '../services/reviews';
-import { Modal } from './Modal';
+import { useNotification } from '../context/NotificationContext';
 import styles from './ReportModal.module.scss';
+import { FormModal } from './modals/FormModal';
 
 interface ReportModalProps {
   isOpen: boolean;
@@ -17,9 +17,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
   onClose,
   reviewId,
 }) => {
-  const setIsThankYouModalOpen = useThankYouModalContext(
-    (state) => state.setIsOpen
-  );
+  const { notify } = useNotification();
   const [chosenReason, setChosenReason] = useState<ReportReason | null>(null);
 
   const onSubmitReport = async () => {
@@ -28,7 +26,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
     }
 
     onClose();
-    setIsThankYouModalOpen(true);
+    notify('Report sent');
   };
 
   const onChooseReason = (reason: ReportReason) => {
@@ -36,45 +34,40 @@ export const ReportModal: React.FC<ReportModalProps> = ({
   };
 
   return (
-    <Modal
+    <FormModal
       open={isOpen}
       onClose={onClose}
-      height={'70%'}
       onSave={onSubmitReport}
-      saveText="Submit Report"
-      saveButtonDisabled={!chosenReason}
+      saveText="Submit"
+      disabled={!chosenReason}
       className={styles.modal}
+      title="Why do you wish to report this review?"
     >
-      <div className={styles.container}>
-        <div className={styles.title}>
-          Why do you wish to report this review?
-        </div>
-        <div className={styles.options}>
-          {Object.entries(REPORT_DESCRIPTION).map(([key, value]) => {
-            return (
-              <div
-                key={key}
-                className={classnames(
-                  styles.input,
-                  key === chosenReason && styles.checked
-                )}
-              >
-                <input
-                  type="radio"
-                  name={key}
-                  value={key}
-                  id={key}
-                  checked={key === chosenReason}
-                  onChange={() => onChooseReason(key as ReportReason)}
-                />
-                <label htmlFor={key}>
-                  {value.title} - {value.content}
-                </label>
-              </div>
-            );
-          })}
-        </div>
+      <div className={styles.options}>
+        {Object.entries(REPORT_DESCRIPTION).map(([key, value]) => {
+          return (
+            <div
+              key={key}
+              className={classnames(
+                styles.input,
+                key === chosenReason && styles.checked
+              )}
+            >
+              <input
+                type="radio"
+                name={key}
+                value={key}
+                id={key}
+                checked={key === chosenReason}
+                onChange={() => onChooseReason(key as ReportReason)}
+              />
+              <label htmlFor={key}>
+                {value.title} - {value.content}
+              </label>
+            </div>
+          );
+        })}
       </div>
-    </Modal>
+    </FormModal>
   );
 };

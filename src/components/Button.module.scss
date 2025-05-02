@@ -40,35 +40,26 @@
     box-shadow: $box-shadow;
   }
 
-  &.green {
-    color: $white;
-    background-color: $green;
-    padding: 12px 24px;
-  }
-
-  &.danger {
-    color: $white;
-    background-color: $red;
-    padding: 12px 24px;
-  }
-
-  &.orange {
-    color: $white;
-    background-color: $orange;
-    padding: 12px 24px;
-  }
-
-  &.nuteral {
-    background-color: $white;
-    border: 1px solid $grey-bold;
-    padding: 12px 24px;
-  }
-
   &:disabled {
-    background-color: $disabled;
+    &.round,
+    &.primary,
+    &.secondary {
+      background-color: $disabled;
+      color: $white;
+    }
+
+    &.secondary {
+      background-color: rgba($disabled, 0.3);
+      color: $grey-bold;
+      border: none;
+    }
+
+    &.simple {
+      color: $disabled;
+    }
   }
 
   &:active:not(:disabled) {
-    transform: scale(0.95);
+    transform: scale(0.97);
   }
 }

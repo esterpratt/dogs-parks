@@ -67,7 +67,7 @@ const SearchListAsync = <T,>({
           Search
         </Button>
       </div>
-      {showLoader && <Loader inside />}
+      {showLoader && <Loader />}
       {!showLoader && !!filteredItems.length && (
         <SearchListItems items={filteredItems} itemKeyfn={itemKeyfn}>
           {children}

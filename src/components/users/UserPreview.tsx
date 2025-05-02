@@ -7,12 +7,14 @@ import { User } from '../../types/user';
 import { Dog } from '../../types/dog';
 import { fetchDogPrimaryImage } from '../../services/dogs';
 import { UserContext } from '../../context/UserContext';
-import { Modal } from '../Modal';
 import { useUpdateFriendship } from '../../hooks/api/useUpdateFriendship';
 import { FRIENDSHIP_STATUS } from '../../types/friendship';
 import { Loader } from '../Loader';
 import { Card } from '../card/Card';
 import { getDogNames } from '../../utils/getDogNames';
+import { useNotification } from '../../context/NotificationContext';
+import { TopModal } from '../modals/TopModal';
+import { Button } from '../Button';
 import styles from './UserPreview.module.scss';
 
 interface UserPreviewProps {
@@ -26,6 +28,7 @@ const UserPreview: React.FC<UserPreviewProps> = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { userId } = useContext(UserContext);
+  const { notify } = useNotification();
 
   const { data: dogImage } = useQuery({
     queryKey: ['dogImage', user.dogs[0].id],
@@ -42,9 +45,8 @@ const UserPreview: React.FC<UserPreviewProps> = ({
   } = useUpdateFriendship({
     friendId: user.id,
     userId: userId!,
-    onSuccess: () => {
-      // modalTitle.current = text;
-      // setIsThankYouModalOpen(true);
+    onSuccess: (text) => {
+      notify(text);
     },
   });
 
@@ -53,6 +55,7 @@ const UserPreview: React.FC<UserPreviewProps> = ({
   return (
     <>
       <Card
+        onClick={() => setIsModalOpen(true)}
         url={userId ? `/profile/${user.id}` : null}
         imgCmp={
           <div className={classnames(styles.img, !dogImage && styles.noImg)}>
@@ -108,28 +111,32 @@ const UserPreview: React.FC<UserPreviewProps> = ({
                     </>
                   ),
                   variant: 'secondary',
-                  onClick: () => onUpdateFriendship(FRIENDSHIP_STATUS.REMOVED),
+                  onClick: () => onUpdateFriendship(FRIENDSHIP_STATUS.ABORTED),
                 },
               ]
             : []
         }
       />
-      <Modal
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        height="30%"
-        className={styles.modal}
-        variant="center"
-      >
-        <div className={styles.message}>
-          <>
-            To see user's page and make friends, you must{' '}
-            <Link to="../login?mode=login" className={styles.link}>
-              log in
-            </Link>
-          </>
+      <TopModal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <div className={styles.container}>
+          <div className={styles.message}>
+            <>
+              To see user's page and make friends, you must{' '}
+              <Link to="../login?mode=login" className={styles.link}>
+                log in!
+              </Link>
+            </>
+          </div>
+          <Button
+            variant="secondary"
+            onClick={() => setIsModalOpen(false)}
+            className={styles.modalButton}
+          >
+            <X size={16} />
+            <span>Cancel</span>
+          </Button>
         </div>
-      </Modal>
+      </TopModal>
     </>
   );
 };

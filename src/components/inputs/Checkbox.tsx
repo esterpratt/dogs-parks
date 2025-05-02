@@ -1,3 +1,4 @@
+import classnames from 'classnames';
 import styles from './Checkbox.module.scss';
 
 interface CheckboxProps {
@@ -5,6 +6,7 @@ interface CheckboxProps {
   onChange: () => void;
   id: string;
   label: string;
+  className?: string;
 }
 
 const Checkbox: React.FC<CheckboxProps> = ({
@@ -12,9 +14,10 @@ const Checkbox: React.FC<CheckboxProps> = ({
   id,
   label,
   isChecked,
+  className,
 }) => {
   return (
-    <div className={styles.container}>
+    <div className={classnames(styles.container, className)}>
       <input
         id={id}
         name={id}

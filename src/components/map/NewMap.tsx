@@ -14,8 +14,8 @@ import { getUserLocation } from './mapHelpers/getUserLocation';
 import { UserLocationMarker } from './UserLocationMarker';
 import { DEFAULT_LOCATION } from '../../utils/consts';
 import { useUserLocation } from '../../context/LocationContext';
-import styles from './NewMap.module.scss';
 import { Button } from '../Button';
+import styles from './NewMap.module.scss';
 
 interface NewMapProps {
   className?: string;
@@ -29,9 +29,10 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
   const [activePark, setActivePark] = useState<Park | null>(null);
   const [isLoadingDirections, setIsLoadingDirections] = useState(false);
   const [directions, setDirections] = useState<{
-    distance: string;
-    duration: string;
-    geoJSONObj: GeoJSON.GeometryObject;
+    distance?: string;
+    duration?: string;
+    error?: string;
+    geoJSONObj?: GeoJSON.GeometryObject;
   }>();
 
   const mapCenter = useMemo(() => {
@@ -111,6 +112,10 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
     setIsLoadingDirections(false);
     if (res) {
       setDirections(res);
+    } else {
+      setDirections({
+        error: 'Sorry, my sniff powers are temporarily offline',
+      });
     }
   };
 
@@ -166,7 +171,11 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
         canGetDirections={!!userLocation}
         directions={
           directions
-            ? { distance: directions.distance, duration: directions.duration }
+            ? {
+                distance: directions.distance,
+                duration: directions.duration,
+                error: directions.error,
+              }
             : undefined
         }
       />

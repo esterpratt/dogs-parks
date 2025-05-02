@@ -1,0 +1,21 @@
+@use '../../variables.scss' as *;
+@use './shared' as shared;
+
+.modal {
+  @extend %modal;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 48px auto 0;
+  width: 90%;
+  padding: 16px;
+  color: $text;
+  font-size: 20px;
+  z-index: 1100;
+  transform: translateY(100%);
+
+  &[open] {
+    transform: translateY(0);
+  }
+}

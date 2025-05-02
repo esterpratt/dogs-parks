@@ -3,6 +3,10 @@ import { Navigate, createBrowserRouter } from 'react-router';
 import { RouterProvider } from 'react-router/dom';
 import { QueryClientProvider } from '@tanstack/react-query';
 import './App.scss';
+import { UserContextProvider } from './context/UserContext';
+import { UserLocationProvider } from './context/LocationContext';
+import { NotificationProvider } from './context/NotificationContext';
+import { OrientationProvider } from './context/OrientationContext';
 import { Home } from './pages/Home';
 import { RootLayout } from './RootLayout';
 import { ErrorPage } from './pages/Error';
@@ -15,17 +19,13 @@ import { Park } from './pages/Park';
 import { ParkDetails } from './pages/ParkDetails';
 import { NewPark } from './pages/NewPark';
 import { queryClient } from './services/react-query';
-import { UserContextProvider } from './context/UserContext';
 import { DeletionConfirmation } from './pages/DeletionConfirmation';
 import { PrivateRoute } from './pages/PrivateRoute';
 import { PrivacyPolicy } from './pages/PrivacyPolicy';
-import { ThankYouModalProvider } from './context/ThankYouModalContext';
-import { OrientationProvider } from './context/OrientationContext';
 import { AuthCallback } from './pages/AuthCallback';
 import { userLoader } from './loaders/userLoader';
 import { UpdatePassowrd } from './pages/UpdatePassword';
 import { About } from './pages/About';
-import { UserLocationProvider } from './context/LocationContext';
 
 const UserDog = lazy(() => import('./pages/UserDog'));
 const UserReviews = lazy(() => import('./pages/UserReviews'));
@@ -150,13 +150,13 @@ const App = () => {
   return (
     <UserLocationProvider>
       <OrientationProvider>
-        <ThankYouModalProvider>
+        <NotificationProvider>
           <QueryClientProvider client={queryClient}>
             <UserContextProvider>
               <RouterProvider router={router} />
             </UserContextProvider>
           </QueryClientProvider>
-        </ThankYouModalProvider>
+        </NotificationProvider>
       </OrientationProvider>
     </UserLocationProvider>
   );

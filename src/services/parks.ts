@@ -42,7 +42,6 @@ const updatePark = async (parkId: string, parkDetails: Partial<Park>) => {
       size: parkDetails.size,
       materials: parkDetails.materials,
       shade: parkDetails.shade,
-      has_water: parkDetails.has_water,
       has_facilities: parkDetails.has_facilities
     })
     .eq('id', parkId)

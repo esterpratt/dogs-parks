@@ -20,33 +20,3 @@ export const fetchSortedParks = async (parks: Park[] | undefined, userLocation: 
 
   return sortedParks as unknown as Park[];
 };
-
-// import orderByDistance from 'geolib/es/orderByDistance';
-// import { GeolibInputCoordinates } from 'geolib/es/types';
-// import { useUserLocation } from '../context/LocationContext';
-// import { useMemo } from 'react';
-
-// type GenericWithGeo<T> = T & GeolibInputCoordinates;
-
-
-// const useDistance = <T>(items: GenericWithGeo<T>[] | undefined) => {
-//   const userLocation = useUserLocation((state) => state.userLocation);
-
-//   const sortedItems = useMemo(() => {
-//     if (!userLocation || !items?.length) {
-//       return items ?? []
-//     }
-
-//     const sortedItemsByDistance = orderByDistance({
-//         latitude: userLocation.lat,
-//         longitude: userLocation.long,
-//       }, items)
-
-//     return sortedItemsByDistance;
-//   }, [userLocation, items]);
-  
-
-//   return sortedItems;
-// };
-
-// export { useDistance };

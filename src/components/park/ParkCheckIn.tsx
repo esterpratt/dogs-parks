@@ -10,6 +10,7 @@ import { ParkIcon } from './ParkIcon';
 import { ReviewModal } from '../ReviewModal';
 import { DogsCountModal } from './DogsCountModal';
 import styles from './ParkCheckIn.module.scss';
+import { useNotification } from '../../context/NotificationContext';
 
 const ParkCheckIn: React.FC<{
   parkId: string;
@@ -20,8 +21,14 @@ const ParkCheckIn: React.FC<{
   const [checkIn, setCheckIn] = useLocalStorage('checkin');
   const [openDogsCountModal, setOpenDogsCountModal] = useState(false);
   const [openReviewModal, setOpenReviewModal] = useState(false);
-  const [showForm, setShowForm] = useState(true);
   const { addReview } = useAddReview(parkId, userId);
+  const { notify } = useNotification();
+
+  const title = `Enjoy your stay${
+    userName
+      ? ', ' + userName.charAt(0).toUpperCase() + userName.slice(1) + '!'
+      : '!'
+  }`;
 
   const { mutateAsync: parkCheckIn } = useMutation({
     mutationFn: async () => {
@@ -29,10 +36,14 @@ const ParkCheckIn: React.FC<{
       return id;
     },
     onSuccess: async () => {
-      setOpenDogsCountModal(true);
       queryClient.invalidateQueries({
         queryKey: ['parkVisitors', parkId],
       });
+      if (localStorage.getItem('hideDogsModal')) {
+        notify(title);
+      } else {
+        setOpenDogsCountModal(true);
+      }
     },
   });
 
@@ -45,12 +56,11 @@ const ParkCheckIn: React.FC<{
   const { mutate: parkCheckout } = useMutation({
     mutationFn: () => checkout(checkIn.id),
     onMutate: () => {
-      if (userReviews?.find((review) => review.parkId === parkId)) {
-        setShowForm(false);
+      if (userReviews?.find((review) => review.park_id === parkId)) {
+        notify('Hope you had a tail-wagging time!');
       } else {
-        setShowForm(true);
+        setOpenReviewModal(true);
       }
-      setOpenReviewModal(true);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -92,15 +102,12 @@ const ParkCheckIn: React.FC<{
       />
       <DogsCountModal
         parkId={parkId}
-        userName={userName}
+        title={title}
         isOpen={openDogsCountModal}
         onClose={() => setOpenDogsCountModal(false)}
       />
       <ReviewModal
-        showForm={showForm}
-        title={`Hope you had a tail-wagging time! ${
-          showForm ? 'Leave a review if you can!' : ''
-        }`}
+        title={'Hope you had a tail-wagging time! Leave a review if you can!'}
         isOpen={openReviewModal}
         closeModal={() => setOpenReviewModal(false)}
         onSubmitReview={onSubmitReview}

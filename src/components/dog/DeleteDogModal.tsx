@@ -1,15 +1,16 @@
 import { useContext } from 'react';
 import { useNavigate, useRevalidator } from 'react-router';
 import { useMutation } from '@tanstack/react-query';
-import { Modal } from '../Modal';
+import { Trash2, X } from 'lucide-react';
 import { Dog } from '../../types/dog';
-import styles from './DeleteDogModal.module.scss';
 import { UserContext } from '../../context/UserContext';
 import { deleteDog } from '../../services/dogs';
 import { queryClient } from '../../services/react-query';
 import { Button } from '../Button';
 import { Loader } from '../Loader';
 import { useOrientationContext } from '../../context/OrientationContext';
+import { TopModal } from '../modals/TopModal';
+import styles from './DeleteDogModal.module.scss';
 
 interface DeleteDogModalProps {
   isOpen: boolean;
@@ -36,30 +37,47 @@ const DeleteDogModal: React.FC<DeleteDogModalProps> = ({
       revalidate();
     },
     onSettled: () => {
-      navigate('..');
+      navigate(`/profile/${userId}/dogs`);
     },
   });
 
   return (
-    <Modal
+    <TopModal
       open={isOpen}
       onClose={onClose}
-      height={orientation === 'landscape' ? '95%' : '30%'}
-      variant="center"
+      height={orientation === 'landscape' ? 95 : null}
       className={styles.approveModal}
     >
       <div className={styles.approveContent}>
         <span>Are you sure you want to say goodbye to {dog.name}?</span>
       </div>
-      {isPending && <Loader inside />}
-      <Button
-        variant="danger"
-        onClick={() => onDeleteDog(dog.id)}
-        className={styles.deleteButton}
-      >
-        Delete
-      </Button>
-    </Modal>
+      <div className={styles.buttonsContainer}>
+        <Button
+          variant="primary"
+          onClick={() => onDeleteDog(dog.id)}
+          className={styles.modalButton}
+          disabled={isPending}
+        >
+          {isPending ? (
+            <Loader inside className={styles.loader} />
+          ) : (
+            <>
+              <Trash2 size={16} />
+              <span>Delete</span>
+            </>
+          )}
+        </Button>
+        <Button
+          variant="secondary"
+          onClick={onClose}
+          className={styles.modalButton}
+          disabled={isPending}
+        >
+          <X size={16} />
+          <span>Cancel</span>
+        </Button>
+      </div>
+    </TopModal>
   );
 };
 

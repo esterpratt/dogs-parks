@@ -9,9 +9,14 @@ import { FRIENDSHIP_STATUS } from '../../types/friendship';
 import { queryClient } from '../../services/react-query';
 import { FRIENDS_KEY } from './keys';
 
+type RemoveFriendshipArgs = {
+  friendshipId: string;
+  message?: string;
+};
+
 interface UseUpdateFriendshipProps {
   friendId: string;
-  userId: string;
+  userId?: string | null;
   onSuccess?: (text: string) => void;
 }
 
@@ -23,17 +28,18 @@ const useUpdateFriendship = ({
   const { data: friendship } = useQuery({
     queryKey: ['friendship', friendId, userId],
     queryFn: async () => {
-      const friendship = await fetchFriendship([friendId, userId]);
+      const friendship = await fetchFriendship([friendId, userId!]);
       return friendship ? friendship : null;
     },
+    enabled: !!userId
   });
 
   const { mutate: removeFriendship, isPending: isPendingRemoveFriendship } =
     useMutation({
-      mutationFn: (friendshipId: string) => deleteFriendship(friendshipId),
-      onSuccess: async () => {
+      mutationFn: ({friendshipId}: RemoveFriendshipArgs) => deleteFriendship(friendshipId),
+      onSuccess: async (_data, vars) => {
         if (onSuccess) {
-          onSuccess('Done');
+          onSuccess(vars.message || 'Friend request was removed');
         }
         return Promise.all([
           queryClient.invalidateQueries({
@@ -57,7 +63,7 @@ const useUpdateFriendship = ({
       mutationFn: () =>
         createFriendship({
           requesteeId: friendId,
-          requesterId: userId,
+          requesterId: userId!,
         }),
       onSuccess: async () => {
         if (onSuccess) {
@@ -108,11 +114,10 @@ const useUpdateFriendship = ({
 
   const onUpdateFriendship = (status: FRIENDSHIP_STATUS) => {
     if (friendship) {
-      if (
-        status === FRIENDSHIP_STATUS.ABORTED ||
-        status === FRIENDSHIP_STATUS.REMOVED
-      ) {
-        removeFriendship(friendship.id);
+      if (status === FRIENDSHIP_STATUS.ABORTED) {
+        removeFriendship({friendshipId: friendship.id});
+      } else if(status === FRIENDSHIP_STATUS.REMOVED) {
+        removeFriendship({friendshipId:friendship.id, message: 'You are no longer friends'});
       } else {
         mutateFriendship({ status, friendshipId: friendship.id });
       }

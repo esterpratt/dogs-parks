@@ -1,0 +1,47 @@
+@use '../../variables.scss' as *;
+
+.modal {
+  max-height: 80vh;
+}
+
+.container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: $title-font-size;
+}
+
+.form-container {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-bottom: 12px;
+  margin-bottom: 64px;
+}
+
+.buttons-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  gap: 24px;
+  width: 100%;
+  border-top: 1px solid $text-light;
+  padding: 12px;
+  background-color: $white;
+  height: 72px;
+
+  .button {
+    border-radius: 8px;
+    width: 100%;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+  }
+}

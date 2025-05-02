@@ -8,12 +8,13 @@
 }
 
 .input {
-  border-bottom-left-radius: 18px;
-  border-bottom-right-radius: 18px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
 
   &.list-open {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+    border-bottom: 1px solid $grey-bold;
   }
 }
 
@@ -23,12 +24,12 @@
   left: 0;
   width: 100%;
   background-color: $white;
-  border: 1px solid $grey-bold;
+  border: 1px solid $pink;
   border-top: none;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
-  border-bottom-left-radius: 18px;
-  border-bottom-right-radius: 18px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
   z-index: 200;
 
   &.no-results {
@@ -46,5 +47,5 @@
 }
 
 .chosen {
-  color: $orange;
+  background-color: rgba($pink, 0.05);
 }

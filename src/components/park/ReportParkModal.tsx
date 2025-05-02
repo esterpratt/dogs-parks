@@ -1,12 +1,12 @@
 import { ChangeEvent, useContext, useState } from 'react';
-import { Modal } from '../Modal';
 import { TextArea } from '../inputs/TextArea';
 import { UserContext } from '../../context/UserContext';
 import styles from './ReportParkModal.module.scss';
 import { createParkReport } from '../../services/park-reports';
 import { useMutation } from '@tanstack/react-query';
-import { useThankYouModalContext } from '../../context/ThankYouModalContext';
 import { useOrientationContext } from '../../context/OrientationContext';
+import { useNotification } from '../../context/NotificationContext';
+import { FormModal } from '../modals/FormModal';
 
 interface ReportParkModalProps {
   open: boolean;
@@ -21,14 +21,12 @@ export const ReportParkModal: React.FC<ReportParkModalProps> = ({
 }) => {
   const { userId } = useContext(UserContext);
   const orientation = useOrientationContext((state) => state.orientation);
-  const setIsThankYouModalOpen = useThankYouModalContext(
-    (state) => state.setIsOpen
-  );
+  const { notify } = useNotification();
   const [text, setText] = useState('');
   const { mutate } = useMutation({
     mutationFn: () =>
       createParkReport({ user_id: userId!, park_id: parkId, text }),
-    onSuccess: () => setIsThankYouModalOpen(true),
+    onSuccess: () => notify(),
   });
 
   const onChangeText = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -43,12 +41,13 @@ export const ReportParkModal: React.FC<ReportParkModalProps> = ({
   };
 
   return (
-    <Modal
+    <FormModal
+      saveText="Submit"
       open={open}
       onClose={onClose}
-      height="70%"
       onSave={onSubmitReport}
-      className={styles.container}
+      className={styles.modal}
+      disabled={!text}
     >
       <TextArea
         className={styles.textArea}
@@ -59,6 +58,6 @@ export const ReportParkModal: React.FC<ReportParkModalProps> = ({
         onChange={onChangeText}
         maxLength={400}
       />
-    </Modal>
+    </FormModal>
   );
 };

@@ -8,6 +8,7 @@ import { useUpdateFriendship } from '../../hooks/api/useUpdateFriendship';
 import { FRIENDSHIP_STATUS } from '../../types/friendship';
 import { Loader } from '../Loader';
 import styles from './FriendRequestButton.module.scss';
+import { useNotification } from '../../context/NotificationContext';
 
 interface PublicProfileProps {
   friendId: string;
@@ -25,6 +26,7 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
     friendId,
     userId: userId!,
   });
+  const { notify } = useNotification();
 
   const {
     onUpdateFriendship,
@@ -34,6 +36,7 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
   } = useUpdateFriendship({
     friendId,
     userId: userId!,
+    onSuccess: (text) => notify(text),
   });
 
   const onUpdateFriend = async (status: FRIENDSHIP_STATUS) => {
@@ -113,7 +116,7 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
           <div className={styles.buttons}>
             <Button
               variant="secondary"
-              onClick={() => onUpdateFriend(FRIENDSHIP_STATUS.REMOVED)}
+              onClick={() => onUpdateFriend(FRIENDSHIP_STATUS.ABORTED)}
               className={styles.button}
             >
               {isPendingRemoveFriendship ? (

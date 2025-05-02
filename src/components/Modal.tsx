@@ -1,11 +1,11 @@
 import { CSSProperties, ReactNode, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import classnames from 'classnames';
-import { CgClose } from 'react-icons/cg';
 import styles from './Modal.module.scss';
 import { Button } from './Button';
 import useKeyboardFix from '../hooks/useKeyboardFix';
 import { useOrientationContext } from '../context/OrientationContext';
+import { X } from 'lucide-react';
 
 interface ModalProps {
   open: boolean;
@@ -120,7 +120,7 @@ const Modal: React.FC<ModalProps> = ({
         onClick={(event) => event?.stopPropagation()}
       >
         {!removeCloseButton && (
-          <CgClose onClick={onClose} size={24} className={styles.close} />
+          <X onClick={onClose} size={24} className={styles.close} />
         )}
         {children}
       </div>
@@ -129,11 +129,7 @@ const Modal: React.FC<ModalProps> = ({
           className={styles.buttonContainer}
           onClick={(event) => event?.stopPropagation()}
         >
-          <Button
-            variant="green"
-            onClick={onSave}
-            disabled={saveButtonDisabled}
-          >
+          <Button onClick={onSave} disabled={saveButtonDisabled}>
             {saveText}
           </Button>
         </div>

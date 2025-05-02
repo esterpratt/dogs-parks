@@ -1,18 +1,13 @@
 import { FormEvent, useState } from 'react';
-import { IconContext } from 'react-icons';
-import { CgClose } from 'react-icons/cg';
-import { PiCamera } from 'react-icons/pi';
-import { PiImageSquare } from 'react-icons/pi';
-import classnames from 'classnames';
-import { Button } from '../Button';
-import { FileInput } from '../inputs/FileInput';
 import { Camera } from './Camera';
-import { Modal } from '../Modal';
-import styles from './CameraModal.module.scss';
+import { ChooseCamera } from './ChooseCamera';
+import { UploadWebButton } from './UploadWebButton';
+import { TakePhotoButton } from './TakePhotoButton';
+import { CancelButton } from './CancelButton';
+import { AppearModal } from '../modals/AppearModal';
 
 interface CameraWebModalProps {
-  open: boolean;
-  variant?: 'centerTop' | 'bottom';
+  variant?: 'top' | 'bottom';
   onUploadImg: (img: string | File) => void;
   title?: string;
   onCameraError: (error: string | DOMException) => void;
@@ -21,7 +16,6 @@ interface CameraWebModalProps {
 }
 
 const CameraWebModal: React.FC<CameraWebModalProps> = ({
-  open,
   variant = 'bottom',
   onUploadImg,
   title,
@@ -49,65 +43,22 @@ const CameraWebModal: React.FC<CameraWebModalProps> = ({
 
   return (
     <>
-      <Modal
-        height={variant === 'bottom' ? '296px' : '370px'}
-        open={open}
-        onClose={onCloseModal}
-        variant={variant}
-        className={styles.modal}
-        removeCloseButton
-        delay={variant !== 'bottom'}
-      >
-        {title && <div className={styles.title}>{title}</div>}
-        <div className={styles.buttonsContainer}>
-          <FileInput
-            onUploadFile={onUploadFile}
-            className={styles.buttonContainer}
-          >
-            <div className={styles.button}>
-              <IconContext.Provider value={{ className: styles.icon }}>
-                <PiImageSquare />
-              </IconContext.Provider>
-              <span>Upload a Photo</span>
-            </div>
-          </FileInput>
-          <Button
-            onClick={() => setIsCameraOpen(true)}
-            className={classnames(styles.button, styles.buttonContainer)}
-            variant="simple"
-          >
-            <IconContext.Provider value={{ className: styles.icon }}>
-              <PiCamera />
-            </IconContext.Provider>
-            <span>Take a Photo</span>
-          </Button>
-          <Button
-            onClick={onCloseModal}
-            className={classnames(styles.button, styles.buttonContainer)}
-            variant="simple"
-          >
-            <IconContext.Provider value={{ className: styles.icon }}>
-              <CgClose />
-            </IconContext.Provider>
-            <span>{variant === 'bottom' ? 'Cancel' : 'Later'}</span>
-          </Button>
-        </div>
-        <span className={styles.error}>
-          {error && 'Sorry, cannot use your camera'}
-        </span>
-      </Modal>
-      <Modal
-        variant="fullScreen"
-        open={isCameraOpen}
-        onClose={() => setIsCameraOpen(false)}
-      >
+      <ChooseCamera error={error} title={title}>
+        <UploadWebButton onUploadFile={onUploadFile} />
+        <TakePhotoButton onOpenCamera={() => setIsCameraOpen(true)} />
+        <CancelButton
+          onCancel={onCloseModal}
+          text={variant === 'bottom' ? 'Cancel' : 'Later'}
+        />
+      </ChooseCamera>
+      <AppearModal open={isCameraOpen} onClose={() => setIsCameraOpen(false)}>
         <Camera
           isOpen={isCameraOpen}
           onSaveImg={onSaveImg}
           onError={handleError}
           onClose={() => setIsCameraOpen(false)}
         />
-      </Modal>
+      </AppearModal>
     </>
   );
 };

@@ -138,7 +138,9 @@ const UserDog = () => {
               imgSrc={primaryImage}
               onClickImg={onClickImage}
               NoImgIcon={DogIcon}
-              onClickEditPhoto={() => setIsAddImageModalOpen(true)}
+              onClickEditPhoto={
+                isSignedInUser ? () => setIsAddImageModalOpen(true) : null
+              }
             />
           }
           imgsClassName={styles.imgContainer}

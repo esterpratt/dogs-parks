@@ -18,15 +18,17 @@ interface CardProps {
   detailsCmp: ReactNode;
   buttons?: ButtonProps[];
   className?: string;
+  onClick?: () => void;
 }
 
 const Card = (props: CardProps) => {
-  const { url, imgCmp, detailsCmp, buttons } = props;
+  const { url, imgCmp, detailsCmp, buttons, onClick } = props;
   const TopContainer = url ? Link : 'div';
 
   return (
     <div className={styles.container}>
       <TopContainer
+        onClick={!url && onClick ? onClick : undefined}
         to={url ? url : ''}
         className={classnames(styles.topContainer)}
       >

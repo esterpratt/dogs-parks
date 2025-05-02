@@ -63,7 +63,7 @@
 }
 
 .modal {
-  padding: 48px 24px 24px;
+  padding: 24px;
 }
 
 .modal-container {
@@ -73,7 +73,12 @@
   font-size: 16px;
 
   a {
-    color: $green;
+    color: $pink;
+  }
+
+  .button {
+    margin-top: 12px;
+    border-radius: 12px;
   }
 }
 

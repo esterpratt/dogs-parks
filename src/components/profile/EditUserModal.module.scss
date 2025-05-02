@@ -1,26 +1,21 @@
 @use '../../variables' as *;
 
-.content-container {
-  padding: 56px 24px 24px;
-  height: 100%;
-}
-
-.title {
-  font-size: $second-title-font-size;
-  margin-bottom: 32px;
+.modal {
+  padding: 24px;
 }
 
 .form {
-  flex-grow: 1;
   display: flex;
   flex-direction: column;
   gap: 24px;
+  font-size: 16px;
 }
 
 .privacy-container {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin-top: 24px;
 
   span {
     font-size: 12px;
@@ -30,11 +25,6 @@
 @media (orientation: landscape) {
   .content-container {
     padding-top: 24px;
-    // min-height: 150%;
-  }
-
-  .title {
-    margin-bottom: 16px;
   }
 
   .form {

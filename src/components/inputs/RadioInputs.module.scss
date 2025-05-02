@@ -9,13 +9,11 @@
 
 .options {
   display: flex;
-  background-color: white;
-  border: 1px solid $grey-bold;
-  border-radius: 18px;
-  width: fit-content;
+  gap: 6px;
+  width: 100%;
 
-  &:has(> *:nth-child(3)) {
-    width: 100%;
+  &:has(> *:nth-child(4)) {
+    gap: 2px;
   }
 }
 

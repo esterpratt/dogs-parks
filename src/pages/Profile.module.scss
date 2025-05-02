@@ -78,8 +78,3 @@
       calc(16px + var(--safe-area-inset-left, 0px));
   }
 }
-
-:export {
-  green: $green;
-  pink: $pink;
-}

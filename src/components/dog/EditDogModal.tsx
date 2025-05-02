@@ -2,9 +2,7 @@ import { ChangeEvent, useContext, useEffect, useMemo, useState } from 'react';
 import { useRevalidator } from 'react-router';
 import { useMutation } from '@tanstack/react-query';
 import classnames from 'classnames';
-import { Modal } from '../Modal';
 import { DOG_ENERGY, DOG_SIZE, Dog, GENDER } from '../../types/dog';
-import { useThankYouModalContext } from '../../context/ThankYouModalContext';
 import { UserContext } from '../../context/UserContext';
 import {
   createDog,
@@ -18,11 +16,13 @@ import { RadioInputs } from '../inputs/RadioInputs';
 import { TextArea } from '../inputs/TextArea';
 import { AutoComplete } from '../inputs/AutoComplete';
 import { dogBreeds } from '../../services/dog-breeds';
-import { IconContext } from 'react-icons';
-import { IoTrashOutline } from 'react-icons/io5';
 import DeleteDogModal from './DeleteDogModal';
-import styles from './EditDogModal.module.scss';
 import { useOrientationContext } from '../../context/OrientationContext';
+import { useNotification } from '../../context/NotificationContext';
+import { Button } from '../Button';
+import { Trash2 } from 'lucide-react';
+import { FormModal } from '../modals/FormModal';
+import styles from './EditDogModal.module.scss';
 
 interface EditDogModalProps {
   isOpen: boolean;
@@ -38,9 +38,7 @@ const EditDogModal: React.FC<EditDogModalProps> = ({
   dog,
 }) => {
   const orientation = useOrientationContext((state) => state.orientation);
-  const setIsThankYouModalOpen = useThankYouModalContext(
-    (state) => state.setIsOpen
-  );
+  const { notify } = useNotification();
   const [dogData, setDogData] = useState<
     | (Partial<Omit<Dog, 'likes' | 'dislikes'>> &
         Required<Pick<Dog, 'name'>> & {
@@ -79,7 +77,7 @@ const EditDogModal: React.FC<EditDogModalProps> = ({
       queryClient.setQueryData(['dogs', vars.dogId], context?.prevDog);
     },
     onSuccess: () => {
-      setIsThankYouModalOpen(true);
+      notify();
     },
     onSettled: (_data, _error, vars) => {
       queryClient.invalidateQueries({ queryKey: ['dogs', vars.dogId] });
@@ -177,138 +175,131 @@ const EditDogModal: React.FC<EditDogModalProps> = ({
 
   return (
     <>
-      <Modal
+      <FormModal
         open={isOpen}
         onClose={onClose}
-        height={orientation === 'landscape' ? '98%' : '95%'}
+        height={orientation === 'landscape' ? 98 : null}
         onSave={onSubmit}
-        saveButtonDisabled={isSaveButtonDisabled}
-        className={styles.contentContainer}
+        disabled={isSaveButtonDisabled}
+        className={styles.modal}
+        title={dog ? `Update ${dog.name}'s details` : `Add your dog's details`}
       >
-        <div className={styles.title}>
-          {dog ? `Update ${dog.name}'s` : `Add your dog's`} details
-        </div>
         <form className={styles.form}>
-          <div className={styles.formInputs}>
-            <ControlledInput
-              value={dogData?.name || ''}
-              onChange={onInputChange}
-              name="name"
-              label="Name *"
-              required
-            />
-            <AutoComplete
-              items={dogBreeds}
-              itemKeyfn={(item) => item}
-              filterFunc={(item, searchInput) =>
-                item.toLowerCase().includes(searchInput.toLowerCase())
-              }
-              equalityFunc={(item, selectedInput) => item === selectedInput}
-              setSelectedInput={(item) => onAutoCompleteSelect('breed', item)}
-              selectedInput={dogData?.breed || ''}
-              label="Breed *"
-            >
-              {(item, isChosen) => (
-                <div
-                  className={classnames(
-                    styles.breed,
-                    isChosen && styles.chosen
-                  )}
-                >
-                  {item}
-                </div>
-              )}
-            </AutoComplete>
-            <RadioInputs
-              value={dogData?.gender || ''}
-              options={[
-                { value: GENDER.FEMALE, id: GENDER.FEMALE },
-                { value: GENDER.MALE, id: GENDER.MALE },
-              ]}
-              onOptionChange={onInputChange}
-              name="gender"
-              label="Gender *"
-            />
-            <ControlledInput
-              defaultValue={formattedBirthday}
-              onChange={onInputChange}
-              name="birthday"
-              label="Birthday *"
-              type="date"
-              max={formattedCurrentDate}
-              style={{ minHeight: '55px' }}
-              required
-            />
-            <RadioInputs
-              value={dogData?.size || ''}
-              options={[
-                { value: DOG_SIZE.LARGE, id: DOG_SIZE.LARGE },
-                { value: DOG_SIZE.MEDIUM, id: DOG_SIZE.MEDIUM },
-                { value: DOG_SIZE.SMALL, id: DOG_SIZE.SMALL },
-              ]}
-              onOptionChange={onInputChange}
-              name="size"
-              label="Size"
-            />
-            <ControlledInput
-              value={dogData?.temperament || ''}
-              onChange={onInputChange}
-              name="temperament"
-              label="Temperament"
-              maxLength={50}
-            />
-            <RadioInputs
-              value={dogData?.energy || ''}
-              options={[
-                { value: DOG_ENERGY.HIGH, id: DOG_ENERGY.HIGH },
-                { value: DOG_ENERGY.MEDIUM, id: DOG_ENERGY.MEDIUM },
-                { value: DOG_ENERGY.LOW, id: DOG_ENERGY.LOW },
-              ]}
-              onOptionChange={onInputChange}
-              name="energy"
-              label="Energy"
-            />
-            <ControlledInput
-              value={dogData?.possessive || ''}
-              onChange={onInputChange}
-              name="possessive"
-              label="Possessive"
-              maxLength={50}
-            />
-            <ControlledInput
-              value={dogData?.likes || ''}
-              onChange={onInputChange}
-              name="likes"
-              label="Likes"
-            />
-            <ControlledInput
-              value={dogData?.dislikes || ''}
-              onChange={onInputChange}
-              name="dislikes"
-              label="Dislikes"
-            />
-            <TextArea
-              rows={orientation === 'landscape' ? 3 : 9}
-              maxLength={330}
-              value={dogData?.description || ''}
-              onChange={onInputChange}
-              name="description"
-              label="Description"
-            />
-          </div>
+          <ControlledInput
+            value={dogData?.name || ''}
+            onChange={onInputChange}
+            name="name"
+            label="Name *"
+            required
+          />
+          <AutoComplete
+            items={dogBreeds}
+            itemKeyfn={(item) => item}
+            filterFunc={(item, searchInput) =>
+              item.toLowerCase().includes(searchInput.toLowerCase())
+            }
+            equalityFunc={(item, selectedInput) => item === selectedInput}
+            setSelectedInput={(item) => onAutoCompleteSelect('breed', item)}
+            selectedInput={dogData?.breed || ''}
+            label="Breed *"
+          >
+            {(item, isChosen) => (
+              <div
+                className={classnames(styles.breed, isChosen && styles.chosen)}
+              >
+                {item}
+              </div>
+            )}
+          </AutoComplete>
+          <RadioInputs
+            value={dogData?.gender || ''}
+            options={[
+              { value: GENDER.FEMALE, id: GENDER.FEMALE },
+              { value: GENDER.MALE, id: GENDER.MALE },
+            ]}
+            onOptionChange={onInputChange}
+            name="gender"
+            label="Gender *"
+          />
+          <ControlledInput
+            defaultValue={formattedBirthday}
+            onChange={onInputChange}
+            name="birthday"
+            label="Birthday *"
+            type="date"
+            max={formattedCurrentDate}
+            style={{ minHeight: '55px' }}
+            required
+          />
+          <RadioInputs
+            value={dogData?.size || ''}
+            options={[
+              { value: DOG_SIZE.LARGE, id: DOG_SIZE.LARGE },
+              { value: DOG_SIZE.MEDIUM, id: DOG_SIZE.MEDIUM },
+              { value: DOG_SIZE.SMALL, id: DOG_SIZE.SMALL },
+            ]}
+            onOptionChange={onInputChange}
+            name="size"
+            label="Size"
+          />
+          <ControlledInput
+            value={dogData?.temperament || ''}
+            onChange={onInputChange}
+            name="temperament"
+            label="Temperament"
+            maxLength={50}
+          />
+          <RadioInputs
+            value={dogData?.energy || ''}
+            options={[
+              { value: DOG_ENERGY.HIGH, id: DOG_ENERGY.HIGH },
+              { value: DOG_ENERGY.MEDIUM, id: DOG_ENERGY.MEDIUM },
+              { value: DOG_ENERGY.LOW, id: DOG_ENERGY.LOW },
+            ]}
+            onOptionChange={onInputChange}
+            name="energy"
+            label="Energy"
+          />
+          <ControlledInput
+            value={dogData?.possessive || ''}
+            onChange={onInputChange}
+            name="possessive"
+            label="Possessive"
+            maxLength={50}
+          />
+          <ControlledInput
+            value={dogData?.likes || ''}
+            onChange={onInputChange}
+            name="likes"
+            label="Likes"
+          />
+          <ControlledInput
+            value={dogData?.dislikes || ''}
+            onChange={onInputChange}
+            name="dislikes"
+            label="Dislikes"
+          />
+          <TextArea
+            rows={orientation === 'landscape' ? 3 : 9}
+            maxLength={330}
+            value={dogData?.description || ''}
+            onChange={onInputChange}
+            name="description"
+            label="Description"
+          />
         </form>
         {dog && (
-          <div
+          <Button
+            variant="secondary"
+            color={styles.red}
             onClick={() => setIsDeleteDogModalOpen(true)}
             className={styles.deleteDogWrapper}
           >
-            <IconContext.Provider value={{ className: styles.deleteIcon }}>
-              <IoTrashOutline />
-            </IconContext.Provider>
+            <Trash2 size={16} />
             <span>Say goodbye to {dog.name}</span>
-          </div>
+          </Button>
         )}
-      </Modal>
+      </FormModal>
       {dog && (
         <DeleteDogModal
           isOpen={isDeleteDogModalOpen}

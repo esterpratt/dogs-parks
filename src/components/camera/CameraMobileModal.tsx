@@ -1,22 +1,17 @@
-import { IconContext } from 'react-icons';
-import { CgClose } from 'react-icons/cg';
-import { PiCamera } from 'react-icons/pi';
-import { PiImageSquare } from 'react-icons/pi';
-import classnames from 'classnames';
 import {
   Camera as CapacitorCamera,
   CameraResultType,
   CameraSource,
   CameraPluginPermissions,
 } from '@capacitor/camera';
-import { Button } from '../Button';
-import { Modal } from '../Modal';
-import styles from './CameraModal.module.scss';
 import { CapacitorException } from '@capacitor/core';
+import { ChooseCamera } from './ChooseCamera';
+import { UploadMobileButton } from './UploadMobileButton';
+import { TakePhotoButton } from './TakePhotoButton';
+import { CancelButton } from './CancelButton';
 
 interface CameraMobileModalProps {
-  open: boolean;
-  variant?: 'centerTop' | 'bottom';
+  variant?: 'top' | 'bottom';
   onUploadImg: (img: string | File) => void;
   title?: string;
   onCameraError: (error: string | DOMException) => void;
@@ -25,7 +20,6 @@ interface CameraMobileModalProps {
 }
 
 const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
-  open,
   variant = 'bottom',
   onUploadImg,
   title,
@@ -96,56 +90,14 @@ const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
   };
 
   return (
-    <>
-      <Modal
-        height={variant === 'bottom' ? '296px' : '370px'}
-        open={open}
-        onClose={onCloseModal}
-        variant={variant}
-        className={styles.modal}
-        removeCloseButton
-        delay={variant !== 'bottom'}
-      >
-        {title && <div className={styles.title}>{title}</div>}
-        <div className={styles.buttonsContainer}>
-          <Button
-            onClick={onClickMobileUploadFile}
-            className={classnames(styles.button, styles.buttonContainer)}
-            variant="simple"
-          >
-            <div className={styles.button}>
-              <IconContext.Provider value={{ className: styles.icon }}>
-                <PiImageSquare />
-              </IconContext.Provider>
-              <span>Upload a Photo</span>
-            </div>
-          </Button>
-          <Button
-            onClick={() => captureImgMobile()}
-            className={classnames(styles.button, styles.buttonContainer)}
-            variant="simple"
-          >
-            <IconContext.Provider value={{ className: styles.icon }}>
-              <PiCamera />
-            </IconContext.Provider>
-            <span>Take a Photo</span>
-          </Button>
-          <Button
-            onClick={onCloseModal}
-            className={classnames(styles.button, styles.buttonContainer)}
-            variant="simple"
-          >
-            <IconContext.Provider value={{ className: styles.icon }}>
-              <CgClose />
-            </IconContext.Provider>
-            <span>{variant === 'bottom' ? 'Cancel' : 'Later'}</span>
-          </Button>
-        </div>
-        <span className={styles.error}>
-          {error && 'Sorry, cannot use your camera'}
-        </span>
-      </Modal>
-    </>
+    <ChooseCamera error={error} title={title}>
+      <UploadMobileButton onUploadFile={onClickMobileUploadFile} />
+      <TakePhotoButton onOpenCamera={() => captureImgMobile()} />
+      <CancelButton
+        onCancel={onCloseModal}
+        text={variant === 'bottom' ? 'Cancel' : 'Later'}
+      />
+    </ChooseCamera>
   );
 };
 

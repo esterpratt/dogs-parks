@@ -17,8 +17,8 @@ $thumbWidth: 20;
   &::-webkit-slider-runnable-track {
     background: linear-gradient(
       to right,
-      $orange 0%,
-      $orange var(--range-value),
+      $pink 0%,
+      $pink var(--range-value),
       $text-light var(--range-value),
       $text-light 100%
     );
@@ -34,7 +34,7 @@ $thumbWidth: 20;
     -webkit-appearance: none;
     height: #{$thumbWidth}px;
     width: #{$thumbWidth}px;
-    background-color: $orange;
+    background-color: $pink;
     border-radius: 50%;
     margin-top: -4px;
   }
@@ -65,23 +65,22 @@ $thumbWidth: 20;
   align-items: center;
   justify-content: center;
   font-size: 12px;
-  border: 1px solid $orange;
+  border: 1px solid $pink;
   border-radius: 4px;
-  background-color: $orange;
+  background-color: $pink;
   color: $white;
-  font-weight: $font-weight-medium;
 
   &::after {
     content: '';
     position: absolute;
-    bottom: -12px; /* Adjust this based on where you want the triangle */
+    bottom: -12px;
     left: 50%;
     transform: translate(-50%);
     width: 0;
     height: 0;
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
-    border-top: 6px solid $orange;
+    border-top: 6px solid $pink;
     border-bottom: 6px solid transparent;
   }
 }

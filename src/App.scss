@@ -246,7 +246,7 @@ textarea {
       left: 0;
       width: 100%;
       background-color: inherit;
-      font-weight: $font-weight-light;
+      font-weight: inherit;
       letter-spacing: inherit;
       border-radius: 25px;
     }
@@ -287,7 +287,7 @@ textarea {
         padding-left: 12px;
         color: $text;
         background-color: inherit;
-        font-weight: $font-weight-light;
+        font-weight: inherit;
         letter-spacing: inherit;
 
         &::placeholder {

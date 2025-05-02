@@ -1,9 +1,6 @@
 import { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { UserContext } from '../../context/UserContext';
-import { Modal } from '../Modal';
-import styles from './EditUserModal.module.scss';
-import { useThankYouModalContext } from '../../context/ThankYouModalContext';
 import {
   updateUser,
   EditUserProps as UpdateUserProps,
@@ -13,6 +10,9 @@ import { User } from '../../types/user';
 import { ControlledInput } from '../inputs/ControlledInput';
 import { Checkbox } from '../inputs/Checkbox';
 import { useOrientationContext } from '../../context/OrientationContext';
+import { useNotification } from '../../context/NotificationContext';
+import { FormModal } from '../modals/FormModal';
+import styles from './EditUserModal.module.scss';
 
 interface EditUserModalProps {
   isOpen: boolean;
@@ -25,9 +25,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
 }) => {
   const { user, refetchUser } = useContext(UserContext);
   const [userData, setUserData] = useState(user);
-  const setIsThankYouModalOpen = useThankYouModalContext(
-    (state) => state.setIsOpen
-  );
+  const { notify } = useNotification();
   const orientation = useOrientationContext((state) => state.orientation);
 
   useEffect(() => {
@@ -53,16 +51,12 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
       queryClient.setQueryData(['user', 'me', user!.id], context?.prevUser);
     },
     onSuccess: () => {
-      setIsThankYouModalOpen(true);
+      notify();
     },
     onSettled: () => {
       refetchUser();
     },
   });
-
-  useEffect(() => {
-    setUserData(user);
-  }, [user]);
 
   const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setUserData((prev) => {
@@ -87,20 +81,25 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
     onClose();
   };
 
+  const handleClose = () => {
+    setUserData(user);
+    onClose();
+  };
+
   if (!user) {
     return null;
   }
 
   return (
-    <Modal
+    <FormModal
       open={isOpen}
-      onClose={onClose}
-      height={orientation === 'landscape' ? '98%' : '50%'}
+      onClose={handleClose}
+      height={orientation === 'landscape' ? 98 : null}
       onSave={onSubmit}
-      saveButtonDisabled={!userData?.name}
-      className={styles.contentContainer}
+      disabled={!userData?.name}
+      className={styles.modal}
+      title="Update your details"
     >
-      <div className={styles.title}>Update your details</div>
       <form className={styles.form}>
         <ControlledInput
           value={userData?.name || ''}
@@ -123,6 +122,6 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
           </span>
         </div>
       </form>
-    </Modal>
+    </FormModal>
   );
 };

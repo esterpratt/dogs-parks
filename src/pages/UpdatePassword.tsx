@@ -2,18 +2,18 @@ import { FormEvent, useContext, useEffect, useState } from 'react';
 import classnames from 'classnames';
 import { Button } from '../components/Button';
 import { UserContext } from '../context/UserContext';
-import { ThankYouModal } from '../components/ThankYouModal';
 import { updatePassword } from '../services/authentication';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 import { Input } from '../components/inputs/Input';
 import styles from './UpdatePassword.module.scss';
+import { useNotification } from '../context/NotificationContext';
 
 const UpdatePassowrd = () => {
   const [error, setError] = useState('');
   const { userId, isLoadingAuthUser } = useContext(UserContext);
-  const [isThankYouModalOpen, setIsThankYouModalOpen] = useState(false);
   const navigate = useNavigate();
+  const { notify } = useNotification();
 
   useEffect(() => {
     setError('');
@@ -32,7 +32,7 @@ const UpdatePassowrd = () => {
         setError(error.message);
       },
       onSuccess: () => {
-        setIsThankYouModalOpen(true);
+        notify('Your password has been updated!');
       },
     });
 
@@ -46,11 +46,6 @@ const UpdatePassowrd = () => {
     } else {
       resetPassword(formData.password);
     }
-  };
-
-  const onCloseThankYouModal = () => {
-    setIsThankYouModalOpen(false);
-    navigate(`/profile/${userId}`);
   };
 
   return (
@@ -81,12 +76,6 @@ const UpdatePassowrd = () => {
           </Button>
         </form>
       </div>
-      <ThankYouModal
-        title="Your password has been updated!"
-        open={isThankYouModalOpen}
-        onClose={onCloseThankYouModal}
-        onAfterClose={onCloseThankYouModal}
-      />
     </>
   );
 };

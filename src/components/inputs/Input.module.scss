@@ -3,15 +3,20 @@
 .input {
   font-weight: inherit;
   color: $text;
-  border: 1px solid $pink;
+  border: 1px solid rgba($pink, 0.4);
   background-color: $white;
-  border-radius: 18px;
+  border-radius: 12px;
   font-size: 16px;
   font-family: inherit;
   outline: none;
   padding: 16px;
   letter-spacing: inherit;
   scroll-margin-top: 36px;
+  transition: border 0.2s;
+
+  &:focus {
+    border: 1px solid rgba($pink, 1);
+  }
 
   &[type='date'] {
     appearance: none;

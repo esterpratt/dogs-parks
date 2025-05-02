@@ -135,7 +135,7 @@ const UserDogs = () => {
       <Suspense fallback={null}>
         <CameraModal
           title="Add your dog image"
-          variant="centerTop"
+          variant="top"
           onUploadImg={onAddDogImage}
           open={isCameraModalOpen}
           setOpen={setIsCameraModalOpen}

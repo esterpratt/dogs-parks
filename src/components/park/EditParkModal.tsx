@@ -1,8 +1,5 @@
 import { ChangeEvent, useState } from 'react';
 import { Park, ParkMaterial } from '../../types/park';
-import { Modal } from '../Modal';
-import styles from './EditParkModal.module.scss';
-import { useThankYouModalContext } from '../../context/ThankYouModalContext';
 import { useMutation } from '@tanstack/react-query';
 import { updatePark } from '../../services/parks';
 import { queryClient } from '../../services/react-query';
@@ -11,6 +8,9 @@ import { MultiSelectInputs } from '../inputs/MultiSelectInputs';
 import { RadioInputs } from '../inputs/RadioInputs';
 import { RangeInput } from '../inputs/RangeInput';
 import { useOrientationContext } from '../../context/OrientationContext';
+import { useNotification } from '../../context/NotificationContext';
+import { FormModal } from '../modals/FormModal';
+import styles from './EditParkModal.module.scss';
 
 interface EditParksModalProps {
   isOpen: boolean;
@@ -19,11 +19,11 @@ interface EditParksModalProps {
 }
 
 const getBooleanValue = (value: string | null) => {
-  if (value === 'Y') {
+  if (value === 'Yes') {
     return true;
   }
 
-  if (value === 'N') {
+  if (value === 'No') {
     return false;
   }
 
@@ -36,23 +36,23 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
   park,
 }) => {
   const orientation = useOrientationContext((state) => state.orientation);
-  const setIsThankYouModalOpen = useThankYouModalContext(
-    (state) => state.setIsOpen
-  );
+  const { notify } = useNotification();
   const [parkDetails, setParkDetails] = useState<{
     materials: ParkMaterial[] | null;
     hasFacilities: string | null;
     size: string | null;
     shade: string | null;
-    hasWater: string | null;
   }>(() => {
     return {
       size: park.size?.toString() || null,
       shade: park.shade?.toString() || null,
       hasFacilities:
-        park.has_facilities === false ? 'N' : park.has_facilities ? 'Y' : null,
+        park.has_facilities === false
+          ? 'No'
+          : park.has_facilities
+          ? 'Yes'
+          : null,
       materials: park.materials,
-      hasWater: park.has_water === false ? 'N' : park.has_water ? 'Y' : null,
     };
   });
 
@@ -75,7 +75,7 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
       queryClient.setQueryData(['parks', park.id], context?.prevPark);
     },
     onSuccess: () => {
-      setIsThankYouModalOpen(true);
+      notify();
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['parks', park.id] });
@@ -100,19 +100,16 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
       size?: number | null;
       shade?: number | null;
       has_facilities?: boolean | null;
-      has_water?: boolean | null;
     } = {
       materials: [],
       size: null,
       shade: null,
       has_facilities: null,
-      has_water: null,
     };
 
     const materials = parkDetails.materials ? parkDetails.materials : [];
     const hasFacilities = getBooleanValue(parkDetails.hasFacilities);
     const shade = parkDetails.shade !== null ? Number(parkDetails.shade) : null;
-    const hasWater = getBooleanValue(parkDetails.hasWater);
     const size = parkDetails.size !== null ? Number(parkDetails.size) : null;
 
     if (size !== null) {
@@ -124,9 +121,6 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
     if (materials?.length) {
       updatedData.materials = materials;
     }
-    if (hasWater !== null) {
-      updatedData.has_water = hasWater;
-    }
     if (hasFacilities !== null) {
       updatedData.has_facilities = hasFacilities;
     }
@@ -135,78 +129,63 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
   };
 
   return (
-    <Modal
+    <FormModal
       open={isOpen}
       onClose={onClose}
-      height={orientation === 'landscape' ? '98%' : '95%'}
+      height={orientation === 'landscape' ? 98 : null}
       onSave={onSubmit}
-      className={styles.modalContent}
+      className={styles.modal}
+      title="Add the following park details"
     >
-      <div className={styles.title}>
-        Can you help us with missing details about this park?
-      </div>
       <form className={styles.form}>
-        <div className={styles.formInputs}>
-          {!park.size && (
-            <ControlledInput
-              type="number"
-              value={parkDetails.size?.toString() || ''}
-              onChange={onInputChange}
-              name="size"
-              label="Size (in meters)"
-            />
-          )}
-          {!park.materials?.length && (
-            <MultiSelectInputs
-              options={[
-                { id: ParkMaterial.SAND, value: ParkMaterial.SAND },
-                { id: ParkMaterial.DIRT, value: ParkMaterial.DIRT },
-                { id: ParkMaterial.GRASS, value: ParkMaterial.GRASS },
-                {
-                  id: ParkMaterial.SYNTHETIC_GRASS,
-                  value: ParkMaterial.SYNTHETIC_GRASS,
-                },
-              ]}
-              value={parkDetails.materials || []}
-              onInputChange={onInputChange}
-              name="materials"
-              label="Ground Covering"
-            />
-          )}
-          {park.has_facilities === null && (
-            <RadioInputs
-              value={parkDetails.hasFacilities || ''}
-              options={[
-                { value: 'Y', id: 'yes' },
-                { value: 'N', id: 'no' },
-              ]}
-              onOptionChange={onInputChange}
-              name="hasFacilities"
-              label="Contains Facilities?"
-            />
-          )}
-          {park.shade === null && (
-            <RangeInput
-              label="Daily Shade Hours"
-              name="shade"
-              value={parkDetails.shade?.toString() || ''}
-              onChange={onInputChange}
-            />
-          )}
-          {park.has_water === null && (
-            <RadioInputs
-              value={parkDetails.hasWater || ''}
-              options={[
-                { value: 'Y', id: 'yes' },
-                { value: 'N', id: 'no' },
-              ]}
-              onOptionChange={onInputChange}
-              name="hasWater"
-              label="Contains Drinking Fountains?"
-            />
-          )}
-        </div>
+        {!park.size && (
+          <ControlledInput
+            type="number"
+            value={parkDetails.size?.toString() || ''}
+            onChange={onInputChange}
+            name="size"
+            label="Size (in meters)"
+          />
+        )}
+        {!park.materials?.length && (
+          <MultiSelectInputs
+            options={[
+              { id: ParkMaterial.SAND, value: ParkMaterial.SAND },
+              { id: ParkMaterial.DIRT, value: ParkMaterial.DIRT },
+              { id: ParkMaterial.GRASS, value: ParkMaterial.GRASS },
+              {
+                id: ParkMaterial.SYNTHETIC_GRASS,
+                value: ParkMaterial.SYNTHETIC_GRASS,
+              },
+            ]}
+            value={parkDetails.materials || []}
+            onInputChange={onInputChange}
+            name="materials"
+            label="Ground Covering"
+          />
+        )}
+        {park.has_facilities === null && (
+          <RadioInputs
+            value={parkDetails.hasFacilities || ''}
+            options={[
+              { value: 'Yes', id: 'yes' },
+              { value: 'No', id: 'no' },
+            ]}
+            onOptionChange={onInputChange}
+            name="hasFacilities"
+            label="Contains Facilities?"
+          />
+        )}
+        {park.shade === null && (
+          <RangeInput
+            label="Daily Shade Hours"
+            name="shade"
+            value={parkDetails.shade?.toString() || ''}
+            onChange={onInputChange}
+            className={styles.range}
+          />
+        )}
       </form>
-    </Modal>
+    </FormModal>
   );
 };

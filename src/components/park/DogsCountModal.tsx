@@ -1,34 +1,30 @@
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import classnames from 'classnames';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
-import { Modal } from '../Modal';
 import { reportDogsCount } from '../../services/dogs-count';
-import styles from './DogsCountModal.module.scss';
 import { queryClient } from '../../services/react-query';
-import { useThankYouModalContext } from '../../context/ThankYouModalContext';
 import { ControlledInput } from '../inputs/ControlledInput';
 import { Checkbox } from '../inputs/Checkbox';
 import { useOrientationContext } from '../../context/OrientationContext';
+import { useNotification } from '../../context/NotificationContext';
+import { FormModal } from '../modals/FormModal';
+import styles from './DogsCountModal.module.scss';
 
 const DogsCountModal: React.FC<{
   parkId: string;
   isOpen: boolean;
-  userName?: string;
   onClose: () => void;
   showOnlyCount?: boolean;
-}> = ({ parkId, userName, isOpen, onClose, showOnlyCount }) => {
-  const setIsThankYouModalOpen = useThankYouModalContext(
-    (state) => state.setIsOpen
-  );
+  title?: string;
+}> = ({ parkId, isOpen, onClose, showOnlyCount, title }) => {
+  const { notify } = useNotification();
 
   const orientation = useOrientationContext((state) => state.orientation);
 
-  const [shouldHideDogsModalStorage, setShouldHideDogsModal] =
+  const [_shouldHideDogsModal, setShouldHideDogsModal] =
     useLocalStorage('hideDogsModal');
-  const shouldHideDogsModal = shouldHideDogsModalStorage ?? false;
   const [shouldHideDogsModalLocal, setShouldHideDogsModalLocal] =
-    useState<boolean>(shouldHideDogsModal || false);
+    useState<boolean>(_shouldHideDogsModal ?? false);
   const [dogsCount, setDogsCount] = useState<string>('');
 
   const { mutate: addDogCountReport } = useMutation({
@@ -41,12 +37,14 @@ const DogsCountModal: React.FC<{
       queryClient.invalidateQueries({
         queryKey: ['dogsCount', parkId],
       });
-      setIsThankYouModalOpen(true);
+      notify();
     },
   });
 
-  const onSave = async (dogsCount: string) => {
-    setShouldHideDogsModal(shouldHideDogsModalLocal);
+  const onSave = async () => {
+    if (shouldHideDogsModalLocal) {
+      setShouldHideDogsModal(true);
+    }
     if (dogsCount) {
       addDogCountReport(Number(dogsCount));
     }
@@ -54,76 +52,45 @@ const DogsCountModal: React.FC<{
   };
 
   return (
-    <Modal
-      height={
-        orientation === 'landscape'
-          ? '98%'
-          : !showOnlyCount && shouldHideDogsModal
-          ? '20%'
-          : '50%'
-      }
+    <FormModal
+      saveText="Submit"
+      title={title}
+      height={orientation === 'landscape' ? 98 : null}
       open={isOpen}
-      autoClose={!showOnlyCount && shouldHideDogsModal}
       onClose={() => onClose()}
-      onSave={
-        !showOnlyCount && shouldHideDogsModal
-          ? undefined
-          : () => onSave(dogsCount)
-      }
-      className={classnames(styles.modalContent, {
-        [styles.keepPadding]: showOnlyCount,
-      })}
-      saveButtonDisabled={
-        !dogsCount && dogsCount !== '0' && !shouldHideDogsModalLocal
+      onSave={onSave}
+      className={styles.modal}
+      disabled={
+        !dogsCount &&
+        ((!showOnlyCount && !shouldHideDogsModalLocal) || showOnlyCount)
       }
     >
+      <div className={styles.inputsContainer}>
+        <ControlledInput
+          type="number"
+          name="dogsCount"
+          label="How many dogs are currently in the park?"
+          min={0}
+          max={99}
+          value={dogsCount}
+          onChange={(event) => setDogsCount(event.currentTarget.value)}
+        />
+      </div>
       {!showOnlyCount && (
-        <div
-          className={classnames(styles.title, {
-            [styles.large]: shouldHideDogsModal,
-          })}
-        >
-          Enjoy your stay
-          {userName ? (
-            <>
-              , <span>{userName}!</span>
-            </>
-          ) : (
-            <>!</>
-          )}
+        <div className={styles.privacyContainer}>
+          <Checkbox
+            id="show"
+            label="Please don't ask me again"
+            onChange={() => setShouldHideDogsModalLocal((prev) => !prev)}
+            isChecked={shouldHideDogsModalLocal}
+          />
+          <span>
+            * You can always add a report by clicking the plus sign in the Busy
+            Hours section.
+          </span>
         </div>
       )}
-      {(showOnlyCount || !shouldHideDogsModal) && (
-        <>
-          <div className={styles.inputsContainer}>
-            <ControlledInput
-              type="number"
-              name="dogsCount"
-              label="How many dogs are currently in the park?"
-              min={0}
-              max={99}
-              value={dogsCount}
-              onChange={(event) => setDogsCount(event.currentTarget.value)}
-            />
-          </div>
-          {!showOnlyCount && (
-            <div className={styles.privacyContainer}>
-              <Checkbox
-                id="show"
-                label="Please don't ask me again"
-                onChange={() => setShouldHideDogsModalLocal((prev) => !prev)}
-                isChecked={shouldHideDogsModalLocal}
-              />
-              <span>
-                * If you are hidden, you won’t appear in search results. Only
-                your friends or users you have sent friend requests to will be
-                able to see your page.
-              </span>
-            </div>
-          )}
-        </>
-      )}
-    </Modal>
+    </FormModal>
   );
 };
 

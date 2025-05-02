@@ -5,13 +5,15 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: 16px 20px;
+  padding: 4px;
   color: $text-medium;
-  height: 50px;
+  min-height: 42px;
+  border-radius: 6px;
+  border: 1px solid rgba($pink, 0.4);
 
   &:first-child:nth-last-child(2),
   &:first-child:nth-last-child(2) ~ .input {
-    width: fit-content;
+    width: 50%;
   }
 
   &:first-child:nth-last-child(3),
@@ -24,27 +26,24 @@
     width: 25%;
   }
 
-  &.checked {
-    background-color: $orange;
-    color: $white;
-  }
-
-  &:not(:last-child) {
-    border-right: 1px solid $grey-bold;
-  }
-
   &:first-child {
-    border-top-left-radius: 17px;
-    border-bottom-left-radius: 17px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
   }
 
   &:last-child {
-    border-top-right-radius: 17px;
-    border-bottom-right-radius: 17px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
+
+  &.checked {
+    background-color: $pink;
+    color: $white;
   }
 
   label {
     text-transform: capitalize;
+    text-align: center;
     padding: 0;
   }
 

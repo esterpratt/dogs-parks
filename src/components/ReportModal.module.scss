@@ -1,7 +1,7 @@
 @use '../variables' as *;
 
 .modal {
-  padding: 48px 24px 24px;
+  padding: 24px;
 }
 
 .container {
@@ -17,41 +17,28 @@
 .options {
   display: flex;
   flex-direction: column;
-  background-color: white;
+  gap: 4px;
   font-size: 16px;
   border-radius: 12px;
 }
 
 .input {
+  border: 1px solid rgba($pink, 0.4);
+  border-radius: 8px;
   display: flex;
   align-items: center;
   position: relative;
-  padding: 0 16px;
   height: 72px;
   display: flex;
   color: $text-medium;
 
-  &:not(:last-child) {
-    border-bottom: 1px solid $grey-bold;
-  }
-
-  &:first-child {
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-  }
-
-  &:last-child {
-    border-bottom-right-radius: 12px;
-    border-bottom-left-radius: 12px;
-  }
-
   &.checked {
-    background-color: $orange;
+    background-color: $pink;
     color: $white;
   }
 
   label {
-    padding: 0;
+    padding: 0 16px;
   }
 
   input {

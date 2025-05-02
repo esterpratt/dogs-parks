@@ -1,6 +1,7 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import styles from './RangeInput.module.scss';
+import classnames from 'classnames';
 import { ControlledInput } from './ControlledInput';
+import styles from './RangeInput.module.scss';
 
 interface RangeInputProps {
   min?: number;
@@ -11,6 +12,7 @@ interface RangeInputProps {
   value?: string;
   sign?: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  className?: string;
 }
 
 const RangeInput: React.FC<RangeInputProps> = ({
@@ -22,6 +24,7 @@ const RangeInput: React.FC<RangeInputProps> = ({
   value,
   sign = '%',
   onChange,
+  className,
 }) => {
   const inputContainerRef = useRef<HTMLDivElement | null>(null);
   const [bubbleStep, setBubbleStep] = useState(0);
@@ -33,7 +36,7 @@ const RangeInput: React.FC<RangeInputProps> = ({
 
   return (
     <div
-      className={styles.container}
+      className={classnames(styles.container, className)}
       ref={inputContainerRef}
       style={{ '--range-value': `${value || 0}%` }}
     >

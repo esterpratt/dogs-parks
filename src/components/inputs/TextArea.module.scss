@@ -11,10 +11,10 @@
   }
 
   textarea {
-    color: $text-medium;
-    border: 1px solid $grey-bold;
+    color: $text;
+    border: 1px solid rgba($pink, 0.4);
     background-color: $white;
-    border-radius: 24px;
+    border-radius: 12px;
     font-size: 16px;
     font-family: inherit;
     outline: none;
@@ -22,9 +22,13 @@
     font-weight: inherit;
     letter-spacing: inherit;
 
+    &:focus {
+      border: 1px solid $pink;
+    }
+
     &::placeholder {
       opacity: 1;
-      color: $text-light;
+      color: $placeholder;
     }
   }
 }

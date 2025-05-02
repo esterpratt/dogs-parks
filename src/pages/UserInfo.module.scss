@@ -7,7 +7,7 @@
   gap: 24px;
   font-size: 16px;
   align-items: center;
-  margin-top: 12px;
+  padding-top: 12px;
 }
 
 .button {
@@ -23,10 +23,10 @@
 }
 
 .approve-modal {
-  padding: 56px 24px 24px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 36px;
 }
 
 .approve-content {
@@ -34,6 +34,23 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+}
+
+.buttons-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+
+  .modal-button {
+    width: 100%;
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
 }
 
 @media (orientation: landscape) {

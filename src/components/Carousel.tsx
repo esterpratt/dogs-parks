@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import Slider from 'react-slick';
-import { Plus } from 'lucide-react';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { Modal } from './Modal';
+import { useState } from 'react';
+import Slider from 'react-slick';
+import { Plus, Trash2, X } from 'lucide-react';
 import { Button } from './Button';
 import { useOrientationContext } from '../context/OrientationContext';
 import { EnlargeImageModal } from './EnlargeImageModal';
+import { TopModal } from './modals/TopModal';
 import styles from './Carousel.module.scss';
 
 interface CarouselProps {
@@ -73,11 +73,10 @@ const Carousel: React.FC<CarouselProps> = ({
           )}
         </Slider>
       </div>
-      <Modal
+      <TopModal
         open={isApproveDeleteModalOpen}
         onClose={() => setIsApproveDeleteModalOpen(false)}
-        height={orientation === 'landscape' ? '95%' : '40%'}
-        variant="center"
+        height={orientation === 'landscape' ? 95 : null}
         className={styles.approveModal}
       >
         <div className={styles.approveContent}>
@@ -87,14 +86,25 @@ const Carousel: React.FC<CarouselProps> = ({
             can run free forever?
           </span>
         </div>
-        <Button
-          variant="danger"
-          onClick={onDeleteImage}
-          className={styles.deleteButton}
-        >
-          Delete
-        </Button>
-      </Modal>
+        <div className={styles.buttonsContainer}>
+          <Button
+            variant="primary"
+            onClick={onDeleteImage}
+            className={styles.button}
+          >
+            <Trash2 size={16} />
+            <span>Delete</span>
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={() => setIsApproveDeleteModalOpen(false)}
+            className={styles.button}
+          >
+            <X size={16} />
+            <span>Cancel</span>
+          </Button>
+        </div>
+      </TopModal>
       <EnlargeImageModal
         isOpen={isEnlargedImageModalOpen}
         onClose={() => setIsEnlargeImageModalOpen(false)}

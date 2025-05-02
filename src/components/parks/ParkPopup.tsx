@@ -14,7 +14,7 @@ interface ParkPopupProps {
   activePark: Park | null;
   onGetDirections: (location: Location) => void;
   isLoadingDirections: boolean;
-  directions?: { distance: string; duration: string };
+  directions?: { distance?: string; duration?: string; error?: string };
   onClose: () => void;
   canGetDirections: boolean;
 }
@@ -104,14 +104,20 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
               )}
               {!isLoadingDirections && directions && (
                 <div className={styles.directions}>
-                  <div className={styles.distance}>
-                    <Footprints className={styles.icon} size={16} />
-                    <span>{directions?.distance}</span>
-                  </div>
-                  <div className={styles.duration}>
-                    <Hourglass className={styles.icon} size={16} />
-                    <span>{directions?.duration}</span>
-                  </div>
+                  {directions.error ? (
+                    <div className={styles.error}>{directions.error}</div>
+                  ) : (
+                    <>
+                      <div className={styles.distance}>
+                        <Footprints className={styles.icon} size={16} />
+                        <span>{directions?.distance}</span>
+                      </div>
+                      <div className={styles.duration}>
+                        <Hourglass className={styles.icon} size={16} />
+                        <span>{directions?.duration}</span>
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
             </div>

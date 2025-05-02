@@ -1,0 +1,22 @@
+@use '../../variables.scss' as *;
+
+%modal {
+  transition: all 0.3s;
+  position: fixed;
+  border: 1px solid $white;
+  border-radius: 12px;
+  background: $white;
+  box-shadow: 0 0 0 100vmax rgba($text, 0.7);
+  display: flex;
+
+  &[open] {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  &:not([open]) {
+    pointer-events: none;
+    visibility: hidden;
+    opacity: 0;
+  }
+}

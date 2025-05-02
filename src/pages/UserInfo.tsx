@@ -1,11 +1,11 @@
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { UserContext } from '../context/UserContext';
-import { LogOut, Pencil, Trash2 } from 'lucide-react';
-import { Modal } from '../components/Modal';
+import { LogOut, Pencil, Trash2, X } from 'lucide-react';
 import { Button } from '../components/Button';
 import { EditUserModal } from '../components/profile/EditUserModal';
 import { useOrientationContext } from '../context/OrientationContext';
+import { TopModal } from '../components/modals/TopModal';
 import styles from './UserInfo.module.scss';
 
 const UserInfo = () => {
@@ -60,11 +60,10 @@ const UserInfo = () => {
         </Button>
       </div>
       <EditUserModal isOpen={isEditUserModalOpen} onClose={onCloseUserModal} />
-      <Modal
+      <TopModal
         open={isDeleteUserModalOpen}
         onClose={() => setIsDeleteUserModalOpen(false)}
-        height={orientation === 'landscape' ? '95%' : '60%'}
-        variant="center"
+        height={orientation === 'landscape' ? 95 : null}
         className={styles.approveModal}
       >
         <div className={styles.approveContent}>
@@ -75,14 +74,25 @@ const UserInfo = () => {
           </span>
           <span>Are you sure you want to say goodbye?</span>
         </div>
-        <Button
-          variant="danger"
-          onClick={onDeleteUser}
-          className={styles.deleteButton}
-        >
-          Delete
-        </Button>
-      </Modal>
+        <div className={styles.buttonsContainer}>
+          <Button
+            variant="primary"
+            onClick={onDeleteUser}
+            className={styles.modalButton}
+          >
+            <Trash2 size={16} />
+            <span>Delete</span>
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={() => setIsDeleteUserModalOpen(false)}
+            className={styles.modalButton}
+          >
+            <X size={16} />
+            <span>Cancel</span>
+          </Button>
+        </div>
+      </TopModal>
     </>
   );
 };

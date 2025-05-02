@@ -1,0 +1,17 @@
+@use '../../variables.scss' as *;
+@use './shared' as shared;
+
+.modal {
+  @extend %modal;
+  margin: auto;
+  padding: 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  color: $text;
+  font-size: 20px;
+  z-index: 1100;
+  max-height: 100dvh;
+  max-width: 100%;
+}

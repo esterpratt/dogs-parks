@@ -2,29 +2,48 @@
 
 .modal-image {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100%;
   width: 100%;
-  border: none;
+  gap: 16px;
+  padding-top: 16px;
+  position: relative;
   border-radius: 12px;
-  background-color: $black;
+
+  .buttons-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 12px;
+  }
+
+  .button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    padding: 8px;
+    border-radius: 8px;
+    gap: 8px;
+    align-self: flex-end;
+
+    &:only-child {
+      margin-left: 100%;
+      transform: translateX(-100%);
+    }
+  }
 
   img {
-    padding-top: 4px;
-    height: 80%;
+    background-color: $black;
+    height: 100%;
     width: 100%;
     object-fit: cover;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
   }
-}
-
-.trash-icon {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  width: 24px;
-  height: 24px;
-  color: $green;
 }
 
 @media (orientation: landscape) {
@@ -33,4 +52,8 @@
       object-fit: contain;
     }
   }
+}
+
+:export {
+  red: $red;
 }
