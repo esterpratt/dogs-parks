@@ -1,12 +1,12 @@
 import { ChangeEvent, useContext, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 import { TextArea } from '../inputs/TextArea';
 import { UserContext } from '../../context/UserContext';
-import styles from './ReportParkModal.module.scss';
 import { createParkReport } from '../../services/park-reports';
-import { useMutation } from '@tanstack/react-query';
 import { useOrientationContext } from '../../context/OrientationContext';
 import { useNotification } from '../../context/NotificationContext';
 import { FormModal } from '../modals/FormModal';
+import styles from './ReportParkModal.module.scss';
 
 interface ReportParkModalProps {
   open: boolean;

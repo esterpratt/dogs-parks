@@ -15,13 +15,11 @@ interface HeaderImageProps {
   editButtonClassName?: string;
   style?: CSSProperties;
   size?: number;
-  variant?: 'round' | 'square';
 }
 
 const HeaderImage = (props: HeaderImageProps) => {
   const {
     size = 152,
-    variant = 'round',
     imgSrc,
     showLoader = false,
     onClickImg,
@@ -47,10 +45,10 @@ const HeaderImage = (props: HeaderImageProps) => {
         <img
           onClick={onClickImg && (() => onClickImg(imgSrc))}
           src={imgSrc}
-          className={classnames(styles.img, styles[variant])}
+          className={styles.img}
         />
       ) : (
-        <div className={classnames(styles.img, styles[variant])}>
+        <div className={styles.img}>
           <div className={styles.noImg}>
             <NoImgIcon size={64} color={styles.green} strokeWidth={1} />
           </div>

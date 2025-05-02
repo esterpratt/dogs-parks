@@ -117,7 +117,11 @@ const UserPreview: React.FC<UserPreviewProps> = ({
             : []
         }
       />
-      <TopModal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
+      <TopModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        className={styles.modal}
+      >
         <div className={styles.container}>
           <div className={styles.message}>
             <>
@@ -133,7 +137,7 @@ const UserPreview: React.FC<UserPreviewProps> = ({
             className={styles.modalButton}
           >
             <X size={16} />
-            <span>Cancel</span>
+            <span>Exit</span>
           </Button>
         </div>
       </TopModal>

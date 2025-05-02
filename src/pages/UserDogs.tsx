@@ -1,15 +1,14 @@
 import { lazy, Suspense, useState } from 'react';
-import { useOutletContext, useRevalidator } from 'react-router';
-import { Link } from 'react-router';
+import { useOutletContext, useRevalidator, Link } from 'react-router';
+import { useIsFetching, useMutation } from '@tanstack/react-query';
 import { User } from '../types/user';
 import { Dog } from '../types/dog';
 import { DogPreview } from '../components/profile/DogPreview';
-import styles from './UserDogs.module.scss';
 import { Button } from '../components/Button';
-import { useIsFetching, useMutation } from '@tanstack/react-query';
 import { uploadDogPrimaryImage } from '../services/dogs';
 import { queryClient } from '../services/react-query';
 import { LOADING } from '../utils/consts';
+import styles from './UserDogs.module.scss';
 
 const EditDogModal = lazy(() => import('../components/dog/EditDogModal'));
 const CameraModal = lazy(() => import('../components/camera/CameraModal'));

@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router';
-import styles from './Home.module.scss';
 import { NewMap } from '../components/map/NewMap';
+import styles from './Home.module.scss';
 
 const Home: React.FC = () => {
   const { state } = useLocation();

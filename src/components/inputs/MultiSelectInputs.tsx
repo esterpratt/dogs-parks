@@ -1,6 +1,6 @@
 import { ChangeEvent } from 'react';
-import styles from './RadioInputs.module.scss';
 import { MultiSelectInput } from './MultiSelectInput';
+import styles from './RadioInputs.module.scss';
 
 interface MultiSelectInputsProps {
   options: { id: string; value: string }[];

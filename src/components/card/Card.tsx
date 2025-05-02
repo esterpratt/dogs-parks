@@ -1,7 +1,6 @@
 import { MouseEvent, ReactNode } from 'react';
 import { Link } from 'react-router';
 import classnames from 'classnames';
-
 import { Button } from '../Button';
 import styles from './Card.module.scss';
 

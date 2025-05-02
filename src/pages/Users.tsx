@@ -1,12 +1,12 @@
+import { ChangeEvent, useContext, useState } from 'react';
 import { User } from '../types/user';
 import { Dog } from '../types/dog';
 import { UserPreview } from '../components/users/UserPreview';
-import styles from './Users.module.scss';
-import { ChangeEvent, useContext, useState } from 'react';
 import { UserContext } from '../context/UserContext';
-import { SearchListAsync } from '../components/SearchListAsync';
+import { SearchListAsync } from '../components/searchList/SearchListAsync';
 import { filterUsersAndDogs } from '../services/users';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
+import styles from './Users.module.scss';
 
 interface UserWithDogs extends User {
   dogs: Dog[];

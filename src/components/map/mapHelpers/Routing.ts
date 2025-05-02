@@ -1,7 +1,7 @@
+import { useEffect } from 'react';
 import { useMap } from 'react-leaflet';
 import L from 'leaflet';
 import styles from './Routing.module.scss';
-import { useEffect } from 'react';
 
 interface RoutingProps {
   geoJSONObj: GeoJSON.GeometryObject;

@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import classnames from 'classnames';
-import { Location } from '../../types/park';
-import styles from './LocationInput.module.scss';
+import { LeafletMouseEvent } from 'leaflet';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import { MapCenter } from '../map/mapHelpers/MapCenter';
 import { MapEventHandler } from '../map/mapHelpers/MapEventHandler';
-import { LeafletMouseEvent } from 'leaflet';
 import { ParkMarker } from '../map/ParkMarker';
+import { Location } from '../../types/park';
 import { DEFAULT_LOCATION } from '../../utils/consts';
 import { getUserLocation } from '../map/mapHelpers/getUserLocation';
+import styles from './LocationInput.module.scss';
 
 interface LocationInputProps {
   label: string;

@@ -8,7 +8,7 @@ import {
 } from 'react';
 import classnames from 'classnames';
 import { Input } from './Input';
-import { SearchListItems } from '../SearchListItems';
+import { SearchListItems } from '../searchList/SearchListItems';
 import { useDebounce } from '../../hooks/useDebounce';
 import styles from './AutoComplete.module.scss';
 

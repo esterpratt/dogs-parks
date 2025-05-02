@@ -1,10 +1,10 @@
 import { ChangeEvent, ReactNode, useState } from 'react';
 import classnames from 'classnames';
-import { useDebounce } from '../hooks/useDebounce';
+import { useDebounce } from '../../hooks/useDebounce';
 import { SearchListItems } from './SearchListItems';
-import styles from './SearchList.module.scss';
-import { SearchInput, SearchInputProps } from './inputs/SearchInput';
+import { SearchInput, SearchInputProps } from '../inputs/SearchInput';
 import { SearchListInfiniteItems } from './SearchListInfiniteItems';
+import styles from './SearchList.module.scss';
 
 interface SearchListProps<T> {
   items: T[];

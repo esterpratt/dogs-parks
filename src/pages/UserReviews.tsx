@@ -7,10 +7,10 @@ import {
   updateReview,
 } from '../services/reviews';
 import { User } from '../types/user';
-import styles from './UserReviews.module.scss';
 import { queryClient } from '../services/react-query';
 import { Review, ReviewData } from '../types/review';
 import { ReviewModalContextProvider } from '../context/ReviewModalContext';
+import styles from './UserReviews.module.scss';
 
 const UserReviews = () => {
   const { user } = useOutletContext() as { user: User };

@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from 'react';
-import styles from './ReviewModal.module.scss';
 import { Review } from '../types/review';
 import { ControlledInput } from './inputs/ControlledInput';
 import { TextArea } from './inputs/TextArea';
@@ -9,6 +8,7 @@ import { UserContext } from '../context/UserContext';
 import { useOrientationContext } from '../context/OrientationContext';
 import { useNotification } from '../context/NotificationContext';
 import { FormModal } from './modals/FormModal';
+import styles from './ReviewModal.module.scss';
 
 interface ReviewModalProps {
   title?: string;
@@ -40,7 +40,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
       content: review?.content || '',
     };
   });
-  const [rank, setRank] = useState<number>(0);
+  const [rank, setRank] = useState<number>(5);
   const { userId } = useContext(UserContext);
   const [isAnonymous, setIsAnonymous] = useState(userId ? false : true);
 
@@ -58,7 +58,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
         title: '',
         content: '',
       });
-      setRank(0);
+      setRank(5);
     }
   }, [review]);
 

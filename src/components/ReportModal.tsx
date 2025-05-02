@@ -3,8 +3,8 @@ import classnames from 'classnames';
 import { REPORT_DESCRIPTION, ReportReason } from '../types/report';
 import { reportReview } from '../services/reviews';
 import { useNotification } from '../context/NotificationContext';
-import styles from './ReportModal.module.scss';
 import { FormModal } from './modals/FormModal';
+import styles from './ReportModal.module.scss';
 
 interface ReportModalProps {
   isOpen: boolean;

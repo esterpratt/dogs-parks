@@ -1,7 +1,7 @@
 import { ChangeEvent } from 'react';
 import classnames from 'classnames';
-import styles from './SearchInput.module.scss';
 import { Search } from 'lucide-react';
+import styles from './SearchInput.module.scss';
 
 export interface SearchInputProps {
   value: string;

@@ -1,10 +1,10 @@
 import { ChangeEvent, ReactNode } from 'react';
 import classnames from 'classnames';
-import styles from './SearchList.module.scss';
-import { Button } from './Button';
+import { Button } from '../Button';
+import { Loader } from '../Loader';
+import { SearchInput, SearchInputProps } from '../inputs/SearchInput';
 import { SearchListItems } from './SearchListItems';
-import { Loader } from './Loader';
-import { SearchInput, SearchInputProps } from './inputs/SearchInput';
+import styles from './SearchList.module.scss';
 
 interface SearchListAsyncProps<T> {
   filteredItems: T[];

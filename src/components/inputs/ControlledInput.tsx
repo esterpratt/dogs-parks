@@ -1,7 +1,7 @@
 import { InputHTMLAttributes } from 'react';
 import classnames from 'classnames';
-import styles from './ControlledInput.module.scss';
 import { Input } from './Input';
+import styles from './ControlledInput.module.scss';
 
 interface ControlledInputProps extends InputHTMLAttributes<HTMLInputElement> {
   value?: string;

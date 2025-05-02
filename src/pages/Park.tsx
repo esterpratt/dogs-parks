@@ -135,7 +135,7 @@ const Park: React.FC = () => {
               <ReviewsPreview className={styles.reviews} />
             </div>
             <div className={styles.addressContainer}>
-              <MapPin size={14} />
+              <MapPin color={styles.green} size={14} />
               <div className={styles.address}>
                 {park.address}, {park.city}
               </div>

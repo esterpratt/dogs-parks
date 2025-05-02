@@ -1,7 +1,7 @@
+import { forwardRef, ReactNode } from 'react';
 import classnames from 'classnames';
 import { Input } from './Input';
 import styles from './FormInput.module.scss';
-import { forwardRef, ReactNode } from 'react';
 
 interface FormInputProps extends React.HTMLAttributes<HTMLInputElement> {
   name: string;

@@ -15,9 +15,9 @@ import {
 } from 'lucide-react';
 import classnames from 'classnames';
 import { UserContext } from '../context/UserContext';
-import styles from './NavbarBottom.module.scss';
 import { useClickOutside } from '../hooks/useClickOutside';
 import { Button } from './Button';
+import styles from './NavbarBottom.module.scss';
 
 const NavbarBottom = () => {
   const { userId, userLogout } = useContext(UserContext);

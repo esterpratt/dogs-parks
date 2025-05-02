@@ -1,8 +1,7 @@
-import { useLocation, useNavigate } from 'react-router';
-import styles from './DeletionConfirmation.module.scss';
+import { useLocation, useNavigate, Link } from 'react-router';
 import { useEffect } from 'react';
 import { Button } from '../components/Button';
-import { Link } from 'react-router';
+import styles from './DeletionConfirmation.module.scss';
 
 const DeletionConfirmation: React.FC = () => {
   const navigate = useNavigate();

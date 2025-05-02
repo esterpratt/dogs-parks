@@ -32,14 +32,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
-  &.square {
-    border-radius: 12px;
-
-    .no-img {
-      border-radius: 12px;
-    }
-  }
 }
 
 .no-img {

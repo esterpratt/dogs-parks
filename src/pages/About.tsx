@@ -1,6 +1,6 @@
+import { Link } from 'react-router';
 import { Button } from '../components/Button';
 import styles from './About.module.scss';
-import { Link } from 'react-router';
 
 const MAIL = 'esterpratt@gmail.com';
 

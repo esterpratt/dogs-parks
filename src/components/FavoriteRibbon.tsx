@@ -1,6 +1,6 @@
 import classnames from 'classnames';
-import styles from './FavoriteRibbon.module.scss';
 import { Trophy } from 'lucide-react';
+import styles from './FavoriteRibbon.module.scss';
 
 interface FavoriteRibbonProps {
   className?: string;

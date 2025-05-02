@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { useQuery } from '@tanstack/react-query';
 import { Map } from 'lucide-react';
 import { Park } from '../../types/park';
-import { SearchList } from '../SearchList';
+import { SearchList } from '../searchList/SearchList';
 import { ParkPreview } from './ParkPreview';
 import { fetchSortedParks } from '../../utils/fetchSortedParks';
 import { fetchParksJSON } from '../../services/parks';

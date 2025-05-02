@@ -3,8 +3,8 @@ import { isMobile } from '../../utils/platform';
 import CameraMobileModal from './CameraMobileModal';
 import CameraWebModal from './CameraWebModal';
 import { BottomModal } from '../modals/BottomModal';
-import styles from './CameraModal.module.scss';
 import { TopModal } from '../modals/TopModal';
+import styles from './CameraModal.module.scss';
 
 interface CameraModalProps {
   open: boolean;
