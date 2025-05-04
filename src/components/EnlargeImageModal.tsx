@@ -28,10 +28,7 @@ const EnlargeImageModal: React.FC<EnlargeImageModalProps> = ({
       width={90}
       height={orientation === 'landscape' ? 95 : 70}
     >
-      <div
-        className={styles.modalImage}
-        onTransitionEnd={() => !isOpen && setImgSrc('')}
-      >
+      <div className={styles.modalImage}>
         <div className={styles.buttonsContainer}>
           {!!onClickDeleteImage && (
             <Button
@@ -52,7 +49,7 @@ const EnlargeImageModal: React.FC<EnlargeImageModalProps> = ({
             <X size={18} />
           </Button>
         </div>
-        <img src={imgSrc} />
+        <img src={imgSrc} onTransitionEnd={() => !isOpen && setImgSrc('')} />
       </div>
     </AppearModal>
   );

@@ -47,6 +47,12 @@ const Carousel: React.FC<CarouselProps> = ({
     setIsEnlargeImageModalOpen(true);
   };
 
+  const handleClickDeleteImage = () => {
+    if (removeImage) {
+      setIsApproveDeleteModalOpen(true);
+    }
+  };
+
   return (
     <>
       <div className="slider-container">
@@ -110,9 +116,7 @@ const Carousel: React.FC<CarouselProps> = ({
         onClose={() => setIsEnlargeImageModalOpen(false)}
         imgSrc={imageToEnlarge}
         setImgSrc={setImageToEnlarge}
-        onClickDeleteImage={
-          removeImage ? () => setIsApproveDeleteModalOpen(true) : null
-        }
+        onClickDeleteImage={handleClickDeleteImage}
       />
     </>
   );
