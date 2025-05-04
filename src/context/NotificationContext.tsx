@@ -14,13 +14,6 @@ interface NotificationContextType {
 
 const NotificationContext = createContext<NotificationContextType | null>(null);
 
-export const useNotification = () => {
-  const ctx = useContext(NotificationContext);
-  if (!ctx)
-    throw new Error('useNotification must be used within NotificationProvider');
-  return ctx;
-};
-
 export const NotificationProvider = ({ children }: { children: ReactNode }) => {
   const [message, setMessage] = useState<string>('Good boy!');
   const [open, setOpen] = useState(false);
@@ -57,4 +50,18 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
       <NotificationModal open={open} message={message} />
     </NotificationContext.Provider>
   );
+};
+
+export const useNotification = () => {
+  const ctx = useContext(NotificationContext);
+
+  if (!ctx) {
+    console.warn('useNotification was called outside NotificationProvider');
+    return {
+      notify: () => {},
+      close: () => {},
+    };
+  }
+
+  return ctx;
 };

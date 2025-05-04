@@ -23,11 +23,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 100%;
     gap: 12px;
 
     .button {
       min-width: 128px;
-      flex: 1;
       position: relative;
       font-size: 12px;
       border-radius: 8px;

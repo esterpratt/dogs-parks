@@ -5,7 +5,6 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import './App.scss';
 import { UserContextProvider } from './context/UserContext';
 import { UserLocationProvider } from './context/LocationContext';
-import { NotificationProvider } from './context/NotificationContext';
 import { OrientationProvider } from './context/OrientationContext';
 import { Home } from './pages/Home';
 import { RootLayout } from './RootLayout';
@@ -150,13 +149,11 @@ const App = () => {
   return (
     <UserLocationProvider>
       <OrientationProvider>
-        <NotificationProvider>
-          <QueryClientProvider client={queryClient}>
-            <UserContextProvider>
-              <RouterProvider router={router} />
-            </UserContextProvider>
-          </QueryClientProvider>
-        </NotificationProvider>
+        <QueryClientProvider client={queryClient}>
+          <UserContextProvider>
+            <RouterProvider router={router} />
+          </UserContextProvider>
+        </QueryClientProvider>
       </OrientationProvider>
     </UserLocationProvider>
   );

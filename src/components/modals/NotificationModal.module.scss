@@ -4,7 +4,9 @@
 .modal {
   @extend %modal;
   transition-delay: 0.1s;
-  margin: auto 12px calc($navbar-height + 12px) auto;
+  margin-top: auto;
+  margin-bottom: calc(var(--safe-area-inset-bottom) + $navbar-height + 12px);
+  margin-left: auto;
   top: 0;
   left: 0;
   right: 0;
@@ -14,14 +16,14 @@
   color: $text;
   font-size: 20px;
   z-index: 1200;
-  transform: translateX(150%);
+  margin-right: -100%;
 
   &[open] {
-    transform: translateX(0);
+    margin-right: 12px;
   }
 
   &:not([open]) {
-    transform: translateX(150%);
+    margin-right: -100%;
   }
 }
 
