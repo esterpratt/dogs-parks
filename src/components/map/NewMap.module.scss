@@ -5,14 +5,14 @@
 
 .list-view-button {
   position: absolute;
-  top: calc(32px + var(--safe-area-inset-bottom, 0px));
+  top: calc(12px + var(--safe-area-inset-top, 0px));
   z-index: 600;
-  right: 12px;
+  right: 16px;
 }
 
 .center-button {
   position: absolute;
   z-index: 1000;
   top: 120px;
-  right: 12px;
+  right: 16px;
 }

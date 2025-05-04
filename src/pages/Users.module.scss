@@ -1,8 +1,9 @@
 @use '../variables' as *;
 
 .container {
-  padding: 32px 0 0;
-  max-height: calc($content-max-height - $navbar-height);
+  padding: 12px 0;
+  max-height: $content-max-height;
+  margin-top: $page-top-padding;
   display: flex;
   flex-direction: column;
   gap: 16px;

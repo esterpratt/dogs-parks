@@ -5,10 +5,9 @@
   flex-direction: column;
   flex-grow: 1;
   overflow: auto;
-  max-height: $content-max-height;
+  max-height: $app-max-height;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
-  // background-color: rgba($blue, 0.01);
   background-color: $white;
 }
 

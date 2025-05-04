@@ -74,60 +74,62 @@ const NewPark: React.FC = () => {
 
   return (
     <>
-      <div className={styles.prevLinks}>
-        {
-          <Link to="/parks">
-            <MoveLeft size={16} />
-            <span>All parks</span>
-          </Link>
-        }
-      </div>
       <div className={styles.container}>
-        <div className={styles.title}>Fill the park details to add it</div>
-        <div className={classnames(styles.error, error && styles.show)}>
-          {error}
+        <div className={styles.prevLinks}>
+          {
+            <Link to="/parks">
+              <MoveLeft size={16} />
+              <span>All parks</span>
+            </Link>
+          }
         </div>
-        <div className={styles.inputsContainer}>
-          <Input
-            placeholder="Park Name"
-            name="name"
-            value={parkDetails.name}
-            onChange={onChangeParkDetails}
-          />
-          <Input
-            type="number"
-            placeholder="Size in meters (if known)"
-            name="size"
-            value={parkDetails.size}
-            onChange={onChangeParkDetails}
-          />
-          <Input
-            placeholder="City *"
-            name="city"
-            value={parkDetails.city}
-            onChange={onChangeParkDetails}
-          />
-          <Input
-            placeholder="Address *"
-            name="address"
-            value={parkDetails.address}
-            onChange={onChangeParkDetails}
-          />
-          <LocationInput
-            label="Click on the map to set the park location *"
-            markerLocation={markerLocation}
-            onMapClick={onMapClick}
-            className={styles.map}
-          />
-          <Button
-            onClick={onAddPark}
-            className={styles.button}
-            disabled={
-              !markerLocation || !parkDetails.address || !parkDetails.city
-            }
-          >
-            Add Park
-          </Button>
+        <div className={styles.contentContainer}>
+          <div className={styles.title}>Fill the park details to add it</div>
+          <div className={classnames(styles.error, error && styles.show)}>
+            {error}
+          </div>
+          <div className={styles.inputsContainer}>
+            <Input
+              placeholder="Park Name"
+              name="name"
+              value={parkDetails.name}
+              onChange={onChangeParkDetails}
+            />
+            <Input
+              type="number"
+              placeholder="Size in meters (if known)"
+              name="size"
+              value={parkDetails.size}
+              onChange={onChangeParkDetails}
+            />
+            <Input
+              placeholder="City *"
+              name="city"
+              value={parkDetails.city}
+              onChange={onChangeParkDetails}
+            />
+            <Input
+              placeholder="Address *"
+              name="address"
+              value={parkDetails.address}
+              onChange={onChangeParkDetails}
+            />
+            <LocationInput
+              label="Click on the map to set the park location *"
+              markerLocation={markerLocation}
+              onMapClick={onMapClick}
+              className={styles.map}
+            />
+            <Button
+              onClick={onAddPark}
+              className={styles.button}
+              disabled={
+                !markerLocation || !parkDetails.address || !parkDetails.city
+              }
+            >
+              Add Park
+            </Button>
+          </div>
         </div>
       </div>
       <TopModal

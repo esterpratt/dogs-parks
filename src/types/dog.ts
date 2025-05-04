@@ -1,7 +1,3 @@
-// type DogSize = 'large' | 'medium' | 'small';
-// type DogEnergy = 'high' | 'medium' | 'low';
-// type Gender = 'female' | 'male';
-
 enum DOG_SIZE {
   LARGE = 'large',
   MEDIUM = 'medium',

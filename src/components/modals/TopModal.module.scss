@@ -7,7 +7,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  margin: 48px auto 0;
+  margin: calc(var(--safe-area-inset-top) + 12px) auto 0;
   width: 90%;
   padding: 16px;
   color: $text;

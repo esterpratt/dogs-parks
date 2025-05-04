@@ -1,8 +1,10 @@
 @use '../variables' as *;
 
 .wrapper {
-  padding: 24px calc(24px + var(--safe-area-inset-right, 0px)) 24px
-    calc(24px + var(--safe-area-inset-left, 0px));
+  max-height: $content-max-height;
+  margin-top: $page-top-padding;
+  padding: 12px calc(16px + var(--safe-area-inset-right, 0px)) 12px
+    calc(16px + var(--safe-area-inset-left, 0px));
   display: flex;
   flex-direction: column;
   gap: 24px;

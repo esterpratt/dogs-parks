@@ -24,7 +24,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  height: calc($content-max-height - $navbar-height);
+  height: $content-max-height;
   width: 100dvw;
   z-index: 10000;
 

@@ -1,13 +1,14 @@
 @use '../variables' as *;
 
 .prev-links {
-  position: absolute;
+  position: fixed;
   top: 0;
   background-color: $white;
   display: flex;
   justify-content: space-between;
-  padding: 6px 12px;
+  padding: $page-top-padding 12px 6px;
   width: 100%;
+  z-index: 500;
 
   a {
     display: flex;

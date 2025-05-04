@@ -29,6 +29,8 @@ $linear-gradient: linear-gradient(
   ),
   linear-gradient(to bottom, rgba($pink, 0.05), rgba($white, 1));
 
+$background-painted-color: rgba($blue, 0.01);
+
 @font-face {
   font-family: 'Fredoka';
   src: url('./assets/fonts/Fredoka-Regular.woff2') format('woff2'),
@@ -47,5 +49,10 @@ $second-title-font-size: 18px;
 $navbar-height: 60px;
 $tabs-height: 48px;
 $content-max-height: calc(
-  100dvh - var(--safe-area-inset-top, 0px) - var(--safe-area-inset-bottom, 0px)
+  100dvh - var(--safe-area-inset-top) - var(--safe-area-inset-bottom, 0px) -
+    $navbar-height
 );
+$app-max-height: calc(
+  100dvh - var(--safe-area-inset-bottom, 0px) - $navbar-height
+);
+$page-top-padding: var(--safe-area-inset-top, 0px);

@@ -52,6 +52,7 @@ const ParkGalleryContainer: React.FC<ParkGalleryContainerProps> = ({
   return (
     <>
       <Section
+        contentClassName={styles.contentContainer}
         titleCmp={
           <div className={styles.title}>
             <span>Gallery</span>

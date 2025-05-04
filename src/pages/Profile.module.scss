@@ -1,14 +1,54 @@
 @use '../variables' as *;
 
-.header {
-  &.medium {
-    background-size: 100% 96px, 100% 172px;
+$small-height: 188px;
+$imgs-small-top: 72px;
+$medium-height: 268px;
+$imgs-medium-top: 96px;
+
+.profile-container {
+  margin-top: $page-top-padding;
+  max-height: $content-max-height;
+  overflow: hidden;
+  height: 100%;
+
+  .header {
+    &.small {
+      height: $small-height;
+      background-size: 100% $imgs-small-top, 100% 116px;
+    }
+
+    &.medium {
+      height: $medium-height;
+      background-size: 100% $imgs-medium-top, 100% 172px;
+    }
+  }
+
+  .imgs-container {
+    &.small {
+      top: $imgs-small-top;
+    }
+    &.medium {
+      top: $imgs-medium-top;
+    }
   }
 }
 
-.imgs-container {
-  &.medium {
-    top: 96px;
+.container {
+  max-height: calc($content-max-height - $medium-height);
+  height: 100%;
+  padding: 12px 16px 12px;
+  overflow: auto;
+
+  &.with-margin {
+    max-height: calc($content-max-height - $tabs-height - $small-height);
+    margin-top: $tabs-height;
+  }
+}
+
+.img {
+  &:not(:first-child) {
+    z-index: 1;
+    margin-left: -20px;
   }
 }
 
@@ -49,27 +89,8 @@
   width: 100%;
 }
 
-.img {
-  &:not(:first-child) {
-    z-index: 1;
-    margin-left: -20px;
-  }
-}
-
 .user-name {
   text-transform: capitalize;
-}
-
-.container {
-  max-height: calc($content-max-height - $navbar-height);
-  height: 100%;
-  padding: 24px 16px 12px;
-  overflow: auto;
-
-  &.with-margin {
-    max-height: calc($content-max-height - $navbar-height - $tabs-height);
-    margin-top: $tabs-height;
-  }
 }
 
 @media (orientation: landscape) {

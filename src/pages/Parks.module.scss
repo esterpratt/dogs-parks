@@ -1,0 +1,6 @@
+@use '../variables.scss' as *;
+
+.container {
+  max-height: $content-max-height;
+  margin-top: $page-top-padding;
+}

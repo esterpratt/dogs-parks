@@ -1,17 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
   <style>
     @keyframes fillCycle1 {
-      0%, 33.3%, 66.7%, 100% { fill: none; }
+      0%, 33.3%, 66.7%, 100% { fill: white; }
       0.1%, 33.2% { fill: #ec4899; }
     }
     
     @keyframes fillCycle2 {
-      0%, 33.3%, 66.7%, 100% { fill: none; }
+      0%, 33.3%, 66.7%, 100% { fill: white; }
       33.4%, 66.6% { fill: #9ac457; }
     }
     
     @keyframes fillCycle3 {
-      0%, 33.3%, 66.7%, 100% { fill: none; }
+      0%, 33.3%, 66.7%, 100% { fill: white; }
       66.8%, 99.9% { fill: #ecac52; }
     }
     
@@ -36,7 +36,7 @@
     }
     
     #main-paw {
-      fill: none;
+      fill: white;
       stroke: #0da2e7;
     }
   </style>

@@ -1,18 +1,8 @@
 @use '../variables' as *;
 
-// .header {
-//   background-size: 100% 116px, 100% 152px;
-// }
-
-// .img-container {
-//   top: 116px;
-// }
-
-.img {
-  &:not(:first-child) {
-    z-index: 1;
-    margin-left: -20px;
-  }
+.container {
+  height: $content-max-height;
+  margin-top: $page-top-padding;
 }
 
 .name,

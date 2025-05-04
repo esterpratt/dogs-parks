@@ -1,12 +1,32 @@
 @use '../variables' as *;
 
+.container {
+  max-height: $content-max-height;
+  margin-top: $page-top-padding;
+  padding: 8px calc(8px + var(--safe-area-inset-right, 0px)) 12px
+    calc(8px + var(--safe-area-inset-left, 0px));
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .button {
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
+  }
+}
+
+.content-container {
+  padding: 32px 8px 12px;
+}
+
 .prev-links {
-  position: absolute;
+  position: fixed;
   top: 0;
+  padding: $page-top-padding 4px 8px;
   background-color: $white;
   display: flex;
   justify-content: space-between;
-  padding: 6px 12px;
   width: 100%;
 
   a {
@@ -21,25 +41,12 @@
 
 .title {
   font-size: $second-title-font-size;
+  padding: 0 8px;
 }
 
 .map {
   height: 280px;
   width: 100%;
-}
-
-.container {
-  padding: 48px calc(24px + var(--safe-area-inset-right, 0px)) 12px
-    calc(24px + var(--safe-area-inset-left, 0px));
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-
-  .button {
-    width: 100%;
-    padding: 16px;
-    border-radius: 12px;
-  }
 }
 
 .inputs-container {

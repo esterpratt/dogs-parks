@@ -69,6 +69,7 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
   return (
     <>
       <Section
+        contentClassName={styles.contentContainer}
         titleCmp={
           <div className={styles.title}>
             <span>Gallery</span>
