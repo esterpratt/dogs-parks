@@ -23,7 +23,7 @@ const Profile: React.FC = () => {
   }
 
   if (isLoading) {
-    return <Loader />;
+    // return <Loader />;
   }
 
   if (!isSignedInUser && user.private) {
@@ -129,7 +129,7 @@ const Profile: React.FC = () => {
           }
         />
         {isSignedInUser && <ProfileTabs />}
-        <Suspense fallback={<Loader />}>
+        <Suspense fallback={<Loader inside />}>
           <Await resolve={dogImages}>
             {(dogImages) => (
               <div

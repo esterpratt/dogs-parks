@@ -5,7 +5,6 @@ import { reportDogsCount } from '../../services/dogs-count';
 import { queryClient } from '../../services/react-query';
 import { ControlledInput } from '../inputs/ControlledInput';
 import { Checkbox } from '../inputs/Checkbox';
-import { useOrientationContext } from '../../context/OrientationContext';
 import { useNotification } from '../../context/NotificationContext';
 import { FormModal } from '../modals/FormModal';
 import styles from './DogsCountModal.module.scss';
@@ -18,8 +17,6 @@ const DogsCountModal: React.FC<{
   title?: string;
 }> = ({ parkId, isOpen, onClose, showOnlyCount, title }) => {
   const { notify } = useNotification();
-
-  const orientation = useOrientationContext((state) => state.orientation);
 
   const [_shouldHideDogsModal, setShouldHideDogsModal] =
     useLocalStorage('hideDogsModal');
@@ -55,7 +52,6 @@ const DogsCountModal: React.FC<{
     <FormModal
       saveText="Submit"
       title={title}
-      height={orientation === 'landscape' ? 98 : null}
       open={isOpen}
       onClose={() => onClose()}
       onSave={onSave}

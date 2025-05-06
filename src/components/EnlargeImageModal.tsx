@@ -25,8 +25,8 @@ const EnlargeImageModal: React.FC<EnlargeImageModalProps> = ({
     <AppearModal
       open={isOpen}
       onClose={onClose}
-      width={90}
-      height={orientation === 'landscape' ? 95 : 70}
+      width={orientation === 'landscape' ? 70 : 90}
+      height={orientation === 'landscape' ? 90 : 70}
     >
       <div className={styles.modalImage}>
         <div className={styles.buttonsContainer}>

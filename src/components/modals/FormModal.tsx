@@ -8,6 +8,7 @@ interface FormModalProps {
   open: boolean;
   onClose?: () => void;
   className?: string;
+  titleClassName?: string;
   children: ReactNode;
   onSave?: () => void;
   height?: number | null;
@@ -21,6 +22,7 @@ const FormModal = ({
   onClose,
   children,
   className,
+  titleClassName,
   height,
   onSave,
   saveText = 'Save',
@@ -36,7 +38,11 @@ const FormModal = ({
     >
       <div className={styles.container}>
         <div className={styles.formContainer}>
-          {title && <div className={styles.title}>{title}</div>}
+          {title && (
+            <div className={classnames(styles.title, titleClassName)}>
+              {title}
+            </div>
+          )}
           {children}
         </div>
         <div className={styles.buttonsContainer}>

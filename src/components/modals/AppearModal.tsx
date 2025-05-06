@@ -25,7 +25,6 @@ const AppearModal = ({
 
   const onCloseModal = (event: MouseEvent<HTMLDialogElement>) => {
     if (event.target === event.currentTarget && onClose) {
-      console.log('hi');
       onClose();
     }
   };

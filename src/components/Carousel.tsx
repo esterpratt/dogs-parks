@@ -4,7 +4,6 @@ import { useState } from 'react';
 import Slider from 'react-slick';
 import { Plus, Trash2, X } from 'lucide-react';
 import { Button } from './Button';
-import { useOrientationContext } from '../context/OrientationContext';
 import { EnlargeImageModal } from './EnlargeImageModal';
 import { TopModal } from './modals/TopModal';
 import styles from './Carousel.module.scss';
@@ -25,7 +24,6 @@ const Carousel: React.FC<CarouselProps> = ({
     useState(false);
   const [isEnlargedImageModalOpen, setIsEnlargeImageModalOpen] =
     useState(false);
-  const orientation = useOrientationContext((state) => state.orientation);
 
   const onDeleteImage = () => {
     if (removeImage) {
@@ -82,7 +80,6 @@ const Carousel: React.FC<CarouselProps> = ({
       <TopModal
         open={isApproveDeleteModalOpen}
         onClose={() => setIsApproveDeleteModalOpen(false)}
-        height={orientation === 'landscape' ? 95 : null}
         className={styles.approveModal}
       >
         <div className={styles.approveContent}>

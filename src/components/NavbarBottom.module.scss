@@ -93,6 +93,20 @@
   }
 }
 
+@media (orientation: landscape) {
+  .menu-container {
+    width: 40%;
+
+    .menu-item {
+      font-size: 11px;
+
+      .inner {
+        padding: 12px 24px;
+      }
+    }
+  }
+}
+
 :export {
   blue: $blue;
 }

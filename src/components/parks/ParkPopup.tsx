@@ -1,5 +1,12 @@
 import { useState } from 'react';
-import { Eye, Footprints, Hourglass, Navigation, X } from 'lucide-react';
+import {
+  Eye,
+  Footprints,
+  Hourglass,
+  Navigation,
+  TreeDeciduous,
+  X,
+} from 'lucide-react';
 import { Link } from 'react-router';
 import classnames from 'classnames';
 import { useQuery } from '@tanstack/react-query';
@@ -9,6 +16,7 @@ import { FavoriteRibbon } from '../FavoriteRibbon';
 import { fetchFavoriteParks } from '../../services/favorites';
 import { Button } from '../Button';
 import styles from './ParkPopup.module.scss';
+import { useOrientationContext } from '../../context/OrientationContext';
 
 interface ParkPopupProps {
   activePark: Park | null;
@@ -46,6 +54,7 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
   });
 
   const [isClosing, setIsClosing] = useState(false);
+  const orientation = useOrientationContext((state) => state.orientation);
 
   const isFavorite =
     activePark && favoriteParkIds && favoriteParkIds.includes(activePark?.id);
@@ -78,10 +87,15 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
       <Link
         to={`/parks/${activePark?.id}`}
         className={classnames(styles.imgContainer, {
-          [styles.hidden]: directions || !image,
+          [styles.hidden]: orientation === 'portrait' && (directions || !image),
         })}
       >
-        <img src={image!} className={styles.img} />
+        {image && <img src={image} className={styles.img} />}
+        {!image && (
+          <div className={styles.noImg}>
+            <TreeDeciduous size={56} color={styles.green} strokeWidth={1} />
+          </div>
+        )}
         {isFavorite && <FavoriteRibbon className={styles.favorite} />}
       </Link>
       <div className={styles.detailsContainer}>

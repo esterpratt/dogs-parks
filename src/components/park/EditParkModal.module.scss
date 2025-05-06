@@ -1,10 +1,15 @@
 @use '../../variables' as *;
 
 .modal {
-  padding: 24px;
+  padding: 24px 0;
+}
+
+.title {
+  padding: 0 24px;
 }
 
 .form {
+  padding: 0 24px;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -16,6 +21,10 @@
 }
 
 @media (orientation: landscape) {
+  .modal {
+    padding-top: 12px;
+  }
+
   .form {
     gap: 16px;
   }

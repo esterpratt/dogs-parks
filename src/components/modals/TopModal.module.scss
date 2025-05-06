@@ -19,3 +19,9 @@
     transform: translateY(0);
   }
 }
+
+@media (orientation: landscape) {
+  .modal {
+    width: 80%;
+  }
+}

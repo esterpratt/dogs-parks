@@ -4,7 +4,6 @@ import { UserContext } from '../context/UserContext';
 import { LogOut, Pencil, Trash2, X } from 'lucide-react';
 import { Button } from '../components/Button';
 import { EditUserModal } from '../components/profile/EditUserModal';
-import { useOrientationContext } from '../context/OrientationContext';
 import { TopModal } from '../components/modals/TopModal';
 import styles from './UserInfo.module.scss';
 
@@ -13,7 +12,6 @@ const UserInfo = () => {
   const [isEditUserModalOpen, setIsEditUserModalOpen] = useState(false);
   const [isDeleteUserModalOpen, setIsDeleteUserModalOpen] = useState(false);
   const navigate = useNavigate();
-  const orientation = useOrientationContext((state) => state.orientation);
 
   const logout = () => {
     userLogout();
@@ -63,7 +61,6 @@ const UserInfo = () => {
       <TopModal
         open={isDeleteUserModalOpen}
         onClose={() => setIsDeleteUserModalOpen(false)}
-        height={orientation === 'landscape' ? 95 : null}
         className={styles.approveModal}
       >
         <div className={styles.approveContent}>

@@ -45,3 +45,10 @@
     width: 100%;
   }
 }
+
+@media (orientation: landscape) {
+  .form-container {
+    gap: 16px;
+    margin-bottom: 50px;
+  }
+}

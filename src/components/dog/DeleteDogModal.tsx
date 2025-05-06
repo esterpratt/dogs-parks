@@ -8,7 +8,6 @@ import { deleteDog } from '../../services/dogs';
 import { queryClient } from '../../services/react-query';
 import { Button } from '../Button';
 import { Loader } from '../Loader';
-import { useOrientationContext } from '../../context/OrientationContext';
 import { TopModal } from '../modals/TopModal';
 import styles from './DeleteDogModal.module.scss';
 
@@ -26,7 +25,6 @@ const DeleteDogModal: React.FC<DeleteDogModalProps> = ({
   const { userId } = useContext(UserContext);
   const { revalidate } = useRevalidator();
   const navigate = useNavigate();
-  const orientation = useOrientationContext((state) => state.orientation);
 
   const { mutateAsync: onDeleteDog, isPending } = useMutation({
     mutationFn: (id: string) => deleteDog(id),
@@ -42,12 +40,7 @@ const DeleteDogModal: React.FC<DeleteDogModalProps> = ({
   });
 
   return (
-    <TopModal
-      open={isOpen}
-      onClose={onClose}
-      height={orientation === 'landscape' ? 95 : null}
-      className={styles.approveModal}
-    >
+    <TopModal open={isOpen} onClose={onClose} className={styles.approveModal}>
       <div className={styles.approveContent}>
         <span>Are you sure you want to say goodbye to {dog.name}?</span>
       </div>

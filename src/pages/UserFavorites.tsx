@@ -38,7 +38,7 @@ const UserFavorites = () => {
     : [];
 
   if (showLoader) {
-    return <Loader />;
+    return <Loader inside className={styles.loader} />;
   }
 
   if (!isLoading && !favoriteParkIds?.length) {

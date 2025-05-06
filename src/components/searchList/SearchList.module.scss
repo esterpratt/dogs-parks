@@ -29,12 +29,13 @@
   .container {
     .input-container {
       flex-direction: row;
-      margin-bottom: 24px;
+      margin-bottom: 12px;
+      gap: 12px;
     }
 
     .input {
-      flex-grow: 1;
       padding: 8px;
+      width: 100%;
     }
 
     .button {

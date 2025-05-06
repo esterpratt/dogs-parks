@@ -23,6 +23,7 @@ import { Button } from '../Button';
 import { Trash2 } from 'lucide-react';
 import { FormModal } from '../modals/FormModal';
 import styles from './EditDogModal.module.scss';
+import useKeyboardFix from '../../hooks/useKeyboardFix';
 
 interface EditDogModalProps {
   isOpen: boolean;
@@ -60,6 +61,7 @@ const EditDogModal: React.FC<EditDogModalProps> = ({
   const { userId } = useContext(UserContext);
   const { revalidate } = useRevalidator();
   const [isDeleteDogModalOpen, setIsDeleteDogModalOpen] = useState(false);
+  const keyboardHeight = useKeyboardFix();
 
   const { mutate: mutateDog } = useMutation({
     mutationFn: (data: UpdateDogProps) =>
@@ -184,7 +186,12 @@ const EditDogModal: React.FC<EditDogModalProps> = ({
         className={styles.modal}
         title={dog ? `Update ${dog.name}'s details` : `Add your dog's details`}
       >
-        <form className={styles.form}>
+        <form
+          className={classnames(styles.form, {
+            [styles.extraPadding]: !!keyboardHeight,
+            [styles.withDog]: !!dog,
+          })}
+        >
           <ControlledInput
             value={dogData?.name || ''}
             onChange={onInputChange}

@@ -23,16 +23,11 @@
 }
 
 @media (orientation: landscape) {
-  .content-container {
-    padding-top: 24px;
+  .modal {
+    padding-top: 12px;
   }
 
   .form {
-    gap: 36px;
-  }
-
-  .privacy-container {
-    gap: 24px;
-    margin-bottom: 56px;
+    gap: 12px;
   }
 }

@@ -32,7 +32,11 @@
 }
 
 @media (orientation: landscape) {
-  .content-container {
-    padding-top: 24px;
+  .modal {
+    padding-top: 12px;
+  }
+
+  .form {
+    gap: 16px;
   }
 }

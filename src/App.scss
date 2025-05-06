@@ -173,7 +173,7 @@ textarea {
 .leaflet-touch .leaflet-bar.leaflet-control-zoom {
   top: 160px;
   border: none;
-  margin-right: 16px;
+  margin-right: calc(16px + var(--safe-area-inset-right));
 
   a.leaflet-control-zoom-in:first-child,
   a.leaflet-control-zoom-out:last-child {
@@ -264,14 +264,17 @@ textarea {
 
     .leaflet-control-geocoder-alternatives {
       li {
-        border-bottom: 1px solid $grey-bold;
+        &:not(:last-child) {
+          border-bottom: 1px solid $grey-bold;
+        }
+
         padding: 12px 24px;
 
         a {
           color: inherit;
 
           .leaflet-control-geocoder-address-context {
-            color: $brown;
+            color: $orange;
           }
         }
       }
@@ -279,6 +282,7 @@ textarea {
 
     .leaflet-control-geocoder-form {
       display: flex;
+      width: 100%;
 
       input {
         width: 100%;

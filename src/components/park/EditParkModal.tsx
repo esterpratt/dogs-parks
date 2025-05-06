@@ -136,6 +136,7 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
       onSave={onSubmit}
       className={styles.modal}
       title="Add the following park details"
+      titleClassName={styles.title}
     >
       <form className={styles.form}>
         {!park.size && (

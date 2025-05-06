@@ -6,7 +6,8 @@
   background-color: $white;
   display: flex;
   justify-content: space-between;
-  padding: $page-top-padding 12px 6px;
+  padding: $page-top-padding calc(12px + var(--safe-area-inset-right)) 6px
+    calc(12px + var(--safe-area-inset-left));
   width: 100%;
   z-index: 500;
 
@@ -69,4 +70,11 @@
   gap: 12px;
   align-items: center;
   width: 100%;
+}
+
+@media (orientation: landscape) {
+  .bottom {
+    padding-left: var(--safe-area-inset-left);
+    padding-right: var(--safe-area-inset-right);
+  }
 }

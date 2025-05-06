@@ -51,7 +51,7 @@ const UserFriends = () => {
   });
 
   if (showLoader) {
-    return <Loader />;
+    return <Loader className={styles.loader} inside />;
   }
 
   if (

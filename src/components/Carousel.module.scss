@@ -5,6 +5,7 @@
   align-items: center;
   justify-content: center;
   height: 100%;
+  outline: none;
 
   .add-image {
     display: flex;
@@ -82,9 +83,9 @@
 }
 
 @media (orientation: landscape) {
-  .modal-image {
-    img {
-      object-fit: contain;
+  .button-container {
+    .plus {
+      transform: translate(0, -70%);
     }
   }
 }

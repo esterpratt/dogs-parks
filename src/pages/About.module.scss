@@ -27,7 +27,11 @@
 }
 
 @media (orientation: landscape) {
-  .modal-content {
-    padding-top: 24px;
+  .container {
+    gap: 12px;
+
+    h3 {
+      margin-bottom: 0;
+    }
   }
 }

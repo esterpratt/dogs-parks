@@ -101,7 +101,6 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
       saveText="Submit"
       open={isOpen}
       onClose={closeModal}
-      height={orientation === 'landscape' ? 98 : null}
       onSave={onSubmit}
       disabled={!reviewData.title}
       className={styles.modal}

@@ -28,3 +28,9 @@
     color: $placeholder;
   }
 }
+
+@media (orientation: landscape) {
+  .input-container {
+    flex: 1;
+  }
+}

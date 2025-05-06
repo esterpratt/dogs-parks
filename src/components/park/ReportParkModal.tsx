@@ -50,7 +50,6 @@ export const ReportParkModal: React.FC<ReportParkModalProps> = ({
       disabled={!text}
     >
       <TextArea
-        className={styles.textArea}
         rows={orientation === 'landscape' ? 3 : 12}
         name="report"
         label="Tell us what’s wrong here."

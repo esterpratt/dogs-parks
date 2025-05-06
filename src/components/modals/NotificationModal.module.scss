@@ -36,3 +36,9 @@
 :export {
   green: $green;
 }
+
+@media (orientation: landscape) {
+  .modal {
+    width: 50%;
+  }
+}

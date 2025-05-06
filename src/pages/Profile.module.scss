@@ -94,8 +94,25 @@ $imgs-medium-top: 96px;
 }
 
 @media (orientation: landscape) {
+  .profile-container {
+    overflow: visible;
+  }
+
   .container {
-    padding: 12px calc(16px + var(--safe-area-inset-right, 0px)) 12px
+    padding: 12px calc(16px + var(--safe-area-inset-right, 0px)) 0
       calc(16px + var(--safe-area-inset-left, 0px));
+    max-height: calc($content-max-height);
+    overflow: visible;
+    height: fit-content;
+
+    &.with-margin {
+      max-height: calc($content-max-height);
+      margin-top: 0;
+    }
+  }
+
+  .loader {
+    align-self: flex-start;
+    margin-top: 8px;
   }
 }

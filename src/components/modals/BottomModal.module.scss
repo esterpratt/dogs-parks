@@ -19,3 +19,9 @@
     transform: translateY(calc(-100% - 12px - var(--safe-area-inset-bottom)));
   }
 }
+
+@media (orientation: landscape) {
+  .modal {
+    width: 80%;
+  }
+}

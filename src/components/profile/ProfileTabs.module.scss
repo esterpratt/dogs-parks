@@ -11,7 +11,9 @@ $small-height: 188px;
 
 @media (orientation: landscape) {
   .tabs {
-    padding-left: calc(16px + var(--safe-area-inset-left, 0px));
+    position: initial;
+    padding-left: calc(8px + var(--safe-area-inset-left, 0px));
+    padding-right: calc(8px + var(--safe-area-inset-right, 0px));
     gap: 48px;
     justify-content: flex-start;
   }
