@@ -1,37 +1,24 @@
 import { useContext } from 'react';
-import { Link, useParams } from 'react-router';
+import { Link, useOutletContext } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { UserPreview } from '../components/users/UserPreview';
 import { UserContext } from '../context/UserContext';
 import { fetchUsersWithDogsByIds } from '../services/users';
-import { Loader } from '../components/Loader';
 import { useGetParkVisitors } from '../hooks/api/useGetParkVisitors';
-import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import { Button } from '../components/Button';
 import styles from './ParkVisitors.module.scss';
+import { Park } from '../types/park';
 
 const ParkVisitors: React.FC = () => {
   const { userId } = useContext(UserContext);
-  const { id: parkId } = useParams();
+  const { id: parkId } = useOutletContext() as Park;
 
-  const {
-    visitorsIds,
-    friendsInParkIds,
-    isLoadingFriendsIds,
-    isLoadingVisitors,
-  } = useGetParkVisitors(parkId!, userId);
+  const { visitorsIds, friendsInParkIds } = useGetParkVisitors(parkId!, userId);
 
-  const { data: friendsInParkWithDogs, isLoading: isLoadingFriends } = useQuery(
-    {
-      queryKey: ['parkVisitorsWithDogs', parkId],
-      queryFn: () => fetchUsersWithDogsByIds(friendsInParkIds),
-      enabled: !!friendsInParkIds.length,
-    }
-  );
-
-  const { showLoader } = useDelayedLoading({
-    isLoading: isLoadingFriends || isLoadingFriendsIds || isLoadingVisitors,
-    minDuration: 1000,
+  const { data: friendsInParkWithDogs } = useQuery({
+    queryKey: ['parkVisitorsWithDogs', parkId],
+    queryFn: () => fetchUsersWithDogsByIds(friendsInParkIds),
+    enabled: !!friendsInParkIds.length,
   });
 
   const friendsCount = friendsInParkIds.length;
@@ -43,10 +30,6 @@ const ParkVisitors: React.FC = () => {
 
   if (!friendsCount && !othersCount) {
     return null;
-  }
-
-  if (showLoader) {
-    return <Loader />;
   }
 
   return (
@@ -65,7 +48,7 @@ const ParkVisitors: React.FC = () => {
           ))}
         </div>
       )}
-      {!showLoader && !!othersCount && (
+      {!!othersCount && (
         <div className={styles.othersContainer}>
           <div className={styles.othersTitle}>
             {userIsOnlyVisitor ? (

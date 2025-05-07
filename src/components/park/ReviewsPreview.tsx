@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { Link, useParams } from 'react-router';
+import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { Stars } from '../Stars';

@@ -16,8 +16,7 @@ const ParkCheckIn: React.FC<{
   parkId: string;
   userId: string | null;
   userName?: string;
-  className?: string;
-}> = ({ parkId, userId, userName, className }) => {
+}> = ({ parkId, userId, userName }) => {
   const [checkIn, setCheckIn] = useLocalStorage('checkin');
   const [openDogsCountModal, setOpenDogsCountModal] = useState(false);
   const [openReviewModal, setOpenReviewModal] = useState(false);
@@ -93,7 +92,7 @@ const ParkCheckIn: React.FC<{
   };
 
   return (
-    <div className={className}>
+    <div>
       <ParkIcon
         IconCmp={!shouldCheckIn ? MapPinXInside : MapPinCheckInside}
         iconColor={!shouldCheckIn ? styles.orange : styles.green}

@@ -1,6 +1,9 @@
 import { lazy } from 'react';
-import { Navigate, createBrowserRouter } from 'react-router';
-import { RouterProvider } from 'react-router/dom';
+import {
+  Navigate,
+  createBrowserRouter,
+  RouterProvider,
+} from 'react-router-dom';
 import { QueryClientProvider } from '@tanstack/react-query';
 import './App.scss';
 import { UserContextProvider } from './context/UserContext';
@@ -25,6 +28,7 @@ import { AuthCallback } from './pages/AuthCallback';
 import { userLoader } from './loaders/userLoader';
 import { UpdatePassowrd } from './pages/UpdatePassword';
 import { About } from './pages/About';
+import { parkLoader } from './loaders/parkLoader';
 
 const UserDog = lazy(() => import('./pages/UserDog'));
 const UserReviews = lazy(() => import('./pages/UserReviews'));
@@ -68,6 +72,7 @@ const App = () => {
         {
           path: '/parks/:id/',
           element: <Park />,
+          loader: parkLoader,
           children: [
             {
               index: true,

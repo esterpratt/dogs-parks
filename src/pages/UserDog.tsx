@@ -1,5 +1,5 @@
 import { useState, lazy, Suspense } from 'react';
-import { useLocation, useParams, useRevalidator, Link } from 'react-router';
+import { useLocation, useParams, useRevalidator, Link } from 'react-router-dom';
 import {
   Cake,
   DogIcon,

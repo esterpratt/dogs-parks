@@ -1,5 +1,5 @@
 import { FormEvent, MouseEvent, useContext, useEffect, useRef } from 'react';
-import { useNavigate, useSearchParams } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import classnames from 'classnames';
 import GoogleIcon from '../assets/google.svg?react';
 import { Button } from '../components/Button';

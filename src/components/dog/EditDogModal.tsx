@@ -1,5 +1,5 @@
 import { ChangeEvent, useContext, useEffect, useMemo, useState } from 'react';
-import { useRevalidator } from 'react-router';
+import { useRevalidator } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { DOG_ENERGY, DOG_SIZE, Dog, GENDER } from '../../types/dog';

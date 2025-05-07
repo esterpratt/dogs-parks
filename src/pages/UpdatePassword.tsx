@@ -4,7 +4,7 @@ import { Button } from '../components/Button';
 import { UserContext } from '../context/UserContext';
 import { updatePassword } from '../services/authentication';
 import { useMutation } from '@tanstack/react-query';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { Input } from '../components/inputs/Input';
 import styles from './UpdatePassword.module.scss';
 import { useNotification } from '../context/NotificationContext';

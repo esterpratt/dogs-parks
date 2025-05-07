@@ -6,7 +6,8 @@ interface ParkTabsProps {
   parkId: string;
 }
 
-const ParkTabs: React.FC<ParkTabsProps> = ({ parkId }) => {
+const ParkTabs = (props: ParkTabsProps) => {
+  const { parkId } = props;
   const { visitorsIds } = useGetParkVisitors(parkId);
 
   return (

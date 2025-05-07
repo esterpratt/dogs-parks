@@ -62,9 +62,9 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
     onMutate: async (data) => {
       onClose();
 
-      await queryClient.cancelQueries({ queryKey: ['parks', park.id] });
-      const prevPark = queryClient.getQueryData<Park>(['parks', park.id]);
-      queryClient.setQueryData(['parks', park.id], {
+      await queryClient.cancelQueries({ queryKey: ['park', park.id] });
+      const prevPark = queryClient.getQueryData<Park>(['park', park.id]);
+      queryClient.setQueryData(['park', park.id], {
         ...prevPark,
         ...data.updatedData,
       });
@@ -72,13 +72,13 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
       return { prevPark };
     },
     onError: (_error, _data, context) => {
-      queryClient.setQueryData(['parks', park.id], context?.prevPark);
+      queryClient.setQueryData(['park', park.id], context?.prevPark);
     },
     onSuccess: () => {
       notify();
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['parks', park.id] });
+      queryClient.invalidateQueries({ queryKey: ['park', park.id] });
     },
   });
 

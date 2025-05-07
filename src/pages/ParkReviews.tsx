@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { useParams } from 'react-router';
+import { useOutletContext } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { UserContext } from '../context/UserContext';
 import { Button } from '../components/Button';
@@ -14,26 +14,21 @@ import { Review, ReviewData } from '../types/review';
 import { useAddReview } from '../hooks/api/useAddReview';
 import { ReviewModalContextProvider } from '../context/ReviewModalContext';
 import { ReviewModal } from '../components/ReviewModal';
-import { useDelayedLoading } from '../hooks/useDelayedLoading';
-import { Loader } from '../components/Loader';
 import { ReviewsPreview } from '../components/park/ReviewsPreview';
 import styles from './ParkReviews.module.scss';
+import { Park } from '../types/park';
 
 const Reviews: React.FC = () => {
-  const { id: parkId } = useParams();
+  const { id: parkId } = useOutletContext() as Park;
   const [isAddReviewModalOpen, setIsAddReviewModalOpen] = useState(false);
 
-  const { data: reviews, isLoading } = useQuery({
+  const { data: reviews } = useQuery({
     queryKey: ['reviews', parkId],
     queryFn: () => fetchReviews(parkId!),
+    enabled: !!parkId,
   });
 
   const { userId } = useContext(UserContext);
-
-  const { showLoader } = useDelayedLoading({
-    isLoading,
-    minDuration: 1000,
-  });
 
   const { addReview } = useAddReview(parkId!, userId);
 
@@ -91,10 +86,6 @@ const Reviews: React.FC = () => {
   const onUpdateReview = ({ reviewData, reviewId }: UpdateReviewProps) => {
     mutateReview({ reviewData, reviewId });
   };
-
-  if (!reviews || showLoader) {
-    return <Loader />;
-  }
 
   if (!reviews?.length) {
     return (

@@ -1,4 +1,4 @@
-import { useOutletContext } from 'react-router';
+import { useOutletContext } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { ReviewPreview } from '../components/ReviewPreview';
 import {

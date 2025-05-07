@@ -1,6 +1,6 @@
 import { UserContext } from '../context/UserContext';
 import { useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { Loader } from '../components/Loader';
 
 const AuthCallback = () => {

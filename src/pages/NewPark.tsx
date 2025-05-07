@@ -1,6 +1,6 @@
 import { ChangeEvent, useContext, useState } from 'react';
 import classnames from 'classnames';
-import { Link, useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { LeafletMouseEvent } from 'leaflet';
 import { Location, NewParkDetails } from '../types/park';

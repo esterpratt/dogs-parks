@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router';
+import { Outlet } from 'react-router-dom';
 import { NavbarBottom } from './components/NavbarBottom';
 import styles from './RootLayout.module.scss';
 import { usePreventFocusOnScroll } from './hooks/usePreventFocusOnScroll';

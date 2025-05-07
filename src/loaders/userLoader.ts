@@ -1,4 +1,4 @@
-import { LoaderFunction } from 'react-router';
+import { LoaderFunction } from 'react-router-dom';
 import { fetchUser } from '../services/users';
 import { fetchDogPrimaryImage, fetchUserDogs } from '../services/dogs';
 import { queryClient } from '../services/react-query';

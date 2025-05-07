@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
 import { Location, Park } from '../../types/park';
 import { MarkerList } from './MarkerList';

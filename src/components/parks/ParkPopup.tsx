@@ -7,7 +7,7 @@ import {
   TreeDeciduous,
   X,
 } from 'lucide-react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 import { useQuery } from '@tanstack/react-query';
 import { Location, Park } from '../../types/park';

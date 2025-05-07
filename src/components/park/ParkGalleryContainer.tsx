@@ -1,5 +1,5 @@
 import { useState, lazy, Suspense, useContext } from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Plus } from 'lucide-react';
 import { fetchAllParkImages, uploadParkImage } from '../../services/parks';

@@ -1,12 +1,16 @@
-import { useOutletContext } from 'react-router';
+import { useOutletContext } from 'react-router-dom';
 import { BusyHours } from '../components/park/BusyHours';
-import { Park } from '../types/park';
 import { ParkGenerals } from '../components/park/ParkGenerals';
 import { ParkGalleryContainer } from '../components/park/ParkGalleryContainer';
 import styles from './ParkDetails.module.scss';
+import { Park } from '../types/park';
 
 export const ParkDetails = () => {
-  const park = useOutletContext<Park>();
+  const park = useOutletContext() as Park;
+
+  if (!park) {
+    return null;
+  }
 
   return (
     <div className={styles.container}>

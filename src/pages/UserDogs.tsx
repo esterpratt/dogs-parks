@@ -1,5 +1,5 @@
 import { lazy, Suspense, useState } from 'react';
-import { useOutletContext, useRevalidator, Link } from 'react-router';
+import { useOutletContext, useRevalidator, Link } from 'react-router-dom';
 import { useIsFetching, useMutation } from '@tanstack/react-query';
 import { User } from '../types/user';
 import { Dog } from '../types/dog';

@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Info, Plus } from 'lucide-react';
 import classnames from 'classnames';
@@ -36,7 +36,8 @@ interface BusyHoursProps {
   parkId: string;
 }
 
-const BusyHours: React.FC<BusyHoursProps> = ({ parkId }) => {
+const BusyHours: React.FC<BusyHoursProps> = (props: BusyHoursProps) => {
+  const { parkId } = props;
   const [isDogsCountModalOpen, setIsDogsCountModalOpen] = useState(false);
   const { userId } = useContext(UserContext);
 

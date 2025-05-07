@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 import classnames from 'classnames';
 import { useQuery } from '@tanstack/react-query';

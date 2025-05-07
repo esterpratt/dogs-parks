@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router';
+import { useLocation } from 'react-router-dom';
 import { NewMap } from '../components/map/NewMap';
 import styles from './Home.module.scss';
 

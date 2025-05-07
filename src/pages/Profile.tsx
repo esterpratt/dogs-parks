@@ -1,5 +1,5 @@
 import { Suspense, useContext } from 'react';
-import { Await, Link, Navigate, Outlet, useLoaderData } from 'react-router';
+import { Await, Link, Navigate, Outlet, useLoaderData } from 'react-router-dom';
 import { DogIcon, MoveLeft, MoveRight } from 'lucide-react';
 import classnames from 'classnames';
 import { UserContext } from '../context/UserContext';
@@ -15,15 +15,11 @@ import styles from './Profile.module.scss';
 const Profile: React.FC = () => {
   const { user, dogs, dogImages, pendingFriendships, approvedFriendships } =
     useLoaderData();
-  const { user: signedInUser, isLoading } = useContext(UserContext);
+  const { user: signedInUser } = useContext(UserContext);
   const isSignedInUser = signedInUser?.id === user.id;
 
   if (!user) {
     return null;
-  }
-
-  if (isLoading) {
-    // return <Loader />;
   }
 
   if (!isSignedInUser && user.private) {
@@ -53,104 +49,102 @@ const Profile: React.FC = () => {
   }
 
   return (
-    <>
-      <div className={styles.profileContainer}>
-        <Header
-          size={isSignedInUser ? 'small' : 'medium'}
-          containerClassName={classnames(
-            styles.header,
-            isSignedInUser || !signedInUser ? styles.small : styles.medium
-          )}
-          imgsClassName={classnames(
-            styles.imgsContainer,
-            isSignedInUser || !signedInUser ? styles.small : styles.medium
-          )}
-          prevLinksCmp={
-            !isSignedInUser ? (
-              <>
-                <Link to="/users">
-                  <MoveLeft size={16} />
-                  <span>Users</span>
+    <div className={styles.profileContainer}>
+      <Header
+        size={isSignedInUser ? 'small' : 'medium'}
+        containerClassName={classnames(
+          styles.header,
+          isSignedInUser || !signedInUser ? styles.small : styles.medium
+        )}
+        imgsClassName={classnames(
+          styles.imgsContainer,
+          isSignedInUser || !signedInUser ? styles.small : styles.medium
+        )}
+        prevLinksCmp={
+          !isSignedInUser ? (
+            <>
+              <Link to="/users">
+                <MoveLeft size={16} />
+                <span>Users</span>
+              </Link>
+              {!!signedInUser && (
+                <Link to={`/profile/${signedInUser.id}/friends`}>
+                  <span>My friends</span>
+                  <MoveRight size={16} />
                 </Link>
-                {!!signedInUser && (
-                  <Link to={`/profile/${signedInUser.id}/friends`}>
-                    <span>My friends</span>
-                    <MoveRight size={16} />
-                  </Link>
-                )}
-              </>
-            ) : null
-          }
-          imgCmp={
-            <Suspense fallback={null}>
-              <Await resolve={dogImages}>
-                {(dogImages) => {
-                  const dogImagesToDisplay =
-                    !dogImages || dogImages.length === 0
-                      ? ['']
-                      : dogImages.length > 4
-                      ? dogImages.slice(0, 4)
-                      : [...dogImages];
-                  return dogImagesToDisplay.map(
-                    (dogImage: string, index: number) => {
-                      return (
-                        <HeaderImage
-                          key={index}
-                          imgSrc={dogImage}
-                          className={styles.img}
-                          style={{ zIndex: dogImagesToDisplay.length - index }}
-                          NoImgIcon={DogIcon}
-                          size={112}
-                        />
-                      );
-                    }
-                  );
+              )}
+            </>
+          ) : null
+        }
+        imgCmp={
+          <Suspense fallback={null}>
+            <Await resolve={dogImages}>
+              {(dogImages) => {
+                const dogImagesToDisplay =
+                  !dogImages || dogImages.length === 0
+                    ? ['']
+                    : dogImages.length > 4
+                    ? dogImages.slice(0, 4)
+                    : [...dogImages];
+                return dogImagesToDisplay.map(
+                  (dogImage: string, index: number) => {
+                    return (
+                      <HeaderImage
+                        key={index}
+                        imgSrc={dogImage}
+                        className={styles.img}
+                        style={{ zIndex: dogImagesToDisplay.length - index }}
+                        NoImgIcon={DogIcon}
+                        size={112}
+                      />
+                    );
+                  }
+                );
+              }}
+            </Await>
+          </Suspense>
+        }
+        bottomCmp={
+          isSignedInUser ? (
+            <div className={styles.welcome}>Paws up, {user.name}!</div>
+          ) : !!signedInUser && !isSignedInUser ? (
+            <div className={styles.title}>
+              <div className={styles.text}>
+                <span>Meet </span>
+                <span className={styles.userName}>{user.name}</span>
+                <span>'s Pack: {getDogNames(dogs)}</span>
+              </div>
+              <FriendRequestButton
+                className={styles.friendRequestContainer}
+                friendId={user.id}
+                userName={user.name}
+              />
+            </div>
+          ) : null
+        }
+      />
+      {isSignedInUser && <ProfileTabs />}
+      <Suspense fallback={<Loader inside className={styles.loader} />}>
+        <Await resolve={dogImages}>
+          {(dogImages) => (
+            <div
+              className={classnames(styles.container, {
+                [styles.withMargin]: isSignedInUser,
+              })}
+            >
+              <Outlet
+                context={{
+                  user,
+                  dogs,
+                  dogImages,
+                  isSignedInUser,
                 }}
-              </Await>
-            </Suspense>
-          }
-          bottomCmp={
-            isSignedInUser ? (
-              <div className={styles.welcome}>Paws up, {user.name}!</div>
-            ) : !!signedInUser && !isSignedInUser ? (
-              <div className={styles.title}>
-                <div className={styles.text}>
-                  <span>Meet </span>
-                  <span className={styles.userName}>{user.name}</span>
-                  <span>'s Pack: {getDogNames(dogs)}</span>
-                </div>
-                <FriendRequestButton
-                  className={styles.friendRequestContainer}
-                  friendId={user.id}
-                  userName={user.name}
-                />
-              </div>
-            ) : null
-          }
-        />
-        {isSignedInUser && <ProfileTabs />}
-        <Suspense fallback={<Loader inside />}>
-          <Await resolve={dogImages}>
-            {(dogImages) => (
-              <div
-                className={classnames(styles.container, {
-                  [styles.withMargin]: isSignedInUser,
-                })}
-              >
-                <Outlet
-                  context={{
-                    user,
-                    dogs,
-                    dogImages,
-                    isSignedInUser,
-                  }}
-                />
-              </div>
-            )}
-          </Await>
-        </Suspense>
-      </div>
-    </>
+              />
+            </div>
+          )}
+        </Await>
+      </Suspense>
+    </div>
   );
 };
 

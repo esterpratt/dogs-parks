@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 import { useQuery } from '@tanstack/react-query';
 import { Check, Dog as DogIcon, X } from 'lucide-react';

@@ -93,6 +93,10 @@ $imgs-medium-top: 96px;
   text-transform: capitalize;
 }
 
+.loader {
+  margin-bottom: 60%;
+}
+
 @media (orientation: landscape) {
   .profile-container {
     overflow: visible;
@@ -114,5 +118,21 @@ $imgs-medium-top: 96px;
   .loader {
     align-self: flex-start;
     margin-top: 8px;
+  }
+}
+
+@media (max-width: 390px) {
+  .img {
+    &:not(:first-child) {
+      margin-left: -30px;
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .img {
+    &:not(:first-child) {
+      margin-left: -40px;
+    }
   }
 }

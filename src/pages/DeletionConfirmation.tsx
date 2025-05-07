@@ -1,4 +1,4 @@
-import { useLocation, useNavigate, Link } from 'react-router';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Button } from '../components/Button';
 import styles from './DeletionConfirmation.module.scss';

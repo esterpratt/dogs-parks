@@ -1,4 +1,4 @@
-import { Link, useOutletContext } from 'react-router';
+import { Link, useOutletContext } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { UserPreview } from '../components/users/UserPreview';
 import { User } from '../types/user';

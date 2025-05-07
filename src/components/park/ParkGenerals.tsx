@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { lazy, Suspense, useContext, useMemo, useState } from 'react';
 import { Dumbbell, Pencil, Ruler, Sprout, Sun } from 'lucide-react';
 import classnames from 'classnames';

@@ -1,5 +1,4 @@
-import { useParams } from 'react-router';
-import { Link } from 'react-router';
+import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { ParkPreview } from '../components/parks/ParkPreview';

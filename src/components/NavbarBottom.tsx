@@ -1,11 +1,10 @@
 import { useContext, useRef, useState } from 'react';
-import { NavLink, useNavigate } from 'react-router';
+import { NavLink } from 'react-router-dom';
 import {
   Ellipsis,
   House,
   Info,
   LogIn,
-  LogOut,
   Map,
   PawPrint,
   Plus,
@@ -16,12 +15,11 @@ import {
 import classnames from 'classnames';
 import { UserContext } from '../context/UserContext';
 import { useClickOutside } from '../hooks/useClickOutside';
-import { Button } from './Button';
 import styles from './NavbarBottom.module.scss';
+import { NavbarLogoutButton } from './NavbarLogoutButton';
 
 const NavbarBottom = () => {
-  const { userId, userLogout } = useContext(UserContext);
-  const navigate = useNavigate();
+  const { userId } = useContext(UserContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
   useClickOutside({
@@ -30,11 +28,6 @@ const NavbarBottom = () => {
       setIsMenuOpen(false);
     },
   });
-
-  const logout = () => {
-    userLogout();
-    navigate('/');
-  };
 
   const handleLinkClick = () => {
     setIsMenuOpen(false);
@@ -157,15 +150,7 @@ const NavbarBottom = () => {
         </div>
         {userId ? (
           <div className={styles.menuItem}>
-            <Button
-              variant="simple"
-              color={styles.blue}
-              onClick={logout}
-              className={styles.inner}
-            >
-              <LogOut size={18} strokeWidth={2} />
-              <span>Logout</span>
-            </Button>
+            <NavbarLogoutButton onClick={() => setIsMenuOpen(false)} />
           </div>
         ) : (
           <div className={styles.menuItem}>

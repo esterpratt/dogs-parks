@@ -1,4 +1,4 @@
-import { isRouteErrorResponse, useRouteError } from 'react-router';
+import { isRouteErrorResponse, useRouteError } from 'react-router-dom';
 import { AppError } from '../services/error';
 import { NavbarBottom } from '../components/NavbarBottom';
 import styles from './Error.module.scss';

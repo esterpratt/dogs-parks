@@ -1,5 +1,5 @@
 import { PropsWithChildren, useContext } from 'react';
-import { Navigate } from 'react-router';
+import { Navigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 
 const PrivateRoute: React.FC<PropsWithChildren> = ({ children }) => {

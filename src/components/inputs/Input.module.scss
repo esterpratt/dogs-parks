@@ -12,7 +12,7 @@
   padding: 16px;
   letter-spacing: inherit;
   scroll-margin-top: 36px;
-  transition: border 0.2s;
+  transition: border 0.3s ease;
 
   &:focus {
     border: 1px solid rgba($pink, 1);

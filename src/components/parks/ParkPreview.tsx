@@ -1,5 +1,5 @@
 import React, { MouseEvent } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router-dom';
 import { Eye, Navigation } from 'lucide-react';
 import { Park } from '../../types/park';
 import { ParkImageLazy } from '../park/ParkImageLazy';

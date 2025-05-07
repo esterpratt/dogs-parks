@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { useNavigate, useRevalidator } from 'react-router';
+import { useNavigate, useRevalidator } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { Trash2, X } from 'lucide-react';
 import { Dog } from '../../types/dog';
