@@ -9,16 +9,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid $text-light;
+  border: 1px solid $grey-light;
   border-radius: 50%;
 }
 
 .details {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 8px 0;
-  font-size: 18px;
+  justify-content: space-around;
 
   .upper {
     display: flex;
@@ -28,6 +26,11 @@
 
 .name {
   margin-right: 8px;
+  font-size: 18px;
+}
+
+.age {
+  font-size: 14px;
 }
 
 :export {

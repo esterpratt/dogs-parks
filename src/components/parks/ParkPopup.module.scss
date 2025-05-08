@@ -153,7 +153,6 @@
 }
 
 .icon {
-  color: $pink;
   margin-right: 4px;
 }
 
@@ -196,7 +195,7 @@
       justify-content: center;
       border-radius: 24px;
       background-image: none;
-      border: 1px solid $text-light;
+      border: 1px solid $grey-light;
 
       img {
         border-radius: 24px;
@@ -211,4 +210,5 @@
 
 :export {
   green: $green;
+  pink: $pink;
 }

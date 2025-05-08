@@ -109,13 +109,9 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
           </div>
         </div>
         {canGetDirections && (
-          <div className={styles.bottomContainer}>
+          <div>
             <div className={styles.directionsContainer}>
-              {isLoadingDirections && (
-                <div className={styles.loadingDirections}>
-                  Sniffing the way...
-                </div>
-              )}
+              {isLoadingDirections && <div>Sniffing the way...</div>}
               {!isLoadingDirections && directions && (
                 <div className={styles.directions}>
                   {directions.error ? (
@@ -123,11 +119,19 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
                   ) : (
                     <>
                       <div className={styles.distance}>
-                        <Footprints className={styles.icon} size={16} />
+                        <Footprints
+                          className={styles.icon}
+                          color={styles.pink}
+                          size={16}
+                        />
                         <span>{directions?.distance}</span>
                       </div>
                       <div className={styles.duration}>
-                        <Hourglass className={styles.icon} size={16} />
+                        <Hourglass
+                          className={styles.icon}
+                          color={styles.pink}
+                          size={16}
+                        />
                         <span>{directions?.duration}</span>
                       </div>
                     </>

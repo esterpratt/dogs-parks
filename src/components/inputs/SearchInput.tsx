@@ -15,7 +15,7 @@ const SearchInput = (props: SearchInputProps) => {
 
   return (
     <div className={classnames(styles.inputContainer, className)}>
-      <Search className={styles.icon} />
+      <Search color={styles.pink} />
       <input
         value={value}
         onChange={onChangeInput}

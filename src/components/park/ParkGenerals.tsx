@@ -86,17 +86,6 @@ const ParkGenerals = ({ park }: ParkGeneralsProps) => {
     staleTime: 6000,
   });
 
-  // prefetch visitors data
-  // useEffect(() => {
-  //   if (friendsInParkIds.length > 0) {
-  //     queryClient.prefetchQuery({
-  //       queryKey: ['parkVisitorsWithDogs', parkId],
-  //       queryFn: () => fetchUsersWithDogsByIds(friendsInParkIds),
-  //       staleTime: 6000,
-  //     });
-  //   }
-  // }, [friendsInParkIds, parkId]);
-
   const existedData = useMemo(
     () => [
       {

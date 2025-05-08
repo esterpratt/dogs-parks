@@ -25,9 +25,7 @@ const ControlledInput: React.FC<ControlledInputProps> = ({
 }) => {
   return (
     <div className={classnames(styles.container, styles[variant])}>
-      <label htmlFor={name} className={styles.label}>
-        {label}
-      </label>
+      <label htmlFor={name}>{label}</label>
       <Input
         className={inputClassName}
         name={name}

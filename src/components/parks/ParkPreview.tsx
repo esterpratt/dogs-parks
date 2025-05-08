@@ -25,7 +25,6 @@ const ParkPreview: React.FC<ParkPreviewProps> = ({ park, className }) => {
         <ParkImageLazy
           parkId={park.id}
           alt={park.name}
-          className={styles.img}
           noImgClassName={styles.noImg}
           iconSize={48}
           lazy

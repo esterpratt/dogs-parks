@@ -1,8 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchParkCheckins } from '../../services/checkins';
 import { useGetFriendsIds } from './useGetFriendsIds';
-
-const FIVE_MINUTES = 1000 * 60 * 5;
+import { FIVE_MINUTES } from '../../utils/consts';
 
 const useGetParkVisitors = (parkId: string, userId?: string | null) => {
   const { data: visitorsIds = [], isLoading: isLoadingVisitors } = useQuery({

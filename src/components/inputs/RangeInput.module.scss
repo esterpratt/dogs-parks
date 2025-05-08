@@ -19,8 +19,8 @@ $thumbWidth: 20;
       to right,
       $pink 0%,
       $pink var(--range-value),
-      $text-light var(--range-value),
-      $text-light 100%
+      $grey-light var(--range-value),
+      $grey-light 100%
     );
     border: none;
     border-radius: 24px;
@@ -86,6 +86,5 @@ $thumbWidth: 20;
 }
 
 :export {
-  bubbleWidth: $bubbleWidth;
   thumbWidth: $thumbWidth;
 }

@@ -2,8 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchUserFriendships } from '../../services/friendships';
 import { FRIENDSHIP_STATUS, USER_ROLE } from '../../types/friendship';
 import { FRIENDS_KEY } from './keys';
-
-const FIVE_MINUTES = 1000 * 60 * 5;
+import { FIVE_MINUTES } from '../../utils/consts';
 
 interface UseGetFriendIdsProps {
   userId: string | null;

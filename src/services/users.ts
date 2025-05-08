@@ -175,7 +175,6 @@ const filterUsersAndDogs = async (input: string) => {
 export {
   updateUser,
   fetchUser,
-  fetchFriends,
   fetchUsers,
   fetchFriendsWithDogs,
   fetchUsersWithDogsByIds,

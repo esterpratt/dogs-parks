@@ -49,7 +49,9 @@ const EnlargeImageModal: React.FC<EnlargeImageModalProps> = ({
             <X size={18} />
           </Button>
         </div>
-        <img src={imgSrc} onTransitionEnd={() => !isOpen && setImgSrc('')} />
+        <div className={styles.img}>
+          <img src={imgSrc} onTransitionEnd={() => !isOpen && setImgSrc('')} />
+        </div>
       </div>
     </AppearModal>
   );

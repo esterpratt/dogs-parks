@@ -58,7 +58,7 @@ const UserPreview: React.FC<UserPreviewProps> = ({
         onClick={() => setIsModalOpen(true)}
         url={userId ? `/profile/${user.id}` : null}
         imgCmp={
-          <div className={classnames(styles.img, !dogImage && styles.noImg)}>
+          <div className={classnames(!dogImage && styles.noImg)}>
             {dogImage ? (
               <img src={dogImage} />
             ) : (

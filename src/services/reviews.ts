@@ -14,25 +14,6 @@ interface UpdateReviewProps {
   reviewData: Omit<Review, 'id' | 'park_id' | 'created_at' | 'user_id'>;
 }
 
-const fetchReviewsCount = async (parkId: string) => {
-  try {
-    const { count, error } = await supabase
-    .from('reviews')
-    .select('*', { count: 'exact', head: true })
-    .eq('park_id', parkId);
-
-
-    if (error) {
-      throw error;
-    }
-
-    return count;
-  } catch (error) {
-    console.error(`there was an error while fetching reviews count for park ${parkId}: ${JSON.stringify(error)}`);
-    return null;
-  }
-};
-
 const fetchParkRank = async (parkId: string) => {
   try {
     const { data, error } = await supabase
@@ -179,11 +160,10 @@ export {
   fetchParkRank,
   fetchReviews,
   fetchReview,
-  fetchReviewsCount,
   createReview,
   updateReview,
   fetchUserReviews,
   reportReview,
 };
 
-export type { UpdateReviewProps, AddReviewProps };
+export type { UpdateReviewProps };

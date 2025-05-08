@@ -79,7 +79,7 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
         return (
           <div className={styles.searchContainer}>
             <SearchInput {...props} className={styles.inputContainer} />
-            <Link to="/" className={styles.mapLink}>
+            <Link to="/">
               <Button variant="round">
                 <Map size={24} />
               </Button>
@@ -88,7 +88,7 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
         );
       }}
     >
-      {(park) => <ParkPreview park={park} className={styles.park} />}
+      {(park) => <ParkPreview park={park} />}
     </SearchList>
   );
 };

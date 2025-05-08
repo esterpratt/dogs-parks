@@ -11,10 +11,6 @@
   padding: 12px;
 }
 
-.icon {
-  color: $pink;
-}
-
 .input {
   outline: none;
   font-size: 20px;
@@ -33,4 +29,8 @@
   .input-container {
     flex: 1;
   }
+}
+
+:export {
+  pink: $pink;
 }

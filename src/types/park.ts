@@ -31,7 +31,5 @@ interface NewParkDetails {
   user_id: string;
 }
 
-type ParkForLists = Pick<Park, 'id' | 'location' | 'name' | 'city' | 'address'>;
-
-export type { Park, ParkForLists, Location, NewParkDetails };
+export type { Park, Location, NewParkDetails };
 export { ParkMaterial };
