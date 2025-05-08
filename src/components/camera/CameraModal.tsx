@@ -66,4 +66,4 @@ const CameraModal: React.FC<CameraModalProps> = ({
   );
 };
 
-export default CameraModal;
+export { CameraModal };

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { lazy, Suspense, useContext, useMemo, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { Dumbbell, Pencil, Ruler, Sprout, Sun } from 'lucide-react';
 import classnames from 'classnames';
 import { Park } from '../../types/park';
@@ -8,10 +8,9 @@ import { Section } from '../section/Section';
 import { Button } from '../Button';
 import { UserContext } from '../../context/UserContext';
 import styles from './ParkGenerals.module.scss';
-
-const ChooseEditParkOptionModal = lazy(
-  () => import('./ChooseEditParkOptionModal')
-);
+import { useQuery } from '@tanstack/react-query';
+import { fetchUsersWithDogsByIds } from '../../services/users';
+import { ChooseEditParkOptionModal } from './ChooseEditParkOptionModal';
 
 interface ParkGeneralsProps {
   park: Park;
@@ -69,7 +68,7 @@ const ParkGenerals = ({ park }: ParkGeneralsProps) => {
     shade,
   } = park;
   const { userId } = useContext(UserContext);
-  const { friendsInParkIds, visitorsIds } = useGetParkVisitors(parkId);
+  const { friendsInParkIds, visitorsIds } = useGetParkVisitors(parkId, userId);
   const [isEditParkModalOpen, setIsEditParkModalOpen] = useState(false);
 
   const friendsCount = friendsInParkIds.length;
@@ -78,6 +77,25 @@ const ParkGenerals = ({ park }: ParkGeneralsProps) => {
   const visitorsContent = friendsCount
     ? friendsCount.toString()
     : othersCount.toString();
+
+  // prefetch visitors data
+  useQuery({
+    queryKey: ['parkVisitorsWithDogs', parkId],
+    queryFn: () => fetchUsersWithDogsByIds(friendsInParkIds),
+    enabled: !!friendsInParkIds.length,
+    staleTime: 6000,
+  });
+
+  // prefetch visitors data
+  // useEffect(() => {
+  //   if (friendsInParkIds.length > 0) {
+  //     queryClient.prefetchQuery({
+  //       queryKey: ['parkVisitorsWithDogs', parkId],
+  //       queryFn: () => fetchUsersWithDogsByIds(friendsInParkIds),
+  //       staleTime: 6000,
+  //     });
+  //   }
+  // }, [friendsInParkIds, parkId]);
 
   const existedData = useMemo(
     () => [
@@ -213,13 +231,11 @@ const ParkGenerals = ({ park }: ParkGeneralsProps) => {
         }
       />
       {!!userId && (
-        <Suspense fallback={null}>
-          <ChooseEditParkOptionModal
-            isOpen={isEditParkModalOpen}
-            onClose={() => setIsEditParkModalOpen(false)}
-            park={park}
-          />
-        </Suspense>
+        <ChooseEditParkOptionModal
+          isOpen={isEditParkModalOpen}
+          onClose={() => setIsEditParkModalOpen(false)}
+          park={park}
+        />
       )}
     </>
   );

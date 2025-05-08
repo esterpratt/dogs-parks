@@ -3,12 +3,13 @@ import { Suspense } from 'react';
 import { Loader } from '../components/Loader';
 import { Park as ParkType } from '../types/park';
 import { ParkResolved } from './ParkResolved';
+import styles from './Park.module.scss';
 
 const Park: React.FC = () => {
   const { park } = useLoaderData() as { park: Promise<ParkType> };
 
   return (
-    <Suspense fallback={<Loader />}>
+    <Suspense fallback={<Loader className={styles.loader} />}>
       <Await resolve={park}>
         {(resolvedPark) => <ParkResolved park={resolvedPark} />}
       </Await>
@@ -16,4 +17,4 @@ const Park: React.FC = () => {
   );
 };
 
-export { Park };
+export default Park;

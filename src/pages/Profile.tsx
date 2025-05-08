@@ -5,18 +5,56 @@ import classnames from 'classnames';
 import { UserContext } from '../context/UserContext';
 import { ProfileTabs } from '../components/profile/ProfileTabs';
 import { Loader } from '../components/Loader';
-import { Friendship } from '../types/friendship';
+import { Friendship, FRIENDSHIP_STATUS, USER_ROLE } from '../types/friendship';
 import { getDogNames } from '../utils/getDogNames';
 import { FriendRequestButton } from '../components/profile/FriendRequestButton';
 import { Header } from '../components/Header';
 import { HeaderImage } from '../components/HeaderImage';
 import styles from './Profile.module.scss';
+import { useQuery } from '@tanstack/react-query';
+import { fetchUserFavorites } from '../services/favorites';
+import { FRIENDS_KEY } from '../hooks/api/keys';
+import { fetchFriendsWithDogs } from '../services/users';
 
 const Profile: React.FC = () => {
   const { user, dogs, dogImages, pendingFriendships, approvedFriendships } =
     useLoaderData();
-  const { user: signedInUser } = useContext(UserContext);
+  const { user: signedInUser, isLoadingUser } = useContext(UserContext);
   const isSignedInUser = signedInUser?.id === user.id;
+
+  // prefetch friends and favorites
+  useQuery({
+    queryKey: ['favorites', user.id],
+    queryFn: async () => fetchUserFavorites(user.id),
+  });
+
+  useQuery({
+    queryKey: ['friends', user.id, FRIENDS_KEY.FRIENDS, 'dogs'],
+    queryFn: () =>
+      fetchFriendsWithDogs({
+        userId: user.id,
+      }),
+  });
+
+  useQuery({
+    queryKey: ['friends', user.id, FRIENDS_KEY.PENDING_FRIENDS, 'dogs'],
+    queryFn: () =>
+      fetchFriendsWithDogs({
+        userId: user.id,
+        userRole: USER_ROLE.REQUESTEE,
+        status: FRIENDSHIP_STATUS.PENDING,
+      }),
+  });
+
+  useQuery({
+    queryKey: ['friends', user.id, FRIENDS_KEY.MY_PENDING_FRIENDS, 'dogs'],
+    queryFn: () =>
+      fetchFriendsWithDogs({
+        userId: user.id,
+        userRole: USER_ROLE.REQUESTER,
+        status: FRIENDSHIP_STATUS.PENDING,
+      }),
+  });
 
   if (!user) {
     return null;
@@ -61,7 +99,7 @@ const Profile: React.FC = () => {
           isSignedInUser || !signedInUser ? styles.small : styles.medium
         )}
         prevLinksCmp={
-          !isSignedInUser ? (
+          !isSignedInUser && !isLoadingUser ? (
             <>
               <Link to="/users">
                 <MoveLeft size={16} />
@@ -148,4 +186,4 @@ const Profile: React.FC = () => {
   );
 };
 
-export { Profile };
+export default Profile;

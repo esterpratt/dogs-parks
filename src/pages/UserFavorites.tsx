@@ -13,10 +13,7 @@ const UserFavorites = () => {
 
   const { data: favoriteParkIds, isLoading: isLoadingFavorites } = useQuery({
     queryKey: ['favorites', userId],
-    queryFn: async () => {
-      const favorites = await fetchUserFavorites(userId!);
-      return favorites ?? [];
-    },
+    queryFn: async () => fetchUserFavorites(userId!),
   });
 
   const { data: parks, isLoading: isLoadingParks } = useQuery({

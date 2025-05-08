@@ -318,4 +318,4 @@ const EditDogModal: React.FC<EditDogModalProps> = ({
   );
 };
 
-export default EditDogModal;
+export { EditDogModal };

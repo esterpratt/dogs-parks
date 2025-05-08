@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Plus } from 'lucide-react';
@@ -8,9 +8,8 @@ import { UserContext } from '../../context/UserContext';
 import { Section } from '../section/Section';
 import { Button } from '../Button';
 import { Carousel } from '../Carousel';
+import { CameraModal } from '../camera/CameraModal';
 import styles from './ParkGalleryContainer.module.scss';
-
-const CameraModal = lazy(() => import('../camera/CameraModal'));
 
 interface ParkGalleryContainerProps {
   parkId: string;
@@ -90,13 +89,11 @@ const ParkGalleryContainer: React.FC<ParkGalleryContainerProps> = ({
         }
       />
       {!!userId && (
-        <Suspense fallback={null}>
-          <CameraModal
-            open={isAddImageModalOpen}
-            setOpen={setIsAddImageModalOpen}
-            onUploadImg={onUploadImg}
-          />
-        </Suspense>
+        <CameraModal
+          open={isAddImageModalOpen}
+          setOpen={setIsAddImageModalOpen}
+          onUploadImg={onUploadImg}
+        />
       )}
     </>
   );

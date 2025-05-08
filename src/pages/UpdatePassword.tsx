@@ -9,7 +9,7 @@ import { Input } from '../components/inputs/Input';
 import styles from './UpdatePassword.module.scss';
 import { useNotification } from '../context/NotificationContext';
 
-const UpdatePassowrd = () => {
+const UpdatePassword = () => {
   const [error, setError] = useState('');
   const { userId, isLoadingAuthUser } = useContext(UserContext);
   const navigate = useNavigate();
@@ -80,4 +80,4 @@ const UpdatePassowrd = () => {
   );
 };
 
-export { UpdatePassowrd };
+export default UpdatePassword;

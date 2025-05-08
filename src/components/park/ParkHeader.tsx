@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Header } from '../Header';
+import { useContext, useState } from 'react';
 import {
   MapPin,
   MoveLeft,
@@ -7,17 +7,17 @@ import {
   ShareIcon,
   TreeDeciduous,
 } from 'lucide-react';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { Header } from '../Header';
 import { HeaderImage } from '../HeaderImage';
 import { ReviewsPreview } from './ReviewsPreview';
 import { FavoriteButton } from './FavoriteButton';
 import { ParkCheckIn } from './ParkCheckIn';
 import { ParkIcon } from './ParkIcon';
-import { Suspense, useContext, useState } from 'react';
-import CameraModal from '../camera/CameraModal';
+import { CameraModal } from '../camera/CameraModal';
 import { EnlargeImageModal } from '../EnlargeImageModal';
 import { useNotification } from '../../context/NotificationContext';
 import { UserContext } from '../../context/UserContext';
-import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   fetchParkPrimaryImage,
   uploadParkPrimaryImage,
@@ -41,7 +41,7 @@ const ParkHeader = (props: ParkHeaderProps) => {
     useState(false);
   const { notify } = useNotification();
 
-  const { data: primaryImage } = useQuery({
+  const { data: primaryImage, isLoading } = useQuery({
     queryKey: ['parkImage', park.id],
     queryFn: async () => {
       const image = await fetchParkPrimaryImage(park.id);
@@ -105,6 +105,7 @@ const ParkHeader = (props: ParkHeaderProps) => {
         imgCmp={
           <HeaderImage
             size={132}
+            isLoading={isLoading}
             imgSrc={primaryImage}
             NoImgIcon={TreeDeciduous}
             onClickImg={onClickImage}
@@ -154,13 +155,11 @@ const ParkHeader = (props: ParkHeaderProps) => {
         imgSrc={imageToEnlarge}
         setImgSrc={setImageToEnlarge}
       />
-      <Suspense fallback={null}>
-        <CameraModal
-          open={isAddImageModalOpen}
-          setOpen={setIsAddImageModalOpen}
-          onUploadImg={onUploadImg}
-        />
-      </Suspense>
+      <CameraModal
+        open={isAddImageModalOpen}
+        setOpen={setIsAddImageModalOpen}
+        onUploadImg={onUploadImg}
+      />
     </>
   );
 };

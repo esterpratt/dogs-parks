@@ -17,16 +17,20 @@ import { ReviewModal } from '../components/ReviewModal';
 import { ReviewsPreview } from '../components/park/ReviewsPreview';
 import styles from './ParkReviews.module.scss';
 import { Park } from '../types/park';
+import { Loader } from '../components/Loader';
+import { useDelayedLoading } from '../hooks/useDelayedLoading';
 
 const Reviews: React.FC = () => {
   const { id: parkId } = useOutletContext() as Park;
   const [isAddReviewModalOpen, setIsAddReviewModalOpen] = useState(false);
 
-  const { data: reviews } = useQuery({
+  const { data: reviews, isPending } = useQuery({
     queryKey: ['reviews', parkId],
     queryFn: () => fetchReviews(parkId!),
     enabled: !!parkId,
   });
+
+  const { showLoader } = useDelayedLoading({ isLoading: isPending });
 
   const { userId } = useContext(UserContext);
 
@@ -87,7 +91,11 @@ const Reviews: React.FC = () => {
     mutateReview({ reviewData, reviewId });
   };
 
-  if (!reviews?.length) {
+  if (showLoader) {
+    return <Loader inside className={styles.loader} />;
+  }
+
+  if (!isPending && !reviews?.length) {
     return (
       <div className={styles.noReviews}>
         <span className={styles.title}>No barks about this park yet</span>
@@ -116,7 +124,7 @@ const Reviews: React.FC = () => {
       <div className={styles.container}>
         <ReviewsPreview variant="reviews" />
         <ul className={styles.list}>
-          {reviews.map((review) => (
+          {reviews?.map((review) => (
             <li key={review.id} className={styles.item}>
               <ReviewPreview review={review} userId={userId} />
             </li>

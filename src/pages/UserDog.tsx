@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense } from 'react';
+import { useState } from 'react';
 import { useLocation, useParams, useRevalidator, Link } from 'react-router-dom';
 import {
   Cake,
@@ -29,10 +29,9 @@ import { Button } from '../components/Button';
 import { DogPreferences } from '../components/dog/DogPreferences';
 import { Header } from '../components/Header';
 import { HeaderImage } from '../components/HeaderImage';
+import { EditDogModal } from '../components/dog/EditDogModal';
+import { CameraModal } from '../components/camera/CameraModal';
 import styles from './UserDog.module.scss';
-
-const CameraModal = lazy(() => import('../components/camera/CameraModal'));
-const EditDogModal = lazy(() => import('../components/dog/EditDogModal'));
 
 const UserDog = () => {
   const { dogId } = useParams();
@@ -222,20 +221,16 @@ const UserDog = () => {
         imgSrc={imageToEnlarge}
         setImgSrc={setImageToEnlarge}
       />
-      <Suspense fallback={null}>
-        <EditDogModal
-          dog={dog}
-          isOpen={isEditDogsModalOpen}
-          onClose={onCloseDogsModal}
-        />
-      </Suspense>
-      <Suspense fallback={null}>
-        <CameraModal
-          open={isAddImageModalOpen}
-          setOpen={setIsAddImageModalOpen}
-          onUploadImg={onUploadImg}
-        />
-      </Suspense>
+      <EditDogModal
+        dog={dog}
+        isOpen={isEditDogsModalOpen}
+        onClose={onCloseDogsModal}
+      />
+      <CameraModal
+        open={isAddImageModalOpen}
+        setOpen={setIsAddImageModalOpen}
+        onUploadImg={onUploadImg}
+      />
     </>
   );
 };

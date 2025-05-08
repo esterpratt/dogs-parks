@@ -79,4 +79,4 @@ const ChooseEditParkOptionModal: React.FC<ChooseEditParkOptionModalProps> = ({
   );
 };
 
-export default ChooseEditParkOptionModal;
+export { ChooseEditParkOptionModal };

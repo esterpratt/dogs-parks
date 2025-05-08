@@ -155,4 +155,4 @@ const NewPark: React.FC = () => {
   );
 };
 
-export { NewPark };
+export default NewPark;

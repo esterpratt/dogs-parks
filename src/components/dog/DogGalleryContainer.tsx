@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense } from 'react';
+import { useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Plus } from 'lucide-react';
 import { Dog } from '../../types/dog';
@@ -12,8 +12,7 @@ import { queryClient } from '../../services/react-query';
 import { Section } from '../section/Section';
 import { Button } from '../Button';
 import styles from './DogGalleryContainer.module.scss';
-
-const CameraModal = lazy(() => import('../camera/CameraModal'));
+import { CameraModal } from '../camera/CameraModal';
 
 interface DogGalleryContainerProps {
   dog: Dog;
@@ -90,13 +89,11 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
           />
         }
       />
-      <Suspense fallback={null}>
-        <CameraModal
-          open={isAddImageModalOpen}
-          setOpen={setIsAddImageModalOpen}
-          onUploadImg={onUploadImg}
-        />
-      </Suspense>
+      <CameraModal
+        open={isAddImageModalOpen}
+        setOpen={setIsAddImageModalOpen}
+        onUploadImg={onUploadImg}
+      />
     </>
   );
 };

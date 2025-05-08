@@ -32,6 +32,7 @@ interface UserContextObj {
   userId: string | null;
   user?: User | null;
   isLoadingAuthUser: boolean;
+  isLoadingUser: boolean;
   userLogin: (props: LoginProps) => void;
   userLogout: () => void;
   userSignin: (props: SigninProps) => void;
@@ -46,6 +47,7 @@ const initialData: UserContextObj = {
   userId: null,
   user: null,
   isLoadingAuthUser: false,
+  isLoadingUser: false,
   userLogin: () => Promise.resolve(),
   userLogout: () => {},
   userSignin: () => Promise.resolve(),
@@ -167,6 +169,7 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const value: UserContextObj = {
     user,
     userId: session?.user.id || null,
+    isLoadingUser,
     isLoadingAuthUser,
     userLogin,
     userLogout,

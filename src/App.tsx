@@ -12,22 +12,10 @@ import { OrientationProvider } from './context/OrientationContext';
 import { Home } from './pages/Home';
 import { RootLayout } from './RootLayout';
 import { ErrorPage } from './pages/Error';
-import { Login } from './pages/Login';
-import { Profile } from './pages/Profile';
-import { Parks } from './pages/Parks';
-import { Users } from './pages/Users';
-import { UserDogs } from './pages/UserDogs';
-import { Park } from './pages/Park';
-import { ParkDetails } from './pages/ParkDetails';
-import { NewPark } from './pages/NewPark';
-import { queryClient } from './services/react-query';
-import { DeletionConfirmation } from './pages/DeletionConfirmation';
-import { PrivateRoute } from './pages/PrivateRoute';
-import { PrivacyPolicy } from './pages/PrivacyPolicy';
 import { AuthCallback } from './pages/AuthCallback';
+import { queryClient } from './services/react-query';
+import { PrivateRoute } from './pages/PrivateRoute';
 import { userLoader } from './loaders/userLoader';
-import { UpdatePassowrd } from './pages/UpdatePassword';
-import { About } from './pages/About';
 import { parkLoader } from './loaders/parkLoader';
 
 const UserDog = lazy(() => import('./pages/UserDog'));
@@ -37,6 +25,18 @@ const UserFavorites = lazy(() => import('./pages/UserFavorites'));
 const UserInfo = lazy(() => import('./pages/UserInfo'));
 const ParkReviews = lazy(() => import('./pages/ParkReviews'));
 const ParkVisitors = lazy(() => import('./pages/ParkVisitors'));
+const Profile = lazy(() => import('./pages/Profile'));
+const Parks = lazy(() => import('./pages/Parks'));
+const Users = lazy(() => import('./pages/Users'));
+const UserDogs = lazy(() => import('./pages/UserDogs'));
+const Park = lazy(() => import('./pages/Park'));
+const ParkDetails = lazy(() => import('./pages/ParkDetails'));
+const NewPark = lazy(() => import('./pages/NewPark'));
+const UpdatePassowrd = lazy(() => import('./pages/UpdatePassword'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const DeletionConfirmation = lazy(() => import('./pages/DeletionConfirmation'));
+const About = lazy(() => import('./pages/About'));
+const Login = lazy(() => import('./pages/Login'));
 
 const App = () => {
   const router = createBrowserRouter([

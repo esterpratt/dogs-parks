@@ -31,8 +31,11 @@ const RangeInput: React.FC<RangeInputProps> = ({
   const halfThumbWidth = Number(styles.thumbWidth) / 2 + 1;
 
   useEffect(() => {
+    const element = inputContainerRef.current;
+    if (!element) return;
+
     const calcBubbleStep = () => {
-      setBubbleStep((inputContainerRef.current!.offsetWidth - 24) / max);
+      setBubbleStep((element.offsetWidth - 24) / max);
     };
 
     calcBubbleStep();
@@ -41,7 +44,7 @@ const RangeInput: React.FC<RangeInputProps> = ({
       calcBubbleStep();
     });
 
-    observer.observe(inputContainerRef.current!);
+    observer.observe(element);
 
     return () => observer.disconnect();
   }, [max]);

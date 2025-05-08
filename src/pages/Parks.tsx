@@ -9,4 +9,4 @@ const Parks: React.FC = () => {
   );
 };
 
-export { Parks };
+export default Parks;

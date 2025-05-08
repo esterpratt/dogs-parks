@@ -140,4 +140,4 @@ const BusyHours: React.FC<BusyHoursProps> = (props: BusyHoursProps) => {
   );
 };
 
-export { BusyHours };
+export default BusyHours;

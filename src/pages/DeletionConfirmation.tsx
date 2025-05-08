@@ -31,4 +31,4 @@ const DeletionConfirmation: React.FC = () => {
   );
 };
 
-export { DeletionConfirmation };
+export default DeletionConfirmation;

@@ -13,7 +13,11 @@ const Loader: React.FC<LoaderProps> = ({
   variant = 'primary',
 }) => {
   return (
-    <div className={classnames(styles.container, { [styles.full]: !inside })}>
+    <div
+      className={classnames(styles.container, {
+        [styles.full]: !inside,
+      })}
+    >
       <div
         className={classnames(
           styles.loader,

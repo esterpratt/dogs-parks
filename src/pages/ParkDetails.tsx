@@ -1,11 +1,13 @@
+import { lazy, Suspense } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { BusyHours } from '../components/park/BusyHours';
 import { ParkGenerals } from '../components/park/ParkGenerals';
 import { ParkGalleryContainer } from '../components/park/ParkGalleryContainer';
-import styles from './ParkDetails.module.scss';
 import { Park } from '../types/park';
+import styles from './ParkDetails.module.scss';
 
-export const ParkDetails = () => {
+const BusyHours = lazy(() => import('../components/park/BusyHours'));
+
+const ParkDetails = () => {
   const park = useOutletContext() as Park;
 
   if (!park) {
@@ -15,8 +17,12 @@ export const ParkDetails = () => {
   return (
     <div className={styles.container}>
       <ParkGenerals park={park} />
-      <BusyHours parkId={park.id} />
+      <Suspense fallback={null}>
+        <BusyHours parkId={park.id} />
+      </Suspense>
       <ParkGalleryContainer parkId={park.id} />
     </div>
   );
 };
+
+export default ParkDetails;

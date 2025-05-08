@@ -8,6 +8,8 @@ import { useGetParkVisitors } from '../hooks/api/useGetParkVisitors';
 import { Button } from '../components/Button';
 import styles from './ParkVisitors.module.scss';
 import { Park } from '../types/park';
+import { useDelayedLoading } from '../hooks/useDelayedLoading';
+import { Loader } from '../components/Loader';
 
 const ParkVisitors: React.FC = () => {
   const { userId } = useContext(UserContext);
@@ -15,11 +17,14 @@ const ParkVisitors: React.FC = () => {
 
   const { visitorsIds, friendsInParkIds } = useGetParkVisitors(parkId!, userId);
 
-  const { data: friendsInParkWithDogs } = useQuery({
+  const { data: friendsInParkWithDogs, isPending } = useQuery({
     queryKey: ['parkVisitorsWithDogs', parkId],
     queryFn: () => fetchUsersWithDogsByIds(friendsInParkIds),
     enabled: !!friendsInParkIds.length,
+    staleTime: 6000,
   });
+
+  const { showLoader } = useDelayedLoading({ isLoading: isPending });
 
   const friendsCount = friendsInParkIds.length;
   const othersCount = visitorsIds.length - friendsCount;
@@ -32,9 +37,13 @@ const ParkVisitors: React.FC = () => {
     return null;
   }
 
+  if (showLoader) {
+    return <Loader inside className={styles.loader} />;
+  }
+
   return (
     <div className={styles.container}>
-      {!!friendsCount && (
+      {!!friendsCount && !isPending && (
         <div className={styles.friendsContainer}>
           <span className={styles.friendsTitle}>
             Friends at the park right now
@@ -48,7 +57,7 @@ const ParkVisitors: React.FC = () => {
           ))}
         </div>
       )}
-      {!!othersCount && (
+      {!!othersCount && !isPending && (
         <div className={styles.othersContainer}>
           <div className={styles.othersTitle}>
             {userIsOnlyVisitor ? (

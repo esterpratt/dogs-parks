@@ -1,14 +1,19 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { Link } from 'react-router-dom';
 import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
 import { Location, Park } from '../../types/park';
 import { MarkerList } from './MarkerList';
 import { AlignJustify, Locate } from 'lucide-react';
-import { ParkPopup } from '../parks/ParkPopup';
 import { MapEventHandler } from './mapHelpers/MapEventHandler';
 import { MapCenter } from './mapHelpers/MapCenter';
 import { Routing } from './mapHelpers/Routing';
-import { getRoute } from '../../services/map';
 import { MapSearchAddress } from './mapHelpers/MapSearchAddress';
 import { getUserLocation } from './mapHelpers/getUserLocation';
 import { UserLocationMarker } from './UserLocationMarker';
@@ -16,6 +21,8 @@ import { DEFAULT_LOCATION } from '../../utils/consts';
 import { useUserLocation } from '../../context/LocationContext';
 import { Button } from '../Button';
 import styles from './NewMap.module.scss';
+
+const ParkPopupLazy = lazy(() => import('../parks/ParkPopupLazy'));
 
 interface NewMapProps {
   className?: string;
@@ -27,7 +34,6 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
   const setUserLocation = useUserLocation((state) => state.setUserLocation);
   const [center, setCenter] = useState(userLocation ?? DEFAULT_LOCATION);
   const [activePark, setActivePark] = useState<Park | null>(null);
-  const [isLoadingDirections, setIsLoadingDirections] = useState(false);
   const [directions, setDirections] = useState<{
     distance?: string;
     duration?: string;
@@ -94,31 +100,6 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
     setActivePark(park);
   };
 
-  const getDirections = async () => {
-    if (!userLocation) {
-      return;
-    }
-    setIsLoadingDirections(true);
-    const res = await getRoute({
-      startLocation: {
-        lat: userLocation.lat,
-        lng: userLocation.long,
-      },
-      targetLocation: {
-        lat: activePark!.location.lat,
-        lng: activePark!.location.long,
-      },
-    });
-    setIsLoadingDirections(false);
-    if (res) {
-      setDirections(res);
-    } else {
-      setDirections({
-        error: 'Sorry, my sniff powers are temporarily offline',
-      });
-    }
-  };
-
   return (
     <div className={className}>
       <MapContainer
@@ -163,22 +144,22 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
         </Button>
         <MapEventHandler onMapClick={onCloseParkPopup} />
       </MapContainer>
-      <ParkPopup
-        isLoadingDirections={isLoadingDirections}
-        onClose={onCloseParkPopup}
-        activePark={activePark}
-        onGetDirections={getDirections}
-        canGetDirections={!!userLocation}
-        directions={
-          directions
-            ? {
-                distance: directions.distance,
-                duration: directions.duration,
-                error: directions.error,
-              }
-            : undefined
-        }
-      />
+      <Suspense fallback={null}>
+        <ParkPopupLazy
+          setDirections={setDirections}
+          onClose={onCloseParkPopup}
+          activePark={activePark}
+          directions={
+            directions
+              ? {
+                  distance: directions.distance,
+                  duration: directions.duration,
+                  error: directions.error,
+                }
+              : undefined
+          }
+        />
+      </Suspense>
     </div>
   );
 };

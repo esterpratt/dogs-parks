@@ -15,6 +15,7 @@ interface HeaderImageProps {
   editButtonClassName?: string;
   style?: CSSProperties;
   size?: number;
+  isLoading?: boolean;
 }
 
 const HeaderImage = (props: HeaderImageProps) => {
@@ -28,6 +29,7 @@ const HeaderImage = (props: HeaderImageProps) => {
     className,
     style,
     editButtonClassName,
+    isLoading,
   } = props;
 
   return (
@@ -47,14 +49,14 @@ const HeaderImage = (props: HeaderImageProps) => {
           src={imgSrc}
           className={styles.img}
         />
-      ) : (
+      ) : !isLoading ? (
         <div className={styles.img}>
           <div className={styles.noImg}>
             <NoImgIcon size={64} color={styles.green} strokeWidth={1} />
           </div>
         </div>
-      )}
-      {!!onClickEditPhoto && (
+      ) : null}
+      {!isLoading && !!onClickEditPhoto && (
         <Button
           variant="round"
           className={classnames(styles.editPhotoIcon, editButtonClassName)}
