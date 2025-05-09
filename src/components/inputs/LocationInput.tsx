@@ -8,11 +8,13 @@ import { ParkMarker } from '../map/ParkMarker';
 import { Location } from '../../types/park';
 import { DEFAULT_LOCATION } from '../../utils/consts';
 import { getUserLocation } from '../map/mapHelpers/getUserLocation';
+import { Button } from '../Button';
 import styles from './LocationInput.module.scss';
 
 interface LocationInputProps {
   label: string;
   onMapClick: (event: LeafletMouseEvent) => void;
+  onSetCurrentLocation: (location: Location) => void;
   markerLocation: Location | null;
   className?: string;
 }
@@ -20,10 +22,21 @@ interface LocationInputProps {
 const LocationInput: React.FC<LocationInputProps> = ({
   label,
   onMapClick,
+  onSetCurrentLocation,
   markerLocation,
   className,
 }) => {
   const [center, setCenter] = useState(DEFAULT_LOCATION);
+
+  const handleSetCurrentLocation = async () => {
+    const userLocation = await getUserLocation();
+    if (userLocation) {
+      onSetCurrentLocation({
+        lat: userLocation.coords.latitude,
+        long: userLocation.coords.longitude,
+      });
+    }
+  };
 
   useEffect(() => {
     const setUserCenter = async () => {
@@ -41,7 +54,19 @@ const LocationInput: React.FC<LocationInputProps> = ({
 
   return (
     <div className={classnames(styles.container, className)}>
-      <span>{label}</span>
+      <label className={styles.label}>
+        <div className={styles.title}>{label}</div>
+        <div className={styles.instructions}>
+          <span>Click the map or </span>
+          <Button
+            className={styles.button}
+            variant="simple"
+            onClick={handleSetCurrentLocation}
+          >
+            use current location
+          </Button>
+        </div>
+      </label>
       <div className={styles.map}>
         <MapContainer
           className={styles.map}

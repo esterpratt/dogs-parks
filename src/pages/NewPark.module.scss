@@ -89,3 +89,9 @@
     align-self: flex-end;
   }
 }
+
+@media (orientation: landscape) {
+  .map {
+    width: 70%;
+  }
+}

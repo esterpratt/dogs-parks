@@ -50,6 +50,10 @@ const NewPark: React.FC = () => {
     });
   };
 
+  const handleSetCurrentLocation = (location: Location) => {
+    setMarkerLocation(location);
+  };
+
   const onAddPark = async () => {
     if (!user?.id) {
       setIsModalOpen(true);
@@ -115,10 +119,11 @@ const NewPark: React.FC = () => {
               onChange={onChangeParkDetails}
             />
             <LocationInput
-              label="Click on the map to set the park location *"
+              label="Park location *"
               markerLocation={markerLocation}
               onMapClick={onMapClick}
               className={styles.map}
+              onSetCurrentLocation={handleSetCurrentLocation}
             />
             <Button
               onClick={onAddPark}

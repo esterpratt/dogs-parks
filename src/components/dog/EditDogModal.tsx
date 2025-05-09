@@ -278,13 +278,13 @@ const EditDogModal: React.FC<EditDogModalProps> = ({
             value={dogData?.likes || ''}
             onChange={onInputChange}
             name="likes"
-            label="Likes"
+            label="Likes (separate with commas)"
           />
           <ControlledInput
             value={dogData?.dislikes || ''}
             onChange={onInputChange}
             name="dislikes"
-            label="Dislikes"
+            label="Dislikes (separate with commas)"
           />
           <TextArea
             rows={orientation === 'landscape' ? 3 : 9}
