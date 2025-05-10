@@ -10,3 +10,13 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     </NotificationProvider>
   </React.StrictMode>
 );
+
+const preload = document.getElementById('preload');
+if (preload) {
+  preload.style.transition = 'opacity 0.5s ease';
+  preload.style.opacity = '0';
+
+  setTimeout(() => {
+    preload.remove();
+  }, 500);
+}
