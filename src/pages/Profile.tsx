@@ -15,6 +15,7 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchUserFavorites } from '../services/favorites';
 import { FRIENDS_KEY } from '../hooks/api/keys';
 import { fetchFriendsWithDogs } from '../services/users';
+import { usePrefetchRoutesOnIdle } from '../hooks/usePrefetchRoutesOnIdle';
 
 const Profile: React.FC = () => {
   const { user, dogs, dogImages, pendingFriendships, approvedFriendships } =
@@ -22,7 +23,9 @@ const Profile: React.FC = () => {
   const { user: signedInUser, isLoadingUser } = useContext(UserContext);
   const isSignedInUser = signedInUser?.id === user.id;
 
-  // prefetch friends and favorites
+  // prefetch  friends and favorites requests
+  usePrefetchRoutesOnIdle(['dog']);
+
   useQuery({
     queryKey: ['favorites', user.id],
     queryFn: async () => fetchUserFavorites(user.id),
@@ -101,16 +104,17 @@ const Profile: React.FC = () => {
         prevLinksCmp={
           !isSignedInUser && !isLoadingUser ? (
             <>
-              <Link to="/users">
-                <MoveLeft size={16} />
-                <span>Users</span>
-              </Link>
               {!!signedInUser && (
                 <Link to={`/profile/${signedInUser.id}/friends`}>
+                  <MoveLeft size={16} />
                   <span>My friends</span>
-                  <MoveRight size={16} />
                 </Link>
               )}
+              <Link to="/users">
+                {!signedInUser && <MoveLeft size={16} />}
+                <span>Users</span>
+                {!!signedInUser && <MoveRight size={16} />}
+              </Link>
             </>
           ) : null
         }

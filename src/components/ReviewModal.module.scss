@@ -11,6 +11,14 @@
   color: $text;
   width: 100%;
   font-size: 16px;
+
+  .content {
+    padding-top: 12px;
+
+    label {
+      width: fit-content;
+    }
+  }
 }
 
 .rank-container {

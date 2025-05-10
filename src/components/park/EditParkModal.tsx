@@ -142,6 +142,7 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
         {!park.size && (
           <ControlledInput
             type="number"
+            inputMode="numeric"
             value={parkDetails.size?.toString() || ''}
             onChange={onInputChange}
             name="size"

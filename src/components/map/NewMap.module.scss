@@ -4,15 +4,9 @@
 }
 
 .list-view-button {
-  position: absolute;
-  top: calc(12px + var(--safe-area-inset-top, 0px));
   z-index: 600;
-  right: calc(16px + var(--safe-area-inset-right));
 }
 
 .center-button {
-  position: absolute;
   z-index: 1000;
-  top: 120px;
-  right: calc(16px + var(--safe-area-inset-right));
 }

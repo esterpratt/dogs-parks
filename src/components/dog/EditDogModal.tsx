@@ -1,4 +1,11 @@
-import { ChangeEvent, useContext, useEffect, useMemo, useState } from 'react';
+import {
+  ChangeEvent,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useRevalidator } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import classnames from 'classnames';
@@ -39,6 +46,8 @@ const EditDogModal: React.FC<EditDogModalProps> = ({
   dog,
 }) => {
   const orientation = useOrientationContext((state) => state.orientation);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const { notify } = useNotification();
   const [dogData, setDogData] = useState<
     | (Partial<Omit<Dog, 'likes' | 'dislikes'>> &
@@ -172,6 +181,26 @@ const EditDogModal: React.FC<EditDogModalProps> = ({
     return getFormattedDate(new Date());
   }, []);
 
+  useEffect(() => {
+    if (!isOpen) return;
+
+    requestAnimationFrame(() => {
+      const shouldScroll = sessionStorage.getItem('scroll-to-input') === 'true';
+      if (shouldScroll) {
+        inputRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+        sessionStorage.removeItem('scroll-to-input');
+      } else {
+        formRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      }
+    });
+  }, [isOpen]);
+
   const isSaveButtonDisabled =
     !dogData?.name || !dogData.birthday || !dogData.gender || !dogData.breed;
 
@@ -187,6 +216,7 @@ const EditDogModal: React.FC<EditDogModalProps> = ({
         title={dog ? `Update ${dog.name}'s details` : `Add your dog's details`}
       >
         <form
+          ref={formRef}
           className={classnames(styles.form, {
             [styles.extraPadding]: !!keyboardHeight,
             [styles.withDog]: !!dog,
@@ -279,6 +309,7 @@ const EditDogModal: React.FC<EditDogModalProps> = ({
             onChange={onInputChange}
             name="likes"
             label="Likes (separate with commas)"
+            inputRef={inputRef}
           />
           <ControlledInput
             value={dogData?.dislikes || ''}
@@ -293,6 +324,7 @@ const EditDogModal: React.FC<EditDogModalProps> = ({
             onChange={onInputChange}
             name="description"
             label="Description"
+            className={styles.description}
           />
         </form>
         {dog && (

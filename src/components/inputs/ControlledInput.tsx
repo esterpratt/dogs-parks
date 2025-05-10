@@ -11,6 +11,7 @@ interface ControlledInputProps extends InputHTMLAttributes<HTMLInputElement> {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   variant?: 'basic' | 'singleLine';
   inputClassName?: string;
+  inputRef?: React.Ref<HTMLInputElement>;
 }
 
 const ControlledInput: React.FC<ControlledInputProps> = ({
@@ -19,6 +20,7 @@ const ControlledInput: React.FC<ControlledInputProps> = ({
   placeholder,
   label,
   name,
+  inputRef,
   variant = 'basic',
   inputClassName,
   ...props
@@ -27,6 +29,8 @@ const ControlledInput: React.FC<ControlledInputProps> = ({
     <div className={classnames(styles.container, styles[variant])}>
       <label htmlFor={name}>{label}</label>
       <Input
+        inputMode="text"
+        ref={inputRef}
         className={inputClassName}
         name={name}
         value={value}

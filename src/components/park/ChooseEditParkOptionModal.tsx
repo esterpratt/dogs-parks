@@ -30,8 +30,8 @@ const ChooseEditParkOptionModal: React.FC<ChooseEditParkOptionModalProps> = ({
   const isEditable =
     !park.size ||
     !park.materials?.length ||
-    park.shade === undefined ||
-    park.has_facilities === undefined;
+    park.shade === null ||
+    park.has_facilities === null;
 
   const onEditPark = () => {
     setIsEditModalOpen(true);

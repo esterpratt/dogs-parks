@@ -64,6 +64,7 @@ const DogsCountModal: React.FC<{
       <div className={styles.inputsContainer}>
         <ControlledInput
           type="number"
+          inputMode="numeric"
           name="dogsCount"
           label="How many dogs are currently in the park?"
           min={0}

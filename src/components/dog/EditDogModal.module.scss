@@ -24,6 +24,14 @@
   color: $text-medium;
 }
 
+.description {
+  padding-top: 12px;
+
+  label {
+    width: fit-content;
+  }
+}
+
 .delete-dog-wrapper {
   display: flex;
   align-items: center;

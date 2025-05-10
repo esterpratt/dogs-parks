@@ -8,6 +8,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'simple' | 'round';
   className?: string;
   color?: string;
+  style?: React.CSSProperties;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -16,13 +17,14 @@ const Button: React.FC<ButtonProps> = ({
   variant = 'primary',
   className,
   color = '',
+  style = {},
   ...props
 }) => {
   return (
     <button
       onClick={onClick}
       className={classnames(styles.button, styles[variant], className)}
-      style={{ '--color': color }}
+      style={{ ...style, '--color': color }}
       {...props}
     >
       {children}

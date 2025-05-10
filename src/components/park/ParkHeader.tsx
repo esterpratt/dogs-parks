@@ -8,6 +8,7 @@ import {
   TreeDeciduous,
 } from 'lucide-react';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import classnames from 'classnames';
 import { Header } from '../Header';
 import { HeaderImage } from '../HeaderImage';
 import { ReviewsPreview } from './ReviewsPreview';
@@ -25,8 +26,8 @@ import {
 import { queryClient } from '../../services/react-query';
 import { isMobile } from '../../utils/platform';
 import { Share } from '@capacitor/share';
-import styles from './ParkHeader.module.scss';
 import { Park } from '../../types/park';
+import styles from './ParkHeader.module.scss';
 
 interface ParkHeaderProps {
   park: Park;
@@ -117,18 +118,26 @@ const ParkHeader = (props: ParkHeaderProps) => {
           />
         }
         bottomCmp={
-          <div className={styles.basicDetails}>
-            <div className={styles.top}>
-              <div className={styles.name}>{park.name}</div>
-              <ReviewsPreview className={styles.reviews} />
-            </div>
-            <div className={styles.addressContainer}>
-              <MapPin color={styles.green} size={14} />
+          <div
+            className={classnames(styles.basicDetails, {
+              [styles.user]: !!user,
+            })}
+          >
+            <div className={styles.top}>{park.name}</div>
+            <div className={styles.bottom}>
               <div className={styles.address}>
-                {park.address}, {park.city}
+                <MapPin color={styles.green} size={14} />
+                <div className={styles.text}>
+                  {park.address}, {park.city}
+                </div>
               </div>
+              {user && <ReviewsPreview className={styles.reviews} />}
             </div>
-            <div className={styles.userEngagementRow}>
+            <div
+              className={classnames(styles.userEngagementRow, {
+                [styles.user]: !!user,
+              })}
+            >
               {user && (
                 <>
                   <FavoriteButton parkId={park.id} userId={user.id} />
@@ -139,6 +148,7 @@ const ParkHeader = (props: ParkHeaderProps) => {
                   />
                 </>
               )}
+              {!user && <ReviewsPreview className={styles.reviews} />}
               <ParkIcon
                 iconColor={styles.blue}
                 IconCmp={ShareIcon}

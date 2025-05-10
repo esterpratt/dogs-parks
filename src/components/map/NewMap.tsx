@@ -115,7 +115,15 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
         />
         <MapSearchAddress setCenter={setCenterByPosition} />
         <Link to="/parks">
-          <Button variant="round" className={styles.listViewButton}>
+          <Button
+            variant="round"
+            className={styles.listViewButton}
+            style={{
+              position: 'absolute',
+              top: 'calc(12px + var(--safe-area-inset-top, 0px))',
+              right: 'calc(16px + var(--safe-area-inset-right, 0px))',
+            }}
+          >
             <AlignJustify />
           </Button>
         </Link>
@@ -139,6 +147,11 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
             setUserCenter([setUserLocationByPosition, setCenterByPosition])
           }
           className={styles.centerButton}
+          style={{
+            position: 'absolute',
+            top: '120px',
+            right: `calc(16px + var(--safe-area-inset-right, 0px))`,
+          }}
         >
           <Locate />
         </Button>

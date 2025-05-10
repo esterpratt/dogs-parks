@@ -92,8 +92,11 @@ const UserDog = () => {
     setIsEditDogsModalOpen(false);
   };
 
-  const onEditDog = () => {
+  const onEditDog = (scrollToInput?: boolean) => {
     setIsEditDogsModalOpen(true);
+    if (scrollToInput) {
+      sessionStorage.setItem('scroll-to-input', 'true');
+    }
   };
 
   const onUploadImg = async (img: string | File) => {
@@ -187,7 +190,7 @@ const UserDog = () => {
               {isSignedInUser && (
                 <Button
                   variant="secondary"
-                  onClick={onEditDog}
+                  onClick={() => onEditDog()}
                   className={styles.editButton}
                 >
                   <Pencil size={18} />
@@ -204,13 +207,13 @@ const UserDog = () => {
             isSignedInUser={isSignedInUser}
             dog={dog}
             userName={userName}
-            onEditDog={onEditDog}
+            onEditDog={() => onEditDog()}
           />
           <DogPreferences
             dog={dog}
             isSignedInUser={isSignedInUser}
             userName={userName}
-            onEditDog={onEditDog}
+            onEditDog={() => onEditDog(true)}
           />
           <DogGalleryContainer dog={dog} isSignedInUser={isSignedInUser} />
         </div>

@@ -51,7 +51,7 @@ const ParkPreview: React.FC<ParkPreviewProps> = ({ park, className }) => {
           children: (
             <>
               <Navigation size={12} />
-              <span>'See in map'</span>
+              <span>See in map</span>
             </>
           ),
           onClick: onClickMapLink,

@@ -1,50 +1,68 @@
 @use '../../variables' as *;
 
 .header {
-  background-size: 100% 104px, 100% 164px;
+  background-size: 100% 98px, 100% 170px;
   margin-top: $page-top-padding;
 }
 
 .img-container {
-  top: 102px;
+  top: 96px;
 }
 
 .basic-details {
   display: flex;
   flex-direction: column;
-  padding: 0 16px;
-  gap: 8px;
+  padding: 0 12px;
+  gap: 6px;
   position: relative;
   width: 100%;
   display: flex;
 
-  .top {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
+  &:not(.user) {
     gap: 8px;
   }
 
-  .reviews {
-    height: 20px;
-    display: flex;
-    align-items: center;
-  }
-
-  .name {
+  .top {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     font-size: $title-font-size;
   }
 
-  .address-container {
+  .bottom {
     display: flex;
-    gap: 4px;
+    gap: 8px;
+    width: 100%;
     align-items: center;
+    justify-content: space-between;
     font-size: 12px;
+    height: 20px;
+
+    .reviews {
+      height: 20px;
+      display: flex;
+      align-items: center;
+      flex: 0 0 auto;
+    }
 
     .address {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex: 1 1 auto;
+      min-width: 0;
+      line-height: 1;
+
+      svg {
+        flex-shrink: 0;
+      }
+
+      .text {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
     }
   }
 }
@@ -55,6 +73,11 @@
   padding-top: 4px;
   gap: 16px;
   align-items: center;
+
+  &:not(.user) {
+    justify-content: space-between;
+    padding-top: 0;
+  }
 }
 
 .map-link {

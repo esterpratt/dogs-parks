@@ -56,6 +56,7 @@ export const ReportParkModal: React.FC<ReportParkModalProps> = ({
         value={text}
         onChange={onChangeText}
         maxLength={400}
+        className={styles.textArea}
       />
     </FormModal>
   );

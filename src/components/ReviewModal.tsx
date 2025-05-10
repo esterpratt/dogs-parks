@@ -123,6 +123,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
           value={reviewData.content}
           onChange={onChangeInput}
           placeholder="Please elaborate..."
+          className={styles.content}
         />
         <div className={styles.rankContainer}>
           <span className={styles.rankTitle}>Rate the park</span>
