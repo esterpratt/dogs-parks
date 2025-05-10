@@ -18,6 +18,15 @@
   .range {
     margin-top: 24px;
   }
+
+  .errors {
+    min-height: 20px;
+    font-size: 11px;
+    color: $red;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
 }
 
 @media (orientation: landscape) {

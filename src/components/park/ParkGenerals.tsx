@@ -37,13 +37,20 @@ const getBooleanContent = (value: boolean | null) => {
 };
 
 const getListContent = (values: string[] | null) => {
-  let content = NO_CONTENT;
-  if (values && values.length) {
-    content = values
-      .map((value) => value[0].toUpperCase() + value.slice(1))
-      .join(' & ');
-  }
-  return content;
+  if (!values || values.length === 0) return NO_CONTENT;
+
+  const capitalized = values.map(
+    (value) => value[0].toUpperCase() + value.slice(1)
+  );
+
+  if (capitalized.length === 1) return capitalized[0];
+  if (capitalized.length === 2) return capitalized.join(' & ');
+
+  return (
+    capitalized.slice(0, -1).join(', ') +
+    ' & ' +
+    capitalized[capitalized.length - 1]
+  );
 };
 
 const getSizeContent = (value: number | null) => {

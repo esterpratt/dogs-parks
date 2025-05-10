@@ -69,7 +69,7 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     refetch: refetchUser,
     isLoading: isLoadingUser,
   } = useQuery({
-    queryKey: ['user', 'me', session?.user.id],
+    queryKey: ['user', session?.user.id],
     queryFn: () => fetchUser(session!.user.id),
     enabled: false,
   });
@@ -140,7 +140,7 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { mutate: userLogout } = useMutation({
     mutationFn: () => logout(),
     onSettled: () => {
-      queryClient.removeQueries({ queryKey: ['user', 'me'] });
+      queryClient.removeQueries({ queryKey: ['user'] });
     },
   });
 
@@ -154,7 +154,7 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     },
     onSettled: () => {
       userLogout();
-      queryClient.removeQueries({ queryKey: ['user', 'me'] });
+      queryClient.removeQueries({ queryKey: ['user'] });
     },
   });
 

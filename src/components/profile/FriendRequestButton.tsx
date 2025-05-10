@@ -37,6 +37,7 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
     friendId,
     userId: userId!,
     onSuccess: (text) => notify(text),
+    onError: (text) => notify(text, true),
   });
 
   const onUpdateFriend = async (status: FRIENDSHIP_STATUS) => {
@@ -52,7 +53,7 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
       {status === FRIENDSHIP_STATUS.APPROVED && (
         <>
           <span>
-            <Check size={12} />
+            <Check size={12} color={styles.green} />
             You are friends
           </span>
           <div className={styles.buttons}>

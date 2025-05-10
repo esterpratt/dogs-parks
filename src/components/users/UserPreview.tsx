@@ -48,6 +48,9 @@ const UserPreview: React.FC<UserPreviewProps> = ({
     onSuccess: (text) => {
       notify(text);
     },
+    onError: (text) => {
+      notify(text, true);
+    },
   });
 
   const dogNames = getDogNames(user.dogs);

@@ -1,5 +1,6 @@
 import { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
+import { useRevalidator } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
 import {
   updateUser,
@@ -23,7 +24,8 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const { user, refetchUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
+  const { revalidate } = useRevalidator();
   const [userData, setUserData] = useState(user);
   const { notify } = useNotification();
   const orientation = useOrientationContext((state) => state.orientation);
@@ -39,8 +41,8 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
         userDetails: data.userDetails,
       }),
     onMutate: async (data) => {
-      await queryClient.cancelQueries({ queryKey: ['user', 'me', user!.id] });
-      const prevUser = queryClient.getQueryData<User>(['user', 'me', user!.id]);
+      await queryClient.cancelQueries({ queryKey: ['user', user!.id] });
+      const prevUser = queryClient.getQueryData<User>(['user', user!.id]);
       queryClient.setQueryData(['users', user!.id], {
         ...prevUser,
         ...data.userDetails,
@@ -48,13 +50,14 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
       return { prevUser };
     },
     onError: (_error, _data, context) => {
-      queryClient.setQueryData(['user', 'me', user!.id], context?.prevUser);
+      queryClient.setQueryData(['user', user!.id], context?.prevUser);
     },
     onSuccess: () => {
       notify();
     },
     onSettled: () => {
-      refetchUser();
+      queryClient.invalidateQueries({ queryKey: ['user', user!.id] });
+      revalidate();
     },
   });
 

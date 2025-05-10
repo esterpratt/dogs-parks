@@ -18,12 +18,14 @@ interface UseUpdateFriendshipProps {
   friendId: string;
   userId?: string | null;
   onSuccess?: (text: string) => void;
+  onError?: (text: string) => void;
 }
 
 const useUpdateFriendship = ({
   friendId,
   userId,
   onSuccess,
+  onError,
 }: UseUpdateFriendshipProps) => {
   const { data: friendship } = useQuery({
     queryKey: ['friendship', friendId, userId],
@@ -85,10 +87,23 @@ const useUpdateFriendship = ({
       mutationFn: ({
         friendshipId,
         status,
+        updatedAt
       }: {
         friendshipId: string;
         status: FRIENDSHIP_STATUS;
-      }) => updateFriendship({ friendshipId, status }),
+        updatedAt: string;
+      }) => updateFriendship({ friendshipId, status, updatedAt }),
+      onError: async () => {
+        if (onError) {
+          onError('Friendship was changed');
+          queryClient.invalidateQueries({
+            queryKey: ['friendship', friendId, userId],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ['friends', userId]
+          });
+        }
+      },
       onSuccess: async () => {
         if (onSuccess) {
           onSuccess('You are now friends!');
@@ -119,7 +134,7 @@ const useUpdateFriendship = ({
       } else if(status === FRIENDSHIP_STATUS.REMOVED) {
         removeFriendship({friendshipId:friendship.id, message: 'You are no longer friends'});
       } else {
-        mutateFriendship({ status, friendshipId: friendship.id });
+        mutateFriendship({ status, friendshipId: friendship.id, updatedAt: friendship.updated_at });
       }
     } else if (status === FRIENDSHIP_STATUS.PENDING) {
       addFriendship();

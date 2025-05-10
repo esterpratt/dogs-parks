@@ -23,7 +23,7 @@ const Profile: React.FC = () => {
   const { user: signedInUser, isLoadingUser } = useContext(UserContext);
   const isSignedInUser = signedInUser?.id === user.id;
 
-  // prefetch  friends and favorites requests
+  // prefetch friends and favorites requests
   usePrefetchRoutesOnIdle(['dog']);
 
   useQuery({

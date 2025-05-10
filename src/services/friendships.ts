@@ -11,6 +11,7 @@ type FetchFriendshipProps = [string, string];
 interface UpdateFriendshipProps {
   friendshipId: string;
   status: FRIENDSHIP_STATUS;
+  updatedAt: string;
 }
 
 interface FetchUserFriendshipsProps {
@@ -117,15 +118,18 @@ const fetchUserFriendships = async ({
   }
 };
 
+
 const updateFriendship = async ({
   friendshipId,
   status,
+  updatedAt
 }: UpdateFriendshipProps) => {
   try {
-    const { error } = await supabase
-    .from('friendships')
-    .update({ status })
-    .eq('id', friendshipId)
+    const { error } = await supabase.rpc('safe_update_friendship', {
+      fid: friendshipId,
+      expected_updated_at: updatedAt,
+      new_status: status,
+    });
 
     if (error) {
       throw error;
@@ -134,6 +138,7 @@ const updateFriendship = async ({
     console.error(
       `there was an error while updating friendship with id ${friendshipId}: ${JSON.stringify(error)}`
     );
+    throw error;
   }
 };
 

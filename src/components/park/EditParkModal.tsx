@@ -1,6 +1,7 @@
 import { ChangeEvent, useState } from 'react';
-import { Park, ParkMaterial } from '../../types/park';
+import { useRevalidator } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
+import { Park, ParkMaterial } from '../../types/park';
 import { updatePark } from '../../services/parks';
 import { queryClient } from '../../services/react-query';
 import { ControlledInput } from '../inputs/ControlledInput';
@@ -36,7 +37,9 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
   park,
 }) => {
   const orientation = useOrientationContext((state) => state.orientation);
+  const { revalidate } = useRevalidator();
   const { notify } = useNotification();
+  const [errors, setErrors] = useState<string[] | null>([]);
   const [parkDetails, setParkDetails] = useState<{
     materials: ParkMaterial[] | null;
     hasFacilities: string | null;
@@ -79,6 +82,7 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['park', park.id] });
+      revalidate();
     },
   });
 
@@ -86,6 +90,7 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     value?: string | number | string[]
   ) => {
+    setErrors(null);
     setParkDetails((prev) => {
       return {
         ...prev,
@@ -111,8 +116,12 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
     const hasFacilities = getBooleanValue(parkDetails.hasFacilities);
     const shade = parkDetails.shade !== null ? Number(parkDetails.shade) : null;
     const size = parkDetails.size !== null ? Number(parkDetails.size) : null;
+    const curErrors = [];
 
     if (size !== null) {
+      if (size < 10) {
+        curErrors.push('Size must be greater than 10');
+      }
       updatedData.size = size;
     }
     if (shade !== null) {
@@ -123,6 +132,11 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
     }
     if (hasFacilities !== null) {
       updatedData.has_facilities = hasFacilities;
+    }
+
+    if (curErrors.length) {
+      setErrors(curErrors);
+      return;
     }
 
     mutate({ id: park.id, updatedData });
@@ -187,6 +201,10 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
             className={styles.range}
           />
         )}
+        <div className={styles.errors}>
+          {!!errors?.length &&
+            errors.map((error) => <span key={error}>{error}</span>)}
+        </div>
       </form>
     </FormModal>
   );
