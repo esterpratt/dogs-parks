@@ -32,6 +32,7 @@ import { HeaderImage } from '../components/HeaderImage';
 import { EditDogModal } from '../components/dog/EditDogModal';
 import { CameraModal } from '../components/camera/CameraModal';
 import styles from './UserDog.module.scss';
+import { capitalizeText } from '../utils/text';
 
 const UserDog = () => {
   const { dogId } = useParams();
@@ -161,7 +162,9 @@ const UserDog = () => {
                     </span>
                   )}
                   {!isSignedInUser && (
-                    <span className={styles.userName}>{userName}'s dog</span>
+                    <span className={styles.userName}>
+                      {capitalizeText(userName)}'s dog
+                    </span>
                   )}
                 </div>
                 <div>
@@ -170,7 +173,7 @@ const UserDog = () => {
                       <Cake color={styles.green} size={14} />
                       <span>
                         {age.diff <= 0
-                          ? 'Just Born'
+                          ? 'Just born'
                           : `${age.diff} ${age.unit} old`}
                       </span>
                     </span>
@@ -181,7 +184,7 @@ const UserDog = () => {
                       <span>
                         {dog.breed.toLowerCase() === 'other' && 'Breed: '}
                         {dog.breed}
-                        {dog.breed.toLowerCase() === 'mixed' && ' Breed'}
+                        {dog.breed.toLowerCase() === 'mixed' && ' breed'}
                       </span>
                     </span>
                   )}

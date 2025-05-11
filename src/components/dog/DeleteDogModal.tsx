@@ -42,7 +42,10 @@ const DeleteDogModal: React.FC<DeleteDogModalProps> = ({
   return (
     <TopModal open={isOpen} onClose={onClose} className={styles.approveModal}>
       <div className={styles.approveContent}>
-        <span>Are you sure you want to say goodbye to {dog.name}?</span>
+        <div>
+          <span>Are you sure you want to say goodbye to</span>{' '}
+          <span className={styles.dogName}>{dog.name}</span>?
+        </div>
       </div>
       <div className={styles.buttonsContainer}>
         <Button

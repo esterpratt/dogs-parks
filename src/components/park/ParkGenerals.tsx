@@ -11,6 +11,7 @@ import styles from './ParkGenerals.module.scss';
 import { useQuery } from '@tanstack/react-query';
 import { fetchUsersWithDogsByIds } from '../../services/users';
 import { ChooseEditParkOptionModal } from './ChooseEditParkOptionModal';
+import { capitalizeText } from '../../utils/text';
 
 interface ParkGeneralsProps {
   park: Park;
@@ -39,9 +40,7 @@ const getBooleanContent = (value: boolean | null) => {
 const getListContent = (values: string[] | null) => {
   if (!values || values.length === 0) return NO_CONTENT;
 
-  const capitalized = values.map(
-    (value) => value[0].toUpperCase() + value.slice(1)
-  );
+  const capitalized = values.map((value) => capitalizeText(value));
 
   if (capitalized.length === 1) return capitalized[0];
   if (capitalized.length === 2) return capitalized.join(' & ');

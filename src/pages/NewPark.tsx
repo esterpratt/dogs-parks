@@ -94,14 +94,14 @@ const NewPark: React.FC = () => {
           </div>
           <div className={styles.inputsContainer}>
             <Input
-              placeholder="Park Name"
+              placeholder="Park name"
               name="name"
               value={parkDetails.name}
               onChange={onChangeParkDetails}
             />
             <Input
               type="number"
-              placeholder="Size in meters (if known)"
+              placeholder="Size in square meters (if known)"
               name="size"
               value={parkDetails.size}
               onChange={onChangeParkDetails}
@@ -132,7 +132,7 @@ const NewPark: React.FC = () => {
                 !markerLocation || !parkDetails.address || !parkDetails.city
               }
             >
-              Add Park
+              Add park
             </Button>
           </div>
         </div>

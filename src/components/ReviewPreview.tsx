@@ -10,6 +10,7 @@ import { fetchPark } from '../services/parks';
 import { ReviewModalContext } from '../context/ReviewModalContext';
 import { ReportModal } from './ReportModal';
 import styles from './ReviewPreview.module.scss';
+import { capitalizeText } from '../utils/text';
 
 interface ReviewPreviewProps {
   review: Review;
@@ -26,7 +27,10 @@ const ReviewPreview: React.FC<ReviewPreviewProps> = ({
 }) => {
   const { setOpenedReview } = useContext(ReviewModalContext);
   const reviewTime = useMemo<string>(() => {
-    return getFormattedPastDate(review.updated_at || review.created_at);
+    const formattedDate = getFormattedPastDate(
+      review.updated_at || review.created_at
+    );
+    return capitalizeText(formattedDate);
   }, [review.created_at, review.updated_at]);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
@@ -66,7 +70,7 @@ const ReviewPreview: React.FC<ReviewPreviewProps> = ({
                 className={styles.button}
                 variant="simple"
               >
-                Update Review
+                Update review
               </Button>
             ) : (
               <>

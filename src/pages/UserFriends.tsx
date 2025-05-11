@@ -77,7 +77,7 @@ const UserFriends = () => {
     <div className={styles.container}>
       {!!friends?.length && (
         <div className={styles.friendsContainer}>
-          <div className={styles.title}>My Friends</div>
+          <div className={styles.title}>My friends</div>
           {friends.map((friend) => {
             return <UserPreview key={friend.id} user={friend} />;
           })}

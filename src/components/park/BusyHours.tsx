@@ -16,17 +16,17 @@ import styles from './BusyHours.module.scss';
 
 const BUSINESS = {
   LIGHT: {
-    str: 'quite',
+    str: 'Quite',
     className: 'light',
     color: barChartStyles.green,
   },
   MEDIUM: {
-    str: 'not so busy',
+    str: 'Not so busy',
     className: 'medium',
     color: barChartStyles.orange,
   },
   BUSY: {
-    str: 'busy',
+    str: 'Busy',
     className: 'busy',
     color: barChartStyles.red,
   },

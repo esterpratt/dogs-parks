@@ -125,13 +125,13 @@ const Login = () => {
                 <Input
                   onChange={() => setError('')}
                   name="name"
-                  placeholder="Your Name *"
+                  placeholder="Your name *"
                   type="text"
                 />
               )}
             </div>
             <Button type="submit" className={styles.button}>
-              {isSignup ? 'Sign Up' : 'Dog In'}
+              {isSignup ? 'Sign up' : 'Dog in'}
             </Button>
           </form>
           <div className={styles.lineThrough}>
@@ -144,7 +144,7 @@ const Login = () => {
             onClick={googleSignin}
           >
             <GoogleIcon width={16} height={16} />
-            <span>{isSignup ? 'Sign Up' : 'Dog In'} With Google</span>
+            <span>{isSignup ? 'Sign up' : 'Dog in'} with Google</span>
           </Button>
         </div>
         <div className={styles.changeMethod}>
@@ -156,7 +156,7 @@ const Login = () => {
                 variant="simple"
                 onClick={() => changeMethod('login')}
               >
-                Log In
+                Log in
               </Button>
             </>
           ) : (
@@ -167,7 +167,7 @@ const Login = () => {
                 variant="simple"
                 onClick={() => changeMethod('signup')}
               >
-                Sign Up
+                Sign up
               </Button>
             </>
           )}

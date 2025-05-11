@@ -1,5 +1,6 @@
 import { Geolocation } from '@capacitor/geolocation';
 import { isMobile } from '../../../utils/platform';
+import { DEFAULT_LOCATION } from '../../../utils/consts';
 
 export async function getUserLocation() {
   let position: GeolocationPosition | null = null;
@@ -23,6 +24,12 @@ export async function getUserLocation() {
     }
   } catch (error) {
     console.error('Error getting location:', error);
+    return {
+      coords: {
+        latitude: DEFAULT_LOCATION.lat,
+        longitude: DEFAULT_LOCATION.long,
+      }
+    }
   }
 
   return position;

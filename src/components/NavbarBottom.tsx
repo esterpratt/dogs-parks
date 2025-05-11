@@ -107,7 +107,7 @@ const NavbarBottom = () => {
             }
           >
             <UserRoundSearch size={18} strokeWidth={2} />
-            <span>Search Friends</span>
+            <span>Search friends</span>
           </NavLink>
         </div>
         {userId && (
@@ -120,7 +120,7 @@ const NavbarBottom = () => {
               }
             >
               <Plus size={18} strokeWidth={2} />
-              <span>Add New Park</span>
+              <span>Add new park</span>
             </NavLink>
           </div>
         )}
@@ -133,7 +133,7 @@ const NavbarBottom = () => {
             }
           >
             <Shield size={18} strokeWidth={2} />
-            <span>Privacy Policy</span>
+            <span>Privacy policy</span>
           </NavLink>
         </div>
         <div className={styles.menuItem}>

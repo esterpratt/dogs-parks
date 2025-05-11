@@ -43,6 +43,10 @@
   width: 100%;
 }
 
+.dog-name {
+  text-transform: capitalize;
+}
+
 @media (orientation: landscape) {
   .modal {
     padding-top: 12px;

@@ -8,6 +8,7 @@ import {
 } from 'react';
 import { Location } from '../types/park';
 import { getUserLocation } from '../components/map/mapHelpers/getUserLocation';
+import { DEFAULT_LOCATION } from '../utils/consts';
 
 interface LocationStoreProps {
   userLocation: Location | undefined;
@@ -36,12 +37,17 @@ export const UserLocationProvider = ({
 
   useEffect(() => {
     const fetchUserLocation = async () => {
-      const userLocation = await getUserLocation();
-      if (userLocation) {
-        setUserLocation({
-          lat: userLocation?.coords.latitude,
-          long: userLocation?.coords.longitude,
-        });
+      try {
+        const userLocation = await getUserLocation();
+        if (userLocation) {
+          setUserLocation({
+            lat: userLocation?.coords.latitude,
+            long: userLocation?.coords.longitude,
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching user location:', error);
+        setUserLocation(DEFAULT_LOCATION);
       }
     };
 

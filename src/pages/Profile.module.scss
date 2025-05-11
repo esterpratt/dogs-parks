@@ -83,7 +83,7 @@ $imgs-medium-top: 96px;
   padding-bottom: 16px;
   font-size: $second-title-font-size;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   gap: 8px;
   align-items: center;
   width: 100%;

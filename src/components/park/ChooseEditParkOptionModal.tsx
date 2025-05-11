@@ -48,12 +48,12 @@ const ChooseEditParkOptionModal: React.FC<ChooseEditParkOptionModalProps> = ({
           {isEditable && (
             <Button onClick={onEditPark} className={styles.button}>
               <Pencil size={20} />
-              <span>Update Park Details</span>
+              <span>Update park details</span>
             </Button>
           )}
           <Button onClick={onReportPark} className={styles.button}>
             <FlagIcon size={20} />
-            <span>Report Incorrect Details</span>
+            <span>Report incorrect details</span>
           </Button>
           <Button
             variant="secondary"

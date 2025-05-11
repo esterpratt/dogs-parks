@@ -28,7 +28,7 @@ const MapSearchAddress: React.FC<MapSearchAddressProps> = ({ setCenter }) => {
       defaultMarkGeocode: false,
       errorMessage: "Oops! We couldn't sniff out that address",
       position: 'topleft',
-      placeholder: 'Search Address',
+      placeholder: 'Search address',
     });
     geocoderControl.addTo(map);
     

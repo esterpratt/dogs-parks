@@ -1,7 +1,7 @@
 @use '../variables' as *;
 
 .container {
-  padding: 12px 0;
+  padding: 12px 0 0;
   max-height: $content-max-height;
   margin-top: $page-top-padding;
   display: flex;

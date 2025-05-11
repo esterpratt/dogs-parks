@@ -11,6 +11,7 @@ import { ReviewModal } from '../ReviewModal';
 import { DogsCountModal } from './DogsCountModal';
 import styles from './ParkCheckIn.module.scss';
 import { useNotification } from '../../context/NotificationContext';
+import { capitalizeText } from '../../utils/text';
 
 const ParkCheckIn: React.FC<{
   parkId: string;
@@ -24,9 +25,7 @@ const ParkCheckIn: React.FC<{
   const { notify } = useNotification();
 
   const title = `Enjoy your stay${
-    userName
-      ? ', ' + userName.charAt(0).toUpperCase() + userName.slice(1) + '!'
-      : '!'
+    userName ? ', ' + capitalizeText(userName) + '!' : '!'
   }`;
 
   const { mutateAsync: parkCheckIn } = useMutation({

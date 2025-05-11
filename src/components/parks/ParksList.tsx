@@ -70,7 +70,7 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
     <SearchList
       isInfinite
       items={sortedParks}
-      placeholder="Search Park"
+      placeholder="Search park"
       noResultsLayout={NoResultsLayout}
       itemKeyfn={(park) => park.id}
       filterFunc={searchParksFunc}

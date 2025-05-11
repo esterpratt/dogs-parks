@@ -9,7 +9,7 @@ const TakePhotoButton = (props: TakePhotoButtonProps) => {
   const { onOpenCamera } = props;
 
   return (
-    <CameraButton onClick={onOpenCamera} text="Take a Photo" Icon={Camera} />
+    <CameraButton onClick={onOpenCamera} text="Take a photo" Icon={Camera} />
   );
 };
 

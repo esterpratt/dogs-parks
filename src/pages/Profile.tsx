@@ -148,13 +148,15 @@ const Profile: React.FC = () => {
         }
         bottomCmp={
           isSignedInUser ? (
-            <div className={styles.welcome}>Paws up, {user.name}!</div>
+            <div className={styles.welcome}>
+              Paws up, <span className={styles.userName}>{user.name}!</span>
+            </div>
           ) : !!signedInUser && !isSignedInUser ? (
             <div className={styles.title}>
               <div className={styles.text}>
                 <span>Meet </span>
                 <span className={styles.userName}>{user.name}</span>
-                <span>'s Pack: {getDogNames(dogs)}</span>
+                <span>'s pack: {getDogNames(dogs)}</span>
               </div>
               <FriendRequestButton
                 className={styles.friendRequestContainer}

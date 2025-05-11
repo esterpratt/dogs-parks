@@ -11,6 +11,7 @@ import { LOADING } from '../utils/consts';
 import { CameraModal } from '../components/camera/CameraModal';
 import { EditDogModal } from '../components/dog/EditDogModal';
 import styles from './UserDogs.module.scss';
+import { Plus } from 'lucide-react';
 
 interface UserDogsProps {
   user: User;
@@ -79,7 +80,8 @@ const UserDogs = () => {
                 className={styles.addDogButton}
                 onClick={() => setIsEditDogsModalOpen(true)}
               >
-                Add dog
+                <Plus size={16} />
+                <span>Add dog</span>
               </Button>
             )}
           </div>
@@ -93,7 +95,8 @@ const UserDogs = () => {
                 className={styles.addDogButton}
                 onClick={() => setIsEditDogsModalOpen(true)}
               >
-                Add dog
+                <Plus size={16} />
+                <span>Add dog</span>
               </Button>
             )}
           </div>

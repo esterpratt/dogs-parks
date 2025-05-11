@@ -6,17 +6,9 @@ import {
   useRef,
   useState,
 } from 'react';
-import { useRevalidator } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { DOG_ENERGY, DOG_SIZE, Dog, GENDER } from '../../types/dog';
 import { UserContext } from '../../context/UserContext';
-import {
-  createDog,
-  updateDog,
-  EditDogProps as UpdateDogProps,
-} from '../../services/dogs';
-import { queryClient } from '../../services/react-query';
 import { getFormattedDate } from '../../utils/time';
 import { ControlledInput } from '../inputs/ControlledInput';
 import { RadioInputs } from '../inputs/RadioInputs';
@@ -25,12 +17,15 @@ import { AutoComplete } from '../inputs/AutoComplete';
 import { dogBreeds } from '../../services/dog-breeds';
 import DeleteDogModal from './DeleteDogModal';
 import { useOrientationContext } from '../../context/OrientationContext';
-import { useNotification } from '../../context/NotificationContext';
 import { Button } from '../Button';
 import { Trash2 } from 'lucide-react';
 import { FormModal } from '../modals/FormModal';
 import styles from './EditDogModal.module.scss';
 import useKeyboardFix from '../../hooks/useKeyboardFix';
+import { capitalizeText } from '../../utils/text';
+import { useUpdateDog } from '../../hooks/api/useUpdateDog';
+import { useAddDog } from '../../hooks/api/useAddDog';
+import { useScrollToInputOnOpen } from '../../hooks/useScrollToInputOnOpen';
 
 interface EditDogModalProps {
   isOpen: boolean;
@@ -48,7 +43,7 @@ const EditDogModal: React.FC<EditDogModalProps> = ({
   const orientation = useOrientationContext((state) => state.orientation);
   const inputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
-  const { notify } = useNotification();
+
   const [dogData, setDogData] = useState<
     | (Partial<Omit<Dog, 'likes' | 'dislikes'>> &
         Required<Pick<Dog, 'name'>> & {
@@ -68,49 +63,11 @@ const EditDogModal: React.FC<EditDogModalProps> = ({
     }
   });
   const { userId } = useContext(UserContext);
-  const { revalidate } = useRevalidator();
   const [isDeleteDogModalOpen, setIsDeleteDogModalOpen] = useState(false);
   const keyboardHeight = useKeyboardFix();
 
-  const { mutate: mutateDog } = useMutation({
-    mutationFn: (data: UpdateDogProps) =>
-      updateDog({ dogId: data.dogId, dogDetails: data.dogDetails }),
-    onMutate: async (vars) => {
-      await queryClient.cancelQueries({ queryKey: ['dogs', vars.dogId] });
-      const prevDog = queryClient.getQueryData<Dog>(['dogs', vars.dogId]);
-      queryClient.setQueryData(['dogs', vars.dogId], {
-        ...prevDog,
-        ...vars.dogDetails,
-      });
-      return { prevDog };
-    },
-    onError: (_error, vars, context) => {
-      queryClient.setQueryData(['dogs', vars.dogId], context?.prevDog);
-    },
-    onSuccess: () => {
-      notify();
-    },
-    onSettled: (_data, _error, vars) => {
-      queryClient.invalidateQueries({ queryKey: ['dogs', vars.dogId] });
-      queryClient.invalidateQueries({ queryKey: ['dogs', userId] });
-      revalidate();
-    },
-  });
-
-  const { mutateAsync: addDog } = useMutation({
-    mutationFn: (data: Omit<Dog, 'id'>) => createDog({ ...data }),
-    onSuccess: async () => {
-      queryClient.invalidateQueries({
-        queryKey: ['dogs', userId],
-      });
-      revalidate();
-    },
-    onSettled: (data) => {
-      if (onAddDog) {
-        onAddDog(data);
-      }
-    },
-  });
+  const { mutateDog } = useUpdateDog();
+  const { addDog } = useAddDog(onAddDog);
 
   useEffect(() => {
     if (dog) {
@@ -181,25 +138,27 @@ const EditDogModal: React.FC<EditDogModalProps> = ({
     return getFormattedDate(new Date());
   }, []);
 
-  useEffect(() => {
-    if (!isOpen) return;
+  useScrollToInputOnOpen(isOpen, inputRef, formRef);
 
-    requestAnimationFrame(() => {
-      const shouldScroll = sessionStorage.getItem('scroll-to-input') === 'true';
-      if (shouldScroll) {
-        inputRef.current?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        });
-        sessionStorage.removeItem('scroll-to-input');
-      } else {
-        formRef.current?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        });
-      }
-    });
-  }, [isOpen]);
+  // useEffect(() => {
+  //   if (!isOpen) return;
+
+  //   requestAnimationFrame(() => {
+  //     const shouldScroll = sessionStorage.getItem('scroll-to-input') === 'true';
+  //     if (shouldScroll) {
+  //       inputRef.current?.scrollIntoView({
+  //         behavior: 'smooth',
+  //         block: 'start',
+  //       });
+  //       sessionStorage.removeItem('scroll-to-input');
+  //     } else {
+  //       formRef.current?.scrollIntoView({
+  //         behavior: 'smooth',
+  //         block: 'start',
+  //       });
+  //     }
+  //   });
+  // }, [isOpen]);
 
   const isSaveButtonDisabled =
     !dogData?.name || !dogData.birthday || !dogData.gender || !dogData.breed;
@@ -223,7 +182,7 @@ const EditDogModal: React.FC<EditDogModalProps> = ({
           })}
         >
           <ControlledInput
-            value={dogData?.name || ''}
+            value={capitalizeText(dogData?.name ?? '') || ''}
             onChange={onInputChange}
             name="name"
             label="Name *"
@@ -335,7 +294,10 @@ const EditDogModal: React.FC<EditDogModalProps> = ({
             className={styles.deleteDogWrapper}
           >
             <Trash2 size={16} />
-            <span>Say goodbye to {dog.name}</span>
+            <div>
+              <span>Say goodbye to</span>{' '}
+              <span className={styles.dogName}>{dog.name}</span>
+            </div>
           </Button>
         )}
       </FormModal>

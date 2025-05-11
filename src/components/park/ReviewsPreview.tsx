@@ -9,6 +9,7 @@ import { fetchParkRank, fetchReviews } from '../../services/reviews';
 import { useAddReview } from '../../hooks/api/useAddReview';
 import { ReviewModal } from '../ReviewModal';
 import styles from './ReviewsPreview.module.scss';
+import { Plus } from 'lucide-react';
 
 interface ReviewsPreviewProps {
   variant?: 'title' | 'reviews';
@@ -75,7 +76,8 @@ const ReviewsPreview = (props: ReviewsPreviewProps) => {
             className={styles.addReviewButton}
             variant="primary"
           >
-            Add review
+            <Plus size={16} />
+            <span>Add review</span>
           </Button>
           <ReviewModal
             onSubmitReview={onAddReview}

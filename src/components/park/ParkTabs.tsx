@@ -14,7 +14,7 @@ const ParkTabs = (props: ParkTabsProps) => {
     <TabsList
       className={styles.tabs}
       tabs={[
-        { text: 'General Info', url: '' },
+        { text: 'General info', url: '' },
         { text: 'Reviews', url: 'Reviews' },
         {
           text: 'Visitors',
