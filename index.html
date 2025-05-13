@@ -21,6 +21,80 @@
       type="font/woff2"
       crossorigin="anonymous"
     />
+    <style>
+      #preload {
+        position: fixed;
+        inset: 0;
+        background: white;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 48px;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 24px;
+        margin-bottom: 50px;
+        box-sizing: border-box;
+      }
+
+      .paw-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .joke-container {
+        text-align: center;
+        position: relative;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+        font-family: 'Fredoka', sans-serif;
+        font-weight: normal;
+        color: #ec4899;
+      }
+
+      .joke-container.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .question,
+      .answer {
+        opacity: 0;
+        transition: opacity 1s ease;
+      }
+
+      .question.visible {
+        opacity: 1;
+      }
+
+      .answer.visible {
+        opacity: 1;
+      }
+
+      .joke-container.fade-out {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      .question {
+        font-size: 24px;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .answer {
+        font-size: 20px;
+        margin-top: 12px;
+        min-height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    </style>
   </head>
   <body>
     <div id="preload">
@@ -130,26 +204,69 @@
           </g>
         </svg>
       </div>
+      <div id="joke" class="joke-container">
+        <div id="question" class="question"></div>
+        <div id="answer" class="answer"></div>
+      </div>
 
-      <style>
-        #preload {
-          position: fixed;
-          inset: 0;
-          background: white;
-          z-index: 9999;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          padding: 40px 24px;
-          box-sizing: border-box;
-        }
+      <div id="joke" class="joke-container">
+        <div id="question" class="question"></div>
+        <div id="answer" class="answer"></div>
+      </div>
 
-        .paw-container {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-      </style>
+      <script>
+        const jokes = [
+          {
+            q: 'Why did the dog sit in the shade?',
+            a: 'Because he didn’t want to be a hot dog.',
+          },
+          {
+            q: 'Why did the dog bring toilet paper to the party?',
+            a: 'Because he was a party pooper.',
+          },
+          { q: 'What type of markets do dogs avoid?', a: 'Flea markets.' },
+          { q: 'What’s a dog’s favorite instrument?', a: 'The trom-bone.' },
+          { q: 'What do you call a dog magician?', a: 'A labra-cadabra-dor!' },
+        ];
+
+        const jokeEl = document.getElementById('joke');
+        const questionEl = document.getElementById('question');
+        const answerEl = document.getElementById('answer');
+
+        let index = 0;
+
+        const showJoke = (joke) => {
+          jokeEl.classList.remove('fade-out', 'visible');
+          questionEl.classList.remove('visible');
+          answerEl.classList.remove('visible');
+          questionEl.textContent = '';
+          answerEl.textContent = '';
+
+          questionEl.textContent = joke.q;
+          answerEl.textContent = joke.a;
+
+          setTimeout(() => {
+            jokeEl.classList.add('visible');
+            questionEl.classList.add('visible');
+
+            setTimeout(() => {
+              answerEl.classList.add('visible');
+
+              setTimeout(() => {
+                jokeEl.classList.remove('visible');
+                jokeEl.classList.add('fade-out');
+
+                setTimeout(() => {
+                  index = (index + 1) % jokes.length;
+                  showJoke(jokes[index]);
+                }, 1000);
+              }, 3000);
+            }, 2000);
+          }, 1000);
+        };
+
+        showJoke(jokes[index]);
+      </script>
     </div>
     <div id="root"></div>
     <div id="modal"></div>
