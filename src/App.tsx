@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom';
 import { QueryClientProvider } from '@tanstack/react-query';
 import './App.scss';
+import { NotificationProvider } from './context/NotificationContext';
 import { UserContextProvider } from './context/UserContext';
 import { UserLocationProvider } from './context/LocationContext';
 import { OrientationProvider } from './context/OrientationContext';
@@ -152,15 +153,17 @@ const App = () => {
   ]);
 
   return (
-    <UserLocationProvider>
-      <OrientationProvider>
-        <QueryClientProvider client={queryClient}>
-          <UserContextProvider>
-            <RouterProvider router={router} />
-          </UserContextProvider>
-        </QueryClientProvider>
-      </OrientationProvider>
-    </UserLocationProvider>
+    <QueryClientProvider client={queryClient}>
+      <NotificationProvider>
+        <UserLocationProvider>
+          <OrientationProvider>
+            <UserContextProvider>
+              <RouterProvider router={router} />
+            </UserContextProvider>
+          </OrientationProvider>
+        </UserLocationProvider>
+      </NotificationProvider>
+    </QueryClientProvider>
   );
 };
 

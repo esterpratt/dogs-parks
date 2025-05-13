@@ -8,6 +8,8 @@ import { FRIENDSHIP_STATUS, USER_ROLE } from '../types/friendship';
 import { FRIENDS_KEY } from '../hooks/api/keys';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import styles from './UserFriends.module.scss';
+import { queryClient } from '../services/react-query';
+import { useEffect } from 'react';
 
 const UserFriends = () => {
   const { user } = useOutletContext() as { user: User };
@@ -44,6 +46,20 @@ const UserFriends = () => {
 
   const isLoading =
     isLoadingFriends || isLoadingPendingFriends || isLoadingMyPendingFriends;
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    [
+      ...(friends ?? []),
+      ...(pendingFriends ?? []),
+      ...(myPendingFriends ?? []),
+    ].forEach((friend) => {
+      const { dogs, ...userWithoutDogs } = friend;
+      queryClient.setQueryData(['user', friend.id], userWithoutDogs);
+      queryClient.setQueryData(['dogs', friend.id], dogs ?? []);
+    });
+  }, [friends, pendingFriends, myPendingFriends, isLoading]);
 
   const { showLoader } = useDelayedLoading({
     isLoading,

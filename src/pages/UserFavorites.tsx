@@ -1,8 +1,8 @@
 import { useParams, Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQueries, useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { ParkPreview } from '../components/parks/ParkPreview';
-import { fetchParksJSON } from '../services/parks';
+import { fetchPark, fetchParksJSON } from '../services/parks';
 import { fetchUserFavorites } from '../services/favorites';
 import { Loader } from '../components/Loader';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
@@ -32,6 +32,14 @@ const UserFavorites = () => {
   const favoriteParks = parks?.length
     ? parks.filter((park) => favoriteParkIds?.includes(park.id))
     : [];
+
+  // prefetch parks
+  useQueries({
+    queries: favoriteParks.map((park) => ({
+      queryKey: ['park', park.id],
+      queryFn: () => fetchPark(park.id),
+    })),
+  });
 
   if (showLoader) {
     return <Loader inside className={styles.loader} />;
