@@ -41,7 +41,7 @@ const BusyHours: React.FC<BusyHoursProps> = (props: BusyHoursProps) => {
   const [isDogsCountModalOpen, setIsDogsCountModalOpen] = useState(false);
   const { userId } = useContext(UserContext);
 
-  const { data: dogsCount } = useQuery({
+  const { data: dogsCount, isLoading } = useQuery({
     queryKey: ['dogsCount', parkId],
     queryFn: () => fetchDogsCount(parkId),
   });
@@ -96,16 +96,21 @@ const BusyHours: React.FC<BusyHoursProps> = (props: BusyHoursProps) => {
                   [styles.empty]: !userId && !dogsCount?.length,
                 })}
               >
-                <Info size={12} color={styles.green} />
-                {dogsCount?.length ? (
+                {isLoading && <span>Loading...</span>}
+                {!isLoading && (
                   <>
-                    <span>Currently:</span>
-                    <span className={styles[business.className]}>
-                      {business.str}
-                    </span>
+                    <Info size={12} color={styles.green} />
+                    {dogsCount?.length ? (
+                      <>
+                        <span>Currently:</span>
+                        <span className={styles[business.className]}>
+                          {business.str}
+                        </span>
+                      </>
+                    ) : (
+                      <span>No data yet.</span>
+                    )}
                   </>
-                ) : (
-                  <span>No data yet.</span>
                 )}
               </div>
               {!userId && !dogsCount?.length && (
