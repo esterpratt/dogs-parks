@@ -96,7 +96,7 @@ const BusyHours: React.FC<BusyHoursProps> = (props: BusyHoursProps) => {
                   [styles.empty]: !userId && !dogsCount?.length,
                 })}
               >
-                {isLoading && <span>Loading...</span>}
+                {isLoading && <span>Calculating...</span>}
                 {!isLoading && (
                   <>
                     <Info size={12} color={styles.green} />

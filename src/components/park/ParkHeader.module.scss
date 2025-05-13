@@ -69,6 +69,7 @@
 }
 
 .user-engagement-row {
+  width: 100%;
   display: flex;
   justify-content: flex-start;
   padding-top: 4px;
@@ -78,6 +79,12 @@
   &:not(.user) {
     justify-content: space-between;
     padding-top: 0;
+  }
+
+  .share {
+    &.align-right {
+      margin-left: auto;
+    }
   }
 }
 

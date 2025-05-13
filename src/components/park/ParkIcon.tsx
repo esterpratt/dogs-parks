@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { LucideIcon } from 'lucide-react';
+import classnames from 'classnames';
 import { Button } from '../Button';
 import styles from './ParkIcon.module.scss';
 
@@ -8,6 +9,7 @@ interface ParkIconProps {
   textCmp: ReactNode;
   onClick: () => void;
   iconColor?: string;
+  className?: string;
 }
 
 const ParkIcon: React.FC<ParkIconProps> = ({
@@ -15,6 +17,7 @@ const ParkIcon: React.FC<ParkIconProps> = ({
   textCmp,
   onClick,
   iconColor,
+  className,
 }) => {
   return (
     <Button
@@ -22,7 +25,7 @@ const ParkIcon: React.FC<ParkIconProps> = ({
         '--icon-bgcolor': `${iconColor ?? styles.pink}90`,
         '--icon-color': iconColor ?? styles.pink,
       }}
-      className={styles.button}
+      className={classnames(styles.button, className)}
       onClick={onClick}
     >
       <IconCmp size={14} />

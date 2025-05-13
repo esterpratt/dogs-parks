@@ -151,6 +151,9 @@ const ParkHeader = (props: ParkHeaderProps) => {
                 IconCmp={ShareIcon}
                 onClick={onClickShareButton}
                 textCmp={<span>Share</span>}
+                className={classnames(styles.share, {
+                  [styles.alignRight]: !user,
+                })}
               />
             </div>
           </div>
