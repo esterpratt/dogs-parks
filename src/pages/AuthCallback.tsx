@@ -16,7 +16,7 @@ const AuthCallback = () => {
   return (
     <Loader
       style={{
-        height: '100dvh',
+        height: '60dvh',
       }}
     />
   );
