@@ -30,11 +30,16 @@
         display: flex;
         flex-direction: column;
         gap: 48px;
-        justify-content: center;
         align-items: center;
         padding: 40px 24px;
-        margin-bottom: 52px;
+        margin-top: 20%;
         box-sizing: border-box;
+      }
+
+      #paw {
+        position: fixed;
+        inset: 0;
+        z-index: 9998;
       }
 
       .paw-container {
@@ -62,15 +67,18 @@
       .question,
       .answer {
         opacity: 0;
-        transition: opacity 1s ease;
+        visibility: hidden;
+        transition: opacity 1s ease, visibility 1s ease;
       }
 
       .question.visible {
         opacity: 1;
+        visibility: visible;
       }
 
       .answer.visible {
         opacity: 1;
+        visibility: visible;
       }
 
       .joke-container.fade-out {
@@ -98,7 +106,12 @@
   </head>
   <body>
     <div id="preload">
-      <div class="paw-container">
+      <div id="joke" class="joke-container">
+        <div id="question" class="question"></div>
+        <div id="answer" class="answer"></div>
+      </div>
+
+      <div id="paw" class="paw-container">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
@@ -203,15 +216,6 @@
             />
           </g>
         </svg>
-      </div>
-      <div id="joke" class="joke-container">
-        <div id="question" class="question"></div>
-        <div id="answer" class="answer"></div>
-      </div>
-
-      <div id="joke" class="joke-container">
-        <div id="question" class="question"></div>
-        <div id="answer" class="answer"></div>
       </div>
 
       <script>
