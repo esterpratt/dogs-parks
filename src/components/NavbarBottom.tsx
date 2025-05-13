@@ -35,7 +35,7 @@ const NavbarBottom = () => {
 
   return (
     <>
-      <nav className={styles.navbar} style={{ height: '64px' }}>
+      <nav className={styles.navbar}>
         <div className={styles.iconsContainer}>
           <>
             <NavLink
