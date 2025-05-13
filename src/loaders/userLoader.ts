@@ -4,8 +4,6 @@ import { fetchDogPrimaryImage, fetchUserDogs } from '../services/dogs';
 import { queryClient } from '../services/react-query';
 import { User } from '../types/user';
 import { Dog } from '../types/dog';
-import { fetchUserFriendships } from '../services/friendships';
-import { Friendship, FRIENDSHIP_STATUS } from '../types/friendship';
 
 const userLoader: LoaderFunction = async ({ params }) => {
   const { id: userId } = params;
@@ -13,8 +11,6 @@ const userLoader: LoaderFunction = async ({ params }) => {
   const promises: [
     Promise<User>,
     Promise<Dog[]>,
-    Promise<Friendship | null>,
-    Promise<Friendship | null>
   ] = [
     queryClient.fetchQuery({
       queryKey: ['user', userId],
@@ -24,24 +20,9 @@ const userLoader: LoaderFunction = async ({ params }) => {
       queryKey: ['dogs', userId],
       queryFn: () => fetchUserDogs(userId!),
     }),
-    queryClient.fetchQuery({
-      queryKey: ['friendships', userId, 'pending'],
-      queryFn: () =>
-        fetchUserFriendships({
-          userId: userId!,
-          status: FRIENDSHIP_STATUS.PENDING,
-        }),
-    }),
-    queryClient.fetchQuery({
-      queryKey: ['friendships', userId, 'approved'],
-      queryFn: () =>
-        fetchUserFriendships({
-          userId: userId!,
-        }),
-    }),
   ];
 
-  const [user, dogs = [], pendingFriendships, approvedFriendships] =
+  const [user, dogs = []] =
     await Promise.all(promises);
 
   const getDogsImages = async () => {
@@ -50,10 +31,7 @@ const userLoader: LoaderFunction = async ({ params }) => {
       dogsImagesPromises.push(
         queryClient.fetchQuery({
           queryKey: ['dogImage', dog.id],
-          queryFn: async () => {
-            const image = await fetchDogPrimaryImage(dog.id);
-            return image || null;
-          },
+          queryFn: async () => fetchDogPrimaryImage(dog.id),
         })
       );
     });
@@ -65,8 +43,6 @@ const userLoader: LoaderFunction = async ({ params }) => {
     user,
     dogs,
     dogImages: getDogsImages(),
-    pendingFriendships,
-    approvedFriendships,
   };
 };
 

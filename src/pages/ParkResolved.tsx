@@ -4,6 +4,7 @@ import { ParkTabs } from '../components/park/ParkTabs';
 import { memo } from 'react';
 import styles from './ParkResolved.module.scss';
 import { Park } from '../types/park';
+import { usePrefetchRoutesOnIdle } from '../hooks/usePrefetchRoutesOnIdle';
 
 interface ParkResolvedProps {
   park: Park;
@@ -11,6 +12,9 @@ interface ParkResolvedProps {
 
 const ParkResolved = memo((props: ParkResolvedProps) => {
   const { park } = props;
+
+  // prefetch park reviews + visitors pages
+  usePrefetchRoutesOnIdle(['parkReviews', 'parkVisitors']);
 
   return (
     <>

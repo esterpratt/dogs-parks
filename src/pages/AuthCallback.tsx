@@ -13,7 +13,13 @@ const AuthCallback = () => {
     }
   }, [user, navigate]);
 
-  return <Loader />;
+  return (
+    <Loader
+      style={{
+        height: '100dvh',
+      }}
+    />
+  );
 };
 
 export { AuthCallback };

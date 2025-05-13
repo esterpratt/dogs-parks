@@ -94,7 +94,11 @@ $imgs-medium-top: 96px;
 }
 
 .loader {
-  margin-bottom: 51%;
+  margin-bottom: 100%;
+
+  &.user {
+    margin-bottom: 60%;
+  }
 }
 
 @media (orientation: landscape) {

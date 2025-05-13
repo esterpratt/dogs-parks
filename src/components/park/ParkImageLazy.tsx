@@ -28,10 +28,7 @@ const ParkImageLazy = ({
 
   const { data: primaryImage } = useQuery({
     queryKey: ['parkImage', parkId],
-    queryFn: async () => {
-      const image = await fetchParkPrimaryImage(parkId!);
-      return image ? image : null;
-    },
+    queryFn: async () => fetchParkPrimaryImage(parkId!),
     enabled: inView || !lazy,
   });
 

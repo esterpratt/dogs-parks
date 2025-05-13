@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 import { useQuery } from '@tanstack/react-query';
 import { Location, Park } from '../../types/park';
-import { fetchParkPrimaryImage } from '../../services/parks';
+import { fetchPark, fetchParkPrimaryImage } from '../../services/parks';
 import { FavoriteRibbon } from '../FavoriteRibbon';
 import { fetchFavoriteParks } from '../../services/favorites';
 import { Button } from '../Button';
@@ -39,10 +39,7 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
 }) => {
   const { data: image } = useQuery({
     queryKey: ['parkImage', activePark?.id],
-    queryFn: async () => {
-      const image = await fetchParkPrimaryImage(activePark!.id);
-      return image ? image : null;
-    },
+    queryFn: async () => fetchParkPrimaryImage(activePark!.id),
     enabled: !!activePark,
   });
 
@@ -55,6 +52,13 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
 
   const [isClosing, setIsClosing] = useState(false);
   const orientation = useOrientationContext((state) => state.orientation);
+
+  // prefetch park
+  useQuery({
+    queryKey: ['park', activePark?.id],
+    queryFn: () => fetchPark(activePark!.id),
+    enabled: !!activePark?.id,
+  });
 
   const isFavorite =
     activePark && favoriteParkIds && favoriteParkIds.includes(activePark?.id);

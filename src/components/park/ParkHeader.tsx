@@ -44,10 +44,7 @@ const ParkHeader = (props: ParkHeaderProps) => {
 
   const { data: primaryImage, isLoading } = useQuery({
     queryKey: ['parkImage', park.id],
-    queryFn: async () => {
-      const image = await fetchParkPrimaryImage(park.id);
-      return image ? image : null;
-    },
+    queryFn: async () => fetchParkPrimaryImage(park.id),
   });
 
   const { mutate } = useMutation({

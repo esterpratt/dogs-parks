@@ -55,10 +55,7 @@ const UserDog = () => {
 
   const { data: primaryImage, isLoading: isLoadingImage } = useQuery({
     queryKey: ['dogImage', dogId],
-    queryFn: async () => {
-      const image = await fetchDogPrimaryImage(dogId!);
-      return image || null;
-    },
+    queryFn: async () => fetchDogPrimaryImage(dogId!),
   });
 
   const { showLoader } = useDelayedLoading({
@@ -111,7 +108,7 @@ const UserDog = () => {
   };
 
   if (showLoader) {
-    return <Loader />;
+    return <Loader style={{ height: '100dvh' }} />;
   }
 
   if (!dog) {

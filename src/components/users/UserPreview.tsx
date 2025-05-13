@@ -31,11 +31,9 @@ const UserPreview: React.FC<UserPreviewProps> = ({
   const { notify } = useNotification();
 
   const { data: dogImage } = useQuery({
-    queryKey: ['dogImage', user.dogs[0].id],
-    queryFn: async () => {
-      const image = await fetchDogPrimaryImage(user.dogs[0].id);
-      return image || null;
-    },
+    queryKey: ['dogImage', user.dogs[0]?.id ?? null],
+    queryFn: async () => fetchDogPrimaryImage(user.dogs[0].id),
+    enabled: user.dogs.length > 0,
   });
 
   const {
@@ -53,7 +51,7 @@ const UserPreview: React.FC<UserPreviewProps> = ({
     },
   });
 
-  const dogNames = getDogNames(user.dogs);
+  const dogNames = user.dogs.length ? getDogNames(user.dogs) : null;
 
   return (
     <>
@@ -71,11 +69,19 @@ const UserPreview: React.FC<UserPreviewProps> = ({
         }
         detailsCmp={
           <div className={styles.detailsContainer}>
-            <span className={styles.dogNames}>{dogNames}</span>
-            <span className={styles.userNameContainer}>
-              <span className={styles.userName}>{user.name}'s</span>
-              <span> dog{user.dogs.length > 1 ? 's' : ''}</span>
-            </span>
+            {dogNames ? (
+              <>
+                <span className={styles.dogNames}>{dogNames}</span>
+                <span className={styles.userNameContainer}>
+                  <span className={styles.userName}>{user.name}'s</span>
+                  <span> dog{user.dogs.length > 1 ? 's' : ''}</span>
+                </span>
+              </>
+            ) : (
+              <span className={styles.userNameContainer}>
+                <span className={styles.userName}>{user.name}</span>
+              </span>
+            )}
           </div>
         }
         buttons={

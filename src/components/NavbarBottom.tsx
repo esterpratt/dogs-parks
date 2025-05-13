@@ -15,8 +15,8 @@ import {
 import classnames from 'classnames';
 import { UserContext } from '../context/UserContext';
 import { useClickOutside } from '../hooks/useClickOutside';
-import styles from './NavbarBottom.module.scss';
 import { NavbarLogoutButton } from './NavbarLogoutButton';
+import styles from './NavbarBottom.module.scss';
 
 const NavbarBottom = () => {
   const { userId } = useContext(UserContext);
@@ -35,7 +35,7 @@ const NavbarBottom = () => {
 
   return (
     <>
-      <nav className={styles.navbar}>
+      <nav className={styles.navbar} style={{ height: '64px' }}>
         <div className={styles.iconsContainer}>
           <>
             <NavLink

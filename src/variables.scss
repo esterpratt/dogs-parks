@@ -44,10 +44,8 @@ $second-title-font-size: 18px;
 $navbar-height: 64px;
 $tabs-height: 48px;
 $content-max-height: calc(
-  100dvh - var(--safe-area-inset-top) - var(--safe-area-inset-bottom, 0px) -
+  100dvh - var(--safe-area-inset-top, 0px) - var(--safe-area-inset-bottom, 0px) -
     $navbar-height
 );
-$app-max-height: calc(
-  100dvh - var(--safe-area-inset-bottom, 0px) - $navbar-height
-);
+$app-max-height: 100%;
 $page-top-padding: var(--safe-area-inset-top, 0px);

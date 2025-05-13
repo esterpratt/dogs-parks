@@ -102,9 +102,11 @@ const UserDogs = () => {
           </div>
         )}
         {!dogs?.length && !isSignedInUser && (
-          <div>
-            <span className={styles.name}>{user.name}'s </span>
-            <span>pack seems to be empty</span>
+          <div className={styles.noDogsTitleContainer}>
+            <div>
+              <span className={styles.name}>{user.name}'s </span>
+              <span>pack seems to be empty</span>
+            </div>
           </div>
         )}
         <div className={styles.dogs}>

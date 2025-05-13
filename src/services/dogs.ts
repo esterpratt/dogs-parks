@@ -181,7 +181,7 @@ const fetchDogPrimaryImage = async (dogId: string) => {
     const userId = await getDogOwnerId(dogId);
 
     const res = await fetchImagesByDirectory({bucket: 'users', path: `${userId}/dogs/${dogId}/primary/`});
-    return res?.[0];
+    return res?.[0] ?? null;
   } catch (error) {
     console.error(
       `there was a problem fetching primary image for dog ${dogId}: ${JSON.stringify(error)}`

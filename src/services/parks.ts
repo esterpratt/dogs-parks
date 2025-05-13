@@ -84,7 +84,7 @@ const uploadParkPrimaryImage = async (image: File | string, parkId: string) => {
 const fetchParkPrimaryImage = async (parkId: string) => {
   try {
       const res = await fetchImagesByDirectory({bucket: 'parks', path: `${parkId}/primary/`});
-      return res?.[0];
+      return res?.[0] ?? null;
     } catch (error) {
       console.error(
         `there was a problem fetching primary image for park ${parkId}: ${JSON.stringify(error)}`

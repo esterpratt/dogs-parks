@@ -2,29 +2,41 @@ import { Suspense, useContext } from 'react';
 import { Await, Link, Navigate, Outlet, useLoaderData } from 'react-router-dom';
 import { DogIcon, MoveLeft, MoveRight } from 'lucide-react';
 import classnames from 'classnames';
+import { useQuery } from '@tanstack/react-query';
 import { UserContext } from '../context/UserContext';
 import { ProfileTabs } from '../components/profile/ProfileTabs';
 import { Loader } from '../components/Loader';
-import { Friendship, FRIENDSHIP_STATUS, USER_ROLE } from '../types/friendship';
+import { FRIENDSHIP_STATUS, USER_ROLE } from '../types/friendship';
 import { getDogNames } from '../utils/getDogNames';
 import { FriendRequestButton } from '../components/profile/FriendRequestButton';
 import { Header } from '../components/Header';
 import { HeaderImage } from '../components/HeaderImage';
-import styles from './Profile.module.scss';
-import { useQuery } from '@tanstack/react-query';
 import { fetchUserFavorites } from '../services/favorites';
 import { FRIENDS_KEY } from '../hooks/api/keys';
 import { fetchFriendsWithDogs } from '../services/users';
 import { usePrefetchRoutesOnIdle } from '../hooks/usePrefetchRoutesOnIdle';
+import { useIsAllowedToViewProfile } from '../hooks/useIsAllowedToViewProfile';
+import styles from './Profile.module.scss';
 
 const Profile: React.FC = () => {
-  const { user, dogs, dogImages, pendingFriendships, approvedFriendships } =
-    useLoaderData();
+  const { user, dogs, dogImages } = useLoaderData();
   const { user: signedInUser, isLoadingUser } = useContext(UserContext);
   const isSignedInUser = signedInUser?.id === user.id;
 
+  const { isAllowedToViewProfile } = useIsAllowedToViewProfile({
+    user,
+    signedInUserId: signedInUser?.id,
+    isSignedInUser,
+  });
+
   // prefetch friends and favorites requests
-  usePrefetchRoutesOnIdle(['dog']);
+  usePrefetchRoutesOnIdle([
+    'dog',
+    'userFriends',
+    'userFavorites',
+    'userReviews',
+    'userInfo',
+  ]);
 
   useQuery({
     queryKey: ['favorites', user.id],
@@ -63,30 +75,8 @@ const Profile: React.FC = () => {
     return null;
   }
 
-  if (!isSignedInUser && user.private) {
-    const pendingFriendsIds = pendingFriendships.map(
-      (friendship: Friendship) => {
-        if (user.id === friendship.requestee_id) {
-          return friendship.requester_id;
-        }
-        return friendship.requestee_id;
-      }
-    );
-
-    const approvedFriendsIds = approvedFriendships.map(
-      (friendship: Friendship) => {
-        if (user.id === friendship.requestee_id) {
-          return friendship.requester_id;
-        }
-        return friendship.requestee_id;
-      }
-    );
-
-    if (
-      !pendingFriendsIds.concat(approvedFriendsIds).includes(signedInUser?.id)
-    ) {
-      return <Navigate to="/" />;
-    }
+  if (!isAllowedToViewProfile) {
+    return <Navigate to="/" />;
   }
 
   return (
@@ -154,9 +144,9 @@ const Profile: React.FC = () => {
           ) : !!signedInUser && !isSignedInUser ? (
             <div className={styles.title}>
               <div className={styles.text}>
-                <span>Meet </span>
+                {!!dogs?.length && <span>Meet </span>}
                 <span className={styles.userName}>{user.name}</span>
-                <span>'s pack: {getDogNames(dogs)}</span>
+                {!!dogs?.length && <span>'s pack: {getDogNames(dogs)}</span>}
               </div>
               <FriendRequestButton
                 className={styles.friendRequestContainer}
@@ -168,7 +158,16 @@ const Profile: React.FC = () => {
         }
       />
       {isSignedInUser && <ProfileTabs />}
-      <Suspense fallback={<Loader inside className={styles.loader} />}>
+      <Suspense
+        fallback={
+          <Loader
+            inside
+            className={classnames(styles.loader, {
+              [styles.user]: isSignedInUser,
+            })}
+          />
+        }
+      >
         <Await resolve={dogImages}>
           {(dogImages) => (
             <div

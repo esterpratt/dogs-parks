@@ -5,11 +5,15 @@ import { usePreventFocusOnScroll } from './hooks/usePreventFocusOnScroll';
 import useKeyboardFix from './hooks/useKeyboardFix';
 import classnames from 'classnames';
 import { useSafeArea } from './hooks/useSafeArea';
+import { usePrefetchRoutesOnIdle } from './hooks/usePrefetchRoutesOnIdle';
 
 const RootLayout = () => {
   usePreventFocusOnScroll();
   const keyboardHeight = useKeyboardFix();
   useSafeArea();
+
+  // prefetch profile and park pages
+  usePrefetchRoutesOnIdle(['profile', 'park']);
 
   return (
     <>
