@@ -57,7 +57,7 @@ const BusyHoursChart = (props: BusyHoursChartProps) => {
             })}
             onClick={() => setActiveTab(WEEKEND)}
           >
-            Weekends
+            Weekend
           </button>
         </div>
       )}
