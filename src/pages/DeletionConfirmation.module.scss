@@ -3,7 +3,7 @@
 .content {
   height: $content-max-height;
   margin-top: $page-top-padding;
-  padding: 8px calc(16px + var(--safe-area-inset-right, 0px)) 24px
+  padding: 48px calc(16px + var(--safe-area-inset-right, 0px)) 24px
     calc(16px + var(--safe-area-inset-left, 0px));
   color: $text;
   font-size: 18px;

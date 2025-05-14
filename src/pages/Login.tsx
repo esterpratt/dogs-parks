@@ -3,8 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import classnames from 'classnames';
 import GoogleIcon from '../assets/google.svg?react';
 import { Button } from '../components/Button';
-import { UserContext } from '../context/UserContext';
-import { SigninProps } from '../context/UserContext';
+import { UserContext, SigninProps } from '../context/UserContext';
 import { useMutation } from '@tanstack/react-query';
 import { sendResetEmail } from '../services/authentication';
 import { Input } from '../components/inputs/Input';
@@ -12,8 +11,15 @@ import styles from './Login.module.scss';
 import { useNotification } from '../context/NotificationContext';
 
 const Login = () => {
-  const { user, userSignin, userLogin, error, setError, isLoading } =
-    useContext(UserContext);
+  const {
+    user,
+    userSigninWithEmailAndPassowrd,
+    userSigninWithGoogle,
+    userLogin,
+    error,
+    setError,
+    isLoading,
+  } = useContext(UserContext);
   const [searchParams, setSearchParams] = useSearchParams({ mode: 'signup' });
   const isSignup = searchParams.get('mode') === 'signup';
   const mailRef = useRef<HTMLInputElement | null>(null);
@@ -46,7 +52,7 @@ const Login = () => {
 
   const googleSignin = async () => {
     if (isSignup) {
-      userSignin({ withGoogle: true });
+      userSigninWithGoogle();
     } else {
       userLogin({ withGoogle: true });
     }
@@ -61,7 +67,7 @@ const Login = () => {
       if (!formData.email || !formData.password || !formData.name) {
         setError('Please fill in the missing details');
       } else {
-        userSignin(formData);
+        userSigninWithEmailAndPassowrd(formData);
       }
     } else {
       if (!formData.email || !formData.password) {

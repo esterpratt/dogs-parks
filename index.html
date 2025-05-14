@@ -105,182 +105,186 @@
     </style>
   </head>
   <body>
-    <div id="preload">
-      <div id="joke" class="joke-container">
-        <div id="question" class="question"></div>
-        <div id="answer" class="answer"></div>
-      </div>
+    <div id="root">
+      <div id="preload">
+        <div id="joke" class="joke-container">
+          <div id="question" class="question"></div>
+          <div id="answer" class="answer"></div>
+        </div>
 
-      <div id="paw" class="paw-container">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          width="80"
-          height="80"
-        >
-          <style>
-            @keyframes fillCycle1 {
-              0%,
-              33.3%,
-              66.7%,
-              100% {
+        <div id="paw" class="paw-container">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="80"
+            height="80"
+          >
+            <style>
+              @keyframes fillCycle1 {
+                0%,
+                33.3%,
+                66.7%,
+                100% {
+                  fill: white;
+                }
+                0.1%,
+                33.2% {
+                  fill: #ec4899;
+                }
+              }
+              @keyframes fillCycle2 {
+                0%,
+                33.3%,
+                66.7%,
+                100% {
+                  fill: white;
+                }
+                33.4%,
+                66.6% {
+                  fill: #9ac457;
+                }
+              }
+              @keyframes fillCycle3 {
+                0%,
+                33.3%,
+                66.7%,
+                100% {
+                  fill: white;
+                }
+                66.8%,
+                99.9% {
+                  fill: #ecac52;
+                }
+              }
+
+              .rotate {
+                transform: rotate(-45deg);
+                transform-origin: center;
+              }
+
+              #left-paw {
+                animation: fillCycle1 1.5s infinite steps(1);
+                stroke: #0da2e7;
+              }
+              #middle-paw {
+                animation: fillCycle2 1.5s infinite steps(1);
+                stroke: #0da2e7;
+              }
+              #right-paw {
+                animation: fillCycle3 1.5s infinite steps(1);
+                stroke: #0da2e7;
+              }
+              #main-paw {
                 fill: white;
+                stroke: #0da2e7;
               }
-              0.1%,
-              33.2% {
-                fill: #ec4899;
-              }
-            }
-            @keyframes fillCycle2 {
-              0%,
-              33.3%,
-              66.7%,
-              100% {
-                fill: white;
-              }
-              33.4%,
-              66.6% {
-                fill: #9ac457;
-              }
-            }
-            @keyframes fillCycle3 {
-              0%,
-              33.3%,
-              66.7%,
-              100% {
-                fill: white;
-              }
-              66.8%,
-              99.9% {
-                fill: #ecac52;
-              }
-            }
+            </style>
 
-            .rotate {
-              transform: rotate(-45deg);
-              transform-origin: center;
-            }
+            <g class="rotate">
+              <circle
+                id="left-paw"
+                cx="11"
+                cy="4"
+                r="2"
+                stroke-width="1"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <circle
+                id="middle-paw"
+                cx="18"
+                cy="8"
+                r="2"
+                stroke-width="1"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <circle
+                id="right-paw"
+                cx="20"
+                cy="16"
+                r="2"
+                stroke-width="1"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                id="main-paw"
+                d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"
+                stroke-width="1"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </g>
+          </svg>
+        </div>
 
-            #left-paw {
-              animation: fillCycle1 1.5s infinite steps(1);
-              stroke: #0da2e7;
-            }
-            #middle-paw {
-              animation: fillCycle2 1.5s infinite steps(1);
-              stroke: #0da2e7;
-            }
-            #right-paw {
-              animation: fillCycle3 1.5s infinite steps(1);
-              stroke: #0da2e7;
-            }
-            #main-paw {
-              fill: white;
-              stroke: #0da2e7;
-            }
-          </style>
+        <script>
+          const jokes = [
+            {
+              q: 'Welcome to Klavhub!',
+              a: 'we are preparing your experience.',
+            },
+            {
+              q: 'In the meantime...',
+              a: 'Do you want to hear a joke?',
+            },
+            {
+              q: 'Why did the dog sit in the shade?',
+              a: 'Because he didn’t want to be a hot dog.',
+            },
+            {
+              q: 'Why did the dog bring toilet paper to the party?',
+              a: 'Because he was a party pooper.',
+            },
+            { q: 'What type of markets do dogs avoid?', a: 'Flea markets.' },
+            { q: 'What’s a dog’s favorite instrument?', a: 'The trom-bone.' },
+            {
+              q: 'What do you call a dog magician?',
+              a: 'A labra-cadabra-dor!',
+            },
+          ];
 
-          <g class="rotate">
-            <circle
-              id="left-paw"
-              cx="11"
-              cy="4"
-              r="2"
-              stroke-width="1"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-            <circle
-              id="middle-paw"
-              cx="18"
-              cy="8"
-              r="2"
-              stroke-width="1"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-            <circle
-              id="right-paw"
-              cx="20"
-              cy="16"
-              r="2"
-              stroke-width="1"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-            <path
-              id="main-paw"
-              d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"
-              stroke-width="1"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </g>
-        </svg>
-      </div>
+          const jokeEl = document.getElementById('joke');
+          const questionEl = document.getElementById('question');
+          const answerEl = document.getElementById('answer');
 
-      <script>
-        const jokes = [
-          {
-            q: 'Welcome to Klavhub!',
-            a: 'We are preparing your hub...',
-          },
-          {
-            q: 'In the meantime...',
-            a: 'Do you want to hear a joke?',
-          },
-          {
-            q: 'Why did the dog sit in the shade?',
-            a: 'Because he didn’t want to be a hot dog.',
-          },
-          {
-            q: 'Why did the dog bring toilet paper to the party?',
-            a: 'Because he was a party pooper.',
-          },
-          { q: 'What type of markets do dogs avoid?', a: 'Flea markets.' },
-          { q: 'What’s a dog’s favorite instrument?', a: 'The trom-bone.' },
-          { q: 'What do you call a dog magician?', a: 'A labra-cadabra-dor!' },
-        ];
+          let index = 0;
 
-        const jokeEl = document.getElementById('joke');
-        const questionEl = document.getElementById('question');
-        const answerEl = document.getElementById('answer');
+          const showJoke = (joke) => {
+            jokeEl.classList.remove('fade-out', 'visible');
+            questionEl.classList.remove('visible');
+            answerEl.classList.remove('visible');
+            questionEl.textContent = '';
+            answerEl.textContent = '';
 
-        let index = 0;
-
-        const showJoke = (joke) => {
-          jokeEl.classList.remove('fade-out', 'visible');
-          questionEl.classList.remove('visible');
-          answerEl.classList.remove('visible');
-          questionEl.textContent = '';
-          answerEl.textContent = '';
-
-          questionEl.textContent = joke.q;
-          answerEl.textContent = joke.a;
-
-          setTimeout(() => {
-            jokeEl.classList.add('visible');
-            questionEl.classList.add('visible');
+            questionEl.textContent = joke.q;
+            answerEl.textContent = joke.a;
 
             setTimeout(() => {
-              answerEl.classList.add('visible');
+              jokeEl.classList.add('visible');
+              questionEl.classList.add('visible');
 
               setTimeout(() => {
-                jokeEl.classList.remove('visible');
-                jokeEl.classList.add('fade-out');
+                answerEl.classList.add('visible');
 
                 setTimeout(() => {
-                  index = (index + 1) % jokes.length;
-                  showJoke(jokes[index]);
-                }, 1000);
-              }, 3000);
-            }, 2000);
-          }, 1700);
-        };
+                  jokeEl.classList.remove('visible');
+                  jokeEl.classList.add('fade-out');
 
-        showJoke(jokes[index]);
-      </script>
+                  setTimeout(() => {
+                    index = (index + 1) % jokes.length;
+                    showJoke(jokes[index]);
+                  }, 1000);
+                }, 3000);
+              }, 2000);
+            }, 1700);
+          };
+
+          showJoke(jokes[index]);
+        </script>
+      </div>
     </div>
-    <div id="root"></div>
     <div id="modal"></div>
     <script
       src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"

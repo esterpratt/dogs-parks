@@ -1,4 +1,4 @@
-import { throwError } from './error';
+import { AppError, throwError } from './error';
 import { supabase } from './supabase-client';
 
 interface LoginProps {
@@ -35,10 +35,14 @@ const signin = async ({ email, password, name }: SigninProps) => {
       password,
       options: {
         data: { full_name: name },
+        emailRedirectTo: import.meta.env.DEV ? 'http://localhost:5173/auth-callback' : 'https://klavhub.com/auth-callback',
       },
     });
     if (error) {
       throw error;
+    }
+    if (!data.user?.identities?.length) {
+      throw new AppError('You already signed up with this email', 400);
     }
     return data;
   } catch (error) {

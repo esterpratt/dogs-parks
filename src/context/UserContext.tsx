@@ -18,10 +18,10 @@ import { User } from '../types/user';
 import { useOnAuthStateChanged } from '../hooks/useOnAuthStateChanged';
 import { queryClient } from '../services/react-query';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { useNotification } from './NotificationContext';
 
 type SigninProps = Partial<LoginWithEmailAndPasswordProps> & {
   name?: string;
-  withGoogle?: boolean;
 };
 
 type LoginProps = Partial<LoginWithEmailAndPasswordProps> & {
@@ -35,7 +35,8 @@ interface UserContextObj {
   isLoadingUser: boolean;
   userLogin: (props: LoginProps) => void;
   userLogout: () => void;
-  userSignin: (props: SigninProps) => void;
+  userSigninWithEmailAndPassowrd: (props: SigninProps) => void;
+  userSigninWithGoogle: () => void;
   userDeletion: () => void;
   error: string;
   setError: Dispatch<React.SetStateAction<string>>;
@@ -50,7 +51,8 @@ const initialData: UserContextObj = {
   isLoadingUser: false,
   userLogin: () => Promise.resolve(),
   userLogout: () => {},
-  userSignin: () => Promise.resolve(),
+  userSigninWithEmailAndPassowrd: () => Promise.resolve(),
+  userSigninWithGoogle: () => Promise.resolve(),
   userDeletion: () => {},
   setError: () => {},
   error: '',
@@ -62,6 +64,7 @@ const UserContext = createContext<UserContextObj>(initialData);
 
 const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { session, isLoadingAuthUser } = useOnAuthStateChanged();
+  const { notify } = useNotification();
   const [error, setError] = useState('');
 
   const {
@@ -92,28 +95,19 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
       onError: (error) => {
         setError(error.message);
       },
+      onSuccess: () => {
+        notify('Check your mail for details');
+        setError('');
+      },
     });
 
-  const { mutate: userSinginWithGoogle, isPending: isSigninInWithGoogle } =
+  const { mutate: userSigninWithGoogle, isPending: isSigninInWithGoogle } =
     useMutation({
       mutationFn: () => signinWithGoogle(),
       onError: (error) => {
         setError(error.message);
       },
     });
-
-  const userSignin = ({ withGoogle, email, password, name }: SigninProps) => {
-    setError('');
-    if (withGoogle) {
-      userSinginWithGoogle();
-    } else {
-      userSigninWithEmailAndPassowrd({
-        email: email!,
-        password: password!,
-        name: name!,
-      });
-    }
-  };
 
   const { mutate: userLoginWithEmailAndPassword, isPending: isLogingIn } =
     useMutation({
@@ -128,7 +122,7 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const userLogin = ({ withGoogle, email, password }: LoginProps) => {
     setError('');
     if (withGoogle) {
-      userSinginWithGoogle();
+      userSigninWithGoogle();
     } else {
       userLoginWithEmailAndPassword({
         email: email!,
@@ -173,7 +167,8 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     isLoadingAuthUser,
     userLogin,
     userLogout,
-    userSignin,
+    userSigninWithEmailAndPassowrd,
+    userSigninWithGoogle,
     userDeletion,
     error,
     setError,
