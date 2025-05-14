@@ -3,34 +3,14 @@ import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Info, Plus } from 'lucide-react';
 import classnames from 'classnames';
-import { getHoursChartData, getStrHour } from '../charts/getHoursChartData';
 import { fetchDogsCount } from '../../services/dogs-count-orchestrator';
-import { getMean, getSTD } from '../../utils/calcs';
-import { BarChart } from '../charts/BarChart';
-import barChartStyles from '../charts/BarChart.module.scss';
 import { DogsCountModal } from './DogsCountModal';
 import { Button } from '../Button';
 import { UserContext } from '../../context/UserContext';
 import { Section } from '../section/Section';
+import { BusyHoursChart } from '../charts/BusyHoursChart';
 import styles from './BusyHours.module.scss';
-
-const BUSINESS = {
-  LIGHT: {
-    str: 'Quite',
-    className: 'light',
-    color: barChartStyles.green,
-  },
-  MEDIUM: {
-    str: 'Not so busy',
-    className: 'medium',
-    color: barChartStyles.orange,
-  },
-  BUSY: {
-    str: 'Busy',
-    className: 'busy',
-    color: barChartStyles.red,
-  },
-};
+import { getBusyHoursData } from './getBusyHoursData';
 
 interface BusyHoursProps {
   parkId: string;
@@ -46,25 +26,14 @@ const BusyHours: React.FC<BusyHoursProps> = (props: BusyHoursProps) => {
     queryFn: () => fetchDogsCount(parkId),
   });
 
-  let currentStrHour;
-  let hoursChartData;
-  let business = BUSINESS.LIGHT;
-
-  if (dogsCount) {
-    const currentHour = new Date().getHours();
-    currentStrHour = getStrHour(currentHour);
-    hoursChartData = getHoursChartData(dogsCount);
-    const counts = hoursChartData.map((item) => item.count);
-    const mean = getMean(counts);
-    const std = getSTD(counts, mean);
-    const currentCount = hoursChartData[currentHour].count;
-
-    if (currentCount > 3 && currentCount > mean + std * 0.5) {
-      business = BUSINESS.BUSY;
-    } else if (currentCount > 2 && currentCount > mean - std * 0.5) {
-      business = BUSINESS.MEDIUM;
-    }
-  }
+  const {
+    currentStrHour,
+    fullData,
+    business,
+    weekdaysHoursChartData,
+    weekendHoursChartData,
+    isWeekend,
+  } = dogsCount?.length ? getBusyHoursData(dogsCount) : {};
 
   return (
     <>
@@ -103,8 +72,8 @@ const BusyHours: React.FC<BusyHoursProps> = (props: BusyHoursProps) => {
                     {dogsCount?.length ? (
                       <>
                         <span>Currently:</span>
-                        <span className={styles[business.className]}>
-                          {business.str}
+                        <span className={styles[business!.className]}>
+                          {business!.str}
                         </span>
                       </>
                     ) : (
@@ -123,14 +92,14 @@ const BusyHours: React.FC<BusyHoursProps> = (props: BusyHoursProps) => {
               )}
             </div>
             {!!dogsCount?.length && (
-              <div className={styles.chartContainer}>
-                <BarChart
-                  data={hoursChartData}
-                  xDataKey="hour"
-                  yDataKey="count"
-                  currentHour={{ hour: currentStrHour!, color: business.color }}
-                />
-              </div>
+              <BusyHoursChart
+                fullData={fullData}
+                weekendData={weekendHoursChartData}
+                weekdaysData={weekdaysHoursChartData}
+                currHour={currentStrHour!}
+                isWeekend={isWeekend!}
+                business={business!}
+              />
             )}
           </div>
         }

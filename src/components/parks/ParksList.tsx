@@ -63,7 +63,7 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
   );
 
   if (showLoader || !sortedParks) {
-    return <Loader />;
+    return <Loader style={{ height: '100dvh' }} />;
   }
 
   return (

@@ -1,6 +1,7 @@
 type GetHoursChartDataProps = {
   hour: number;
   count: number;
+  weekday: string;
   fullDate: string;
 }[];
 

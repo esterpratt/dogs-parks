@@ -14,16 +14,19 @@ const processReportsToDogsCount = (reports: DogsCountReport[]) => {
       day: "2-digit",
       hour: "2-digit",
       hour12: false,
+      weekday: 'short'
     }).formatToParts(date);
 
     const year = parts.find(p => p.type === "year")!.value;
     const month = parts.find(p => p.type === "month")!.value;
     const day = parts.find(p => p.type === "day")!.value;
     const hour = Number(parts.find(p => p.type === "hour")!.value);
+    const weekday = parts.find(p => p.type === "weekday")!.value;
 
     return {
       count: report.count,
       hour,
+      weekday,
       fullDate: `${day}, ${month}, ${year}`,
     };
   });
@@ -45,6 +48,7 @@ const processCheckinsToDogsCount = (checkins: Checkin[]) => {
       day: "2-digit",
       hour: "2-digit",
       hour12: false,
+      weekday: 'short'
     }).formatToParts(checkin);
 
     const year = startParts.find(p => p.type === "year")!.value;
@@ -56,10 +60,11 @@ const processCheckinsToDogsCount = (checkins: Checkin[]) => {
       hour: "2-digit",
       hour12: false,
     }).format(checkout));
+    const weekday = startParts.find(p => p.type === "weekday")!.value;
 
     for (let hour = startHour; hour <= endHour; hour++) {
       const fullDate = `${day}, ${month}, ${year}`;
-      const key = `${hour}_${fullDate}`;
+      const key = `${hour}_${fullDate}_${weekday}`;
 
       if (!dogsPerHour[key]) {
         dogsPerHour[key] = 1;
@@ -70,8 +75,8 @@ const processCheckinsToDogsCount = (checkins: Checkin[]) => {
   });
 
   return Object.entries(dogsPerHour).map(([key, count]) => {
-    const [hour, fullDate] = key.split('_');
-    return { count, hour: Number(hour), fullDate };
+    const [hour, fullDate, weekday] = key.split('_');
+    return { count, hour: Number(hour), fullDate, weekday };
   });
 };
 
