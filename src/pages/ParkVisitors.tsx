@@ -17,14 +17,14 @@ const ParkVisitors: React.FC = () => {
 
   const { visitorsIds, friendsInParkIds } = useGetParkVisitors(parkId!, userId);
 
-  const { data: friendsInParkWithDogs, isPending } = useQuery({
+  const { data: friendsInParkWithDogs, isLoading } = useQuery({
     queryKey: ['parkVisitorsWithDogs', parkId],
     queryFn: () => fetchUsersWithDogsByIds(friendsInParkIds),
     enabled: !!friendsInParkIds.length,
     staleTime: 6000,
   });
 
-  const { showLoader } = useDelayedLoading({ isLoading: isPending });
+  const { showLoader } = useDelayedLoading({ isLoading });
 
   const friendsCount = friendsInParkIds.length;
   const othersCount = visitorsIds.length - friendsCount;
@@ -43,7 +43,7 @@ const ParkVisitors: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      {!!friendsCount && !isPending && (
+      {!!friendsCount && !isLoading && (
         <div className={styles.friendsContainer}>
           <span className={styles.friendsTitle}>
             Friends at the park right now
@@ -57,7 +57,7 @@ const ParkVisitors: React.FC = () => {
           ))}
         </div>
       )}
-      {!!othersCount && !isPending && (
+      {!!othersCount && !isLoading && (
         <div className={styles.othersContainer}>
           <div className={styles.othersTitle}>
             {userIsOnlyVisitor ? (

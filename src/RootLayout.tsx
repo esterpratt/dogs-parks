@@ -12,8 +12,8 @@ const RootLayout = () => {
   const keyboardHeight = useKeyboardFix();
   useSafeArea();
 
-  // prefetch profile and park pages
-  usePrefetchRoutesOnIdle(['profile', 'park']);
+  // prefetch pages
+  usePrefetchRoutesOnIdle(['profile', 'park', 'parks', 'users']);
 
   return (
     <>

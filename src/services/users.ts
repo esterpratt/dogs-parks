@@ -2,7 +2,7 @@ import { User } from '../types/user';
 import { fetchUserFriendships } from './friendships';
 import { FRIENDSHIP_STATUS, USER_ROLE } from '../types/friendship';
 import { throwError } from './error';
-import { fetchDogs, fetchUsersDogs } from './dogs';
+import { fetchUsersDogs } from './dogs';
 import { Dog } from '../types/dog';
 import { supabase } from './supabase-client';
 
@@ -79,9 +79,9 @@ const fetchUsers = async (ids?: string[]) => {
   }
 };
 
-const fetchUsersWithDogsByIds = async (ids?: string[]) => {
+const fetchUsersWithDogsByIds = async (ids: string[]) => {
   try {
-    const dogsPromise = ids?.length ? fetchUsersDogs(ids) : fetchDogs();
+    const dogsPromise = fetchUsersDogs(ids);
     const promises: [Promise<User[] | undefined>, Promise<Dog[] | undefined>] =
       [fetchUsers(ids), dogsPromise];
 

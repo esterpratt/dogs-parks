@@ -140,26 +140,6 @@ const EditDogModal: React.FC<EditDogModalProps> = ({
 
   useScrollToInputOnOpen(isOpen, inputRef, formRef);
 
-  // useEffect(() => {
-  //   if (!isOpen) return;
-
-  //   requestAnimationFrame(() => {
-  //     const shouldScroll = sessionStorage.getItem('scroll-to-input') === 'true';
-  //     if (shouldScroll) {
-  //       inputRef.current?.scrollIntoView({
-  //         behavior: 'smooth',
-  //         block: 'start',
-  //       });
-  //       sessionStorage.removeItem('scroll-to-input');
-  //     } else {
-  //       formRef.current?.scrollIntoView({
-  //         behavior: 'smooth',
-  //         block: 'start',
-  //       });
-  //     }
-  //   });
-  // }, [isOpen]);
-
   const isSaveButtonDisabled =
     !dogData?.name || !dogData.birthday || !dogData.gender || !dogData.breed;
 

@@ -28,6 +28,7 @@ import { isMobile } from '../../utils/platform';
 import { Share } from '@capacitor/share';
 import { Park } from '../../types/park';
 import styles from './ParkHeader.module.scss';
+import { LOADING } from '../../utils/consts';
 
 interface ParkHeaderProps {
   park: Park;
@@ -49,6 +50,16 @@ const ParkHeader = (props: ParkHeaderProps) => {
 
   const { mutate } = useMutation({
     mutationFn: (img: string | File) => uploadParkPrimaryImage(img, park.id),
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: ['dogImage', park.id] });
+      const prevImage = queryClient.getQueryData(['parkImage', park.id]);
+      queryClient.setQueryData(['parkImage', park.id], LOADING);
+
+      return { prevImage };
+    },
+    onError: (_error, _data, context) => {
+      queryClient.setQueryData(['parkImage', park.id], context?.prevImage);
+    },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['parkImage', park.id] });
     },

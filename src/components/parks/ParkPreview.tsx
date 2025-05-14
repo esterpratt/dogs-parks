@@ -22,13 +22,15 @@ const ParkPreview: React.FC<ParkPreviewProps> = ({ park, className }) => {
     <Card
       url={`/parks/${park.id}`}
       imgCmp={
-        <ParkImageLazy
-          parkId={park.id}
-          alt={park.name}
-          noImgClassName={styles.noImg}
-          iconSize={48}
-          lazy
-        />
+        <div className={styles.img}>
+          <ParkImageLazy
+            parkId={park.id}
+            alt={park.name}
+            noImgClassName={styles.noImg}
+            iconSize={48}
+            lazy
+          />
+        </div>
       }
       detailsCmp={
         <div className={styles.detailsContainer}>

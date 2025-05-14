@@ -7,6 +7,7 @@ import { Button } from './Button';
 import { EnlargeImageModal } from './EnlargeImageModal';
 import { TopModal } from './modals/TopModal';
 import styles from './Carousel.module.scss';
+import { Image } from './Image';
 
 interface CarouselProps {
   images: string[];
@@ -50,7 +51,7 @@ const Carousel: React.FC<CarouselProps> = ({
       <div className="slider-container">
         <Slider {...settings} className={styles.container}>
           {images.map((img) => (
-            <img
+            <Image
               className={styles.image}
               src={img}
               key={img}

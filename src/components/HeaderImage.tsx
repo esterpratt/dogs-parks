@@ -1,8 +1,8 @@
 import { CSSProperties } from 'react';
 import { Camera, LucideIcon } from 'lucide-react';
 import classnames from 'classnames';
-import { Loader } from './Loader';
 import { Button } from './Button';
+import { Image } from './Image';
 import styles from './HeaderImage.module.scss';
 
 interface HeaderImageProps {
@@ -22,7 +22,6 @@ const HeaderImage = (props: HeaderImageProps) => {
   const {
     size = 152,
     imgSrc,
-    showLoader = false,
     onClickImg,
     NoImgIcon,
     onClickEditPhoto,
@@ -37,14 +36,8 @@ const HeaderImage = (props: HeaderImageProps) => {
       className={classnames(styles.imgContainer, className)}
       style={{ '--img-size': `${size}px`, ...style }}
     >
-      {showLoader ? (
-        <div className={styles.img}>
-          <div className={styles.noImg}>
-            <Loader inside />
-          </div>
-        </div>
-      ) : imgSrc ? (
-        <img
+      {imgSrc ? (
+        <Image
           onClick={onClickImg && (() => onClickImg(imgSrc))}
           src={imgSrc}
           className={styles.img}

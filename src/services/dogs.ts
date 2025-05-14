@@ -80,31 +80,18 @@ const deleteDog = async (id: string) => {
   }
 };
 
-const fetchDogs = async (ids?: string[]) => {
+const fetchDogs = async (ids: string[]) => {
   try {
-    if (!ids || !ids.length) {
-      const { data: dogs, error } = await supabase
-      .from('dogs')
-      .select('*')
-      .is('deleted_at', null)
+    const { data: dogs, error } = await supabase
+    .from('dogs')
+    .select('*')
+    .in('id', ids)
+    .is('deleted_at', null)
 
-      if (error) {
-        throw error;
-      }
-
-      return dogs;
-    } else {
-      const { data: dogs, error } = await supabase
-      .from('dogs')
-      .select('*')
-      .in('id', ids)
-      .is('deleted_at', null)
-
-      if (error) {
-        throw error;
-      }
-      return dogs;
+    if (error) {
+      throw error;
     }
+    return dogs;
   } catch (error) {
     throwError(error);
   }

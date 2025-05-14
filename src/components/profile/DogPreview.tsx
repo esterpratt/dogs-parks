@@ -2,9 +2,8 @@ import classnames from 'classnames';
 import { DogIcon, Mars, Venus } from 'lucide-react';
 import { Dog, GENDER } from '../../types/dog';
 import { getAge } from '../../utils/time';
-import { LOADING } from '../../utils/consts';
-import { Loader } from '../Loader';
 import { Card } from '../card/Card';
+import { Image } from '../Image';
 import styles from './DogPreview.module.scss';
 
 interface DogPreviewProps {
@@ -21,13 +20,9 @@ const DogPreview: React.FC<DogPreviewProps> = ({ dog, image }) => {
       imgCmp={
         <>
           {image ? (
-            image === LOADING ? (
-              <div className={classnames(styles.img, styles.empty)}>
-                <Loader inside />
-              </div>
-            ) : (
-              <img src={image} className={styles.img} />
-            )
+            <div className={styles.imgContainer}>
+              <Image src={image} className={styles.img} />
+            </div>
           ) : (
             <div className={classnames(styles.img, styles.empty)}>
               <DogIcon size={64} color={styles.green} strokeWidth={1} />

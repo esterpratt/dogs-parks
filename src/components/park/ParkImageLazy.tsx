@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { TreeDeciduous } from 'lucide-react';
 import { fetchParkPrimaryImage } from '../../services/parks';
+import { Image } from '../Image';
 import styles from './ParkImageLazy.module.scss';
 
 interface ParkImageLazyProps {
@@ -35,10 +36,10 @@ const ParkImageLazy = ({
   return (
     <div ref={ref} className={classnames(styles.container, className)}>
       {primaryImage && (
-        <img
+        <Image
           src={primaryImage}
           alt={alt}
-          loading={lazy ? 'lazy' : 'eager'}
+          loadingStrategy={lazy ? 'lazy' : 'eager'}
           onClick={() => onClick?.(primaryImage)}
           className={styles.img}
         />

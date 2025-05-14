@@ -10,6 +10,10 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 
 const preload = document.getElementById('preload');
 if (preload) {
+  const joke = document.getElementById('joke');
+  if (joke) {
+    joke.style.opacity = '0';
+  }
   preload.style.transition = 'opacity 0.5s ease';
   preload.style.opacity = '0';
 

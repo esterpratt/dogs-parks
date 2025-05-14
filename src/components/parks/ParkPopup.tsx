@@ -15,8 +15,9 @@ import { fetchPark, fetchParkPrimaryImage } from '../../services/parks';
 import { FavoriteRibbon } from '../FavoriteRibbon';
 import { fetchFavoriteParks } from '../../services/favorites';
 import { Button } from '../Button';
-import styles from './ParkPopup.module.scss';
 import { useOrientationContext } from '../../context/OrientationContext';
+import { Image } from '../Image';
+import styles from './ParkPopup.module.scss';
 
 interface ParkPopupProps {
   activePark: Park | null;
@@ -85,8 +86,12 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
       )}
       onTransitionEnd={handleTransitionEnd}
     >
-      <Button variant="round" className={styles.close}>
-        <X onClick={() => setIsClosing(true)} size={18} />
+      <Button
+        variant="round"
+        className={styles.close}
+        onClick={() => setIsClosing(true)}
+      >
+        <X size={18} />
       </Button>
       <Link
         to={`/parks/${activePark?.id}`}
@@ -94,7 +99,7 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
           [styles.hidden]: orientation === 'portrait' && (directions || !image),
         })}
       >
-        {image && <img src={image} className={styles.img} />}
+        {image && <Image src={image} className={styles.img} />}
         {!image && (
           <div className={styles.noImg}>
             <TreeDeciduous size={56} color={styles.green} strokeWidth={1} />

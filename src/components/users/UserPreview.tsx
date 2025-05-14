@@ -15,6 +15,7 @@ import { getDogNames } from '../../utils/getDogNames';
 import { useNotification } from '../../context/NotificationContext';
 import { TopModal } from '../modals/TopModal';
 import { Button } from '../Button';
+import { Image } from '../Image';
 import styles from './UserPreview.module.scss';
 
 interface UserPreviewProps {
@@ -59,13 +60,17 @@ const UserPreview: React.FC<UserPreviewProps> = ({
         onClick={() => setIsModalOpen(true)}
         url={userId ? `/profile/${user.id}` : null}
         imgCmp={
-          <div className={classnames(!dogImage && styles.noImg)}>
+          <>
             {dogImage ? (
-              <img src={dogImage} />
+              <div className={styles.imgContainer}>
+                <Image src={dogImage} className={styles.img} />
+              </div>
             ) : (
-              <DogIcon size={64} color={styles.green} strokeWidth={1} />
+              <div className={classnames(styles.img, styles.noImg)}>
+                <DogIcon size={64} color={styles.green} strokeWidth={1} />
+              </div>
             )}
-          </div>
+          </>
         }
         detailsCmp={
           <div className={styles.detailsContainer}>
