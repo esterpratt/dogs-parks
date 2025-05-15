@@ -77,4 +77,4 @@ const DeleteDogModal: React.FC<DeleteDogModalProps> = ({
   );
 };
 
-export default DeleteDogModal;
+export { DeleteDogModal };

@@ -15,7 +15,7 @@ import { RadioInputs } from '../inputs/RadioInputs';
 import { TextArea } from '../inputs/TextArea';
 import { AutoComplete } from '../inputs/AutoComplete';
 import { dogBreeds } from '../../services/dog-breeds';
-import DeleteDogModal from './DeleteDogModal';
+import { DeleteDogModal } from './DeleteDogModal';
 import { useOrientationContext } from '../../context/OrientationContext';
 import { Button } from '../Button';
 import { Trash2 } from 'lucide-react';

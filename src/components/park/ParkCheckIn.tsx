@@ -12,6 +12,7 @@ import { DogsCountModal } from './DogsCountModal';
 import styles from './ParkCheckIn.module.scss';
 import { useNotification } from '../../context/NotificationContext';
 import { capitalizeText } from '../../utils/text';
+import CheckoutFromAnotherParkModal from './CheckoutFromAnotherParkModal';
 
 const ParkCheckIn: React.FC<{
   parkId: string;
@@ -21,6 +22,8 @@ const ParkCheckIn: React.FC<{
   const [checkIn, setCheckIn] = useLocalStorage('checkin');
   const [openDogsCountModal, setOpenDogsCountModal] = useState(false);
   const [openReviewModal, setOpenReviewModal] = useState(false);
+  const [openChekoutFromAnotherParkModal, setOpenChekoutFromAnotherParkModal] =
+    useState(false);
   const { addReview } = useAddReview(parkId, userId);
   const { notify } = useNotification();
 
@@ -33,7 +36,8 @@ const ParkCheckIn: React.FC<{
       const id = await checkin({ userId, parkId });
       return id;
     },
-    onSuccess: async () => {
+    onSuccess: async (id) => {
+      setCheckIn({ id, parkId });
       queryClient.invalidateQueries({
         queryKey: ['parkVisitors', parkId],
       });
@@ -42,6 +46,16 @@ const ParkCheckIn: React.FC<{
       } else {
         setOpenDogsCountModal(true);
       }
+    },
+  });
+
+  const { mutate: anotherParkCheckout } = useMutation({
+    mutationFn: ({ checkinId }: { checkinId: string; parkId: string }) =>
+      checkout(checkinId),
+    onSuccess: (_data, vars) => {
+      queryClient.invalidateQueries({
+        queryKey: ['parkVisitors', vars.parkId],
+      });
     },
   });
 
@@ -70,15 +84,23 @@ const ParkCheckIn: React.FC<{
     },
   });
 
-  const shouldCheckIn = !checkIn || checkIn.parkId !== parkId;
+  const isCheckedInInAnotherPark = checkIn && checkIn.parkId !== parkId;
+  const canCheckIn = !checkIn || isCheckedInInAnotherPark;
 
-  const onCheckIn = async () => {
-    if (!shouldCheckIn) {
+  const onClickCheckIn = async () => {
+    if (!canCheckIn) {
       parkCheckout();
+    } else if (isCheckedInInAnotherPark) {
+      setOpenChekoutFromAnotherParkModal(true);
     } else {
-      const id = await parkCheckIn();
-      setCheckIn({ id, parkId });
+      parkCheckIn();
     }
+  };
+
+  const onReplaceCheckIn = async () => {
+    setOpenChekoutFromAnotherParkModal(false);
+    anotherParkCheckout({ checkinId: checkIn.id, parkId: checkIn.parkId });
+    parkCheckIn();
   };
 
   const onSubmitReview = async (review: {
@@ -93,10 +115,10 @@ const ParkCheckIn: React.FC<{
   return (
     <div>
       <ParkIcon
-        IconCmp={!shouldCheckIn ? MapPinXInside : MapPinCheckInside}
-        iconColor={!shouldCheckIn ? styles.orange : styles.green}
-        onClick={onCheckIn}
-        textCmp={<span>{!shouldCheckIn ? 'Checkout' : 'Checkin'}</span>}
+        IconCmp={!canCheckIn ? MapPinXInside : MapPinCheckInside}
+        iconColor={!canCheckIn ? styles.orange : styles.green}
+        onClick={onClickCheckIn}
+        textCmp={<span>{!canCheckIn ? 'Checkout' : 'Checkin'}</span>}
       />
       <DogsCountModal
         parkId={parkId}
@@ -109,6 +131,11 @@ const ParkCheckIn: React.FC<{
         isOpen={openReviewModal}
         closeModal={() => setOpenReviewModal(false)}
         onSubmitReview={onSubmitReview}
+      />
+      <CheckoutFromAnotherParkModal
+        isOpen={openChekoutFromAnotherParkModal}
+        onClose={() => setOpenChekoutFromAnotherParkModal(false)}
+        onCheckin={onReplaceCheckIn}
       />
     </div>
   );
