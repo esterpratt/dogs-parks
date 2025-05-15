@@ -1,8 +1,8 @@
 import { throwError } from './error';
 import { Dog } from '../types/dog';
 import { supabase } from './supabase-client';
-// TODO: take removeBasePath from image-utils?
-import { deleteImage, fetchImagesByDirectory, moveImage, removeBasePath, uploadImage } from './image';
+import { deleteImage, fetchImagesByDirectory, moveImage, uploadImage } from './image';
+import { removeBasePath } from './image-utils'
 
 type CreateDogProps = Omit<Dog, 'id'>;
 

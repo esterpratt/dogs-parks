@@ -127,4 +127,4 @@ const moveImage = async ({ bucket, oldPath, newPath }: MoveImageProps) => {
   }
 };
 
-export { uploadImage, fetchImagesByDirectory, deleteImage, moveImage, removeBasePath };
+export { uploadImage, fetchImagesByDirectory, deleteImage, moveImage };
