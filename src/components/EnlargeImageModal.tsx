@@ -1,4 +1,5 @@
-import { Trash2, X } from 'lucide-react';
+import { Star, Trash2, X } from 'lucide-react';
+import classnames from 'classnames';
 import { useOrientationContext } from '../context/OrientationContext';
 import { AppearModal } from './modals/AppearModal';
 import { Button } from './Button';
@@ -10,12 +11,14 @@ interface EnlargeImageModalProps {
   setImgSrc: (imgSrc: string) => void;
   onClose: () => void;
   onClickDeleteImage?: (() => void) | null;
+  onSetPrimaryImage?: (() => void) | null;
 }
 
 const EnlargeImageModal: React.FC<EnlargeImageModalProps> = ({
   isOpen,
   onClose,
   onClickDeleteImage,
+  onSetPrimaryImage,
   imgSrc,
   setImgSrc,
 }) => {
@@ -38,7 +41,15 @@ const EnlargeImageModal: React.FC<EnlargeImageModalProps> = ({
               color={styles.red}
             >
               <Trash2 size={18} />
-              <span>Delete</span>
+            </Button>
+          )}
+          {!!onSetPrimaryImage && (
+            <Button
+              className={classnames(styles.button, styles.primaryButton)}
+              onClick={onSetPrimaryImage}
+            >
+              <Star size={18} />
+              <span>Set as primary</span>
             </Button>
           )}
           <Button

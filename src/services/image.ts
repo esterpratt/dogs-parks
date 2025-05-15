@@ -17,6 +17,12 @@ interface HandleImageProps {
   path: string
 }
 
+interface MoveImageProps {
+  bucket: string;
+  oldPath: string;
+  newPath: string;
+}
+
 const fetchImagesByDirectory = async ({path, bucket}: HandleImageProps) => {
   try {
     const { data, error } = await supabase
@@ -103,4 +109,22 @@ const uploadImage = async ({ image, bucket, path, name, upsert }: UploadImagePro
   }
 };
 
-export { uploadImage, fetchImagesByDirectory, deleteImage, removeBasePath };
+const moveImage = async ({ bucket, oldPath, newPath }: MoveImageProps) => {
+  try {
+    const { data, error } = await supabase
+    .storage
+    .from(bucket)
+    .move(oldPath, newPath)
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Sorry, there was a problem moving the image: ', JSON.stringify(error));
+    return null;
+  }
+};
+
+export { uploadImage, fetchImagesByDirectory, deleteImage, moveImage, removeBasePath };

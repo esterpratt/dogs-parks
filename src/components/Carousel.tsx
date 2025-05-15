@@ -13,12 +13,14 @@ interface CarouselProps {
   images: string[];
   addImage?: (() => void) | null;
   removeImage?: ((imgPath: string) => void) | null;
+  setPrimaryImage?: ((imgPath: string) => void) | null;
 }
 
 const Carousel: React.FC<CarouselProps> = ({
   images = [],
   addImage,
   removeImage,
+  setPrimaryImage,
 }) => {
   const [imageToEnlarge, setImageToEnlarge] = useState<string>('');
   const [isApproveDeleteModalOpen, setIsApproveDeleteModalOpen] =
@@ -44,6 +46,13 @@ const Carousel: React.FC<CarouselProps> = ({
   const onClickImage = (img: string) => {
     setImageToEnlarge(img);
     setIsEnlargeImageModalOpen(true);
+  };
+
+  const handleSetPrimaryImage = () => {
+    if (setPrimaryImage) {
+      setPrimaryImage(imageToEnlarge);
+    }
+    setIsEnlargeImageModalOpen(false);
   };
 
   return (
@@ -111,6 +120,7 @@ const Carousel: React.FC<CarouselProps> = ({
         onClickDeleteImage={
           removeImage && (() => setIsApproveDeleteModalOpen(true))
         }
+        onSetPrimaryImage={setPrimaryImage ? handleSetPrimaryImage : null}
       />
     </>
   );

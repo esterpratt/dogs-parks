@@ -1,7 +1,8 @@
 import { throwError } from './error';
 import { Dog } from '../types/dog';
 import { supabase } from './supabase-client';
-import { deleteImage, fetchImagesByDirectory, removeBasePath, uploadImage } from './image';
+// TODO: take removeBasePath from image-utils?
+import { deleteImage, fetchImagesByDirectory, moveImage, removeBasePath, uploadImage } from './image';
 
 type CreateDogProps = Omit<Dog, 'id'>;
 
@@ -191,6 +192,71 @@ const fetchAllDogImages = async (dogId: string) => {
   }
 };
 
+const movePrimaryImageToOther = async (imgPath: string, dogId: string) => {
+  try {
+    const userId = await getDogOwnerId(dogId);
+    const imageName = imgPath.split('primary/')[1].slice('primary'.length);
+    if (imageName) {
+      const newPath = `${userId}/dogs/${dogId}/other/${imageName}`;
+      const oldPath = `${userId}/dogs/${dogId}/primary/primary${imageName}`;
+      
+      return moveImage({
+        bucket: 'users',
+        oldPath,
+        newPath,
+      });
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error(
+      `there was a problem moving primary image for dog ${dogId}: ${JSON.stringify(error)}`
+    );
+    return null;
+  }
+}
+
+const moveOtherImageToPrimary = async (imgPath: string, dogId: string) => {
+  try {
+    const userId = await getDogOwnerId(dogId);
+    const imageName = imgPath.split('other/')[1];
+    const newPath = `${userId}/dogs/${dogId}/primary/primary${imageName}`;
+    const oldPath = `${userId}/dogs/${dogId}/other/${imageName}`;
+    
+    return moveImage({
+      bucket: 'users',
+      oldPath,
+      newPath,
+    });
+  } catch (error) {
+    console.error(
+      `there was a problem moving other image for dog ${dogId}: ${JSON.stringify(error)}`
+    );
+    return null;
+  }
+}
+
+const setDogPrimaryImage = async (imgPath: string, dogId: string) => {
+  try {
+    const curPrimaryImage = await fetchDogPrimaryImage(dogId);
+    const promises = [moveOtherImageToPrimary(imgPath, dogId)];
+
+    if (curPrimaryImage) {
+      promises.push(movePrimaryImageToOther(curPrimaryImage, dogId));
+    }
+
+    const [newPrimaryRes, oldPrimaryRes] = await Promise.all(promises);
+
+    if (!newPrimaryRes || !oldPrimaryRes) {
+      throw new Error('Error moving images');
+    }
+  } catch (error) {
+    console.error(
+      `there was a problem moving images for dog ${dogId}: ${JSON.stringify(error)}`
+    );
+  }
+};
+
 const deleteDogImage = async (imgPath: string) => {
   const relevantPath = removeBasePath(imgPath, 'users/');
   return deleteImage({bucket: 'users', path: relevantPath});
@@ -207,7 +273,8 @@ export {
   fetchAllDogImages,
   uploadDogImage,
   uploadDogPrimaryImage,
-  deleteDogImage
+  deleteDogImage,
+  setDogPrimaryImage
 };
 
 export type { EditDogProps };

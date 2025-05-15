@@ -6,6 +6,7 @@ import {
   deleteDogImage,
   fetchAllDogImages,
   uploadDogImage,
+  setDogPrimaryImage,
 } from '../../services/dogs';
 import { DogGallery } from './DogGallery';
 import { queryClient } from '../../services/react-query';
@@ -42,6 +43,18 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
   const { mutate: removeImage } = useMutation({
     mutationFn: (imgPath: string) => deleteDogImage(imgPath),
     onSuccess: async () => {
+      queryClient.invalidateQueries({
+        queryKey: ['dogImages', dog.id],
+      });
+    },
+  });
+
+  const { mutate: setPrimaryImage } = useMutation({
+    mutationFn: (imgPath: string) => setDogPrimaryImage(imgPath, dog.id),
+    onSuccess: async () => {
+      queryClient.invalidateQueries({
+        queryKey: ['dogImage', dog.id],
+      });
       queryClient.invalidateQueries({
         queryKey: ['dogImages', dog.id],
       });
@@ -86,6 +99,7 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
             isSignedInUser={isSignedInUser}
             openCameraModal={openCameraModal}
             removeImage={isSignedInUser ? removeImage : null}
+            setPrimaryImage={isSignedInUser ? setPrimaryImage : null}
           />
         }
       />

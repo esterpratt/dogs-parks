@@ -8,6 +8,7 @@ interface DogGalleryProps {
   openCameraModal: () => void;
   isSignedInUser: boolean;
   removeImage?: ((imgPath: string) => void) | null;
+  setPrimaryImage?: ((imgPath: string) => void) | null;
 }
 
 const DogGallery: React.FC<DogGalleryProps> = ({
@@ -15,6 +16,7 @@ const DogGallery: React.FC<DogGalleryProps> = ({
   images,
   openCameraModal,
   removeImage,
+  setPrimaryImage,
 }) => {
   return (
     <div className={styles.container}>
@@ -22,6 +24,7 @@ const DogGallery: React.FC<DogGalleryProps> = ({
         <Carousel
           images={images}
           removeImage={isSignedInUser ? removeImage : null}
+          setPrimaryImage={isSignedInUser ? setPrimaryImage : null}
           addImage={
             isSignedInUser && images.length < 8 ? openCameraModal : null
           }
