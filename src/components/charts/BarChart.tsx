@@ -15,7 +15,7 @@ interface BarChartProps {
   currentHour: {
     hour: string | number;
     color: string;
-  };
+  } | null;
 }
 
 const BarChart: React.FC<BarChartProps> = ({
@@ -53,8 +53,8 @@ const BarChart: React.FC<BarChartProps> = ({
               <Cell
                 key={`cell-${index}`}
                 fill={
-                  entry.hour === currentHour.hour
-                    ? currentHour.color
+                  entry.hour === currentHour?.hour
+                    ? currentHour?.color
                     : styles.lightBlue
                 }
               />

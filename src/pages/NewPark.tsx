@@ -9,7 +9,7 @@ import { LocationInput } from '../components/inputs/LocationInput';
 import { createParkSuggestion } from '../services/park-suggestions';
 import { UserContext } from '../context/UserContext';
 import { Input } from '../components/inputs/Input';
-import { MoveLeft } from 'lucide-react';
+import { MoveLeft, Plus } from 'lucide-react';
 import { TopModal } from '../components/modals/TopModal';
 import styles from './NewPark.module.scss';
 
@@ -25,11 +25,12 @@ const NewPark: React.FC = () => {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFinishModalOpen, setIsFinishModalOpen] = useState(false);
 
   const { mutate } = useMutation({
     mutationFn: createParkSuggestion,
     onSuccess: async () => {
-      navigate('/parks');
+      setIsFinishModalOpen(true);
     },
   });
 
@@ -74,6 +75,22 @@ const NewPark: React.FC = () => {
 
       mutate(newPark);
     }
+  };
+
+  const onClickBackToParks = () => {
+    setIsFinishModalOpen(false);
+    navigate('/parks');
+  };
+
+  const onClickAddAnotherPark = () => {
+    setIsFinishModalOpen(false);
+    setParkDetails({
+      name: '',
+      city: '',
+      address: '',
+      size: '',
+    });
+    setMarkerLocation(null);
   };
 
   return (
@@ -154,6 +171,33 @@ const NewPark: React.FC = () => {
           >
             Exit
           </Button>
+        </div>
+      </TopModal>
+      <TopModal
+        open={isFinishModalOpen}
+        onClose={() => setIsFinishModalOpen(false)}
+        className={styles.finishModal}
+      >
+        <div className={styles.finishModalContainer}>
+          <div className={styles.text}>
+            <span>Thank you!</span>
+            <span>The park will be added shortly.</span>
+            <span>Want to add another one?</span>
+          </div>
+          <div className={styles.buttonsContainer}>
+            <Button className={styles.button} onClick={onClickAddAnotherPark}>
+              <Plus size={16} />
+              <span>Add park</span>
+            </Button>
+            <Button
+              variant="secondary"
+              className={styles.button}
+              onClick={onClickBackToParks}
+            >
+              <MoveLeft size={16} />
+              <span>Back to parks</span>
+            </Button>
+          </div>
         </div>
       </TopModal>
     </>

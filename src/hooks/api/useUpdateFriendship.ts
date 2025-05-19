@@ -1,147 +1,127 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import {
   createFriendship,
   deleteFriendship,
   fetchFriendship,
   updateFriendship,
 } from '../../services/friendships';
-import { FRIENDSHIP_STATUS } from '../../types/friendship';
+import { Friendship, FRIENDSHIP_STATUS, USER_ROLE } from '../../types/friendship';
 import { queryClient } from '../../services/react-query';
-import { FRIENDS_KEY } from './keys';
-
-type RemoveFriendshipArgs = {
-  friendshipId: string;
-  message?: string;
-};
+import { useNotification } from '../../context/NotificationContext';
 
 interface UseUpdateFriendshipProps {
   friendId: string;
-  userId?: string | null;
-  onSuccess?: (text: string) => void;
-  onError?: (text: string) => void;
+  userId: string;
 }
 
-const useUpdateFriendship = ({
-  friendId,
-  userId,
-  onSuccess,
-  onError,
-}: UseUpdateFriendshipProps) => {
-  const { data: friendship } = useQuery({
-    queryKey: ['friendship', friendId, userId],
-    queryFn: async () => {
-      const friendship = await fetchFriendship([friendId, userId!]);
-      return friendship ? friendship : null;
+interface RemoveFriendshipArgs {
+  friendshipId: string;
+  message?: string;
+}
+
+export const useUpdateFriendship = ({ friendId, userId }: UseUpdateFriendshipProps) => {
+  const { notify } = useNotification();
+
+  const { mutate: removeFriendship, isPending: isPendingRemoveFriendship } = useMutation({
+    mutationFn: ({ friendshipId }: RemoveFriendshipArgs) => deleteFriendship(friendshipId),
+    onMutate: async () => {
+      const previous = queryClient.getQueryData(['friendshipMap', userId]);
+      queryClient.setQueryData<Map<string, Friendship>>(['friendshipMap', userId], (oldMap = new Map()) => {
+        const newMap = new Map(oldMap);
+        newMap.delete(friendId);
+        return newMap;
+      });
+      return { previous };
     },
-    enabled: !!userId
+    onSuccess: (_data, vars) => {
+      queryClient.invalidateQueries({ queryKey: ['friendshipMap', userId] });
+      queryClient.invalidateQueries({ queryKey: ['friendsWithDogs', userId] });
+      notify(vars.message || 'Friend request was removed');
+    },
+    onError: (_err, _vars, context) => {
+      queryClient.setQueryData(['friendshipMap', userId], context?.previous);
+      notify('Sorry, there was an error', true);
+    },
   });
 
-  const { mutate: removeFriendship, isPending: isPendingRemoveFriendship } =
-    useMutation({
-      mutationFn: ({friendshipId}: RemoveFriendshipArgs) => deleteFriendship(friendshipId),
-      onSuccess: async (_data, vars) => {
-        if (onSuccess) {
-          onSuccess(vars.message || 'Friend request was removed');
-        }
-        return Promise.all([
-          queryClient.invalidateQueries({
-            queryKey: ['friends', userId, FRIENDS_KEY.FRIENDS],
-          }),
-          queryClient.invalidateQueries({
-            queryKey: ['friends', userId, FRIENDS_KEY.PENDING_FRIENDS],
-          }),
-          queryClient.invalidateQueries({
-            queryKey: ['friends', userId, FRIENDS_KEY.MY_PENDING_FRIENDS],
-          }),
-          queryClient.invalidateQueries({
-            queryKey: ['friendship', friendId, userId],
-          }),
-        ]);
-      },
-    });
+  const { mutate: addFriendship, isPending: isPendingAddFriendship } = useMutation({
+    mutationFn: () => createFriendship({ requesterId: userId, requesteeId: friendId }),
+    onMutate: async () => {
+      const previous = queryClient.getQueryData(['friendshipMap', userId]);
+      queryClient.setQueryData<Map<string, Omit<Friendship, 'id'>>>(['friendshipMap', userId], (oldMap = new Map()) => {
+        const newMap = new Map(oldMap);
+        newMap.set(friendId, {
+          requester_id: userId,
+          requestee_id: friendId,
+          status: FRIENDSHIP_STATUS.PENDING,
+        });
+        return newMap;
+      });
+      return { previous };
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['friendshipMap', userId] });
+      queryClient.invalidateQueries({ queryKey: ['friendsWithDogs', userId, FRIENDSHIP_STATUS.PENDING, USER_ROLE.REQUESTER] });
+      notify('Friend request sent');
+    },
+    onError: (_err, _vars, context) => {
+      queryClient.setQueryData(['friendshipMap', userId], context?.previous);
+      notify('Failed to send friend request', true);
+    },
+  });
 
-  const { mutate: addFriendship, isPending: isPendingAddFriendship } =
-    useMutation({
-      mutationFn: () =>
-        createFriendship({
-          requesteeId: friendId,
-          requesterId: userId!,
-        }),
-      onSuccess: async () => {
-        if (onSuccess) {
-          onSuccess('Friend request was sent!');
-        }
-        return Promise.all([
-          queryClient.invalidateQueries({
-            queryKey: ['friends', userId, FRIENDS_KEY.MY_PENDING_FRIENDS],
-          }),
-          queryClient.invalidateQueries({
-            queryKey: ['friendship', friendId, userId],
-          }),
-        ]);
-      },
-    });
+  const { mutate: mutateFriendship, isPending: isPendingMutateFriendship } = useMutation({
+    mutationFn: ({ friendshipId, status, updatedAt }: { friendshipId: string; status: FRIENDSHIP_STATUS; updatedAt: string }) =>
+      updateFriendship({ friendshipId, status, updatedAt }),
+    onMutate: async ({ friendshipId, status }) => {
+      const previous = queryClient.getQueryData(['friendshipMap', userId]);
+      queryClient.setQueryData<Map<string, Friendship>>(['friendshipMap', userId], (oldMap = new Map()) => {
+        const newMap = new Map(oldMap);
+        newMap.set(friendId, {
+          id: friendshipId,
+          requester_id: userId,
+          requestee_id: friendId,
+          status,
+        });
+        return newMap;
+      });
+      return { previous };
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['friendshipMap', userId] });
+      queryClient.invalidateQueries({ queryKey: ['friendsWithDogs', userId] });
+      notify('You are now friends!');
+    },
+    onError: (_err, _vars, context) => {
+      queryClient.setQueryData(['friendshipMap', userId], context?.previous);
+      notify('Friendship was changed', true);
+    },
+  });
 
-  const { mutate: mutateFriendship, isPending: isPendingMutateFriendship } =
-    useMutation({
-      mutationFn: ({
-        friendshipId,
-        status,
-        updatedAt
-      }: {
-        friendshipId: string;
-        status: FRIENDSHIP_STATUS;
-        updatedAt: string;
-      }) => updateFriendship({ friendshipId, status, updatedAt }),
-      onError: async () => {
-        if (onError) {
-          onError('Friendship was changed');
-          queryClient.invalidateQueries({
-            queryKey: ['friendship', friendId, userId],
-          });
-          queryClient.invalidateQueries({
-            queryKey: ['friends', userId]
-          });
-        }
-      },
-      onSuccess: async () => {
-        if (onSuccess) {
-          onSuccess('You are now friends!');
-        }
-        return Promise.all([
-          queryClient.invalidateQueries({
-            queryKey: ['friends', userId, FRIENDS_KEY.FRIENDS],
-          }),
-          queryClient.invalidateQueries({
-            queryKey: ['friends', userId, FRIENDS_KEY.PENDING_FRIENDS],
-          }),
-          queryClient.invalidateQueries({
-            queryKey: ['friendship', friendId, userId],
-          }),
-        ]);
-      },
-    });
-
-  const isPending =
-    isPendingRemoveFriendship ||
-    isPendingAddFriendship ||
-    isPendingMutateFriendship;
-
-  const onUpdateFriendship = (status: FRIENDSHIP_STATUS) => {
+  const onUpdateFriendship = async (status: FRIENDSHIP_STATUS) => {
+    const friendship = await fetchFriendship([friendId, userId]);
     if (friendship) {
       if (status === FRIENDSHIP_STATUS.ABORTED) {
         removeFriendship({friendshipId: friendship.id});
-      } else if(status === FRIENDSHIP_STATUS.REMOVED) {
+      } else if (status === FRIENDSHIP_STATUS.REMOVED) {
         removeFriendship({friendshipId:friendship.id, message: 'You are no longer friends'});
       } else {
         mutateFriendship({ status, friendshipId: friendship.id, updatedAt: friendship.updated_at });
       }
     } else if (status === FRIENDSHIP_STATUS.PENDING) {
       addFriendship();
+    } else {
+      notify('Friendship was changed', true);
+      queryClient.invalidateQueries({ queryKey: ['friendshipMap', userId] });
+      queryClient.invalidateQueries({ queryKey: ['friendsWithDogs', userId] });
     }
   };
 
-  return { onUpdateFriendship, isPending, isPendingRemoveFriendship, isPendingMutateFriendship, isPendingAddFriendship };
+  return {
+    onUpdateFriendship,
+    isPending: isPendingRemoveFriendship || isPendingAddFriendship || isPendingMutateFriendship,
+    isPendingRemoveFriendship,
+    isPendingAddFriendship,
+    isPendingMutateFriendship,
+  };
 };
-
-export { useUpdateFriendship };

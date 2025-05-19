@@ -69,7 +69,8 @@
   }
 }
 
-.modal {
+.modal,
+.finish-modal {
   padding: 24px;
 }
 
@@ -90,8 +91,47 @@
   }
 }
 
+.finish-modal-container {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  width: 100%;
+}
+
+.text {
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+
+  .button {
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    min-width: max-content;
+    max-width: 100%;
+    gap: 4px;
+    padding: 8px 12px;
+    border-radius: 8px;
+  }
+}
+
 @media (orientation: landscape) {
   .map {
     width: 70%;
+  }
+}
+
+@media (max-width: 360px) {
+  .buttons-container .button {
+    min-width: min-content;
   }
 }

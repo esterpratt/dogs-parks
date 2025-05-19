@@ -9,10 +9,8 @@ import { fetchDogPrimaryImage } from '../../services/dogs';
 import { UserContext } from '../../context/UserContext';
 import { useUpdateFriendship } from '../../hooks/api/useUpdateFriendship';
 import { FRIENDSHIP_STATUS } from '../../types/friendship';
-import { Loader } from '../Loader';
 import { Card } from '../card/Card';
 import { getDogNames } from '../../utils/getDogNames';
-import { useNotification } from '../../context/NotificationContext';
 import { TopModal } from '../modals/TopModal';
 import { Button } from '../Button';
 import { Image } from '../Image';
@@ -29,7 +27,6 @@ const UserPreview: React.FC<UserPreviewProps> = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { userId } = useContext(UserContext);
-  const { notify } = useNotification();
 
   const { data: dogImage } = useQuery({
     queryKey: ['dogImage', user.dogs[0]?.id ?? null],
@@ -37,19 +34,9 @@ const UserPreview: React.FC<UserPreviewProps> = ({
     enabled: user.dogs.length > 0,
   });
 
-  const {
-    onUpdateFriendship,
-    isPendingMutateFriendship,
-    isPendingRemoveFriendship,
-  } = useUpdateFriendship({
+  const { onUpdateFriendship } = useUpdateFriendship({
     friendId: user.id,
     userId: userId!,
-    onSuccess: (text) => {
-      notify(text);
-    },
-    onError: (text) => {
-      notify(text, true);
-    },
   });
 
   const dogNames = user.dogs.length ? getDogNames(user.dogs) : null;
@@ -95,18 +82,8 @@ const UserPreview: React.FC<UserPreviewProps> = ({
                 {
                   children: (
                     <>
-                      {isPendingMutateFriendship ? (
-                        <Loader
-                          variant="secondary"
-                          className={styles.loader}
-                          inside
-                        />
-                      ) : (
-                        <>
-                          <Check size={12} />
-                          <span>Accept</span>
-                        </>
-                      )}
+                      <Check size={12} />
+                      <span>Accept</span>
                     </>
                   ),
                   onClick: () => onUpdateFriendship(FRIENDSHIP_STATUS.APPROVED),
@@ -114,14 +91,8 @@ const UserPreview: React.FC<UserPreviewProps> = ({
                 {
                   children: (
                     <>
-                      {isPendingRemoveFriendship ? (
-                        <Loader className={styles.loader} inside />
-                      ) : (
-                        <>
-                          <X size={12} />
-                          <span>Decline</span>
-                        </>
-                      )}
+                      <X size={12} />
+                      <span>Decline</span>
                     </>
                   ),
                   variant: 'secondary',

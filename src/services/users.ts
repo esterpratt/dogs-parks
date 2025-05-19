@@ -1,6 +1,4 @@
 import { User } from '../types/user';
-import { fetchUserFriendships } from './friendships';
-import { FRIENDSHIP_STATUS, USER_ROLE } from '../types/friendship';
 import { throwError } from './error';
 import { fetchUsersDogs } from './dogs';
 import { Dog } from '../types/dog';
@@ -9,12 +7,6 @@ import { supabase } from './supabase-client';
 interface EditUserProps {
   userId: string;
   userDetails: Omit<User, 'id'>;
-}
-
-interface FetchFriendsProps {
-  userId: string;
-  userRole?: USER_ROLE;
-  status?: FRIENDSHIP_STATUS;
 }
 
 const updateUser = async ({ userId, userDetails }: EditUserProps) => {
@@ -81,6 +73,10 @@ const fetchUsers = async (ids?: string[]) => {
 
 const fetchUsersWithDogsByIds = async (ids: string[]) => {
   try {
+    if (!ids.length) {
+      return [];
+    }
+
     const dogsPromise = fetchUsersDogs(ids);
     const promises: [Promise<User[] | undefined>, Promise<Dog[] | undefined>] =
       [fetchUsers(ids), dogsPromise];
@@ -94,64 +90,6 @@ const fetchUsersWithDogsByIds = async (ids: string[]) => {
     });
 
     return usersWithDogs;
-  } catch (error) {
-    throwError(error);
-  }
-};
-
-const fetchFriends = async ({
-  userId,
-  userRole = USER_ROLE.ANY,
-  status = FRIENDSHIP_STATUS.APPROVED,
-}: FetchFriendsProps) => {
-  try {
-    const friendships = await fetchUserFriendships({
-      userId,
-      userRole,
-      status,
-    });
-    if (!friendships || !friendships.length) {
-      return [];
-    }
-    const friendsIds = friendships.map((friendship) => {
-      if (friendship.requestee_id !== userId) {
-        return friendship.requestee_id;
-      }
-      return friendship.requester_id;
-    });
-
-    const friends = await fetchUsers(friendsIds);
-    return friends;
-  } catch (error) {
-    throwError(error);
-  }
-};
-
-const fetchFriendsWithDogs = async ({
-  userId,
-  userRole = USER_ROLE.ANY,
-  status = FRIENDSHIP_STATUS.APPROVED,
-}: FetchFriendsProps) => {
-  try {
-    const friends = await fetchFriends({
-      userId,
-      userRole,
-      status,
-    });
-
-    if (!friends?.length) {
-      return [];
-    }
-
-    const dogs = await fetchUsersDogs(friends.map((friend) => friend.id));
-    const friendsWithDogs = friends.map((friend) => {
-      return {
-        ...friend,
-        dogs: dogs ? dogs.filter((dog) => dog.owner === friend.id) : [],
-      };
-    });
-
-    return friendsWithDogs;
   } catch (error) {
     throwError(error);
   }
@@ -176,7 +114,6 @@ export {
   updateUser,
   fetchUser,
   fetchUsers,
-  fetchFriendsWithDogs,
   fetchUsersWithDogsByIds,
   filterUsersAndDogs
 };

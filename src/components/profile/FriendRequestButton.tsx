@@ -2,13 +2,11 @@ import { useContext } from 'react';
 import { Check, X } from 'lucide-react';
 import classnames from 'classnames';
 import { Button } from '../Button';
-import { useFriendshipStatus } from '../../hooks/api/useFriendshipStatus';
 import { UserContext } from '../../context/UserContext';
 import { useUpdateFriendship } from '../../hooks/api/useUpdateFriendship';
 import { FRIENDSHIP_STATUS } from '../../types/friendship';
-import { Loader } from '../Loader';
 import styles from './FriendRequestButton.module.scss';
-import { useNotification } from '../../context/NotificationContext';
+import { useUserFriendshipMap } from '../../hooks/api/useUserFriendshipMap';
 
 interface PublicProfileProps {
   friendId: string;
@@ -22,23 +20,16 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
   className,
 }) => {
   const { userId } = useContext(UserContext);
-  const { status, isFriendIsRequester, isLoading } = useFriendshipStatus({
-    friendId,
-    userId: userId!,
-  });
-  const { notify } = useNotification();
+  const { data: friendshipMap, isLoading } = useUserFriendshipMap(userId);
+  const friendship = friendshipMap ? friendshipMap.get(friendId) : null;
 
-  const {
-    onUpdateFriendship,
-    isPendingAddFriendship,
-    isPendingMutateFriendship,
-    isPendingRemoveFriendship,
-  } = useUpdateFriendship({
+  const { onUpdateFriendship } = useUpdateFriendship({
     friendId,
     userId: userId!,
-    onSuccess: (text) => notify(text),
-    onError: (text) => notify(text, true),
   });
+
+  const status = friendship?.status;
+  const isFriendIsRequester = friendship?.requester_id === friendId;
 
   const onUpdateFriend = async (status: FRIENDSHIP_STATUS) => {
     onUpdateFriendship(status);
@@ -62,14 +53,8 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
               onClick={() => onUpdateFriend(FRIENDSHIP_STATUS.REMOVED)}
               className={styles.button}
             >
-              {isPendingRemoveFriendship ? (
-                <Loader inside className={styles.loader} />
-              ) : (
-                <>
-                  <X size={12} />
-                  <span>Unfriend</span>
-                </>
-              )}
+              <X size={12} />
+              <span>Unfriend</span>
             </Button>
           </div>
         </>
@@ -85,28 +70,16 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
               variant="primary"
               onClick={() => onUpdateFriend(FRIENDSHIP_STATUS.APPROVED)}
             >
-              {isPendingMutateFriendship ? (
-                <Loader inside variant="secondary" className={styles.loader} />
-              ) : (
-                <>
-                  <Check size={12} />
-                  <span>Accept</span>
-                </>
-              )}
+              <Check size={12} />
+              <span>Accept</span>
             </Button>
             <Button
               variant="secondary"
               onClick={() => onUpdateFriend(FRIENDSHIP_STATUS.ABORTED)}
               className={styles.button}
             >
-              {isPendingRemoveFriendship ? (
-                <Loader inside className={styles.loader} />
-              ) : (
-                <>
-                  <X size={12} />
-                  <span>Decline</span>
-                </>
-              )}
+              <X size={12} />
+              <span>Decline</span>
             </Button>
           </div>
         </>
@@ -120,14 +93,8 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
               onClick={() => onUpdateFriend(FRIENDSHIP_STATUS.ABORTED)}
               className={styles.button}
             >
-              {isPendingRemoveFriendship ? (
-                <Loader inside className={styles.loader} />
-              ) : (
-                <>
-                  <X size={12} />
-                  <span>Remove request</span>
-                </>
-              )}
+              <X size={12} />
+              <span>Remove request</span>
             </Button>
           </div>
         </>
@@ -139,11 +106,7 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
             onClick={() => onUpdateFriend(FRIENDSHIP_STATUS.PENDING)}
             className={styles.button}
           >
-            {isPendingAddFriendship ? (
-              <Loader inside variant="secondary" className={styles.loader} />
-            ) : (
-              <span>Add friend</span>
-            )}
+            <span>Add friend</span>
           </Button>
         </div>
       )}

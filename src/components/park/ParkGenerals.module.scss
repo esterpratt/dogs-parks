@@ -8,7 +8,11 @@
   justify-content: space-between;
 
   .button {
+    height: 36px;
+    width: 26px;
     display: flex;
+    align-items: center;
+    justify-content: flex-end;
   }
 }
 
@@ -86,6 +90,10 @@
 .link {
   text-decoration: none;
   color: inherit;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
 
   &.disabled {
     pointer-events: none;

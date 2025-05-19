@@ -1,4 +1,11 @@
-import { FormEvent, MouseEvent, useContext, useEffect, useRef } from 'react';
+import {
+  FormEvent,
+  MouseEvent,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import classnames from 'classnames';
 import GoogleIcon from '../assets/google.svg?react';
@@ -9,6 +16,8 @@ import { sendResetEmail } from '../services/authentication';
 import { Input } from '../components/inputs/Input';
 import styles from './Login.module.scss';
 import { useNotification } from '../context/NotificationContext';
+import { Eye, EyeClosed } from 'lucide-react';
+import { preserveCursor } from '../utils/input';
 
 const Login = () => {
   const {
@@ -21,8 +30,10 @@ const Login = () => {
     isLoading,
   } = useContext(UserContext);
   const [searchParams, setSearchParams] = useSearchParams({ mode: 'signup' });
+  const [showPassword, setShowPassword] = useState(false);
   const isSignup = searchParams.get('mode') === 'signup';
   const mailRef = useRef<HTMLInputElement | null>(null);
+  const passwordRef = useRef<HTMLInputElement | null>(null);
   const navigate = useNavigate();
   const { notify } = useNotification();
 
@@ -122,10 +133,36 @@ const Login = () => {
                 type="email"
               />
               <Input
+                ref={passwordRef}
                 onChange={() => setError('')}
                 name="password"
                 placeholder="Password *"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
+                rightIcon={
+                  showPassword ? (
+                    <button
+                      type="button"
+                      className={styles.eyeButton}
+                      onClick={() =>
+                        preserveCursor(passwordRef, () =>
+                          setShowPassword(false)
+                        )
+                      }
+                    >
+                      <Eye size={20} color={styles.pink} />
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      className={styles.eyeButton}
+                      onClick={() =>
+                        preserveCursor(passwordRef, () => setShowPassword(true))
+                      }
+                    >
+                      <EyeClosed size={20} color={styles.pink} />
+                    </button>
+                  )
+                }
               />
               {isSignup && (
                 <Input

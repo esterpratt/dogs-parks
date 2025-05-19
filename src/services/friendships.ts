@@ -8,6 +8,7 @@ interface CreateFriendshipProps {
 
 type FetchFriendshipProps = [string, string];
 
+
 interface UpdateFriendshipProps {
   friendshipId: string;
   status: FRIENDSHIP_STATUS;
@@ -74,33 +75,32 @@ const getFriendshipUserQuery = ({
   userRole,
   status
 }: FetchUserFriendshipsProps) => {
+  const baseQuery = supabase.from('friendships').select('*');
+
+  const addStatusFilter = (query: typeof baseQuery) =>
+    status ? query.eq('status', status) : query;
+
   switch (userRole) {
     case USER_ROLE.REQUESTEE:
-      return supabase
-        .from('friendships')
-        .select('*')
-        .eq('status', status)
-        .eq('requestee_id', userId);
+      return addStatusFilter(
+        baseQuery.eq('requestee_id', userId)
+      );
     case USER_ROLE.REQUESTER:
-      return supabase
-        .from('friendships')
-        .select('*')
-        .eq('status', status)
-        .eq('requester_id', userId);
+      return addStatusFilter(
+        baseQuery.eq('requester_id', userId)
+      );
     case USER_ROLE.ANY:
     default:
-      return supabase
-        .from('friendships')
-        .select('*')
-        .eq('status', status)
-        .or(`requester_id.eq.${userId}, requestee_id.eq.${userId}`);
+      return addStatusFilter(
+        baseQuery.or(`requester_id.eq.${userId},requestee_id.eq.${userId}`)
+      );
   }
 };
 
 const fetchUserFriendships = async ({
   userId,
   userRole = USER_ROLE.ANY,
-  status = FRIENDSHIP_STATUS.APPROVED,
+  status,
 }: FetchUserFriendshipsProps) => {
   try {
     const { data: friendships, error } = await getFriendshipUserQuery({ userId, userRole, status });

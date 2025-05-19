@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchParkCheckins } from '../../services/checkins';
-import { useGetFriendsIds } from './useGetFriendsIds';
-import { FIVE_MINUTES } from '../../utils/consts';
+import { useUserFriendshipMap } from './useUserFriendshipMap';
+import { getFriendIdsByStatus } from '../../utils/friendship';
+import { FRIENDSHIP_STATUS } from '../../types/friendship';
 
 const useGetParkVisitors = (parkId: string, userId?: string | null) => {
   const { data: visitorsIds = [], isLoading: isLoadingVisitors } = useQuery({
@@ -10,23 +11,27 @@ const useGetParkVisitors = (parkId: string, userId?: string | null) => {
       const checkins = await fetchParkCheckins(parkId);
       return checkins ? checkins.map((checkin) => checkin.user_id) : [];
     },
-    staleTime: FIVE_MINUTES,
-    gcTime: FIVE_MINUTES,
+    staleTime: 6000,
+    gcTime: 6000,
   });
 
-  const { friendsIds = [], isLoading: isLoadingFriendsIds } = useGetFriendsIds({
-    userId: userId!,
-    enabled: !!userId && !!visitorsIds.length,
-  });
+  const {
+    data: friendshipMap,
+    isLoading: isLoadingFriendshipMap,
+  } = useUserFriendshipMap(userId);
 
-  const friendsInParkIds = friendsIds.filter((id) => visitorsIds?.includes(id));
+  const friendIds = friendshipMap ? getFriendIdsByStatus({
+    friendshipMap,
+    status: FRIENDSHIP_STATUS.APPROVED,
+  }): [];
+
+  const friendsInParkIds = (visitorsIds as string[]).filter(id => friendIds.includes(id));
 
   return {
     visitorsIds,
-    friendsIds,
     friendsInParkIds,
-    isLoadingFriendsIds,
     isLoadingVisitors,
+    isLoadingFriendIds: (!!userId && isLoadingFriendshipMap),
   };
 };
 

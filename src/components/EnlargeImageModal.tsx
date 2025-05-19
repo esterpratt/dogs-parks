@@ -32,37 +32,40 @@ const EnlargeImageModal: React.FC<EnlargeImageModalProps> = ({
       height={orientation === 'landscape' ? 90 : 70}
     >
       <div className={styles.modalImage}>
-        <div className={styles.buttonsContainer}>
-          {!!onClickDeleteImage && (
-            <Button
-              variant="secondary"
-              className={styles.button}
-              onClick={onClickDeleteImage}
-              color={styles.red}
-            >
-              <Trash2 size={18} />
-            </Button>
-          )}
-          {!!onSetPrimaryImage && (
-            <Button
-              className={classnames(styles.button, styles.primaryButton)}
-              onClick={onSetPrimaryImage}
-            >
-              <Star size={18} />
-              <span>Set as primary</span>
-            </Button>
-          )}
+        <div className={styles.img}>
           <Button
-            variant="secondary"
+            variant="round"
             onClick={onClose}
-            className={styles.button}
+            className={styles.exitButton}
           >
             <X size={18} />
           </Button>
-        </div>
-        <div className={styles.img}>
           <img src={imgSrc} onTransitionEnd={() => !isOpen && setImgSrc('')} />
         </div>
+        {(!!onClickDeleteImage || !!onSetPrimaryImage) && (
+          <div className={styles.buttonsContainer}>
+            {!!onClickDeleteImage && (
+              <Button
+                variant="secondary"
+                className={styles.button}
+                onClick={onClickDeleteImage}
+                color={styles.red}
+              >
+                <Trash2 size={18} />
+                <span>Delete</span>
+              </Button>
+            )}
+            {!!onSetPrimaryImage && (
+              <Button
+                className={classnames(styles.button, styles.primaryButton)}
+                onClick={onSetPrimaryImage}
+              >
+                <Star size={18} />
+                <span>Set as primary</span>
+              </Button>
+            )}
+          </div>
+        )}
       </div>
     </AppearModal>
   );

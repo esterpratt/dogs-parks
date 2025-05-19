@@ -51,6 +51,18 @@
   gap: 24px;
 }
 
+.eye-button {
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  outline: none;
+  display: flex;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
 .line-through {
   margin: 32px 4px 32px;
   text-align: center;
@@ -144,4 +156,5 @@
 
 :export {
   text: $text;
+  pink: $pink;
 }

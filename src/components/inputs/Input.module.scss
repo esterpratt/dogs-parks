@@ -1,5 +1,20 @@
 @use '../../variables' as *;
 
+.container {
+  position: relative;
+
+  .right-icon {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.4;
+  }
+}
+
 .input {
   font-weight: inherit;
   color: $text;
@@ -13,9 +28,14 @@
   letter-spacing: inherit;
   scroll-margin-top: 36px;
   transition: border 0.3s ease;
+  width: 100%;
 
   &:focus {
     border: 1px solid rgba($pink, 1);
+
+    + .right-icon {
+      opacity: 1;
+    }
   }
 
   &[type='date'] {

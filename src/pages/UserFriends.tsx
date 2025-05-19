@@ -1,48 +1,39 @@
 import { Link, useOutletContext } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
 import { UserPreview } from '../components/users/UserPreview';
 import { User } from '../types/user';
 import { Loader } from '../components/Loader';
-import { fetchFriendsWithDogs } from '../services/users';
 import { FRIENDSHIP_STATUS, USER_ROLE } from '../types/friendship';
-import { FRIENDS_KEY } from '../hooks/api/keys';
-import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import styles from './UserFriends.module.scss';
 import { queryClient } from '../services/react-query';
 import { useEffect } from 'react';
+import { useFetchFriendsWithDogs } from '../hooks/api/useFetchFriendsWithDogs';
 
 const UserFriends = () => {
   const { user } = useOutletContext() as { user: User };
 
-  const { data: friends, isFetching: isLoadingFriends } = useQuery({
-    queryKey: ['friends', user.id, FRIENDS_KEY.FRIENDS, 'dogs'],
-    queryFn: () =>
-      fetchFriendsWithDogs({
-        userId: user.id,
-      }),
+  const { friendsWithDogs: friends, isLoading: isLoadingFriends } =
+    useFetchFriendsWithDogs({
+      userId: user.id,
+      status: FRIENDSHIP_STATUS.APPROVED,
+    });
+
+  const {
+    friendsWithDogs: pendingFriends,
+    isLoading: isLoadingPendingFriends,
+  } = useFetchFriendsWithDogs({
+    userId: user.id,
+    status: FRIENDSHIP_STATUS.PENDING,
+    userRole: USER_ROLE.REQUESTEE,
   });
 
-  const { data: pendingFriends, isFetching: isLoadingPendingFriends } =
-    useQuery({
-      queryKey: ['friends', user.id, FRIENDS_KEY.PENDING_FRIENDS, 'dogs'],
-      queryFn: () =>
-        fetchFriendsWithDogs({
-          userId: user.id,
-          userRole: USER_ROLE.REQUESTEE,
-          status: FRIENDSHIP_STATUS.PENDING,
-        }),
-    });
-
-  const { data: myPendingFriends, isFetching: isLoadingMyPendingFriends } =
-    useQuery({
-      queryKey: ['friends', user.id, FRIENDS_KEY.MY_PENDING_FRIENDS, 'dogs'],
-      queryFn: () =>
-        fetchFriendsWithDogs({
-          userId: user.id,
-          userRole: USER_ROLE.REQUESTER,
-          status: FRIENDSHIP_STATUS.PENDING,
-        }),
-    });
+  const {
+    friendsWithDogs: myPendingFriends,
+    isLoading: isLoadingMyPendingFriends,
+  } = useFetchFriendsWithDogs({
+    userId: user.id,
+    status: FRIENDSHIP_STATUS.PENDING,
+    userRole: USER_ROLE.REQUESTER,
+  });
 
   const isLoading =
     isLoadingFriends || isLoadingPendingFriends || isLoadingMyPendingFriends;
@@ -61,12 +52,7 @@ const UserFriends = () => {
     });
   }, [friends, pendingFriends, myPendingFriends, isLoading]);
 
-  const { showLoader } = useDelayedLoading({
-    isLoading,
-    minDuration: 750,
-  });
-
-  if (showLoader) {
+  if (isLoading) {
     return <Loader className={styles.loader} inside />;
   }
 

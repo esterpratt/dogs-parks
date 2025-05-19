@@ -4,4 +4,6 @@ enum FRIENDS_KEY {
   MY_PENDING_FRIENDS = 'MY_PENDING_FRIENDS',
 }
 
-export { FRIENDS_KEY };
+const getFriendshipMapKey = (userId?: string | null) => ['friendshipMap', userId]
+
+export { FRIENDS_KEY, getFriendshipMapKey };

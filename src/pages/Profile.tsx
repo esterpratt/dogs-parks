@@ -12,11 +12,10 @@ import { FriendRequestButton } from '../components/profile/FriendRequestButton';
 import { Header } from '../components/Header';
 import { HeaderImage } from '../components/HeaderImage';
 import { fetchUserFavorites } from '../services/favorites';
-import { FRIENDS_KEY } from '../hooks/api/keys';
-import { fetchFriendsWithDogs } from '../services/users';
 import { usePrefetchRoutesOnIdle } from '../hooks/usePrefetchRoutesOnIdle';
 import { useIsAllowedToViewProfile } from '../hooks/useIsAllowedToViewProfile';
 import styles from './Profile.module.scss';
+import { usePrefetchFriendsWithDogs } from '../hooks/api/usePrefetchFriendsWithDogs';
 
 const Profile: React.FC = () => {
   const { user, dogs, dogImages } = useLoaderData();
@@ -43,32 +42,22 @@ const Profile: React.FC = () => {
     queryFn: async () => fetchUserFavorites(user.id),
   });
 
-  useQuery({
-    queryKey: ['friends', user.id, FRIENDS_KEY.FRIENDS, 'dogs'],
-    queryFn: () =>
-      fetchFriendsWithDogs({
-        userId: user.id,
-      }),
+  usePrefetchFriendsWithDogs({
+    userId: user.id,
+    status: FRIENDSHIP_STATUS.APPROVED,
+    enabled: isSignedInUser,
   });
-
-  useQuery({
-    queryKey: ['friends', user.id, FRIENDS_KEY.PENDING_FRIENDS, 'dogs'],
-    queryFn: () =>
-      fetchFriendsWithDogs({
-        userId: user.id,
-        userRole: USER_ROLE.REQUESTEE,
-        status: FRIENDSHIP_STATUS.PENDING,
-      }),
+  usePrefetchFriendsWithDogs({
+    userId: user.id,
+    status: FRIENDSHIP_STATUS.PENDING,
+    userRole: USER_ROLE.REQUESTEE,
+    enabled: isSignedInUser,
   });
-
-  useQuery({
-    queryKey: ['friends', user.id, FRIENDS_KEY.MY_PENDING_FRIENDS, 'dogs'],
-    queryFn: () =>
-      fetchFriendsWithDogs({
-        userId: user.id,
-        userRole: USER_ROLE.REQUESTER,
-        status: FRIENDSHIP_STATUS.PENDING,
-      }),
+  usePrefetchFriendsWithDogs({
+    userId: user.id,
+    status: FRIENDSHIP_STATUS.PENDING,
+    userRole: USER_ROLE.REQUESTER,
+    enabled: isSignedInUser,
   });
 
   if (!user) {

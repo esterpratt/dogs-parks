@@ -1,7 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
-import { Friendship, FRIENDSHIP_STATUS } from "../types/friendship";
-import { fetchUserFriendships } from "../services/friendships";
+import { FRIENDSHIP_STATUS, USER_ROLE } from "../types/friendship";
 import { User } from "../types/user";
+import { useUserFriendshipMap } from "./api/useUserFriendshipMap";
+import { getFriendIdsByStatus } from "../utils/friendship";
 
 interface UseIsAllowedToViewProfileProps {
   user: User;
@@ -12,46 +12,18 @@ interface UseIsAllowedToViewProfileProps {
 const useIsAllowedToViewProfile = (props: UseIsAllowedToViewProfileProps) => {
   const { user, signedInUserId, isSignedInUser } = props;
 
-  const { data: pendingFriendships, isPending: isPendingPendingFriendships } = useQuery({
-    queryKey: ['friendships', user.id, 'pending'],
-    queryFn: () =>
-      fetchUserFriendships({
-        userId: user.id,
-        status: FRIENDSHIP_STATUS.PENDING,
-      }),
-  });
-
-  const { data: approvedFriendships, isPending: isPendingApprovedFriendships } = useQuery({
-    queryKey: ['friendships', user.id, 'approved'],
-    queryFn: () =>
-      fetchUserFriendships({
-        userId: user.id,
-      }),
-  });
+  const {
+      data: friendshipMap,
+    } = useUserFriendshipMap(user.id);
 
   if (!isSignedInUser && user.private) {
-    const pendingFriendsIds = pendingFriendships?.map(
-      (friendship: Friendship) => {
-        if (user.id === friendship.requestee_id) {
-          return friendship.requester_id;
-        }
-        return friendship.requestee_id;
-      }
-    );
+    if (friendshipMap) {
+      const friendIds = getFriendIdsByStatus({friendshipMap, status: FRIENDSHIP_STATUS.APPROVED, userId: user.id});
+      const pendindFriendIds = getFriendIdsByStatus({friendshipMap, status: FRIENDSHIP_STATUS.PENDING, userId: user.id, userRole: USER_ROLE.REQUESTER});
 
-    const approvedFriendsIds = approvedFriendships?.map(
-      (friendship: Friendship) => {
-        if (user.id === friendship.requestee_id) {
-          return friendship.requester_id;
-        }
-        return friendship.requestee_id;
+      if (!friendIds.includes(signedInUserId ?? '') && !pendindFriendIds.includes(signedInUserId ?? '')) {
+        return { isAllowedToViewProfile: false};
       }
-    );
-
-    if (!isPendingPendingFriendships && !isPendingApprovedFriendships &&
-      !pendingFriendsIds?.concat(approvedFriendsIds ?? []).includes(signedInUserId ?? '')
-    ) {
-      return { isAllowedToViewProfile: false};
     }
   }
 
