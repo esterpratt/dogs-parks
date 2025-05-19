@@ -1,6 +1,6 @@
 import { Suspense, useContext } from 'react';
 import { Await, Link, Navigate, Outlet, useLoaderData } from 'react-router-dom';
-import { DogIcon, MoveLeft, MoveRight } from 'lucide-react';
+import { MoveLeft, MoveRight } from 'lucide-react';
 import classnames from 'classnames';
 import { useQuery } from '@tanstack/react-query';
 import { UserContext } from '../context/UserContext';
@@ -11,6 +11,7 @@ import { getDogNames } from '../utils/getDogNames';
 import { FriendRequestButton } from '../components/profile/FriendRequestButton';
 import { Header } from '../components/Header';
 import { HeaderImage } from '../components/HeaderImage';
+import DogIcon from '../assets/dog.svg?react';
 import { fetchUserFavorites } from '../services/favorites';
 import { usePrefetchRoutesOnIdle } from '../hooks/usePrefetchRoutesOnIdle';
 import { useIsAllowedToViewProfile } from '../hooks/useIsAllowedToViewProfile';

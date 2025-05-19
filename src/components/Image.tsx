@@ -1,8 +1,8 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
+import DogIcon from '../assets/dog.svg?react';
 import styles from './Image.module.scss';
 import { LOADING } from '../utils/consts';
-import { Bone } from 'lucide-react';
 
 interface ImageProps {
   src: string;
@@ -37,7 +37,7 @@ const Image = (props: ImageProps) => {
     <>
       {!!error && (
         <div className={classnames(styles.noImgContainer, className)}>
-          <Bone size={48} color={styles.green} strokeWidth={1} />
+          <DogIcon width={64} height={64} />
         </div>
       )}
       {!error && (

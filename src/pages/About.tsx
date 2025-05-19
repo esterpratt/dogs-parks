@@ -7,7 +7,7 @@ const MAIL = 'esterpratt@gmail.com';
 const About = () => {
   return (
     <div className={styles.container}>
-      <h3>Welcome to Klavhub!</h3>
+      <h3>Welcome to KlavHub!</h3>
       <Link to="/privacy-policy">
         <Button variant="simple" className={styles.button}>
           See our Privacy Policy

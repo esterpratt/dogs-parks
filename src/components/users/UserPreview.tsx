@@ -2,7 +2,7 @@ import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 import { useQuery } from '@tanstack/react-query';
-import { Check, Dog as DogIcon, X } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 import { User } from '../../types/user';
 import { Dog } from '../../types/dog';
 import { fetchDogPrimaryImage } from '../../services/dogs';
@@ -14,6 +14,7 @@ import { getDogNames } from '../../utils/getDogNames';
 import { TopModal } from '../modals/TopModal';
 import { Button } from '../Button';
 import { Image } from '../Image';
+import DogIcon from '../../assets/dog.svg?react';
 import styles from './UserPreview.module.scss';
 
 interface UserPreviewProps {
@@ -54,7 +55,7 @@ const UserPreview: React.FC<UserPreviewProps> = ({
               </div>
             ) : (
               <div className={classnames(styles.img, styles.noImg)}>
-                <DogIcon size={64} color={styles.green} strokeWidth={1} />
+                <DogIcon width={64} height={64} />
               </div>
             )}
           </>

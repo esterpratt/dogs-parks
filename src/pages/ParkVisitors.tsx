@@ -61,11 +61,11 @@ const ParkVisitors: React.FC = () => {
         <div className={styles.othersContainer}>
           <div className={styles.othersTitle}>
             {userIsOnlyVisitor ? (
-              'You are the only Klabhuber at the park right now'
+              'You are the only KlavHuber at the park right now'
             ) : othersWithoutUserCount ? (
               <>
                 {othersWithoutUserCount}
-                {(!!friendsCount || userIsVisitor) && ' more'} Klabhuber
+                {(!!friendsCount || userIsVisitor) && ' more'} KlavHuber
                 {othersWithoutUserCount > 1 && 's'} at the park right now
               </>
             ) : null}

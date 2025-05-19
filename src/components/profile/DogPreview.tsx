@@ -1,9 +1,10 @@
 import classnames from 'classnames';
-import { DogIcon, Mars, Venus } from 'lucide-react';
+import { Mars, Venus } from 'lucide-react';
 import { Dog, GENDER } from '../../types/dog';
 import { getAge } from '../../utils/time';
 import { Card } from '../card/Card';
 import { Image } from '../Image';
+import DogIcon from '../../assets/dog.svg?react';
 import styles from './DogPreview.module.scss';
 
 interface DogPreviewProps {
@@ -25,7 +26,7 @@ const DogPreview: React.FC<DogPreviewProps> = ({ dog, image }) => {
             </div>
           ) : (
             <div className={classnames(styles.img, styles.empty)}>
-              <DogIcon size={64} color={styles.green} strokeWidth={1} />
+              <DogIcon width={64} height={64} />
             </div>
           )}
         </>

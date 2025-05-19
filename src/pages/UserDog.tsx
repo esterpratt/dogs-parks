@@ -1,16 +1,9 @@
 import { useState } from 'react';
 import { useLocation, useParams, useRevalidator, Link } from 'react-router-dom';
-import {
-  Cake,
-  DogIcon,
-  Mars,
-  MoveLeft,
-  Pencil,
-  Tag,
-  Venus,
-} from 'lucide-react';
+import { Cake, Mars, MoveLeft, Pencil, Tag, Venus } from 'lucide-react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
+import DogIcon from '../assets/dog.svg?react';
 import { DogDetails } from '../components/dog/DogDetails';
 import { DogGalleryContainer } from '../components/dog/DogGalleryContainer';
 import {

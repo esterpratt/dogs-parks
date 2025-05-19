@@ -1,4 +1,4 @@
-# Klavhub - Dog Parks App
+# KlavHub - Dog Parks App
 
 Until the app is available in the stores, you're welcome to view it on the web at: klavhub.com.
 The app is designed for mobile.

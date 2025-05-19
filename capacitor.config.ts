@@ -2,10 +2,10 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.klavhub.www',
-  appName: 'dogs-parks',
+  appName: 'KlavHub',
   webDir: 'dist',
   server: {
-    url: 'http://10.100.102.53:5173/',
+    url: 'http://172.20.10.6:5173/',
     cleartext: true,
   },
   plugins: {

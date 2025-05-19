@@ -9,7 +9,7 @@ interface HeaderImageProps {
   imgSrc?: string | null;
   showLoader?: boolean;
   onClickImg?: (imgSrc: string) => void;
-  NoImgIcon: LucideIcon;
+  NoImgIcon: LucideIcon | React.FC<React.SVGProps<SVGSVGElement>>;
   onClickEditPhoto?: null | (() => void);
   className?: string;
   editButtonClassName?: string;
@@ -45,7 +45,7 @@ const HeaderImage = (props: HeaderImageProps) => {
       ) : !isLoading ? (
         <div className={styles.img}>
           <div className={styles.noImg}>
-            <NoImgIcon size={64} color={styles.green} strokeWidth={1} />
+            <NoImgIcon size={'100%'} color={styles.green} strokeWidth={1} />
           </div>
         </div>
       ) : null}
