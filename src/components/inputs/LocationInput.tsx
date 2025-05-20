@@ -30,10 +30,10 @@ const LocationInput: React.FC<LocationInputProps> = ({
 
   const handleSetCurrentLocation = async () => {
     const userLocation = await getUserLocation();
-    if (userLocation) {
+    if (userLocation?.position) {
       onSetCurrentLocation({
-        lat: userLocation.coords.latitude,
-        long: userLocation.coords.longitude,
+        lat: userLocation.position.coords.latitude,
+        long: userLocation.position.coords.longitude,
       });
     }
   };
@@ -41,10 +41,10 @@ const LocationInput: React.FC<LocationInputProps> = ({
   useEffect(() => {
     const setUserCenter = async () => {
       const userLocation = await getUserLocation();
-      if (userLocation) {
+      if (userLocation?.position) {
         setCenter({
-          lat: userLocation.coords.latitude,
-          long: userLocation.coords.longitude,
+          lat: userLocation.position.coords.latitude,
+          long: userLocation.position.coords.longitude,
         });
       }
     };

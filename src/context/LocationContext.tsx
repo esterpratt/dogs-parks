@@ -6,13 +6,17 @@ import {
   useEffect,
   useState,
 } from 'react';
+import { App } from '@capacitor/app';
 import { Location } from '../types/park';
 import { getUserLocation } from '../components/map/mapHelpers/getUserLocation';
 import { DEFAULT_LOCATION } from '../utils/consts';
+import { PluginListenerHandle } from '@capacitor/core';
 
 interface LocationStoreProps {
   userLocation: Location | undefined;
   setUserLocation: (location: Location) => void;
+  isLocationDenied: boolean;
+  setIsLocationDenied: (isLocationDenied: boolean) => void;
 }
 
 const UserLocationContext = createContext<
@@ -30,29 +34,53 @@ export const UserLocationProvider = ({
     createStore<LocationStoreProps>((set) => ({
       userLocation: undefined,
       setUserLocation: (userLocation) => set(() => ({ userLocation })),
+      isLocationDenied: false,
+      setIsLocationDenied: (isLocationDenied) =>
+        set(() => ({ isLocationDenied })),
     }))
   );
 
   const setUserLocation = useStore(store, (state) => state.setUserLocation);
+  const setIsLocationDenied = useStore(
+    store,
+    (state) => state.setIsLocationDenied
+  );
 
   useEffect(() => {
     const fetchUserLocation = async () => {
       try {
         const userLocation = await getUserLocation();
+        if (userLocation?.error) {
+          setIsLocationDenied(true);
+        } else {
+          setIsLocationDenied(false);
+        }
+
         if (userLocation) {
           setUserLocation({
-            lat: userLocation?.coords.latitude,
-            long: userLocation?.coords.longitude,
+            lat: userLocation.position.coords.latitude,
+            long: userLocation.position.coords.longitude,
           });
         }
       } catch (error) {
-        console.error('Error fetching user location:', error);
         setUserLocation(DEFAULT_LOCATION);
       }
     };
 
+    let resumeListener: PluginListenerHandle;
+    const setupListener = async () => {
+      resumeListener = await App.addListener('resume', () => {
+        fetchUserLocation();
+      });
+    };
+
+    setupListener();
     fetchUserLocation();
-  }, [setUserLocation]);
+
+    return () => {
+      resumeListener?.remove();
+    };
+  }, [setUserLocation, setIsLocationDenied]);
 
   return (
     <UserLocationContext.Provider value={store}>

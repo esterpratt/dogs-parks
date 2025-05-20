@@ -18,10 +18,10 @@ const DogsCountModal: React.FC<{
 }> = ({ parkId, isOpen, onClose, showOnlyCount, title }) => {
   const { notify } = useNotification();
 
-  const [_shouldHideDogsModal, setShouldHideDogsModal] =
+  const [shouldHideDogsModal, setShouldHideDogsModal] =
     useLocalStorage('hideDogsModal');
   const [shouldHideDogsModalLocal, setShouldHideDogsModalLocal] =
-    useState<boolean>(_shouldHideDogsModal ?? false);
+    useState<boolean>(shouldHideDogsModal ?? false);
   const [dogsCount, setDogsCount] = useState<string>('');
 
   const { mutate: addDogCountReport } = useMutation({

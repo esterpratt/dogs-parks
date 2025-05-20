@@ -72,8 +72,8 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
       cbc.forEach((cb) =>
         cb({
           coords: {
-            lat: userPosition.coords.latitude,
-            long: userPosition.coords.longitude,
+            lat: userPosition.position.coords.latitude,
+            long: userPosition.position.coords.longitude,
           },
         })
       );

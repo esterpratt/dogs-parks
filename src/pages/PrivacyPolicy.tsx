@@ -86,7 +86,7 @@ const PrivacyPolicy = () => {
           free to contact us at{' '}
           <a href="mailto:esterpratt@gmail.com">
             <Button variant="simple" className={styles.button}>
-              esterpratt@gmail.com
+              esterpratt@gmail.com.
             </Button>
           </a>
         </span>

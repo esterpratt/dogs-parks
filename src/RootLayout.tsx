@@ -6,6 +6,7 @@ import useKeyboardFix from './hooks/useKeyboardFix';
 import classnames from 'classnames';
 import { useSafeArea } from './hooks/useSafeArea';
 import { usePrefetchRoutesOnIdle } from './hooks/usePrefetchRoutesOnIdle';
+import { LocationPermissionModal } from './components/LocationPermissionModal';
 
 const RootLayout = () => {
   usePreventFocusOnScroll();
@@ -27,6 +28,7 @@ const RootLayout = () => {
         />
       </div>
       <NavbarBottom />
+      <LocationPermissionModal />
     </>
   );
 };
