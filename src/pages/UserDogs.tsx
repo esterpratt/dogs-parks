@@ -1,13 +1,12 @@
 import { useState } from 'react';
-import { useOutletContext, useRevalidator, Link } from 'react-router-dom';
-import { useIsFetching, useMutation } from '@tanstack/react-query';
+import { useOutletContext, Link } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
 import { User } from '../types/user';
 import { Dog } from '../types/dog';
 import { DogPreview } from '../components/profile/DogPreview';
 import { Button } from '../components/Button';
 import { uploadDogPrimaryImage } from '../services/dogs';
 import { queryClient } from '../services/react-query';
-import { LOADING } from '../utils/consts';
 import { CameraModal } from '../components/camera/CameraModal';
 import { EditDogModal } from '../components/dog/EditDogModal';
 import styles from './UserDogs.module.scss';
@@ -27,26 +26,18 @@ const UserDogs = () => {
   const [isEditDogsModalOpen, setIsEditDogsModalOpen] = useState(false);
   const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
   const [newDogId, setNewDogId] = useState('');
-  const { revalidate } = useRevalidator();
 
-  const isFetching = useIsFetching({
-    queryKey: ['dogImage', newDogId],
-  });
-
-  const { mutate: setDogImage, isPending: isUploadingImage } = useMutation({
+  const { mutate: setDogImage } = useMutation({
     mutationFn: (img: string | File) =>
       uploadDogPrimaryImage({
         image: img,
         dogId: newDogId!,
         upsert: true,
       }),
-    onMutate: async () => {
+    onSettled: () => {
       queryClient.invalidateQueries({
         queryKey: ['dogImage', newDogId],
       });
-    },
-    onSettled: () => {
-      revalidate();
     },
   });
 
@@ -116,14 +107,7 @@ const UserDogs = () => {
               key={dog.id}
               state={{ userName: user.name, isSignedInUser }}
             >
-              <DogPreview
-                dog={dog}
-                image={
-                  dog.id === newDogId && (isUploadingImage || isFetching > 0)
-                    ? LOADING
-                    : dogImages[index]
-                }
-              />
+              <DogPreview dog={dog} image={dogImages[index]} />
             </Link>
           ))}
         </div>

@@ -9,7 +9,7 @@ import styles from './DogPreview.module.scss';
 
 interface DogPreviewProps {
   dog: Dog;
-  image: string | null;
+  image?: string | null;
 }
 
 const DogPreview: React.FC<DogPreviewProps> = ({ dog, image }) => {

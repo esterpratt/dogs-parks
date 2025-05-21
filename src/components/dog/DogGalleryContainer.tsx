@@ -14,6 +14,7 @@ import { Section } from '../section/Section';
 import { Button } from '../Button';
 import styles from './DogGalleryContainer.module.scss';
 import { CameraModal } from '../camera/CameraModal';
+import { MAX_IMAGES } from '../../utils/consts';
 
 interface DogGalleryContainerProps {
   dog: Dog;
@@ -85,7 +86,7 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
         titleCmp={
           <div className={styles.title}>
             <span>Gallery</span>
-            {isSignedInUser && (dogImages ?? []).length < 8 && (
+            {isSignedInUser && (dogImages ?? []).length < MAX_IMAGES && (
               <Button className={styles.button} onClick={onClickAddPhoto}>
                 <Plus color={styles.white} size={24} />
               </Button>

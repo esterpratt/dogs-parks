@@ -1,5 +1,5 @@
 import { createPortal } from 'react-dom';
-import { ReactNode } from 'react';
+import { MouseEvent, ReactNode } from 'react';
 import classnames from 'classnames';
 import styles from './BottomModal.module.scss';
 import { useModal } from './useModal';
@@ -19,12 +19,18 @@ const BottomModal = ({
 }: BottomModalProps) => {
   const dialogRef = useModal(open);
 
+  const onCloseModal = (event: MouseEvent<HTMLDialogElement>) => {
+    if (event.target === event.currentTarget && onClose) {
+      onClose();
+    }
+  };
+
   return createPortal(
     <dialog
       ref={dialogRef}
       className={classnames(styles.modal, className)}
       onClose={onClose}
-      onClick={onClose}
+      onClick={onCloseModal}
     >
       {children}
     </dialog>,

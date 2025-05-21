@@ -55,7 +55,7 @@ const DeleteDogModal: React.FC<DeleteDogModalProps> = ({
           disabled={isPending}
         >
           {isPending ? (
-            <Loader inside className={styles.loader} />
+            <Loader variant="secondary" inside className={styles.loader} />
           ) : (
             <>
               <Trash2 size={16} />

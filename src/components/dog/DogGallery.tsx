@@ -1,4 +1,5 @@
 import { Dog } from '../../types/dog';
+import { MAX_IMAGES } from '../../utils/consts';
 import { Carousel } from '../Carousel';
 import styles from './DogGallery.module.scss';
 
@@ -26,7 +27,9 @@ const DogGallery: React.FC<DogGalleryProps> = ({
           removeImage={isSignedInUser ? removeImage : null}
           setPrimaryImage={isSignedInUser ? setPrimaryImage : null}
           addImage={
-            isSignedInUser && images.length < 8 ? openCameraModal : null
+            isSignedInUser && images.length < MAX_IMAGES
+              ? openCameraModal
+              : null
           }
         />
       )}

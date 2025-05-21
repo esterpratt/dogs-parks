@@ -118,6 +118,7 @@ const NewPark: React.FC = () => {
             />
             <Input
               type="number"
+              inputMode="numeric"
               placeholder="Size in square meters (if known)"
               name="size"
               value={parkDetails.size}

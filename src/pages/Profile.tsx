@@ -1,11 +1,10 @@
-import { Suspense, useContext } from 'react';
-import { Await, Link, Navigate, Outlet, useLoaderData } from 'react-router-dom';
+import { useContext } from 'react';
+import { Link, Navigate, Outlet, useLoaderData } from 'react-router-dom';
 import { MoveLeft, MoveRight } from 'lucide-react';
 import classnames from 'classnames';
-import { useQuery } from '@tanstack/react-query';
+import { useQueries, useQuery } from '@tanstack/react-query';
 import { UserContext } from '../context/UserContext';
 import { ProfileTabs } from '../components/profile/ProfileTabs';
-import { Loader } from '../components/Loader';
 import { FRIENDSHIP_STATUS, USER_ROLE } from '../types/friendship';
 import { getDogNames } from '../utils/getDogNames';
 import { FriendRequestButton } from '../components/profile/FriendRequestButton';
@@ -17,11 +16,29 @@ import { usePrefetchRoutesOnIdle } from '../hooks/usePrefetchRoutesOnIdle';
 import { useIsAllowedToViewProfile } from '../hooks/useIsAllowedToViewProfile';
 import styles from './Profile.module.scss';
 import { usePrefetchFriendsWithDogs } from '../hooks/api/usePrefetchFriendsWithDogs';
+import { fetchDogPrimaryImage } from '../services/dogs';
+import { Dog } from '../types/dog';
 
 const Profile: React.FC = () => {
-  const { user, dogs, dogImages } = useLoaderData();
+  const { user, dogs } = useLoaderData();
   const { user: signedInUser, isLoadingUser } = useContext(UserContext);
   const isSignedInUser = signedInUser?.id === user.id;
+
+  const dogImages = useQueries({
+    queries: dogs.map((dog: Dog) => {
+      return {
+        queryKey: ['dogImage', dog.id],
+        queryFn: async () => fetchDogPrimaryImage(dog.id),
+      };
+    }),
+  });
+
+  const dogImagesToDisplay =
+    !dogImages || dogImages.length === 0
+      ? new Array(dogs?.length || 0)
+      : dogImages.length > 4
+      ? dogImages.slice(0, 4)
+      : [...dogImages.map((image) => image.data)];
 
   const { isAllowedToViewProfile } = useIsAllowedToViewProfile({
     user,
@@ -98,34 +115,18 @@ const Profile: React.FC = () => {
             </>
           ) : null
         }
-        imgCmp={
-          <Suspense fallback={null}>
-            <Await resolve={dogImages}>
-              {(dogImages) => {
-                const dogImagesToDisplay =
-                  !dogImages || dogImages.length === 0
-                    ? ['']
-                    : dogImages.length > 4
-                    ? dogImages.slice(0, 4)
-                    : [...dogImages];
-                return dogImagesToDisplay.map(
-                  (dogImage: string, index: number) => {
-                    return (
-                      <HeaderImage
-                        key={index}
-                        imgSrc={dogImage}
-                        className={styles.img}
-                        style={{ zIndex: dogImagesToDisplay.length - index }}
-                        NoImgIcon={DogIcon}
-                        size={112}
-                      />
-                    );
-                  }
-                );
-              }}
-            </Await>
-          </Suspense>
-        }
+        imgCmp={dogImagesToDisplay.map((dogImage: string, index: number) => {
+          return (
+            <HeaderImage
+              key={index}
+              imgSrc={dogImage}
+              className={styles.img}
+              style={{ zIndex: dogImagesToDisplay.length - index }}
+              NoImgIcon={DogIcon}
+              size={112}
+            />
+          );
+        })}
         bottomCmp={
           isSignedInUser ? (
             <div className={styles.welcome}>
@@ -148,35 +149,20 @@ const Profile: React.FC = () => {
         }
       />
       {isSignedInUser && <ProfileTabs />}
-      <Suspense
-        fallback={
-          <Loader
-            inside
-            className={classnames(styles.loader, {
-              [styles.user]: isSignedInUser,
-            })}
-          />
-        }
+      <div
+        className={classnames(styles.container, {
+          [styles.withMargin]: isSignedInUser,
+        })}
       >
-        <Await resolve={dogImages}>
-          {(dogImages) => (
-            <div
-              className={classnames(styles.container, {
-                [styles.withMargin]: isSignedInUser,
-              })}
-            >
-              <Outlet
-                context={{
-                  user,
-                  dogs,
-                  dogImages,
-                  isSignedInUser,
-                }}
-              />
-            </div>
-          )}
-        </Await>
-      </Suspense>
+        <Outlet
+          context={{
+            user,
+            dogs,
+            isSignedInUser,
+            dogImages: dogImagesToDisplay,
+          }}
+        />
+      </div>
     </div>
   );
 };

@@ -14,9 +14,7 @@ const ChooseCamera = (props: ChooseCameraProps) => {
     <div className={styles.container}>
       {title && <div className={styles.title}>{title}</div>}
       <div className={styles.buttonsContainer}>{children}</div>
-      <div className={styles.error}>
-        {!!error && 'Sorry, cannot use your camera'}
-      </div>
+      <div className={styles.error}>{!!error && `Sorry. ${error}`}</div>
     </div>
   );
 };

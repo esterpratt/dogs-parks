@@ -1,6 +1,6 @@
 import { LoaderFunction } from 'react-router-dom';
 import { fetchUser } from '../services/users';
-import { fetchDogPrimaryImage, fetchUserDogs } from '../services/dogs';
+import { fetchUserDogs } from '../services/dogs';
 import { queryClient } from '../services/react-query';
 import { User } from '../types/user';
 import { Dog } from '../types/dog';
@@ -25,24 +25,9 @@ const userLoader: LoaderFunction = async ({ params }) => {
   const [user, dogs = []] =
     await Promise.all(promises);
 
-  const getDogsImages = async () => {
-    const dogsImagesPromises: Promise<string | null>[] = [];
-    dogs.forEach((dog) => {
-      dogsImagesPromises.push(
-        queryClient.fetchQuery({
-          queryKey: ['dogImage', dog.id],
-          queryFn: async () => fetchDogPrimaryImage(dog.id),
-        })
-      );
-    });
-
-    return Promise.all(dogsImagesPromises);
-  };
-
   return {
     user,
     dogs,
-    dogImages: getDogsImages(),
   };
 };
 

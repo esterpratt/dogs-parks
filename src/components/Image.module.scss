@@ -13,17 +13,6 @@
     opacity: 1;
     filter: blur(0);
   }
-
-  &.loading {
-    background-image: url('/loader.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 48px 48px;
-    object-fit: contain;
-    padding: 25%;
-    opacity: 1;
-    filter: none;
-  }
 }
 
 .no-img-container {

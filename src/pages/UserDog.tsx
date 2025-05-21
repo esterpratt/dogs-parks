@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useLocation, useParams, useRevalidator, Link } from 'react-router-dom';
+import { useLocation, useParams, Link } from 'react-router-dom';
 import { Cake, Mars, MoveLeft, Pencil, Tag, Venus } from 'lucide-react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
@@ -16,7 +16,6 @@ import { queryClient } from '../services/react-query';
 import { getAge } from '../utils/time';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import { Loader } from '../components/Loader';
-import { LOADING } from '../utils/consts';
 import { EnlargeImageModal } from '../components/EnlargeImageModal';
 import { Button } from '../components/Button';
 import { DogPreferences } from '../components/dog/DogPreferences';
@@ -35,7 +34,6 @@ const UserDog = () => {
   const [imageToEnlarge, setImageToEnlarge] = useState<string>('');
   const [isEnlargedImageModalOpen, setIsEnlargeImageModalOpen] =
     useState(false);
-  const { revalidate } = useRevalidator();
   const { isSignedInUser, userName } = state;
 
   const { data: dog, isLoading: isLoadingDog } = useQuery({
@@ -46,36 +44,25 @@ const UserDog = () => {
     },
   });
 
-  const { data: primaryImage, isLoading: isLoadingImage } = useQuery({
+  const { data: primaryImage } = useQuery({
     queryKey: ['dogImage', dogId],
     queryFn: async () => fetchDogPrimaryImage(dogId!),
   });
 
   const { showLoader } = useDelayedLoading({
-    isLoading: isLoadingDog || isLoadingImage,
+    isLoading: isLoadingDog,
     minDuration: 750,
   });
 
-  const { mutate: setDogImage, isPending: isUploadingImage } = useMutation({
+  const { mutate: setDogImage } = useMutation({
     mutationFn: (img: string | File) =>
       uploadDogPrimaryImage({
         image: img,
         dogId: dogId!,
         upsert: !!primaryImage,
       }),
-    onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: ['dogImage', dogId] });
-      const prevImage = queryClient.getQueryData(['dogImage', dogId]);
-      queryClient.setQueryData(['dogImage', dogId], LOADING);
-
-      return { prevImage };
-    },
-    onError: (_error, _data, context) => {
-      queryClient.setQueryData(['dogImage', dogId], context?.prevImage);
-    },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['dogImage', dogId] });
-      revalidate();
     },
   });
 
@@ -127,7 +114,6 @@ const UserDog = () => {
           }
           imgCmp={
             <HeaderImage
-              showLoader={isUploadingImage || primaryImage === LOADING}
               imgSrc={primaryImage}
               onClickImg={onClickImage}
               NoImgIcon={DogIcon}

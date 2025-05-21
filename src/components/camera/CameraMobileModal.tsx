@@ -37,12 +37,13 @@ const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
       const hasPermission = await requestPermission({
         permissions: ['photos'],
       });
+
       if (!hasPermission) {
         throw new Error('Gallery permission denied');
       }
 
       const photo = await CapacitorCamera.getPhoto({
-        quality: 80,
+        quality: 90,
         resultType: CameraResultType.Base64,
         source: CameraSource.Photos,
       });
@@ -54,6 +55,15 @@ const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
       }
     } catch (error) {
       if ((error as CapacitorException).message?.includes('cancel')) {
+        return;
+      }
+
+      if (
+        (error as CapacitorException).message
+          ?.toLowerCase()
+          .includes('permission')
+      ) {
+        onCameraError('Gallery permission denied');
         return;
       }
       onCameraError(error as string);
@@ -82,10 +92,23 @@ const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
         throw new Error('Image is not Base64');
       }
     } catch (error) {
-      if ((error as CapacitorException).message?.includes('cancel')) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : typeof error === 'string'
+          ? error
+          : 'Unknown error';
+
+      if (message.includes('cancel')) {
         return;
       }
-      onCameraError(error as string);
+
+      if (message.includes('access') || message.includes('permission')) {
+        const isCamera = message.toLowerCase().includes('camera');
+        onCameraError(`${isCamera ? 'Camera' : 'Gallery'}  permission denied`);
+      } else {
+        onCameraError((error as Error)?.message);
+      }
     }
   };
 

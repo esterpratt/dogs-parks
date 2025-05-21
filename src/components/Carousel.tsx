@@ -39,8 +39,9 @@ const Carousel: React.FC<CarouselProps> = ({
   const settings = {
     className: 'center',
     infinite: false,
-    slidesToShow: 3,
+    slidesToShow: 2,
     slidesToScroll: 1,
+    swipeToSlide: true,
   };
 
   const onClickImage = (img: string) => {

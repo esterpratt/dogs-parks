@@ -54,7 +54,7 @@ textarea {
 }
 
 .slick-slider {
-  padding: 0 12px;
+  padding: 0 18px;
 
   .slick-arrow {
     z-index: 100;
@@ -66,28 +66,26 @@ textarea {
         color: $pink;
         content: '›';
         font-family: inherit;
-        font-size: 32px;
+        font-size: 42px;
         display: block;
       }
     }
 
-    &.slick-next::before {
-      margin-left: 4px;
-    }
-
     &.slick-prev {
-      left: -6px;
-      padding-top: 6px;
+      left: -4px;
 
       &::before {
-        margin-right: 4px;
         transform: rotate(180deg);
+        margin-top: 10px;
       }
     }
 
     &.slick-next {
-      padding-bottom: 6px;
-      right: -6px;
+      right: -4px;
+
+      &::before {
+        margin-bottom: 12px;
+      }
     }
   }
 
@@ -103,7 +101,7 @@ textarea {
     margin-left: 0;
 
     .slick-slide {
-      height: 112px;
+      height: 132px;
 
       > div {
         height: 100%;

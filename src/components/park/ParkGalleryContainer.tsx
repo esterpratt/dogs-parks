@@ -10,6 +10,7 @@ import { Button } from '../Button';
 import { Carousel } from '../Carousel';
 import { CameraModal } from '../camera/CameraModal';
 import styles from './ParkGalleryContainer.module.scss';
+import { MAX_IMAGES } from '../../utils/consts';
 
 interface ParkGalleryContainerProps {
   parkId: string;
@@ -55,7 +56,7 @@ const ParkGalleryContainer: React.FC<ParkGalleryContainerProps> = ({
         titleCmp={
           <div className={styles.title}>
             <span>Gallery</span>
-            {!!userId && (
+            {!!userId && (parkImages || []).length < MAX_IMAGES && (
               <Button
                 variant="simple"
                 color={styles.white}
@@ -72,7 +73,11 @@ const ParkGalleryContainer: React.FC<ParkGalleryContainerProps> = ({
             <div className={styles.galleryContainer}>
               <Carousel
                 images={parkImages || []}
-                addImage={userId ? () => setIsAddImageModalOpen(true) : null}
+                addImage={
+                  userId && (parkImages || []).length < MAX_IMAGES
+                    ? () => setIsAddImageModalOpen(true)
+                    : null
+                }
               />
             </div>
           ) : (

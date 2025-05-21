@@ -28,7 +28,6 @@ import { isMobile } from '../../utils/platform';
 import { Share } from '@capacitor/share';
 import { Park } from '../../types/park';
 import styles from './ParkHeader.module.scss';
-import { LOADING } from '../../utils/consts';
 
 interface ParkHeaderProps {
   park: Park;
@@ -43,23 +42,13 @@ const ParkHeader = (props: ParkHeaderProps) => {
     useState(false);
   const { notify } = useNotification();
 
-  const { data: primaryImage, isLoading } = useQuery({
+  const { data: primaryImage } = useQuery({
     queryKey: ['parkImage', park.id],
     queryFn: async () => fetchParkPrimaryImage(park.id),
   });
 
   const { mutate } = useMutation({
     mutationFn: (img: string | File) => uploadParkPrimaryImage(img, park.id),
-    onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: ['dogImage', park.id] });
-      const prevImage = queryClient.getQueryData(['parkImage', park.id]);
-      queryClient.setQueryData(['parkImage', park.id], LOADING);
-
-      return { prevImage };
-    },
-    onError: (_error, _data, context) => {
-      queryClient.setQueryData(['parkImage', park.id], context?.prevImage);
-    },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['parkImage', park.id] });
     },
@@ -114,7 +103,6 @@ const ParkHeader = (props: ParkHeaderProps) => {
         imgCmp={
           <HeaderImage
             size={132}
-            isLoading={isLoading}
             imgSrc={primaryImage}
             NoImgIcon={TreeDeciduous}
             onClickImg={onClickImage}

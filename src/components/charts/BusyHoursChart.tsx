@@ -67,7 +67,9 @@ const BusyHoursChart = (props: BusyHoursChartProps) => {
           xDataKey="hour"
           yDataKey="count"
           currentHour={
-            !fullData && isWeekend && activeTab === WEEKDAYS
+            !fullData &&
+            ((isWeekend && activeTab === WEEKDAYS) ||
+              (!isWeekend && activeTab === WEEKEND))
               ? null
               : { hour: currHour, color: business.color }
           }
