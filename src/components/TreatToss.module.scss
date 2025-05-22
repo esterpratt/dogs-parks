@@ -1,0 +1,64 @@
+@use '../variables.scss' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.animation-container {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 240px;
+}
+
+.boneWrapper,
+.dog {
+  background-color: $white;
+  position: relative;
+  z-index: 1;
+}
+
+.boneWrapper {
+  cursor: pointer;
+}
+
+.bonePulse {
+  animation: pulse 1s infinite;
+}
+
+.tossedBone {
+  position: absolute;
+  z-index: 0;
+  left: 5px;
+  bottom: 50%;
+  animation: tossBone 0.8s ease forwards;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+@keyframes tossBone {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(90px, -40px) rotate(180deg);
+  }
+  100% {
+    transform: translate(180px, 0) rotate(360deg);
+  }
+}
+
+:export {
+  pink: $pink;
+}
