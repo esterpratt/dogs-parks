@@ -42,6 +42,7 @@ const UserDog = () => {
       const dogs = await fetchDogs([dogId!]);
       return dogs?.[0];
     },
+    throwOnError: true,
   });
 
   const { data: primaryImage } = useQuery({
