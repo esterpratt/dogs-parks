@@ -22,8 +22,10 @@ const NavbarBottom = () => {
   const { userId } = useContext(UserContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
+  const moreButtonRef = useRef(null);
+
   useClickOutside({
-    ref: menuRef,
+    refs: [menuRef, moreButtonRef],
     handler: () => {
       setIsMenuOpen(false);
     },
@@ -55,7 +57,7 @@ const NavbarBottom = () => {
                 isActive ? `${[styles.active]}` : ''
               }
             >
-              <div className={styles.item}>
+              <div className={classnames(styles.item, styles.parksLink)}>
                 <PawPrint size={24} strokeWidth={2} />
               </div>
             </NavLink>
@@ -70,6 +72,7 @@ const NavbarBottom = () => {
               </div>
             </NavLink>
             <div
+              ref={moreButtonRef}
               className={styles.moreContainer}
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >

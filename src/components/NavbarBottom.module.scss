@@ -38,6 +38,10 @@
     border-radius: 50%;
     height: 48px;
     width: 48px;
+
+    &.parks-link {
+      transform: rotate(-45deg);
+    }
   }
 
   .active .item {
@@ -50,7 +54,7 @@
   z-index: 3000;
   width: 50%;
   border: 1px solid $blue;
-  bottom: 72px;
+  bottom: 88px;
   right: 12px;
   background-color: $white;
   box-shadow: $box-shadow;
