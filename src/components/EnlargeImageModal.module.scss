@@ -71,15 +71,10 @@
 
 @media (orientation: landscape) {
   .modal-image {
-    padding-top: 8px;
     gap: 8px;
 
     .buttons-container {
-      padding: 0 8px;
-    }
-
-    .img img {
-      object-fit: contain;
+      padding: 0 8px 8px;
     }
   }
 }

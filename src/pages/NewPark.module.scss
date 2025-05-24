@@ -23,6 +23,7 @@
 .prev-links {
   position: fixed;
   top: 0;
+  z-index: 100;
   padding: $page-top-padding 4px 8px;
   background-color: $white;
   display: flex;
@@ -47,6 +48,7 @@
 .map {
   height: 280px;
   width: 100%;
+  z-index: 1;
 }
 
 .inputs-container {

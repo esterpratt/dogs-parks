@@ -27,28 +27,9 @@
 .image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
   border: 1px solid $grey-light;
   outline: none;
   border-radius: 8px;
-}
-
-.modal-image {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  width: 100%;
-  border: none;
-  border-radius: 12px;
-  background-color: $black;
-
-  img {
-    padding-top: 4px;
-    height: 80%;
-    width: 100%;
-    object-fit: cover;
-  }
 }
 
 .approve-modal {
