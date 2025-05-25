@@ -34,7 +34,7 @@ const CameraModal: React.FC<CameraModalProps> = ({
   };
 
   const renderInnerModal = () => {
-    return isMobile ? (
+    return isMobile() ? (
       <CameraMobileModal
         error={error}
         onCameraError={onCameraError}

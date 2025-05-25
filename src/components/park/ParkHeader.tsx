@@ -60,7 +60,7 @@ const ParkHeader = (props: ParkHeaderProps) => {
   };
 
   const onClickShareButton = async () => {
-    if (isMobile) {
+    if (isMobile()) {
       await Share.share({
         title: 'Check this park out!',
         text: 'Hey, check out this park:',

@@ -6,7 +6,7 @@ export async function getUserLocation() {
   let position: { position: GeolocationPosition, error?: unknown } | null = null;
 
   try {
-    if (isMobile) {
+    if (isMobile()) {
       const permStatus = await Geolocation.checkPermissions();
 
       if (permStatus.location === 'denied') {

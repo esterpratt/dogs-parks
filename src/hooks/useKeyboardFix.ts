@@ -34,7 +34,7 @@ const useKeyboardFix = () => {
       });
     };
 
-    if (isMobile) {
+    if (isMobile()) {
       setupListeners();
     }
 

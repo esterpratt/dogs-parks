@@ -2,13 +2,13 @@ import {
   Camera as CapacitorCamera,
   CameraResultType,
   CameraSource,
-  CameraPluginPermissions,
 } from '@capacitor/camera';
 import { CapacitorException } from '@capacitor/core';
 import { ChooseCamera } from './ChooseCamera';
 import { UploadMobileButton } from './UploadMobileButton';
 import { TakePhotoButton } from './TakePhotoButton';
 import { CancelButton } from './CancelButton';
+import { isIos } from '../../utils/platform';
 
 interface CameraMobileModalProps {
   variant?: 'top' | 'bottom';
@@ -19,6 +19,30 @@ interface CameraMobileModalProps {
   onCloseModal: () => void;
 }
 
+const requestPermission = async (type: 'camera' | 'photos') => {
+  const check = await CapacitorCamera.checkPermissions();
+
+  if (isIos()) {
+    if (
+      (type === 'camera' && check.camera === 'granted') ||
+      (type === 'photos' && check.photos === 'granted')
+    ) {
+      return true;
+    }
+  } else {
+    if (check.camera === 'granted') return true;
+  }
+
+  try {
+    const request = await CapacitorCamera.requestPermissions();
+    return type === 'camera'
+      ? request.camera === 'granted'
+      : request.photos === 'granted';
+  } catch (err) {
+    return false;
+  }
+};
+
 const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
   variant = 'bottom',
   onUploadImg,
@@ -27,16 +51,9 @@ const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
   error,
   onCloseModal,
 }) => {
-  const requestPermission = async (options: CameraPluginPermissions) => {
-    const permission = await CapacitorCamera.requestPermissions(options);
-    return permission.camera === 'granted' || permission.photos === 'granted';
-  };
-
   const onClickMobileUploadFile = async () => {
     try {
-      const hasPermission = await requestPermission({
-        permissions: ['photos'],
-      });
+      const hasPermission = await requestPermission('photos');
 
       if (!hasPermission) {
         throw new Error('Gallery permission denied');
@@ -48,11 +65,11 @@ const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
         source: CameraSource.Photos,
       });
 
-      if (photo.base64String) {
-        onUploadImg(`data:image/jpeg;base64,${photo.base64String}`);
-      } else {
+      if (!photo?.base64String) {
         throw new Error('Image is not Base64');
       }
+
+      onUploadImg(`data:image/jpeg;base64,${photo.base64String}`);
     } catch (error) {
       if ((error as CapacitorException).message?.includes('cancel')) {
         return;
@@ -72,9 +89,8 @@ const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
 
   const captureImgMobile = async () => {
     try {
-      const hasPermission = await requestPermission({
-        permissions: ['camera'],
-      });
+      const hasPermission = await requestPermission('camera');
+
       if (!hasPermission) {
         throw new Error('Camera permission denied');
       }
@@ -99,15 +115,17 @@ const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
           ? error
           : 'Unknown error';
 
-      if (message.includes('cancel')) {
+      if (message.toLowerCase().includes('cancel')) {
         return;
       }
 
-      if (message.includes('access') || message.includes('permission')) {
-        const isCamera = message.toLowerCase().includes('camera');
-        onCameraError(`${isCamera ? 'Camera' : 'Gallery'}  permission denied`);
+      if (
+        message.toLowerCase().includes('access') ||
+        message.toLowerCase().includes('permission')
+      ) {
+        onCameraError('Camera permission denied');
       } else {
-        onCameraError((error as Error)?.message);
+        onCameraError(message);
       }
     }
   };
