@@ -1,4 +1,4 @@
-package com.klavhub.www;
+package com.klavhub;
 
 import android.os.Build;
 import android.os.Bundle;

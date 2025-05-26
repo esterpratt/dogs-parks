@@ -51,7 +51,7 @@ const UserFavorites = () => {
         <div>No favorite parks yet.</div>
         <div>
           Sniff out nearby parks{' '}
-          <Link to="/" className={styles.link}>
+          <Link to="/parks" className={styles.link}>
             here!
           </Link>
         </div>

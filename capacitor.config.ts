@@ -1,13 +1,12 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.klavhub.www',
+  appId: 'com.klavhub',
   appName: 'KlavHub',
   webDir: 'dist',
-  server: {
-    url: 'http://10.100.102.53:5173/',
-    cleartext: true,
-  },
+  server: process.env.NODE_ENV === 'development'
+  ? { url: 'http://172.20.10.6:5173/', cleartext: true }
+  : undefined,
   plugins: {
     Keyboard: {
       resize: 'body',

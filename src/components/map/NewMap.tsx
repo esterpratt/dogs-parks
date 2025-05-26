@@ -32,7 +32,9 @@ interface NewMapProps {
 const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
   const userLocation = useUserLocation((state) => state.userLocation);
   const setUserLocation = useUserLocation((state) => state.setUserLocation);
-  const [center, setCenter] = useState(userLocation ?? DEFAULT_LOCATION);
+  const [center, setCenter] = useState<Location>(
+    location ?? userLocation ?? DEFAULT_LOCATION
+  );
   const [activePark, setActivePark] = useState<Park | null>(null);
   const [directions, setDirections] = useState<{
     distance?: string;
@@ -55,6 +57,12 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
     [setUserLocation]
   );
 
+  useEffect(() => {
+    if (!location && userLocation) {
+      setCenter(userLocation);
+    }
+  }, [location, userLocation]);
+
   const setCenterByPosition = (position: {
     coords: { lat: number; long: number };
   }) => {
@@ -68,6 +76,7 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
     cbc: ((position: { coords: Location }) => void)[]
   ) => {
     const userPosition = await getUserLocation();
+
     if (userPosition) {
       cbc.forEach((cb) =>
         cb({
@@ -79,16 +88,6 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
       );
     }
   };
-
-  useEffect(() => {
-    const setStatesToRun = [setUserLocationByPosition];
-    if (location) {
-      setCenter({ lat: location.lat, long: location.long });
-    } else {
-      setStatesToRun.push(setCenterByPosition);
-    }
-    setUserCenter(setStatesToRun);
-  }, [location, setUserLocationByPosition]);
 
   const onCloseParkPopup = () => {
     setDirections(undefined);

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import classnames from 'classnames';
 import { LeafletMouseEvent } from 'leaflet';
 import { MapContainer, TileLayer } from 'react-leaflet';
@@ -27,14 +27,19 @@ const LocationInput: React.FC<LocationInputProps> = ({
   className,
 }) => {
   const [center, setCenter] = useState(DEFAULT_LOCATION);
+  const mapCenter = useMemo(() => {
+    return { lat: center.lat, lng: center.long };
+  }, [center]);
 
   const handleSetCurrentLocation = async () => {
     const userLocation = await getUserLocation();
     if (userLocation?.position) {
-      onSetCurrentLocation({
+      const location = {
         lat: userLocation.position.coords.latitude,
         long: userLocation.position.coords.longitude,
-      });
+      };
+      setCenter(location);
+      onSetCurrentLocation(location);
     }
   };
 
@@ -70,7 +75,7 @@ const LocationInput: React.FC<LocationInputProps> = ({
       <div className={styles.map}>
         <MapContainer
           className={styles.map}
-          center={{ lat: center.lat, lng: center.long }}
+          center={mapCenter}
           zoom={17}
           scrollWheelZoom={false}
         >
@@ -79,7 +84,7 @@ const LocationInput: React.FC<LocationInputProps> = ({
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           {markerLocation && <ParkMarker location={markerLocation} />}
-          <MapCenter center={{ lat: center.lat, lng: center.long }} />
+          <MapCenter center={mapCenter} />
           <MapEventHandler onMapClick={onMapClick} />
         </MapContainer>
       </div>

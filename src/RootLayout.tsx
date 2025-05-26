@@ -7,11 +7,15 @@ import classnames from 'classnames';
 import { useSafeArea } from './hooks/useSafeArea';
 import { usePrefetchRoutesOnIdle } from './hooks/usePrefetchRoutesOnIdle';
 import { LocationPermissionModal } from './components/LocationPermissionModal';
+import { isIos } from './utils/platform';
 
 const RootLayout = () => {
   usePreventFocusOnScroll();
   const keyboardHeight = useKeyboardFix();
   useSafeArea();
+  const safeAreaAddition = !isIos()
+    ? 'var(--safe-area-inset-bottom, 0px)'
+    : '14px';
 
   // prefetch pages
   usePrefetchRoutesOnIdle(['profile', 'park', 'parks', 'users']);
@@ -24,7 +28,9 @@ const RootLayout = () => {
           className={classnames(styles.keyboardHeightContainer, {
             [styles.withExtraHeight]: !!keyboardHeight,
           })}
-          style={{ '--keyboard-height': `${keyboardHeight}px` }}
+          style={{
+            '--keyboard-height': `calc(${keyboardHeight}px + ${safeAreaAddition})`,
+          }}
         />
       </div>
       <NavbarBottom />

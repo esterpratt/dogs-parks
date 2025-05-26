@@ -23,24 +23,30 @@ const requestPermission = async (type: 'camera' | 'photos') => {
   const check = await CapacitorCamera.checkPermissions();
 
   if (isIos()) {
-    if (
-      (type === 'camera' && check.camera === 'granted') ||
-      (type === 'photos' && check.photos === 'granted')
-    ) {
-      return true;
-    }
-  } else {
-    if (check.camera === 'granted') return true;
+    return type === 'camera'
+      ? check.camera === 'granted'
+      : check.photos === 'granted';
   }
 
-  try {
-    const request = await CapacitorCamera.requestPermissions();
-    return type === 'camera'
-      ? request.camera === 'granted'
-      : request.photos === 'granted';
-  } catch (err) {
-    return false;
+  if (type === 'camera') {
+    if (check.camera === 'granted') return true;
+
+    const requested = await CapacitorCamera.requestPermissions({
+      permissions: ['camera'],
+    });
+    return requested.camera === 'granted';
   }
+
+  if (type === 'photos') {
+    if (check.photos === 'granted') return true;
+
+    const requested = await CapacitorCamera.requestPermissions({
+      permissions: ['photos'],
+    });
+    return requested.photos === 'granted';
+  }
+
+  return false;
 };
 
 const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
@@ -53,6 +59,7 @@ const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
 }) => {
   const onClickMobileUploadFile = async () => {
     try {
+      onCameraError('');
       const hasPermission = await requestPermission('photos');
 
       if (!hasPermission) {
@@ -89,10 +96,17 @@ const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
 
   const captureImgMobile = async () => {
     try {
+      onCameraError('');
       const hasPermission = await requestPermission('camera');
 
       if (!hasPermission) {
         throw new Error('Camera permission denied');
+      }
+
+      if (!isIos()) {
+        await new Promise((resolve) =>
+          requestAnimationFrame(() => resolve(null))
+        );
       }
 
       const photo = await CapacitorCamera.getPhoto({
