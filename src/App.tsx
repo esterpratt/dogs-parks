@@ -14,6 +14,7 @@ import { Home } from './pages/Home';
 import { RootLayout } from './RootLayout';
 import { ErrorPage } from './pages/Error';
 import { AuthCallback } from './pages/AuthCallback';
+import { EmailCallback } from './pages/EmailCallback';
 import { queryClient } from './services/react-query';
 import { PrivateRoute } from './pages/PrivateRoute';
 import { userLoader } from './loaders/userLoader';
@@ -53,6 +54,10 @@ const App = () => {
         {
           path: '/auth-callback',
           element: <AuthCallback />,
+        },
+        {
+          path: '/email-callback',
+          element: <EmailCallback />,
         },
         {
           path: '/about',

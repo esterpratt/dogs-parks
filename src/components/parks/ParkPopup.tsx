@@ -129,7 +129,10 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
                     <>
                       <div className={styles.distance}>
                         <Footprints
-                          className={styles.icon}
+                          className={classnames(
+                            styles.icon,
+                            styles.directionsIcon
+                          )}
                           color={styles.pink}
                           size={16}
                         />
@@ -137,7 +140,10 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
                       </div>
                       <div className={styles.duration}>
                         <Hourglass
-                          className={styles.icon}
+                          className={classnames(
+                            styles.icon,
+                            styles.directionsIcon
+                          )}
                           color={styles.pink}
                           size={16}
                         />
@@ -154,12 +160,12 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
                 className={styles.button}
                 onClick={onClickGetDirections}
               >
-                <Navigation size={12} />
+                <Navigation size={12} className={styles.icon} />
                 <span>Lead the way</span>
               </Button>
               <Button className={styles.button}>
                 <Link to={`/parks/${activePark?.id}`}>
-                  <Eye size={12} />
+                  <Eye size={12} className={styles.icon} />
                   <span>View park</span>
                 </Link>
               </Button>

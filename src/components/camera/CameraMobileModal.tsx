@@ -23,9 +23,20 @@ const requestPermission = async (type: 'camera' | 'photos') => {
   const check = await CapacitorCamera.checkPermissions();
 
   if (isIos()) {
+    const isGranted =
+      type === 'camera'
+        ? check.camera === 'granted'
+        : check.photos === 'granted';
+
+    if (isGranted) return true;
+
+    const requested = await CapacitorCamera.requestPermissions({
+      permissions: [type],
+    });
+
     return type === 'camera'
-      ? check.camera === 'granted'
-      : check.photos === 'granted';
+      ? requested.camera === 'granted'
+      : requested.photos === 'granted';
   }
 
   if (type === 'camera') {

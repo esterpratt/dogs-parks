@@ -8,14 +8,20 @@ import { useSafeArea } from './hooks/useSafeArea';
 import { usePrefetchRoutesOnIdle } from './hooks/usePrefetchRoutesOnIdle';
 import { LocationPermissionModal } from './components/LocationPermissionModal';
 import { isIos } from './utils/platform';
+import { useKeyboardPreFocus } from './hooks/useKeyboardPreFocus';
+import { useAuthCallbackHandler } from './hooks/useAuthCallbackHandler';
 
 const RootLayout = () => {
+  useAuthCallbackHandler();
   usePreventFocusOnScroll();
   const keyboardHeight = useKeyboardFix();
   useSafeArea();
   const safeAreaAddition = !isIos()
     ? 'var(--safe-area-inset-bottom, 0px)'
     : '14px';
+
+  // warms up the keyboard pre-focus to avoid a delay when the keyboard is opened for the first time
+  useKeyboardPreFocus();
 
   // prefetch pages
   usePrefetchRoutesOnIdle(['profile', 'park', 'parks', 'users']);

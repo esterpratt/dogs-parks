@@ -52,10 +52,10 @@
   flex-shrink: 0;
   background-image: $linear-gradient;
   max-height: 180px;
-  transition: all 0.3s ease;
+  transition: max-height 0.3s ease;
 
   &.hidden {
-    height: 0;
+    max-height: 0;
 
     .no-img {
       display: none;
@@ -144,6 +144,8 @@
 
 .directions-container {
   height: 20px;
+  display: flex;
+  align-items: center;
 }
 
 .directions {
@@ -153,6 +155,10 @@
 }
 
 .icon {
+  will-change: transform;
+}
+
+.directions-icon {
   margin-right: 4px;
 }
 

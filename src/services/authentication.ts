@@ -1,3 +1,5 @@
+import { Browser } from '@capacitor/browser';
+import { isMobile } from '../utils/platform';
 import { AppError, throwError } from './error';
 import { supabase } from './supabase-client';
 
@@ -12,16 +14,29 @@ interface SigninProps extends LoginProps {
 
 const signinWithGoogle = async () => {
   try {
-    const { error } = await supabase.auth.signInWithOAuth({
+    const isMobileApp = isMobile();
+    const redirectTo = isMobileApp
+    ? 'com.klavhub://auth-callback'
+    : `${window.location.origin}/auth-callback`;
+
+    const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth-callback`
+        redirectTo,
+        skipBrowserRedirect: isMobileApp,
+        queryParams: {
+          prompt: 'select_account',
+        },
       }
     });
 
     if (error) {
       console.error('error here: ', JSON.stringify(error));
       throw error;
+    }
+
+    if (data?.url) {
+      await Browser.open({ url: data.url });
     }
   } catch (error) {
     throwError(error);
@@ -35,7 +50,7 @@ const signin = async ({ email, password, name }: SigninProps) => {
       password,
       options: {
         data: { full_name: name },
-        emailRedirectTo: import.meta.env.DEV ? 'http://localhost:5173/auth-callback' : 'https://klavhub.com/auth-callback',
+        emailRedirectTo: import.meta.env.DEV ? 'http://localhost:5173/email-callback' : 'https://klavhub.com/email-callback',
       },
     });
     if (error) {

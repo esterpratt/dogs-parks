@@ -1,6 +1,6 @@
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Slider from 'react-slick';
 import { Plus, Trash2, X } from 'lucide-react';
 import { Button } from './Button';
@@ -8,6 +8,7 @@ import { EnlargeImageModal } from './EnlargeImageModal';
 import { TopModal } from './modals/TopModal';
 import styles from './Carousel.module.scss';
 import { Image } from './Image';
+import { usePreventVerticalScrollOnHorizontalSwipe } from '../hooks/usePreventVerticalScrollOnHorizontalSwipe';
 
 interface CarouselProps {
   images: string[];
@@ -27,6 +28,9 @@ const Carousel: React.FC<CarouselProps> = ({
     useState(false);
   const [isEnlargedImageModalOpen, setIsEnlargeImageModalOpen] =
     useState(false);
+
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  usePreventVerticalScrollOnHorizontalSwipe(containerRef);
 
   const onDeleteImage = () => {
     if (removeImage) {
@@ -58,7 +62,7 @@ const Carousel: React.FC<CarouselProps> = ({
 
   return (
     <>
-      <div className="slider-container">
+      <div ref={containerRef} className="slider-container">
         <Slider {...settings} className={styles.container}>
           {images.map((img) => (
             <Image
