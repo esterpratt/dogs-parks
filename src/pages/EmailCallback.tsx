@@ -8,17 +8,6 @@ import { Button } from '../components/Button';
 const EmailCallback = () => {
   const { user } = useContext(UserContext);
 
-  const hash = window.location.hash;
-  const params = new URLSearchParams(hash.slice(1));
-  const access_token = params.get('access_token');
-  const refresh_token = params.get('refresh_token');
-
-  const deepLink =
-    access_token && refresh_token && user?.id
-      ? `com.klavhub://auth-callback/profile/${user.id}` +
-        `#access_token=${access_token}&refresh_token=${refresh_token}`
-      : 'com.klavhub://';
-
   if (user) {
     return (
       <div className={styles.container}>
@@ -29,7 +18,7 @@ const EmailCallback = () => {
         </p>
         <div className={styles.buttonsContainer}>
           <Button>
-            <a href={deepLink} className={styles.appLink}>
+            <a href="com.klavhub://login" className={styles.appLink}>
               Open the App
             </a>
           </Button>
