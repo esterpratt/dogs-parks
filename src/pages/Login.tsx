@@ -12,7 +12,7 @@ import GoogleIcon from '../assets/google.svg?react';
 import { Button } from '../components/Button';
 import { UserContext, SigninProps } from '../context/UserContext';
 import { useMutation } from '@tanstack/react-query';
-import { sendResetEmail } from '../services/authentication';
+import { sendResetEmail, signin } from '../services/authentication';
 import { Input } from '../components/inputs/Input';
 import styles from './Login.module.scss';
 import { useNotification } from '../context/NotificationContext';
@@ -20,15 +20,8 @@ import { Eye, EyeClosed } from 'lucide-react';
 import { preserveCursor } from '../utils/input';
 
 const Login = () => {
-  const {
-    user,
-    userSigninWithEmailAndPassowrd,
-    userSigninWithGoogle,
-    userLogin,
-    error,
-    setError,
-    isLoading,
-  } = useContext(UserContext);
+  const { user, userSigninWithGoogle, userLogin, error, setError, isLoading } =
+    useContext(UserContext);
   const [searchParams, setSearchParams] = useSearchParams({ mode: 'signup' });
   const [showPassword, setShowPassword] = useState(false);
   const isSignup = searchParams.get('mode') === 'signup';
@@ -58,6 +51,7 @@ const Login = () => {
       onSuccess: () => {
         notify('Check your mail for details');
         setError('');
+        changeMethod('login');
       },
     });
 
@@ -68,6 +62,25 @@ const Login = () => {
       userLogin({ withGoogle: true });
     }
   };
+
+  const { mutate: userSigninWithEmailAndPassowrd, isPending: isSigningIn } =
+    useMutation({
+      mutationFn: (vars: SigninProps) => {
+        return signin({
+          email: vars.email!,
+          password: vars.password!,
+          name: vars.name!,
+        });
+      },
+      onError: (error) => {
+        setError(error.message);
+      },
+      onSuccess: () => {
+        notify('Check your mail for details');
+        setError('');
+        changeMethod('login');
+      },
+    });
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -117,7 +130,8 @@ const Login = () => {
             <span
               className={classnames(
                 styles.loading,
-                (isLoading || isPendingResetPassword) && styles.show
+                (isLoading || isSigningIn || isPendingResetPassword) &&
+                  styles.show
               )}
             >
               Paws a sec...
