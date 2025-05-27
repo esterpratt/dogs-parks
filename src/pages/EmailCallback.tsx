@@ -18,7 +18,7 @@ const EmailCallback = () => {
         </p>
         <div className={styles.buttonsContainer}>
           <Button>
-            <a href="com.klavhub://login" className={styles.appLink}>
+            <a href="com.klavhub://login?mode=login" className={styles.appLink}>
               Open the App
             </a>
           </Button>
