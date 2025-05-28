@@ -37,7 +37,9 @@ const ParkCheckIn: React.FC<{
       return id;
     },
     onSuccess: async (id) => {
-      setCheckIn({ id, parkId });
+      if (id) {
+        setCheckIn({ id, parkId });
+      }
       queryClient.invalidateQueries({
         queryKey: ['parkVisitors', parkId],
       });
