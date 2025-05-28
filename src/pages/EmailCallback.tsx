@@ -18,8 +18,8 @@ const EmailCallback = () => {
         </p>
         <div className={styles.buttonsContainer}>
           <Button>
-            <a href="com.klavhub://login?mode=login" className={styles.appLink}>
-              Open the App
+            <a href="com.klavhub://login" className={styles.appLink}>
+              Open the app
             </a>
           </Button>
           <Button variant="secondary">

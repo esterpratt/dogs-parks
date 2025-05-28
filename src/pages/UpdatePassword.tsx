@@ -69,7 +69,7 @@ const UpdatePassword = () => {
     }
   };
 
-  if (user && isUpdated && accessToken && refreshToken) {
+  if (isUpdated && user) {
     const deepLink =
       user && accessToken && refreshToken
         ? `com.klavhub://auth-callback/profile/${user.id}` +
@@ -84,11 +84,11 @@ const UpdatePassword = () => {
         <div className={styles.buttonsContainer}>
           <Button>
             <a href={deepLink} className={styles.appLink}>
-              Open the App
+              Open the app
             </a>
           </Button>
           <Button variant="secondary">
-            <Link to={`/profile/${user.id}`} className={styles.link}>
+            <Link to={`/profile/${user?.id}`} className={styles.link}>
               Continue here
             </Link>
           </Button>
