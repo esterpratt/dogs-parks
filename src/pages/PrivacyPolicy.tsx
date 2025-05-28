@@ -5,7 +5,7 @@ const PrivacyPolicy = () => {
   return (
     <div className={styles.wrapper}>
       <h1>Privacy Policy</h1>
-      <p>Last Updated: 1.2.25</p>
+      <p>Last Updated: 28.5.25</p>
       <div className={styles.section}>
         <h2>1. Introduction</h2>
         <p>
