@@ -19,6 +19,7 @@ import { queryClient } from './services/react-query';
 import { PrivateRoute } from './pages/PrivateRoute';
 import { userLoader } from './loaders/userLoader';
 import { parkLoader } from './loaders/parkLoader';
+import { ShareRedirect } from './pages/ShareRedirect';
 
 const UserDog = lazy(() => import('./pages/UserDog'));
 const UserReviews = lazy(() => import('./pages/UserReviews'));
@@ -58,6 +59,10 @@ const App = () => {
         {
           path: '/email-callback',
           element: <EmailCallback />,
+        },
+        {
+          path: '/share/parks/:parkId',
+          element: <ShareRedirect />,
         },
         {
           path: '/about',

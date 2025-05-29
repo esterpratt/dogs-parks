@@ -64,13 +64,13 @@ const ParkHeader = (props: ParkHeaderProps) => {
       await Share.share({
         title: 'Check this park out!',
         text: 'Hey, check out this park:',
-        url: location.href,
+        url: `https://klavhub.com/share/parks/${park.id}`,
         dialogTitle: 'Share this park with friends',
       });
       notify('Thanks for sharing!');
     } else if (navigator.clipboard) {
       navigator.clipboard.writeText(location.href);
-      notify('Park Copied to Clipboard');
+      notify('Park link copied to clipboard');
     }
   };
 
