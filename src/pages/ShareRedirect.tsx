@@ -11,8 +11,8 @@ const ShareRedirect = () => {
 
     setTimeout(() => {
       const fallbackLink = isIos()
-        ? import.meta.env.VITE_IOS_APP_LINK || siteLink
-        : import.meta.env.VITE_ANDROID_APP_LINK || siteLink;
+        ? import.meta.env.VITE_IOS_STORE_APP_LINK || siteLink
+        : import.meta.env.VITE_ANDROID_STORE_APP_LINK || siteLink;
 
       window.open(fallbackLink, '_self');
     }, 1500);
