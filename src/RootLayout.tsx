@@ -9,10 +9,10 @@ import { usePrefetchRoutesOnIdle } from './hooks/usePrefetchRoutesOnIdle';
 import { LocationPermissionModal } from './components/LocationPermissionModal';
 import { isIos } from './utils/platform';
 import { useKeyboardPreFocus } from './hooks/useKeyboardPreFocus';
-import { useAuthCallbackHandler } from './hooks/useAuthCallbackHandler';
+import { useUrlHandler } from './hooks/useUrlHandler';
 
 const RootLayout = () => {
-  useAuthCallbackHandler();
+  useUrlHandler();
   usePreventFocusOnScroll();
   const keyboardHeight = useKeyboardFix();
   useSafeArea();
