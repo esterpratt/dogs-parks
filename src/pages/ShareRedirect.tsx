@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import styles from './ShareRedirect.module.scss';
 import { isIos } from '../utils/platform';
+import { Button } from '../components/Button';
 
 const ShareRedirect = () => {
   const { parkId } = useParams();
@@ -24,21 +25,22 @@ const ShareRedirect = () => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Someone shared a dog-park with you!</h1>
-      <p className={styles.subtitle}>Wanna sniff it out in the app?</p>
+      <h1>Someone shared a park with you!</h1>
+      <p>Wanna sniff it out in the app?</p>
+      <p>(If the app doesn't open, we'll fetch the bone from the store)</p>
 
       <div className={styles.buttonsContainer}>
-        <button onClick={handleOpenApp} className={styles.appButton}>
-          Open in App
-        </button>
-        <button onClick={handleOpenBrowser} className={styles.browserButton}>
+        <Button onClick={handleOpenApp} className={styles.button}>
+          Open in app
+        </Button>
+        <Button
+          variant="secondary"
+          onClick={handleOpenBrowser}
+          className={styles.button}
+        >
           Continue here
-        </button>
+        </Button>
       </div>
-
-      <p className={styles.note}>
-        P.S. If the app doesn't open, we'll fetch the bone from the store
-      </p>
     </div>
   );
 };
