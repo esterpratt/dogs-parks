@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { App } from '@capacitor/app';
 import { Browser } from '@capacitor/browser';
 import { supabase } from '../services/supabase-client';
-import { useNavigate } from 'react-router-dom';
 
-const useUrlHandler = () => {
+export const useUrlHandler = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -13,31 +13,31 @@ const useUrlHandler = () => {
     const setupListener = async () => {
       const { remove } = await App.addListener('appUrlOpen', async ({ url }) => {
         try {
-          const parsed = new URL(url);
+          const [base, hash] = url.split('#');
+          const path = base.replace('com.klavhub://', '').replace(/^\/+/, '');
+          const params = new URLSearchParams(hash);
+          const access_token = params.get('access_token');
+          const refresh_token = params.get('refresh_token');
 
-          if (parsed.pathname.includes('auth-callback') && parsed.hash.includes('access_token')) {
-            const hash = parsed.hash.slice(1);
-            const params = new URLSearchParams(hash);
+          if (path.startsWith('auth-callback') && access_token && refresh_token) {
+            const { error } = await supabase.auth.setSession({
+              access_token,
+              refresh_token,
+            });
 
-            const access_token = params.get('access_token');
-            const refresh_token = params.get('refresh_token');
-
-            if (access_token && refresh_token) {
-              await supabase.auth.setSession({
-                access_token,
-                refresh_token,
-              });
+            if (error) {
+              console.error('[Supabase auth error]', error.message);
             }
 
-            navigate('/login');
+            navigate('/auth-callback');
           } else {
-            const path = parsed.pathname;
-            navigate(path);
+            navigate(`/${path}`);
           }
-
-          await Browser.close();
         } catch (error) {
-          console.error('[Deep link error]', JSON.stringify(error));
+          console.error('[Deep link handler error]', error);
+          navigate('/');
+        } finally {
+          await Browser.close();
         }
       });
 
@@ -53,5 +53,3 @@ const useUrlHandler = () => {
     };
   }, [navigate]);
 };
-
-export { useUrlHandler };

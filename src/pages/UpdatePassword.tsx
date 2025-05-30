@@ -5,7 +5,6 @@ import { updatePassword } from '../services/authentication';
 import { useMutation } from '@tanstack/react-query';
 import { Input } from '../components/inputs/Input';
 import styles from './UpdatePassword.module.scss';
-import { useNotification } from '../context/NotificationContext';
 import { supabase } from '../services/supabase-client';
 import { Link } from 'react-router';
 import { UserContext } from '../context/UserContext';
@@ -17,7 +16,6 @@ const UpdatePassword = () => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
-  const { notify } = useNotification();
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -52,7 +50,6 @@ const UpdatePassword = () => {
       },
       onSuccess: () => {
         setIsUpdated(true);
-        notify('Your password has been updated!');
         setError('');
       },
     });
@@ -72,7 +69,7 @@ const UpdatePassword = () => {
   if (isUpdated && user) {
     const deepLink =
       user && accessToken && refreshToken
-        ? `com.klavhub://auth-callback/profile/${user.id}` +
+        ? 'com.klavhub://auth-callback' +
           `#access_token=${accessToken}&refresh_token=${refreshToken}`
         : 'com.klavhub://login';
 
@@ -121,7 +118,7 @@ const UpdatePassword = () => {
           type="password"
         />
         <Button type="submit" className={styles.button}>
-          Change Password
+          Update password
         </Button>
       </form>
     </div>
