@@ -63,7 +63,7 @@ const ParkHeader = (props: ParkHeaderProps) => {
     if (isMobile()) {
       await Share.share({
         title: 'Check this park out!',
-        text: 'Hey, check out this park:',
+        text: `Hey, check out ${park.name} park:`,
         url: `https://klavhub.com/share/parks/${park.id}`,
         dialogTitle: 'Share this park with friends',
       });
