@@ -3,3 +3,5 @@ export const DEFAULT_LOCATION = { lat: 32.09992, long: 34.809212 };
 export const FIVE_MINUTES = 1000 * 60 * 5;
 
 export const MAX_IMAGES = 5;
+
+export const USER_NOT_FOUND_ERROR = 'User not found';

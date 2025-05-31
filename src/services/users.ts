@@ -1,8 +1,9 @@
 import { User } from '../types/user';
-import { throwError } from './error';
+import { AppError, throwError } from './error';
 import { fetchUsersDogs } from './dogs';
 import { Dog } from '../types/dog';
 import { supabase } from './supabase-client';
+import { USER_NOT_FOUND_ERROR } from '../utils/consts';
 
 interface EditUserProps {
   userId: string;
@@ -33,7 +34,7 @@ const fetchUser = async (id: string) => {
       .single();
     
     if (error) {
-      throw error;
+      throw new AppError(USER_NOT_FOUND_ERROR, 403)
     }
 
     return user;
