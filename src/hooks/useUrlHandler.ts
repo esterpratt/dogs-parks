@@ -29,7 +29,15 @@ export const useUrlHandler = () => {
               console.error('[Supabase auth error]', error.message);
             }
 
-            navigate('/auth-callback');
+            const { data: userData, error: userError } = await supabase.auth.getUser();
+
+            if (userError || !userData.user) {
+              console.error('[Supabase getUser error]', userError?.message);
+              navigate('/login'); // fallback
+              return;
+            }
+
+            navigate(`/profile/${userData.user.id}`);
           } else {
             navigate(`/${path}`);
           }
