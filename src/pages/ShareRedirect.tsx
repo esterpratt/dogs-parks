@@ -1,12 +1,12 @@
 import { useParams } from 'react-router-dom';
 import styles from './ShareRedirect.module.scss';
-import { isIos } from '../utils/platform';
+import { isIosFromBrowser } from '../utils/platform';
 import { Button } from '../components/Button';
 
 const ShareRedirect = () => {
   const { parkId } = useParams();
   const siteLink = `https://klavhub.com/parks/${parkId}`;
-  const downloadLabel = isIos() ? 'the App Store' : 'Google Play';
+  const downloadLabel = isIosFromBrowser() ? 'the App Store' : 'Google Play';
 
   const handleOpenApp = () => {
     window.location.href = `com.klavhub://parks/${parkId}`;
@@ -17,7 +17,7 @@ const ShareRedirect = () => {
   };
 
   const handleOpenStore = () => {
-    const fallbackLink = isIos()
+    const fallbackLink = isIosFromBrowser()
       ? import.meta.env.VITE_IOS_STORE_APP_LINK || siteLink
       : import.meta.env.VITE_ANDROID_STORE_APP_LINK || siteLink;
     window.open(fallbackLink, '_self');
