@@ -33,7 +33,7 @@ export const useUrlHandler = () => {
 
             if (userError || !userData.user) {
               console.error('[Supabase getUser error]', userError?.message);
-              navigate('/login'); // fallback
+              navigate('/login');
               return;
             }
 
