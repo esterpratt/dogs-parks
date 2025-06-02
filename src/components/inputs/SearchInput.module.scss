@@ -4,10 +4,10 @@
   height: 48px;
   display: flex;
   align-items: center;
-  box-shadow: $box-shadow;
+  box-shadow: var(--box-shadow);
   border-radius: 50px;
-  background-color: $white;
-  color: $text;
+  background-color: var(--background-color);
+  color: var(--color-text);
   padding: 12px;
 }
 
@@ -19,9 +19,11 @@
   border: none;
   padding-left: 12px;
   width: 100%;
+  background-color: inherit;
+  color: inherit;
 
   &::placeholder {
-    color: $placeholder;
+    color: var(--color-placeholder);
   }
 }
 

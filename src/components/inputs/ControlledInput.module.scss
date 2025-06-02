@@ -3,7 +3,7 @@
 .container {
   display: flex;
   gap: 8px;
-  color: $text;
+  color: var(--color-text);
 
   &.basic {
     flex-direction: column;

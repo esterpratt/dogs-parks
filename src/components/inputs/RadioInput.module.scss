@@ -6,10 +6,15 @@
   justify-content: center;
   position: relative;
   padding: 4px;
-  color: $text-medium;
+  color: var(--color-text-medium);
   min-height: 42px;
   border-radius: 6px;
-  border: 1px solid rgba($pink, 0.4);
+  border: 2px solid rgba($pink, 0.2);
+  transition: all 0.3s ease;
+
+  :global(.dark) & {
+    border: 2px solid rgba($pink, 0.6);
+  }
 
   &:first-child:nth-last-child(2),
   &:first-child:nth-last-child(2) ~ .input {

@@ -56,8 +56,8 @@
   border: 1px solid $blue;
   bottom: 88px;
   right: 12px;
-  background-color: $white;
-  box-shadow: $box-shadow;
+  background-color: var(--background-color);
+  box-shadow: var(--box-shadow);
   border-radius: 12px;
   display: flex;
   flex-direction: column;
@@ -87,7 +87,7 @@
       color: $blue;
 
       &.active {
-        background-color: rgba($blue, 0.1);
+        background-color: rgba($blue, 0.15);
       }
     }
   }

@@ -6,8 +6,8 @@
   bottom: -400px;
   left: calc(12px + var(--safe-area-inset-left));
   right: calc(12px + var(--safe-area-inset-right));
-  background-color: $white;
-  box-shadow: $box-shadow;
+  background-color: var(--background-color);
+  box-shadow: var(--box-shadow);
   border-radius: 24px;
   transition: all 0.3s ease;
   display: flex;
@@ -50,7 +50,7 @@
   border-top-right-radius: 24px;
   border-top-left-radius: 24px;
   flex-shrink: 0;
-  background-image: $linear-gradient;
+  background-image: var(--gradient);
   max-height: 180px;
   transition: max-height 0.3s ease;
 
@@ -80,7 +80,7 @@
   text-wrap: nowrap;
   padding: 24px calc(24px + var(--safe-area-inset-right, 0px)) 24px
     calc(24px + var(--safe-area-inset-left, 0px));
-  color: $text;
+  color: var(--color-text);
 }
 
 .details {
@@ -201,7 +201,7 @@
       justify-content: center;
       border-radius: 24px;
       background-image: none;
-      border: 1px solid $grey-light;
+      border: 1px solid var(--color-grey-light);
 
       img {
         border-radius: 24px;

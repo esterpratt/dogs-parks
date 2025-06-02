@@ -3,7 +3,7 @@
 .prev-links {
   position: fixed;
   top: 0;
-  background-color: $white;
+  background-color: var(--background-color);
   display: flex;
   justify-content: space-between;
   padding: $page-top-padding calc(12px + var(--safe-area-inset-right)) 6px
@@ -25,11 +25,11 @@
   position: relative;
   height: 268px;
   flex-shrink: 0;
-  background-image: $linear-gradient;
+  background-image: var(--gradient);
   background-repeat: no-repeat;
   background-size: 100% 114px, 100% 154px;
   background-position: top, bottom;
-  border-bottom: 1px solid $grey-light;
+  border-bottom: 1px solid var(--color-grey-light);
 
   &.small {
     height: 220px;

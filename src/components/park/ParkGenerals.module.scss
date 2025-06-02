@@ -135,10 +135,10 @@
   red: $red;
   pink: $pink;
   white: $white;
-  lightGreen: rgba($green, 0.2);
-  lightBlue: rgba($blue, 0.2);
-  lightOrange: rgba($orange, 0.2);
-  lightRed: rgba($red, 0.2);
+  lightGreen: var(--light-green);
+  lightOrange: var(--light-orange);
+  lightBlue: var(--light-blue);
+  lightRed: var(--light-red);
 }
 
 @media (orientation: landscape) {

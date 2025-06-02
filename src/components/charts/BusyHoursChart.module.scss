@@ -39,8 +39,16 @@
   justify-content: center;
   border-bottom: 1px solid rgba($blue, 0.8);
 
+  :global(.dark) & {
+    border-bottom: 1px solid $blue;
+  }
+
   &.active {
     color: $white;
     background-color: rgba($blue, 0.8);
+
+    :global(.dark) & {
+      background-color: $blue;
+    }
   }
 }

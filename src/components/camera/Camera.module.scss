@@ -6,7 +6,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  color: $text;
+  color: var(--color-text);
   background-color: $black;
   display: flex;
   flex-direction: column;

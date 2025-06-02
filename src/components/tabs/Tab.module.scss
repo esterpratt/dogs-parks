@@ -24,12 +24,16 @@
     div {
       color: $white;
       background-color: rgba($blue, 0.8);
+
+      :global(.dark) & {
+        background-color: $blue;
+      }
     }
   }
 
   &.disabled {
     div {
-      color: $disabled;
+      color: var(--color-disabled);
     }
 
     pointer-events: none;

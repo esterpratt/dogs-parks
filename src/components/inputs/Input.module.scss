@@ -17,9 +17,9 @@
 
 .input {
   font-weight: inherit;
-  color: $text;
-  border: 1px solid rgba($pink, 0.4);
-  background-color: $white;
+  color: var(--color-text);
+  border: 2px solid rgba($pink, 0.2);
+  background-color: var(--background-color);
   border-radius: 12px;
   font-size: 16px;
   font-family: inherit;
@@ -30,17 +30,36 @@
   transition: border 0.3s ease;
   width: 100%;
 
+  :global(.dark) & {
+    border: 2px solid rgba($pink, 0.6);
+  }
+
   &:focus {
-    border: 1px solid rgba($pink, 1);
+    border: 2px solid rgba($pink, 1);
+
+    :global(.dark) & {
+      border: 2px solid rgba($pink, 1);
+    }
 
     + .right-icon {
       opacity: 1;
     }
   }
 
+  &:-webkit-autofill {
+    -webkit-text-fill-color: var(--color-text) !important;
+    box-shadow: 0 0 0 1000px var(--background-color) inset !important;
+  }
+
   &[type='date'] {
     appearance: none;
     -webkit-appearance: none;
+
+    color-scheme: light;
+
+    :global(.dark) & {
+      color-scheme: dark;
+    }
 
     &::-webkit-date-and-time-value {
       text-align: left;
@@ -48,6 +67,6 @@
   }
 
   &::placeholder {
-    color: $placeholder;
+    color: var(--color-placeholder);
   }
 }

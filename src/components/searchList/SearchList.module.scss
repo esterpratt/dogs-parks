@@ -16,13 +16,13 @@
 .button {
   margin: 32px auto 0;
   border-radius: 48px;
-  box-shadow: $box-shadow;
+  box-shadow: var(--box-shadow);
 }
 
 .no-results {
   margin: 20px auto;
   text-align: center;
-  color: $text;
+  color: var(--color-text);
 }
 
 @media (orientation: landscape) {

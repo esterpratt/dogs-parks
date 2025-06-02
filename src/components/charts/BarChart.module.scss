@@ -5,5 +5,7 @@
   red: $red;
   orange: $orange;
   blue: $blue;
-  lightBlue: rgba($blue, 0.5);
+  lightBlueLight: rgba($blue, 0.5);
+  lightBlueDark: rgba($blue, 0.9);
+  tickColor: var(--color-text);
 }

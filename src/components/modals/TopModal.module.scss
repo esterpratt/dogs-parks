@@ -10,7 +10,7 @@
   margin: calc(var(--safe-area-inset-top) + 12px) auto 0;
   width: 90%;
   padding: 16px;
-  color: $text;
+  color: var(--color-text);
   font-size: 20px;
   z-index: 1100;
   transform: translateY(100%);

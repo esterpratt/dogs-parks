@@ -5,9 +5,9 @@
   height: $tabs-height;
   display: flex;
   align-items: center;
-  background: $white;
+  background-color: var(--background-color);
   margin: 0;
   padding: 2px 4px;
   font-size: 14px;
-  border-bottom: 1px solid $grey-light;
+  border-bottom: 1px solid var(--color-grey-light);
 }

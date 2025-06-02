@@ -74,8 +74,10 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     if (session) {
-      refetchUser({ throwOnError: true }).catch(() => {
-        logout();
+      refetchUser({ throwOnError: true }).catch((error) => {
+        if (!error?.silent) {
+          logout();
+        }
       });
     }
   }, [session, refetchUser]);

@@ -16,7 +16,7 @@
 
 .boneWrapper,
 .dog {
-  background-color: $white;
+  background-color: var(--background-color);
   position: relative;
   z-index: 1;
 }

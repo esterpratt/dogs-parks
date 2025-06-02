@@ -20,6 +20,7 @@ import { PrivateRoute } from './pages/PrivateRoute';
 import { userLoader } from './loaders/userLoader';
 import { parkLoader } from './loaders/parkLoader';
 import { ShareRedirect } from './pages/ShareRedirect';
+import { ModeProvider } from './context/ModeContext';
 
 const UserDog = lazy(() => import('./pages/UserDog'));
 const UserReviews = lazy(() => import('./pages/UserReviews'));
@@ -165,13 +166,15 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <NotificationProvider>
-        <UserLocationProvider>
-          <OrientationProvider>
-            <UserContextProvider>
-              <RouterProvider router={router} />
-            </UserContextProvider>
-          </OrientationProvider>
-        </UserLocationProvider>
+        <ModeProvider>
+          <UserLocationProvider>
+            <OrientationProvider>
+              <UserContextProvider>
+                <RouterProvider router={router} />
+              </UserContextProvider>
+            </OrientationProvider>
+          </UserLocationProvider>
+        </ModeProvider>
       </NotificationProvider>
     </QueryClientProvider>
   );

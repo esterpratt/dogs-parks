@@ -14,17 +14,17 @@
   &.list-open {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    border-bottom: 1px solid $grey-bold;
   }
 }
 
 .list-container {
+  z-index: 1000;
   position: absolute;
   top: 100%;
   left: 0;
   width: 100%;
-  background-color: $white;
-  border: 1px solid $pink;
+  background-color: var(--background-color);
+  border: 2px solid $pink;
   border-top: none;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
@@ -40,12 +40,17 @@
 .items {
   max-height: 182px;
   overflow: auto;
+  color: var(--color-text);
 
   li:not(:last-child) {
-    border-bottom: 1px solid $grey-light;
+    border-bottom: 1px solid var(--color-grey-light);
   }
 }
 
 .chosen {
   background-color: rgba($pink, 0.05);
+
+  :global(.dark) & {
+    background-color: rgba($pink, 0.2);
+  }
 }

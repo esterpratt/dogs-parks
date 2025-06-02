@@ -25,7 +25,7 @@
   top: 0;
   z-index: 100;
   padding: $page-top-padding 4px 8px;
-  background-color: $white;
+  background-color: var(--background-color);
   display: flex;
   justify-content: space-between;
   width: 100%;

@@ -3,13 +3,13 @@
 .container {
   list-style: none;
   text-decoration: none;
-  background-color: #fff;
-  color: $text;
+  background-color: var(--background-color);
+  color: var(--color-text);
   border: none;
   margin: 0;
   padding: 16px;
   border-radius: 12px;
-  box-shadow: $box-shadow;
+  box-shadow: var(--box-shadow);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -76,7 +76,7 @@
 .park-name {
   font-size: $title-font-size;
   padding-bottom: 4px;
-  border-bottom: 1px solid $grey-light;
+  border-bottom: 1px solid var(--color-grey-light);
 }
 
 :export {

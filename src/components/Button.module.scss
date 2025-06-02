@@ -21,7 +21,7 @@
 
   &.secondary {
     color: var(--color, $pink);
-    background-color: $white;
+    background-color: var(--background-color);
     border: 1px solid var(--color, $pink);
     padding: 12px 24px;
   }
@@ -32,30 +32,29 @@
 
   &.round {
     color: $pink;
-    background-color: $white;
+    background-color: var(--background-color);
     border-radius: 50%;
     padding: 12px;
     width: 48px;
     height: 48px;
-    box-shadow: $box-shadow;
+    box-shadow: var(--box-shadow);
   }
 
   &:disabled {
     &.round,
-    &.primary,
-    &.secondary {
-      background-color: $disabled;
-      color: $white;
+    &.primary {
+      background-color: var(--color-disabled);
+      color: var(--color-disabled-text);
     }
 
     &.secondary {
-      background-color: rgba($disabled, 0.3);
-      color: $grey-bold;
+      background-color: rgba(var(--color-disabled-rgb), 0.3);
+      color: var(--color-grey-bold);
       border: none;
     }
 
     &.simple {
-      color: $disabled;
+      color: var(--color-disabled);
     }
   }
 

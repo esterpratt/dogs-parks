@@ -1,8 +1,8 @@
 @use '../../variables.scss' as *;
 
 .container {
-  background-color: $white;
-  box-shadow: $box-shadow;
+  background-color: var(--background-color);
+  box-shadow: var(--box-shadow);
   border-radius: 12px;
 }
 
@@ -20,7 +20,7 @@
 
 .content {
   padding: 16px 12px;
-  color: $text;
+  color: var(--color-text);
   min-height: 108px;
   display: flex;
   align-items: center;

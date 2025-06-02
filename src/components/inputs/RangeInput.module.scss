@@ -14,13 +14,17 @@ $thumbWidth: 20;
   border: none;
   background-color: transparent;
 
+  :global(.dark) & {
+    border: none;
+  }
+
   &::-webkit-slider-runnable-track {
     background: linear-gradient(
       to right,
       $pink 0%,
       $pink var(--range-value),
-      $grey-light var(--range-value),
-      $grey-light 100%
+      var(--color-grey-light) var(--range-value),
+      var(--color-grey-light) 100%
     );
     border: none;
     border-radius: 24px;

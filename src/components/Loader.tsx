@@ -1,6 +1,7 @@
 import classnames from 'classnames';
 import styles from './Loader.module.scss';
 import { CSSProperties } from 'react';
+import { useModeContext } from '../context/ModeContext';
 
 interface LoaderProps {
   className?: string;
@@ -15,6 +16,8 @@ const Loader: React.FC<LoaderProps> = ({
   variant = 'primary',
   style,
 }) => {
+  const mode = useModeContext((state) => state.mode);
+
   return (
     <div
       className={classnames(styles.container, {
@@ -25,7 +28,7 @@ const Loader: React.FC<LoaderProps> = ({
       <div
         className={classnames(
           styles.loader,
-          { [styles.secondary]: variant === 'secondary' },
+          { [styles.secondary]: mode === 'dark' || variant === 'secondary' },
           className
         )}
       ></div>

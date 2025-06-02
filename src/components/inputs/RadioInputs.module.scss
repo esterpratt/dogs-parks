@@ -1,7 +1,7 @@
 @use '../../variables' as *;
 
 .container {
-  color: $text;
+  color: var(--color-text);
   display: flex;
   flex-direction: column;
   gap: 8px;

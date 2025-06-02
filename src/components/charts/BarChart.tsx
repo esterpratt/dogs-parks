@@ -7,6 +7,7 @@ import {
 } from 'recharts';
 import styles from './BarChart.module.scss';
 import { CategoricalChartProps } from 'recharts/types/chart/generateCategoricalChart';
+import { useModeContext } from '../../context/ModeContext';
 
 interface BarChartProps {
   data: CategoricalChartProps['data'];
@@ -24,6 +25,8 @@ const BarChart: React.FC<BarChartProps> = ({
   yDataKey,
   currentHour,
 }) => {
+  const mode = useModeContext((state) => state.mode);
+
   return (
     <ResponsiveContainer>
       <RechartsBarChart data={data} barGap="100%">
@@ -31,6 +34,9 @@ const BarChart: React.FC<BarChartProps> = ({
           dataKey={xDataKey}
           tickMargin={10}
           interval="preserveStartEnd"
+          tick={{ stroke: styles.tickColor }}
+          tickLine={{ stroke: styles.tickColor }}
+          axisLine={{ stroke: styles.tickColor }}
           ticks={[
             '00:00',
             '3:00',
@@ -55,7 +61,9 @@ const BarChart: React.FC<BarChartProps> = ({
                 fill={
                   entry.hour === currentHour?.hour
                     ? currentHour?.color
-                    : styles.lightBlue
+                    : mode === 'light'
+                    ? styles.lightBlueLight
+                    : styles.lightBlueDark
                 }
               />
             );

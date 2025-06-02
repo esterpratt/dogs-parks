@@ -6,6 +6,7 @@ import { Button } from '../components/Button';
 import { EditUserModal } from '../components/profile/EditUserModal';
 import { TopModal } from '../components/modals/TopModal';
 import styles from './UserInfo.module.scss';
+import { ThemeToggle } from '../components/profile/ThemeToggle';
 
 const UserInfo = () => {
   const { userLogout, userDeletion } = useContext(UserContext);
@@ -34,6 +35,9 @@ const UserInfo = () => {
   return (
     <>
       <div className={styles.container}>
+        <div className={styles.themeContainer}>
+          <ThemeToggle />
+        </div>
         <Button onClick={onEditUser} className={styles.button}>
           <Pencil size={24} />
           <span>Edit details</span>

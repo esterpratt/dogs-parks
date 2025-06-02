@@ -10,10 +10,12 @@ import { LocationPermissionModal } from './components/LocationPermissionModal';
 import { isIos } from './utils/platform';
 import { useKeyboardPreFocus } from './hooks/useKeyboardPreFocus';
 import { useUrlHandler } from './hooks/useUrlHandler';
+import { useThemeMode } from './hooks/useThemeMode';
 
 const RootLayout = () => {
   useUrlHandler();
   usePreventFocusOnScroll();
+  useThemeMode();
   const keyboardHeight = useKeyboardFix();
   useSafeArea();
   const safeAreaAddition = !isIos()

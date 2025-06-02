@@ -1,0 +1,79 @@
+@use '../../variables.scss' as *;
+
+.toggleRow {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  gap: 24px;
+}
+
+.label {
+  font-weight: 500;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 84px;
+  height: 36px;
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    background-color: var(--color-grey-bold);
+    border-radius: 999px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transition: background-color 0.3s;
+    cursor: pointer;
+
+    &::before {
+      content: '';
+      position: absolute;
+      height: 32px;
+      width: 32px;
+      left: 2px;
+      top: 2px;
+      background-color: var(--background-color);
+      border-radius: 50%;
+      transition: transform 0.3s ease;
+    }
+
+    .icon {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      height: 32px;
+      width: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+
+      svg {
+        width: 20px;
+        height: 20px;
+        color: $orange;
+      }
+    }
+  }
+
+  input:checked + .slider {
+    background-color: $pink;
+  }
+
+  input:checked + .slider::before {
+    transform: translateX(48px);
+  }
+
+  input:checked + .slider .icon {
+    transform: translateX(48px);
+  }
+}
