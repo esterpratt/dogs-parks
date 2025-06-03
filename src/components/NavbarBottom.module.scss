@@ -54,7 +54,7 @@
   z-index: 3000;
   width: 50%;
   border: 1px solid $blue;
-  bottom: 90px;
+  bottom: calc(var(--safe-area-inset-bottom) + $navbar-height + 2px);
   right: 12px;
   background-color: var(--background-color);
   box-shadow: var(--box-shadow);
