@@ -37,7 +37,7 @@ const DeleteAcount = () => {
         <p>2. Tap on your dog's profile</p>
         <p>3. Tap the edit icon</p>
         <p>4. Scroll to and tap 'Say Goodbye...'</p>
-        <p>Tap Delete</p>
+        <p>5. Tap Delete</p>
         <p>
           When you delete your dog's profile, the data is removed from the app
           and inaccessible. It is not visible to other users and no longer
