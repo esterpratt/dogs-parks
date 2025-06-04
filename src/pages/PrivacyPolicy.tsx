@@ -1,3 +1,4 @@
+import { Link } from 'react-router';
 import { Button } from '../components/Button';
 import styles from './PrivacyPolicy.module.scss';
 
@@ -5,7 +6,7 @@ const PrivacyPolicy = () => {
   return (
     <div className={styles.wrapper}>
       <h1>Privacy Policy</h1>
-      <p>Last Updated: 28.5.25</p>
+      <p>Last Updated: 4.6.25</p>
       <div className={styles.section}>
         <h2>1. Introduction</h2>
         <p>
@@ -81,9 +82,13 @@ const PrivacyPolicy = () => {
       <div className={styles.section}>
         <h2>6. Your Rights & Choices</h2>
         <span>
-          You can delete your account anytime from the profile settings. This
-          will remove all data related to you. If you encounter any issues, feel
-          free to contact us at{' '}
+          You can delete your account anytime from the profile settings. For
+          detailed instructions on how to delete your data,{' '}
+          <Button variant="simple" className={styles.button}>
+            <Link to="/delete-account">click here</Link>
+          </Button>
+          . Account deletion will erase all data linked to your profile. If you
+          encounter any issues, feel free to contact us at{' '}
           <a href="mailto:esterpratt@gmail.com">
             <Button variant="simple" className={styles.button}>
               esterpratt@gmail.com.

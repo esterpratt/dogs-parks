@@ -38,6 +38,7 @@ const ParkDetails = lazy(() => import('./pages/ParkDetails'));
 const NewPark = lazy(() => import('./pages/NewPark'));
 const UpdatePassowrd = lazy(() => import('./pages/UpdatePassword'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const DeleteAcount = lazy(() => import('./pages/DeleteAcount'));
 const DeletionConfirmation = lazy(() => import('./pages/DeletionConfirmation'));
 const About = lazy(() => import('./pages/About'));
 const Login = lazy(() => import('./pages/Login'));
@@ -107,6 +108,10 @@ const App = () => {
         {
           path: '/user-deleted',
           element: <DeletionConfirmation />,
+        },
+        {
+          path: '/delete-account',
+          element: <DeleteAcount />,
         },
         {
           path: '/privacy-policy',
