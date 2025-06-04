@@ -169,7 +169,7 @@ textarea {
 
 .leaflet-touch .leaflet-control-layers,
 .leaflet-touch .leaflet-bar.leaflet-control-zoom {
-  top: 160px;
+  top: calc(160px + var(--safe-area-inset-top, 0px));
   border: none;
   margin-right: calc(16px + var(--safe-area-inset-right, 0px));
 

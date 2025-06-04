@@ -148,7 +148,7 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
           className={styles.centerButton}
           style={{
             position: 'absolute',
-            top: '120px',
+            top: `calc(120px + var(--safe-area-inset-top, 0px))`,
             right: `calc(16px + var(--safe-area-inset-right, 0px))`,
           }}
         >
