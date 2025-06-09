@@ -9,8 +9,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "map": "vite build --sourcemap",
-    "test": "vitest run",
-    "test:file": "vitest run --testFile"
+    "test": "vitest run"
   },
   "dependencies": {
     "-": "^0.0.1",
