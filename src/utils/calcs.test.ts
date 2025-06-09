@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { getSum, getMean, getSTD } from './calcs';
 
 describe('getSum', () => {
