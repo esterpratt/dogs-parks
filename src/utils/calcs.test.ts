@@ -2,7 +2,7 @@ import { getSum, getMean, getSTD } from './calcs';
 
 describe('getSum', () => {
   it('returns 0 for an empty array', () => {
-    expect(getSum([])).toBe(1);
+    expect(getSum([])).toBe(0);
   });
   it('returns the sum of array elements', () => {
     expect(getSum([1, 2, 3])).toBe(6);
