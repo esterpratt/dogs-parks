@@ -1,0 +1,81 @@
+@use '../../variables' as *;
+
+.container {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  row-gap: 24px;
+
+  & > div {
+    width: 100%;
+  }
+}
+
+.text-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  :first-child {
+    font-size: 14px;
+
+    &::first-letter {
+      text-transform: capitalize;
+    }
+  }
+
+  :last-child {
+    font-size: 12px;
+
+    &::first-letter {
+      text-transform: capitalize;
+    }
+  }
+}
+
+.link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+
+  &.disabled {
+    pointer-events: none;
+  }
+}
+
+.visitors {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .visitors-button {
+    border-radius: 50%;
+    padding: 0;
+    height: 48px;
+    width: 48px;
+  }
+
+  .visitors-text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    :first-child {
+      font-size: 14px;
+    }
+
+    :last-child {
+      font-size: 12px;
+    }
+  }
+}
+
+@media (orientation: landscape) {
+  .container {
+    justify-content: start;
+    gap: 18px;
+  }
+}

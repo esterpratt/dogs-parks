@@ -92,11 +92,7 @@ const DogDetails: React.FC<DogDeatilsProps> = ({
   return (
     <Section
       className={styles.container}
-      titleCmp={
-        <div className={styles.title}>
-          <span>About</span>
-        </div>
-      }
+      title="About"
       contentCmp={
         <div
           className={classnames(styles.content, {

@@ -1,0 +1,43 @@
+@use '../../variables' as *;
+
+.container {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.icon-container {
+  border-radius: 50%;
+  height: 48px;
+  width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  svg {
+    fill: $white;
+  }
+}
+
+.text-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  :first-child {
+    font-size: 14px;
+
+    &::first-letter {
+      text-transform: capitalize;
+    }
+  }
+
+  :last-child {
+    font-size: 12px;
+
+    &::first-letter {
+      text-transform: capitalize;
+    }
+  }
+}

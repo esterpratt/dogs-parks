@@ -53,20 +53,18 @@ const ParkGalleryContainer: React.FC<ParkGalleryContainerProps> = ({
     <>
       <Section
         contentClassName={styles.contentContainer}
-        titleCmp={
-          <div className={styles.title}>
-            <span>Gallery</span>
-            {!!userId && (parkImages || []).length < MAX_IMAGES && (
-              <Button
-                variant="simple"
-                color={styles.white}
-                className={styles.button}
-                onClick={onClickAddPhoto}
-              >
-                <Plus size={24} />
-              </Button>
-            )}
-          </div>
+        title="Gallery"
+        actions={
+          userId && (parkImages || []).length < MAX_IMAGES ? (
+            <Button
+              variant="simple"
+              color={styles.white}
+              className={styles.button}
+              onClick={onClickAddPhoto}
+            >
+              <Plus size={24} />
+            </Button>
+          ) : undefined
         }
         contentCmp={
           !!parkImages?.length || !!userId ? (

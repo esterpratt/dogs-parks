@@ -25,11 +25,7 @@ const DogPreferences: React.FC<DogPreferencesProps> = ({
   return (
     <Section
       className={styles.container}
-      titleCmp={
-        <div className={styles.title}>
-          <span>Preferences</span>
-        </div>
-      }
+      title="Preferences"
       contentCmp={
         <div
           className={classnames(styles.content, {

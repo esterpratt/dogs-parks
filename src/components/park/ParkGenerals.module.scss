@@ -25,7 +25,6 @@
 }
 
 .characters-container {
-  padding: 0 8px;
   width: 100%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -100,11 +99,18 @@
   }
 }
 
+.general-info {
+  padding: 0 8px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+}
+
 .visitors {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 0 8px;
 
   .visitors-button {
     border-radius: 50%;
@@ -133,7 +139,6 @@
   blue: $blue;
   orange: $orange;
   red: $red;
-  pink: $pink;
   white: $white;
   lightGreen: var(--light-green);
   lightOrange: var(--light-orange);

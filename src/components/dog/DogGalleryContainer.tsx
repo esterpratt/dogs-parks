@@ -83,15 +83,18 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
     <>
       <Section
         contentClassName={styles.contentContainer}
-        titleCmp={
-          <div className={styles.title}>
-            <span>Gallery</span>
-            {isSignedInUser && (dogImages ?? []).length < MAX_IMAGES && (
-              <Button className={styles.button} onClick={onClickAddPhoto}>
-                <Plus color={styles.white} size={24} />
-              </Button>
-            )}
-          </div>
+        title="Gallery"
+        actions={
+          isSignedInUser && (dogImages ?? []).length < MAX_IMAGES ? (
+            <Button
+              variant="simple"
+              color={styles.white}
+              className={styles.button}
+              onClick={onClickAddPhoto}
+            >
+              <Plus size={24} />
+            </Button>
+          ) : undefined
         }
         contentCmp={
           <DogGallery

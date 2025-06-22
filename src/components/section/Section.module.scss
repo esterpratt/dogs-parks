@@ -1,27 +1,99 @@
 @use '../../variables.scss' as *;
 
 .container {
+  --transition-duration: 0.3s;
   background-color: var(--background-color);
   box-shadow: var(--box-shadow);
   border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.title {
-  height: 36px;
+.header {
   background-color: rgba($pink, 0.98);
-  font-size: 16px;
-  color: $white;
-  padding: 6px 6px 6px 12px;
+  height: 36px;
   display: flex;
   align-items: center;
-  border-top-right-radius: 12px;
-  border-top-left-radius: 12px;
+  justify-content: space-between;
+  border-radius: 12px 12px 0 0;
+  transition: border-radius var(--transition-duration) ease;
+
+  .container:not(:has(.content-open)) & {
+    border-radius: 12px;
+  }
+}
+
+.title-button {
+  border: none;
+  padding: 6px 12px;
+  margin: 0;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: $white;
+  font-size: 16px;
+  flex-grow: 1;
+  height: 100%;
+  text-align: left;
+  justify-content: flex-start;
+
+  span {
+    flex-grow: 0;
+    margin-right: auto;
+  }
+}
+
+.actions {
+  height: 100%;
+  padding-right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chevron {
+  color: $white;
+  transition: transform var(--transition-duration) ease;
+  transform: rotate(180deg);
+  flex-shrink: 0;
+}
+
+.chevron-open {
+  transform: rotate(0deg);
 }
 
 .content {
-  padding: 16px 12px;
   color: var(--color-text);
-  min-height: 108px;
-  display: flex;
-  align-items: center;
+  max-height: 0;
+  visibility: hidden;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height var(--transition-duration) ease,
+    opacity var(--transition-duration) ease,
+    visibility 0s linear var(--transition-duration);
+
+  > div {
+    padding: 16px 12px;
+    min-height: 108px;
+    display: flex;
+    align-items: center;
+    transform-origin: top;
+    transform: translateY(-12px);
+    transition: transform var(--transition-duration) ease;
+  }
+}
+
+.content-open {
+  max-height: 500px;
+  visibility: visible;
+  opacity: 1;
+  transition: max-height var(--transition-duration) ease,
+    opacity var(--transition-duration) ease, visibility 0s linear;
+
+  > div {
+    transform: translateY(0);
+  }
 }

@@ -4,22 +4,15 @@
   padding: 8px;
 }
 
-.title {
+.button {
+  background-color: transparent;
+  padding: 0;
+  border-radius: 4px;
+  height: 24px;
+  width: 24px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  width: 100%;
-
-  .button {
-    background-color: transparent;
-    padding: 0;
-    border-radius: 4px;
-    height: 36px;
-    width: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  justify-content: center;
 }
 
 :export {

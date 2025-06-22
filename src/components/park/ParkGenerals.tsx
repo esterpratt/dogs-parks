@@ -1,15 +1,11 @@
-import { Link } from 'react-router-dom';
 import { useContext, useMemo, useState } from 'react';
 import { Dumbbell, Pencil, Ruler, Sprout, Sun } from 'lucide-react';
 import classnames from 'classnames';
 import { Park } from '../../types/park';
-import { useGetParkVisitors } from '../../hooks/api/useGetParkVisitors';
 import { Section } from '../section/Section';
 import { Button } from '../Button';
 import { UserContext } from '../../context/UserContext';
 import styles from './ParkGenerals.module.scss';
-import { useQuery } from '@tanstack/react-query';
-import { fetchUsersWithDogsByIds } from '../../services/users';
 import { ChooseEditParkOptionModal } from './ChooseEditParkOptionModal';
 import { capitalizeText } from '../../utils/text';
 
@@ -66,31 +62,9 @@ const getSizeContent = (value: number | null) => {
 };
 
 const ParkGenerals = ({ park }: ParkGeneralsProps) => {
-  const {
-    id: parkId,
-    size,
-    materials: ground,
-    has_facilities: facilities,
-    shade,
-  } = park;
+  const { size, materials: ground, has_facilities: facilities, shade } = park;
   const { userId } = useContext(UserContext);
-  const { friendsInParkIds, visitorsIds } = useGetParkVisitors(parkId, userId);
   const [isEditParkModalOpen, setIsEditParkModalOpen] = useState(false);
-
-  const friendsCount = friendsInParkIds.length;
-  const othersCount = visitorsIds.length - friendsCount;
-
-  const visitorsContent = friendsCount
-    ? friendsCount.toString()
-    : othersCount.toString();
-
-  // prefetch visitors data
-  useQuery({
-    queryKey: ['parkVisitorsWithDogs', parkId],
-    queryFn: () => fetchUsersWithDogsByIds(friendsInParkIds),
-    enabled: !!friendsInParkIds.length,
-    staleTime: 6000,
-  });
 
   const existedData = useMemo(
     () => [
@@ -170,23 +144,25 @@ const ParkGenerals = ({ park }: ParkGeneralsProps) => {
     [facilities, ground, shade, size]
   );
 
+  const handleClickEditAbout = () => {
+    setIsEditParkModalOpen(true);
+  };
+
   return (
     <>
       <Section
-        titleCmp={
-          <div className={styles.title}>
-            <span>About</span>
-            {!!userId && (
-              <Button
-                variant="simple"
-                color={styles.white}
-                className={styles.button}
-                onClick={() => setIsEditParkModalOpen(true)}
-              >
-                <Pencil size={18} />
-              </Button>
-            )}
-          </div>
+        title="About"
+        actions={
+          !!userId && (
+            <Button
+              variant="simple"
+              color={styles.white}
+              className={styles.button}
+              onClick={handleClickEditAbout}
+            >
+              <Pencil size={18} />
+            </Button>
+          )
         }
         contentCmp={
           <div className={styles.container}>
@@ -202,25 +178,6 @@ const ParkGenerals = ({ park }: ParkGeneralsProps) => {
                   </div>
                 );
               })}
-            </div>
-            <div className={styles.visitors}>
-              <Button
-                disabled={!friendsCount && !othersCount}
-                className={styles.visitorsButton}
-              >
-                <Link
-                  to="visitors"
-                  className={classnames(styles.link, {
-                    [styles.disabled]: !friendsCount && !othersCount,
-                  })}
-                >
-                  {visitorsContent}
-                </Link>
-              </Button>
-              <div className={styles.visitorsText}>
-                <div>{friendsCount ? 'Friends' : 'Visitors'}</div>
-                <div> at the park right now</div>
-              </div>
             </div>
           </div>
         }

@@ -35,23 +35,25 @@ const BusyHours: React.FC<BusyHoursProps> = (props: BusyHoursProps) => {
     isWeekend,
   } = dogsCount?.length ? getBusyHoursData(dogsCount) : {};
 
+  const handleClickReportDogCount = () => {
+    setIsDogsCountModalOpen(true);
+  };
+
   return (
     <>
       <Section
-        titleCmp={
-          <div className={styles.title}>
-            <span>Busy hours</span>
-            {!!userId && (
-              <Button
-                variant="simple"
-                color={styles.white}
-                className={styles.button}
-                onClick={() => setIsDogsCountModalOpen(true)}
-              >
-                <Plus size={24} />
-              </Button>
-            )}
-          </div>
+        title="Busy hours"
+        actions={
+          userId ? (
+            <Button
+              variant="simple"
+              color={styles.white}
+              className={styles.button}
+              onClick={handleClickReportDogCount}
+            >
+              <Plus size={24} />
+            </Button>
+          ) : undefined
         }
         contentCmp={
           <div className={styles.container}>
