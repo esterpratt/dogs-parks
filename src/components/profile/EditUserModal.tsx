@@ -43,7 +43,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
     onMutate: async (data) => {
       await queryClient.cancelQueries({ queryKey: ['user', user!.id] });
       const prevUser = queryClient.getQueryData<User>(['user', user!.id]);
-      queryClient.setQueryData(['users', user!.id], {
+      queryClient.setQueryData(['user', user!.id], {
         ...prevUser,
         ...data.userDetails,
       });

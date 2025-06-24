@@ -11,6 +11,8 @@ import { Park } from '../types/park';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import { Loader } from '../components/Loader';
 
+const ONE_MINUTE = 60 * 1000;
+
 const ParkVisitors: React.FC = () => {
   const { userId } = useContext(UserContext);
   const { id: parkId } = useOutletContext() as Park;
@@ -21,7 +23,8 @@ const ParkVisitors: React.FC = () => {
     queryKey: ['parkVisitorsWithDogs', parkId],
     queryFn: () => fetchUsersWithDogsByIds(friendsInParkIds),
     enabled: !!friendsInParkIds.length,
-    staleTime: 6000,
+    staleTime: ONE_MINUTE,
+    refetchInterval: ONE_MINUTE,
   });
 
   const { showLoader } = useDelayedLoading({ isLoading });
