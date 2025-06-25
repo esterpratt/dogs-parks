@@ -16,7 +16,7 @@ PODS:
     - Capacitor
   - CapacitorPluginSafeArea (4.0.0):
     - Capacitor
-  - CapacitorPushNotifications (7.0.0):
+  - CapacitorPushNotifications (7.0.1):
     - Capacitor
   - CapacitorScreenOrientation (7.0.0):
     - Capacitor
@@ -78,7 +78,7 @@ SPEC CHECKSUMS:
   CapacitorKeyboard: 4db71e694e7afb5d7c0be09b05495c19f7d6c914
   CapacitorNativeSettings: bef37b3c7e2184da7416a3f162c71de19fd27593
   CapacitorPluginSafeArea: 22031c3436269ca80fac90ec2c94bc7c1e59a81d
-  CapacitorPushNotifications: 2e0132cd2f1a5d696bcbfc3725c2b6ffcb9275d4
+  CapacitorPushNotifications: 6a2794788c583dd89215f1805ca4bced1b13dbdf
   CapacitorScreenOrientation: 45e36e1121cdba1634eb12077c5e99391055116f
   CapacitorShare: d94c53d7656f1ce8f6712ae8d19ab0c18a69259f
   CapacitorStatusBar: a8c4c83ed2e973bdafb979e80e4b00d027832cb7
