@@ -34,9 +34,9 @@ const BarChart: React.FC<BarChartProps> = ({
           dataKey={xDataKey}
           tickMargin={10}
           interval="preserveStartEnd"
-          tick={{ stroke: styles.tickColor }}
-          tickLine={{ stroke: styles.tickColor }}
-          axisLine={{ stroke: styles.tickColor }}
+          tick={{ fill: styles.tickColor }}
+          tickLine={{ fill: styles.tickColor }}
+          axisLine={{ fill: styles.tickColor }}
           ticks={[
             '00:00',
             '3:00',
