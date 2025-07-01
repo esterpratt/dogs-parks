@@ -71,12 +71,6 @@ const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
   const onClickMobileUploadFile = async () => {
     try {
       onCameraError('');
-      const hasPermission = await requestPermission('photos');
-
-      if (!hasPermission) {
-        throw new Error('Gallery permission denied');
-      }
-
       const photo = await CapacitorCamera.getPhoto({
         quality: 90,
         resultType: CameraResultType.Base64,
