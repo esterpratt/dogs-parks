@@ -6,12 +6,12 @@ const PrivacyPolicy = () => {
   return (
     <div className={styles.wrapper}>
       <h1>Privacy Policy</h1>
-      <p>Last Updated: 4.6.25</p>
+      <p>Last Updated: 1.7.25</p>
       <div className={styles.section}>
         <h2>1. Introduction</h2>
         <p>
-          Welcome to Kluvhub. This privacy policy explains how we collect, use,
-          and protect your information when you use our app, Kluvhub (the
+          Welcome to KluvHub. This privacy policy explains how we collect, use,
+          and protect your information when you use our app, KluvHub (the
           "App"). By using the App, you agree to the collection and use of
           information in accordance with this policy.
         </p>
