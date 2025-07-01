@@ -15,12 +15,13 @@ import { MapEventHandler } from './mapHelpers/MapEventHandler';
 import { MapCenter } from './mapHelpers/MapCenter';
 import { Routing } from './mapHelpers/Routing';
 import { MapSearchAddress } from './mapHelpers/MapSearchAddress';
-import { getUserLocation } from './mapHelpers/getUserLocation';
+import { getUserLocation } from '../../utils/getUserLocation';
 import { UserLocationMarker } from './UserLocationMarker';
 import { DEFAULT_LOCATION } from '../../utils/consts';
 import { useUserLocation } from '../../context/LocationContext';
 import { Button } from '../Button';
 import styles from './NewMap.module.scss';
+import { useInitLocation } from '../../hooks/useInitLocation';
 
 const ParkPopupLazy = lazy(() => import('../parks/ParkPopupLazy'));
 
@@ -30,7 +31,8 @@ interface NewMapProps {
 }
 
 const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
-  const userLocation = useUserLocation((state) => state.userLocation);
+  const userLocation = useInitLocation();
+
   const setUserLocation = useUserLocation((state) => state.setUserLocation);
   const [center, setCenter] = useState<Location>(
     location ?? userLocation ?? DEFAULT_LOCATION

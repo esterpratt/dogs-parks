@@ -7,7 +7,7 @@ import { MapEventHandler } from '../map/mapHelpers/MapEventHandler';
 import { ParkMarker } from '../map/ParkMarker';
 import { Location } from '../../types/park';
 import { DEFAULT_LOCATION } from '../../utils/consts';
-import { getUserLocation } from '../map/mapHelpers/getUserLocation';
+import { getUserLocation } from '../../utils/getUserLocation';
 import { Button } from '../Button';
 import styles from './LocationInput.module.scss';
 

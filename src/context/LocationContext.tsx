@@ -8,9 +8,8 @@ import {
 } from 'react';
 import { App } from '@capacitor/app';
 import { Location } from '../types/park';
-import { getUserLocation } from '../components/map/mapHelpers/getUserLocation';
-import { DEFAULT_LOCATION } from '../utils/consts';
 import { PluginListenerHandle } from '@capacitor/core';
+import { initializeUserLocation } from '../utils/initializeUserLocation';
 
 interface LocationStoreProps {
   userLocation: Location | undefined;
@@ -47,36 +46,13 @@ export const UserLocationProvider = ({
   );
 
   useEffect(() => {
-    const fetchUserLocation = async () => {
-      try {
-        const userLocation = await getUserLocation();
-        if (userLocation?.error) {
-          setIsLocationDenied(true);
-        } else {
-          setIsLocationDenied(false);
-        }
-
-        if (userLocation) {
-          setUserLocation({
-            lat: userLocation.position.coords.latitude,
-            long: userLocation.position.coords.longitude,
-          });
-        }
-      } catch (error) {
-        setUserLocation(DEFAULT_LOCATION);
-      }
-    };
-
     let resumeListener: PluginListenerHandle;
     const setupListener = async () => {
       resumeListener = await App.addListener('resume', () => {
-        fetchUserLocation();
+        initializeUserLocation({ setIsLocationDenied, setUserLocation });
       });
     };
-
     setupListener();
-    fetchUserLocation();
-
     return () => {
       resumeListener?.remove();
     };

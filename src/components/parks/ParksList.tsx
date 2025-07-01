@@ -12,7 +12,7 @@ import { Loader } from '../Loader';
 import { UserContext } from '../../context/UserContext';
 import { Button } from '../Button';
 import { SearchInput, SearchInputProps } from '../inputs/SearchInput';
-import { useUserLocation } from '../../context/LocationContext';
+import { useInitLocation } from '../../hooks/useInitLocation';
 import styles from './ParksList.module.scss';
 import { useDelayedLoading } from '../../hooks/useDelayedLoading';
 
@@ -22,12 +22,12 @@ interface ParksListProps {
 
 const ParksList: React.FC<ParksListProps> = ({ className }) => {
   const { user } = useContext(UserContext);
+  const userLocation = useInitLocation();
+
   const { data: parks, isLoading: isLoadingParks } = useQuery({
     queryKey: ['parks'],
     queryFn: fetchParksJSON,
   });
-
-  const userLocation = useUserLocation((state) => state.userLocation);
 
   const { data: sortedParks, isLoading: isLoadingSortedParks } = useQuery({
     queryKey: ['sortedParks', userLocation],

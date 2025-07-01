@@ -1,13 +1,21 @@
 import { Geolocation } from '@capacitor/geolocation';
-import { isMobile } from '../../../utils/platform';
-import { DEFAULT_LOCATION } from '../../../utils/consts';
+import { isMobile } from './platform';
+import { DEFAULT_LOCATION } from './consts';
 
 export async function getUserLocation() {
   let position: { position: GeolocationPosition, error?: unknown } | null = null;
 
   try {
     if (isMobile()) {
-      const permStatus = await Geolocation.checkPermissions();
+      let permStatus = await Geolocation.checkPermissions();
+
+      if (
+        permStatus.location === 'prompt' ||
+        permStatus.location === 'prompt-with-rationale'
+      ) {
+        await Geolocation.requestPermissions();
+        permStatus = await Geolocation.checkPermissions();
+      }
 
       if (permStatus.location === 'denied') {
         throw new Error('PERMISSION_DENIED');
