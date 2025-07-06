@@ -77,30 +77,30 @@ const uploadImage = async ({ image, bucket, path, name, upsert }: UploadImagePro
   try {
     const prefix = typeof image === 'string' ? '' : image.name;
     const rawName = name ? name + v4() : prefix + v4();
-    // const cleanedImageName = cleanName(imageName);
     const cleanedName = cleanName(rawName).replace(/\.[^/.]+$/, '');
-    const webpFileName = `${cleanedName}.webp`;
 
     const { compressImage, getCompressedImage } = await import('./image-compression');
 
     const file =
       typeof image === 'string'
-        ? await getCompressedImage(image, webpFileName)
+        ? await getCompressedImage(image, cleanedName)
         : image;
+        
+    const { file: compressedImage, format } = await compressImage(file);
 
-    const compressedImage = await compressImage(file);
+    const fileName = `${cleanedName}.${format}`;
 
     if (upsert) {
       await deleteOldImage({ bucket, path });
     }
 
-    const fullPath = `${path}/${webpFileName}`;
+    const fullPath = `${path}/${fileName}`;
 
     const { data, error } = await supabase
     .storage
     .from(bucket)
     .upload(fullPath, compressedImage, {
-      contentType: 'image/webp',
+      contentType: `image/${format}`,
       cacheControl: '2592000'
     })
 
