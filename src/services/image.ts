@@ -75,7 +75,7 @@ const deleteOldImage = async ({ bucket, path }: HandleImageProps) => {
 
 const uploadImage = async ({ image, bucket, path, name, upsert }: UploadImageProps) => {
   try {
-    const prefix = typeof image === 'string' ? '' : image.name;
+    const prefix = typeof image === 'string' ? 'image' : image.name;
     const rawBase = name ? cleanName(name).replace(/\.[^/.]+$/, '') : cleanName(prefix);
     const rawName = `${rawBase}-${v4()}`;
 
