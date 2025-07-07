@@ -72,7 +72,7 @@ const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
     try {
       onCameraError('');
       const photo = await CapacitorCamera.getPhoto({
-        quality: 90,
+        quality: 100,
         resultType: CameraResultType.Base64,
         source: CameraSource.Photos,
       });
