@@ -23,7 +23,7 @@ const compressImage = async (file: File, maxSizeWebP = 0.2, maxSizeJpeg = 0.25, 
     maxSizeMB: canWebP ? maxSizeWebP : maxSizeJpeg,
     maxWidthOrHeight: canWebP ? maxWidthOrHeightWebP : maxWidthOrHeightJPEG,
     fileType: `image/${format}`,
-    initialQuality: 0.9,
+    initialQuality: canWebP ? 0.9 : 0.8,
   });
 
   return { file: compressed, format };
