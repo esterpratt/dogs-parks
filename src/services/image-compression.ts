@@ -14,13 +14,14 @@ const canEncodeWebP = async (): Promise<boolean> => {
   });
 };
 
-const compressImage = async (file: File, maxSizeMB = 0.2, maxWidthOrHeight = 1200) => {
+const compressImage = async (file: File, maxSizeMB = 0.2, maxWidthOrHeightWebP = 1200,
+  maxWidthOrHeightJPEG = 1600) => {
   const canWebP = await canEncodeWebP();
   const format = canWebP ? 'webp' : 'jpeg';
 
   const compressed = await imageCompression(file, {
-    maxSizeMB,
-    maxWidthOrHeight,
+    maxSizeMB: canWebP ? maxSizeMB : undefined,
+    maxWidthOrHeight: canWebP ? maxWidthOrHeightWebP : maxWidthOrHeightJPEG,
     fileType: `image/${format}`,
     initialQuality: 0.9,
   });
