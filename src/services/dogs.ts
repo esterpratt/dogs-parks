@@ -195,10 +195,13 @@ const fetchAllDogImages = async (dogId: string) => {
 const movePrimaryImageToOther = async (imgPath: string, dogId: string) => {
   try {
     const userId = await getDogOwnerId(dogId);
-    const imageName = imgPath.split('primary/')[1].slice('primary'.length);
+    const imageName = imgPath
+    .split('primary/')[1]
+    .slice('primary'.length)
+    .replace(/^[-]/, '');
     if (imageName) {
       const newPath = `${userId}/dogs/${dogId}/other/${imageName}`;
-      const oldPath = `${userId}/dogs/${dogId}/primary/primary${imageName}`;
+      const oldPath = `${userId}/dogs/${dogId}/primary/primary-${imageName}`;
       
       return moveImage({
         bucket: 'users',
