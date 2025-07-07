@@ -115,7 +115,7 @@ const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
       }
 
       const photo = await CapacitorCamera.getPhoto({
-        quality: 80,
+        quality: 100,
         resultType: CameraResultType.Base64,
         source: CameraSource.Camera,
         allowEditing: true,
