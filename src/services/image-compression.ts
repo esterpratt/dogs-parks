@@ -15,7 +15,7 @@ const canEncodeWebP = async (): Promise<boolean> => {
 };
 
 const compressImage = async (file: File, maxSizeWebP = 0.2, maxSizeJpeg = 0.25, maxWidthOrHeightWebP = 1200,
-  maxWidthOrHeightJPEG = 1600) => {
+  maxWidthOrHeightJPEG = 1400) => {
   const canWebP = await canEncodeWebP();
   const format = canWebP ? 'webp' : 'jpeg';
 
