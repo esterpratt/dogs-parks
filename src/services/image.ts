@@ -76,19 +76,19 @@ const deleteOldImage = async ({ bucket, path }: HandleImageProps) => {
 const uploadImage = async ({ image, bucket, path, name, upsert }: UploadImageProps) => {
   try {
     const prefix = typeof image === 'string' ? '' : image.name;
-    const rawName = name ? name + v4() : prefix + v4();
-    const cleanedName = cleanName(rawName).replace(/\.[^/.]+$/, '');
+    const rawBase = name ? cleanName(name).replace(/\.[^/.]+$/, '') : cleanName(prefix);
+    const rawName = `${rawBase}-${v4()}`;
 
     const { compressImage, getCompressedImage } = await import('./image-compression');
 
     const file =
       typeof image === 'string'
-        ? await getCompressedImage(image, cleanedName)
+        ? await getCompressedImage(image, rawName)
         : image;
         
     const { file: compressedImage, format } = await compressImage(file);
 
-    const fileName = `${cleanedName}.${format}`;
+    const fileName = `${rawName}.${format}`;
 
     if (upsert) {
       await deleteOldImage({ bucket, path });
