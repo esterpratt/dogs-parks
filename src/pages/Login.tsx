@@ -7,21 +7,31 @@ import {
   useState,
 } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Eye, EyeClosed } from 'lucide-react';
 import classnames from 'classnames';
 import GoogleIcon from '../assets/google.svg?react';
+import AppleWhite from '../assets/apple-white.svg?react';
+import AppleBlack from '../assets/apple-black.svg?react';
 import { Button } from '../components/Button';
 import { UserContext, SigninProps } from '../context/UserContext';
 import { useMutation } from '@tanstack/react-query';
 import { sendResetEmail, signin } from '../services/authentication';
 import { Input } from '../components/inputs/Input';
-import styles from './Login.module.scss';
 import { useNotification } from '../context/NotificationContext';
-import { Eye, EyeClosed } from 'lucide-react';
 import { preserveCursor } from '../utils/input';
+import styles from './Login.module.scss';
+import { useModeContext } from '../context/ModeContext';
 
 const Login = () => {
-  const { user, userSigninWithGoogle, userLogin, error, setError, isLoading } =
-    useContext(UserContext);
+  const {
+    user,
+    userSigninWithGoogle,
+    userSigninWithApple,
+    userLogin,
+    error,
+    setError,
+    isLoading,
+  } = useContext(UserContext);
   const [searchParams, setSearchParams] = useSearchParams({ mode: 'signup' });
   const [showPassword, setShowPassword] = useState(false);
   const isSignup = searchParams.get('mode') === 'signup';
@@ -29,6 +39,8 @@ const Login = () => {
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const navigate = useNavigate();
   const { notify } = useNotification();
+
+  const mode = useModeContext((state) => state.mode);
 
   useEffect(() => {
     if (user) {
@@ -60,6 +72,14 @@ const Login = () => {
       userSigninWithGoogle();
     } else {
       userLogin({ withGoogle: true });
+    }
+  };
+
+  const appleSignin = async () => {
+    if (isSignup) {
+      userSigninWithApple();
+    } else {
+      userLogin({ withApple: true });
     }
   };
 
@@ -123,7 +143,12 @@ const Login = () => {
     <>
       <div className={styles.container}>
         <div className={styles.formContainer}>
-          <div className={styles.title}>
+          <h1 className={styles.title}>
+            {isSignup
+              ? 'Sign up to KlavHub to create a profile, add friends, and contribute park info.'
+              : 'Log in to KlavHub to manage your profile, add friends, and share park updates.'}
+          </h1>
+          <div className={styles.infoLine}>
             <div className={classnames(styles.error, error ? styles.show : '')}>
               {error}
             </div>
@@ -140,6 +165,9 @@ const Login = () => {
           <form onSubmit={handleSubmit} className={styles.inputsContainer}>
             <div className={styles.inputs}>
               <Input
+                className={classnames(styles.input, {
+                  [styles.dark]: mode === 'dark',
+                })}
                 ref={mailRef}
                 onChange={() => setError('')}
                 name="email"
@@ -147,6 +175,9 @@ const Login = () => {
                 type="email"
               />
               <Input
+                className={classnames(styles.input, {
+                  [styles.dark]: mode === 'dark',
+                })}
                 ref={passwordRef}
                 onChange={() => setError('')}
                 name="password"
@@ -184,6 +215,9 @@ const Login = () => {
                   name="name"
                   placeholder="Your name *"
                   type="text"
+                  className={classnames(styles.input, {
+                    [styles.dark]: mode === 'dark',
+                  })}
                 />
               )}
             </div>
@@ -197,11 +231,32 @@ const Login = () => {
           <Button
             variant="secondary"
             color={styles.text}
-            className={styles.googleLoginButton}
+            className={classnames(styles.appleLoginButton, {
+              [styles.dark]: mode === 'dark',
+            })}
+            onClick={appleSignin}
+          >
+            {mode === 'dark' ? (
+              <AppleWhite className={styles.appleIcon} />
+            ) : (
+              <AppleBlack className={styles.appleIcon} />
+            )}
+            <div className={styles.buttonText}>
+              {isSignup ? 'Sign up' : 'Continue'} with Apple
+            </div>
+          </Button>
+          <Button
+            variant="secondary"
+            color={styles.text}
+            className={classnames(styles.googleLoginButton, {
+              [styles.dark]: mode === 'dark',
+            })}
             onClick={googleSignin}
           >
             <GoogleIcon width={16} height={16} />
-            <span>{isSignup ? 'Sign up' : 'Dog in'} with Google</span>
+            <div className={styles.buttonText}>
+              {isSignup ? 'Sign up' : 'Continue'} with Google
+            </div>
           </Button>
         </div>
         <div className={styles.changeMethod}>

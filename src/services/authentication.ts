@@ -12,22 +12,22 @@ interface SigninProps extends LoginProps {
   name: string;
 }
 
-const signinWithGoogle = async () => {
+const signinWithOAuthProvider = async (provider: 'google' | 'apple') => {
   try {
     const isMobileApp = isMobile();
     const redirectTo = isMobileApp
-    ? 'com.klavhub://auth-callback'
-    : `${window.location.origin}/auth-callback`;
+      ? 'com.klavhub://auth-callback'
+      : `${window.location.origin}/auth-callback`;
 
     const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
+      provider,
       options: {
         redirectTo,
         skipBrowserRedirect: isMobileApp,
-        queryParams: {
-          prompt: 'select_account',
-        },
-      }
+        ...(provider === 'google' && {
+          queryParams: { prompt: 'select_account' },
+        }),
+      },
     });
 
     if (error) {
@@ -42,6 +42,9 @@ const signinWithGoogle = async () => {
     throwError(error);
   }
 };
+
+const signinWithGoogle = () => signinWithOAuthProvider('google');
+const signinWithApple = () => signinWithOAuthProvider('apple');
 
 const signin = async ({ email, password, name }: SigninProps) => {
   try {
@@ -141,5 +144,5 @@ const deleteUser = async (id: string | null) => {
   }
 };
 
-export { login, logout, signin, signinWithGoogle, sendResetEmail, deleteUser, updatePassword };
+export { login, logout, signin, signinWithGoogle, signinWithApple, sendResetEmail, deleteUser, updatePassword };
 export type { LoginProps };

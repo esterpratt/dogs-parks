@@ -10,6 +10,7 @@ import {
   login,
   logout,
   signinWithGoogle,
+  signinWithApple, // <-- add this import
   deleteUser,
 } from '../services/authentication';
 import { fetchUser } from '../services/users';
@@ -24,6 +25,7 @@ type SigninProps = Partial<LoginWithEmailAndPasswordProps> & {
 
 type LoginProps = Partial<LoginWithEmailAndPasswordProps> & {
   withGoogle?: boolean;
+  withApple?: boolean;
 };
 
 interface UserContextObj {
@@ -34,6 +36,7 @@ interface UserContextObj {
   userLogin: (props: LoginProps) => void;
   userLogout: () => void;
   userSigninWithGoogle: () => void;
+  userSigninWithApple: () => void;
   userDeletion: () => void;
   error: string;
   setError: Dispatch<React.SetStateAction<string>>;
@@ -49,6 +52,7 @@ const initialData: UserContextObj = {
   userLogin: () => Promise.resolve(),
   userLogout: () => {},
   userSigninWithGoogle: () => Promise.resolve(),
+  userSigninWithApple: () => Promise.resolve(),
   userDeletion: () => {},
   setError: () => {},
   error: '',
@@ -90,6 +94,14 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
       },
     });
 
+  const { mutate: userSigninWithApple, isPending: isSigninInWithApple } =
+    useMutation({
+      mutationFn: () => signinWithApple(),
+      onError: (error) => {
+        setError(error.message);
+      },
+    });
+
   const { mutate: userLoginWithEmailAndPassword, isPending: isLogingIn } =
     useMutation({
       mutationFn: (data: LoginProps) => {
@@ -100,10 +112,17 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
       },
     });
 
-  const userLogin = ({ withGoogle, email, password }: LoginProps) => {
+  const userLogin = ({
+    withGoogle,
+    withApple,
+    email,
+    password,
+  }: LoginProps) => {
     setError('');
     if (withGoogle) {
       userSigninWithGoogle();
+    } else if (withApple) {
+      userSigninWithApple();
     } else {
       userLoginWithEmailAndPassword({
         email: email!,
@@ -137,6 +156,7 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     isLoadingUser ||
     isLogingIn ||
     isSigninInWithGoogle ||
+    isSigninInWithApple ||
     isPendingDeletion ||
     isLoadingAuthUser;
 
@@ -148,6 +168,7 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     userLogin,
     userLogout,
     userSigninWithGoogle,
+    userSigninWithApple,
     userDeletion,
     error,
     setError,
