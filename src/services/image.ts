@@ -2,7 +2,7 @@ import { v4 } from 'uuid';
 import { supabase } from './supabase-client';
 import { throwError } from './error';
 import { getFileUrl } from './supabase-storage';
-import { cleanName, removeBasePath } from './image-utils';
+import { cleanName } from './image-utils';
 
 interface UploadImageProps {
   image: File | string;
@@ -59,20 +59,6 @@ const deleteImage = async ({path, bucket}: HandleImageProps) => {
   }
 };
 
-const deleteOldImage = async ({ bucket, path }: HandleImageProps) => {
-  try {
-    const imagePath = await fetchImagesByDirectory({ bucket, path });
-    if (!imagePath || !imagePath.length) {
-      return;
-    }
-
-    const imagePathWithName = removeBasePath(imagePath[0], 'users/');
-    await deleteImage({ bucket, path: imagePathWithName });
-  } catch (error) {
-    throwError(error);
-  }
-};
-
 const uploadImage = async ({ image, bucket, path, name, upsert }: UploadImageProps) => {
   try {
     const rawInput = name || (typeof image !== 'string' ? image.name : 'image');
@@ -90,23 +76,33 @@ const uploadImage = async ({ image, bucket, path, name, upsert }: UploadImagePro
     const { file: compressedImage, format } = await compressImage(file);
 
     const fileName = `${rawName}.${format}`;
-
-    if (upsert) {
-      await deleteOldImage({ bucket, path });
-    }
-
     const fullPath = `${path}/${fileName}`;
 
+    let oldImages: string[] = [];
+    if (upsert) {
+      const { data: oldData, error: oldError } = await supabase.storage.from(bucket).list(path);
+      if (oldError) throw oldError;
+      oldImages = oldData ? oldData.map(img => img.name) : [];
+    }
+
     const { data, error } = await supabase
-    .storage
-    .from(bucket)
-    .upload(fullPath, compressedImage, {
-      contentType: `image/${format}`,
-      cacheControl: '2592000'
-    })
+      .storage
+      .from(bucket)
+      .upload(fullPath, compressedImage, {
+        contentType: `image/${format}`,
+        cacheControl: '2592000'
+      })
 
     if (error) {
       throw error;
+    }
+
+    if (upsert && oldImages.length) {
+      for (const oldImageName of oldImages) {
+        if (oldImageName !== fileName) {
+          await deleteImage({ bucket, path: `${path}/${oldImageName}` });
+        }
+      }
     }
 
     return getFileUrl({bucketName: bucket, fileName: data?.path || ''});
