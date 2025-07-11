@@ -72,7 +72,7 @@ const uploadParkPrimaryImage = async (image: File | string, parkId: string) => {
     const res = await uploadImage({
       image,
       bucket: 'parks',
-      path: `${parkId}/primary/`,
+      path: `${parkId}/primary`,
       name: 'primary'
     });
     return res;
