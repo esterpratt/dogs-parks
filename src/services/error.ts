@@ -1,4 +1,9 @@
 import { AuthError } from '@supabase/supabase-js';
+import type { StorageError } from '@supabase/storage-js';
+
+type LocalStorageError = StorageError & {
+  statusCode: string;
+}
 
 class AppError {
   message: string;
@@ -19,6 +24,10 @@ const throwError = (error: unknown, status?: number) => {
 
   if (error instanceof AuthError) {
     throw error;
+  }
+
+  if ((error as LocalStorageError).statusCode === '413') {
+    throw new AppError('Upload failed: The image is too large', 413);
   }
 
   throw {

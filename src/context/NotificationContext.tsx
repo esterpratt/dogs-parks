@@ -21,7 +21,7 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   const notify = useCallback(
-    (msg = 'Good Boy!', isError = false, timeout = 1500) => {
+    (msg = 'Good Boy!', isError = false, timeout = 2000) => {
       if (timeoutId) {
         clearTimeout(timeoutId);
       }

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useLocation, useParams, Link } from 'react-router-dom';
 import { Cake, Mars, MoveLeft, Pencil, Tag, Venus } from 'lucide-react';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
 import DogIcon from '../assets/dog.svg?react';
 import { DogDetails } from '../components/dog/DogDetails';
@@ -25,6 +25,7 @@ import { EditDogModal } from '../components/dog/EditDogModal';
 import { CameraModal } from '../components/camera/CameraModal';
 import styles from './UserDog.module.scss';
 import { capitalizeText } from '../utils/text';
+import { useUploadImage } from '../hooks/api/useUploadImage';
 
 const UserDog = () => {
   const { dogId } = useParams();
@@ -55,7 +56,7 @@ const UserDog = () => {
     minDuration: 750,
   });
 
-  const { mutate: setDogImage } = useMutation({
+  const { mutate: setDogImage } = useUploadImage({
     mutationFn: (img: string | File) =>
       uploadDogPrimaryImage({
         image: img,

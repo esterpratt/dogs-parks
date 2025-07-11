@@ -7,7 +7,7 @@ import {
   ShareIcon,
   TreeDeciduous,
 } from 'lucide-react';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { Header } from '../Header';
 import { HeaderImage } from '../HeaderImage';
@@ -28,6 +28,7 @@ import { isMobile } from '../../utils/platform';
 import { Share } from '@capacitor/share';
 import { Park } from '../../types/park';
 import styles from './ParkHeader.module.scss';
+import { useUploadImage } from '../../hooks/api/useUploadImage';
 
 interface ParkHeaderProps {
   park: Park;
@@ -47,7 +48,7 @@ const ParkHeader = (props: ParkHeaderProps) => {
     queryFn: async () => fetchParkPrimaryImage(park.id),
   });
 
-  const { mutate } = useMutation({
+  const { mutate } = useUploadImage({
     mutationFn: (img: string | File) => uploadParkPrimaryImage(img, park.id),
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['parkImage', park.id] });

@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { Plus } from 'lucide-react';
 import { fetchAllParkImages, uploadParkImage } from '../../services/parks';
 import { queryClient } from '../../services/react-query';
@@ -11,6 +11,7 @@ import { Carousel } from '../Carousel';
 import { CameraModal } from '../camera/CameraModal';
 import styles from './ParkGalleryContainer.module.scss';
 import { MAX_IMAGES } from '../../utils/consts';
+import { useUploadImage } from '../../hooks/api/useUploadImage';
 
 interface ParkGalleryContainerProps {
   parkId: string;
@@ -27,7 +28,7 @@ const ParkGalleryContainer: React.FC<ParkGalleryContainerProps> = ({
     queryFn: () => fetchAllParkImages(parkId),
   });
 
-  const { mutate } = useMutation({
+  const { mutate } = useUploadImage({
     mutationFn: (img: string | File) => uploadParkImage(img, parkId),
     onSuccess: async () => {
       queryClient.invalidateQueries({

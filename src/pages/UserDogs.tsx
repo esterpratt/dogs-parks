@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useOutletContext, Link } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query';
 import { User } from '../types/user';
 import { Dog } from '../types/dog';
 import { DogPreview } from '../components/profile/DogPreview';
@@ -11,6 +10,7 @@ import { CameraModal } from '../components/camera/CameraModal';
 import { EditDogModal } from '../components/dog/EditDogModal';
 import styles from './UserDogs.module.scss';
 import { Plus } from 'lucide-react';
+import { useUploadImage } from '../hooks/api/useUploadImage';
 
 interface UserDogsProps {
   user: User;
@@ -27,7 +27,7 @@ const UserDogs = () => {
   const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
   const [newDogId, setNewDogId] = useState('');
 
-  const { mutate: setDogImage } = useMutation({
+  const { mutate: setDogImage } = useUploadImage({
     mutationFn: (img: string | File) =>
       uploadDogPrimaryImage({
         image: img,

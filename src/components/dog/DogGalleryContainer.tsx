@@ -15,6 +15,7 @@ import { Button } from '../Button';
 import styles from './DogGalleryContainer.module.scss';
 import { CameraModal } from '../camera/CameraModal';
 import { MAX_IMAGES } from '../../utils/consts';
+import { useUploadImage } from '../../hooks/api/useUploadImage';
 
 interface DogGalleryContainerProps {
   dog: Dog;
@@ -32,7 +33,7 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
     queryFn: async () => fetchAllDogImages(dog.id),
   });
 
-  const { mutate } = useMutation({
+  const { mutate } = useUploadImage({
     mutationFn: (img: string | File) => uploadDogImage(img, dog.id),
     onSuccess: async () => {
       queryClient.invalidateQueries({
