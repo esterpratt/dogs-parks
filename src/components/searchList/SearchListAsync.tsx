@@ -60,7 +60,7 @@ const SearchListAsync = <T,>({
           />
         )}
         <Button
-          disabled={!input.length}
+          disabled={!input.trim().length}
           onClick={onSearch}
           className={styles.button}
         >

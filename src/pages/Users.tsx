@@ -7,6 +7,7 @@ import { SearchListAsync } from '../components/searchList/SearchListAsync';
 import { filterUsersAndDogs } from '../services/users';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import styles from './Users.module.scss';
+import { useQuery } from '@tanstack/react-query';
 
 interface UserWithDogs extends User {
   dogs: Dog[];
@@ -15,37 +16,38 @@ interface UserWithDogs extends User {
 const Users = () => {
   const { userId } = useContext(UserContext);
 
-  const [input, setInput] = useState<string>('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [filteredUsers, setFilteredUsers] = useState<UserWithDogs[]>([]);
-  const [showNoResults, setShowNoResults] = useState(false);
+  const [input, setInput] = useState('');
+  const [searchInput, setSearchInput] = useState('');
+
+  const {
+    data: users,
+    isLoading,
+    isFetched,
+    isFetching,
+  } = useQuery({
+    queryKey: ['users', searchInput],
+    queryFn: () => filterUsersAndDogs(searchInput),
+    enabled: !!searchInput,
+  });
+
+  const filteredUsers: UserWithDogs[] =
+    users?.filter((user: UserWithDogs) => user.id !== userId) ?? [];
+
+  const showNoResults =
+    isFetched && !isLoading && !isFetching && filteredUsers.length === 0;
 
   const { showLoader } = useDelayedLoading({ isLoading });
 
   const onChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
     setInput(event.target.value);
-    setShowNoResults(false);
   };
 
   const onSearch = async () => {
-    if (!input) {
+    if (!input || !input.trim()) {
       return false;
     }
 
-    setIsLoading(true);
-
-    const res = await filterUsersAndDogs(input);
-
-    if (!res.length) {
-      setShowNoResults(true);
-    }
-
-    const filterUsersWithoutSelf = res.filter(
-      (user: UserWithDogs) => user.id !== userId
-    );
-
-    setFilteredUsers(filterUsersWithoutSelf);
-    setIsLoading(false);
+    setSearchInput(input.trim());
   };
 
   const NoResultsLayout = (
