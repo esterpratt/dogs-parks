@@ -90,6 +90,7 @@ const logout = async () => {
       throw error;
     }
   } catch (error) {
+    await supabase.auth.signOut({ scope: 'local' });
     throwError(error);
   }
 };

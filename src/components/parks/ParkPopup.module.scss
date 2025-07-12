@@ -181,7 +181,7 @@
   left: 14px;
 }
 
-@media (orientation: landscape) {
+@media screen and (orientation: landscape) and (max-height: 500px) {
   .park-modal {
     height: 55vh;
     flex-direction: row;
@@ -210,6 +210,16 @@
 
     .details-container {
       padding: 12px;
+    }
+  }
+}
+
+@media screen and (orientation: landscape) and (min-height: 500px) {
+  .img-container:has(.no-img) {
+    max-height: 0;
+
+    .no-img {
+      display: none;
     }
   }
 }

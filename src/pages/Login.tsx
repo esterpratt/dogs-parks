@@ -37,10 +37,15 @@ const Login = () => {
   const isSignup = searchParams.get('mode') === 'signup';
   const mailRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
+  const topRef = useRef<HTMLInputElement | null>(null);
   const navigate = useNavigate();
   const { notify } = useNotification();
 
   const mode = useModeContext((state) => state.mode);
+
+  useEffect(() => {
+    topRef.current?.scrollIntoView({ block: 'start' });
+  }, [isSignup]);
 
   useEffect(() => {
     if (user) {
@@ -142,7 +147,7 @@ const Login = () => {
   return (
     <>
       <div className={styles.container}>
-        <div className={styles.formContainer}>
+        <div className={styles.formContainer} ref={topRef}>
           <h1 className={styles.title}>
             {isSignup
               ? 'Sign up to KlavHub to create a profile, add friends, and contribute park info.'
