@@ -118,7 +118,6 @@ const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
         quality: 100,
         resultType: CameraResultType.Base64,
         source: CameraSource.Camera,
-        allowEditing: true,
       });
 
       if (photo.base64String) {
