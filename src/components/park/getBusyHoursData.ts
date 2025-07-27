@@ -4,7 +4,7 @@ import { getHoursChartData, getStrHour } from '../charts/getHoursChartData';
 
 export const BUSINESS = {
   LIGHT: {
-    str: 'Quite',
+    str: 'Quiet',
     className: 'light',
     color: barChartStyles.green,
   },
