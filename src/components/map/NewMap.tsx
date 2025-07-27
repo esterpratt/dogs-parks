@@ -107,7 +107,7 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
         className={styles.map}
         center={mapCenter}
         zoomControl={false}
-        zoom={17}
+        zoom={16}
         scrollWheelZoom={false}
       >
         <TileLayer
