@@ -28,7 +28,7 @@ const ParkGalleryContainer: React.FC<ParkGalleryContainerProps> = ({
     queryFn: () => fetchAllParkImages(parkId),
   });
 
-  const { mutate } = useUploadImage({
+  const { mutate, isPending } = useUploadImage({
     mutationFn: (img: string | File) => uploadParkImage(img, parkId),
     onSuccess: async () => {
       queryClient.invalidateQueries({
@@ -71,6 +71,7 @@ const ParkGalleryContainer: React.FC<ParkGalleryContainerProps> = ({
           !!parkImages?.length || !!userId ? (
             <div className={styles.galleryContainer}>
               <Carousel
+                isLoading={isPending}
                 images={parkImages || []}
                 addImage={
                   userId && (parkImages || []).length < MAX_IMAGES

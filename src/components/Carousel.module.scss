@@ -1,5 +1,20 @@
 @use '../variables' as *;
 
+.loader {
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+}
+
+.container {
+  opacity: 1;
+  transition: opacity 0.2s ease;
+
+  &.loading {
+    opacity: 0.05;
+  }
+}
+
 .button-container {
   display: flex;
   align-items: center;

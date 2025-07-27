@@ -33,7 +33,7 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
     queryFn: async () => fetchAllDogImages(dog.id),
   });
 
-  const { mutate } = useUploadImage({
+  const { mutate, isPending } = useUploadImage({
     mutationFn: (img: string | File) => uploadDogImage(img, dog.id),
     onSuccess: async () => {
       queryClient.invalidateQueries({
@@ -99,6 +99,7 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
         }
         contentCmp={
           <DogGallery
+            isLoading={isPending}
             images={dogImages ?? []}
             dog={dog}
             isSignedInUser={isSignedInUser}

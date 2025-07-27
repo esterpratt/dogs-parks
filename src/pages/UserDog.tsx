@@ -56,7 +56,7 @@ const UserDog = () => {
     minDuration: 750,
   });
 
-  const { mutate: setDogImage } = useUploadImage({
+  const { mutate: setDogImage, isPending } = useUploadImage({
     mutationFn: (img: string | File) =>
       uploadDogPrimaryImage({
         image: img,
@@ -122,6 +122,7 @@ const UserDog = () => {
               onClickEditPhoto={
                 isSignedInUser ? () => setIsAddImageModalOpen(true) : null
               }
+              isLoading={isPending}
             />
           }
           imgsClassName={styles.imgContainer}

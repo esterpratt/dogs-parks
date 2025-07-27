@@ -14,6 +14,7 @@ interface HeaderImageProps {
   editButtonClassName?: string;
   style?: CSSProperties;
   size?: number;
+  isLoading?: boolean;
 }
 
 const HeaderImage = (props: HeaderImageProps) => {
@@ -26,6 +27,7 @@ const HeaderImage = (props: HeaderImageProps) => {
     className,
     style,
     editButtonClassName,
+    isLoading,
   } = props;
 
   return (
@@ -38,6 +40,7 @@ const HeaderImage = (props: HeaderImageProps) => {
           onClick={onClickImg && (() => onClickImg(imgSrc))}
           src={imgSrc}
           className={styles.img}
+          isLoading={isLoading}
         />
       ) : (
         <div className={styles.img}>
