@@ -41,4 +41,4 @@ const TreatToss = () => {
   );
 };
 
-export default TreatToss;
+export { TreatToss };

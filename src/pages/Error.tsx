@@ -1,10 +1,8 @@
 import { isRouteErrorResponse, useRouteError } from 'react-router-dom';
-import { lazy } from 'react';
 import { AppError } from '../services/error';
 import { NavbarBottom } from '../components/NavbarBottom';
+import { TreatToss } from '../components/TreatToss';
 import styles from './Error.module.scss';
-
-const TreatToss = lazy(() => import('../components/TreatToss'));
 
 const ErrorPage: React.FC = () => {
   const error = useRouteError();
