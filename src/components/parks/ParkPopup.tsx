@@ -7,7 +7,7 @@ import {
   TreeDeciduous,
   X,
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import classnames from 'classnames';
 import { useQuery } from '@tanstack/react-query';
 import { Location, Park } from '../../types/park';
@@ -38,6 +38,7 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
   onClose,
   canGetDirections,
 }) => {
+  const navigate = useNavigate();
   const { data: image } = useQuery({
     queryKey: ['parkImage', activePark?.id],
     queryFn: async () => fetchParkPrimaryImage(activePark!.id),
@@ -68,6 +69,10 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
     if (activePark) {
       onGetDirections(activePark!.location);
     }
+  };
+
+  const onClickViewPark = () => {
+    navigate(`/parks/${activePark?.id}`);
   };
 
   const handleTransitionEnd = () => {
@@ -163,11 +168,9 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
                 <Navigation size={12} className={styles.icon} />
                 <span>Lead the way</span>
               </Button>
-              <Button className={styles.button}>
-                <Link to={`/parks/${activePark?.id}`}>
-                  <Eye size={12} className={styles.icon} />
-                  <span>View park</span>
-                </Link>
+              <Button className={styles.button} onClick={onClickViewPark}>
+                <Eye size={12} className={styles.icon} />
+                <span>View park</span>
               </Button>
             </div>
           </div>
