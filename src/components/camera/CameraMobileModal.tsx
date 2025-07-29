@@ -118,7 +118,7 @@ const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
         quality: 100,
         resultType: CameraResultType.Base64,
         source: CameraSource.Camera,
-        correctOrientation: true,
+        correctOrientation: !isIos(),
       });
 
       if (photo.base64String) {
