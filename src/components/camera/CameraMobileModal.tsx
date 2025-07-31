@@ -114,11 +114,12 @@ const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
         );
       }
 
+      console.log('im here!');
+
       const photo = await CapacitorCamera.getPhoto({
         quality: 100,
         resultType: CameraResultType.Base64,
         source: CameraSource.Camera,
-        correctOrientation: !isIos(),
       });
 
       if (photo.base64String) {
