@@ -7,12 +7,20 @@ interface ToggleInputProps<T> {
   valueOn: T;
   valueOff: T;
   onChange: (value: T) => void;
-  iconOn: ReactNode;
-  iconOff: ReactNode;
+  iconOn?: ReactNode;
+  iconOff?: ReactNode;
 }
 
 export const ToggleInput = <T,>(props: ToggleInputProps<T>) => {
-  const { label, value, valueOn, valueOff, onChange, iconOn, iconOff } = props;
+  const {
+    label,
+    value,
+    valueOn,
+    valueOff,
+    onChange,
+    iconOn = null,
+    iconOff = null,
+  } = props;
   const isOn = value === valueOn;
 
   return (
