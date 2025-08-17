@@ -21,6 +21,11 @@ Creates structured commits with proper formatting and Claude Code attribution.
    )"
    ```
 
+3. **Push to remote (optional, with explicit permission):**
+   ```bash
+   git push
+   ```
+
 ## Best Practices
 
 - Use clear, descriptive commit messages
@@ -29,6 +34,8 @@ Creates structured commits with proper formatting and Claude Code attribution.
 - Add details in the body if needed
 - Group related changes into logical commits
 - Run `npm run lint` and `npm run test` before committing
+- Only push to remote when explicitly requested by the user
+- Always ask for permission before pushing changes
 
 ## Examples
 
