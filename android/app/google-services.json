@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "31205545999",
+    "project_id": "klavhub",
+    "storage_bucket": "klavhub.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:31205545999:android:f28952fd222ae5d459eb7a",
+        "android_client_info": {
+          "package_name": "com.klavhub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCj4M2wVuR89af4SIAlSiDfzMnZORTkujc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
