@@ -1,31 +1,32 @@
 PODS:
   - Capacitor (7.0.1):
     - CapacitorCordova
-  - CapacitorApp (7.0.1):
+  - CapacitorApp (7.0.2):
     - Capacitor
-  - CapacitorBrowser (7.0.1):
+  - CapacitorBrowser (7.0.2):
     - Capacitor
-  - CapacitorCamera (7.0.0):
+  - CapacitorCamera (7.0.2):
     - Capacitor
   - CapacitorCordova (7.0.1)
   - CapacitorFirebaseMessaging (7.3.0):
     - Capacitor
     - FirebaseMessaging (~> 11.7.0)
-  - CapacitorGeolocation (7.0.0):
+  - CapacitorGeolocation (7.1.5):
     - Capacitor
-  - CapacitorKeyboard (7.0.0):
+    - IONGeolocationLib (= 1.0.1)
+  - CapacitorKeyboard (7.0.2):
     - Capacitor
-  - CapacitorNativeSettings (7.0.1):
+  - CapacitorNativeSettings (7.0.2):
     - Capacitor
   - CapacitorPluginSafeArea (4.0.0):
     - Capacitor
   - CapacitorPreferences (7.0.2):
     - Capacitor
-  - CapacitorScreenOrientation (7.0.0):
+  - CapacitorScreenOrientation (7.0.2):
     - Capacitor
-  - CapacitorShare (7.0.0):
+  - CapacitorShare (7.0.2):
     - Capacitor
-  - CapacitorStatusBar (7.0.0):
+  - CapacitorStatusBar (7.0.2):
     - Capacitor
   - CapawesomeCapacitorBadge (7.0.1):
     - Capacitor
@@ -76,6 +77,7 @@ PODS:
   - GoogleUtilities/UserDefaults (8.1.0):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
+  - IONGeolocationLib (1.0.1)
   - nanopb (3.30910.0):
     - nanopb/decode (= 3.30910.0)
     - nanopb/encode (= 3.30910.0)
@@ -108,6 +110,7 @@ SPEC REPOS:
     - FirebaseMessaging
     - GoogleDataTransport
     - GoogleUtilities
+    - IONGeolocationLib
     - nanopb
     - PromisesObjC
 
@@ -145,19 +148,19 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Capacitor: de199cba6c8b20995428ad0b7cb0bc6ca625ffd4
-  CapacitorApp: febecbb9582cb353aed037e18ec765141f880fe9
-  CapacitorBrowser: 6299776d496e968505464884d565992faa20444a
-  CapacitorCamera: 20a37684b81c69c0c33fb5a7216919f135371a6f
+  CapacitorApp: 1f6922c9c5c8b1c538d7fbe92ebe44a81b34bed3
+  CapacitorBrowser: 22541e48442de44dc629c214388290d6eecc6ae9
+  CapacitorCamera: f9e54db0a18bb218a8dc360907d63aaefe9209ff
   CapacitorCordova: 63d476958d5022d76f197031e8b7ea3519988c64
   CapacitorFirebaseMessaging: f2be30f5cc99da414a82693e93e0f039d097aabf
-  CapacitorGeolocation: 8c81945cc5da62974d94699c347e7d88888745c0
-  CapacitorKeyboard: 4db71e694e7afb5d7c0be09b05495c19f7d6c914
-  CapacitorNativeSettings: bef37b3c7e2184da7416a3f162c71de19fd27593
+  CapacitorGeolocation: 84f868bea4c2499aebc3bb3a88fd0a508f87ab87
+  CapacitorKeyboard: a86aa9e4741b6444a802df26440a92ae041b34a6
+  CapacitorNativeSettings: 3cd2e2ef431fe471674f381609cfb29154ddfcfa
   CapacitorPluginSafeArea: 22031c3436269ca80fac90ec2c94bc7c1e59a81d
   CapacitorPreferences: 65107ed7437d96ee72583df5763985e3c0ff2bc2
-  CapacitorScreenOrientation: 45e36e1121cdba1634eb12077c5e99391055116f
-  CapacitorShare: d94c53d7656f1ce8f6712ae8d19ab0c18a69259f
-  CapacitorStatusBar: a8c4c83ed2e973bdafb979e80e4b00d027832cb7
+  CapacitorScreenOrientation: e0d5b9ef293b269b8f93373355d5b276f50fabea
+  CapacitorShare: be166411fa995ead2d39b104aa0aae56d8615c66
+  CapacitorStatusBar: e04d05e121d5a5979c29eb4249186a4e4a84cacb
   CapawesomeCapacitorBadge: 7fc1fa00c920b88eabb8451ddc92bdc75da2cffa
   FirebaseCore: 3227e35f4197a924206fbcdc0349325baf4f5de4
   FirebaseCoreInternal: d6c17dafc8dc33614733a8b52df78fcb4394c881
@@ -165,6 +168,7 @@ SPEC CHECKSUMS:
   FirebaseMessaging: 00ece041b71ddb52a2862ffdee73fb6e9824bd0c
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleUtilities: 00c88b9a86066ef77f0da2fab05f65d7768ed8e1
+  IONGeolocationLib: 20f9d0248a0b5264511fb57a37e25dd2badf797a
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
 
