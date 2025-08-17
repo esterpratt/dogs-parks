@@ -5,8 +5,8 @@ import { LogOut, Pencil, Trash2, X } from 'lucide-react';
 import { Button } from '../components/Button';
 import { EditUserModal } from '../components/profile/EditUserModal';
 import { TopModal } from '../components/modals/TopModal';
-import styles from './UserInfo.module.scss';
 import { ThemeToggle } from '../components/profile/ThemeToggle';
+import styles from './UserInfo.module.scss';
 
 const UserInfo = () => {
   const { userLogout, userDeletion } = useContext(UserContext);

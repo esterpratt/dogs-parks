@@ -11,11 +11,13 @@ import { isIos } from './utils/platform';
 import { useKeyboardPreFocus } from './hooks/useKeyboardPreFocus';
 import { useUrlHandler } from './hooks/useUrlHandler';
 import { useThemeMode } from './hooks/useThemeMode';
+import { usePushNotifications } from './hooks/usePushNotifications';
 
 const RootLayout = () => {
   useUrlHandler();
   usePreventFocusOnScroll();
   useThemeMode();
+  usePushNotifications();
   const keyboardHeight = useKeyboardFix();
   useSafeArea();
   const safeAreaAddition = !isIos()

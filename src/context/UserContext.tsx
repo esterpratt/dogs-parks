@@ -10,7 +10,7 @@ import {
   login,
   logout,
   signinWithGoogle,
-  signinWithApple, // <-- add this import
+  signinWithApple,
   deleteUser,
 } from '../services/authentication';
 import { fetchUser } from '../services/users';
