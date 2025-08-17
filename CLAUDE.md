@@ -16,8 +16,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Mobile Development
 
 - `npx cap sync` - Sync web assets to native platforms
+- `npx cap sync android && npx cap open android` - Open Android project in Android Studio
 - `npx cap run android` - Run on Android device/emulator
 - `npx cap run ios` - Run on iOS device/simulator
+- `npx cap open ios` - Open iOS project in Xcode
 - `npx cap build android` - Build Android app
 - `npx cap build ios` - Build iOS app
 

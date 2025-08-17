@@ -18,6 +18,9 @@ parks.json
 android/app/google-services.json
 ios/App/App/GoogleService-Info.plist
 
+# Development script backup files
+capacitor.config.ts.backup
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

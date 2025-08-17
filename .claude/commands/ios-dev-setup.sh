@@ -1,28 +1,19 @@
 #!/bin/bash
 
-# Mobile Development Setup Script
-# This script automates the mobile development workflow:
+# iOS Development Setup Script
+# This script automates the iOS development workflow:
 # 1. Starts dev server with --host
 # 2. Extracts Network IP
 # 3. Updates capacitor.config.ts if needed
-# 4. Syncs and opens iOS or Android
+# 4. Syncs and opens iOS
 #
-# Usage: ./ios-dev-setup.sh [ios|android]
-# Default: ios
+# Usage: ./ios-dev-setup.sh
 
 set -e  # Exit on any error
 
-# Get platform argument (default to ios)
-PLATFORM=${1:-ios}
+PLATFORM="ios"
 
-# Validate platform argument
-if [[ "$PLATFORM" != "ios" && "$PLATFORM" != "android" ]]; then
-    echo "❌ Invalid platform: $PLATFORM"
-    echo "Usage: $0 [ios|android]"
-    exit 1
-fi
-
-echo "🚀 Starting $PLATFORM Development Setup..."
+echo "🚀 Starting iOS Development Setup..."
 
 # Colors for output
 GREEN='\033[0;32m'
@@ -106,9 +97,9 @@ else
     print_status "IP already matches, no update needed"
 fi
 
-# Step 4: Sync and open platform
-print_status "Syncing and opening $PLATFORM..."
-NODE_ENV=development npx cap sync $PLATFORM && npx cap open $PLATFORM &
+# Step 4: Sync and open iOS
+print_status "Syncing and opening iOS..."
+NODE_ENV=development npx cap sync ios && npx cap open ios &
 PLATFORM_PID=$!
 
 # Cleanup function
@@ -123,7 +114,7 @@ trap cleanup EXIT
 
 print_status "✅ Setup complete!"
 print_status "Dev server running at: $NETWORK_IP"
-print_status "$PLATFORM project opening..."
+print_status "iOS project opening..."
 print_status ""
 print_status "Press Ctrl+C to stop the dev server"
 
