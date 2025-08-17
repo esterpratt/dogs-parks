@@ -21,7 +21,10 @@ Creates structured commits with proper formatting and Claude Code attribution.
    )"
    ```
 
-3. **Push to remote (optional, with explicit permission):**
+3. **Ask user about pushing:**
+   After committing, always ask: "Would you like me to push these changes to the remote repository?"
+   
+4. **Push to remote (only if user says yes):**
    ```bash
    git push
    ```
@@ -34,8 +37,9 @@ Creates structured commits with proper formatting and Claude Code attribution.
 - Add details in the body if needed
 - Group related changes into logical commits
 - Run `npm run lint` and `npm run test` before committing
-- Only push to remote when explicitly requested by the user
-- Always ask for permission before pushing changes
+- Always ask the user if they want to push after completing a commit
+- Only push to remote when explicitly granted permission by the user
+- Never push automatically without user consent
 
 ## Examples
 
