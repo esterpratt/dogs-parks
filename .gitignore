@@ -14,6 +14,10 @@ dist-ssr
 .firebase/
 parks.json
 
+# Firebase configuration files (contain sensitive API keys)
+android/app/google-services.json
+ios/App/App/GoogleService-Info.plist
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
