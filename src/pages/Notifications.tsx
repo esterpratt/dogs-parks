@@ -18,7 +18,6 @@ import { queryClient } from '../services/react-query';
 import { Loader } from '../components/Loader';
 import { ONE_MINUTE } from '../utils/consts';
 import styles from './Notifications.module.scss';
-import { useDelayedLoading } from '../hooks/useDelayedLoading';
 
 const Notifications = () => {
   const { user } = useContext(UserContext);
@@ -55,7 +54,11 @@ const Notifications = () => {
     },
   });
 
-  const { data: notifications, isFetching } = useQuery({
+  const {
+    data: notifications,
+    status,
+    isFetching,
+  } = useQuery({
     queryKey: ['notifications', user?.id ?? 'anon'],
     queryFn: () => getNotifications({ userId: user!.id }),
     enabled: !!user,
@@ -64,12 +67,9 @@ const Notifications = () => {
     refetchIntervalInBackground: false,
   });
 
-  const { showLoader } = useDelayedLoading({
-    isLoading: !notifications || isFetching,
-    minDuration: 300,
-    threshold: 0,
-    showFromStart: true,
-  });
+  const showLoader =
+    status === 'pending' || (!notifications?.length && isFetching);
+  const showContent = status === 'success';
 
   // On fetch/update:
   // 1) Add unseen-at-entry to New (first load)
@@ -80,7 +80,7 @@ const Notifications = () => {
       return;
     }
 
-    if (!notifications || notifications.length === 0) {
+    if (!notifications?.length) {
       return;
     }
 
@@ -122,9 +122,8 @@ const Notifications = () => {
       (notification) => !newIds.includes(notification.id)
     ) ?? [];
 
-  const unreadCount = notifications
-    ? notifications.filter((notification) => !notification.read_at).length
-    : 0;
+  const unreadCount =
+    notifications?.filter((notification) => !notification.read_at).length ?? 0;
 
   return (
     <div className={styles.container}>
@@ -142,9 +141,9 @@ const Notifications = () => {
       </div>
       {showLoader ? (
         <Loader inside className={styles.loader} />
-      ) : (
+      ) : showContent ? (
         <div className={styles.content}>
-          {!notifications || notifications.length === 0 ? (
+          {!notifications?.length ? (
             <div className={styles.emptyState}>
               <div className={styles.emptyIcon}>
                 <Bell size={64} />
@@ -203,7 +202,7 @@ const Notifications = () => {
             </>
           )}
         </div>
-      )}
+      ) : null}
       <NotificationsModal
         isOpen={isSettingsModalOpen}
         onClose={() => setIsSettingsModalOpen(false)}

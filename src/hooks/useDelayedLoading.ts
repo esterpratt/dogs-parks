@@ -4,16 +4,14 @@ interface UseDelayedLoadingParams {
   isLoading: boolean;
   minDuration?: number;
   threshold?: number;
-  showFromStart?: boolean;
 }
 
 export function useDelayedLoading({
   isLoading,
   minDuration = 1500,
   threshold = 50,
-  showFromStart = false,
 }: UseDelayedLoadingParams) {
-  const [showLoader, setShowLoader] = useState(showFromStart);
+  const [showLoader, setShowLoader] = useState(false);
   const [isPending, setIsPending] = useState(true);
   const startTimeRef = useRef<number | null>(null);
 
