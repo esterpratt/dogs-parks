@@ -18,6 +18,7 @@ import { queryClient } from '../services/react-query';
 import { Loader } from '../components/Loader';
 import { ONE_MINUTE } from '../utils/consts';
 import styles from './Notifications.module.scss';
+import { useDelayedLoading } from '../hooks/useDelayedLoading';
 
 const Notifications = () => {
   const { user } = useContext(UserContext);
@@ -54,7 +55,7 @@ const Notifications = () => {
     },
   });
 
-  const { data: notifications } = useQuery({
+  const { data: notifications, isFetching } = useQuery({
     queryKey: ['notifications', user?.id ?? 'anon'],
     queryFn: () => getNotifications({ userId: user!.id }),
     enabled: !!user,
@@ -63,7 +64,12 @@ const Notifications = () => {
     refetchIntervalInBackground: false,
   });
 
-  const showLoader = !notifications;
+  const { showLoader } = useDelayedLoading({
+    isLoading: !notifications || isFetching,
+    minDuration: 300,
+    threshold: 0,
+    showFromStart: true,
+  });
 
   // On fetch/update:
   // 1) Add unseen-at-entry to New (first load)
