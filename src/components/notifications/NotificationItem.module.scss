@@ -1,19 +1,5 @@
 @use '../../variables.scss' as *;
 
-.notification-card {
-  position: relative;
-  background-color: var(--background-color);
-  color: var(--color-text);
-  border: none;
-  margin: 0;
-  padding: 16px;
-  border-radius: 12px;
-  box-shadow: var(--box-shadow);
-  text-decoration: none;
-  display: block;
-  transition: border 0.3s ease;
-}
-
 .notification-content {
   display: flex;
   align-items: center;
@@ -73,30 +59,41 @@
   text-align: left;
 }
 
-// Read/Unread states
 .notification-card {
+  position: relative;
+  background-color: var(--background-color);
+  color: var(--color-text);
+  border: none;
+  margin: 0;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: var(--box-shadow);
+  text-decoration: none;
+  display: block;
+  transition: border 0.3s ease;
+
   &.unread {
-    border-left: 3px solid $pink;
-    border-right: 3px solid $pink;
+    border-left: 3px solid rgba($pink, 0.5);
+    border-right: 3px solid rgba($pink, 0.5);
     background-color: rgba($pink, 0.03);
-    
+
     .user-name {
       font-weight: 600;
     }
-    
+
     .message {
       opacity: 1;
     }
   }
-  
+
   &.read {
     border-left: 3px solid rgba($pink, 0);
     border-right: 3px solid rgba($pink, 0);
-    
+
     .user-name {
       font-weight: 400;
     }
-    
+
     .message {
       opacity: 0.7;
     }

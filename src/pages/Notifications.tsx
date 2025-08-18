@@ -3,9 +3,10 @@ import { Settings, Bell } from 'lucide-react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { Capacitor } from '@capacitor/core';
 import { Badge } from '@capawesome/capacitor-badge';
+import classnames from 'classnames';
 import { Button } from '../components/Button';
 import { NotificationsModal } from '../components/notifications/NotificationsModal';
-import { NotificationItem } from '../components/notifications/NotificationItem';
+import { NotificationsList } from '../components/notifications/NotificationsList';
 import { UserContext } from '../context/UserContext';
 import {
   getNotifications,
@@ -19,19 +20,10 @@ import { ONE_MINUTE } from '../utils/consts';
 import styles from './Notifications.module.scss';
 
 const Notifications = () => {
-  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
-  const [initialNewNotificationIds, setInitialNewNotificationIds] = useState<
-    string[]
-  >([]);
   const { user } = useContext(UserContext);
-  const markSeenInFlight = useRef(false);
-  const capturedInitialRef = useRef(false);
-
-  // Reset initial snapshot when the user changes
-  useEffect(() => {
-    capturedInitialRef.current = false;
-    setInitialNewNotificationIds([]);
-  }, [user?.id]);
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+  const [newIds, setNewIds] = useState<string[]>([]);
+  const isMarkingSeenRef = useRef(false);
 
   const { mutate: markAllAsReadMutation } = useMutation({
     mutationFn: markAllAsRead,
@@ -60,12 +52,9 @@ const Notifications = () => {
         }
       }
     },
-    onSettled: () => {
-      markSeenInFlight.current = false;
-    },
   });
 
-  const { data: notifications = [], isLoading } = useQuery({
+  const { data: notifications } = useQuery({
     queryKey: ['notifications', user?.id ?? 'anon'],
     queryFn: () => getNotifications({ userId: user!.id }),
     enabled: !!user,
@@ -74,56 +63,62 @@ const Notifications = () => {
     refetchIntervalInBackground: false,
   });
 
-  // Capture initial unseen notification IDs once per screen entry
-  useEffect(() => {
-    if (!capturedInitialRef.current && notifications.length > 0) {
-      const unseenIdsAtEntry = notifications
-        .filter((notification) => !notification.seen_at)
-        .map((notification) => notification.id);
+  const showLoader = !notifications;
 
-      setInitialNewNotificationIds(unseenIdsAtEntry);
-      capturedInitialRef.current = true;
-    }
-  }, [notifications]);
-
-  // Auto-mark unseen as seen when landing / when unseen appear
+  // On fetch/update:
+  // 1) Add unseen-at-entry to New (first load)
+  // 2) Add any newly arrived unseen to New
+  // 3) If any unseen exist, mark all as seen immediately (guarded)
   useEffect(() => {
-    if (!user?.id || notifications.length === 0 || markSeenInFlight.current) {
+    if (!user?.id) {
       return;
     }
 
-    const hasUnseenNotifications = notifications.some(
-      (notification) => !notification.seen_at
-    );
-
-    if (!hasUnseenNotifications) {
+    if (!notifications || notifications.length === 0) {
       return;
     }
 
-    markSeenInFlight.current = true;
+    // Step 1 + 2: capture unseen-at-entry and any newly arrived unseen
+    const unseenIds = notifications
+      .filter((notification) => !notification.seen_at)
+      .map((notification) => notification.id);
 
-    const runMarkAllAsSeen = async () => {
-      try {
-        await markAllAsSeenMutation();
-      } catch (error) {
-        console.error('Failed to mark all as seen:', error);
-      }
-    };
+    if (unseenIds.length > 0) {
+      setNewIds((prevNewIds) => {
+        const merged = new Set([...prevNewIds, ...unseenIds]);
+        return Array.from(merged);
+      });
+    }
 
-    runMarkAllAsSeen();
+    // Step 3: mark as seen immediately whenever there are unseen items
+    if (unseenIds.length > 0 && !isMarkingSeenRef.current) {
+      const markNow = async () => {
+        isMarkingSeenRef.current = true;
+        try {
+          await markAllAsSeenMutation();
+        } catch (error) {
+          console.error('Failed to mark notifications as seen:', error);
+        } finally {
+          isMarkingSeenRef.current = false;
+        }
+      };
+
+      markNow();
+    }
   }, [notifications, user?.id, markAllAsSeenMutation]);
 
-  const newNotifications = notifications.filter((notification) =>
-    initialNewNotificationIds.includes(notification.id)
-  );
+  const newNotifications: Notification[] =
+    notifications?.filter((notification) => newIds.includes(notification.id)) ??
+    [];
 
-  const oldNotifications = notifications.filter(
-    (notification) => !initialNewNotificationIds.includes(notification.id)
-  );
+  const oldNotifications: Notification[] =
+    notifications?.filter(
+      (notification) => !newIds.includes(notification.id)
+    ) ?? [];
 
-  const unreadCount = notifications.filter(
-    (notification) => !notification.read_at
-  ).length;
+  const unreadCount = notifications
+    ? notifications.filter((notification) => !notification.read_at).length
+    : 0;
 
   return (
     <div className={styles.container}>
@@ -138,60 +133,71 @@ const Notifications = () => {
             <Settings size={24} />
           </Button>
         </div>
-        {notifications.length > 0 && (
-          <div className={styles.notificationActions}>
-            <span className={styles.unreadCount}>
-              {newNotifications.length > 0 ? newNotifications.length : 'No'} new
-              notification{newNotifications.length !== 1 ? 's' : ''}
-            </span>
-            {unreadCount > 0 && (
-              <Button
-                variant="simple"
-                onClick={() => {
-                  if (user?.id) {
-                    markAllAsReadMutation();
-                  }
-                }}
-                className={styles.markAllButton}
-              >
-                Mark all as read
-              </Button>
-            )}
-          </div>
-        )}
       </div>
-      <div className={styles.notificationsList}>
-        {isLoading ? (
-          <Loader />
-        ) : notifications.length === 0 ? (
-          <div className={styles.emptyState}>
-            <div className={styles.emptyIcon}>
-              <Bell size={64} />
-            </div>
-            <div className={styles.emptyText}>You have no notifications</div>
-          </div>
-        ) : (
-          <>
-            {newNotifications.map((notification: Notification) => (
-              <NotificationItem
-                key={notification.id}
-                notification={notification}
-              />
-            ))}
-            {oldNotifications.length > 0 && (
-              <div className={styles.earlierDivider}>
-                <span>Earlier</span>
+      {showLoader ? (
+        <Loader inside className={styles.loader} />
+      ) : (
+        <div className={styles.content}>
+          {!notifications || notifications.length === 0 ? (
+            <div className={styles.emptyState}>
+              <div className={styles.emptyIcon}>
+                <Bell size={64} />
               </div>
-            )}
-            {oldNotifications.map((notification: Notification) => (
-              <NotificationItem
-                key={notification.id}
-                notification={notification}
-              />
-            ))}
-          </>
-        )}
-      </div>
+              <div className={styles.emptyText}>You have no notifications</div>
+            </div>
+          ) : (
+            <>
+              <div className={styles.section}>
+                <div className={styles.sectionHeader}>
+                  <h2
+                    className={classnames(styles.sectionTitle, {
+                      [styles.lighter]: newNotifications.length === 0,
+                    })}
+                  >
+                    {newNotifications.length > 0
+                      ? newNotifications.length
+                      : 'No'}{' '}
+                    new notification{newNotifications.length !== 1 ? 's' : ''}
+                  </h2>
+                  {unreadCount > 0 && (
+                    <Button
+                      variant="simple"
+                      onClick={() => {
+                        if (user?.id) {
+                          markAllAsReadMutation();
+                        }
+                      }}
+                      className={styles.markAllButton}
+                    >
+                      Mark all as read
+                    </Button>
+                  )}
+                </div>
+                {newNotifications.length > 0 && (
+                  <div className={styles.notificationsList}>
+                    <NotificationsList notifications={newNotifications} />
+                  </div>
+                )}
+              </div>
+              {oldNotifications.length > 0 && (
+                <div className={styles.section}>
+                  <h2
+                    className={classnames(
+                      styles.sectionTitle,
+                      styles.earlierTitle
+                    )}
+                  >
+                    Earlier
+                  </h2>
+                  <div className={styles.notificationsList}>
+                    <NotificationsList notifications={oldNotifications} />
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      )}
       <NotificationsModal
         isOpen={isSettingsModalOpen}
         onClose={() => setIsSettingsModalOpen(false)}

@@ -3,6 +3,7 @@
 .container {
   margin-top: $page-top-padding;
   padding: 12px 16px;
+  max-height: $content-max-height;
   color: var(--color-text);
 }
 
@@ -10,49 +11,62 @@
   margin-bottom: 12px;
 }
 
+.loader {
+  margin-bottom: 50%;
+}
+
 .title-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
-}
-
-.notification-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-}
-
-.unread-count {
-  font-size: 14px;
-  color: var(--color-text-medium);
-}
-
-.title {
-  font-size: 24px;
-}
-
-.mark-all-button {
-  font-size: 14px;
-}
-
-.notifications-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
   margin-bottom: 24px;
 }
 
-.earlier-divider {
-  margin-top: 8px;
-  font-size: 14px;
+.title {
+  margin: 0;
+  font-size: $title-font-size;
+}
+
+.settings-button {
+  display: flex;
+}
+
+.mark-all-button {
+  font-size: 16px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+
+  &.lighter {
+    color: var(--color-text-medium);
+  }
+}
+
+.earlier-title {
+  margin-bottom: 18px;
+}
+
+.notifications-list {
+  margin-bottom: 32px;
 }
 
 .empty-state {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 64px 16px;
-  color: var(--color-text);
+  text-align: center;
 }
 
 .empty-icon {
@@ -62,7 +76,6 @@
 
 .empty-text {
   font-size: 20px;
-  color: var(--color-text);
 }
 
 @media (max-width: 640px) {
