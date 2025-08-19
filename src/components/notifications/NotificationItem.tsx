@@ -78,7 +78,8 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
   const { mutate: markAsReadMutation } = useMutation({
     mutationFn: () => markAsRead({ notificationId: notification.id }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['notifications', user?.id] });
+      queryClient.invalidateQueries({ queryKey: ['unseenNotifications', user?.id] });
+      queryClient.invalidateQueries({ queryKey: ['seenNotifications', user?.id] });
     },
   });
 

@@ -26,7 +26,7 @@ const NavbarBottom = () => {
   const menuRef = useRef(null);
   const moreButtonRef = useRef(null);
 
-  const { data: unseenNotificationCount = 0 } = useNotificationCount();
+  const unseenNotificationCount = useNotificationCount();
 
   useClickOutside({
     refs: [menuRef, moreButtonRef],

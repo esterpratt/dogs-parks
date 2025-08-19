@@ -18,6 +18,8 @@ interface NotificationPreferences {
 
 interface GetNotificationsParams {
   userId: string;
+  limit: number;
+  cursor?: string;
 }
 
 interface MarkAsReadParams {
@@ -95,11 +97,13 @@ const removeDeviceToken = async (params: RemoveDeviceTokenParams) => {
   }
 };
 
-const getNotifications = async ({
+const getSeenNotifications = async ({
   userId,
+  limit,
+  cursor,
 }: GetNotificationsParams): Promise<Notification[]> => {
   try {
-    const { data, error } = await supabase
+    let query = supabase
       .from('notifications')
       .select(
         `
@@ -119,7 +123,15 @@ const getNotifications = async ({
       `
       )
       .eq('receiver_id', userId)
-      .order('created_at', { ascending: false });
+      .not('seen_at', 'is', null)
+      .order('created_at', { ascending: false })
+      .limit(limit);
+
+    if (cursor) {
+      query = query.lt('created_at', cursor);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       throw error;
@@ -139,7 +151,7 @@ const getNotifications = async ({
       })) || []
     );
   } catch (error) {
-    console.error('Error fetching notifications:', error);
+    console.error('Error fetching seen notifications:', error);
     return [];
   }
 };
@@ -240,18 +252,53 @@ const updateNotificationPreferences = async (
   }
 };
 
-const getUnseenNotificationCount = async (): Promise<number> => {
+const getUnseenNotifications = async (
+  userId: string
+): Promise<Notification[]> => {
   try {
-    const { data, error } = await supabase.rpc('count_unseen_notifications');
+    const { data, error } = await supabase
+      .from('notifications')
+      .select(
+        `
+        id,
+        type,
+        sender_id,
+        title,
+        app_message,
+        push_message,
+        read_at,
+        seen_at,
+        created_at,
+        sender:users!notifications_sender_id_fkey(
+          id,
+          name
+        )
+      `
+      )
+      .eq('receiver_id', userId)
+      .is('seen_at', null)
+      .order('created_at', { ascending: false });
 
     if (error) {
       throw error;
     }
 
-    return data || 0;
+    return (
+      data?.map((notification) => ({
+        id: notification.id,
+        type: notification.type as NotificationType,
+        sender_id: notification.sender_id,
+        title: notification.title,
+        app_message: notification.app_message,
+        push_message: notification.push_message,
+        read_at: notification.read_at,
+        seen_at: notification.seen_at,
+        created_at: notification.created_at,
+      })) || []
+    );
   } catch (error) {
-    console.error('Error fetching unseen notification count:', error);
-    return 0;
+    console.error('Error fetching unseen notifications:', error);
+    return [];
   }
 };
 
@@ -290,8 +337,8 @@ const sendPushNotification = async ({
 export {
   upsertDeviceToken,
   removeDeviceToken,
-  getNotifications,
-  getUnseenNotificationCount,
+  getSeenNotifications,
+  getUnseenNotifications,
   markAsRead,
   markAllAsRead,
   markAllAsSeen,

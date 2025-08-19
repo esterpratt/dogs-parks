@@ -1,15 +1,17 @@
-import { useState, useContext, useEffect, useRef } from 'react';
+import { useState, useContext, useEffect, useRef, useMemo } from 'react';
 import { Settings, Bell } from 'lucide-react';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useMutation, useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { Capacitor } from '@capacitor/core';
 import { Badge } from '@capawesome/capacitor-badge';
+import { useVirtualizer } from '@tanstack/react-virtual';
 import classnames from 'classnames';
 import { Button } from '../components/Button';
 import { NotificationsModal } from '../components/notifications/NotificationsModal';
-import { NotificationsList } from '../components/notifications/NotificationsList';
+import { NotificationItem } from '../components/notifications/NotificationItem';
 import { UserContext } from '../context/UserContext';
 import {
-  getNotifications,
+  getSeenNotifications,
+  getUnseenNotifications,
   markAllAsRead,
   markAllAsSeen,
 } from '../services/notifications';
@@ -19,8 +21,21 @@ import { Loader } from '../components/Loader';
 import { ONE_MINUTE } from '../utils/consts';
 import styles from './Notifications.module.scss';
 
+type ListRow =
+  | {
+      type: 'header';
+      data: { title: string; isNew: boolean };
+      id: string;
+    }
+  | {
+      type: 'notification';
+      data: Notification;
+      id: string;
+    };
+
 const Notifications = () => {
   const { user } = useContext(UserContext);
+
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [newIds, setNewIds] = useState<string[]>([]);
   const isMarkingSeenRef = useRef(false);
@@ -29,7 +44,10 @@ const Notifications = () => {
     mutationFn: markAllAsRead,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['notifications', user?.id ?? 'anon'],
+        queryKey: ['unseenNotifications', user?.id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['seenNotifications', user?.id],
       });
     },
   });
@@ -38,10 +56,10 @@ const Notifications = () => {
     mutationFn: markAllAsSeen,
     onSuccess: async () => {
       queryClient.invalidateQueries({
-        queryKey: ['notifications', user?.id ?? 'anon'],
+        queryKey: ['unseenNotifications', user?.id],
       });
       queryClient.invalidateQueries({
-        queryKey: ['notificationCount', user?.id ?? 'anon'],
+        queryKey: ['seenNotifications', user?.id],
       });
 
       if (Capacitor.isNativePlatform()) {
@@ -54,52 +72,70 @@ const Notifications = () => {
     },
   });
 
+  // Unseen notifications query (refetches every 30s)
   const {
-    data: notifications,
-    status,
-    isFetching,
+    data: unseenNotifications = [],
+    isLoading: isLoadingUnseen,
   } = useQuery({
-    queryKey: ['notifications', user?.id ?? 'anon'],
-    queryFn: () => getNotifications({ userId: user!.id }),
+    queryKey: ['unseenNotifications', user?.id],
+    queryFn: () => getUnseenNotifications(user!.id),
     enabled: !!user,
-    staleTime: 0,
     refetchInterval: ONE_MINUTE / 2,
     refetchIntervalInBackground: false,
+    staleTime: 0,
   });
 
-  const showLoader =
-    status === 'pending' || (!notifications?.length && isFetching);
-  const showContent = status === 'success';
+  // Historical notifications query (infinite, no refetch)
+  const {
+    data: historicalData,
+    status: historicalStatus,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ['seenNotifications', user?.id],
+    queryFn: ({ pageParam }: { pageParam: string | undefined }) =>
+      getSeenNotifications({ userId: user!.id, limit: 10, cursor: pageParam }),
+    getNextPageParam: (lastPage: Notification[]) => {
+      if (lastPage.length < 10) {
+        return undefined;
+      }
 
-  // On fetch/update:
-  // 1) Add unseen-at-entry to New (first load)
-  // 2) Add any newly arrived unseen to New
-  // 3) If any unseen exist, mark all as seen immediately (guarded)
+      return lastPage[lastPage.length - 1].created_at;
+    },
+    initialPageParam: undefined as string | undefined,
+    enabled: !!user,
+    staleTime: 5 * 60 * 1000, // 5 minutes - allows invalidation to work
+  });
+
+  const historicalNotifications = useMemo(
+    () => historicalData?.pages.flat() ?? [],
+    [historicalData]
+  );
+
+  const allNotifications = useMemo(
+    () => [...unseenNotifications, ...historicalNotifications],
+    [unseenNotifications, historicalNotifications]
+  );
+
+  // Capture unseen notifications as 'new' and mark them as seen
   useEffect(() => {
-    if (!user?.id) {
+    if (!user?.id || unseenNotifications.length === 0) {
       return;
     }
 
-    if (!notifications?.length) {
-      return;
-    }
+    // Add new unseen notification IDs to newIds state
+    const unseenIds = unseenNotifications.map(n => n.id);
+    setNewIds(prev => {
+      const merged = new Set([...prev, ...unseenIds]);
+      return Array.from(merged);
+    });
 
-    // Step 1 + 2: capture unseen-at-entry and any newly arrived unseen
-    const unseenIds = notifications
-      .filter((notification) => !notification.seen_at)
-      .map((notification) => notification.id);
-
-    if (unseenIds.length > 0) {
-      setNewIds((prevNewIds) => {
-        const merged = new Set([...prevNewIds, ...unseenIds]);
-        return Array.from(merged);
-      });
-    }
-
-    // Step 3: mark as seen immediately whenever there are unseen items
-    if (unseenIds.length > 0 && !isMarkingSeenRef.current) {
+    // Mark as seen if not already doing so
+    if (!isMarkingSeenRef.current) {
       const markNow = async () => {
         isMarkingSeenRef.current = true;
+
         try {
           await markAllAsSeenMutation();
         } catch (error) {
@@ -111,19 +147,95 @@ const Notifications = () => {
 
       markNow();
     }
-  }, [notifications, user?.id, markAllAsSeenMutation]);
+  }, [unseenNotifications, user?.id, markAllAsSeenMutation]);
 
-  const newNotifications: Notification[] =
-    notifications?.filter((notification) => newIds.includes(notification.id)) ??
-    [];
+  // Build virtualized rows (new section based on newIds + historical section)
+  const virtualizedItems: ListRow[] = useMemo(() => {
+    const rows: ListRow[] = [];
 
-  const oldNotifications: Notification[] =
-    notifications?.filter(
-      (notification) => !newIds.includes(notification.id)
-    ) ?? [];
+    // Combine all notifications and separate by newIds
+    const newList = allNotifications.filter(n => newIds.includes(n.id));
+    const oldList = allNotifications.filter(n => !newIds.includes(n.id));
+
+    // Add new notifications section
+    if (newList.length > 0) {
+      rows.push({
+        type: 'header',
+        data: {
+          title: `${newList.length} new notification${newList.length !== 1 ? 's' : ''}`,
+          isNew: true,
+        },
+        id: 'new-header',
+      });
+
+      newList.forEach((notification: Notification) => {
+        rows.push({ type: 'notification', data: notification, id: notification.id });
+      });
+    } else {
+      rows.push({
+        type: 'header',
+        data: { title: 'No new notifications', isNew: true },
+        id: 'no-new-header',
+      });
+    }
+
+    // Add historical notifications section
+    if (oldList.length > 0) {
+      rows.push({
+        type: 'header',
+        data: { title: 'Earlier', isNew: false },
+        id: 'earlier-header',
+      });
+
+      oldList.forEach((notification: Notification) => {
+        rows.push({ type: 'notification', data: notification, id: notification.id });
+      });
+    }
+
+    return rows;
+  }, [allNotifications, newIds]);
 
   const unreadCount =
-    notifications?.filter((notification) => !notification.read_at).length ?? 0;
+    allNotifications?.filter((notification) => !notification.read_at).length ?? 0;
+
+  const parentRef = useRef<HTMLDivElement>(null);
+
+  // --- Loader row pattern (sentinel) ---
+  const dataCount = virtualizedItems.length;
+  const totalCount = hasNextPage ? dataCount + 1 : dataCount; // +1 = loader row
+
+  const rowVirtualizer = useVirtualizer({
+    count: totalCount,
+    getScrollElement: () => parentRef.current,
+    estimateSize: (index) => {
+      const item = virtualizedItems[index];
+      return item?.type === 'header' ? 60 : 120;
+    },
+    overscan: 2,
+  });
+
+  const virtualRows = rowVirtualizer.getVirtualItems();
+
+  // Fetch next page only when the loader row becomes the last visible row
+  useEffect(() => {
+    if (!hasNextPage || isFetchingNextPage) {
+      return;
+    }
+
+    const last = virtualRows[virtualRows.length - 1];
+    if (!last) {
+      return;
+    }
+
+    const isLoaderRowVisible = last.index >= dataCount;
+    if (isLoaderRowVisible) {
+      fetchNextPage();
+    }
+  }, [virtualRows, dataCount, hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  const showLoader =
+    isLoadingUnseen || (historicalStatus === 'pending' && unseenNotifications.length === 0);
+  const showContent = !isLoadingUnseen && (unseenNotifications.length > 0 || historicalStatus === 'success');
 
   return (
     <div className={styles.container}>
@@ -139,11 +251,12 @@ const Notifications = () => {
           </Button>
         </div>
       </div>
+
       {showLoader ? (
         <Loader inside className={styles.loader} />
       ) : showContent ? (
         <div className={styles.content}>
-          {!notifications?.length ? (
+          {!allNotifications?.length ? (
             <div className={styles.emptyState}>
               <div className={styles.emptyIcon}>
                 <Bell size={64} />
@@ -151,58 +264,101 @@ const Notifications = () => {
               <div className={styles.emptyText}>You have no notifications</div>
             </div>
           ) : (
-            <>
-              <div className={styles.section}>
-                <div className={styles.sectionHeader}>
-                  <h2
-                    className={classnames(styles.sectionTitle, {
-                      [styles.lighter]: newNotifications.length === 0,
-                    })}
+            <div className={styles.virtualizedContainer}>
+              {unreadCount > 0 && (
+                <div className={styles.markAllContainer}>
+                  <Button
+                    variant="simple"
+                    onClick={() => {
+                      if (user?.id) {
+                        markAllAsReadMutation();
+                      }
+                    }}
+                    className={styles.markAllButton}
                   >
-                    {newNotifications.length > 0
-                      ? newNotifications.length
-                      : 'No'}{' '}
-                    new notification{newNotifications.length !== 1 ? 's' : ''}
-                  </h2>
-                  {unreadCount > 0 && (
-                    <Button
-                      variant="simple"
-                      onClick={() => {
-                        if (user?.id) {
-                          markAllAsReadMutation();
-                        }
-                      }}
-                      className={styles.markAllButton}
-                    >
-                      Mark all as read
-                    </Button>
-                  )}
-                </div>
-                {newNotifications.length > 0 && (
-                  <div className={styles.notificationsList}>
-                    <NotificationsList notifications={newNotifications} />
-                  </div>
-                )}
-              </div>
-              {oldNotifications.length > 0 && (
-                <div className={styles.section}>
-                  <h2
-                    className={classnames(
-                      styles.sectionTitle,
-                      styles.earlierTitle
-                    )}
-                  >
-                    Earlier
-                  </h2>
-                  <div className={styles.notificationsList}>
-                    <NotificationsList notifications={oldNotifications} />
-                  </div>
+                    Mark all as read
+                  </Button>
                 </div>
               )}
-            </>
+
+              <div ref={parentRef} className={styles.virtualScrollContainer}>
+                <div
+                  style={{
+                    height: `${rowVirtualizer.getTotalSize()}px`,
+                    width: '100%',
+                    position: 'relative',
+                  }}
+                >
+                  {virtualRows.map((virtualRow) => {
+                    const isLoaderRow = virtualRow.index > dataCount - 1;
+
+                    return (
+                      <div
+                        key={virtualRow.key}
+                        className={styles.virtualRow}
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: `${virtualRow.size}px`,
+                          transform: `translateY(${virtualRow.start}px)`,
+                        }}
+                      >
+                        {isLoaderRow ? (
+                          <div className={styles.loadingMore}>
+                            {hasNextPage
+                              ? 'Loading more…'
+                              : 'Nothing more to load'}
+                          </div>
+                        ) : virtualizedItems[virtualRow.index].type ===
+                          'header' ? (
+                          <div className={styles.sectionHeader}>
+                            <h2
+                              className={classnames(styles.sectionTitle, {
+                                [styles.lighter]:
+                                  (
+                                    virtualizedItems[virtualRow.index].data as {
+                                      title: string;
+                                      isNew: boolean;
+                                    }
+                                  ).isNew && newIds.length === 0,
+                                [styles.earlierTitle]: !(
+                                  virtualizedItems[virtualRow.index].data as {
+                                    title: string;
+                                    isNew: boolean;
+                                  }
+                                ).isNew,
+                              })}
+                            >
+                              {
+                                (
+                                  virtualizedItems[virtualRow.index].data as {
+                                    title: string;
+                                    isNew: boolean;
+                                  }
+                                ).title
+                              }
+                            </h2>
+                          </div>
+                        ) : (
+                          <NotificationItem
+                            notification={
+                              virtualizedItems[virtualRow.index]
+                                .data as Notification
+                            }
+                          />
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
           )}
         </div>
       ) : null}
+
       <NotificationsModal
         isOpen={isSettingsModalOpen}
         onClose={() => setIsSettingsModalOpen(false)}

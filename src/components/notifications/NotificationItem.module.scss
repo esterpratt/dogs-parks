@@ -70,6 +70,7 @@
   box-shadow: var(--box-shadow);
   text-decoration: none;
   display: block;
+  width: 100%;
   transition: border 0.3s ease;
 
   &.unread {

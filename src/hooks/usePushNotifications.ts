@@ -5,7 +5,10 @@ import { FirebaseMessaging } from '@capacitor-firebase/messaging';
 import { Preferences } from '@capacitor/preferences';
 import { v4 as uuidv4 } from 'uuid';
 import { UserContext } from '../context/UserContext';
-import { upsertDeviceToken, removeDeviceToken } from '../services/notifications';
+import {
+  upsertDeviceToken,
+  removeDeviceToken,
+} from '../services/notifications';
 import { queryClient } from '../services/react-query';
 import { Platform } from '../types/notification';
 
@@ -42,16 +45,18 @@ export const usePushNotifications = () => {
     async function cleanupOnLogout() {
       try {
         const deviceId = await getDeviceId();
-        const { value: cachedToken } = await Preferences.get({ key: KEYS.cachedToken });
+        const { value: cachedToken } = await Preferences.get({
+          key: KEYS.cachedToken,
+        });
 
         if (cachedToken) {
-          const deleted = await removeDeviceToken({ deviceId, token: cachedToken });
-          console.log('Removed device token rows:', deleted);
-        } else {
-          console.log('No cached push token to remove');
+          await removeDeviceToken({
+            deviceId,
+            token: cachedToken,
+          });
         }
-      } catch (e) {
-        console.error('Failed to remove device token on logout:', e);
+      } catch (err) {
+        console.error('Failed to remove device token on logout:', err);
       } finally {
         previousUserId.current = null;
         currentToken.current = null;
@@ -73,9 +78,12 @@ export const usePushNotifications = () => {
     let actionListener: PluginListenerHandle | undefined;
 
     async function invalidateNotifications(userId: string) {
-      console.log('i will invalidate: ', userId)
       await queryClient.invalidateQueries({
-        queryKey: ['notifications', userId],
+        queryKey: ['unseenNotifications', userId],
+        refetchType: 'active',
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ['seenNotifications', userId],
         refetchType: 'active',
       });
     }
@@ -96,7 +104,10 @@ export const usePushNotifications = () => {
       }
 
       try {
-        await Preferences.set({ key: KEYS.cachedToken, value: nextToken }).catch((err) => {
+        await Preferences.set({
+          key: KEYS.cachedToken,
+          value: nextToken,
+        }).catch((err) => {
           console.error('Failed to cache push token:', err);
         });
 
@@ -133,21 +144,30 @@ export const usePushNotifications = () => {
           });
         }
 
-        tokenListener = await FirebaseMessaging.addListener('tokenReceived', async (e) => {
-          await persistDeviceToken(e.token ?? '');
-        });
+        tokenListener = await FirebaseMessaging.addListener(
+          'tokenReceived',
+          async (e) => {
+            await persistDeviceToken(e.token ?? '');
+          }
+        );
 
         const { token } = await FirebaseMessaging.getToken();
         await persistDeviceToken(token);
 
-        receivedListener = await FirebaseMessaging.addListener('notificationReceived', async () => {
-          await invalidateNotifications(userId!);
-        });
+        receivedListener = await FirebaseMessaging.addListener(
+          'notificationReceived',
+          async () => {
+            await invalidateNotifications(userId!);
+          }
+        );
 
-        actionListener = await FirebaseMessaging.addListener('notificationActionPerformed', async () => {
-          await invalidateNotifications(userId!);
-          navigate('/notifications');
-        });
+        actionListener = await FirebaseMessaging.addListener(
+          'notificationActionPerformed',
+          async () => {
+            await invalidateNotifications(userId!);
+            navigate('/notifications');
+          }
+        );
       } catch (err) {
         console.error('Push notifications init failed:', err);
       }
