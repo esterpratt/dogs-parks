@@ -13,7 +13,7 @@ interface Notification {
   id: string;
   type: NotificationType;
   sender_id: string;
-  receiver_id: boolean;
+  receiver_id: string;
   title: string;
   app_message: string;
   push_message?: string;

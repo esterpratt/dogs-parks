@@ -26,13 +26,6 @@ interface GetNotificationPreferencesParams {
   userId: string;
 }
 
-interface SendPushNotificationParams {
-  receiverId: string;
-  senderId: string;
-  type: string;
-  data?: Record<string, unknown>;
-}
-
 interface UpsertDeviceTokenParams {
   userId: string;
   deviceId: string;
@@ -138,12 +131,15 @@ const getSeenNotifications = async ({
         id: notification.id,
         type: notification.type as NotificationType,
         sender_id: notification.sender_id,
+        receiver_id: userId,
         title: notification.title,
         app_message: notification.app_message,
         push_message: notification.push_message,
         read_at: notification.read_at,
         seen_at: notification.seen_at,
+        delivered_at: true,
         created_at: notification.created_at,
+        is_ready: true,
       })) || []
     );
   } catch (error) {
@@ -282,49 +278,20 @@ const getUnseenNotifications = async (userId: string) => {
         id: notification.id,
         type: notification.type as NotificationType,
         sender_id: notification.sender_id,
+        receiver_id: userId,
         title: notification.title,
         app_message: notification.app_message,
         push_message: notification.push_message,
         read_at: notification.read_at,
         seen_at: notification.seen_at,
+        delivered_at: true,
         created_at: notification.created_at,
+        is_ready: true,
       })) || []
     );
   } catch (error) {
     console.error('Error fetching unseen notifications:', error);
     return [];
-  }
-};
-
-const sendPushNotification = async ({
-  receiverId,
-  senderId,
-  type,
-  data,
-}: SendPushNotificationParams) => {
-  try {
-    const { data: result, error } = await supabase
-      .from('notifications')
-      .insert([
-        {
-          receiver_id: receiverId,
-          sender_id: senderId,
-          type,
-          data,
-        },
-      ])
-      .select()
-      .single();
-
-    if (error) {
-      console.error('Error inserting notification:', error);
-      throw error;
-    }
-
-    return result;
-  } catch (error) {
-    console.error('Failed to insert notification:', error);
-    throwError(error);
   }
 };
 
@@ -338,5 +305,4 @@ export {
   markAllAsSeen,
   getNotificationPreferences,
   updateNotificationPreferences,
-  sendPushNotification,
 };
