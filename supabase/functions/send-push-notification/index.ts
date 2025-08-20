@@ -1,3 +1,4 @@
+// supabase/functions/send-push-notification/index.ts
 import { serve } from 'https://deno.land/std/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 import { corsHeaders } from '../_shared/cors.ts';
@@ -46,66 +47,104 @@ interface ServiceAccountCredentials {
 }
 
 serve(async (req) => {
-  if (req.method === 'OPTIONS') return ok({ ok: true });
+  if (req.method === 'OPTIONS') {
+    return ok({ ok: true });
+  }
 
   try {
-    if (!FCM_SA_JSON) return err({ error: 'FCM service account not configured' }, 500);
+    if (!FCM_SA_JSON) {
+      return err({ error: 'FCM service account not configured' }, 500);
+    }
 
     const raw = await req.json();
     const record = normalizePayload(raw);
-    const notifId = record.id;
+    const notificationId = record.id;
 
+    // Build payload parts
     const senderName = await lookupUserName(record.sender_id || undefined);
-    const { title, pushMessage, appMessage } = renderCopy(record.type, { senderName });
+    const { title, pushMessage, appMessage } = renderCopy(record.type, {
+      senderName,
+    });
 
-    await supabase
+    // ---- First-time-only UPDATE to mark the row ready (no title/null guard) ----
+    // Guard on is_ready so only the initial flip emits realtime.
+    const { error: readyErr, count: readyCount } = await supabase
       .from('notifications')
       .update({
+        is_ready: true,
         title,
         push_message: record.push_message || pushMessage,
         app_message: record.app_message || appMessage,
         data: record.data ?? null,
+        // If you added a BEFORE UPDATE trigger to bump updated_at, it will fire here too
       })
-      .eq('id', notifId)
-      .is('title', null);
+      .eq('id', notificationId)
+      .neq('is_ready', true) // first-time-only guard
+      .select('id', { head: true, count: 'exact' });
 
-    // ---- Idempotency ----
+    if (readyErr) {
+      console.error('EF: update-to-ready failed', { notificationId, readyErr });
+      // Continue anyway; client can still poll as fallback
+    }
+
+    // ---- Idempotency: skip delivery work if already delivered ----
     {
-      const { data: existing } = await supabase
+      const { data: existing, error: loadErr } = await supabase
         .from('notifications')
         .select('id, delivered_at, delivery_attempts')
-        .eq('id', notifId)
+        .eq('id', notificationId)
         .maybeSingle();
+      if (loadErr) {
+        console.error('EF: load for idempotency failed', {
+          notificationId,
+          loadErr,
+        });
+      }
       if (existing?.delivered_at) {
-        return ok({ message: 'Already delivered', id: notifId });
+        return ok({ message: 'Already delivered', id: notificationId });
       }
     }
 
     // ---- Preferences ----
-    const { data: prefs } = await supabase
+    const { data: prefs, error: prefsErr } = await supabase
       .from('notifications_preferences')
       .select('muted, friend_request, friend_approval')
       .eq('user_id', record.receiver_id)
       .maybeSingle<NotificationPreferencesRow>();
+    if (prefsErr) {
+      console.error('EF: load prefs failed', {
+        userId: record.receiver_id,
+        prefsErr,
+      });
+    }
 
     if (prefs?.muted) {
       return ok({ message: 'Muted by user' });
     }
 
     const prefKey = getPrefKey(record.type);
-    
-    if (prefKey && prefs && (prefs as unknown)[prefKey] === false) {
+    if (
+      prefKey &&
+      prefs &&
+      (prefs as unknown as Record<string, boolean | null>)[prefKey] === false
+    ) {
       return ok({ message: `Type '${record.type}' disabled by user` });
     }
 
     // ---- Device tokens ----
-    const { data: tokens } = await supabase
+    const { data: tokens, error: tokensErr } = await supabase
       .from('device_tokens')
       .select('token')
       .eq('user_id', record.receiver_id);
+    if (tokensErr) {
+      console.error('EF: load tokens failed', {
+        userId: record.receiver_id,
+        tokensErr,
+      });
+    }
 
     if (!tokens?.length) {
-      await incAttempts(notifId);
+      await incAttempts(notificationId);
       return err({ message: 'No device tokens' }, 404);
     }
 
@@ -121,7 +160,7 @@ serve(async (req) => {
         unseen_count: String(unseenCount),
       }),
       android: {
-        priority: 'HIGH',
+        priority: 'HIGH' as const,
         notification: { channel_id: 'default', default_sound: true },
       },
       apns: {
@@ -139,38 +178,63 @@ serve(async (req) => {
     const accessToken = await getAccessToken(FCM_SA_JSON);
     const cred = JSON.parse(FCM_SA_JSON) as ServiceAccountCredentials;
 
-    let sent = 0, failed = 0;
+    let sent = 0;
+    let failed = 0;
+
     await Promise.all(
-      tokens.map(async (t) => {
+      tokens.map(async (row) => {
         const res = await fetch(
           `https://fcm.googleapis.com/v1/projects/${cred.project_id}/messages:send`,
           {
             method: 'POST',
-            headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: { ...messageBase, token: t.token } }),
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              message: { ...messageBase, token: row.token },
+            }),
           }
         );
+
         if (!res.ok) {
           failed++;
           const txt = await res.text().catch(() => '');
-          if (isInvalidFcmTokenError(txt)) await pruneTokenByValue(t.token);
+          if (isInvalidFcmTokenError(txt)) {
+            await pruneTokenByValue(row.token);
+          }
           return;
         }
+
         sent++;
       })
     );
 
     if (sent > 0) {
-      await supabase
+      const { error: deliveredErr } = await supabase
         .from('notifications')
         .update({ delivered_at: new Date().toISOString() })
-        .eq('id', notifId)
+        .eq('id', notificationId)
         .is('delivered_at', null);
+      if (deliveredErr) {
+        console.error('EF: set delivered_at failed', {
+          notificationId,
+          deliveredErr,
+        });
+      }
     } else {
-      await incAttempts(notifId);
+      await incAttempts(notificationId);
     }
 
-    return ok({ success: true, sent, failed, total: tokens.length, unseenCount });
+    return ok({
+      success: true,
+      sent,
+      failed,
+      total: tokens.length,
+      unseenCount,
+      // Whether this run flipped row to ready (useful for logs)
+      readyFlipped: !!readyCount,
+    });
   } catch (e) {
     console.error('send-push-notification error:', e);
     return err({ error: 'Internal server error' }, 500);
@@ -205,85 +269,143 @@ function normalizePayload(raw: unknown): WebhookRecord {
   } as WebhookRecord;
 }
 
-function getPrefKey(type: NotificationType): keyof NotificationPreferencesRow | null {
+function getPrefKey(
+  type: NotificationType
+): keyof NotificationPreferencesRow | null {
   switch (type) {
-    case NotificationType.FRIEND_REQUEST: return 'friend_request';
-    case NotificationType.FRIEND_APPROVAL: return 'friend_approval';
-    default: return null;
+    case NotificationType.FRIEND_REQUEST: {
+      return 'friend_request';
+    }
+    case NotificationType.FRIEND_APPROVAL: {
+      return 'friend_approval';
+    }
+    default: {
+      return null;
+    }
   }
 }
 
 async function lookupUserName(userId?: string): Promise<string> {
-  if (!userId) return 'Someone';
-  const { data } = await supabase.from('users').select('name').eq('id', userId).maybeSingle();
+  if (!userId) {
+    return 'Someone';
+  }
+  const { data, error } = await supabase
+    .from('users')
+    .select('name')
+    .eq('id', userId)
+    .maybeSingle();
+  if (error) {
+    console.error('EF: lookupUserName failed', { userId, error });
+  }
   return data?.name || 'Someone';
 }
 
 function renderCopy(type: NotificationType, vars: { senderName?: string }) {
   const who = vars.senderName || 'Someone';
   switch (type) {
-    case NotificationType.FRIEND_REQUEST:
-      return { title: `${who} sent you a friend request`, pushMessage: `Open KlavHub to respond`, appMessage: `Click to respond` };
-    case NotificationType.FRIEND_APPROVAL:
-      return { title: `${who} accepted your friend request`, pushMessage: `You are now friends`, appMessage: `You are now friends!` };
-    case NotificationType.PARK_INVITE:
-      return { title: `${who} invited you to a park`, pushMessage: `See the details in KlavHub`, appMessage: `Click to respond` };
-    case NotificationType.PARK_INVITE_RESPONSE:
-      return { title: `${who} responded to your invite`, pushMessage: `Open KlavHub to view the response`, appMessage: `Click to view the response` };
-    default:
+    case NotificationType.FRIEND_REQUEST: {
+      return {
+        title: `${who} sent you a friend request`,
+        pushMessage: 'Open KlavHub to respond',
+        appMessage: 'Click to respond',
+      };
+    }
+    case NotificationType.FRIEND_APPROVAL: {
+      return {
+        title: `${who} accepted your friend request`,
+        pushMessage: 'You are now friends',
+        appMessage: 'You are now friends!',
+      };
+    }
+    case NotificationType.PARK_INVITE: {
+      return {
+        title: `${who} invited you to a park`,
+        pushMessage: 'See the details in KlavHub',
+        appMessage: 'Click to respond',
+      };
+    }
+    case NotificationType.PARK_INVITE_RESPONSE: {
+      return {
+        title: `${who} responded to your invite`,
+        pushMessage: 'Open KlavHub to view the response',
+        appMessage: 'Click to view the response',
+      };
+    }
+    default: {
       return { title: 'Notification', pushMessage: '', appMessage: '' };
+    }
   }
 }
 
 function objectToStringDict(obj: Record<string, unknown>) {
   const out: Record<string, string> = {};
-  for (const [k, v] of Object.entries(obj)) {
-    out[k] = typeof v === 'string' ? v : JSON.stringify(v);
+  for (const [key, value] of Object.entries(obj)) {
+    out[key] = typeof value === 'string' ? value : JSON.stringify(value);
   }
   return out;
 }
 
 async function pruneTokenByValue(token: string) {
-  await supabase.from('device_tokens').delete().eq('token', token);
+  const { error } = await supabase
+    .from('device_tokens')
+    .delete()
+    .eq('token', token);
+  if (error) {
+    console.error('EF: pruneTokenByValue failed', { error });
+  }
 }
 
-async function incAttempts(notifId?: string) {
-  if (!notifId) return;
-  const { data } = await supabase.from('notifications').select('delivery_attempts').eq('id', notifId).maybeSingle();
+async function incAttempts(notificationId?: string) {
+  if (!notificationId) {
+    return;
+  }
+  const { data, error } = await supabase
+    .from('notifications')
+    .select('delivery_attempts')
+    .eq('id', notificationId)
+    .maybeSingle();
+  if (error) {
+    console.error('EF: incAttempts load failed', { notificationId, error });
+    return;
+  }
   const attempts = (data?.delivery_attempts ?? 0) + 1;
-  await supabase.from('notifications').update({ delivery_attempts: attempts }).eq('id', notifId);
+  const { error: updErr } = await supabase
+    .from('notifications')
+    .update({ delivery_attempts: attempts })
+    .eq('id', notificationId);
+  if (updErr) {
+    console.error('EF: incAttempts update failed', { notificationId, updErr });
+  }
 }
 
 function isInvalidFcmTokenError(body: string): boolean {
-  return /\bUNREGISTERED\b/.test(body) || /\bNOT_FOUND\b/.test(body) || /APNS_TOKEN_INVALID/i.test(body) ||
-    (/\bINVALID_ARGUMENT\b/.test(body) && /not found|Invalid registration/i.test(body));
-}
-
-async function getUnseenCount(userId: string): Promise<number> {
-  const { count, error } = await supabase
-    .from('notifications')
-    .select('id', { count: 'exact', head: true })
-    .eq('receiver_id', userId)
-    .is('seen_at', null);
-  if (error) {
-    console.error('getUnseenCount error:', error.message);
-    return 0;
-  }
-  return count ?? 0;
+  return (
+    /\bUNREGISTERED\b/.test(body) ||
+    /\bNOT_FOUND\b/.test(body) ||
+    /APNS_TOKEN_INVALID/i.test(body) ||
+    (/\bINVALID_ARGUMENT\b/.test(body) &&
+      /not found|Invalid registration/i.test(body))
+  );
 }
 
 /* ---- FCM OAuth (service account) ---- */
 function pemToDer(pem: string): ArrayBuffer {
-  const b64 = pem.replace(/-----BEGIN PRIVATE KEY-----/g, '').replace(/-----END PRIVATE KEY-----/g, '').replace(/\s+/g, '');
+  const b64 = pem
+    .replace(/-----BEGIN PRIVATE KEY-----/g, '')
+    .replace(/-----END PRIVATE KEY-----/g, '')
+    .replace(/\s+/g, '');
   const raw = atob(b64);
   const buf = new Uint8Array(raw.length);
-  for (let i = 0; i < raw.length; i++) buf[i] = raw.charCodeAt(i);
+  for (let i = 0; i < raw.length; i++) {
+    buf[i] = raw.charCodeAt(i);
+  }
   return buf.buffer;
 }
 
 async function getAccessToken(serviceAccountJson: string): Promise<string> {
   const cred = JSON.parse(serviceAccountJson) as ServiceAccountCredentials;
   const now = Math.floor(Date.now() / 1000);
+
   const header = { alg: 'RS256', typ: 'JWT' };
   const payload = {
     iss: cred.client_email,
@@ -292,13 +414,36 @@ async function getAccessToken(serviceAccountJson: string): Promise<string> {
     iat: now,
     exp: now + 3600,
   };
-  const enc = (o: unknown) => btoa(JSON.stringify(o)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
-  const unsigned = `${enc(header)}.${enc(payload)}`;
+
+  const encode = (o: unknown) =>
+    btoa(JSON.stringify(o))
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/g, '');
+
+  const unsigned = `${encode(header)}.${encode(payload)}`;
 
   const der = pemToDer(cred.private_key.replace(/\\n/g, '\n'));
-  const key = await crypto.subtle.importKey('pkcs8', der, { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['sign']);
-  const sig = new Uint8Array(await crypto.subtle.sign('RSASSA-PKCS1-v1_5', key, new TextEncoder().encode(unsigned)));
-  const sigB64 = btoa(String.fromCharCode(...sig)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+  const key = await crypto.subtle.importKey(
+    'pkcs8',
+    der,
+    { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+
+  const signature = new Uint8Array(
+    await crypto.subtle.sign(
+      'RSASSA-PKCS1-v1_5',
+      key,
+      new TextEncoder().encode(unsigned)
+    )
+  );
+  const sigB64 = btoa(String.fromCharCode(...signature))
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/g, '');
+
   const jwt = `${unsigned}.${sigB64}`;
 
   const res = await fetch('https://oauth2.googleapis.com/token', {
@@ -309,7 +454,11 @@ async function getAccessToken(serviceAccountJson: string): Promise<string> {
       assertion: jwt,
     }),
   });
-  if (!res.ok) throw new Error(`OAuth token exchange failed: ${res.status} ${await res.text()}`);
+  if (!res.ok) {
+    throw new Error(
+      `OAuth token exchange failed: ${res.status} ${await res.text()}`
+    );
+  }
   const json = await res.json();
   return json.access_token as string;
 }

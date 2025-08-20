@@ -5,14 +5,14 @@ import { UserContext } from '../../context/UserContext';
 import styles from './MarkAllReadButton.module.scss';
 
 const MarkAllReadButton = () => {
-  const { user } = useContext(UserContext);
+  const { userId } = useContext(UserContext);
   const { markAllNotificationsAsRead } = useMarkAllNotificationsAsRead();
 
   return (
     <Button
       variant="simple"
       onClick={() => {
-        if (user?.id) {
+        if (userId) {
           markAllNotificationsAsRead();
         }
       }}

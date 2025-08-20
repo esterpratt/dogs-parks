@@ -44,10 +44,8 @@ const useMarkAllNotificationsAsSeen = () => {
           seen_at: nowIso,
         }));
 
-        // Clear unseen cache
         queryClient.setQueryData(['unseenNotifications', user?.id], []);
 
-        // Prepend to seen cache
         if (prevSeen) {
           const updated: InfiniteData<Notification[]> = {
             ...prevSeen,

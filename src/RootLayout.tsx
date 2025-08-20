@@ -12,12 +12,14 @@ import { useKeyboardPreFocus } from './hooks/useKeyboardPreFocus';
 import { useUrlHandler } from './hooks/useUrlHandler';
 import { useThemeMode } from './hooks/useThemeMode';
 import { usePushNotifications } from './hooks/usePushNotifications';
+import { useNotificationsRealtime } from './hooks/api/useNotificationsRealtime';
 
 const RootLayout = () => {
   useUrlHandler();
   usePreventFocusOnScroll();
   useThemeMode();
   usePushNotifications();
+  useNotificationsRealtime();
   const keyboardHeight = useKeyboardFix();
   useSafeArea();
   const safeAreaAddition = !isIos()

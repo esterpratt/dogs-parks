@@ -10,13 +10,12 @@ import {
 } from '../services/notifications';
 import { Notification } from '../types/notification';
 import { Loader } from '../components/Loader';
-import { ONE_MINUTE } from '../utils/consts';
-import styles from './Notifications.module.scss';
 import { useMarkAllNotificationsAsSeen } from '../hooks/api/useMarkAllNotificationsAsSeen';
 import { NotificationsList } from '../components/notifications/NotificationsList';
+import styles from './Notifications.module.scss';
 
 const Notifications = () => {
-  const { user } = useContext(UserContext);
+  const { userId } = useContext(UserContext);
 
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [newIds, setNewIds] = useState<string[]>([]);
@@ -26,12 +25,9 @@ const Notifications = () => {
 
   const { data: unseenNotifications = [], isLoading: isLoadingUnseen } =
     useQuery({
-      queryKey: ['unseenNotifications', user?.id],
-      queryFn: () => getUnseenNotifications(user!.id),
-      enabled: !!user,
-      refetchInterval: ONE_MINUTE / 2,
-      refetchIntervalInBackground: false,
-      staleTime: 0,
+      queryKey: ['unseenNotifications', userId],
+      queryFn: () => getUnseenNotifications(userId!),
+      enabled: !!userId,
     });
 
   // Historical notifications query (infinite, no refetch)
@@ -42,17 +38,17 @@ const Notifications = () => {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ['seenNotifications', user?.id],
+    queryKey: ['seenNotifications', userId],
     initialPageParam: undefined as string | undefined,
     queryFn: ({ pageParam }: { pageParam: string | undefined }) =>
-      getSeenNotifications({ userId: user!.id, limit: 20, cursor: pageParam }),
+      getSeenNotifications({ userId: userId!, limit: 20, cursor: pageParam }),
     getNextPageParam: (lastPage: Notification[]) => {
       if (lastPage.length < 20) {
         return undefined;
       }
       return lastPage[lastPage.length - 1].created_at;
     },
-    enabled: !!user,
+    enabled: !!userId,
   });
 
   const historicalNotifications = useMemo(() => {
@@ -65,7 +61,7 @@ const Notifications = () => {
 
   // Capture unseen notifications as 'new' and then mark them as seen
   useEffect(() => {
-    if (!user?.id || unseenNotifications.length === 0 || isMarkingSeen) {
+    if (!userId || unseenNotifications.length === 0 || isMarkingSeen) {
       return;
     }
 
@@ -81,12 +77,7 @@ const Notifications = () => {
     requestAnimationFrame(() => {
       markAllNotificationsAsSeen();
     });
-  }, [
-    unseenNotifications,
-    user?.id,
-    isMarkingSeen,
-    markAllNotificationsAsSeen,
-  ]);
+  }, [unseenNotifications, userId, isMarkingSeen, markAllNotificationsAsSeen]);
 
   const showLoader =
     isLoadingUnseen ||

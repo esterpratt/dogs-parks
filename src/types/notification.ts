@@ -6,20 +6,23 @@ enum NotificationType {
 enum Platform {
   IOS = 'ios',
   ANDROID = 'android',
-  WEB = 'web'
+  WEB = 'web',
 }
 
 interface Notification {
   id: string;
   type: NotificationType;
   sender_id: string;
+  receiver_id: boolean;
   title: string;
   app_message: string;
   push_message?: string;
   read_at: string | null;
   seen_at: string | null;
+  delivered_at: boolean;
   created_at: string;
+  is_ready: boolean;
 }
 
 export type { Notification };
-export { NotificationType, Platform }
+export { NotificationType, Platform };

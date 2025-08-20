@@ -72,13 +72,13 @@ export const NotificationsModal: React.FC<NotificationsModalProps> = ({
     friendApprovals: true,
   });
 
-  const { user } = useContext(UserContext);
+  const { userId } = useContext(UserContext);
   const orientation = useOrientationContext((state) => state.orientation);
 
   const { data: serverPreferences } = useQuery({
-    queryKey: ['notification-preferences', user?.id],
-    queryFn: () => getNotificationPreferences({ userId: user!.id }),
-    enabled: !!user,
+    queryKey: ['notification-preferences', userId],
+    queryFn: () => getNotificationPreferences({ userId: userId! }),
+    enabled: !!userId,
   });
 
   useEffect(() => {
@@ -104,14 +104,14 @@ export const NotificationsModal: React.FC<NotificationsModalProps> = ({
   const { mutate: mutateNotificationsPreferences, isPending } = useMutation({
     mutationFn: () =>
       updateNotificationPreferences({
-        user_id: user!.id,
+        user_id: userId!,
         muted: muteAll,
         friend_request: preferences.friendRequests,
         friend_approval: preferences.friendApprovals,
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['notification-preferences', user?.id],
+        queryKey: ['notification-preferences', userId],
       });
       onClose();
     },

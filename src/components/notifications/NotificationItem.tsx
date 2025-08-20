@@ -68,7 +68,7 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
 const NotificationItem = ({ notification }: NotificationItemProps) => {
   const { type, app_message, read_at, created_at } = notification;
   const navigate = useNavigate();
-  const { user } = useContext(UserContext);
+  const { userId } = useContext(UserContext);
 
   const config = getNotificationConfig(type);
   const url = config.getUrl(notification);
@@ -78,8 +78,12 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
   const { mutate: markAsReadMutation } = useMutation({
     mutationFn: () => markAsRead({ notificationId: notification.id }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['unseenNotifications', user?.id] });
-      queryClient.invalidateQueries({ queryKey: ['seenNotifications', user?.id] });
+      queryClient.invalidateQueries({
+        queryKey: ['unseenNotifications', userId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['seenNotifications', userId],
+      });
     },
   });
 
@@ -88,8 +92,8 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
       markAsReadMutation();
     }
 
-    if (user?.id) {
-      config.invalidateQueries(user.id);
+    if (userId) {
+      config.invalidateQueries(userId);
     }
 
     if (url) {
