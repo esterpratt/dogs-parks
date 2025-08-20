@@ -17,7 +17,7 @@ import classnames from 'classnames';
 import { UserContext } from '../context/UserContext';
 import { useClickOutside } from '../hooks/useClickOutside';
 import { NavbarLogoutButton } from './NavbarLogoutButton';
-import { useNotificationCount } from '../hooks/useNotificationCount';
+import { useNotificationCount } from '../hooks/api/useNotificationCount';
 import styles from './NavbarBottom.module.scss';
 
 const NavbarBottom = () => {

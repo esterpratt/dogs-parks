@@ -1,5 +1,44 @@
-.list {
+@use '../../variables.scss' as *;
+
+$header-height: 48px;
+
+.section-header {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  justify-content: space-between;
+  align-items: center;
+
+  h2 {
+    margin: 0;
+  }
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+
+  &.lighter {
+    color: var(--color-text-medium);
+  }
+}
+
+.earlier-title {
+  margin-top: 16px;
+}
+
+.no-new-notifications {
+  margin-top: 8px;
+}
+
+.virtualized-container {
+  height: 100%;
+}
+
+.virtual-row {
+  padding: 0 8px;
+}
+
+.virtual-scroll-container {
+  height: calc($content-max-height - $header-height - 12px);
+  overflow: auto;
 }
