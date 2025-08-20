@@ -1,10 +1,6 @@
 import { Capacitor } from '@capacitor/core';
 import { supabase } from './supabase-client';
-import {
-  Notification,
-  NotificationType,
-  Platform,
-} from '../types/notification';
+import { NotificationType, Platform } from '../types/notification';
 import { throwError } from './error';
 
 interface NotificationPreferences {
@@ -101,7 +97,7 @@ const getSeenNotifications = async ({
   userId,
   limit,
   cursor,
-}: GetNotificationsParams): Promise<Notification[]> => {
+}: GetNotificationsParams) => {
   try {
     let query = supabase
       .from('notifications')
@@ -252,9 +248,7 @@ const updateNotificationPreferences = async (
   }
 };
 
-const getUnseenNotifications = async (
-  userId: string
-): Promise<Notification[]> => {
+const getUnseenNotifications = async (userId: string) => {
   try {
     const { data, error } = await supabase
       .from('notifications')
