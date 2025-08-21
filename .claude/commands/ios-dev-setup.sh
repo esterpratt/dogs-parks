@@ -34,8 +34,8 @@ print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
-# Step 1: Start dev server and extract Network IP
-print_status "Starting development server..."
+# Step 1: Extract Network IP from a test run
+print_status "Getting network IP..."
 npm run dev -- --host > dev_output.log 2>&1 &
 DEV_PID=$!
 
@@ -44,16 +44,18 @@ sleep 3
 NETWORK_IP=""
 for i in {1..10}; do
     if grep -q "Network:" dev_output.log; then
-        NETWORK_IP=$(grep "Network:" dev_output.log | grep -oE 'http://[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+:[0-9]+')
+        NETWORK_IP=$(grep "Network:" dev_output.log | grep -oE 'http://[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+:[0-9]+' | head -1)
         break
     fi
     sleep 1
 done
 
+# Stop the test server
+kill $DEV_PID 2>/dev/null || true
+rm -f dev_output.log
+
 if [ -z "$NETWORK_IP" ]; then
-    print_error "Could not extract Network IP from dev server"
-    kill $DEV_PID 2>/dev/null || true
-    rm -f dev_output.log
+    print_error "Could not extract Network IP"
     exit 1
 fi
 
@@ -71,7 +73,7 @@ if [ ! -f "$CONFIG_FILE" ]; then
 fi
 
 # Extract current server URL from config
-CURRENT_URL=$(grep -A 5 "process.env.NODE_ENV === 'development'" "$CONFIG_FILE" | grep -oE 'http://[^"'\'']+' || echo "")
+CURRENT_URL=$(grep -A 5 "process.env.NODE_ENV === 'development'" "$CONFIG_FILE" | grep -oE 'http://[^"'\'']+' | head -1 || echo "")
 
 # Step 3: Update config if IPs don't match
 if [ "$CURRENT_URL" != "$NETWORK_IP" ]; then
@@ -99,24 +101,13 @@ fi
 
 # Step 4: Sync and open iOS
 print_status "Syncing and opening iOS..."
-NODE_ENV=development npx cap sync ios && npx cap open ios &
-PLATFORM_PID=$!
-
-# Cleanup function
-cleanup() {
-    print_status "Cleaning up..."
-    kill $DEV_PID 2>/dev/null || true
-    rm -f dev_output.log
-}
-
-# Set trap to cleanup on script exit
-trap cleanup EXIT
+NODE_ENV=development npx cap sync ios && npx cap open ios
 
 print_status "✅ Setup complete!"
-print_status "Dev server running at: $NETWORK_IP"
-print_status "iOS project opening..."
+print_status "Starting dev server at: $NETWORK_IP"
+print_status "iOS project opened in Xcode"
 print_status ""
 print_status "Press Ctrl+C to stop the dev server"
 
-# Keep dev server running
-wait $DEV_PID
+# Start dev server in foreground
+npm run dev -- --host

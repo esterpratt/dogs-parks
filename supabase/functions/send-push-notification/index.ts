@@ -181,6 +181,7 @@ serve(async (req) => {
     let sent = 0;
     let failed = 0;
 
+
     await Promise.all(
       tokens.map(async (row) => {
         const res = await fetch(
@@ -206,9 +207,11 @@ serve(async (req) => {
           return;
         }
 
+
         sent++;
       })
     );
+
 
     if (sent > 0) {
       const { error: deliveredErr } = await supabase
@@ -232,7 +235,6 @@ serve(async (req) => {
       failed,
       total: tokens.length,
       unseenCount,
-      // Whether this run flipped row to ready (useful for logs)
       readyFlipped: !!readyCount,
     });
   } catch (e) {
@@ -242,6 +244,20 @@ serve(async (req) => {
 });
 
 /* ---------------- helpers ---------------- */
+
+async function getUnseenCount(userId: string): Promise<number> {
+  const { count, error } = await supabase
+    .from('notifications')
+    .select('id', { head: true, count: 'exact' })
+    .eq('receiver_id', userId)
+    .is('seen_at', null);
+
+  if (error) {
+    console.error('EF: getUnseenCount failed', { userId, error });
+    return 0;
+  }
+  return count ?? 0;
+}
 
 function ok(payload: unknown, status = 200) {
   return new Response(JSON.stringify(payload), {
