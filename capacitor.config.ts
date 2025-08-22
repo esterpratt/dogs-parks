@@ -6,7 +6,7 @@ const config: CapacitorConfig = {
   webDir: 'dist',
   server:
     process.env.NODE_ENV === 'development'
-      ? { url: 'http://10.100.102.60:5173', cleartext: true }
+      ? { url: 'http://172.20.10.6:5173/', cleartext: true }
       : undefined,
   plugins: {
     Keyboard: {

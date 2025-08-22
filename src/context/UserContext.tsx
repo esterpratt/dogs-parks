@@ -8,7 +8,6 @@ import {
 import {
   LoginProps as LoginWithEmailAndPasswordProps,
   login,
-  logout,
   signinWithGoogle,
   signinWithApple,
   deleteUser,
@@ -18,6 +17,7 @@ import { User } from '../types/user';
 import { useOnAuthStateChanged } from '../hooks/useOnAuthStateChanged';
 import { queryClient } from '../services/react-query';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { logoutWithCleanup } from '../services/logout-orchestrator';
 
 type SigninProps = Partial<LoginWithEmailAndPasswordProps> & {
   name?: string;
@@ -76,16 +76,6 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     enabled: false,
   });
 
-  useEffect(() => {
-    if (session) {
-      refetchUser({ throwOnError: true }).catch((error) => {
-        if (!error?.silent) {
-          logout();
-        }
-      });
-    }
-  }, [session, refetchUser]);
-
   const { mutate: userSigninWithGoogle, isPending: isSigninInWithGoogle } =
     useMutation({
       mutationFn: () => signinWithGoogle(),
@@ -112,27 +102,8 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
       },
     });
 
-  const userLogin = ({
-    withGoogle,
-    withApple,
-    email,
-    password,
-  }: LoginProps) => {
-    setError('');
-    if (withGoogle) {
-      userSigninWithGoogle();
-    } else if (withApple) {
-      userSigninWithApple();
-    } else {
-      userLoginWithEmailAndPassword({
-        email: email!,
-        password: password!,
-      });
-    }
-  };
-
-  const { mutate: userLogout } = useMutation({
-    mutationFn: () => logout(),
+  const { mutate: userLogout, isPending: isLoggingOut } = useMutation({
+    mutationFn: () => logoutWithCleanup(),
     onSettled: () => {
       queryClient.removeQueries({ queryKey: ['user'] });
     },
@@ -151,6 +122,37 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
       queryClient.removeQueries({ queryKey: ['user'] });
     },
   });
+
+  useEffect(() => {
+    if (session) {
+      refetchUser({ throwOnError: true }).catch((error) => {
+        if (!error?.silent) {
+          if (!isLoggingOut) {
+            userLogout();
+          }
+        }
+      });
+    }
+  }, [session, refetchUser, userLogout, isLoggingOut]);
+
+  const userLogin = ({
+    withGoogle,
+    withApple,
+    email,
+    password,
+  }: LoginProps) => {
+    setError('');
+    if (withGoogle) {
+      userSigninWithGoogle();
+    } else if (withApple) {
+      userSigninWithApple();
+    } else {
+      userLoginWithEmailAndPassword({
+        email: email!,
+        password: password!,
+      });
+    }
+  };
 
   const isLoading =
     isLoadingUser ||

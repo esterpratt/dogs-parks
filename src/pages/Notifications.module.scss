@@ -12,13 +12,14 @@ $header-height: 48px;
 
 .header {
   height: $header-height;
-  padding: 12px 16px;
+  padding: 12px calc(16px + var(--safe-area-inset-right, 0px)) 12px
+    calc(16px + var(--safe-area-inset-left, 0px));
   background: var(--color-background);
 }
 
 .content {
-  padding: 12px 8px;
-  padding-bottom: calc(12px + $navbar-height);
+  padding: 12px calc(8px + var(--safe-area-inset-right, 0px)) calc(12px + $navbar-height)
+    calc(8px + var(--safe-area-inset-left, 0px));
 }
 
 .loader {
@@ -45,7 +46,8 @@ $header-height: 48px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 64px 16px;
+  padding: 64px calc(16px + var(--safe-area-inset-right, 0px)) 64px
+    calc(16px + var(--safe-area-inset-left, 0px));
   text-align: center;
 }
 

@@ -10,6 +10,14 @@ let activeChannelKey: string | null = null;
 let activeChannelRef: RealtimeChannel | null = null;
 let lastAccessToken: string | null = null;
 
+function invalidateNotificationsKeys(uid: string): void {
+  queryClient.invalidateQueries({ queryKey: ['unseenNotifications', uid] });
+  queryClient.invalidateQueries({ queryKey: ['seenNotifications', uid] });
+  queryClient.invalidateQueries({
+    queryKey: ['notification-preferences', uid],
+  });
+}
+
 function useNotificationsRealtime() {
   const { userId } = useContext(UserContext);
   const [isConnected, setIsConnected] = useState(false);
@@ -93,6 +101,8 @@ function useNotificationsRealtime() {
           activeChannelRef.subscribe((status) => {
             if (status === 'SUBSCRIBED') {
               setIsConnected(true);
+              // Pull anything missed before join
+              invalidateNotificationsKeys(uid);
             }
           });
         }
@@ -115,6 +125,8 @@ function useNotificationsRealtime() {
       channel.subscribe((status) => {
         if (status === 'SUBSCRIBED') {
           setIsConnected(true);
+          // Guarantee a cold pull on first subscribe
+          invalidateNotificationsKeys(uid);
           return;
         }
         if (
@@ -135,18 +147,27 @@ function useNotificationsRealtime() {
       startingRef.current = false;
     }
 
-    // Prime socket with current token and start
-    (async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      const token = session?.access_token ?? null;
-      if (token && token !== lastAccessToken) {
-        supabase.realtime.setAuth(token);
-        lastAccessToken = token;
+    async function primeAndStart(uid: string): Promise<void> {
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        const token = session?.access_token ?? null;
+
+        if (token && token !== lastAccessToken) {
+          supabase.realtime.setAuth(token);
+          lastAccessToken = token;
+          invalidateNotificationsKeys(uid);
+        }
+
+        await startChannelFor(uid);
+      } catch (err) {
+        console.error('[NotificationsRealtime] primeAndStart failed:', err);
       }
-      await startChannelFor(userId);
-    })();
+    }
+
+    primeAndStart(userId);
 
     // Auth listener (handles initial session + refresh + sign-out)
     const { data: listener } = supabase.auth.onAuthStateChange(
@@ -157,6 +178,8 @@ function useNotificationsRealtime() {
           if (next) {
             supabase.realtime.setAuth(next);
             lastAccessToken = next;
+            invalidateNotificationsKeys(userId);
+
             if (!activeChannelRef || activeChannelRef.state !== 'joined') {
               void startChannelFor(userId);
             }
@@ -177,6 +200,7 @@ function useNotificationsRealtime() {
     if (authUnsubscribeRef.current) {
       authUnsubscribeRef.current();
     }
+
     authUnsubscribeRef.current = () => {
       listener.subscription.unsubscribe();
     };

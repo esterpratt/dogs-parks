@@ -1,107 +1,51 @@
-import { useEffect, useRef, useContext } from 'react';
+import { useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Capacitor, PluginListenerHandle } from '@capacitor/core';
 import { FirebaseMessaging } from '@capacitor-firebase/messaging';
 import { Preferences } from '@capacitor/preferences';
 import { v4 as uuidv4 } from 'uuid';
 import { UserContext } from '../context/UserContext';
-import {
-  upsertDeviceToken,
-  removeDeviceToken,
-} from '../services/notifications';
+import { upsertDeviceToken } from '../services/notifications';
 import { Platform } from '../types/notification';
+import { DEVICE_ID_KEY } from '../utils/consts';
 
 const PLATFORM = Capacitor.getPlatform();
-const KEYS = {
-  deviceId: 'device_id',
-  cachedToken: 'push_token',
-};
 
 async function getDeviceId(): Promise<string> {
-  const { value } = await Preferences.get({ key: KEYS.deviceId });
-  if (value) {
-    return value;
+  const existing = await Preferences.get({ key: DEVICE_ID_KEY });
+  if (existing.value) {
+    return existing.value;
+  } else {
+    const id = uuidv4();
+    await Preferences.set({ key: DEVICE_ID_KEY, value: id });
+    return id;
   }
-  const id = uuidv4();
-  await Preferences.set({ key: KEYS.deviceId, value: id });
-  return id;
 }
 
-export const usePushNotifications = () => {
+function usePushNotifications() {
   const { userId = null } = useContext(UserContext);
   const navigate = useNavigate();
 
-  const previousUserId = useRef<string | null>(null);
-  const currentToken = useRef<string | null>(null);
-
   useEffect(() => {
-    if (PLATFORM === 'web') {
+    if (!Capacitor.isNativePlatform() || !userId) {
       return;
     }
-
-    async function cleanupOnLogout() {
-      try {
-        const deviceId = await getDeviceId();
-        const { value: cachedToken } = await Preferences.get({
-          key: KEYS.cachedToken,
-        });
-
-        if (cachedToken) {
-          await removeDeviceToken({
-            deviceId,
-            token: cachedToken,
-          });
-        }
-      } catch (err) {
-        console.error('Failed to remove device token on logout:', err);
-      } finally {
-        previousUserId.current = null;
-        currentToken.current = null;
-        await Preferences.remove({ key: KEYS.cachedToken });
-      }
-    }
-
-    if (!userId) {
-      cleanupOnLogout();
-      return;
-    }
-
-    previousUserId.current = userId;
 
     let tokenListener: PluginListenerHandle | undefined;
     let actionListener: PluginListenerHandle | undefined;
 
-    async function persistDeviceToken(nextToken?: string | null) {
-      if (!nextToken) {
-        return;
-      }
-
-      if (nextToken === currentToken.current) {
-        return;
-      }
-
-      currentToken.current = nextToken;
-
-      if (previousUserId.current !== userId) {
-        return;
-      }
-
+    async function saveToken(token?: string | null) {
+      if (!token) return;
       try {
-        await Preferences.set({
-          key: KEYS.cachedToken,
-          value: nextToken,
-        });
-
         const deviceId = await getDeviceId();
-
         await upsertDeviceToken({
           userId: userId!,
           deviceId,
           platform: PLATFORM as Platform,
-          token: nextToken,
+          token,
         });
       } catch (err) {
-        console.error('Failed to save push token:', err);
+        console.error('[Push] upsertDeviceToken failed:', err);
       }
     }
 
@@ -116,33 +60,33 @@ export const usePushNotifications = () => {
         }
 
         if (PLATFORM === 'android') {
-          await FirebaseMessaging.createChannel({
-            id: 'default',
-            name: 'Default',
-            description: 'General notifications',
-            importance: 3,
-            sound: 'default',
-          });
+          try {
+            await FirebaseMessaging.createChannel({
+              id: 'default',
+              name: 'Default',
+              description: 'General notifications',
+              importance: 3,
+              sound: 'default',
+            });
+          } catch (error) {
+            console.error('There was an error creating channel: ', error);
+          }
         }
 
         tokenListener = await FirebaseMessaging.addListener(
           'tokenReceived',
-          async (e) => {
-            await persistDeviceToken(e.token ?? '');
-          }
+          (e) => saveToken(e.token ?? '')
         );
 
         const { token } = await FirebaseMessaging.getToken();
-        await persistDeviceToken(token);
+        await saveToken(token);
 
         actionListener = await FirebaseMessaging.addListener(
           'notificationActionPerformed',
-          async () => {
-            navigate('/notifications');
-          }
+          () => navigate('/notifications')
         );
-      } catch (err) {
-        console.error('Push notifications init failed:', err);
+      } catch (error) {
+        console.error('[Push] init failed:', error);
       }
     }
 
@@ -153,4 +97,6 @@ export const usePushNotifications = () => {
       actionListener?.remove();
     };
   }, [navigate, userId]);
-};
+}
+
+export { usePushNotifications };

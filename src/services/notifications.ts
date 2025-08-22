@@ -2,6 +2,8 @@ import { Capacitor } from '@capacitor/core';
 import { supabase } from './supabase-client';
 import { NotificationType, Platform } from '../types/notification';
 import { throwError } from './error';
+import { Preferences } from '@capacitor/preferences';
+import { DEVICE_ID_KEY } from '../utils/consts';
 
 interface NotificationPreferences {
   user_id: string;
@@ -33,11 +35,6 @@ interface UpsertDeviceTokenParams {
   token: string;
 }
 
-interface RemoveDeviceTokenParams {
-  token: string;
-  deviceId: string;
-}
-
 const upsertDeviceToken = async (params: UpsertDeviceTokenParams) => {
   const { userId, deviceId, platform, token } = params;
   if (!Capacitor.isNativePlatform()) {
@@ -64,25 +61,19 @@ const upsertDeviceToken = async (params: UpsertDeviceTokenParams) => {
   }
 };
 
-const removeDeviceToken = async (params: RemoveDeviceTokenParams) => {
-  const { token, deviceId } = params;
-
-  if (!Capacitor.isNativePlatform()) {
-    return;
-  }
-
+const cleanupDeviceTokensBeforeLogout = async () => {
   try {
-    const { error } = await supabase.rpc('remove_device_token_by_device', {
-      p_device_id: deviceId,
-      p_token: token,
+    const { value: deviceId } = await Preferences.get({ key: DEVICE_ID_KEY });
+    const { data, error } = await supabase.rpc('api_cleanup_device_tokens', {
+      p_device_id: deviceId ?? null,
     });
-
     if (error) {
       throw error;
     }
+    return (data as number) ?? 0;
   } catch (error) {
-    console.error('[Push] removeDeviceToken error:', error);
-    throwError(error);
+    console.error('[Push] api_cleanup_device_tokens error:', error);
+    return 0;
   }
 };
 
@@ -297,7 +288,7 @@ const getUnseenNotifications = async (userId: string) => {
 
 export {
   upsertDeviceToken,
-  removeDeviceToken,
+  cleanupDeviceTokensBeforeLogout,
   getSeenNotifications,
   getUnseenNotifications,
   markAsRead,
