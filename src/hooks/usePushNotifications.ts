@@ -78,13 +78,13 @@ function usePushNotifications() {
           (e) => saveToken(e.token ?? '')
         );
 
-        const { token } = await FirebaseMessaging.getToken();
-        await saveToken(token);
-
         actionListener = await FirebaseMessaging.addListener(
           'notificationActionPerformed',
           () => navigate('/notifications')
         );
+
+        const { token } = await FirebaseMessaging.getToken();
+        await saveToken(token);
       } catch (error) {
         console.error('[Push] init failed:', error);
       }
