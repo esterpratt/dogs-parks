@@ -1,5 +1,5 @@
 PODS:
-  - Capacitor (7.0.1):
+  - Capacitor (7.4.3):
     - CapacitorCordova
   - CapacitorApp (7.0.2):
     - Capacitor
@@ -7,7 +7,7 @@ PODS:
     - Capacitor
   - CapacitorCamera (7.0.2):
     - Capacitor
-  - CapacitorCordova (7.0.1)
+  - CapacitorCordova (7.4.3)
   - CapacitorFirebaseMessaging (7.3.0):
     - Capacitor
     - FirebaseMessaging (~> 11.7.0)
@@ -16,7 +16,7 @@ PODS:
     - IONGeolocationLib (= 1.0.1)
   - CapacitorKeyboard (7.0.2):
     - Capacitor
-  - CapacitorNativeSettings (7.0.2):
+  - CapacitorNativeSettings (7.0.1):
     - Capacitor
   - CapacitorPluginSafeArea (4.0.0):
     - Capacitor
@@ -147,15 +147,15 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capawesome/capacitor-badge"
 
 SPEC CHECKSUMS:
-  Capacitor: de199cba6c8b20995428ad0b7cb0bc6ca625ffd4
+  Capacitor: 28d6c01026a9a3f7156529498ec1f389a2a28dbc
   CapacitorApp: 1f6922c9c5c8b1c538d7fbe92ebe44a81b34bed3
   CapacitorBrowser: 22541e48442de44dc629c214388290d6eecc6ae9
   CapacitorCamera: f9e54db0a18bb218a8dc360907d63aaefe9209ff
-  CapacitorCordova: 63d476958d5022d76f197031e8b7ea3519988c64
+  CapacitorCordova: 435121e81a2df4d0034f0fb11fcefab5104cfdb5
   CapacitorFirebaseMessaging: f2be30f5cc99da414a82693e93e0f039d097aabf
   CapacitorGeolocation: 84f868bea4c2499aebc3bb3a88fd0a508f87ab87
   CapacitorKeyboard: a86aa9e4741b6444a802df26440a92ae041b34a6
-  CapacitorNativeSettings: 3cd2e2ef431fe471674f381609cfb29154ddfcfa
+  CapacitorNativeSettings: bef37b3c7e2184da7416a3f162c71de19fd27593
   CapacitorPluginSafeArea: 22031c3436269ca80fac90ec2c94bc7c1e59a81d
   CapacitorPreferences: 65107ed7437d96ee72583df5763985e3c0ff2bc2
   CapacitorScreenOrientation: e0d5b9ef293b269b8f93373355d5b276f50fabea

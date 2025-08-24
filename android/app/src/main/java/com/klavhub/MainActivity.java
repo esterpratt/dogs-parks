@@ -30,7 +30,6 @@ public class MainActivity extends BridgeActivity {
       );
     }
 
-    // ✅ Ensure default notification channel exists
     createDefaultNotificationChannel();
   }
 
