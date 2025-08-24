@@ -22,6 +22,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npx cap open ios` - Open iOS project in Xcode
 - `npx cap build android` - Build Android app
 - `npx cap build ios` - Build iOS app
+- `./.claude/commands/ios-dev-setup.sh` - iOS development setup script
 
 ## Architecture Overview
 

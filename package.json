@@ -10,7 +10,8 @@
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
     "preview": "vite preview",
     "map": "vite build --sourcemap",
-    "test": "vitest run"
+    "test": "vitest run",
+    "ios-setup": "./.claude/commands/ios-dev-setup.sh"
   },
   "dependencies": {
     "@capacitor-firebase/messaging": "7.3.0",
