@@ -108,6 +108,7 @@ print_status "Starting dev server at: $NETWORK_IP"
 print_status "iOS project opened in Xcode"
 print_status ""
 print_status "Press Ctrl+C to stop the dev server"
+print_status ""
 
 # Start dev server in foreground
-npm run dev -- --host
+exec npm run dev -- --host
