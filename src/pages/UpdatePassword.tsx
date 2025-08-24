@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Input } from '../components/inputs/Input';
 import styles from './UpdatePassword.module.scss';
 import { supabase } from '../services/supabase-client';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 
 const UpdatePassword = () => {

@@ -4,9 +4,10 @@ const config: CapacitorConfig = {
   appId: 'com.klavhub',
   appName: 'KlavHub',
   webDir: 'dist',
-  server: process.env.NODE_ENV === 'development'
-  ? { url: 'http://10.100.102.60:5173/', cleartext: true }
-  : undefined,
+  server:
+    process.env.NODE_ENV === 'development'
+      ? { url: 'http://10.100.102.60:5173', cleartext: true }
+      : undefined,
   plugins: {
     Keyboard: {
       resize: 'body',
@@ -15,6 +16,9 @@ const config: CapacitorConfig = {
     },
     Geolocation: {
       androidBackgroundLocation: true,
+    },
+    FirebaseMessaging: {
+      presentationOptions: ['badge'],
     },
   },
 };

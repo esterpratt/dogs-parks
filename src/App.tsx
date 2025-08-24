@@ -42,6 +42,7 @@ const DeleteAcount = lazy(() => import('./pages/DeleteAcount'));
 const DeletionConfirmation = lazy(() => import('./pages/DeletionConfirmation'));
 const About = lazy(() => import('./pages/About'));
 const Login = lazy(() => import('./pages/Login'));
+const Notifications = lazy(() => import('./pages/Notifications'));
 
 const App = () => {
   const router = createBrowserRouter([
@@ -163,6 +164,14 @@ const App = () => {
         {
           path: '/users',
           element: <Users />,
+        },
+        {
+          path: '/notifications',
+          element: (
+            <PrivateRoute>
+              <Notifications />
+            </PrivateRoute>
+          ),
         },
       ],
     },

@@ -114,8 +114,6 @@ const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
         );
       }
 
-      console.log('im here!');
-
       const photo = await CapacitorCamera.getPhoto({
         quality: 100,
         resultType: CameraResultType.Base64,
@@ -132,8 +130,8 @@ const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
         error instanceof Error
           ? error.message
           : typeof error === 'string'
-          ? error
-          : 'Unknown error';
+            ? error
+            : 'Unknown error';
 
       if (message.toLowerCase().includes('cancel')) {
         return;

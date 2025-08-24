@@ -1,0 +1,61 @@
+@use '../variables.scss' as *;
+
+$header-height: 48px;
+
+.container {
+  margin-top: $page-top-padding;
+  max-height: $content-max-height;
+  overflow: hidden;
+  height: 100%;
+  color: var(--color-text);
+}
+
+.header {
+  height: $header-height;
+  padding: 12px calc(16px + var(--safe-area-inset-right, 0px)) 12px
+    calc(16px + var(--safe-area-inset-left, 0px));
+  background: var(--color-background);
+}
+
+.content {
+  padding: 12px calc(8px + var(--safe-area-inset-right, 0px)) calc(12px + $navbar-height)
+    calc(8px + var(--safe-area-inset-left, 0px));
+}
+
+.loader {
+  margin-bottom: 50%;
+}
+
+.title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  margin: 0;
+  font-size: $title-font-size;
+}
+
+.settings-button {
+  display: flex;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px calc(16px + var(--safe-area-inset-right, 0px)) 64px
+    calc(16px + var(--safe-area-inset-left, 0px));
+  text-align: center;
+}
+
+.empty-icon {
+  margin-bottom: 16px;
+  opacity: 0.7;
+}
+
+.empty-text {
+  font-size: 20px;
+}

@@ -2,7 +2,7 @@ import { UserContext } from '../context/UserContext';
 import { useContext } from 'react';
 import { Loader } from '../components/Loader';
 import styles from './EmailCallback.module.scss';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { Button } from '../components/Button';
 
 const EmailCallback = () => {
