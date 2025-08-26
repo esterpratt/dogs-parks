@@ -1,6 +1,7 @@
 import { useContext, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import {
+  Bell,
   Ellipsis,
   House,
   Info,
@@ -16,6 +17,7 @@ import classnames from 'classnames';
 import { UserContext } from '../context/UserContext';
 import { useClickOutside } from '../hooks/useClickOutside';
 import { NavbarLogoutButton } from './NavbarLogoutButton';
+import { useNotificationCount } from '../hooks/api/useNotificationCount';
 import styles from './NavbarBottom.module.scss';
 
 const NavbarBottom = () => {
@@ -23,6 +25,8 @@ const NavbarBottom = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const moreButtonRef = useRef(null);
+
+  const unseenNotificationCount = useNotificationCount();
 
   useClickOutside({
     refs: [menuRef, moreButtonRef],
@@ -38,7 +42,12 @@ const NavbarBottom = () => {
   return (
     <>
       <nav className={styles.navbar}>
-        <div className={styles.iconsContainer}>
+        <div
+          className={classnames(styles.iconsContainer, {
+            [styles.loggedIn]: userId,
+            [styles.loggedOut]: !userId,
+          })}
+        >
           <>
             <NavLink
               to="/"
@@ -71,6 +80,27 @@ const NavbarBottom = () => {
                 <UserRound size={24} strokeWidth={2} />
               </div>
             </NavLink>
+            {userId && (
+              <NavLink
+                to="/notifications"
+                className={({ isActive }) =>
+                  isActive ? `${[styles.active]}` : ''
+                }
+              >
+                <div className={styles.item}>
+                  <div className={styles.notificationContainer}>
+                    <Bell size={24} strokeWidth={2} />
+                    {unseenNotificationCount > 0 && (
+                      <div className={styles.notificationBadge}>
+                        {unseenNotificationCount > 99
+                          ? '99+'
+                          : unseenNotificationCount}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </NavLink>
+            )}
             <div
               ref={moreButtonRef}
               className={styles.moreContainer}

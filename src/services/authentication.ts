@@ -31,10 +31,8 @@ const signinWithOAuthProvider = async (provider: 'google' | 'apple') => {
     });
 
     if (error) {
-      console.error('error here: ', JSON.stringify(error));
       throw error;
     }
-
     if (data?.url) {
       await Browser.open({ url: data.url });
     }
@@ -53,7 +51,9 @@ const signin = async ({ email, password, name }: SigninProps) => {
       password,
       options: {
         data: { full_name: name },
-        emailRedirectTo: import.meta.env.DEV ? 'http://localhost:5173/email-callback' : 'https://klavhub.com/email-callback',
+        emailRedirectTo: import.meta.env.DEV
+          ? 'http://localhost:5173/email-callback'
+          : 'https://klavhub.com/email-callback',
       },
     });
     if (error) {
@@ -83,7 +83,7 @@ const login = async ({ email, password }: LoginProps) => {
   }
 };
 
-const logout = async () => {
+const signOut = async () => {
   try {
     const { error } = await supabase.auth.signOut();
     if (error) {
@@ -98,13 +98,13 @@ const logout = async () => {
 const sendResetEmail = async (email: string) => {
   try {
     const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: import.meta.env.DEV ? 'http://localhost:5173/update-password' : 'https://klavhub.com/update-password',
+      redirectTo: import.meta.env.DEV
+        ? 'http://localhost:5173/update-password'
+        : 'https://klavhub.com/update-password',
     });
-
     if (error) {
       throw error;
     }
-
     return data;
   } catch (error) {
     throwError(error);
@@ -113,10 +113,7 @@ const sendResetEmail = async (email: string) => {
 
 const updatePassword = async (password: string) => {
   try {
-    const { error } = await supabase.auth.updateUser({
-      password,
-    });
-
+    const { error } = await supabase.auth.updateUser({ password });
     if (error) {
       throw error;
     }
@@ -130,20 +127,26 @@ const deleteUser = async (id: string | null) => {
     if (!id) {
       return;
     }
-
-    const { error } = await supabase.functions.invoke("delete-user", {
+    const { error } = await supabase.functions.invoke('delete-user', {
       body: { id },
     });
-
     if (error) {
       throw error;
     }
-
     await supabase.auth.signOut();
   } catch (error) {
     throwError(error);
   }
 };
 
-export { login, logout, signin, signinWithGoogle, signinWithApple, sendResetEmail, deleteUser, updatePassword };
-export type { LoginProps };
+export {
+  login,
+  signOut,
+  signin,
+  signinWithGoogle,
+  signinWithApple,
+  sendResetEmail,
+  deleteUser,
+  updatePassword,
+};
+export type { LoginProps, SigninProps };

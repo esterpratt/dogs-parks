@@ -5,7 +5,7 @@ import { queryClient } from '../services/react-query';
 import { User } from '../types/user';
 import { Dog } from '../types/dog';
 import { AppError } from '../services/error';
-import { logout } from '../services/authentication';
+import { signOut } from '../services/authentication';
 import { USER_NOT_FOUND_ERROR } from '../utils/consts';
 
 const userLoader: LoaderFunction = async ({ params }) => {
@@ -13,10 +13,7 @@ const userLoader: LoaderFunction = async ({ params }) => {
   let user, dogs: Dog[];
 
   try {
-    const promises: [
-      Promise<User>,
-      Promise<Dog[]>,
-    ] = [
+    const promises: [Promise<User>, Promise<Dog[]>] = [
       queryClient.fetchQuery({
         queryKey: ['user', userId],
         queryFn: () => fetchUser(userId!),
@@ -26,17 +23,16 @@ const userLoader: LoaderFunction = async ({ params }) => {
         queryFn: () => fetchUserDogs(userId!),
       }),
     ];
-  
-    [user, dogs = []] =
-      await Promise.all(promises);
+
+    [user, dogs = []] = await Promise.all(promises);
 
     return {
       user,
       dogs,
     };
-  } catch(error: unknown) {
+  } catch (error: unknown) {
     if ((error as AppError).message === USER_NOT_FOUND_ERROR) {
-      await logout();
+      await signOut();
       return redirect('/login?mode=login');
     }
   }

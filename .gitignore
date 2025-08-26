@@ -14,6 +14,13 @@ dist-ssr
 .firebase/
 parks.json
 
+# Firebase configuration files (contain sensitive API keys)
+android/app/google-services.json
+ios/App/App/GoogleService-Info.plist
+
+# Development script backup files
+capacitor.config.ts.backup
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
