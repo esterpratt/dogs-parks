@@ -1,25 +1,35 @@
 import { Link } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import classnames from 'classnames';
-import { Location } from '../../types/park';
+import { Wrench } from 'lucide-react';
+import { ParkCondition, ActiveParkCondition } from '../../types/parkCondition';
 import { useGetParkVisitors } from '../../hooks/api/useGetParkVisitors';
 import { Section } from '../section/Section';
 import { Button } from '../Button';
 import { UserContext } from '../../context/UserContext';
 import { useQuery } from '@tanstack/react-query';
 import { fetchUsersWithDogsByIds } from '../../services/users';
-import { WeatherForecast } from './WeatherForecast';
 import styles from './ParkLive.module.scss';
+import { ReportConditionModal } from './ReportConditionModal';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { useGetActiveParkConditions } from '../../hooks/api/useGetActiveParkConditions';
+import { ParkConditionsList } from './ParkConditionsList';
+import { PARK_CONDITIONS } from '../../utils/parkConditions';
 
 interface ParkGeneralsProps {
   id: string;
-  location: Location;
 }
 
 const ParkLive = (props: ParkGeneralsProps) => {
-  const { id: parkId, location } = props;
+  const { id: parkId } = props;
   const { userId } = useContext(UserContext);
   const { friendsInParkIds, visitorsIds } = useGetParkVisitors(parkId, userId);
+  const [isReportConditionModalOpen, setIsReportConditionModalOpen] =
+    useState(false);
+  const [hideReportHint, setHideReportHint] = useLocalStorage('hideReportHint');
+
+  const { data: activeConditions = [] } =
+    useGetActiveParkConditions(parkId);
 
   const friendsCount = friendsInParkIds.length;
   const othersCount = visitorsIds.length - friendsCount;
@@ -28,42 +38,84 @@ const ParkLive = (props: ParkGeneralsProps) => {
     ? friendsCount.toString()
     : othersCount.toString();
 
+  const isParkClosed = activeConditions.some(
+    (activeCondition: ActiveParkCondition) =>
+      activeCondition.condition === ParkCondition.GATE_CLOSED ||
+      activeCondition.condition === ParkCondition.UNDER_CONSTRUCTION
+  );
+
+  const canReportCondition =
+    !isParkClosed && activeConditions.length < PARK_CONDITIONS.length;
+
   // prefetch visitors data
   useQuery({
     queryKey: ['parkVisitorsWithDogs', parkId],
     queryFn: () => fetchUsersWithDogsByIds(friendsInParkIds),
-    enabled: !!friendsInParkIds.length,
+    enabled: !!friendsInParkIds.length && !isParkClosed,
     staleTime: 6000,
   });
 
+  const handleClickReport = () => {
+    setIsReportConditionModalOpen(true);
+    setHideReportHint(true);
+  };
+
   return (
-    <Section
-      title="Live status"
-      contentCmp={
-        <div className={styles.container}>
-          <WeatherForecast lat={location.lat} long={location.long} />
-          <div className={styles.visitors}>
+    <>
+      <Section
+        title="Live status"
+        actions={
+          !!userId &&
+          canReportCondition && (
             <Button
-              disabled={!friendsCount && !othersCount}
-              className={styles.visitorsButton}
+              variant="simple"
+              color={styles.white}
+              className={styles.button}
+              onClick={handleClickReport}
             >
-              <Link
-                to="visitors"
-                className={classnames(styles.link, {
-                  [styles.disabled]: !friendsCount && !othersCount,
-                })}
-              >
-                {visitorsContent}
-              </Link>
+              {!hideReportHint && <span>Report</span>}
+              <Wrench size={18} />
             </Button>
-            <div className={styles.textContainer}>
-              <div>{friendsCount ? 'Friends' : 'Visitors'}</div>
-              <div>at the park right now</div>
-            </div>
+          )
+        }
+        contentCmp={
+          <div className={styles.container}>
+            {!!activeConditions && (
+              <ParkConditionsList conditions={activeConditions} />
+            )}
+            {!isParkClosed && (
+              <div className={styles.visitors}>
+                <Button
+                  disabled={!friendsCount && !othersCount}
+                  className={styles.visitorsButton}
+                >
+                  <Link
+                    to="visitors"
+                    className={classnames(styles.link, {
+                      [styles.disabled]: !friendsCount && !othersCount,
+                    })}
+                  >
+                    {visitorsContent}
+                  </Link>
+                </Button>
+                <div className={styles.textContainer}>
+                  <div>{friendsCount ? 'Friends' : 'Visitors'}</div>
+                  <div>at the park right now</div>
+                </div>
+              </div>
+            )}
           </div>
-        </div>
-      }
-    />
+        }
+      />
+      {canReportCondition && (
+        <ReportConditionModal
+          parkId={parkId}
+          isOpen={isReportConditionModalOpen}
+          onClose={() => setIsReportConditionModalOpen(false)}
+          activeConditions={activeConditions}
+        />
+      )}
+    </>
   );
 };
 

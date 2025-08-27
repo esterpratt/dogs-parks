@@ -1,0 +1,40 @@
+@use '../../variables' as *;
+
+.container {
+  // Basic styling for the list container
+  display: flex;
+  flex-direction: column;
+  gap: 10px; // Example spacing
+  color: $white; // Example color
+}
+
+.statusMessage {
+  font-size: 18px; // Example font size
+  font-weight: bold;
+  color: $red; // Example color for important messages
+  text-align: center;
+  padding: 10px;
+  border: 1px solid $red;
+  border-radius: 5px;
+}
+
+.noConditions {
+  font-size: 16px;
+  color: $gray-light;
+  text-align: center;
+  padding: 10px;
+}
+
+.conditionItemPlaceholder {
+  // Placeholder style for individual condition items
+  background-color: $gray-dark;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.exclusiveConditionContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0; // Example spacing
+}
