@@ -1,6 +1,6 @@
 import { ParkCondition, ActiveParkCondition } from '../../types/parkCondition';
-import styles from './ParkConditionsList.module.scss';
 import { ConditionItem } from './ConditionItem';
+import styles from './ParkConditionsList.module.scss';
 
 interface ParkConditionsListProps {
   conditions: ActiveParkCondition[];
@@ -10,9 +10,10 @@ const ParkConditionsList = ({ conditions }: ParkConditionsListProps) => {
   const gatesClosedCondition = conditions.find(
     (conditionReport) => conditionReport.condition === ParkCondition.GATE_CLOSED
   );
-  
+
   const underConstructionCondition = conditions.find(
-    (conditionReport) => conditionReport.condition === ParkCondition.UNDER_CONSTRUCTION
+    (conditionReport) =>
+      conditionReport.condition === ParkCondition.UNDER_CONSTRUCTION
   );
 
   if (conditions.length === 0) {

@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { addParkConditionObservation } from '../../services/park-conditions';
-import { ParkCondition, ParkConditionStatus } from '../../types/park';
+import { ParkCondition, ParkConditionStatus } from '../../types/parkCondition';
 import { queryClient } from '../../services/react-query';
 
 interface AddParkConditionObservationParams {

@@ -26,7 +26,7 @@ export const ReportConditionModal: React.FC<ReportConditionModalProps> = ({
   const { mutate, isPending } = useAddParkCondition();
 
   const reportableConditions = PARK_CONDITIONS.filter(
-    (option) => !activeConditions.some((ac) => ac.condition === option.value)
+    (option) => !activeConditions.some((ac) => ac.condition === option.id)
   );
 
   const handleReportCondition = (conditionToReport: ParkCondition) => {
@@ -43,7 +43,8 @@ export const ReportConditionModal: React.FC<ReportConditionModalProps> = ({
         },
         onError: () => {
           notify(
-            'Sorry, your report was not accepted. Please try again later.'
+            'Your report was not accepted. Please try again later.',
+            true
           );
         },
       }
@@ -68,7 +69,7 @@ export const ReportConditionModal: React.FC<ReportConditionModalProps> = ({
               <button
                 key={option.id}
                 className={styles.conditionButton}
-                onClick={() => handleReportCondition(option.value)}
+                onClick={() => handleReportCondition(option.id)}
                 disabled={isPending}
               >
                 <option.icon size={18} />

@@ -1,13 +1,13 @@
 enum ParkCondition {
-  MUDDY = 'muddy',
-  BROKEN_FOUNTAIN = 'broken fountain',
-  GATE_CLOSED = 'gate closed',
-  UNDER_CONSTRUCTION = 'under construction',
+  MUDDY = 'MUDDY',
+  BROKEN_FOUNTAIN = 'BROKEN_FOUNTAIN',
+  GATE_CLOSED = 'GATE_CLOSED',
+  UNDER_CONSTRUCTION = 'UNDER_CONSTRUCTION',
 }
 
 enum ParkConditionStatus {
-  PRESENT = 'present',
-  NOT_PRESENT = 'not present',
+  PRESENT = 'PRESENT',
+  NOT_PRESENT = 'NOT_PRESENT',
 }
 
 interface ParkConditionObservation {

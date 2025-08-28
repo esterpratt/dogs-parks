@@ -28,8 +28,7 @@ const ParkLive = (props: ParkGeneralsProps) => {
     useState(false);
   const [hideReportHint, setHideReportHint] = useLocalStorage('hideReportHint');
 
-  const { data: activeConditions = [] } =
-    useGetActiveParkConditions(parkId);
+  const { data: activeConditions = [] } = useGetActiveParkConditions(parkId);
 
   const friendsCount = friendsInParkIds.length;
   const othersCount = visitorsIds.length - friendsCount;

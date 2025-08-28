@@ -1,40 +1,37 @@
 @use '../../variables' as *;
 
 .container {
-  // Basic styling for the list container
   display: flex;
   flex-direction: column;
-  gap: 10px; // Example spacing
-  color: $white; // Example color
+  gap: 10px;
+  color: $white;
 }
 
-.statusMessage {
-  font-size: 18px; // Example font size
-  font-weight: bold;
-  color: $red; // Example color for important messages
+.status-message {
+  font-size: $second-title-font-size;
+  color: $red;
   text-align: center;
   padding: 10px;
   border: 1px solid $red;
   border-radius: 5px;
 }
 
-.noConditions {
+.no-conditions {
   font-size: 16px;
-  color: $gray-light;
+  color: $text-medium;
   text-align: center;
   padding: 10px;
 }
 
-.conditionItemPlaceholder {
-  // Placeholder style for individual condition items
-  background-color: $gray-dark;
+.condition-item-placeholder {
+  background-color: $dark-surface-dark;
   padding: 8px;
   border-radius: 4px;
 }
 
-.exclusiveConditionContainer {
+.exclusive-condition-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px 0; // Example spacing
+  padding: 10px 0;
 }

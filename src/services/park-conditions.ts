@@ -1,5 +1,5 @@
 import { supabase } from './supabase-client';
-import { ParkCondition, ParkConditionStatus } from '../types/park';
+import { ParkCondition, ParkConditionStatus } from '../types/parkCondition';
 import { throwError } from './error';
 
 interface AddParkConditionObservationParams {
@@ -27,7 +27,7 @@ const getActiveParkConditions = async ({
     return data || [];
   } catch (error) {
     console.error(
-      `There was an error fetching park conditions for park: ${parkId}`
+      `There was an error fetching park conditions for park ${parkId}: ${JSON.stringify(error)}`
     );
     return [];
   }
