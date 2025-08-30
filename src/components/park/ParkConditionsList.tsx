@@ -1,5 +1,5 @@
 import { ParkCondition, ActiveParkCondition } from '../../types/parkCondition';
-import { ConditionItem } from './ConditionItem';
+import { ParkConditionItem } from './ParkConditionItem';
 import styles from './ParkConditionsList.module.scss';
 
 interface ParkConditionsListProps {
@@ -21,25 +21,19 @@ const ParkConditionsList = ({ conditions }: ParkConditionsListProps) => {
   }
 
   if (gatesClosedCondition) {
-    return (
-      <div className={styles.exclusiveConditionContainer}>
-        <ConditionItem conditionObservation={gatesClosedCondition} />
-      </div>
-    );
+    return <ParkConditionItem conditionObservation={gatesClosedCondition} />;
   }
 
   if (underConstructionCondition) {
     return (
-      <div className={styles.exclusiveConditionContainer}>
-        <ConditionItem conditionObservation={underConstructionCondition} />
-      </div>
+      <ParkConditionItem conditionObservation={underConstructionCondition} />
     );
   }
 
   return (
     <div className={styles.container}>
       {conditions.map((condition) => (
-        <ConditionItem
+        <ParkConditionItem
           key={condition.park_id + condition.condition}
           conditionObservation={condition}
         />

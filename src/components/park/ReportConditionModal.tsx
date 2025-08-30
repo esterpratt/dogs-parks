@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import classnames from 'classnames';
 import { useNotification } from '../../context/NotificationContext';
 import {
   ActiveParkCondition,
@@ -24,28 +26,33 @@ export const ReportConditionModal: React.FC<ReportConditionModalProps> = ({
 }) => {
   const { notify } = useNotification();
   const { mutate, isPending } = useAddParkCondition();
+  const [chosenCondition, setChosenCondition] = useState<ParkCondition | null>(
+    null
+  );
 
   const reportableConditions = PARK_CONDITIONS.filter(
     (option) => !activeConditions.some((ac) => ac.condition === option.id)
   );
 
-  const handleReportCondition = (conditionToReport: ParkCondition) => {
+  const onSubmitReport = () => {
+    if (!chosenCondition) {
+      return;
+    }
+
     mutate(
       {
         parkId: parkId,
-        condition: conditionToReport,
+        condition: chosenCondition,
         status: ParkConditionStatus.PRESENT,
       },
       {
         onSuccess: () => {
           notify('Thanks for reporting park conditions!');
           onClose();
+          setChosenCondition(null);
         },
         onError: () => {
-          notify(
-            'Your report was not accepted. Please try again later.',
-            true
-          );
+          notify('Your report was not accepted. Please try again later.', true);
         },
       }
     );
@@ -54,9 +61,15 @@ export const ReportConditionModal: React.FC<ReportConditionModalProps> = ({
   return (
     <FormModal
       open={isOpen}
-      onClose={onClose}
+      onClose={() => {
+        setChosenCondition(null);
+        onClose();
+      }}
+      onSave={reportableConditions.length === 0 ? undefined : onSubmitReport}
+      saveText="Report"
+      disabled={!chosenCondition || isPending}
       className={styles.modal}
-      title="Report park condition"
+      title="Spot an issue here?"
     >
       <div className={styles.options}>
         {reportableConditions.length === 0 ? (
@@ -65,16 +78,28 @@ export const ReportConditionModal: React.FC<ReportConditionModalProps> = ({
           </p>
         ) : (
           reportableConditions.map((option) => {
+            const isChecked = chosenCondition === option.id;
             return (
-              <button
+              <div
                 key={option.id}
-                className={styles.conditionButton}
-                onClick={() => handleReportCondition(option.id)}
-                disabled={isPending}
+                className={classnames(
+                  styles.input,
+                  isChecked && styles.checked
+                )}
               >
-                <option.icon size={18} />
-                <span>{option.value}</span>
-              </button>
+                <input
+                  type="radio"
+                  id={option.id}
+                  name="park-condition"
+                  value={option.id}
+                  checked={isChecked}
+                  onChange={() => setChosenCondition(option.id)}
+                  disabled={isPending}
+                />
+                <label htmlFor={option.id}>
+                  <option.icon size={18} /> <span>{option.value}</span>
+                </label>
+              </div>
             );
           })
         )}

@@ -42,7 +42,7 @@ export const ReportParkModal: React.FC<ReportParkModalProps> = ({
 
   return (
     <FormModal
-      saveText="Submit"
+      saveText="Report"
       open={open}
       onClose={onClose}
       onSave={onSubmitReport}
