@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { getFormattedPastDate, getFormattedDate, getAge, getDurationFromNow } from './time';
+import dayjs from 'dayjs';
+import {
+  getFormattedPastDate,
+  getFormattedDate,
+  getAge,
+  getDurationFromNow,
+} from './time';
 
 describe('getFormattedPastDate', () => {
   it('returns N/A if no date is provided', () => {
@@ -38,11 +44,34 @@ describe('getAge', () => {
   });
 
   it('returns months if less than 1 year old', () => {
-    const birthday = new Date();
-    birthday.setMonth(birthday.getMonth() - 6);
+    const birthday = dayjs().subtract(6, 'month').toDate();
     const age = getAge(birthday);
     expect(age.unit).toBe('months');
     expect(age.diff).toBe(6);
+  });
+
+  it('returns 1 month for a birthday exactly 1 month ago', () => {
+    const base = dayjs().date(15);
+    const birthday = base.subtract(1, 'month').toDate();
+    const age = getAge(birthday);
+    expect(age.unit).toBe('month');
+    expect(age.diff).toBe(1);
+  });
+
+  it('returns 11 months for a birthday exactly 11 months ago', () => {
+    const base = dayjs().date(15);
+    const birthday = base.subtract(11, 'month').toDate();
+    const age = getAge(birthday);
+    expect(age.unit).toBe('months');
+    expect(age.diff).toBe(11);
+  });
+
+  it('returns 1 year for a birthday exactly 12 months ago', () => {
+    const base = dayjs().date(15);
+    const birthday = base.subtract(12, 'month').toDate();
+    const age = getAge(birthday);
+    expect(age.unit).toBe('year');
+    expect(age.diff).toBe(1);
   });
 });
 
