@@ -47,7 +47,7 @@ export const ReportConditionModal: React.FC<ReportConditionModalProps> = ({
       },
       {
         onSuccess: () => {
-          notify('Thanks for reporting park conditions!');
+          notify('Thanks for keeping the pack updated!');
           onClose();
           setChosenCondition(null);
         },
