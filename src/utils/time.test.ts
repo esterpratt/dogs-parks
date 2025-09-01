@@ -51,24 +51,21 @@ describe('getAge', () => {
   });
 
   it('returns 1 month for a birthday exactly 1 month ago', () => {
-    const base = dayjs().date(15);
-    const birthday = base.subtract(1, 'month').toDate();
+    const birthday = dayjs().subtract(1, 'month').toDate();
     const age = getAge(birthday);
     expect(age.unit).toBe('month');
     expect(age.diff).toBe(1);
   });
 
   it('returns 11 months for a birthday exactly 11 months ago', () => {
-    const base = dayjs().date(15);
-    const birthday = base.subtract(11, 'month').toDate();
+    const birthday = dayjs().subtract(11, 'month').toDate();
     const age = getAge(birthday);
     expect(age.unit).toBe('months');
     expect(age.diff).toBe(11);
   });
 
   it('returns 1 year for a birthday exactly 12 months ago', () => {
-    const base = dayjs().date(15);
-    const birthday = base.subtract(12, 'month').toDate();
+    const birthday = dayjs().subtract(12, 'month').toDate();
     const age = getAge(birthday);
     expect(age.unit).toBe('year');
     expect(age.diff).toBe(1);
