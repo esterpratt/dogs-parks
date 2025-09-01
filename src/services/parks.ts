@@ -6,7 +6,10 @@ import { getFileUrl } from './supabase-storage';
 
 const fetchParksJSON = async () => {
   try {
-    const url = await getFileUrl({bucketName: 'parks', fileName: 'parks.json'});
+    const url = await getFileUrl({
+      bucketName: 'parks',
+      fileName: 'parks.json',
+    });
     const response = await fetch(url);
     if (!response.ok) throw new Error('Failed to fetch parks file');
     const parks = await response.json();
@@ -19,10 +22,10 @@ const fetchParksJSON = async () => {
 const fetchPark = async (parkId: string) => {
   try {
     const { data: park, error } = await supabase
-    .from('parks')
-    .select('*')
-    .eq('id', parkId)
-    .single();
+      .from('parks')
+      .select('*')
+      .eq('id', parkId)
+      .single();
 
     if (error) {
       throw error;
@@ -37,34 +40,36 @@ const fetchPark = async (parkId: string) => {
 const updatePark = async (parkId: string, parkDetails: Partial<Park>) => {
   try {
     const { error } = await supabase
-    .from('parks')
-    .update({
-      size: parkDetails.size,
-      materials: parkDetails.materials,
-      shade: parkDetails.shade,
-      has_facilities: parkDetails.has_facilities
-    })
-    .eq('id', parkId)
+      .from('parks')
+      .update({
+        size: parkDetails.size,
+        materials: parkDetails.materials,
+        shade: parkDetails.shade,
+        has_facilities: parkDetails.has_facilities,
+      })
+      .eq('id', parkId);
 
     if (error) {
       throw error;
     }
   } catch (error) {
-    console.error(`there was an error while updating park ${parkId}: ${JSON.stringify(error)}`);
+    console.error(
+      `there was an error while updating park ${parkId}: ${JSON.stringify(error)}`
+    );
   }
 };
 
 const uploadParkImage = async (image: File | string, parkId: string) => {
   try {
-      const res = await uploadImage({
-        image,
-        path: `${parkId}/other/`,
-        bucket: 'parks',
-      });
-      return res;
-    } catch (error) {
-      throwError(error);
-    }
+    const res = await uploadImage({
+      image,
+      path: `${parkId}/other/`,
+      bucket: 'parks',
+    });
+    return res;
+  } catch (error) {
+    throwError(error);
+  }
 };
 
 const uploadParkPrimaryImage = async (image: File | string, parkId: string) => {
@@ -73,7 +78,7 @@ const uploadParkPrimaryImage = async (image: File | string, parkId: string) => {
       image,
       bucket: 'parks',
       path: `${parkId}/primary`,
-      name: 'primary'
+      name: 'primary',
     });
     return res;
   } catch (error) {
@@ -83,25 +88,31 @@ const uploadParkPrimaryImage = async (image: File | string, parkId: string) => {
 
 const fetchParkPrimaryImage = async (parkId: string) => {
   try {
-      const res = await fetchImagesByDirectory({bucket: 'parks', path: `${parkId}/primary/`});
-      return res?.[0] ?? null;
-    } catch (error) {
-      console.error(
-        `there was a problem fetching primary image for park ${parkId}: ${JSON.stringify(error)}`
-      );
-      return null;
-    }
+    const res = await fetchImagesByDirectory({
+      bucket: 'parks',
+      path: `${parkId}/primary/`,
+    });
+    return res?.[0] ?? null;
+  } catch (error) {
+    console.error(
+      `there was a problem fetching primary image for park ${parkId}: ${JSON.stringify(error)}`
+    );
+    return null;
+  }
 };
 
 const fetchAllParkImages = async (parkId: string) => {
   try {
-    const res = await fetchImagesByDirectory({bucket: 'parks', path: `${parkId}/other/`});
+    const res = await fetchImagesByDirectory({
+      bucket: 'parks',
+      path: `${parkId}/other/`,
+    });
     return res;
   } catch (error) {
     console.error(
-        `there was a problem fetching images for park ${parkId}: ${JSON.stringify(error)}`
-      );
-      return null;
+      `there was a problem fetching images for park ${parkId}: ${JSON.stringify(error)}`
+    );
+    return null;
   }
 };
 
