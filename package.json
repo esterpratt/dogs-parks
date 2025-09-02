@@ -11,7 +11,8 @@
     "preview": "vite preview",
     "map": "vite build --sourcemap",
     "test": "vitest run",
-    "ios-setup": "./.claude/commands/ios-dev-setup.sh"
+    "ios-setup": "./.claude/commands/ios-dev-setup.sh",
+    "pr": "gh workflow run manual-pr.yml -f head=$(git rev-parse --abbrev-ref HEAD)"
   },
   "dependencies": {
     "@capacitor-firebase/messaging": "7.3.0",
