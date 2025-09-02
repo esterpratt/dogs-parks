@@ -55,6 +55,16 @@ jobs:
           echo "draft=${{ github.event.inputs.draft || 'false' }}" >> $GITHUB_OUTPUT
           echo "labels=${{ github.event.inputs.labels }}" >> $GITHUB_OUTPUT
       - name: Create or update PR
+          BASE_IN="${{ github.event.inputs.base }}"
+          if [ -z "$BASE_IN" ]; then
+          BASE_IN="main"
+          fi
+          echo "base=$BASE_IN" >> $GITHUB_OUTPUT
+          DRAFT_IN="${{ github.event.inputs.draft }}"
+          if [ -z "$DRAFT_IN" ]; then
+          DRAFT_IN="false"
+          fi
+          echo "draft=$DRAFT_IN" >> $GITHUB_OUTPUT
         id: pr
         uses: actions/github-script@v7
         with:
