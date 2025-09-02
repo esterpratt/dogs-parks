@@ -1,0 +1,201 @@
+name: Auto Inline Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    if: ${{ !github.event.pull_request.draft }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (shallow)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Auto review (inline comments)
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = context.payload.pull_request;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const prNumber = pr.number;
+
+            // Load config (optional)
+            let config = {
+              largePrAdditionsThreshold: 100,
+              enableConsoleLogRule: true,
+              enableTodoFixmeRule: true,
+              enableSensitiveKeyScan: true,
+              enableSingleLineIfRule: true,
+              enableInterfacePropsNaming: true,
+              enableNoFontWeight: true,
+              enableNoInlineStyle: true,
+              enableScssKebabCase: true,
+              enableNoRemUnits: true,
+              uiFileGlobs: ["src/components/", "src/pages/"],
+              maxInlineComments: 50
+            };
+            try {
+              const res = await github.rest.repos.getContent({ owner, repo, path: '.github/auto-review-rules.json', ref: pr.head.sha });
+              if ('content' in res.data) {
+                config = { ...config, ...JSON.parse(Buffer.from(res.data.content, 'base64').toString()) };
+              }
+            } catch (e) {
+              core.info('Config file not found, using defaults.');
+            }
+
+            // Fetch changed files
+            const files = await github.paginate(github.rest.pulls.listFiles, { owner, repo, pull_number: prNumber, per_page: 100 });
+
+            // Build existing comment signature set to avoid duplicates
+            const existingReviewComments = await github.paginate(github.rest.pulls.listReviewComments, { owner, repo, pull_number: prNumber, per_page: 100 });
+            const existingHashes = new Set(existingReviewComments.map(c => {
+              const m = c.body.match(/\[AUTO-REVIEW HASH: ([a-f0-9]{8})]/);
+              return m ? m[1] : null;
+            }).filter(Boolean));
+
+            function hash(str) {
+              let h = 0; for (let i=0;i<str.length;i++){ h = ((h<<5)-h) + str.charCodeAt(i); h |= 0; }
+              return ('00000000'+(h>>>0).toString(16)).slice(-8);
+            }
+
+            // Utility: parse added lines from unified diff patch
+            function parseAddedLines(patch) {
+              if (!patch) { return []; }
+              const added = [];
+              let newLine = 0;
+              for (const raw of patch.split('\n')) {
+                const hunk = raw.match(/^@@ .* \+(\d+)(?:,(\d+))? @@/);
+                if (hunk) { newLine = parseInt(hunk[1], 10); continue; }
+                if (raw.startsWith('+') && !raw.startsWith('+++')) {
+                  added.push({ lineNumber: newLine, content: raw.slice(1) });
+                }
+                if (!raw.startsWith('-')) { newLine++; }
+              }
+              return added;
+            }
+
+            // Rule implementations
+            const findings = [];
+
+            // PR-wide large additions (attach to first file's first added line later)
+            if (pr.additions > config.largePrAdditionsThreshold) {
+              findings.push({
+                _prWide: true,
+                message: `⚠️ [WARN] Large PR: ${pr.additions} additions (> ${config.largePrAdditionsThreshold}). Consider splitting for easier review.`
+              });
+            }
+
+            // Sensitive patterns regexes
+            const sensitivePatterns = [
+              { name: 'Firebase API key', regex: /AIza[0-9A-Za-z\-_.]{35}/ },
+              { name: 'Supabase key', regex: /SUPABASE_[A-Z0-9_]*KEY/ },
+              { name: 'Supabase domain', regex: /https?:\/\/[a-z0-9\-]+\.supabase\.co/ },
+              { name: 'Generic API key assignment', regex: /(api[_-]?key)\s*[:=]\s*['\"][A-Za-z0-9\-_]{20,}['\"]/i }
+            ];
+
+            for (const file of files) {
+              if (file.status === 'removed') { continue; }
+              const addedLines = parseAddedLines(file.patch);
+              if (addedLines.length === 0) { continue; }
+
+              // File-level SCSS filename kebab-case check
+              if (config.enableScssKebabCase && file.filename.endsWith('.scss')) {
+                const base = file.filename.split('/').pop();
+                if (/[A-Z_]/.test(base)) {
+                  const firstLineNum = addedLines[0].lineNumber;
+                  findings.push({ path: file.filename, line: firstLineNum, message: '⚠️ [WARN] SCSS filename should be kebab-case (lowercase, hyphens). Avoid uppercase letters or underscores.' });
+                }
+              }
+
+              for (const { lineNumber, content } of addedLines) {
+                const trimmed = content.trim();
+
+                if (config.enableConsoleLogRule && /console\.(log|debug)\(/.test(content) && !file.filename.endsWith('.test.ts') && !file.filename.endsWith('.test.tsx')) {
+                  findings.push({ path: file.filename, line: lineNumber, message: `ℹ️ [INFO] console.${content.includes('console.debug')?'debug':'log'} detected. Prefer removing or guarding with a debug flag.` });
+                }
+
+                if (config.enableTodoFixmeRule && /(TODO|FIXME)/.test(content)) {
+                  findings.push({ path: file.filename, line: lineNumber, message: 'ℹ️ [INFO] TODO/FIXME present. Ensure this is tracked or resolved before merge if critical.' });
+                }
+
+                if (config.enableSingleLineIfRule && /^if\s*\(.+\)\s*[^\s{][^;{]*$/.test(trimmed)) {
+                  findings.push({ path: file.filename, line: lineNumber, message: '⚠️ [WARN] Single-line if without braces. Project convention requires curly braces.' });
+                }
+
+                if (config.enableInterfacePropsNaming && file.filename.endsWith('.tsx') && /^interface\s+([A-Z][A-Za-z0-9_]*)\s*/.test(trimmed)) {
+                  const name = trimmed.match(/^interface\s+([A-Z][A-Za-z0-9_]*)\s*/)[1];
+                  if (!(name.endsWith('Props') || name.endsWith('Params'))) {
+                    findings.push({ path: file.filename, line: lineNumber, message: `ℹ️ [INFO] Interface '${name}' should end with 'Props' (component) or 'Params' (function parameters) per conventions.` });
+                  }
+                }
+
+                if (config.enableNoFontWeight && file.filename.endsWith('.scss') && /font-weight\s*:/.test(content)) {
+                  findings.push({ path: file.filename, line: lineNumber, message: '⚠️ [WARN] font-weight usage detected. Convention specifies not using font-weight; rely on defined typography styles.' });
+                }
+
+                if (config.enableNoInlineStyle && file.filename.endsWith('.tsx') && /style=\{\{/.test(content)) {
+                  findings.push({ path: file.filename, line: lineNumber, message: 'ℹ️ [INFO] Inline style detected. Prefer SCSS module classes unless explicitly required.' });
+                }
+
+                if (config.enableNoRemUnits && file.filename.endsWith('.scss') && /[0-9]+\.?[0-9]*rem\b/.test(content)) {
+                  findings.push({ path: file.filename, line: lineNumber, message: '⚠️ [WARN] rem unit detected. Use pixel units per styling conventions.' });
+                }
+
+                if (config.enableSensitiveKeyScan) {
+                  for (const pat of sensitivePatterns) {
+                    if (pat.regex.test(content)) {
+                      findings.push({ path: file.filename, line: lineNumber, message: `⚠️ [WARN] Possible ${pat.name} exposure. Consider using env variables / secrets.` });
+                    }
+                  }
+                }
+              }
+            }
+
+            if (findings.length === 0) {
+              core.info('No findings. Skipping review creation.');
+              return;
+            }
+
+            // Map PR-wide findings to first available file/line
+            const firstFileWithLines = files.find(f => f.patch && parseAddedLines(f.patch).length > 0);
+            if (firstFileWithLines) {
+              const firstLine = parseAddedLines(firstFileWithLines.patch)[0].lineNumber;
+              for (const f of findings.filter(f => f._prWide)) {
+                f.path = firstFileWithLines.filename;
+                f.line = firstLine;
+              }
+            }
+
+            // Prepare review comments (dedupe & limit)
+            const comments = [];
+            for (const f of findings) {
+              if (!f.path || !f.line) { continue; }
+              const hashVal = hash(f.path + ':' + f.line + ':' + f.message);
+              if (existingHashes.has(hashVal)) { continue; }
+              const body = `${f.message}\n\n[AUTO-REVIEW HASH: ${hashVal}]`;
+              comments.push({ path: f.path, line: f.line, side: 'RIGHT', body });
+              if (comments.length >= config.maxInlineComments) { break; }
+            }
+
+            if (comments.length === 0) {
+              core.info('All findings already commented.');
+              return;
+            }
+
+            await github.rest.pulls.createReview({
+              owner, repo, pull_number: prNumber,
+              event: 'COMMENT',
+              comments
+            });
+            core.notice(`Posted ${comments.length} inline auto-review comment(s).`);
+
+            // Add a check run summary (optional future enhancement)

@@ -1,0 +1,14 @@
+{
+  "largePrAdditionsThreshold": 100,
+  "enableConsoleLogRule": true,
+  "enableTodoFixmeRule": true,
+  "enableSensitiveKeyScan": true,
+  "enableSingleLineIfRule": true,
+  "enableInterfacePropsNaming": true,
+  "enableNoFontWeight": true,
+  "enableNoInlineStyle": true,
+  "enableScssKebabCase": true,
+  "enableNoRemUnits": true,
+  "uiFileGlobs": ["src/components/", "src/pages/"],
+  "maxInlineComments": 50
+}

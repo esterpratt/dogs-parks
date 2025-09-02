@@ -1,0 +1,118 @@
+name: Create PR (manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      head:
+        description: Head branch (if empty uses ref where run triggered)
+        required: false
+      base:
+        description: Base branch
+        required: false
+        default: main
+      title:
+        description: PR title override
+        required: false
+      draft:
+        description: Create as draft (true/false)
+        required: false
+        default: 'false'
+      labels:
+        description: Comma-separated labels
+        required: false
+        default: auto-pr
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: manual-pr-${{ github.event.inputs.head || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  manual-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Resolve branches
+        id: vars
+        run: |
+          HEAD_IN="${{ github.event.inputs.head }}"
+          if [ -z "$HEAD_IN" ]; then
+            HEAD_BRANCH="${GITHUB_REF_NAME}"
+          else
+            HEAD_BRANCH="$HEAD_IN"
+          fi
+          if [ -z "$HEAD_BRANCH" ]; then
+            echo "Head branch required (input or context)" >&2
+            exit 1
+          fi
+          echo "head=$HEAD_BRANCH" >> $GITHUB_OUTPUT
+          echo "base=${{ github.event.inputs.base || 'main' }}" >> $GITHUB_OUTPUT
+          echo "draft=${{ github.event.inputs.draft || 'false' }}" >> $GITHUB_OUTPUT
+          echo "labels=${{ github.event.inputs.labels }}" >> $GITHUB_OUTPUT
+      - name: Create or update PR
+        id: pr
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const head = '${{ steps.vars.outputs.head }}';
+            const base = '${{ steps.vars.outputs.base }}';
+            const draft = '${{ steps.vars.outputs.draft }}' === 'true';
+            const labelsCsv = '${{ steps.vars.outputs.labels }}';
+            const labels = labelsCsv ? labelsCsv.split(',').map(s=>s.trim()).filter(Boolean) : [];
+            const titleInput = `${{ github.event.inputs.title || '' }}`.trim();
+            const defaultTitle = `${head} → ${base}`;
+            const title = titleInput || defaultTitle;
+
+            const { data: existing } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              head: `${context.repo.owner}:${head}`,
+              base
+            });
+
+            let prNumber;
+            if (existing.length) {
+              const pr = existing[0];
+              prNumber = pr.number;
+              if (pr.title !== title) {
+                await github.rest.pulls.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: pr.number,
+                  title
+                });
+              }
+              core.notice(`PR already exists #${pr.number}`);
+            } else {
+              // No body passed so GitHub will apply the default PR template.
+              const { data: created } = await github.rest.pulls.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                head,
+                base,
+                draft
+              });
+              prNumber = created.number;
+              core.notice(`Created PR #${prNumber}`);
+            }
+
+            core.setOutput('pr-number', prNumber.toString());
+            if (labels.length) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                labels
+              });
+            }
+
+      - name: Summary
+        run: echo "PR #${{ steps.pr.outputs.pr-number }} ready."
