@@ -82,13 +82,14 @@ This guide helps AI coding agents work productively in this codebase. It summari
 - react-query queries should use a different stale time if they need a smaller cache than the global 1 day
 
 ## Styling conventions
+
 - Use camelCase for className combinations in TSX files
-- Use kebab-case convention in SCSS files
+- Use kebab-case for SCSS class selectors (file names can follow component/module naming)
 - Use pixels, not rem
 - Do not use font-weight
 - Do not use inline style unless asked to
 - Use classnames from 'classnames' to concat style names
-- Theme variables are set in theme.scss. Variables for colors and typography are set in variables.scss. 
+- Theme variables are set in theme.scss. Variables for colors and typography are set in variables.scss.
 
 ## Folder-Specific Code Standards
 
@@ -98,7 +99,7 @@ This guide helps AI coding agents work productively in this codebase. It summari
 
 - `src/components/`
   - Modular, domain-driven components grouped by feature (e.g., dog/, park/).
-  - Each component has a matching `.module.scss` file (kebab-case).
+  - Each component has a matching `.module.scss` file. Class selectors inside should be kebab-case.
   - Use clear prop interfaces, extract props at top of function.
   - No single-line ifs; always use curly braces.
   - Name exports at end of file.
@@ -112,7 +113,7 @@ This guide helps AI coding agents work productively in this codebase. It summari
   - Receive an error from supabase request, and if exists throw it to the catch
   - Catch should throw an error or only console the error based on the need
   - Catch that do not throw an error should console.error the error and return the appropriate type (e.g null or [])
-  - Catch that throws an error should use the custom throwError from error.ts 
+  - Catch that throws an error should use the custom throwError from error.ts
 
 - `src/context/`
   - React context providers for global state (auth, location, notifications).
