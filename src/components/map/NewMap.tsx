@@ -5,6 +5,7 @@ import {
   useEffect,
   useMemo,
   useState,
+  useRef,
 } from 'react';
 import { Link } from 'react-router-dom';
 import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
@@ -59,9 +60,12 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
     [setUserLocation]
   );
 
+  const hasAppliedUserLocationRef = useRef(false);
+
   useEffect(() => {
-    if (!location && userLocation) {
+    if (!location && userLocation && !hasAppliedUserLocationRef.current) {
       setCenter(userLocation);
+      hasAppliedUserLocationRef.current = true;
     }
   }, [location, userLocation]);
 

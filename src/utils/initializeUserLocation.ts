@@ -1,5 +1,4 @@
-import { DEFAULT_LOCATION } from "./consts";
-import { getUserLocation } from "./getUserLocation";
+import { getUserLocation } from './getUserLocation';
 
 export async function initializeUserLocation({
   setUserLocation,
@@ -13,17 +12,20 @@ export async function initializeUserLocation({
 
     if (userLocation?.error) {
       setIsLocationDenied(true);
-    } else {
-      setIsLocationDenied(false);
+      return;
     }
 
     if (userLocation) {
+      setIsLocationDenied(false);
       setUserLocation({
         lat: userLocation.position.coords.latitude,
         long: userLocation.position.coords.longitude,
       });
     }
-  } catch {
-    setUserLocation(DEFAULT_LOCATION);
+  } catch (error) {
+    console.error(
+      `There was an error initialize user lcoation: `,
+      JSON.stringify(error)
+    );
   }
 }
