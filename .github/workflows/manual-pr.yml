@@ -55,28 +55,35 @@ jobs:
           echo "draft=${{ github.event.inputs.draft || 'false' }}" >> $GITHUB_OUTPUT
           echo "labels=${{ github.event.inputs.labels }}" >> $GITHUB_OUTPUT
       - name: Create or update PR
-          BASE_IN="${{ github.event.inputs.base }}"
-          if [ -z "$BASE_IN" ]; then
-          BASE_IN="main"
-          fi
-          echo "base=$BASE_IN" >> $GITHUB_OUTPUT
-          DRAFT_IN="${{ github.event.inputs.draft }}"
-          if [ -z "$DRAFT_IN" ]; then
-          DRAFT_IN="false"
-          fi
-          echo "draft=$DRAFT_IN" >> $GITHUB_OUTPUT
         id: pr
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            function deriveConventionalTitle(head, base) {
+              // If user supplies explicit title via dispatch input, we'll override later.
+              if (!head) { return `${head} → ${base}`; }
+              const parts = head.split('/');
+              let rawType = parts[0];
+              const typeMap = { feature: 'feat', feat: 'feat', fix: 'fix', bugfix: 'fix', hotfix: 'fix', chore: 'chore', docs: 'docs', doc: 'docs', refactor: 'refactor', test: 'test', ci: 'ci', build: 'build', perf: 'perf' };
+              let type = typeMap[rawType] || 'chore';
+              const rest = parts.length > 1 ? parts.slice(1).join('/') : head; // if no slash keep whole
+              const cleaned = rest.replace(/[-_]/g, ' ');
+              const words = cleaned.split(/\s+/).filter(Boolean);
+              if (words.length === 0) { return `${type}: update`; }
+              if (words.length === 1) { return `${type}: ${words[0]}`; }
+              const scope = words[0].toLowerCase();
+              const summary = words.slice(1).join(' ');
+              return `${type}(${scope}): ${summary}`;
+            }
+
             const head = '${{ steps.vars.outputs.head }}';
             const base = '${{ steps.vars.outputs.base }}';
             const draft = '${{ steps.vars.outputs.draft }}' === 'true';
             const labelsCsv = '${{ steps.vars.outputs.labels }}';
             const labels = labelsCsv ? labelsCsv.split(',').map(s=>s.trim()).filter(Boolean) : [];
             const titleInput = `${{ github.event.inputs.title || '' }}`.trim();
-            const defaultTitle = `${head} → ${base}`;
+            const defaultTitle = deriveConventionalTitle(head, base);
             const title = titleInput || defaultTitle;
 
             const { data: existing } = await github.rest.pulls.list({
@@ -101,7 +108,6 @@ jobs:
               }
               core.notice(`PR already exists #${pr.number}`);
             } else {
-              // No body passed so GitHub will apply the default PR template.
               const { data: created } = await github.rest.pulls.create({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
@@ -123,6 +129,5 @@ jobs:
                 labels
               });
             }
-
       - name: Summary
         run: echo "PR #${{ steps.pr.outputs.pr-number }} ready."

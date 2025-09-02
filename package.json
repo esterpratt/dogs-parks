@@ -12,7 +12,7 @@
     "map": "vite build --sourcemap",
     "test": "vitest run",
     "ios-setup": "./.claude/commands/ios-dev-setup.sh",
-    "pr": "gh workflow run manual-pr.yml --ref $(git rev-parse --abbrev-ref HEAD) -f head=$(git rev-parse --abbrev-ref HEAD)"
+    "pr": "BR=$(git rev-parse --abbrev-ref HEAD); git push -u origin $BR; TITLE=$(node scripts/pr-title.js $BR); gh pr create --base main --head $BR --title \"$TITLE\" --fill || (echo 'PR likely exists; showing current PR' && gh pr view --web || true)"
   },
   "dependencies": {
     "@capacitor-firebase/messaging": "7.3.0",

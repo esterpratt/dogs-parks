@@ -32,6 +32,11 @@ To get started with the project, run the following commands:
 - Data fetching is handled by `react-query`.
 - The app is built with Capacitor to allow it to be deployed as a native mobile app.
 
+### React Query
+
+- The `react-query` client is initialized and exported from `src/services/react-query.ts`.
+- When needing to interact with the query client (e.g., for cache invalidation), import the `queryClient` instance directly from this file instead of using the `useQueryClient` hook.
+
 ### Testing
 
 - The project uses `vitest` for testing.
@@ -50,7 +55,7 @@ To get started with the project, run the following commands:
 - **`src`**: This is where the main application source code lives. It's further divided into:
     - **`components`**: Reusable React components.
     - **`context`**: React context providers for managing global state.
-    - **`hooks`**: Custom React hooks.
+    - **`hooks`**: Custom React hooks. Each hook should be in its own file within `src/hooks/api`.
     - **`loaders`**: Data loaders for `react-router-dom`.
     - **`pages`**: The main pages of the application.
     - **`services`**: Services for interacting with external APIs, such as Supabase.
@@ -72,7 +77,7 @@ To get started with the project, run the following commands:
     - The styles are imported as `styles` from a `.[module].scss` file.
     - `classnames` library is used to conditionally apply classes.
 - **Class Names**: Class names are written in `camelCase`.
-- **Export**: Components are exported using a named export `export { ComponentName };`.
+- **Export**: All exports should be grouped at the end of the file using a single `export { ... };` statement.
 - **File Naming**: Component files are named in `PascalCase.tsx`.
 
 ### `ts` Files
@@ -82,15 +87,25 @@ To get started with the project, run the following commands:
     - Custom types are defined in the `src/types` directory.
 - **Functions**:
     - Functions are defined using the `const functionName = () => {}` syntax.
-    - Functions are exported using a named export `export { functionName };`.
+    - Functions in services that accept more than 1 argument should accept an object of arguments.
+    - The interface for these arguments should be named `[FunctionName]Params`, using PascalCase for the function name.
 - **Error Handling**:
-    - Errors are handled using `try...catch` blocks.
-    - A custom `throwError` function is used to throw errors.
+    - Service functions must wrap asynchronous calls in a `try...catch` block.
+    - The `catch` block determines how to handle the error based on the specific needs of the function.
+    - If the error needs to be propagated to the UI layer (e.g., for `react-query` to manage its error state), the `throwError` utility from `src/services/error.ts` must be used.
+    - If the error can be handled gracefully within the service, the `catch` block should `console.error` the error and return an appropriate default value (e.g., `null`, an empty array `[]`).
 - **Async/Await**: `async/await` is used for asynchronous operations.
+- **Constants**: Use the `src/utils/consts.ts` file for shared constants when possible.
+- **Export**: All exports should be grouped at the end of the file using a single `export { ... };` statement.
 - **File Naming**: Files are named in `camelCase.ts` or `kebab-case.ts`.
 - **Supabase**:
     - The Supabase client is imported from `src/services/supabase-client.ts`.
     - Supabase queries are used to interact with the database.
+
+### Hooks
+
+- Each hook should be in its own file.
+- Hooks that are API-related should be under the `src/hooks/api` folder.
 
 ### `scss` Files
 

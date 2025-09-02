@@ -30,7 +30,8 @@ jobs:
 
             // Load config (optional)
             let config = {
-              largePrAdditionsThreshold: 100,
+              largePrAdditionsThreshold: 1500,
+              largePrFileThreshold: 100,
               enableConsoleLogRule: true,
               enableTodoFixmeRule: true,
               enableSensitiveKeyScan: true,
@@ -38,7 +39,7 @@ jobs:
               enableInterfacePropsNaming: true,
               enableNoFontWeight: true,
               enableNoInlineStyle: true,
-              enableScssKebabCase: true,
+              enableScssClassKebabCase: true,
               enableNoRemUnits: true,
               uiFileGlobs: ["src/components/", "src/pages/"],
               maxInlineComments: 50
@@ -54,6 +55,12 @@ jobs:
 
             // Fetch changed files
             const files = await github.paginate(github.rest.pulls.listFiles, { owner, repo, pull_number: prNumber, per_page: 100 });
+            // Prepare findings array early (needed for file threshold rule)
+            const findings = [];
+            const effectiveChangedFileCount = files.filter(f => f.status !== 'removed').length;
+            if (config.largePrFileThreshold && effectiveChangedFileCount > config.largePrFileThreshold) {
+              findings.push({ _prWide: true, message: `⚠️ [WARN] Large PR: ${effectiveChangedFileCount} changed files (> ${config.largePrFileThreshold}). Consider splitting for focus.` });
+            }
 
             // Build existing comment signature set to avoid duplicates
             const existingReviewComments = await github.paginate(github.rest.pulls.listReviewComments, { owner, repo, pull_number: prNumber, per_page: 100 });
@@ -83,8 +90,7 @@ jobs:
               return added;
             }
 
-            // Rule implementations
-            const findings = [];
+            // Rule implementations (additional rules will append to findings)
 
             // PR-wide large additions (attach to first file's first added line later)
             if (pr.additions > config.largePrAdditionsThreshold) {
@@ -107,12 +113,19 @@ jobs:
               const addedLines = parseAddedLines(file.patch);
               if (addedLines.length === 0) { continue; }
 
-              // File-level SCSS filename kebab-case check
-              if (config.enableScssKebabCase && file.filename.endsWith('.scss')) {
-                const base = file.filename.split('/').pop();
-                if (/[A-Z_]/.test(base)) {
-                  const firstLineNum = addedLines[0].lineNumber;
-                  findings.push({ path: file.filename, line: firstLineNum, message: '⚠️ [WARN] SCSS filename should be kebab-case (lowercase, hyphens). Avoid uppercase letters or underscores.' });
+              // SCSS class selector kebab-case rule (enforce on selectors, not filenames)
+              if (config.enableScssClassKebabCase && file.filename.endsWith('.scss')) {
+                for (const { lineNumber, content } of addedLines) {
+                  const trimmedSel = content.trim();
+                  if (trimmedSel.startsWith('.') && !trimmedSel.startsWith('..')) {
+                    const m = trimmedSel.match(/^\.([A-Za-z0-9_-]+)/);
+                    if (m) {
+                      const className = m[1];
+                      if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(className)) {
+                        findings.push({ path: file.filename, line: lineNumber, message: `⚠️ [WARN] SCSS class '${className}' should be kebab-case (lowercase with optional hyphens).` });
+                      }
+                    }
+                  }
                 }
               }
 

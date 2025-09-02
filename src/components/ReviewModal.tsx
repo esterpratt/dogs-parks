@@ -75,7 +75,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
 
   const resetReview = () => {
     setReviewData({ title: '', content: '' });
-    setRank(0);
+    setRank(5);
     setIsAnonymous(false);
   };
 

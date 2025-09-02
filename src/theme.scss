@@ -17,6 +17,7 @@
   --color-disabled-rgb: 217, 217, 217;
   --background-color: #{$white};
   --box-shadow: 2px 4px 8px 2px rgba(0, 0, 0, 0.1);
+  --box-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
   --gradient: #{$linear-gradient};
 }
 
@@ -35,5 +36,6 @@ body.dark {
   --color-disabled-rgb: 90, 90, 90;
   --background-color: #1e293b;
   --box-shadow: 1px 1px 4px 1px rgba(200, 200, 200, 0.5);
+  --box-shadow-sm: 0 1px 2px 0 rgba(200, 200, 200, 0.25);
   --gradient: #{$dark-gradient};
 }

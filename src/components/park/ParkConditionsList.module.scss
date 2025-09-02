@@ -1,0 +1,31 @@
+@use '../../variables' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: $white;
+}
+
+.status-message {
+  font-size: $second-title-font-size;
+  color: $red;
+  text-align: center;
+  padding: 10px;
+  border: 1px solid $red;
+  border-radius: 5px;
+}
+
+.no-conditions {
+  font-size: 16px;
+  color: $text-medium;
+  text-align: center;
+  padding: 10px;
+}
+
+.condition-item-placeholder {
+  background-color: $dark-surface-dark;
+  padding: 8px;
+  border-radius: 4px;
+}
+
