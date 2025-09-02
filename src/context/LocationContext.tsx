@@ -39,16 +39,17 @@ export const UserLocationProvider = ({
     }))
   );
 
-  const setUserLocation = useStore(store, (state) => state.setUserLocation);
-  const setIsLocationDenied = useStore(
-    store,
-    (state) => state.setIsLocationDenied
-  );
-
   useEffect(() => {
     let resumeListener: PluginListenerHandle;
     const setupListener = async () => {
       resumeListener = await App.addListener('resume', () => {
+        const { userLocation, isLocationDenied } = store.getState();
+
+        if (userLocation && !isLocationDenied) {
+          return;
+        }
+
+        const { setIsLocationDenied, setUserLocation } = store.getState();
         initializeUserLocation({ setIsLocationDenied, setUserLocation });
       });
     };
@@ -56,7 +57,7 @@ export const UserLocationProvider = ({
     return () => {
       resumeListener?.remove();
     };
-  }, [setUserLocation, setIsLocationDenied]);
+  }, [store]);
 
   return (
     <UserLocationContext.Provider value={store}>
