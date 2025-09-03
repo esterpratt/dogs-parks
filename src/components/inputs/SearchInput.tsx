@@ -6,12 +6,13 @@ import styles from './SearchInput.module.scss';
 export interface SearchInputProps {
   value: string;
   onChangeInput: (event: ChangeEvent<HTMLInputElement>) => void;
+  inputTestId?: string;
   placeholder?: string;
   className?: string;
 }
 
 const SearchInput = (props: SearchInputProps) => {
-  const { value, onChangeInput, placeholder, className } = props;
+  const { value, onChangeInput, placeholder, className, inputTestId } = props;
 
   return (
     <div className={classnames(styles.inputContainer, className)}>
@@ -21,6 +22,7 @@ const SearchInput = (props: SearchInputProps) => {
         onChange={onChangeInput}
         placeholder={placeholder}
         className={styles.input}
+        data-test={inputTestId}
       />
     </div>
   );

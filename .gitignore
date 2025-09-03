@@ -13,6 +13,8 @@ dist-ssr
 *.local
 .firebase/
 parks.json
+test-results
+playwright-report
 
 # Firebase configuration files (contain sensitive API keys)
 android/app/google-services.json

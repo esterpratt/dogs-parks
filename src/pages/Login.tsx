@@ -178,6 +178,7 @@ const Login = () => {
                 name="email"
                 placeholder="Email *"
                 type="email"
+                data-test="login-email"
               />
               <Input
                 className={classnames(styles.input, {
@@ -188,6 +189,7 @@ const Login = () => {
                 name="password"
                 placeholder="Password *"
                 type={showPassword ? 'text' : 'password'}
+                data-test="login-password"
                 rightIcon={
                   showPassword ? (
                     <button
@@ -226,7 +228,11 @@ const Login = () => {
                 />
               )}
             </div>
-            <Button type="submit" className={styles.button}>
+            <Button
+              type="submit"
+              className={styles.button}
+              data-test="login-submit"
+            >
               {isSignup ? 'Sign up' : 'Dog in'}
             </Button>
           </form>

@@ -71,7 +71,7 @@ export const ReportConditionModal: React.FC<ReportConditionModalProps> = ({
       className={styles.modal}
       title="Spot an issue here?"
     >
-      <div className={styles.options}>
+      <div className={styles.options} data-test="report-condition-modal">
         {reportableConditions.length === 0 ? (
           <p className={styles.noReportableConditions}>
             All conditions are currently reported.

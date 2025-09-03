@@ -8,10 +8,9 @@ import styles from './ParkPreview.module.scss';
 
 interface ParkPreviewProps {
   park: Park;
-  className?: string;
 }
 
-const ParkPreview: React.FC<ParkPreviewProps> = ({ park, className }) => {
+const ParkPreview: React.FC<ParkPreviewProps> = ({ park }) => {
   const navigate = useNavigate();
   const onClickMapLink = (event: MouseEvent) => {
     event.preventDefault();
@@ -20,6 +19,7 @@ const ParkPreview: React.FC<ParkPreviewProps> = ({ park, className }) => {
 
   return (
     <Card
+      testId="park-card"
       url={`/parks/${park.id}`}
       imgCmp={
         <div className={styles.img}>
@@ -34,7 +34,9 @@ const ParkPreview: React.FC<ParkPreviewProps> = ({ park, className }) => {
       }
       detailsCmp={
         <div className={styles.detailsContainer}>
-          <span className={styles.name}>{park.name}</span>
+          <span className={styles.name} data-test="park-title">
+            {park.name}
+          </span>
           <span className={styles.address}>
             {park.address}, {park.city}
           </span>
@@ -61,7 +63,6 @@ const ParkPreview: React.FC<ParkPreviewProps> = ({ park, className }) => {
           variant: 'secondary',
         },
       ]}
-      className={className}
     />
   );
 };

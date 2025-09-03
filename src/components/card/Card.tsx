@@ -16,16 +16,16 @@ interface CardProps {
   imgCmp: ReactNode;
   detailsCmp: ReactNode;
   buttons?: ButtonProps[];
-  className?: string;
   onClick?: () => void;
+  testId?: string;
 }
 
 const Card = (props: CardProps) => {
-  const { url, imgCmp, detailsCmp, buttons, onClick } = props;
+  const { url, imgCmp, detailsCmp, buttons, onClick, testId } = props;
   const TopContainer = url ? Link : 'div';
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} data-test={testId}>
       <TopContainer
         onClick={!url && onClick ? onClick : undefined}
         to={url ? url : ''}

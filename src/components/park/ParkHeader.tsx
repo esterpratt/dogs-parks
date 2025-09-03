@@ -120,7 +120,9 @@ const ParkHeader = (props: ParkHeaderProps) => {
               [styles.user]: !!user,
             })}
           >
-            <div className={styles.top}>{park.name}</div>
+            <div className={styles.top} data-test="park-name">
+              {park.name}
+            </div>
             <div className={styles.bottom}>
               <div className={styles.address}>
                 <MapPin color={styles.green} size={14} />
@@ -158,7 +160,7 @@ const ParkHeader = (props: ParkHeaderProps) => {
             </div>
           </div>
         }
-      ></Header>
+      />
       <EnlargeImageModal
         isOpen={isEnlargedImageModalOpen}
         onClose={() => setIsEnlargeImageModalOpen(false)}

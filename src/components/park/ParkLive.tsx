@@ -63,6 +63,7 @@ const ParkLive = (props: ParkGeneralsProps) => {
     <>
       <Section
         title="Live status"
+        titleTestId="live-status-heading"
         actions={
           !!userId &&
           canReportCondition && (
@@ -71,6 +72,7 @@ const ParkLive = (props: ParkGeneralsProps) => {
               color={styles.white}
               className={styles.button}
               onClick={handleClickReport}
+              data-test="report-button"
             >
               {!hideReportHint && <span>Report</span>}
               <Wrench size={18} />

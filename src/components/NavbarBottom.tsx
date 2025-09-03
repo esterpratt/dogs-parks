@@ -86,6 +86,7 @@ const NavbarBottom = () => {
                 className={({ isActive }) =>
                   isActive ? `${[styles.active]}` : ''
                 }
+                data-test="navbar-notifications-link"
               >
                 <div className={styles.item}>
                   <div className={styles.notificationContainer}>
@@ -105,6 +106,7 @@ const NavbarBottom = () => {
               ref={moreButtonRef}
               className={styles.moreContainer}
               onClick={() => setIsMenuOpen(!isMenuOpen)}
+              data-test="navbar-more"
             >
               <div className={styles.item}>
                 <Ellipsis size={24} strokeWidth={2} />

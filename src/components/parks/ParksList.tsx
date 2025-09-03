@@ -78,7 +78,11 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
       renderSearchInput={(props: SearchInputProps) => {
         return (
           <div className={styles.searchContainer}>
-            <SearchInput {...props} className={styles.inputContainer} />
+            <SearchInput
+              {...props}
+              className={styles.inputContainer}
+              inputTestId="park-search-input"
+            />
             <Link to="/">
               <Button variant="round">
                 <Map size={24} />

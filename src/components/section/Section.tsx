@@ -9,10 +9,18 @@ interface SectionProps {
   contentCmp: ReactNode;
   className?: string;
   contentClassName?: string;
+  titleTestId?: string;
 }
 
 const Section = (props: SectionProps) => {
-  const { title, actions, contentCmp, className, contentClassName } = props;
+  const {
+    title,
+    actions,
+    contentCmp,
+    className,
+    contentClassName,
+    titleTestId,
+  } = props;
   const [isOpen, setIsOpen] = useState(true);
 
   return (
@@ -28,7 +36,7 @@ const Section = (props: SectionProps) => {
               [styles.chevronOpen]: isOpen,
             })}
           />
-          <span>{title}</span>
+          <span data-test={titleTestId}>{title}</span>
         </button>
         {actions && <div className={styles.actions}>{actions}</div>}
       </div>

@@ -26,6 +26,7 @@ const NavbarLogoutButton = (props: NavbarLogoutButtonProps) => {
       color={styles.blue}
       onClick={logout}
       className={styles.inner}
+      data-test="navbar-logout"
     >
       <LogOut size={18} strokeWidth={2} />
       <span>Logout</span>
