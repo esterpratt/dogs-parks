@@ -11,6 +11,8 @@ import { getFormattedPastDate } from '../../utils/time';
 import { PARK_CONDITIONS } from '../../utils/parkConditions';
 import { useNotification } from '../../context/NotificationContext';
 import styles from './ParkConditionItem.module.scss';
+import { useContext } from 'react';
+import { UserContext } from '../../context/UserContext';
 
 interface ParkConditionItemProps {
   conditionObservation: ActiveParkCondition;
@@ -20,6 +22,7 @@ const ParkConditionItem = (props: ParkConditionItemProps) => {
   const { conditionObservation } = props;
   const { mutate, isPending } = useAddParkCondition();
   const { notify } = useNotification();
+  const { userId } = useContext(UserContext);
 
   const conditionId = conditionObservation.condition;
 
@@ -90,25 +93,27 @@ const ParkConditionItem = (props: ParkConditionItemProps) => {
             <span className={styles.reportedAt}>{formattedReportedAt}</span>
           </div>
         </div>
-        <div className={styles.stillTherePrompt}>
-          <span className={styles.stillThereLabel}>Still there?</span>
-          <div className={styles.stillThereButtons}>
-            <Button
-              className={styles.button}
-              onClick={handleConfirm}
-              disabled={isPending}
-            >
-              <Check size={20} color={styles.green} />
-            </Button>
-            <Button
-              className={`${styles.button} ${styles.buttonDeny}`}
-              onClick={handleDeny}
-              disabled={isPending}
-            >
-              <X size={20} color={styles.red} />
-            </Button>
+        {!!userId && (
+          <div className={styles.stillTherePrompt}>
+            <span className={styles.stillThereLabel}>Still there?</span>
+            <div className={styles.stillThereButtons}>
+              <Button
+                className={styles.button}
+                onClick={handleConfirm}
+                disabled={isPending}
+              >
+                <Check size={20} color={styles.green} />
+              </Button>
+              <Button
+                className={`${styles.button} ${styles.buttonDeny}`}
+                onClick={handleDeny}
+                disabled={isPending}
+              >
+                <X size={20} color={styles.red} />
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
