@@ -23,6 +23,7 @@ import { useUserLocation } from '../../context/LocationContext';
 import { Button } from '../Button';
 import styles from './NewMap.module.scss';
 import { useInitLocation } from '../../hooks/useInitLocation';
+import { WeatherButton } from '../weather/WeatherButton';
 
 const ParkPopupLazy = lazy(() => import('../parks/ParkPopupLazy'));
 
@@ -160,6 +161,7 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
         >
           <Locate />
         </Button>
+        <WeatherButton lat={mapCenter.lat} long={mapCenter.lng} />
         <MapEventHandler onMapClick={onCloseParkPopup} />
       </MapContainer>
       <Suspense fallback={null}>

@@ -88,7 +88,7 @@ This guide helps AI coding agents work productively in this codebase. It summari
 - Use pixels, not rem
 - Do not use font-weight
 - Do not use inline style unless asked to
-- Use classnames from 'classnames' to concat style names
+- Use `classnames` from `classnames` to concatenate multiple and conditional class names; avoid template string concatenation for classes
 - Theme variables are set in theme.scss. Variables for colors and typography are set in variables.scss.
 
 ## Folder-Specific Code Standards
@@ -144,6 +144,63 @@ Follow these standards for consistency and maintainability
 
 - See `README.md` for app overview
 
----
+## Assistant Working Memory (user-memory.json)
 
-If any section is unclear or missing, please provide feedback to improve these instructions.
+A lightweight, explicit reminder system for future queries.
+
+Location: `.github/user-memory.json`
+
+Schema (array of entries):
+
+```
+{
+  id: string,
+  triggers: string[],        // lowercase phrases; ALL words in a phrase must appear in the user query to match (case-insensitive, order flexible but phrase words must all be present)
+  reminder: string,          // < 200 chars; actionable fact / guideline
+  contextLinks: string[],    // optional repo-relative paths
+  lastUpdated: ISO date
+  // optional: expires?: ISO date
+}
+```
+
+Matching rules for the assistant:
+
+1. Normalize incoming user query to lowercase.
+2. For each entry, treat each trigger phrase as a set of words; if every word in the phrase appears somewhere in the query, that trigger matches.
+3. If any trigger matches, surface the `reminder` BEFORE performing the requested action (once per conversation turn per entry).
+4. If multiple entries match, list them in the order they appear in the file.
+5. Ignore entries where `expires` is in the past.
+
+Guidelines for adding entries:
+
+- Use specific multi-word triggers (avoid single generic words like "button").
+- Prefer 1–3 trigger phrases per entry.
+- Keep reminders stable; update (do not duplicate) when guidance changes.
+- Remove or add `expires` to phase out temporary notes.
+- Keep file small (< ~50 entries) to avoid noise.
+
+Example (already added):
+
+```
+{
+  "id": "newmap-weather-button",
+  "triggers": ["newmap button", "new map button", "newmap component button"],
+  "reminder": "The weather button is shown when there is rain.",
+  "contextLinks": ["src/components/map/NewMap.tsx"],
+  "lastUpdated": "2025-09-04"
+}
+```
+
+Maintenance workflow:
+
+1. Edit `.github/user-memory.json`.
+2. Commit with message prefix `chore(memory):`.
+3. During PR review ensure triggers aren't overly broad.
+
+Assistant behavior note:
+
+- The assistant does NOT learn automatically outside this file.
+- If you want something remembered, add it here explicitly.
+- If a reminder becomes obsolete, delete the entry to prevent stale guidance.
+
+---

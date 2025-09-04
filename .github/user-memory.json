@@ -1,0 +1,9 @@
+[
+  {
+    "id": "newmap-weather-button",
+    "triggers": ["newmap button", "new map button", "newmap component button"],
+    "reminder": "The weather button is shown when there is rain.",
+    "contextLinks": ["src/components/map/NewMap.tsx"],
+    "lastUpdated": "2025-09-04"
+  }
+]
