@@ -1,3 +1,5 @@
 <resources>
+    <color name="colorPrimary">#EC4899</color>
+    <color name="colorSecondary">#0DA2E7</color>
     <color name="notification_color">#0DA2E7</color>
 </resources>
