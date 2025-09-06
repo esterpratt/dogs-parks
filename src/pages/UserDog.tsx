@@ -90,7 +90,7 @@ const UserDog = () => {
   };
 
   if (showLoader) {
-    return <Loader style={{ height: '100dvh' }} />;
+    return <Loader style={{ paddingTop: '64px' }} />;
   }
 
   if (!dog) {

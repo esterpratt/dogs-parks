@@ -8,7 +8,7 @@ const Park: React.FC = () => {
   const { park } = useLoaderData() as { park: Promise<ParkType> };
 
   return (
-    <Suspense fallback={<Loader style={{ height: '100dvh' }} />}>
+    <Suspense fallback={<Loader style={{ paddingTop: '64px' }} />}>
       <Await resolve={park}>
         {(resolvedPark) => <ParkResolved park={resolvedPark} />}
       </Await>

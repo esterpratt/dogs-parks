@@ -5,7 +5,9 @@ import { initializeUserLocation } from '../utils/initializeUserLocation';
 export const useInitLocation = () => {
   const userLocation = useUserLocation((state) => state.userLocation);
   const setUserLocation = useUserLocation((state) => state.setUserLocation);
-  const setIsLocationDenied = useUserLocation((state) => state.setIsLocationDenied);
+  const setIsLocationDenied = useUserLocation(
+    (state) => state.setIsLocationDenied
+  );
 
   useEffect(() => {
     if (!userLocation) {

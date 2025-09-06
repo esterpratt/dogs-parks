@@ -3,7 +3,8 @@ import { isMobile } from './platform';
 import { DEFAULT_LOCATION } from './consts';
 
 export async function getUserLocation() {
-  let position: { position: GeolocationPosition, error?: unknown } | null = null;
+  let position: { position: GeolocationPosition; error?: unknown } | null =
+    null;
 
   try {
     if (isMobile()) {
@@ -20,7 +21,7 @@ export async function getUserLocation() {
       if (permStatus.location === 'denied') {
         throw new Error('PERMISSION_DENIED');
       }
-      
+
       const capPosition = await Geolocation.getCurrentPosition();
       position = {
         position: {
@@ -29,15 +30,15 @@ export async function getUserLocation() {
             longitude: capPosition.coords.longitude,
           },
           timestamp: capPosition.timestamp,
-        } as GeolocationPosition
-      }
+        } as GeolocationPosition,
+      };
     } else {
       if ('geolocation' in navigator) {
         position = {
           position: await new Promise((resolve, reject) => {
             navigator.geolocation.getCurrentPosition(resolve, reject);
           }),
-        }
+        };
       }
     }
   } catch (error) {
@@ -48,9 +49,9 @@ export async function getUserLocation() {
         coords: {
           latitude: DEFAULT_LOCATION.lat,
           longitude: DEFAULT_LOCATION.long,
-        }
-      } as GeolocationPosition
-    } 
+        },
+      } as GeolocationPosition,
+    };
   }
 
   return position;

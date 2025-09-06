@@ -32,7 +32,7 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
   const { data: sortedParks, isLoading: isLoadingSortedParks } = useQuery({
     queryKey: ['sortedParks', userLocation],
     queryFn: () => fetchSortedParks(parks!, userLocation),
-    enabled: !!parks && !!userLocation,
+    enabled: !!parks,
   });
 
   const { showLoader } = useDelayedLoading({
@@ -63,7 +63,7 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
   );
 
   if (showLoader || !sortedParks) {
-    return <Loader style={{ height: '100dvh' }} />;
+    return <Loader style={{ paddingTop: '64px' }} />;
   }
 
   return (

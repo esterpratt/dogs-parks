@@ -1,7 +1,10 @@
 import { orderByDistance } from 'geolib';
 import { Location, Park } from '../types/park';
 
-export const fetchSortedParks = async (parks: Park[] | undefined, userLocation: Location | undefined) => {
+export const fetchSortedParks = async (
+  parks: Park[] | undefined,
+  userLocation: Location | undefined
+) => {
   if (!userLocation || !parks) return parks;
 
   const parksToSort = parks.map((park) => ({
