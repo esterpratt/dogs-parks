@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import type { InfiniteData } from '@tanstack/react-query';
 import { Capacitor } from '@capacitor/core';
 import { Badge } from '@capawesome/capacitor-badge';
+import { FirebaseMessaging } from '@capacitor-firebase/messaging';
 import { markAllAsSeen } from '../../services/notifications';
 import { Notification } from '../../types/notification';
 import { queryClient } from '../../services/react-query';
@@ -93,7 +94,8 @@ const useMarkAllNotificationsAsSeen = () => {
 
       if (Capacitor.isNativePlatform()) {
         try {
-          await Badge.clear();
+          await FirebaseMessaging.removeAllDeliveredNotifications();
+          await Badge.set({ count: 0 });
         } catch (error) {
           console.error('Failed to clear badge count:', error);
         }

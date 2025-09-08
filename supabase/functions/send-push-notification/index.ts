@@ -67,7 +67,6 @@ serve(async (req) => {
     });
 
     // ---- First-time-only UPDATE to mark the row ready (no title/null guard) ----
-    // Guard on is_ready so only the initial flip emits realtime.
     const { error: readyErr, count: readyCount } = await supabase
       .from('notifications')
       .update({
@@ -76,15 +75,13 @@ serve(async (req) => {
         push_message: record.push_message || pushMessage,
         app_message: record.app_message || appMessage,
         data: record.data ?? null,
-        // If you added a BEFORE UPDATE trigger to bump updated_at, it will fire here too
       })
       .eq('id', notificationId)
-      .neq('is_ready', true) // first-time-only guard
+      .neq('is_ready', true)
       .select('id', { head: true, count: 'exact' });
 
     if (readyErr) {
       console.error('EF: update-to-ready failed', { notificationId, readyErr });
-      // Continue anyway; client can still poll as fallback
     }
 
     // ---- Idempotency: skip delivery work if already delivered ----
@@ -161,7 +158,11 @@ serve(async (req) => {
       }),
       android: {
         priority: 'HIGH' as const,
-        notification: { channel_id: 'default', default_sound: true },
+        notification: {
+          channel_id: 'default',
+          default_sound: true,
+          notification_count: unseenCount,
+        },
       },
       apns: {
         headers: { 'apns-push-type': 'alert' },
@@ -180,7 +181,6 @@ serve(async (req) => {
 
     let sent = 0;
     let failed = 0;
-
 
     await Promise.all(
       tokens.map(async (row) => {
@@ -207,11 +207,9 @@ serve(async (req) => {
           return;
         }
 
-
         sent++;
       })
     );
-
 
     if (sent > 0) {
       const { error: deliveredErr } = await supabase
