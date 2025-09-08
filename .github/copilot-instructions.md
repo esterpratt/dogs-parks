@@ -67,8 +67,17 @@ This guide helps AI coding agents work productively in this codebase. It summari
 ## General Instructions
 
 - Show me a plan of changes before implementing them
-- Run Prettier formatting after every code change
 - If there are eslint or ts errors after your change, try to fix the file
+
+## Forbidden Commands
+
+Never suggest or run commands that delete local changes, including but not limited to:
+
+- `git reset --hard`
+- `git checkout -- .`
+- `git clean -fd`
+- `git stash drop`
+- Any command that discards uncommitted work without explicit user confirmation
 
 ## General Code Standards
 
