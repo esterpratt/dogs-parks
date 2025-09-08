@@ -161,7 +161,9 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
         >
           <Locate />
         </Button>
-        <WeatherButton lat={mapCenter.lat} long={mapCenter.lng} />
+        {userLocation && (
+          <WeatherButton lat={userLocation.lat} long={userLocation.long} />
+        )}
         <MapEventHandler onMapClick={onCloseParkPopup} />
       </MapContainer>
       <Suspense fallback={null}>

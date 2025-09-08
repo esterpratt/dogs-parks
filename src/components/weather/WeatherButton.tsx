@@ -28,7 +28,7 @@ const WeatherButton: React.FC<WeatherButtonProps> = ({ lat, long }) => {
     return null;
   }
 
-  if (forecast.precipitationProbability <= 1) {
+  if (forecast.precipitationProbability <= 5) {
     return null;
   }
 
@@ -76,7 +76,7 @@ const WeatherButton: React.FC<WeatherButtonProps> = ({ lat, long }) => {
         </div>
         <div className={styles.row}>
           <span>
-            {forecast.precipitationProbability}% chance of rain next hour
+            {forecast.precipitationProbability}% chance of rain in the next hour
           </span>
         </div>
       </div>

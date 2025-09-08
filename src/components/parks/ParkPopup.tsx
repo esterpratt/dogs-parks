@@ -122,8 +122,8 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
             <span className={styles.city}>{activePark?.city}</span>
           </div>
         </div>
-        {canGetDirections && (
-          <div>
+        <div>
+          {canGetDirections && (
             <div className={styles.directionsContainer}>
               {isLoadingDirections && <div>Sniffing the way...</div>}
               {!isLoadingDirections && directions && (
@@ -159,7 +159,9 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
                 </div>
               )}
             </div>
-            <div className={styles.buttons}>
+          )}
+          <div className={styles.buttons}>
+            {canGetDirections && (
               <Button
                 variant="secondary"
                 className={styles.button}
@@ -168,13 +170,13 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
                 <Navigation size={12} className={styles.icon} />
                 <span>Lead the way</span>
               </Button>
-              <Button className={styles.button} onClick={onClickViewPark}>
-                <Eye size={12} className={styles.icon} />
-                <span>View park</span>
-              </Button>
-            </div>
+            )}
+            <Button className={styles.button} onClick={onClickViewPark}>
+              <Eye size={12} className={styles.icon} />
+              <span>View park</span>
+            </Button>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
