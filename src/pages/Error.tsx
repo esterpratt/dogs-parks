@@ -3,20 +3,31 @@ import { AppError } from '../services/error';
 import { NavbarBottom } from '../components/NavbarBottom';
 import { TreatToss } from '../components/TreatToss';
 import styles from './Error.module.scss';
+import { useTransportOnline } from '../hooks/useTransportOnline';
+
+const GENERIC_MESSAGE = 'There was a problem';
 
 const ErrorPage: React.FC = () => {
   const error = useRouteError();
+  const transport = useTransportOnline();
+  const isOffline = transport !== null && transport.isConnected === false;
 
-  let message = 'There was a problem';
+  let message = GENERIC_MESSAGE;
 
   if (isRouteErrorResponse(error)) {
-    message = error.data.message;
+    if (error.status === 503) {
+      message = 'You are offline — connect to the internet to continue.';
+    } else {
+      message = error.data.message;
 
-    if (error.status === 404 && !error.data.message) {
-      message = 'Could not find page';
+      if (error.status === 404 && !error.data.message) {
+        message = 'Could not find page';
+      }
     }
   } else if (error instanceof AppError) {
     message = error.message;
+  } else if (isOffline && message === GENERIC_MESSAGE) {
+    message = 'You are offline — connect to the internet to continue.';
   }
 
   return (

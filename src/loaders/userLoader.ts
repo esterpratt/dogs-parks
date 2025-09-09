@@ -7,9 +7,16 @@ import { Dog } from '../types/dog';
 import { AppError } from '../services/error';
 import { signOut } from '../services/authentication';
 import { USER_NOT_FOUND_ERROR } from '../utils/consts';
+import { Network } from '@capacitor/network';
 
 const userLoader: LoaderFunction = async ({ params }) => {
   const { id: userId } = params;
+
+  const status = await Network.getStatus();
+  if (!status.connected) {
+    throw new Response('Offline', { status: 503, statusText: 'Offline' });
+  }
+
   let user, dogs: Dog[];
 
   try {

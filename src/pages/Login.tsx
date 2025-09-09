@@ -21,6 +21,7 @@ import { useNotification } from '../context/NotificationContext';
 import { preserveCursor } from '../utils/input';
 import styles from './Login.module.scss';
 import { useModeContext } from '../context/ModeContext';
+import { useTransportOnline } from '../hooks/useTransportOnline';
 
 const Login = () => {
   const {
@@ -42,6 +43,9 @@ const Login = () => {
   const { notify } = useNotification();
 
   const mode = useModeContext((state) => state.mode);
+
+  const transport = useTransportOnline();
+  const isOffline = transport !== null && transport.isConnected === false;
 
   useEffect(() => {
     topRef.current?.scrollIntoView({ block: 'start' });
@@ -73,6 +77,11 @@ const Login = () => {
     });
 
   const googleSignin = async () => {
+    if (isOffline) {
+      setError('You are offline — connect to continue.');
+      return;
+    }
+
     if (isSignup) {
       userSigninWithGoogle();
     } else {
@@ -81,6 +90,11 @@ const Login = () => {
   };
 
   const appleSignin = async () => {
+    if (isOffline) {
+      setError('You are offline — connect to continue.');
+      return;
+    }
+
     if (isSignup) {
       userSigninWithApple();
     } else {
@@ -109,6 +123,12 @@ const Login = () => {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (isOffline) {
+      setError('You are offline — connect to log in.');
+      return;
+    }
+
     const formData = Object.fromEntries(
       new FormData(event.currentTarget)
     ) as unknown as Required<Omit<SigninProps, 'withGoogle'>>;
@@ -129,6 +149,12 @@ const Login = () => {
 
   const onClickResetPassword = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+
+    if (isOffline) {
+      setError('You are offline — connect to reset your password.');
+      return;
+    }
+
     const email = mailRef.current?.value;
     if (email) {
       resetPassword(email);
@@ -232,6 +258,9 @@ const Login = () => {
               type="submit"
               className={styles.button}
               data-test="login-submit"
+              disabled={
+                isOffline || isSigningIn || isLoading || isPendingResetPassword
+              }
             >
               {isSignup ? 'Sign up' : 'Dog in'}
             </Button>
@@ -246,6 +275,7 @@ const Login = () => {
               [styles.dark]: mode === 'dark',
             })}
             onClick={appleSignin}
+            disabled={isOffline}
           >
             {mode === 'dark' ? (
               <AppleWhite className={styles.appleIcon} />
@@ -263,6 +293,7 @@ const Login = () => {
               [styles.dark]: mode === 'dark',
             })}
             onClick={googleSignin}
+            disabled={isOffline}
           >
             <GoogleIcon width={16} height={16} />
             <div className={styles.buttonText}>
@@ -302,6 +333,7 @@ const Login = () => {
               variant="simple"
               onClick={onClickResetPassword}
               className={styles.resetButton}
+              disabled={isOffline}
             >
               Reset password
             </Button>

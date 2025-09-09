@@ -27,12 +27,14 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
   const { data: parks, isLoading: isLoadingParks } = useQuery({
     queryKey: ['parks'],
     queryFn: fetchParksJSON,
+    retry: 0,
   });
 
   const { data: sortedParks, isLoading: isLoadingSortedParks } = useQuery({
     queryKey: ['sortedParks', userLocation],
     queryFn: () => fetchSortedParks(parks!, userLocation),
     enabled: !!parks,
+    retry: 0,
   });
 
   const { showLoader } = useDelayedLoading({
