@@ -84,7 +84,7 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
   ) => {
     const userPosition = await getUserLocation();
 
-    if (userPosition) {
+    if (userPosition && !userPosition.error) {
       cbc.forEach((cb) =>
         cb({
           coords: {
