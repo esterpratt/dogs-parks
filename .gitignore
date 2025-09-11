@@ -34,3 +34,4 @@ capacitor.config.ts.backup
 *.njsproj
 *.sln
 *.sw?
+.env*

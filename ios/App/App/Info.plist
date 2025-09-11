@@ -35,9 +35,9 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>We need access to your camera to take photos.</string>
-	<key>NSLocationUsageDescription</key>
-	<string>Your location is used to show relevant parks nearby.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Your location is used to show relevant parks nearby.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Your location is used to show relevant parks nearby.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>We need permission to save photos.</string>
