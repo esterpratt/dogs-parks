@@ -13,6 +13,7 @@ import { useNotification } from '../../context/NotificationContext';
 import styles from './ParkConditionItem.module.scss';
 import { useContext } from 'react';
 import { UserContext } from '../../context/UserContext';
+import { capitalizeText } from '../../utils/text';
 
 interface ParkConditionItemProps {
   conditionObservation: ActiveParkCondition;
@@ -68,8 +69,8 @@ const ParkConditionItem = (props: ParkConditionItemProps) => {
   const conditionValue = PARK_CONDITIONS.find(
     (parkCondition) => parkCondition.id === conditionId
   )?.value;
-  const formattedReportedAt = getFormattedPastDate(
-    new Date(conditionObservation.last_reported_at)
+  const formattedReportedAt = capitalizeText(
+    getFormattedPastDate(new Date(conditionObservation.last_reported_at))
   );
 
   const backgroundVariantClass =

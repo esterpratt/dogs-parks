@@ -16,7 +16,7 @@ const ErrorPage: React.FC = () => {
 
   if (isRouteErrorResponse(error)) {
     if (error.status === 503) {
-      message = 'You are offline — connect to the internet to continue.';
+      message = 'You are offline. Connect to the internet to continue.';
     } else {
       message = error.data.message;
 
@@ -27,7 +27,7 @@ const ErrorPage: React.FC = () => {
   } else if (error instanceof AppError) {
     message = error.message;
   } else if (isOffline && message === GENERIC_MESSAGE) {
-    message = 'You are offline — connect to the internet to continue.';
+    message = 'You are offline. Connect to the internet to continue.';
   }
 
   return (

@@ -78,7 +78,7 @@ const Login = () => {
 
   const googleSignin = async () => {
     if (isOffline) {
-      setError('You are offline — connect to continue.');
+      setError('You are offline. Connect to continue.');
       return;
     }
 
@@ -91,7 +91,7 @@ const Login = () => {
 
   const appleSignin = async () => {
     if (isOffline) {
-      setError('You are offline — connect to continue.');
+      setError('You are offline. Connect to continue.');
       return;
     }
 
@@ -125,7 +125,7 @@ const Login = () => {
     event.preventDefault();
 
     if (isOffline) {
-      setError('You are offline — connect to log in.');
+      setError('You are offline. Connect to log in.');
       return;
     }
 
@@ -151,7 +151,7 @@ const Login = () => {
     event.preventDefault();
 
     if (isOffline) {
-      setError('You are offline — connect to reset your password.');
+      setError('You are offline. Connect to reset your password.');
       return;
     }
 
