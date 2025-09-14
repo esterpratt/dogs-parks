@@ -1,6 +1,7 @@
 import { Geolocation } from '@capacitor/geolocation';
 import { isMobile } from './platform';
 import { DEFAULT_LOCATION } from './consts';
+import { runWhenActive } from './runWhenActive';
 
 export async function getUserLocation() {
   let position: { position: GeolocationPosition; error?: unknown } | null =
@@ -14,7 +15,7 @@ export async function getUserLocation() {
         permStatus.location === 'prompt' ||
         permStatus.location === 'prompt-with-rationale'
       ) {
-        await Geolocation.requestPermissions();
+        await runWhenActive(Geolocation.requestPermissions);
         permStatus = await Geolocation.checkPermissions();
       }
 
