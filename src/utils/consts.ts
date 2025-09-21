@@ -9,3 +9,8 @@ export const MAX_IMAGES = 5;
 export const USER_NOT_FOUND_ERROR = 'User not found';
 
 export const DEVICE_ID_KEY = 'device_id';
+
+export const APP_LANGUAGES = {
+  EN: 'en',
+  HE: 'he',
+} as const;

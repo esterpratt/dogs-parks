@@ -1,13 +1,17 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { AppLanguage } from '../types/language';
+import { APP_LANGUAGES } from '../utils/consts';
+import { toAppLanguage } from '../utils/languageStorage';
 
-const RTL_LANGS = new Set(['he', 'ar']);
+const RTL_LANGS = new Set<AppLanguage>([APP_LANGUAGES.HE]);
 
 function useI18nDirection(): void {
   const { i18n } = useTranslation();
 
   useEffect(() => {
-    const lang = i18n.language?.split('-')[0] || 'en';
+    const raw = i18n.language?.split('-')[0] ?? null;
+    const lang: AppLanguage = toAppLanguage(raw);
     const dir = RTL_LANGS.has(lang) ? 'rtl' : 'ltr';
     const html = document.documentElement;
 

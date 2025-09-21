@@ -1,20 +1,26 @@
-import { Capacitor } from '@capacitor/core';
 import { Preferences } from '@capacitor/preferences';
+import { isMobile } from './platform';
+import type { AppLanguage } from '../types/language';
+import { APP_LANGUAGES } from './consts';
 
-export type AppLanguage = 'en' | 'he';
+const STORAGE_KEY = 'app:preferred_language';
 
-const STORAGE_KEY = 'preferredLanguage';
-
-function isValidLang(value: string | null | undefined): value is AppLanguage {
-  return value === 'en' || value === 'he';
+export function toAppLanguage(value: string | null | undefined): AppLanguage {
+  if (value === APP_LANGUAGES.HE) {
+    return APP_LANGUAGES.HE;
+  }
+  return APP_LANGUAGES.EN;
 }
 
-// Read synchronously to avoid UI jump on initial render (works in web and native webview)
+function isValidLang(value: unknown): value is AppLanguage {
+  return value === APP_LANGUAGES.EN || value === APP_LANGUAGES.HE;
+}
+
 function getPreferredLanguageSync(): AppLanguage | null {
   try {
-    const val = localStorage.getItem(STORAGE_KEY);
-    if (isValidLang(val)) {
-      return val;
+    const preferredLanguage = window.localStorage.getItem(STORAGE_KEY);
+    if (isValidLang(preferredLanguage)) {
+      return preferredLanguage;
     }
   } catch (error) {
     console.error('languageStorage.getPreferredLanguageSync error', error);
@@ -22,10 +28,9 @@ function getPreferredLanguageSync(): AppLanguage | null {
   return null;
 }
 
-// Optional helper if you ever want to double-check Capacitor Preferences asynchronously
 async function getPreferredLanguageAsync(): Promise<AppLanguage | null> {
   try {
-    if (Capacitor.isNativePlatform()) {
+    if (isMobile()) {
       const { value } = await Preferences.get({ key: STORAGE_KEY });
       if (isValidLang(value)) {
         return value;
@@ -37,18 +42,23 @@ async function getPreferredLanguageAsync(): Promise<AppLanguage | null> {
   return getPreferredLanguageSync();
 }
 
-// Write to localStorage immediately; mirror to Preferences on native.
 async function setPreferredLanguage(lang: AppLanguage): Promise<void> {
+  if (!isValidLang(lang)) {
+    console.error('languageStorage.setPreferredLanguage invalid lang', lang);
+    return;
+  }
+
   try {
-    localStorage.setItem(STORAGE_KEY, lang);
+    window.localStorage.setItem(STORAGE_KEY, lang);
   } catch (error) {
     console.error(
       'languageStorage.setPreferredLanguage localStorage error',
       error
     );
   }
+
   try {
-    if (Capacitor.isNativePlatform()) {
+    if (isMobile()) {
       await Preferences.set({ key: STORAGE_KEY, value: lang });
     }
   } catch (error) {
@@ -60,8 +70,8 @@ async function setPreferredLanguage(lang: AppLanguage): Promise<void> {
 }
 
 export {
-  STORAGE_KEY,
   getPreferredLanguageSync,
   getPreferredLanguageAsync,
   setPreferredLanguage,
+  isValidLang,
 };
