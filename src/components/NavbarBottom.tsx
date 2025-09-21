@@ -1,4 +1,5 @@
 import { useContext, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import {
   Bell,
@@ -22,6 +23,7 @@ import styles from './NavbarBottom.module.scss';
 import { LanguageSwitcher } from './LanguageSwitcher';
 
 const NavbarBottom = () => {
+  const { t } = useTranslation();
   const { userId } = useContext(UserContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
@@ -131,7 +133,7 @@ const NavbarBottom = () => {
             }
           >
             <Map size={18} strokeWidth={2} />
-            <span>Explore</span>
+            <span>{t('nav.bottom.explore')}</span>
           </NavLink>
         </div>
         <div className={styles.menuItem}>
@@ -143,7 +145,7 @@ const NavbarBottom = () => {
             }
           >
             <UserRoundSearch size={18} strokeWidth={2} />
-            <span>Search friends</span>
+            <span>{t('nav.bottom.searchFriends')}</span>
           </NavLink>
         </div>
         {userId && (
@@ -156,7 +158,7 @@ const NavbarBottom = () => {
               }
             >
               <Plus size={18} strokeWidth={2} />
-              <span>Add new park</span>
+              <span>{t('nav.bottom.addPark')}</span>
             </NavLink>
           </div>
         )}
@@ -169,7 +171,7 @@ const NavbarBottom = () => {
             }
           >
             <Shield size={18} strokeWidth={2} />
-            <span>Privacy policy</span>
+            <span>{t('nav.bottom.privacy')}</span>
           </NavLink>
         </div>
         <div className={styles.menuItem}>
@@ -181,7 +183,7 @@ const NavbarBottom = () => {
             }
           >
             <Info size={18} strokeWidth={2} />
-            <span>About</span>
+            <span>{t('nav.bottom.about')}</span>
           </NavLink>
         </div>
         <div className={styles.menuItem}>
@@ -205,7 +207,7 @@ const NavbarBottom = () => {
               }
             >
               <LogIn size={18} strokeWidth={2} />
-              <span>Login</span>
+              <span>{t('nav.bottom.login')}</span>
             </NavLink>
           </div>
         )}

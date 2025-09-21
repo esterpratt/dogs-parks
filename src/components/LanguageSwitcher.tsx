@@ -18,7 +18,7 @@ const LanguageSwitcher = (props: LanguageSwitcherProps) => {
 
   const currentLang = i18n.language?.split('-')[0] || APP_LANGUAGES.EN;
   const isHebrew = currentLang === APP_LANGUAGES.HE;
-  const nextLang = isHebrew ? APP_LANGUAGES.HE : APP_LANGUAGES.EN;
+  const nextLang = isHebrew ? APP_LANGUAGES.EN : APP_LANGUAGES.HE;
   const label = isHebrew ? LABEL_ENGLISH : LABEL_HEBREW;
 
   const handleToggle = async (e: MouseEvent<HTMLButtonElement>) => {
