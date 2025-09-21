@@ -19,6 +19,7 @@ import { useClickOutside } from '../hooks/useClickOutside';
 import { NavbarLogoutButton } from './NavbarLogoutButton';
 import { useNotificationCount } from '../hooks/api/useNotificationCount';
 import styles from './NavbarBottom.module.scss';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 const NavbarBottom = () => {
   const { userId } = useContext(UserContext);
@@ -182,6 +183,13 @@ const NavbarBottom = () => {
             <Info size={18} strokeWidth={2} />
             <span>About</span>
           </NavLink>
+        </div>
+        <div className={styles.menuItem}>
+          {/* Language switcher: no navigation, reuse inner class for look */}
+          <LanguageSwitcher
+            className={styles.inner}
+            onClick={() => setIsMenuOpen(false)}
+          />
         </div>
         {userId ? (
           <div className={styles.menuItem}>

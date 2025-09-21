@@ -1,10 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
+import { I18nextProvider } from 'react-i18next';
+import { initI18n } from './i18n';
+import { getPreferredLanguageSync } from './utils/languageStorage';
+
+const savedLang = getPreferredLanguageSync() ?? 'en';
+const i18n = initI18n({ lng: savedLang });
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
+    <I18nextProvider i18n={i18n}>
+      <App />
+    </I18nextProvider>
   </React.StrictMode>
 );
 

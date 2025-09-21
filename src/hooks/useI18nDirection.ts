@@ -1,0 +1,23 @@
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+
+const RTL_LANGS = new Set(['he', 'ar']);
+
+function useI18nDirection(): void {
+  const { i18n } = useTranslation();
+
+  useEffect(() => {
+    const lang = i18n.language?.split('-')[0] || 'en';
+    const dir = RTL_LANGS.has(lang) ? 'rtl' : 'ltr';
+    const html = document.documentElement;
+
+    html.setAttribute('lang', lang);
+    html.setAttribute('dir', dir);
+
+    // optional: set a css class for easier styling
+    html.classList.toggle('rtl', dir === 'rtl');
+    html.classList.toggle('ltr', dir === 'ltr');
+  }, [i18n.language]);
+}
+
+export { useI18nDirection };
