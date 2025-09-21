@@ -2,5 +2,460 @@
   "language": {
     "english": "English",
     "hebrew": "Hebrew"
+  },
+  "userDogs": {
+    "titleMyPack": "My pack",
+    "titleUsersPack": "{{name}}'s pack",
+    "addDog": "Add dog",
+    "emptySignedIn1": "Your dog squad is looking pretty empty.",
+    "emptySignedIn2": "Time to recruit some furry friends!",
+    "otherEmpty": "{{name}}'s pack seems to be empty",
+    "cameraModalTitle": "Add your dog image"
+  },
+  "deleteAccount": {
+    "title": "Deleting Your Data on KlavHub",
+    "fullDeleteTitle": "To delete your full account and all associated data:",
+    "fullDeleteStep2": "Tap Settings -> Delete my profile",
+    "fullDeleteNote": "This will permanently remove your account and all related data",
+    "deleteDogTitle": "To delete your dog:",
+    "deleteDogBody": "When you delete your dog's profile, the data is removed from the app and inaccessible. It is not visible to other users and no longer retained for display or processing.",
+    "help": "If you need help, contact us at:",
+    "helpEmail": "esterpratt@gmail.com"
+  },
+  "privacyPolicy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last Updated: 1.7.25",
+    "intro": "Welcome to KlavHub. This privacy policy explains how we collect, use, and protect your information when you use our app, KlavHub (the \"App\"). By using the App, you agree to the collection and use of information in accordance with this policy.",
+    "dataWeCollect": {
+      "title": "Information We Collect",
+      "personalTitle": "Personal Information (when creating an account):",
+      "personalItems": [
+        "Name, email address.",
+        "If you sign in using Google, we may collect profile details as per their policies.",
+        "Any additional data you deliberately add to your profile, such as your dog's details and park interactions."
+      ],
+      "usageTitle": "Usage Data:",
+      "usageDesc": "Information about how you interact with the App (e.g., features used, session duration).",
+      "deviceTitle": "Device Information:",
+      "deviceDesc": "Device type, operating system, and unique device identifiers.",
+      "locationTitle": "Approximate or precise location (only with your permission).",
+      "photosTitle": "Photos and other content you upload to the App."
+    },
+    "usage": {
+      "title": "How We Use Your Information",
+      "items": [
+        "Allow other dog parents to search for friends and view their dogs' pages. If you prefer to keep your page private, you can change this anytime in the profile settings.",
+        "Provide and improve our services.",
+        "Personalize your experience.",
+        "Communicate updates and support.",
+        "Analyze usage to enhance performance.",
+        "Ensure security and prevent fraud."
+      ]
+    },
+    "sharing": {
+      "title": "Sharing Your Information",
+      "items": [
+        "Service Providers – For analytics, hosting, or customer support.",
+        "Legal Authorities – If required by law or to prevent fraud."
+      ]
+    },
+    "security": {
+      "title": "Data Retention and Security",
+      "desc": "We keep your data only as long as necessary for its intended purpose. We implement industry-standard security measures to protect your data. However, no online service is 100% secure, so use the App at your own risk."
+    },
+    "delete": {
+      "title": "Deleting Your Data",
+      "desc": "You can delete your account anytime from the profile settings. For detailed instructions on how to delete your data, click here."
+    },
+    "children": {
+      "title": "Children’s Privacy",
+      "desc": "Our App is not intended for children under 13 (or 16 in some regions). We do not knowingly collect personal data from minors."
+    },
+    "thirdParties": {
+      "title": "Third-Party Services",
+      "desc": "We may use third-party services that collect data (e.g., Google Analytics, Supabase). Each third party has its own privacy policy:",
+      "links": ["Google Analytics: https://policies.google.com/privacy"]
+    },
+    "changes": {
+      "title": "Changes to This Policy",
+      "desc": "We may update this policy periodically. We will notify you of significant changes by updating the \"Last Updated\" date."
+    }
+  },
+  "about": {
+    "welcomeTitle": "Welcome to KlavHub!",
+    "welcomeBody": "KlavHub is built for dog lovers looking to find the best nearby dog parks and connect with friends.",
+    "helpTitle": "Need help or have feedback?",
+    "helpBody": "If you're experiencing issues with the app or have any suggestions, feel free to reach out at:",
+    "privacyCta": "View our privacy policy here.",
+    "earlyBody": "This app is just getting started, and your help growing the community is deeply appreciated. You can support Klavhub by joining the community, sharing with friends, adding details about your local dog park, and contributing missing parks.",
+    "thankYou": "Thank you!",
+    "createdBy": "Created by:",
+    "createdByName": "Ester Pratt.",
+    "inspiredByTitle": "Inspired by:",
+    "inspiredByBody": "My special dog Nina, the dog who doesn't go to dog parks.",
+    "specialThanks": "Special thanks to: Kfir Arad, Rotem Koltz."
+  },
+  "users": {
+    "noResults": "No users were found",
+    "sniffFriends": "Sniff out some friends!",
+    "searchPlaceholder": "Search by user or dog name",
+    "preview": {
+      "dogsCount_one": "{{count}} dog",
+      "dogsCount_other": "{{count}} dogs",
+      "accept": "Accept",
+      "decline": "Decline",
+      "exit": "Exit",
+      "gated": {
+        "prefix": "To see user's page and make friends, you must",
+        "login": "log in!"
+      }
+    },
+    "friends": {
+      "status": {
+        "friends": "You are friends",
+        "waitingResponse": "Waiting friend's response"
+      },
+      "actions": {
+        "unfriend": "Unfriend",
+        "accept": "Accept",
+        "decline": "Decline",
+        "removeRequest": "Remove request",
+        "addFriend": "Add friend"
+      }
+    }
+  },
+  "favorites": {
+    "none": "No favorite parks yet.",
+    "sniffParksPrefix": "Sniff out nearby parks",
+    "sniffParksLink": "here!",
+    "title": "My favorite parks"
+  },
+  "error": {
+    "title": "Uh-oh! {{message}}",
+    "tryAgain": "Toss me more treats and try again!"
+  },
+  "share": {
+    "title": "Someone shared a park with you!",
+    "subtitle": "Wanna sniff it out in the app?",
+    "openInApp": "Open in app",
+    "downloadFrom": "Download KlavHub from {{store}}",
+    "continueHere": "Continue here"
+  },
+  "userInfo": {
+    "editDetails": "Edit details",
+    "logout": "Logout",
+    "deleteProfile": "Delete my profile",
+    "deleteModalTitle": "Hold your leash!",
+    "deleteModalBody1": "By clicking 'Delete', all your data and your dogs' data will be sent to a farm up north where it can run free forever.",
+    "deleteModalBody2": "Are you sure you want to say goodbye?",
+    "delete": "Delete",
+    "cancel": "Cancel"
+  },
+  "emailCallback": {
+    "title": "Good boy!",
+    "verified": "Your account is verified and you're officially part of the pack.",
+    "closeTab": "You can close this tab and fetch the app to continue your adventure.",
+    "openApp": "Open the app",
+    "continueHere": "Continue here"
+  },
+  "userReviews": {
+    "title": "My park reviews"
+  },
+  "profile": {
+    "myFriends": "My friends",
+    "users": "Users",
+    "pawsUp": "Paws up, {{name}}!",
+    "meetPrefix": "Meet"
+  },
+  "visitors": {
+    "friendsTitle": "Friends at the park right now",
+    "onlyFriendsDetails": "You can only see friends' details",
+    "sniffFriendsPrefix": "Sniff out some friends",
+    "sniffFriendsLink": "here!"
+  },
+  "updatePassword": {
+    "title": "Good boy!",
+    "updated": "Your password has been updated.",
+    "returnApp": "You can now return to the app and continue your adventure.",
+    "openApp": "Open the app",
+    "continueHere": "Continue here",
+    "pawsASec": "Paws a sec...",
+    "placeholderNewPassword": "Enter new password",
+    "buttonUpdate": "Update password"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "You have no notifications",
+    "actions": {
+      "markAllRead": "Mark all as read"
+    },
+    "list": {
+      "headerNew_one": "{{count}} new notification",
+      "headerNew_other": "{{count}} new notifications",
+      "headerNone": "No new notifications",
+      "headerEarlier": "Earlier"
+    },
+    "modal": {
+      "title": "Update your notifications",
+      "section": {
+        "general": "General",
+        "types": "Notification Types"
+      },
+      "mute": {
+        "title": "Mute notifications",
+        "description": "Turn off all notifications"
+      },
+      "types": {
+        "friendRequests": {
+          "title": "Friend requests",
+          "description": "Get notified when someone wants to be friends"
+        },
+        "friendApprovals": {
+          "title": "Friend approvals",
+          "description": "Get notified when your friend requests are accepted"
+        }
+      }
+    }
+  },
+  "parkReviews": {
+    "emptyTitle": "No barks about this park yet",
+    "firstReviewCta": "Be the first to leave a review!"
+  },
+  "userFriends": {
+    "noFriends": "No friends yet.",
+    "myFriends": "My friends",
+    "friendRequests": "Friend requests",
+    "pendingRequests": "Pending requests"
+  },
+  "newPark": {
+    "breadcrumbAllParks": "All parks",
+    "fillDetailsTitle": "Fill the park details to add it",
+    "placeholderName": "Park name",
+    "placeholderSize": "Size in square meters (if known)",
+    "placeholderCity": "City *",
+    "placeholderAddress": "Address *",
+    "addButton": "Add park",
+    "onlyMembers": "Only KlavHubers can add a new park.",
+    "loginLink": "Log In",
+    "packInvite": "to be part of the pack!",
+    "exit": "Exit",
+    "finishThankYou": "Thank you!",
+    "finishAddedSoon": "The park will be added shortly.",
+    "finishAddAnother": "Want to add another one?",
+    "finishAddButton": "Add park",
+    "finishBackToParks": "Back to parks"
+  },
+  "deletionConfirmation": {
+    "confirmation1": "Your data has been sent to a farm up north.",
+    "confirmation2": "Thanks for being part of the pack! The doggy door is always open — come back anytime!",
+    "goHome": "Go Home"
+  },
+  "login": {
+    "checkMail": "Check your mail for details",
+    "offline": "You are offline. Connect to continue.",
+    "pawsASec": "Paws a sec...",
+    "placeholderEmail": "Email *",
+    "placeholderPassword": "Password *",
+    "placeholderName": "Your name *",
+    "or": "Or",
+    "alreadyMember": "Already part of the pack?",
+    "login": "Log in",
+    "notMemberYet": "Not part of the pack yet?",
+    "signup": "Sign up",
+    "forgotPassword": "Forgot password?",
+    "resetPassword": "Reset password"
+  },
+  "common": {
+    "actions": {
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "login": "Log in",
+      "logout": "Logout",
+      "search": "Search",
+      "openSettings": "Open settings",
+      "maybeLater": "Maybe later",
+      "dontShowAgain": "Don't show again",
+      "view": "View",
+      "add": "Add",
+      "accept": "Accept",
+      "decline": "Decline",
+      "report": "Report"
+    },
+    "placeholders": {
+      "search": "Search",
+      "searchPark": "Search park",
+      "reviewTitle": "Review title",
+      "reviewContent": "Please elaborate..."
+    },
+    "status": {
+      "errorLoadingImage": "There was an error loading the image"
+    }
+  },
+  "nav": {
+    "bottom": {
+      "explore": "Explore",
+      "searchFriends": "Search friends",
+      "addPark": "Add new park",
+      "privacy": "Privacy policy",
+      "about": "About",
+      "login": "Login"
+    }
+  },
+  "parks": {
+    "preview": {
+      "view": "View park",
+      "seeOnMap": "See in map"
+    },
+    "search": {
+      "placeholder": "Search park"
+    },
+    "noResults": {
+      "titleSignedIn": "Can’t sniff out your park?",
+      "helpPrefix": "Help us by",
+      "helpLink": "adding the park details!",
+      "titleSignedOut": "Sorry, can’t sniff out your park",
+      "ctaSignedOutSuffix": "to add your park!"
+    },
+    "directions": {
+      "error": "Sorry, my sniff powers are temporarily offline"
+    },
+    "popup": {
+      "loading": "Sniffing the way...",
+      "leadTheWay": "Lead the way",
+      "view": "View park"
+    },
+    "favorite": {
+      "ribbon": "Favorite Park!"
+    },
+    "sections": {
+      "about": "About",
+      "busyHours": "Busy hours",
+      "liveStatus": "Live status"
+    },
+    "conditions": {
+      "stillThere": "Still there?"
+    },
+    "live": {
+      "report": "Report"
+    },
+    "edit": {
+      "choose": {
+        "update": "Update park details",
+        "report": "Report incorrect details"
+      }
+    }
+  },
+  "components": {
+    "carousel": {
+      "addPhoto": "Add photo",
+      "confirmTitle": "Hold your leash!",
+      "confirmBody": "Are you sure you want to send this pic to a farm up north where it can run free forever?"
+    },
+    "enlargeImage": {
+      "setPrimary": "Set as primary"
+    },
+    "gallery": {
+      "title": "Gallery"
+    }
+  },
+  "reviews": {
+    "modal": {
+      "title": "How did you dig the park?",
+      "placeholderTitle": "Review title",
+      "placeholderContent": "Please elaborate...",
+      "rankTitle": "Rate the park"
+    }
+  },
+
+  "location": {
+    "permissions": {
+      "message": "We couldn’t access your location. You can enable location permissions in your device settings.",
+      "dontShowAgain": "Don't show again"
+    },
+    "input": {
+      "clickMap": "Click the map or",
+      "useCurrent": "use current location"
+    }
+  },
+  "charts": {
+    "busyHours": {
+      "weekdays": "Weekdays",
+      "weekend": "Weekend"
+    }
+  },
+  "weather": {
+    "button": {
+      "ariaLabel": "Weather forecast"
+    }
+  },
+  "dogs": {
+    "delete": {
+      "confirm": "Are you sure you want to say goodbye to {{name}}"
+    },
+    "details": {
+      "title": "About",
+      "fields": {
+        "size": "Size",
+        "temperament": "Temperament",
+        "energy": "Energy",
+        "possessive": "Possessive"
+      },
+      "addYourDetails": "Add your dog's details",
+      "notAddedYet": "did not add their dog's details yet",
+      "description": "Description"
+    },
+    "prefs": {
+      "title": "Preferences",
+      "addYourPrefs": "Add your dog's preferences",
+      "notAddedYet": "did not add their dog's preferences yet"
+    },
+    "edit": {
+      "titleUpdate": "Update {{name}}’s details",
+      "titleAdd": "Add your dog's details",
+      "labels": {
+        "name": "Name *",
+        "breed": "Breed *",
+        "gender": "Gender *",
+        "birthday": "Birthday *",
+        "size": "Size",
+        "temperament": "Temperament",
+        "energy": "Energy",
+        "possessive": "Possessive",
+        "likes": "Likes (separate with commas)",
+        "dislikes": "Dislikes (separate with commas)",
+        "description": "Description"
+      }
+    }
+  },
+  "toasts": {
+    "friendRequest": {
+      "removed": "Friend request was removed",
+      "sent": "Friend request sent",
+      "fail": "Failed to send friend request"
+    },
+    "friendship": {
+      "nowFriends": "You are now friends!",
+      "changed": "Friendship was changed",
+      "noLongerFriends": "You are no longer friends"
+    },
+    "upload": {
+      "error": "Sorry, there was an error"
+    },
+    "generic": {
+      "error": "Sorry, there was an error"
+    },
+    "default": {
+      "goodBoy": "Good boy!",
+      "goodBoyAlt": "Good Boy!"
+    },
+    "checkout": {
+      "hadFun": "Hope you had a tail-wagging time!",
+      "askReview": "Hope you had a tail-wagging time! Leave a review if you can!"
+    }
+  },
+  "reports": {
+    "reviewModal": {
+      "title": "Why do you wish to report this review?"
+    }
   }
 }

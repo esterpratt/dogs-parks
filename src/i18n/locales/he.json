@@ -2,5 +2,460 @@
   "language": {
     "english": "אנגלית",
     "hebrew": "עברית"
+  },
+  "userDogs": {
+    "titleMyPack": "החבורה שלי",
+    "titleUsersPack": "החבורה של {{name}}",
+    "addDog": "הוספת כלב",
+    "emptySignedIn1": "החבורה שלך נראית די ריקה.",
+    "emptySignedIn2": "זה הזמן לצרף כמה חברים פרוותיים!",
+    "otherEmpty": "נראה שהחבורה של {{name}} ריקה.",
+    "cameraModalTitle": "הוסף/י תמונה לכלב שלך"
+  },
+  "deleteAccount": {
+    "title": "מחיקת הנתונים שלך ב‑KlavHub",
+    "fullDeleteTitle": "כדי למחוק את כל החשבון וכל הנתונים הקשורים:",
+    "fullDeleteStep2": "הקש/י על הגדרות -> מחיקת הפרופיל שלי",
+    "fullDeleteNote": "פעולה זו תמחק לצמיתות את חשבונך ואת כל הנתונים הקשורים",
+    "deleteDogTitle": "כדי למחוק את הכלב שלך:",
+    "deleteDogBody": "כאשר מוחקים את פרופיל הכלב, הנתונים מוסרים מהאפליקציה ואינם נגישים. הם אינם גלויים למשתמשים אחרים ואינם נשמרים עוד להצגה או לעיבוד.",
+    "help": "צריך עזרה? אפשר לפנות אלינו בכתובת:",
+    "helpEmail": "esterpratt@gmail.com"
+  },
+  "privacyPolicy": {
+    "title": "מדיניות פרטיות",
+    "lastUpdated": "עודכן לאחרונה: 1.7.25",
+    "intro": "ברוכים הבאים ל‑KlavHub. מדיניות פרטיות זו מסבירה כיצד אנו אוספים, משתמשים ומגנים על המידע שלך בעת השימוש באפליקציה שלנו, KlavHub (\"היישום\"). בשימושך ביישום, מתקבלת הסכמתך לאיסוף ולשימוש במידע בהתאם למדיניות זו.",
+    "dataWeCollect": {
+      "title": "המידע שאנו אוספים",
+      "personalTitle": "מידע אישי (בעת יצירת חשבון):",
+      "personalItems": [
+        "שם, כתובת דוא\"ל.",
+        "אם נכנסים באמצעות Google, ייתכן שייאספו פרטי פרופיל בהתאם למדיניות שלהם.",
+        "כל מידע נוסף שמוסיפים לפרופיל, כגון פרטי הכלב ואינטראקציות בפארקים."
+      ],
+      "usageTitle": "נתוני שימוש:",
+      "usageDesc": "מידע על אופן השימוש ביישום (למשל, תכונות בשימוש, משך סשן).",
+      "deviceTitle": "מידע על המכשיר:",
+      "deviceDesc": "סוג המכשיר, מערכת ההפעלה ומזהים ייחודיים.",
+      "locationTitle": "מיקום משוער או מדויק (רק באישור).",
+      "photosTitle": "תמונות ותכנים אחרים שמועלים ליישום."
+    },
+    "usage": {
+      "title": "כיצד אנו משתמשים במידע",
+      "items": [
+        "לאפשר להורים לכלבים לחפש חברים ולצפות בעמודי הכלבים שלהם. אם מעדיפים לשמור את העמוד פרטי, ניתן לשנות זאת בכל עת בהגדרות הפרופיל.",
+        "להעניק ולשפר את השירותים.",
+        "להתאים את החוויה אליך.",
+        "למסור עדכונים ותמיכה.",
+        "לנתח שימוש כדי לשפר ביצועים.",
+        "להבטיח אבטחה ולמנוע הונאה."
+      ]
+    },
+    "sharing": {
+      "title": "שיתוף המידע",
+      "items": [
+        "ספקי שירות – למטרות אנליטיקה, אירוח או תמיכה.",
+        "רשויות חוק – אם נדרש על פי דין או לצורך מניעת הונאה."
+      ]
+    },
+    "security": {
+      "title": "שמירת מידע ואבטחה",
+      "desc": "שומרים מידע רק כל עוד הוא נדרש למטרתו. מיושמים אמצעי אבטחה מקובלים להגנה על המידע. עם זאת, אף שירות מקוון אינו מאובטח ב‑100%, והשימוש הוא על אחריות המשתמש/ת."
+    },
+    "delete": {
+      "title": "מחיקת הנתונים",
+      "desc": "אפשר למחוק את החשבון בכל עת דרך הגדרות הפרופיל. להנחיות מפורטות למחיקת הנתונים, לחצו כאן."
+    },
+    "children": {
+      "title": "פרטיות ילדים",
+      "desc": "היישום אינו מיועד לילדים מתחת לגיל 13 (או 16 באזורים מסוימים). איננו אוספים ביודעין נתונים אישיים מקטינים."
+    },
+    "thirdParties": {
+      "title": "שירותים של צד שלישי",
+      "desc": "ייתכן שנעשה שימוש בשירותי צד שלישי האוספים נתונים (למשל, Google Analytics, Supabase). לכל צד שלישי מדיניות פרטיות משלו:",
+      "links": ["Google Analytics: https://policies.google.com/privacy"]
+    },
+    "changes": {
+      "title": "שינויים במדיניות",
+      "desc": "ייתכן שהמדיניות תעודכן מעת לעת. תימסר הודעה על שינויים מהותיים באמצעות עדכון תאריך \"עודכן לאחרונה\"."
+    }
+  },
+  "about": {
+    "welcomeTitle": "ברוכים הבאים ל‑KlavHub!",
+    "welcomeBody": "KlavHub נבנתה לחובבי כלבים שמחפשים את פארקי הכלבים הכי טובים לידם ולהתחבר לחברים.",
+    "helpTitle": "צריך עזרה או יש משוב?",
+    "helpBody": "אם יש בעיות באפליקציה או הצעות, נשמח לשמוע בכתובת:",
+    "privacyCta": "צפו במדיניות הפרטיות כאן.",
+    "earlyBody": "היישום רק בתחילת הדרך, וכל עזרה בהגדלת הקהילה תתקבל באהבה. אפשר לעזור על ידי הצטרפות, שיתוף עם חברים, הוספת פרטים על פארק הכלבים המקומי ותרומה של פארקים חסרים.",
+    "thankYou": "תודה!",
+    "createdBy": "נוצר על ידי:",
+    "createdByName": "Ester Pratt.",
+    "inspiredByTitle": "בהשראת:",
+    "inspiredByBody": "הכלבה המיוחדת נינה, הכלבה שלא הולכת לפארקי כלבים.",
+    "specialThanks": "תודות מיוחדות: Kfir Arad, Rotem Koltz."
+  },
+  "users": {
+    "noResults": "לא נמצאו משתמשים",
+    "sniffFriends": "למצוא כמה חברים!",
+    "searchPlaceholder": "חיפוש לפי שם משתמש או כלב",
+    "preview": {
+      "dogsCount_one": "כלב אחד",
+      "dogsCount_other": "{{count}} כלבים",
+      "accept": "אישור",
+      "decline": "דחייה",
+      "exit": "יציאה",
+      "gated": {
+        "prefix": "כדי לצפות בעמוד המשתמש ולהפוך לחברים, צריך",
+        "login": "להיכנס!"
+      }
+    },
+    "friends": {
+      "status": {
+        "friends": "אתם חברים",
+        "waitingResponse": "ממתין לאישור החברות"
+      },
+      "actions": {
+        "unfriend": "הסרת חברות",
+        "accept": "אישור",
+        "decline": "דחייה",
+        "removeRequest": "הסרת הבקשה",
+        "addFriend": "הוספת חבר/ה"
+      }
+    }
+  },
+  "favorites": {
+    "none": "אין עדיין פארקים מועדפים.",
+    "sniffParksPrefix": "לגלות פארקים קרובים",
+    "sniffParksLink": "כאן!",
+    "title": "הפארקים המועדפים עליי"
+  },
+  "error": {
+    "title": "אופס! {{message}}",
+    "tryAgain": "תנו לי עוד חטיפים וננסה שוב!"
+  },
+  "share": {
+    "title": "מישהו שיתף איתך פארק!",
+    "subtitle": "רוצים לבדוק אותו באפליקציה?",
+    "openInApp": "פתיחה באפליקציה",
+    "downloadFrom": "הורידו את KlavHub מ‑{{store}}",
+    "continueHere": "להמשיך כאן"
+  },
+  "userInfo": {
+    "editDetails": "עריכת פרטים",
+    "logout": "יציאה",
+    "deleteProfile": "מחיקת הפרופיל שלי",
+    "deleteModalTitle": "להחזיק חזק את הרצועה!",
+    "deleteModalBody1": "בלחיצה על 'מחק', כל הנתונים שלך ונתוני הכלבים שלך יישלחו לחווה בצפון, שם הם יוכלו לרוץ חופשי לנצח.",
+    "deleteModalBody2": "בטוחים שרוצים להיפרד?",
+    "delete": "מחיקה",
+    "cancel": "ביטול"
+  },
+  "emailCallback": {
+    "title": "כלב/ה טוב/ה!",
+    "verified": "החשבון אומת ואתם באופן רשמי חלק מהלה... מהחבורה!",
+    "closeTab": "אפשר לסגור את הלשונית ולחזור לאפליקציה להמשך ההרפתקה.",
+    "openApp": "פתיחת האפליקציה",
+    "continueHere": "להמשיך כאן"
+  },
+  "userReviews": {
+    "title": "הביקורות שלי על פארקים"
+  },
+  "profile": {
+    "myFriends": "החברים שלי",
+    "users": "משתמשים",
+    "pawsUp": "כפות למעלה, {{name}}!",
+    "meetPrefix": "מכירים את"
+  },
+  "visitors": {
+    "friendsTitle": "חברים בפארק ממש עכשיו",
+    "onlyFriendsDetails": "אפשר לראות רק פרטים של חברים",
+    "sniffFriendsPrefix": "למצוא חברים",
+    "sniffFriendsLink": "כאן!"
+  },
+  "updatePassword": {
+    "title": "כלב/ה טוב/ה!",
+    "updated": "הסיסמה עודכנה.",
+    "returnApp": "אפשר לחזור לאפליקציה ולהמשיך בהרפתקה.",
+    "openApp": "פתיחת האפליקציה",
+    "continueHere": "להמשיך כאן",
+    "pawsASec": "עוד רגע ממשיכים...",
+    "placeholderNewPassword": "הזנת סיסמה חדשה",
+    "buttonUpdate": "עדכון סיסמה"
+  },
+  "notifications": {
+    "title": "התראות",
+    "empty": "אין התראות",
+    "actions": {
+      "markAllRead": "סימון הכל כנקרא"
+    },
+    "list": {
+      "headerNew_one": "התראה חדשה אחת",
+      "headerNew_other": "{{count}} התראות חדשות",
+      "headerNone": "אין התראות חדשות",
+      "headerEarlier": "קודמות"
+    },
+    "modal": {
+      "title": "עדכון הגדרות ההתראות",
+      "section": {
+        "general": "כללי",
+        "types": "סוגי התראות"
+      },
+      "mute": {
+        "title": "השתקת התראות",
+        "description": "כיבוי כל ההתראות"
+      },
+      "types": {
+        "friendRequests": {
+          "title": "בקשות חברות",
+          "description": "קבלת התראה כשמישהו מבקש להיות חבר"
+        },
+        "friendApprovals": {
+          "title": "אישורי חברות",
+          "description": "קבלת התראה כשהבקשה שלך מאושרת"
+        }
+      }
+    }
+  },
+  "parkReviews": {
+    "emptyTitle": "עוד אין נביחות על הפארק הזה",
+    "firstReviewCta": "היו הראשונים להשאיר ביקורת!"
+  },
+  "userFriends": {
+    "noFriends": "אין עדיין חברים.",
+    "myFriends": "החברים שלי",
+    "friendRequests": "בקשות חברות",
+    "pendingRequests": "בקשות ממתינות"
+  },
+  "newPark": {
+    "breadcrumbAllParks": "כל הפארקים",
+    "fillDetailsTitle": "למלא את פרטי הפארק כדי להוסיף",
+    "placeholderName": "שם הפארק",
+    "placeholderSize": "גודל במ\"ר (אם ידוע)",
+    "placeholderCity": "עיר *",
+    "placeholderAddress": "כתובת *",
+    "addButton": "הוספת פארק",
+    "onlyMembers": "רק משתמשי KlavHub יכולים להוסיף פארק חדש.",
+    "loginLink": "כניסה",
+    "packInvite": "כדי להצטרף לחבורה!",
+    "exit": "יציאה",
+    "finishThankYou": "תודה!",
+    "finishAddedSoon": "הפארק יתווסף בקרוב.",
+    "finishAddAnother": "רוצים להוסיף עוד פארק?",
+    "finishAddButton": "הוספת פארק",
+    "finishBackToParks": "חזרה לפארקים"
+  },
+  "deletionConfirmation": {
+    "confirmation1": "הנתונים נשלחו לחווה בצפון.",
+    "confirmation2": "תודה שהייתם חלק מהחבורה! הדלת לכלב תמיד פתוחה — מוזמנים לחזור בכל עת!",
+    "goHome": "חזרה לדף הבית"
+  },
+  "login": {
+    "checkMail": "בדקו את הדוא\"ל לפרטים",
+    "offline": "אין חיבור לאינטרנט. התחברו כדי להמשיך.",
+    "pawsASec": "עוד רגע ממשיכים...",
+    "placeholderEmail": "דוא\"ל *",
+    "placeholderPassword": "סיסמה *",
+    "placeholderName": "השם שלך *",
+    "or": "או",
+    "alreadyMember": "כבר חלק מהחבורה?",
+    "login": "כניסה",
+    "notMemberYet": "עדיין לא חלק מהחבורה?",
+    "signup": "הצטרפות",
+    "forgotPassword": "שכחת סיסמה?",
+    "resetPassword": "איפוס סיסמה"
+  },
+  "common": {
+    "actions": {
+      "cancel": "ביטול",
+      "delete": "מחיקה",
+      "login": "כניסה",
+      "logout": "יציאה",
+      "search": "חיפוש",
+      "openSettings": "פתיחת ההגדרות",
+      "maybeLater": "אולי אחר כך",
+      "dontShowAgain": "לא להציג שוב",
+      "view": "צפייה",
+      "add": "הוספה",
+      "accept": "אישור",
+      "decline": "דחייה",
+      "report": "דיווח"
+    },
+    "placeholders": {
+      "search": "חיפוש",
+      "searchPark": "חיפוש פארק",
+      "reviewTitle": "כותרת ביקורת",
+      "reviewContent": "נשמח לפירוט..."
+    },
+    "status": {
+      "errorLoadingImage": "אירעה שגיאה בטעינת התמונה"
+    }
+  },
+  "nav": {
+    "bottom": {
+      "explore": "לחקור",
+      "searchFriends": "חיפוש חברים",
+      "addPark": "הוספת פארק חדש",
+      "privacy": "מדיניות פרטיות",
+      "about": "אודות",
+      "login": "כניסה"
+    }
+  },
+  "parks": {
+    "preview": {
+      "view": "צפייה בפארק",
+      "seeOnMap": "לראות במפה"
+    },
+    "search": {
+      "placeholder": "חיפוש פארק"
+    },
+    "noResults": {
+      "titleSignedIn": "לא מצליחים להריח את הפארק שלכם?",
+      "helpPrefix": "תעזרו לנו ב",
+      "helpLink": "הוספת פרטי הפארק!",
+      "titleSignedOut": "סליחה, לא מצליחים להריח את הפארק שלכם",
+      "ctaSignedOutSuffix": "כדי להוסיף את הפארק!"
+    },
+    "directions": {
+      "error": "אופס, כוחות ההרחה שלי לא זמינים כרגע"
+    },
+    "popup": {
+      "loading": "מרחרחים את הדרך...",
+      "leadTheWay": "להוביל את הדרך",
+      "view": "צפייה בפארק"
+    },
+    "favorite": {
+      "ribbon": "פארק מועדף!"
+    },
+    "sections": {
+      "about": "אודות",
+      "busyHours": "שעות העומס",
+      "liveStatus": "מצב חי"
+    },
+    "conditions": {
+      "stillThere": "עדיין שם?"
+    },
+    "live": {
+      "report": "דיווח"
+    },
+    "edit": {
+      "choose": {
+        "update": "עדכון פרטי הפארק",
+        "report": "דיווח על פרטים שגויים"
+      }
+    }
+  },
+  "components": {
+    "carousel": {
+      "addPhoto": "הוספת תמונה",
+      "confirmTitle": "להחזיק חזק את הרצועה!",
+      "confirmBody": "בטוחים שעכשיו התמונה הזו יוצאת לחווה בצפון לרוץ חופשי לנצח?"
+    },
+    "enlargeImage": {
+      "setPrimary": "קביעת תמונת שער"
+    },
+    "gallery": {
+      "title": "גלריה"
+    }
+  },
+  "reviews": {
+    "modal": {
+      "title": "איך היה בפארק?",
+      "placeholderTitle": "כותרת ביקורת",
+      "placeholderContent": "נשמח לשמוע עוד...",
+      "rankTitle": "דרגו את הפארק"
+    }
+  },
+
+  "location": {
+    "permissions": {
+      "message": "לא הצלחנו לגשת למיקום. ניתן להפעיל הרשאות מיקום בהגדרות המכשיר.",
+      "dontShowAgain": "לא להציג שוב"
+    },
+    "input": {
+      "clickMap": "לחצו על המפה או",
+      "useCurrent": "השתמשו במיקום הנוכחי"
+    }
+  },
+  "charts": {
+    "busyHours": {
+      "weekdays": "ימי חול",
+      "weekend": "סופ\"ש"
+    }
+  },
+  "weather": {
+    "button": {
+      "ariaLabel": "תחזית מזג אוויר"
+    }
+  },
+  "dogs": {
+    "delete": {
+      "confirm": "בטוחים שרוצים להיפרד מ{{name}}?"
+    },
+    "details": {
+      "title": "אודות",
+      "fields": {
+        "size": "גודל",
+        "temperament": "אופי",
+        "energy": "אנרגיה",
+        "possessive": "רכושנות"
+      },
+      "addYourDetails": "הוספת פרטי הכלב שלך",
+      "notAddedYet": "עוד לא הוסיפו פרטים על הכלב",
+      "description": "תיאור"
+    },
+    "prefs": {
+      "title": "העדפות",
+      "addYourPrefs": "הוספת העדפות הכלב שלך",
+      "notAddedYet": "עוד לא הוסיפו העדפות לכלב"
+    },
+    "edit": {
+      "titleUpdate": "עדכון הפרטים של {{name}}",
+      "titleAdd": "הוספת פרטי הכלב שלך",
+      "labels": {
+        "name": "שם *",
+        "breed": "גזע *",
+        "gender": "מין *",
+        "birthday": "תאריך לידה *",
+        "size": "גודל",
+        "temperament": "אופי",
+        "energy": "אנרגיה",
+        "possessive": "רכושנות",
+        "likes": "מה אוהב/ת (להפריד בפסיקים)",
+        "dislikes": "מה לא אוהב/ת (להפריד בפסיקים)",
+        "description": "תיאור"
+      }
+    }
+  },
+  "toasts": {
+    "friendRequest": {
+      "removed": "בקשת החברות הוסרה",
+      "sent": "בקשת חברות נשלחה",
+      "fail": "שליחת בקשת החברות נכשלה"
+    },
+    "friendship": {
+      "nowFriends": "אתם עכשיו חברים!",
+      "changed": "סטטוס החברות עודכן",
+      "noLongerFriends": "כבר לא חברים"
+    },
+    "upload": {
+      "error": "סליחה, קרתה שגיאה"
+    },
+    "generic": {
+      "error": "סליחה, קרתה שגיאה"
+    },
+    "default": {
+      "goodBoy": "כלב טוב!",
+      "goodBoyAlt": "כלב טוב!"
+    },
+    "checkout": {
+      "hadFun": "מקווים שהיה לכם זמן מזנב־מדהים!",
+      "askReview": "מקווים שהיה לכם זמן מזנב־מדהים! אם אפשר — נשמח לביקורת!"
+    }
+  },
+  "reports": {
+    "reviewModal": {
+      "title": "למה תרצו לדווח על הביקורת הזו?"
+    }
   }
 }
