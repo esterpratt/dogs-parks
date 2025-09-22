@@ -1,4 +1,5 @@
 import { ChangeEvent, ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import classnames from 'classnames';
 import { Button } from '../Button';
 import { Loader } from '../Loader';
@@ -41,6 +42,7 @@ const SearchListAsync = <T,>({
   children,
   renderSearchInput,
 }: SearchListAsyncProps<T>) => {
+  const { t } = useTranslation();
   return (
     <div className={classnames(styles.container, containerClassName)}>
       <div
@@ -64,7 +66,7 @@ const SearchListAsync = <T,>({
           onClick={onSearch}
           className={styles.button}
         >
-          Search
+          {t('common.actions.search')}
         </Button>
       </div>
       {showLoader && <Loader />}
