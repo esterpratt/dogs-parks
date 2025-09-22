@@ -117,8 +117,9 @@
     "sniffFriends": "Sniff out some friends!",
     "searchPlaceholder": "Search by user or dog name",
     "preview": {
-      "dogsCount_one": "{{count}} dog",
-      "dogsCount_other": "{{count}} dogs",
+      "dogsCount_one": "dog",
+      "dogsCount_female_one": "dog",
+      "dogsCount_other": "dogs",
       "accept": "Accept",
       "decline": "Decline",
       "exit": "Exit",

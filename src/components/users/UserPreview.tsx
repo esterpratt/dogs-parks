@@ -1,10 +1,11 @@
 import { useContext, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 import { useQuery } from '@tanstack/react-query';
 import { Check, X } from 'lucide-react';
 import { User } from '../../types/user';
-import { Dog } from '../../types/dog';
+import { Dog, GENDER } from '../../types/dog';
 import { fetchDogPrimaryImage } from '../../services/dogs';
 import { UserContext } from '../../context/UserContext';
 import { useUpdateFriendship } from '../../hooks/api/useUpdateFriendship';
@@ -28,6 +29,7 @@ const UserPreview: React.FC<UserPreviewProps> = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { userId } = useContext(UserContext);
+  const { t } = useTranslation();
 
   const { data: dogImage } = useQuery({
     queryKey: ['dogImage', user.dogs[0]?.id ?? null],
@@ -66,8 +68,18 @@ const UserPreview: React.FC<UserPreviewProps> = ({
               <>
                 <span className={styles.dogNames}>{dogNames}</span>
                 <span className={styles.userNameContainer}>
-                  <span className={styles.userName}>{user.name}'s</span>
-                  <span> dog{user.dogs.length > 1 ? 's' : ''}</span>
+                  <span className={styles.userName}>{user.name}</span>
+                  <span>
+                    {' '}
+                    {t('users.preview.dogsCount', {
+                      count: user.dogs.length,
+                      context:
+                        user.dogs.length === 1 &&
+                        user.dogs[0]?.gender === GENDER.FEMALE
+                          ? 'female'
+                          : undefined,
+                    })}
+                  </span>
                 </span>
               </>
             ) : (
@@ -84,7 +96,7 @@ const UserPreview: React.FC<UserPreviewProps> = ({
                   children: (
                     <>
                       <Check size={12} />
-                      <span>Accept</span>
+                      <span>{t('users.preview.accept')}</span>
                     </>
                   ),
                   onClick: () => onUpdateFriendship(FRIENDSHIP_STATUS.APPROVED),
@@ -93,7 +105,7 @@ const UserPreview: React.FC<UserPreviewProps> = ({
                   children: (
                     <>
                       <X size={12} />
-                      <span>Decline</span>
+                      <span>{t('users.preview.decline')}</span>
                     </>
                   ),
                   variant: 'secondary',
@@ -111,9 +123,9 @@ const UserPreview: React.FC<UserPreviewProps> = ({
         <div className={styles.container}>
           <div className={styles.message}>
             <>
-              To see user's page and make friends, you must{' '}
+              {t('users.preview.gated.prefix')}{' '}
               <Link to="../login?mode=login" className={styles.link}>
-                log in!
+                {t('users.preview.gated.login')}
               </Link>
             </>
           </div>
@@ -123,7 +135,7 @@ const UserPreview: React.FC<UserPreviewProps> = ({
             className={styles.modalButton}
           >
             <X size={16} />
-            <span>Exit</span>
+            <span>{t('users.preview.exit')}</span>
           </Button>
         </div>
       </TopModal>
