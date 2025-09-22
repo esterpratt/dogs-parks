@@ -383,7 +383,9 @@
     },
     "input": {
       "clickMap": "Click the map or",
-      "useCurrent": "use current location"
+      "useCurrent": "use current location",
+      "searchAddress": "Search address",
+      "errorAddressNotFound": "Oops! We couldn't sniff out that address"
     }
   },
   "charts": {

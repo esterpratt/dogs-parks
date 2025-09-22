@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 import classnames from 'classnames';
@@ -21,6 +22,7 @@ interface ParksListProps {
 }
 
 const ParksList: React.FC<ParksListProps> = ({ className }) => {
+  const { t } = useTranslation();
   const { user } = useContext(UserContext);
   const userLocation = useInitLocation();
 
@@ -50,16 +52,18 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
 
   const NoResultsLayout = user ? (
     <div className={styles.noResults}>
-      <span>Can’t sniff out your park?</span>
+      <span>{t('parks.noResults.titleSignedIn')}</span>
       <span>
-        Help us by <Link to="new">adding the park details!</Link>
+        {t('parks.noResults.helpPrefix')}{' '}
+        <Link to="new">{t('parks.noResults.helpLink')}</Link>
       </span>
     </div>
   ) : (
     <div className={styles.noResults}>
-      <span>Sorry, can’t sniff out your park</span>
+      <span>{t('parks.noResults.titleSignedOut')}</span>
       <span>
-        <Link to="/login?mode=login">Log In</Link> to add your park!
+        <Link to="/login?mode=login">{t('newPark.loginLink')}</Link>{' '}
+        {t('parks.noResults.ctaSignedOutSuffix')}
       </span>
     </div>
   );
@@ -72,7 +76,7 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
     <SearchList
       isInfinite
       items={sortedParks}
-      placeholder="Search park"
+      placeholder={t('parks.search.placeholder')}
       noResultsLayout={NoResultsLayout}
       itemKeyfn={(park) => park.id}
       filterFunc={searchParksFunc}

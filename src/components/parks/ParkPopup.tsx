@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import {
   Eye,
@@ -38,6 +39,7 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
   onClose,
   canGetDirections,
 }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { data: image } = useQuery({
     queryKey: ['parkImage', activePark?.id],
@@ -125,7 +127,7 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
         <div>
           {canGetDirections && (
             <div className={styles.directionsContainer}>
-              {isLoadingDirections && <div>Sniffing the way...</div>}
+              {isLoadingDirections && <div>{t('parks.popup.loading')}</div>}
               {!isLoadingDirections && directions && (
                 <div className={styles.directions}>
                   {directions.error ? (
@@ -168,12 +170,12 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
                 onClick={onClickGetDirections}
               >
                 <Navigation size={12} className={styles.icon} />
-                <span>Lead the way</span>
+                <span>{t('parks.popup.leadTheWay')}</span>
               </Button>
             )}
             <Button className={styles.button} onClick={onClickViewPark}>
               <Eye size={12} className={styles.icon} />
-              <span>View park</span>
+              <span>{t('parks.preview.view')}</span>
             </Button>
           </div>
         </div>
