@@ -150,7 +150,10 @@
   },
   "error": {
     "title": "Uh-oh! {{message}}",
-    "tryAgain": "Toss me more treats and try again!"
+    "tryAgain": "Toss me more treats and try again!",
+    "generic": "There was a problem",
+    "offline": "You are offline. Connect to the internet to continue.",
+    "notFound": "Could not find page"
   },
   "share": {
     "title": "Someone shared a park with you!",
