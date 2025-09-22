@@ -15,9 +15,16 @@
   "deleteAccount": {
     "title": "Deleting Your Data on KlavHub",
     "fullDeleteTitle": "To delete your full account and all associated data:",
+    "fullDeleteStep1": "Go to your profile",
     "fullDeleteStep2": "Tap Settings -> Delete my profile",
+    "fullDeleteStep3": "Tap Delete",
     "fullDeleteNote": "This will permanently remove your account and all related data",
     "deleteDogTitle": "To delete your dog:",
+    "deleteDogStep1": "Go to your profile",
+    "deleteDogStep2": "Tap on your dog's profile",
+    "deleteDogStep3": "Tap the edit icon",
+    "deleteDogStep4": "Scroll to and tap 'Say Goodbye...'",
+    "deleteDogStep5": "Tap Delete",
     "deleteDogBody": "When you delete your dog's profile, the data is removed from the app and inaccessible. It is not visible to other users and no longer retained for display or processing.",
     "help": "If you need help, contact us at:",
     "helpEmail": "esterpratt@gmail.com"
@@ -25,9 +32,11 @@
   "privacyPolicy": {
     "title": "Privacy Policy",
     "lastUpdated": "Last Updated: 1.7.25",
+    "introTitle": "Introduction",
     "intro": "Welcome to KlavHub. This privacy policy explains how we collect, use, and protect your information when you use our app, KlavHub (the \"App\"). By using the App, you agree to the collection and use of information in accordance with this policy.",
     "dataWeCollect": {
       "title": "Information We Collect",
+      "lead": "We may collect the following types of information:",
       "personalTitle": "Personal Information (when creating an account):",
       "personalItems": [
         "Name, email address.",
@@ -43,6 +52,7 @@
     },
     "usage": {
       "title": "How We Use Your Information",
+      "lead": "We use your data to:",
       "items": [
         "Allow other dog parents to search for friends and view their dogs' pages. If you prefer to keep your page private, you can change this anytime in the profile settings.",
         "Provide and improve our services.",
@@ -54,6 +64,7 @@
     },
     "sharing": {
       "title": "Sharing Your Information",
+      "lead": "We do not sell your personal information. However, we may share data with:",
       "items": [
         "Service Providers – For analytics, hosting, or customer support.",
         "Legal Authorities – If required by law or to prevent fraud."
@@ -65,8 +76,10 @@
     },
     "delete": {
       "title": "Deleting Your Data",
-      "desc": "You can delete your account anytime from the profile settings. For detailed instructions on how to delete your data, click here."
+      "desc": "You can delete your account anytime from the profile settings. For detailed instructions on how to delete your data",
+      "linkText": "click here"
     },
+    "privateOption": "If you prefer to keep your page private, you can change this anytime in the profile settings.",
     "children": {
       "title": "Children’s Privacy",
       "desc": "Our App is not intended for children under 13 (or 16 in some regions). We do not knowingly collect personal data from minors."
@@ -79,6 +92,10 @@
     "changes": {
       "title": "Changes to This Policy",
       "desc": "We may update this policy periodically. We will notify you of significant changes by updating the \"Last Updated\" date."
+    },
+    "contact": {
+      "title": "Contact Us",
+      "desc": "If you have questions about this Privacy Policy, contact us at:"
     }
   },
   "about": {
