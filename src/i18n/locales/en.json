@@ -181,7 +181,9 @@
     "continueHere": "Continue here",
     "pawsASec": "Paws a sec...",
     "placeholderNewPassword": "Enter new password",
-    "buttonUpdate": "Update password"
+    "buttonUpdate": "Update password",
+    "invalidLink": "This reset link is invalid or expired. Please request a new one.",
+    "pleaseEnterNewPassword": "Please enter a new password"
   },
   "notifications": {
     "title": "Notifications",

@@ -7,9 +7,11 @@ import { Input } from '../components/inputs/Input';
 import styles from './UpdatePassword.module.scss';
 import { supabase } from '../services/supabase-client';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { UserContext } from '../context/UserContext';
 
 const UpdatePassword = () => {
+  const { t } = useTranslation();
   const { user } = useContext(UserContext);
   const [error, setError] = useState('');
   const [isUpdated, setIsUpdated] = useState(false);
@@ -35,12 +37,10 @@ const UpdatePassword = () => {
             'Failed to restore session from password reset link',
             err
           );
-          setError(
-            'This reset link is invalid or expired. Please request a new one.'
-          );
+          setError(t('updatePassword.invalidLink'));
         });
     }
-  }, []);
+  }, [t]);
 
   const { mutate: resetPassword, isPending: isLoadingResetPassword } =
     useMutation({
@@ -60,7 +60,7 @@ const UpdatePassword = () => {
     const password = formData.get('password') as string;
 
     if (!password) {
-      setError('Please enter a new password');
+      setError(t('updatePassword.pleaseEnterNewPassword'));
     } else {
       resetPassword(password);
     }
@@ -75,18 +75,18 @@ const UpdatePassword = () => {
 
     return (
       <div className={styles.successContainer}>
-        <h1>Good boy!</h1>
-        <p>Your password has been updated.</p>
-        <p>You can now return to the app and continue your adventure.</p>
+        <h1>{t('updatePassword.title')}</h1>
+        <p>{t('updatePassword.updated')}</p>
+        <p>{t('updatePassword.returnApp')}</p>
         <div className={styles.buttonsContainer}>
           <Button>
             <a href={deepLink} className={styles.appLink}>
-              Open the app
+              {t('updatePassword.openApp')}
             </a>
           </Button>
           <Button variant="secondary">
             <Link to={`/profile/${user?.id}`} className={styles.link}>
-              Continue here
+              {t('updatePassword.continueHere')}
             </Link>
           </Button>
         </div>
@@ -106,7 +106,7 @@ const UpdatePassword = () => {
             isLoadingResetPassword && styles.show
           )}
         >
-          Paws a sec...
+          {t('updatePassword.pawsASec')}
         </span>
       </div>
       <form onSubmit={handleSubmit} className={styles.inputsContainer}>
@@ -114,11 +114,11 @@ const UpdatePassword = () => {
           ref={passwordRef}
           onChange={() => setError('')}
           name="password"
-          placeholder="Enter new password"
+          placeholder={t('updatePassword.placeholderNewPassword')}
           type="password"
         />
         <Button type="submit" className={styles.button}>
-          Update password
+          {t('updatePassword.buttonUpdate')}
         </Button>
       </form>
     </div>

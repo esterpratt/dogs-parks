@@ -181,7 +181,9 @@
     "continueHere": "להמשיך כאן",
     "pawsASec": "עוד רגע ממשיכים...",
     "placeholderNewPassword": "הזנת סיסמה חדשה",
-    "buttonUpdate": "עדכון סיסמה"
+    "buttonUpdate": "עדכון סיסמה",
+    "invalidLink": "הקישור הזה אינו תקין או שפג תוקפו. אנא בקשו קישור חדש.",
+    "pleaseEnterNewPassword": "אנא הזינו סיסמה חדשה"
   },
   "notifications": {
     "title": "התראות",
