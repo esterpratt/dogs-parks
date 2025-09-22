@@ -2,25 +2,6 @@ import { Button } from '../components/Button';
 import { useTranslation } from 'react-i18next';
 import styles from './DeleteAcount.module.scss';
 
-// You can delete your full account and all associated data from inside the app:
-
-// Go to your Profile
-
-// Tap Settings > Delete Account
-
-// This will permanently remove your account and all related data.
-
-// Delete specific data (e.g., your dog)
-// If you'd prefer to remove only part of your data, such as your dog’s profile:
-
-// Open your Profile
-
-// Tap on your dog’s profile
-
-// Tap Delete Dog
-
-// This removes the dog’s information without deleting your entire account.
-
 const DeleteAcount = () => {
   const { t } = useTranslation();
   return (
