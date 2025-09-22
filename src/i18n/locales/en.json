@@ -254,6 +254,7 @@
     "placeholderSize": "Size in square meters (if known)",
     "placeholderCity": "City *",
     "placeholderAddress": "Address *",
+    "labelLocation": "Park location *",
     "addButton": "Add park",
     "onlyMembers": "Only KlavHubers can add a new park.",
     "loginLink": "Log In",

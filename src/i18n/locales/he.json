@@ -254,6 +254,7 @@
     "placeholderSize": "גודל במ\"ר (אם ידוע)",
     "placeholderCity": "עיר *",
     "placeholderAddress": "כתובת *",
+    "labelLocation": "מיקום הפארק *",
     "addButton": "הוספת פארק",
     "onlyMembers": "רק משתמשי כלבהאב יכולים להוסיף פארק חדש.",
     "loginLink": "כניסה",
