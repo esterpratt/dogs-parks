@@ -157,7 +157,11 @@
     "subtitle": "Wanna sniff it out in the app?",
     "openInApp": "Open in app",
     "downloadFrom": "Download KlavHub from {{store}}",
-    "continueHere": "Continue here"
+    "continueHere": "Continue here",
+    "store": {
+      "appStore": "the App Store",
+      "googlePlay": "Google Play"
+    }
   },
   "userInfo": {
     "editDetails": "Edit details",

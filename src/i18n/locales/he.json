@@ -157,7 +157,11 @@
     "subtitle": "רוצים לבדוק אותו באפליקציה?",
     "openInApp": "פתיחה באפליקציה",
     "downloadFrom": "הורידו את כלבהאב מ‑{{store}}",
-    "continueHere": "להמשיך כאן"
+    "continueHere": "להמשיך כאן",
+    "store": {
+      "appStore": "ה-App Store",
+      "googlePlay": "Google Play"
+    }
   },
   "userInfo": {
     "editDetails": "עריכת פרטים",

@@ -2,11 +2,15 @@ import { useParams } from 'react-router-dom';
 import styles from './ShareRedirect.module.scss';
 import { isIosFromBrowser } from '../utils/platform';
 import { Button } from '../components/Button';
+import { useTranslation } from 'react-i18next';
 
 const ShareRedirect = () => {
+  const { t } = useTranslation();
   const { parkId } = useParams();
   const siteLink = `https://klavhub.com/parks/${parkId}`;
-  const downloadLabel = isIosFromBrowser() ? 'the App Store' : 'Google Play';
+  const downloadLabel = isIosFromBrowser()
+    ? t('share.store.appStore')
+    : t('share.store.googlePlay');
 
   const handleOpenApp = () => {
     window.location.href = `com.klavhub://parks/${parkId}`;
@@ -25,19 +29,19 @@ const ShareRedirect = () => {
 
   return (
     <div className={styles.container}>
-      <h1>Someone shared a park with you!</h1>
-      <p>Wanna sniff it out in the app?</p>
+      <h1>{t('share.title')}</h1>
+      <p>{t('share.subtitle')}</p>
 
       <div className={styles.buttonsContainer}>
         <Button onClick={handleOpenApp} className={styles.button}>
-          Open in app
+          {t('share.openInApp')}
         </Button>
         <Button
           variant="secondary"
           onClick={handleOpenStore}
           className={styles.button}
         >
-          Download KlavHub from {downloadLabel}
+          {t('share.downloadFrom', { store: downloadLabel })}
         </Button>
         <Button
           variant="secondary"
@@ -45,7 +49,7 @@ const ShareRedirect = () => {
           onClick={handleOpenBrowser}
           className={styles.button}
         >
-          Continue here
+          {t('share.continueHere')}
         </Button>
       </div>
     </div>
