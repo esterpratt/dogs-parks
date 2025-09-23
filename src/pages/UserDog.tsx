@@ -26,6 +26,7 @@ import { CameraModal } from '../components/camera/CameraModal';
 import styles from './UserDog.module.scss';
 import { capitalizeText } from '../utils/text';
 import { useUploadImage } from '../hooks/api/useUploadImage';
+import { useTranslation } from 'react-i18next';
 
 const UserDog = () => {
   const { dogId } = useParams();
@@ -36,6 +37,7 @@ const UserDog = () => {
   const [isEnlargedImageModalOpen, setIsEnlargeImageModalOpen] =
     useState(false);
   const { isSignedInUser, userName } = state;
+  const { t } = useTranslation();
 
   const { data: dog, isLoading: isLoadingDog } = useQuery({
     queryKey: ['dogs', dogId],
@@ -152,8 +154,11 @@ const UserDog = () => {
                       <Cake color={styles.green} size={14} />
                       <span>
                         {age.diff <= 0
-                          ? 'Just born'
-                          : `${age.diff} ${age.unit} old`}
+                          ? t('dogs.age.justBorn')
+                          : t('dogs.age.old', {
+                              diff: age.diff,
+                              unit: age.unit,
+                            })}
                       </span>
                     </span>
                   )}

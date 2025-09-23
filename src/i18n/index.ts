@@ -2,6 +2,8 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import en from './locales/en.json';
 import he from './locales/he.json';
+import dayjs from 'dayjs';
+import 'dayjs/locale/he';
 
 const resources = {
   en: { translation: en },
@@ -34,11 +36,16 @@ function initI18n(params: InitI18nParams = {}): typeof i18n {
       .catch((error) => {
         console.error('i18n init error', error);
       });
+
+    // Sync Day.js locale with i18n on init
+    dayjs.locale(lng ?? 'en');
   } else {
     if (lng) {
       i18n.changeLanguage(lng).catch((error) => {
         console.error('i18n changeLanguage error', error);
       });
+      // Sync Day.js locale with i18n on language change
+      dayjs.locale(lng);
     }
   }
 

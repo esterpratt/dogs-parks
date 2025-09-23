@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import classnames from 'classnames';
 import { Mars, Venus } from 'lucide-react';
 import { Dog, GENDER } from '../../types/dog';
@@ -15,6 +16,7 @@ interface DogPreviewProps {
 const DogPreview: React.FC<DogPreviewProps> = ({ dog, image }) => {
   const { name, birthday, gender } = dog;
   const age = !birthday ? null : getAge(birthday);
+  const { t } = useTranslation();
 
   return (
     <Card
@@ -48,12 +50,17 @@ const DogPreview: React.FC<DogPreviewProps> = ({ dog, image }) => {
           {age !== null && (
             <div className={styles.age}>
               {age.diff === 0
-                ? 'Just born'
+                ? t('dogs.age.justBorn')
                 : age.diff > 0
-                ? `${age.diff} ${age.unit} old`
-                : `${age.diff} ${age.unit} old. No wonder ${
-                    gender === GENDER.FEMALE ? 'she' : 'he'
-                  } looks so good!`}
+                  ? t('dogs.age.old', { diff: age.diff, unit: age.unit })
+                  : t('dogs.age.oldCompliment', {
+                      diff: age.diff,
+                      unit: age.unit,
+                      pronoun:
+                        gender === GENDER.FEMALE
+                          ? t('dogs.age.she')
+                          : t('dogs.age.he'),
+                    })}
             </div>
           )}
         </div>
