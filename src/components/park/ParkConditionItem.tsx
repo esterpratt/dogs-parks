@@ -12,6 +12,7 @@ import { PARK_CONDITIONS } from '../../utils/parkConditions';
 import { useNotification } from '../../context/NotificationContext';
 import styles from './ParkConditionItem.module.scss';
 import { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import { UserContext } from '../../context/UserContext';
 import { capitalizeText } from '../../utils/text';
 
@@ -24,6 +25,7 @@ const ParkConditionItem = (props: ParkConditionItemProps) => {
   const { mutate, isPending } = useAddParkCondition();
   const { notify } = useNotification();
   const { userId } = useContext(UserContext);
+  const { t } = useTranslation();
 
   const conditionId = conditionObservation.condition;
 
@@ -36,10 +38,10 @@ const ParkConditionItem = (props: ParkConditionItemProps) => {
       },
       {
         onSuccess: () => {
-          notify('Thanks for confirming!');
+          notify(t('toasts.live.confirmThanks'));
         },
         onError: () => {
-          notify('Your confirmation failed. Please try again later.', true);
+          notify(t('toasts.live.confirmRejected'), true);
         },
       }
     );
@@ -54,10 +56,10 @@ const ParkConditionItem = (props: ParkConditionItemProps) => {
       },
       {
         onSuccess: () => {
-          notify('Thanks for updating!');
+          notify(t('toasts.live.updateThanks'));
         },
         onError: () => {
-          notify('Your update failed. Please try again later.', true);
+          notify(t('toasts.live.updateRejected'), true);
         },
       }
     );
@@ -96,7 +98,9 @@ const ParkConditionItem = (props: ParkConditionItemProps) => {
         </div>
         {!!userId && (
           <div className={styles.stillTherePrompt}>
-            <span className={styles.stillThereLabel}>Still there?</span>
+            <span className={styles.stillThereLabel}>
+              {t('parks.conditions.stillThere')}
+            </span>
             <div className={styles.stillThereButtons}>
               <Button
                 className={styles.button}

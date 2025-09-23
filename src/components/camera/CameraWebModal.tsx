@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { FormEvent, useState } from 'react';
 import { Camera } from './Camera';
 import { ChooseCamera } from './ChooseCamera';
@@ -23,6 +24,7 @@ const CameraWebModal: React.FC<CameraWebModalProps> = ({
   error,
   onCloseModal,
 }) => {
+  const { t } = useTranslation();
   const [isCameraOpen, setIsCameraOpen] = useState(false);
 
   const onSaveImg = async (img: string | File) => {
@@ -48,7 +50,11 @@ const CameraWebModal: React.FC<CameraWebModalProps> = ({
         <TakePhotoButton onOpenCamera={() => setIsCameraOpen(true)} />
         <CancelButton
           onCancel={onCloseModal}
-          text={variant === 'bottom' ? 'Cancel' : 'Later'}
+          text={
+            variant === 'bottom'
+              ? t('common.actions.cancel')
+              : t('common.actions.maybeLater')
+          }
         />
       </ChooseCamera>
       <AppearModal open={isCameraOpen} onClose={() => setIsCameraOpen(false)}>

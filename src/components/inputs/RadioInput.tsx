@@ -8,6 +8,7 @@ interface RadioInputsProps {
   id: string;
   selectedValue: string;
   onOptionChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  label?: string;
 }
 
 const RadioInput: React.FC<RadioInputsProps> = ({
@@ -16,6 +17,7 @@ const RadioInput: React.FC<RadioInputsProps> = ({
   id,
   selectedValue,
   onOptionChange,
+  label,
 }) => {
   return (
     <div
@@ -32,7 +34,7 @@ const RadioInput: React.FC<RadioInputsProps> = ({
         checked={selectedValue === value}
         onChange={onOptionChange}
       />
-      <label htmlFor={id}>{value}</label>
+      <label htmlFor={id}>{label ?? value}</label>
     </div>
   );
 };

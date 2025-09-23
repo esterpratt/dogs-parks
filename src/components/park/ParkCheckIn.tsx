@@ -13,12 +13,14 @@ import styles from './ParkCheckIn.module.scss';
 import { useNotification } from '../../context/NotificationContext';
 import { capitalizeText } from '../../utils/text';
 import CheckoutFromAnotherParkModal from './CheckoutFromAnotherParkModal';
+import { useTranslation } from 'react-i18next';
 
 const ParkCheckIn: React.FC<{
   parkId: string;
   userId: string | null;
   userName?: string;
 }> = ({ parkId, userId, userName }) => {
+  const { t } = useTranslation();
   const [checkIn, setCheckIn] = useLocalStorage('checkin');
   const [openDogsCountModal, setOpenDogsCountModal] = useState(false);
   const [openReviewModal, setOpenReviewModal] = useState(false);
@@ -27,9 +29,9 @@ const ParkCheckIn: React.FC<{
   const { addReview } = useAddReview(parkId, userId);
   const { notify } = useNotification();
 
-  const title = `Enjoy your stay${
-    userName ? ', ' + capitalizeText(userName) + '!' : '!'
-  }`;
+  const title = userName
+    ? t('parks.checkin.titleWithName', { name: capitalizeText(userName) })
+    : t('parks.checkin.title');
 
   const { mutateAsync: parkCheckIn } = useMutation({
     mutationFn: async () => {
@@ -71,7 +73,7 @@ const ParkCheckIn: React.FC<{
     mutationFn: () => checkout(checkIn.id),
     onMutate: () => {
       if (userReviews?.find((review) => review.park_id === parkId)) {
-        notify('Hope you had a tail-wagging time!');
+        notify(t('toasts.checkout.hadFun'));
       } else {
         setOpenReviewModal(true);
       }
@@ -120,7 +122,13 @@ const ParkCheckIn: React.FC<{
         IconCmp={!canCheckIn ? MapPinXInside : MapPinCheckInside}
         iconColor={!canCheckIn ? styles.orange : styles.green}
         onClick={onClickCheckIn}
-        textCmp={<span>{!canCheckIn ? 'Checkout' : 'Checkin'}</span>}
+        textCmp={
+          <span>
+            {!canCheckIn
+              ? t('common.actions.checkout')
+              : t('common.actions.checkin')}
+          </span>
+        }
       />
       <DogsCountModal
         parkId={parkId}
@@ -129,7 +137,7 @@ const ParkCheckIn: React.FC<{
         onClose={() => setOpenDogsCountModal(false)}
       />
       <ReviewModal
-        title={'Hope you had a tail-wagging time! Leave a review if you can!'}
+        title={t('toasts.checkout.askReview')}
         isOpen={openReviewModal}
         closeModal={() => setOpenReviewModal(false)}
         onSubmitReview={onSubmitReview}

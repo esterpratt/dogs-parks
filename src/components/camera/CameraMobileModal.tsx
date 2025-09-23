@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import {
   Camera as CapacitorCamera,
   CameraResultType,
@@ -68,6 +69,7 @@ const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
   error,
   onCloseModal,
 }) => {
+  const { t } = useTranslation();
   const onClickMobileUploadFile = async () => {
     try {
       onCameraError('');
@@ -154,7 +156,11 @@ const CameraMobileModal: React.FC<CameraMobileModalProps> = ({
       <TakePhotoButton onOpenCamera={() => captureImgMobile()} />
       <CancelButton
         onCancel={onCloseModal}
-        text={variant === 'bottom' ? 'Cancel' : 'Later'}
+        text={
+          variant === 'bottom'
+            ? t('common.actions.cancel')
+            : t('common.actions.maybeLater')
+        }
       />
     </ChooseCamera>
   );

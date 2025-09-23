@@ -1,4 +1,5 @@
 import { ChangeEvent, useContext, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 import { TextArea } from '../inputs/TextArea';
 import { UserContext } from '../../context/UserContext';
@@ -19,6 +20,7 @@ export const ReportParkModal: React.FC<ReportParkModalProps> = ({
   onClose,
   parkId,
 }) => {
+  const { t } = useTranslation();
   const { userId } = useContext(UserContext);
   const orientation = useOrientationContext((state) => state.orientation);
   const { notify } = useNotification();
@@ -42,7 +44,7 @@ export const ReportParkModal: React.FC<ReportParkModalProps> = ({
 
   return (
     <FormModal
-      saveText="Report"
+      saveText={t('common.actions.report')}
       open={open}
       onClose={onClose}
       onSave={onSubmitReport}
@@ -52,7 +54,7 @@ export const ReportParkModal: React.FC<ReportParkModalProps> = ({
       <TextArea
         rows={orientation === 'landscape' ? 3 : 12}
         name="report"
-        label="Tell us what’s wrong here."
+        label={t('parks.report.modal.textLabel')}
         value={text}
         onChange={onChangeText}
         maxLength={400}

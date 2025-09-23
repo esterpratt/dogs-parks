@@ -1,4 +1,5 @@
 import { Camera } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { CameraButton } from './CameraButton';
 
 interface TakePhotoButtonProps {
@@ -7,9 +8,14 @@ interface TakePhotoButtonProps {
 
 const TakePhotoButton = (props: TakePhotoButtonProps) => {
   const { onOpenCamera } = props;
+  const { t } = useTranslation();
 
   return (
-    <CameraButton onClick={onOpenCamera} text="Take a photo" Icon={Camera} />
+    <CameraButton
+      onClick={onOpenCamera}
+      text={t('components.camera.takePhoto')}
+      Icon={Camera}
+    />
   );
 };
 

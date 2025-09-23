@@ -10,10 +10,12 @@ import styles from './ParkVisitors.module.scss';
 import { Park } from '../types/park';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import { Loader } from '../components/Loader';
+import { useTranslation } from 'react-i18next';
 
 const ONE_MINUTE = 60 * 1000;
 
 const ParkVisitors: React.FC = () => {
+  const { t } = useTranslation();
   const { userId } = useContext(UserContext);
   const { id: parkId } = useOutletContext() as Park;
 
@@ -49,7 +51,7 @@ const ParkVisitors: React.FC = () => {
       {!!friendsCount && !isLoading && (
         <div className={styles.friendsContainer}>
           <span className={styles.friendsTitle}>
-            Friends at the park right now
+            {t('visitors.friendsTitle')}
           </span>
           {friendsInParkWithDogs?.map((user) => (
             <UserPreview
@@ -64,22 +66,25 @@ const ParkVisitors: React.FC = () => {
         <div className={styles.othersContainer}>
           <div className={styles.othersTitle}>
             {userIsOnlyVisitor ? (
-              'You are the only KlavHuber at the park right now'
+              t('parks.visitors.onlyYou')
             ) : othersWithoutUserCount ? (
               <>
-                {othersWithoutUserCount}
-                {(!!friendsCount || userIsVisitor) && ' more'} KlavHuber
-                {othersWithoutUserCount > 1 && 's'} at the park right now
+                {t(
+                  !!friendsCount || userIsVisitor
+                    ? 'parks.visitors.countWithMore'
+                    : 'parks.visitors.count',
+                  { count: othersWithoutUserCount }
+                )}
               </>
             ) : null}
           </div>
           {!friendsCount && !userIsOnlyVisitor && (
             <div className={styles.notFriends}>
-              <span>You can only see friends' details</span>
+              <span>{t('visitors.onlyFriendsDetails')}</span>
               <div>
-                <span>Sniff out some friends </span>
+                <span>{t('visitors.sniffFriendsPrefix')} </span>
                 <Button variant="simple">
-                  <Link to="/users">here!</Link>
+                  <Link to="/users">{t('visitors.sniffFriendsLink')}</Link>
                 </Button>
               </div>
             </div>

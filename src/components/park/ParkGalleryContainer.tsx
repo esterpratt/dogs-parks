@@ -12,6 +12,7 @@ import { CameraModal } from '../camera/CameraModal';
 import styles from './ParkGalleryContainer.module.scss';
 import { MAX_IMAGES } from '../../utils/consts';
 import { useUploadImage } from '../../hooks/api/useUploadImage';
+import { useTranslation } from 'react-i18next';
 
 interface ParkGalleryContainerProps {
   parkId: string;
@@ -20,6 +21,7 @@ interface ParkGalleryContainerProps {
 const ParkGalleryContainer: React.FC<ParkGalleryContainerProps> = ({
   parkId,
 }) => {
+  const { t } = useTranslation();
   const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
   const { userId } = useContext(UserContext);
 
@@ -54,7 +56,7 @@ const ParkGalleryContainer: React.FC<ParkGalleryContainerProps> = ({
     <>
       <Section
         contentClassName={styles.contentContainer}
-        title="Gallery"
+        title={t('components.gallery.title')}
         actions={
           userId && (parkImages || []).length < MAX_IMAGES ? (
             <Button
@@ -82,12 +84,20 @@ const ParkGalleryContainer: React.FC<ParkGalleryContainerProps> = ({
             </div>
           ) : (
             <div className={styles.noData}>
-              <span>No photos for this park yet. </span>
+              <span>
+                {t('components.carousel.noPhotosYet') ||
+                  'No photos for this park yet.'}{' '}
+              </span>
               <div>
                 <Button variant="simple" className={styles.link}>
-                  <Link to="/login?mode=login">Log In</Link>
+                  <Link to="/login?mode=login">
+                    {t('common.actions.login')}
+                  </Link>
                 </Button>
-                <span> to add data.</span>
+                <span>
+                  {' '}
+                  {t('components.carousel.toAddDataSuffix') || 'to add data.'}
+                </span>
               </div>
             </div>
           )

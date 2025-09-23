@@ -9,6 +9,7 @@ import { useOrientationContext } from '../context/OrientationContext';
 import { useNotification } from '../context/NotificationContext';
 import { FormModal } from './modals/FormModal';
 import styles from './ReviewModal.module.scss';
+import { useTranslation } from 'react-i18next';
 
 interface ReviewModalProps {
   title?: string;
@@ -32,6 +33,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
   review,
   onSubmitReview,
 }) => {
+  const { t } = useTranslation();
   const { notify } = useNotification();
 
   const [reviewData, setReviewData] = useState(() => {
@@ -98,35 +100,37 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
 
   return (
     <FormModal
-      saveText="Submit"
+      saveText={t('common.actions.submit')}
       open={isOpen}
       onClose={closeModal}
       onSave={onSubmit}
       disabled={!reviewData.title}
       className={styles.modal}
-      title={title || 'How did you dig the park?'}
+      title={title || t('reviews.modal.title')}
     >
       <form className={styles.form}>
         <ControlledInput
-          label="Title *"
+          label={t('reviews.modal.placeholderTitle') + ' *'}
           name="title"
           value={reviewData.title}
           onChange={onChangeInput}
-          placeholder="Review title"
+          placeholder={t('reviews.modal.placeholderTitle')}
           required
         />
         <TextArea
-          label="Content"
+          label={t('reviews.modal.placeholderContentLabel') || 'Content'}
           name="content"
           rows={orientation === 'landscape' ? 3 : 7}
           maxLength={280}
           value={reviewData.content}
           onChange={onChangeInput}
-          placeholder="Please elaborate..."
+          placeholder={t('reviews.modal.placeholderContent')}
           className={styles.content}
         />
         <div className={styles.rankContainer}>
-          <span className={styles.rankTitle}>Rate the park</span>
+          <span className={styles.rankTitle}>
+            {t('reviews.modal.rankTitle')}
+          </span>
           <Stars
             className={styles.stars}
             rank={rank}
@@ -137,7 +141,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
         {!review && !!userId && (
           <Checkbox
             id="isAnonymous"
-            label="Report anonymously"
+            label={t('reviews.modal.reportAnonymously')}
             isChecked={isAnonymous}
             onChange={onChangeAnonymousStatus}
             className={styles.checkbox}

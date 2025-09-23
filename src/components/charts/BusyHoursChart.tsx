@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import classnames from 'classnames';
 import { BarChart } from './BarChart';
 import styles from './BusyHoursChart.module.scss';
+import { useTranslation } from 'react-i18next';
 
 interface Data {
   hour: string;
@@ -28,12 +29,13 @@ const BusyHoursChart = (props: BusyHoursChartProps) => {
   const { fullData, weekdaysData, weekendData, currHour, isWeekend, business } =
     props;
   const [activeTab, setActiveTab] = useState(WEEKDAYS);
+  const { t } = useTranslation();
 
   const activeData = fullData
     ? fullData
     : activeTab === WEEKDAYS
-    ? weekdaysData
-    : weekendData;
+      ? weekdaysData
+      : weekendData;
 
   useEffect(() => {
     setActiveTab(isWeekend ? WEEKEND : WEEKDAYS);
@@ -49,7 +51,7 @@ const BusyHoursChart = (props: BusyHoursChartProps) => {
             })}
             onClick={() => setActiveTab(WEEKDAYS)}
           >
-            Weekdays
+            {t('charts.busyHours.weekdays')}
           </button>
           <button
             className={classnames(styles.tab, {
@@ -57,7 +59,7 @@ const BusyHoursChart = (props: BusyHoursChartProps) => {
             })}
             onClick={() => setActiveTab(WEEKEND)}
           >
-            Weekend
+            {t('charts.busyHours.weekend')}
           </button>
         </div>
       )}

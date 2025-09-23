@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import classnames from 'classnames';
 import { TopModal } from './TopModal';
 import { Button } from '../Button';
@@ -25,10 +26,11 @@ const FormModal = ({
   titleClassName,
   height,
   onSave,
-  saveText = 'Save',
+  saveText,
   disabled,
   title,
 }: FormModalProps) => {
+  const { t } = useTranslation();
   return (
     <TopModal
       open={open}
@@ -52,7 +54,7 @@ const FormModal = ({
               onClick={onSave}
               className={styles.button}
             >
-              {saveText}
+              {saveText ?? t('common.actions.save')}
             </Button>
           )}
           <Button
@@ -60,7 +62,7 @@ const FormModal = ({
             onClick={onClose}
             className={styles.button}
           >
-            Exit
+            {t('common.actions.cancel')}
           </Button>
         </div>
       </div>

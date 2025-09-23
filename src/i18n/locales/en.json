@@ -246,7 +246,12 @@
   },
   "parkReviews": {
     "emptyTitle": "No barks about this park yet",
-    "firstReviewCta": "Be the first to leave a review!"
+    "firstReviewCta": "Be the first to leave a review!",
+    "count_one": "1 review",
+    "count_other": "{{count}} reviews",
+    "averageRank": "Average rank: {{rank}}",
+    "addReview": "Add review",
+    "updateReview": "Update review"
   },
   "userFriends": {
     "noFriends": "No friends yet.",
@@ -314,7 +319,14 @@
       "add": "Add",
       "accept": "Accept",
       "decline": "Decline",
-      "report": "Report"
+      "report": "Report",
+      "share": "Share",
+      "checkin": "Check in",
+      "checkout": "Check out",
+      "like": "Like",
+      "unlike": "Unlike",
+      "submit": "Submit",
+      "save": "Save"
     },
     "placeholders": {
       "search": "Search",
@@ -323,7 +335,10 @@
       "reviewContent": "Please elaborate..."
     },
     "status": {
-      "errorLoadingImage": "There was an error loading the image"
+      "errorLoadingImage": "There was an error loading the image",
+      "calculating": "Calculating...",
+      "currently": "Currently",
+      "noData": "No data yet"
     }
   },
   "nav": {
@@ -337,12 +352,25 @@
     }
   },
   "parks": {
+    "breadcrumb": {
+      "all": "All parks"
+    },
     "preview": {
       "view": "View park",
       "seeOnMap": "See in map"
     },
     "search": {
       "placeholder": "Search park"
+    },
+    "tabs": {
+      "general": "General",
+      "reviews": "Reviews",
+      "visitors": "Visitors"
+    },
+    "share": {
+      "title": "Share a park",
+      "text": "Check out {{name}} on KlavHub",
+      "dialogTitle": "Share {{name}}"
     },
     "noResults": {
       "titleSignedIn": "Can’t sniff out your park?",
@@ -362,29 +390,105 @@
     "favorite": {
       "ribbon": "Favorite Park!"
     },
+    "busyHours": {
+      "status": {
+        "quiet": "quiet",
+        "medium": "medium",
+        "busy": "busy"
+      },
+      "toAddDataSuffix": "to add live data.",
+      "modal": {
+        "dogsCountLabel": "How many dogs are currently in the park?",
+        "hintSuffix": "* You can always add a report by clicking the plus sign in the Busy Hours section."
+      }
+    },
     "sections": {
       "about": "About",
       "busyHours": "Busy hours",
       "liveStatus": "Live status"
     },
+    "about": {
+      "size": "Size",
+      "ground": "Ground",
+      "shade": "Shade",
+      "facilities": "Facilities",
+      "boolean": {
+        "yes": "Yes",
+        "no": "No",
+        "unknown": "?"
+      },
+      "sizeLabel": {
+        "small": "Small",
+        "medium": "Medium",
+        "large": "Large"
+      },
+      "groundOptions": {
+        "SAND": "Sand",
+        "DIRT": "Dirt",
+        "GRASS": "Grass",
+        "SYNTHETIC_GRASS": "Synthetic grass"
+      }
+    },
     "conditions": {
-      "stillThere": "Still there?"
+      "stillThere": "Still there?",
+      "labels": {
+        "muddy": "Muddy",
+        "gateClosed": "Gate closed",
+        "underConstruction": "Under construction",
+        "brokenFountain": "Broken fountain"
+      }
     },
     "live": {
-      "report": "Report"
+      "report": "Report",
+      "friends": "Friends",
+      "visitors": "Visitors",
+      "atTheParkRightNow": "at the park right now",
+      "reportModal": {
+        "title": "Spot an issue here?",
+        "noReportable": "All conditions are currently reported."
+      }
     },
     "edit": {
+      "modal": {
+        "title": "Add the following park details",
+        "sizeMeters": "Size (in meters)",
+        "groundCovering": "Ground Covering",
+        "containsFacilities": "Contains Facilities?",
+        "dailyShadeHours": "Daily Shade Hours"
+      },
       "choose": {
         "update": "Update park details",
         "report": "Report incorrect details"
       }
+    },
+    "report": {
+      "modal": {
+        "textLabel": "Tell us what’s wrong here."
+      }
+    },
+    "checkin": {
+      "title": "Enjoy your stay!",
+      "titleWithName": "Enjoy your stay, {{name}}!"
+    },
+    "visitors": {
+      "onlyYou": "You're the only one here right now",
+      "count_one": "1 visitor here now",
+      "count_other": "{{count}} visitors here now",
+      "countWithMore_one": "and 1 other",
+      "countWithMore_other": "and {{count}} others"
     }
   },
   "components": {
     "carousel": {
       "addPhoto": "Add photo",
       "confirmTitle": "Hold your leash!",
-      "confirmBody": "Are you sure you want to send this pic to a farm up north where it can run free forever?"
+      "confirmBody": "Are you sure you want to send this pic to a farm up north where it can run free forever?",
+      "noPhotosYet": "No photos for this park yet.",
+      "toAddDataSuffix": "to add data."
+    },
+    "camera": {
+      "uploadImage": "Upload image",
+      "takePhoto": "Take a photo"
     },
     "enlargeImage": {
       "setPrimary": "Set as primary"
@@ -398,7 +502,9 @@
       "title": "How did you dig the park?",
       "placeholderTitle": "Review title",
       "placeholderContent": "Please elaborate...",
-      "rankTitle": "Rate the park"
+      "placeholderContentLabel": "Content",
+      "rankTitle": "Rate the park",
+      "reportAnonymously": "Report anonymously"
     }
   },
 
@@ -428,6 +534,13 @@
   "dogs": {
     "delete": {
       "confirm": "Are you sure you want to say goodbye to {{name}}"
+    },
+    "age": {
+      "justBorn": "Just born",
+      "old": "{{diff}} {{unit}} old",
+      "oldCompliment": "{{diff}} {{unit}} old. No wonder {{pronoun}} looks so good!",
+      "she": "she",
+      "he": "he"
     },
     "details": {
       "title": "About",
@@ -488,11 +601,45 @@
     "checkout": {
       "hadFun": "Hope you had a tail-wagging time!",
       "askReview": "Hope you had a tail-wagging time! Leave a review if you can!"
+    },
+    "live": {
+      "reportThanks": "Thanks for keeping the pack updated!",
+      "reportRejected": "Your report was not accepted. Please try again later.",
+      "confirmThanks": "Thanks for confirming!",
+      "confirmRejected": "Your confirmation failed. Please try again later.",
+      "updateThanks": "Thanks for updating!",
+      "updateRejected": "Your update failed. Please try again later."
+    },
+    "share": {
+      "thanks": "Thanks for sharing!",
+      "copied": "Link copied to clipboard"
     }
   },
   "reports": {
     "reviewModal": {
       "title": "Why do you wish to report this review?"
+    },
+    "reasons": {
+      "spam": {
+        "title": "Spam",
+        "content": "Promotional or repetitive."
+      },
+      "inappropriate": {
+        "title": "Inappropriate",
+        "content": "Contains offensive language, harassment or hate speech"
+      },
+      "misinformation": {
+        "title": "Misinformation",
+        "content": "Spreads false information."
+      },
+      "fake": {
+        "title": "Fake",
+        "content": "Appears to be fake or biased."
+      },
+      "personal": {
+        "title": "Personal Information",
+        "content": "Contains private information."
+      }
     }
   }
 }

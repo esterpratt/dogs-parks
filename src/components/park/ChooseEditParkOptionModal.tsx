@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FlagIcon, Pencil, X } from 'lucide-react';
 import { Button } from '../Button';
 import { Park } from '../../types/park';
@@ -18,6 +19,7 @@ const ChooseEditParkOptionModal: React.FC<ChooseEditParkOptionModalProps> = ({
   onClose,
   park,
 }) => {
+  const { t } = useTranslation();
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
@@ -48,12 +50,12 @@ const ChooseEditParkOptionModal: React.FC<ChooseEditParkOptionModalProps> = ({
           {isEditable && (
             <Button onClick={onEditPark} className={styles.button}>
               <Pencil size={20} />
-              <span>Update park details</span>
+              <span>{t('parks.edit.choose.update')}</span>
             </Button>
           )}
           <Button onClick={onReportPark} className={styles.button}>
             <FlagIcon size={20} />
-            <span>Report incorrect details</span>
+            <span>{t('parks.edit.choose.report')}</span>
           </Button>
           <Button
             variant="secondary"
@@ -61,7 +63,7 @@ const ChooseEditParkOptionModal: React.FC<ChooseEditParkOptionModalProps> = ({
             className={styles.button}
           >
             <X size={20} />
-            <span>Cancel</span>
+            <span>{t('common.actions.cancel')}</span>
           </Button>
         </div>
       </BottomModal>

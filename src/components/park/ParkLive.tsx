@@ -15,6 +15,7 @@ import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { useGetActiveParkConditions } from '../../hooks/api/useGetActiveParkConditions';
 import { ParkConditionsList } from './ParkConditionsList';
 import { PARK_CONDITIONS } from '../../utils/parkConditions';
+import { useTranslation } from 'react-i18next';
 
 interface ParkGeneralsProps {
   id: string;
@@ -22,6 +23,7 @@ interface ParkGeneralsProps {
 
 const ParkLive = (props: ParkGeneralsProps) => {
   const { id: parkId } = props;
+  const { t } = useTranslation();
   const { userId } = useContext(UserContext);
   const { friendsInParkIds, visitorsIds } = useGetParkVisitors(parkId, userId);
   const [isReportConditionModalOpen, setIsReportConditionModalOpen] =
@@ -62,7 +64,7 @@ const ParkLive = (props: ParkGeneralsProps) => {
   return (
     <>
       <Section
-        title="Live status"
+        title={t('parks.sections.liveStatus')}
         titleTestId="live-status-heading"
         actions={
           !!userId &&
@@ -74,7 +76,7 @@ const ParkLive = (props: ParkGeneralsProps) => {
               onClick={handleClickReport}
               data-test="report-button"
             >
-              {!hideReportHint && <span>Report</span>}
+              {!hideReportHint && <span>{t('parks.live.report')}</span>}
               <Wrench size={18} />
             </Button>
           )
@@ -100,8 +102,12 @@ const ParkLive = (props: ParkGeneralsProps) => {
                   </Link>
                 </Button>
                 <div className={styles.textContainer}>
-                  <div>{friendsCount ? 'Friends' : 'Visitors'}</div>
-                  <div>at the park right now</div>
+                  <div>
+                    {friendsCount
+                      ? t('parks.live.friends')
+                      : t('parks.live.visitors')}
+                  </div>
+                  <div>{t('parks.live.atTheParkRightNow')}</div>
                 </div>
               </div>
             )}

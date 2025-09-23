@@ -1,4 +1,5 @@
 import { useMemo, useContext, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Flag } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { Review } from '../types/review';
@@ -25,6 +26,7 @@ const ReviewPreview: React.FC<ReviewPreviewProps> = ({
   showPark = false,
   withName = true,
 }) => {
+  const { t } = useTranslation();
   const { setOpenedReview } = useContext(ReviewModalContext);
   const reviewTime = useMemo<string>(() => {
     const formattedDate = getFormattedPastDate(
@@ -70,7 +72,7 @@ const ReviewPreview: React.FC<ReviewPreviewProps> = ({
                 className={styles.button}
                 variant="simple"
               >
-                Update review
+                {t('parkReviews.updateReview')}
               </Button>
             ) : (
               <>

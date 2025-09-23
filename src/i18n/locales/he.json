@@ -246,7 +246,12 @@
   },
   "parkReviews": {
     "emptyTitle": "עוד אין נביחות על הפארק הזה",
-    "firstReviewCta": "היו הראשונים להשאיר ביקורת!"
+    "firstReviewCta": "היו הראשונים להשאיר ביקורת!",
+    "count_one": "ביקורת אחת",
+    "count_other": "{{count}} ביקורות",
+    "averageRank": "דירוג ממוצע: {{rank}}",
+    "addReview": "הוספת ביקורת",
+    "updateReview": "עדכון ביקורת"
   },
   "userFriends": {
     "noFriends": "אין עדיין חברים.",
@@ -314,7 +319,14 @@
       "add": "הוספה",
       "accept": "אישור",
       "decline": "דחייה",
-      "report": "דיווח"
+      "report": "דיווח",
+      "share": "שיתוף",
+      "checkin": "צ'ק אין",
+      "checkout": "יציאה",
+      "like": "לייק",
+      "unlike": "ביטול לייק",
+      "submit": "שליחה",
+      "save": "שמירה"
     },
     "placeholders": {
       "search": "חיפוש",
@@ -323,7 +335,10 @@
       "reviewContent": "נשמח לפירוט..."
     },
     "status": {
-      "errorLoadingImage": "אירעה שגיאה בטעינת התמונה"
+      "errorLoadingImage": "אירעה שגיאה בטעינת התמונה",
+      "calculating": "מחשב...",
+      "currently": "כרגע",
+      "noData": "עוד אין נתונים"
     }
   },
   "nav": {
@@ -337,12 +352,25 @@
     }
   },
   "parks": {
+    "breadcrumb": {
+      "all": "כל הפארקים"
+    },
     "preview": {
       "view": "צפייה בפארק",
       "seeOnMap": "לראות במפה"
     },
     "search": {
       "placeholder": "חיפוש פארק"
+    },
+    "tabs": {
+      "general": "כללי",
+      "reviews": "ביקורות",
+      "visitors": "מבקרים"
+    },
+    "share": {
+      "title": "שיתוף פארק",
+      "text": "תראו את {{name}} ב‑כלבהאב",
+      "dialogTitle": "שיתוף {{name}}"
     },
     "noResults": {
       "titleSignedIn": "לא מצליחים להריח את הפארק שלכם?",
@@ -362,29 +390,105 @@
     "favorite": {
       "ribbon": "פארק מועדף!"
     },
+    "busyHours": {
+      "status": {
+        "quiet": "שקט",
+        "medium": "בינוני",
+        "busy": "עמוס"
+      },
+      "toAddDataSuffix": "כדי להוסיף נתונים חיים.",
+      "modal": {
+        "dogsCountLabel": "כמה כלבים יש עכשיו בפארק?",
+        "hintSuffix": "* תמיד אפשר להוסיף דיווח דרך הסימן פלוס בסעיף שעות העומס."
+      }
+    },
     "sections": {
       "about": "אודות",
       "busyHours": "שעות העומס",
       "liveStatus": "מצב חי"
     },
+    "about": {
+      "size": "גודל",
+      "ground": "קרקע",
+      "shade": "צל",
+      "facilities": "מתקנים",
+      "boolean": {
+        "yes": "כן",
+        "no": "לא",
+        "unknown": "?"
+      },
+      "sizeLabel": {
+        "small": "קטן",
+        "medium": "בינוני",
+        "large": "גדול"
+      },
+      "groundOptions": {
+        "SAND": "חול",
+        "DIRT": "אדמה",
+        "GRASS": "דשא",
+        "SYNTHETIC_GRASS": "דשא סינטטי"
+      }
+    },
     "conditions": {
-      "stillThere": "עדיין שם?"
+      "stillThere": "עדיין שם?",
+      "labels": {
+        "muddy": "בוץ",
+        "gateClosed": "שער סגור",
+        "underConstruction": "בעבודות",
+        "brokenFountain": "ברזיה מקולקלת"
+      }
     },
     "live": {
-      "report": "דיווח"
+      "report": "דיווח",
+      "friends": "חברים",
+      "visitors": "מבקרים",
+      "atTheParkRightNow": "בפארק ממש עכשיו",
+      "reportModal": {
+        "title": "יש בעיה במקום?",
+        "noReportable": "כל התנאים כבר דווחו כרגע."
+      }
     },
     "edit": {
+      "modal": {
+        "title": "להוסיף את פרטי הפארק הבאים",
+        "sizeMeters": "גודל (במטרים)",
+        "groundCovering": "כיסוי הקרקע",
+        "containsFacilities": "האם יש מתקנים?",
+        "dailyShadeHours": "שעות צל ביום"
+      },
       "choose": {
         "update": "עדכון פרטי הפארק",
         "report": "דיווח על פרטים שגויים"
       }
+    },
+    "report": {
+      "modal": {
+        "textLabel": "ספרו לנו מה לא תקין כאן."
+      }
+    },
+    "checkin": {
+      "title": "תהנו מהשהות!",
+      "titleWithName": "{{name}}, תהנו מהשהות!"
+    },
+    "visitors": {
+      "onlyYou": "את/ה היחיד/ה כאן כרגע",
+      "count_one": "מבקר/ת אחד/ת כרגע",
+      "count_other": "{{count}} מבקרים כרגע",
+      "countWithMore_one": "ועוד אחד/ת",
+      "countWithMore_other": "ועוד {{count}}"
     }
   },
   "components": {
     "carousel": {
       "addPhoto": "הוספת תמונה",
       "confirmTitle": "להחזיק חזק את הרצועה!",
-      "confirmBody": "בטוחים שעכשיו התמונה הזו יוצאת לחווה בצפון לרוץ חופשי לנצח?"
+      "confirmBody": "בטוחים שעכשיו התמונה הזו יוצאת לחווה בצפון לרוץ חופשי לנצח?",
+      "noPhotosYet": "עוד אין תמונות לפארק הזה.",
+      "toAddDataSuffix": "כדי להוסיף נתונים."
+    },
+    "camera": {
+      "uploadImage": "העלאת תמונה",
+      "takePhoto": "צילום תמונה"
     },
     "enlargeImage": {
       "setPrimary": "קביעת תמונת שער"
@@ -398,7 +502,9 @@
       "title": "איך היה בפארק?",
       "placeholderTitle": "כותרת ביקורת",
       "placeholderContent": "נשמח לשמוע עוד...",
-      "rankTitle": "דרגו את הפארק"
+      "placeholderContentLabel": "תוכן",
+      "rankTitle": "דרגו את הפארק",
+      "reportAnonymously": "דיווח בעילום שם"
     }
   },
 
@@ -428,6 +534,13 @@
   "dogs": {
     "delete": {
       "confirm": "בטוחים שרוצים להיפרד מ{{name}}?"
+    },
+    "age": {
+      "justBorn": "נולד/ה זה עתה",
+      "old": "בן/בת {{diff}} {{unit}}",
+      "oldCompliment": "בן/בת {{diff}} {{unit}}. לא פלא ש{{pronoun}} נראה/ת כל כך טוב!",
+      "she": "היא",
+      "he": "הוא"
     },
     "details": {
       "title": "אודות",
@@ -488,11 +601,45 @@
     "checkout": {
       "hadFun": "מקווים שהיה לכם זמן מזנב־מדהים!",
       "askReview": "מקווים שהיה לכם זמן מזנב־מדהים! אם אפשר — נשמח לביקורת!"
+    },
+    "live": {
+      "reportThanks": "תודה על העדכון לקהילה!",
+      "reportRejected": "הדיווח לא התקבל. נסו שוב מאוחר יותר.",
+      "confirmThanks": "תודה על האישור!",
+      "confirmRejected": "האישור נכשל. נסו שוב מאוחר יותר.",
+      "updateThanks": "תודה על העדכון!",
+      "updateRejected": "העדכון נכשל. נסו שוב מאוחר יותר."
+    },
+    "share": {
+      "thanks": "תודה על השיתוף!",
+      "copied": "הקישור הועתק"
     }
   },
   "reports": {
     "reviewModal": {
       "title": "למה תרצו לדווח על הביקורת הזו?"
+    },
+    "reasons": {
+      "spam": {
+        "title": "ספאם",
+        "content": "פרסומי או חוזר על עצמו"
+      },
+      "inappropriate": {
+        "title": "לא הולם",
+        "content": "כולל שפה פוגענית, הטרדה או דברי שנאה"
+      },
+      "misinformation": {
+        "title": "מידע מטעה",
+        "content": "מפיץ מידע שגוי"
+      },
+      "fake": {
+        "title": "מזויף",
+        "content": "נראה מזויף או מוטה"
+      },
+      "personal": {
+        "title": "מידע אישי",
+        "content": "מכיל מידע פרטי"
+      }
     }
   }
 }

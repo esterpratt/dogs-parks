@@ -7,7 +7,8 @@ import { Button } from '../Button';
 import { UserContext } from '../../context/UserContext';
 import styles from './ParkGenerals.module.scss';
 import { ChooseEditParkOptionModal } from './ChooseEditParkOptionModal';
-import { capitalizeText } from '../../utils/text';
+import { TFunction } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 interface ParkGeneralsProps {
   park: Park;
@@ -23,54 +24,66 @@ const getNumberContent = (value: number | null, sign?: string) => {
   return content;
 };
 
-const getBooleanContent = (value: boolean | null) => {
-  let content = NO_CONTENT;
+const getBooleanContent = (value: boolean | null, t: TFunction) => {
+  let content = t('parks.about.boolean.unknown');
   if (value) {
-    content = 'Yes';
+    content = t('parks.about.boolean.yes');
   } else if (value === false) {
-    content = 'No';
+    content = t('parks.about.boolean.no');
   }
   return content;
 };
 
-const getListContent = (values: string[] | null) => {
+// Removed unused getListContent (replaced by getListContentLabels)
+
+const getListContentLabels = (values: string[] | null) => {
   if (!values || values.length === 0) return NO_CONTENT;
 
-  const capitalized = values.map((value) => capitalizeText(value));
+  if (values.length === 1) return values[0];
+  if (values.length === 2) return values.join(' & ');
 
-  if (capitalized.length === 1) return capitalized[0];
-  if (capitalized.length === 2) return capitalized.join(' & ');
-
-  return (
-    capitalized.slice(0, -1).join(', ') +
-    ' & ' +
-    capitalized[capitalized.length - 1]
-  );
+  return values.slice(0, -1).join(', ') + ' & ' + values[values.length - 1];
 };
 
-const getSizeContent = (value: number | null) => {
+const getSizeContent = (value: number | null, t: TFunction) => {
   let content = NO_CONTENT;
   if (value) {
-    content = 'Medium';
+    content = t('parks.about.sizeLabel.medium');
     if (value >= 100) {
-      content = 'Large';
+      content = t('parks.about.sizeLabel.large');
     } else if (value < 50) {
-      content = 'Small';
+      content = t('parks.about.sizeLabel.small');
     }
   }
   return content;
 };
 
 const ParkGenerals = ({ park }: ParkGeneralsProps) => {
+  const { t } = useTranslation();
   const { size, materials: ground, has_facilities: facilities, shade } = park;
   const { userId } = useContext(UserContext);
   const [isEditParkModalOpen, setIsEditParkModalOpen] = useState(false);
 
+  const groundLabels = useMemo(() => {
+    if (!ground || ground.length === 0) return null;
+    return ground.map((value) => {
+      const key =
+        value.toLowerCase() === 'sand'
+          ? 'SAND'
+          : value.toLowerCase() === 'dirt'
+            ? 'DIRT'
+            : value.toLowerCase() === 'grass'
+              ? 'GRASS'
+              : 'SYNTHETIC_GRASS';
+      return t(`parks.about.groundOptions.${key}`);
+    });
+  }, [ground, t]);
+
   const existedData = useMemo(
     () => [
       {
-        label: 'Size',
-        data: getSizeContent(size),
+        label: t('parks.about.size'),
+        data: getSizeContent(size, t),
         icon: (
           <div
             style={{
@@ -90,8 +103,8 @@ const ParkGenerals = ({ park }: ParkGeneralsProps) => {
         ),
       },
       {
-        label: 'Ground',
-        data: getListContent(ground),
+        label: t('parks.about.ground'),
+        data: getListContentLabels(groundLabels),
         icon: (
           <div
             style={{
@@ -104,7 +117,7 @@ const ParkGenerals = ({ park }: ParkGeneralsProps) => {
         ),
       },
       {
-        label: 'Shade',
+        label: t('parks.about.shade'),
         data: getNumberContent(shade, '%'),
         icon: (
           <div
@@ -125,8 +138,8 @@ const ParkGenerals = ({ park }: ParkGeneralsProps) => {
         ),
       },
       {
-        label: 'Facilities',
-        data: getBooleanContent(facilities),
+        label: t('parks.about.facilities'),
+        data: getBooleanContent(facilities, t),
         icon: (
           <div
             style={{
@@ -141,7 +154,7 @@ const ParkGenerals = ({ park }: ParkGeneralsProps) => {
         ),
       },
     ],
-    [facilities, ground, shade, size]
+    [facilities, groundLabels, shade, size, t]
   );
 
   const handleClickEditAbout = () => {
@@ -151,7 +164,7 @@ const ParkGenerals = ({ park }: ParkGeneralsProps) => {
   return (
     <>
       <Section
-        title="About"
+        title={t('parks.sections.about')}
         actions={
           !!userId && (
             <Button
