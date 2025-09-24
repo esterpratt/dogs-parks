@@ -99,6 +99,12 @@ const UserDog = () => {
     return null;
   }
 
+  const ageText = getLocalizedDogAgeText({
+    birthday: dog.birthday,
+    gender: dog.gender,
+    t,
+  });
+
   return (
     <>
       <div className={styles.container}>
@@ -147,20 +153,10 @@ const UserDog = () => {
                   )}
                 </div>
                 <div>
-                  {getLocalizedDogAgeText({
-                    birthday: dog.birthday,
-                    gender: dog.gender,
-                    t,
-                  }) && (
+                  {ageText && (
                     <span className={styles.age}>
                       <Cake color={styles.green} size={14} />
-                      <span>
-                        {getLocalizedDogAgeText({
-                          birthday: dog.birthday,
-                          gender: dog.gender,
-                          t,
-                        })}
-                      </span>
+                      <span>{ageText}</span>
                     </span>
                   )}
                   {dog.breed && (

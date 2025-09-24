@@ -16,6 +16,7 @@ interface DogPreviewProps {
 const DogPreview: React.FC<DogPreviewProps> = ({ dog, image }) => {
   const { name, birthday, gender } = dog;
   const { t } = useTranslation();
+  const ageText = getLocalizedDogAgeText({ birthday, gender, t });
 
   return (
     <Card
@@ -46,11 +47,7 @@ const DogPreview: React.FC<DogPreviewProps> = ({ dog, image }) => {
               </>
             )}
           </div>
-          {getLocalizedDogAgeText({ birthday, gender, t }) !== null && (
-            <div className={styles.age}>
-              {getLocalizedDogAgeText({ birthday, gender, t })}
-            </div>
-          )}
+          {ageText !== null && <div className={styles.age}>{ageText}</div>}
         </div>
       }
     />
