@@ -1,27 +1,29 @@
 import { getMean, getSTD } from '../../utils/calcs';
 import barChartStyles from '../charts/BarChart.module.scss';
 import { getHoursChartData, getStrHour } from '../charts/getHoursChartData';
-import i18next from 'i18next';
 
-export const BUSINESS = {
-  LIGHT: {
-    get str() {
-      return i18next.t('parks.busyHours.status.quiet');
-    },
+enum BusinessLevel {
+  LIGHT = 'LIGHT',
+  MEDIUM = 'MEDIUM',
+  BUSY = 'BUSY',
+}
+
+export const BUSINESS: Record<
+  BusinessLevel,
+  { key: string; className: string; color: string }
+> = {
+  [BusinessLevel.LIGHT]: {
+    key: 'parks.busyHours.status.quiet',
     className: 'light',
     color: barChartStyles.green,
   },
-  MEDIUM: {
-    get str() {
-      return i18next.t('parks.busyHours.status.medium');
-    },
+  [BusinessLevel.MEDIUM]: {
+    key: 'parks.busyHours.status.medium',
     className: 'medium',
     color: barChartStyles.orange,
   },
-  BUSY: {
-    get str() {
-      return i18next.t('parks.busyHours.status.busy');
-    },
+  [BusinessLevel.BUSY]: {
+    key: 'parks.busyHours.status.busy',
     className: 'busy',
     color: barChartStyles.red,
   },
@@ -41,7 +43,7 @@ const getBusyHoursData = (dogsCount: DogsCount[]) => {
   let weekendHoursChartData;
   let fullData;
   let isWeekend = false;
-  let business = BUSINESS.LIGHT;
+  let level: BusinessLevel = BusinessLevel.LIGHT;
 
   const currentDate = new Date();
   const currentHour = currentDate.getHours();
@@ -81,16 +83,17 @@ const getBusyHoursData = (dogsCount: DogsCount[]) => {
   }
 
   if (currentCount > 15) {
-    business = BUSINESS.BUSY;
+    level = BusinessLevel.BUSY;
   } else if (currentCount > 3 && currentCount > mean + std * 0.5) {
-    business = BUSINESS.BUSY;
+    level = BusinessLevel.BUSY;
   } else if (currentCount > 2 && currentCount > mean - std * 0.5) {
-    business = BUSINESS.MEDIUM;
+    level = BusinessLevel.MEDIUM;
   }
 
   return {
     currentStrHour,
-    business,
+    level,
+    business: BUSINESS[level],
     isWeekend,
     fullData,
     weekdaysHoursChartData,

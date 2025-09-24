@@ -99,7 +99,7 @@ export const ReportConditionModal: React.FC<ReportConditionModalProps> = ({
                   disabled={isPending}
                 />
                 <label htmlFor={option.id}>
-                  <option.icon size={18} /> <span>{option.value}</span>
+                  <option.icon size={18} /> <span>{t(option.key)}</span>
                 </label>
               </div>
             );

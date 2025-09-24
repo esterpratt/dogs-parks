@@ -68,9 +68,9 @@ const ParkConditionItem = (props: ParkConditionItemProps) => {
   const ConditionIcon = PARK_CONDITIONS.find(
     (parkCondition) => parkCondition.id === conditionId
   )?.icon;
-  const conditionValue = PARK_CONDITIONS.find(
+  const conditionKey = PARK_CONDITIONS.find(
     (parkCondition) => parkCondition.id === conditionId
-  )?.value;
+  )?.key;
   const formattedReportedAt = capitalizeText(
     getFormattedPastDate(new Date(conditionObservation.last_reported_at))
   );
@@ -92,7 +92,9 @@ const ParkConditionItem = (props: ParkConditionItemProps) => {
             </div>
           )}
           <div className={styles.conditionText}>
-            <span className={styles.conditionName}>{conditionValue}</span>
+            <span className={styles.conditionName}>
+              {conditionKey ? t(conditionKey) : ''}
+            </span>
             <span className={styles.reportedAt}>{formattedReportedAt}</span>
           </div>
         </div>

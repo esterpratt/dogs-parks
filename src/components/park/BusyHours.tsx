@@ -76,9 +76,11 @@ const BusyHours: React.FC<BusyHoursProps> = (props: BusyHoursProps) => {
                     {dogsCount?.length ? (
                       <>
                         <span>{t('common.status.currently')}</span>
-                        <span className={styles[business!.className]}>
-                          {business!.str}
-                        </span>
+                        {business && (
+                          <span className={styles[business.className]}>
+                            {t(business.key)}
+                          </span>
+                        )}
                       </>
                     ) : (
                       <span>{t('common.status.noData')}</span>

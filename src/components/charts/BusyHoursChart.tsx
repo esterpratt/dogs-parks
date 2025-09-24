@@ -16,7 +16,7 @@ interface BusyHoursChartProps {
   currHour: string;
   isWeekend: boolean;
   business: {
-    str: string;
+    key: string;
     className: string;
     color: string;
   };
