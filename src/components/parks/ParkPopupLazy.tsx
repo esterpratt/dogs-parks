@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Park } from '../../types/park';
 import { useUserLocation } from '../../context/LocationContext';
 import { getRoute } from '../../services/map';
@@ -19,6 +20,7 @@ interface ParkPopupLazyProps {
 
 const ParkPopupLazy = (props: ParkPopupLazyProps) => {
   const { setDirections, onClose, activePark, directions } = props;
+  const { t } = useTranslation();
   const userLocation = useUserLocation((state) => state.userLocation);
   const [isLoadingDirections, setIsLoadingDirections] = useState(false);
 
@@ -51,7 +53,7 @@ const ParkPopupLazy = (props: ParkPopupLazyProps) => {
       setDirections(res);
     } else {
       setDirections({
-        error: 'Sorry, my sniff powers are temporarily offline',
+        error: t('parks.directions.error'),
       });
     }
   };
