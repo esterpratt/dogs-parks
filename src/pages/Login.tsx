@@ -25,8 +25,7 @@ import { useModeContext } from '../context/ModeContext';
 import { useTransportOnline } from '../hooks/useTransportOnline';
 
 const Login = () => {
-  const { t, i18n } = useTranslation();
-  const isHebrew = (i18n.language || '').startsWith('he');
+  const { t } = useTranslation();
   const {
     user,
     userSigninWithGoogle,
@@ -39,6 +38,12 @@ const Login = () => {
   const [searchParams, setSearchParams] = useSearchParams({ mode: 'signup' });
   const [showPassword, setShowPassword] = useState(false);
   const isSignup = searchParams.get('mode') === 'signup';
+  const providerAppleKey = isSignup
+    ? 'login.cta.apple.signup'
+    : 'login.cta.apple.continue';
+  const providerGoogleKey = isSignup
+    ? 'login.cta.google.signup'
+    : 'login.cta.google.continue';
   const mailRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const topRef = useRef<HTMLInputElement | null>(null);
@@ -283,11 +288,7 @@ const Login = () => {
             ) : (
               <AppleBlack className={styles.appleIcon} />
             )}
-            <div className={styles.buttonText}>
-              {isHebrew
-                ? t('login.withApple')
-                : `${isSignup ? t('login.signup') : t('login.continue')} ${t('login.withApple')}`}
-            </div>
+            <div className={styles.buttonText}>{t(providerAppleKey)}</div>
           </Button>
           <Button
             variant="secondary"
@@ -299,11 +300,7 @@ const Login = () => {
             disabled={isOffline}
           >
             <GoogleIcon width={16} height={16} />
-            <div className={styles.buttonText}>
-              {isHebrew
-                ? t('login.withGoogle')
-                : `${isSignup ? t('login.signup') : t('login.continue')} ${t('login.withGoogle')}`}
-            </div>
+            <div className={styles.buttonText}>{t(providerGoogleKey)}</div>
           </Button>
         </div>
         <div className={styles.changeMethod}>

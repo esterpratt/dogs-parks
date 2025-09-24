@@ -304,7 +304,17 @@
     "notMemberYet": "Not part of the pack yet?",
     "signup": "Sign up",
     "forgotPassword": "Forgot password?",
-    "resetPassword": "Reset password"
+    "resetPassword": "Reset password",
+    "cta": {
+      "apple": {
+        "signup": "Sign up with Apple",
+        "continue": "Continue with Apple"
+      },
+      "google": {
+        "signup": "Sign up with Google",
+        "continue": "Continue with Google"
+      }
+    }
   },
   "common": {
     "actions": {
