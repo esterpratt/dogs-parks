@@ -34,8 +34,6 @@ const getBooleanContent = (value: boolean | null, t: TFunction) => {
   return content;
 };
 
-// Removed unused getListContent (replaced by getListContentLabels)
-
 const getListContentLabels = (values: string[] | null) => {
   if (!values || values.length === 0) return NO_CONTENT;
 

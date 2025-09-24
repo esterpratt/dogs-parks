@@ -9,7 +9,7 @@ import { ParkCondition } from '../types/parkCondition';
 
 interface ParkConditionDef {
   id: ParkCondition;
-  key: string; // translation key
+  key: string;
   icon: LucideIcon;
 }
 
