@@ -247,6 +247,7 @@
   "parkReviews": {
     "emptyTitle": "No barks about this park yet",
     "firstReviewCta": "Be the first to leave a review!",
+    "count": "{{count}} reviews",
     "count_one": "1 review",
     "count_other": "{{count}} reviews",
     "averageRank": "Average rank: {{rank}}",
@@ -537,10 +538,24 @@
     },
     "age": {
       "justBorn": "Just born",
+      "justBornMale": "Just born",
+      "justBornFemale": "Just born",
       "old": "{{diff}} {{unit}} old",
+      "oldMale": "{{diff}} {{unit}} old",
+      "oldFemale": "{{diff}} {{unit}} old",
       "oldCompliment": "{{diff}} {{unit}} old. No wonder {{pronoun}} looks so good!",
+      "oldComplimentMale": "{{diff}} {{unit}} old. No wonder he looks so good!",
+      "oldComplimentFemale": "{{diff}} {{unit}} old. No wonder she looks so good!",
       "she": "she",
-      "he": "he"
+      "he": "he",
+      "units": {
+        "year": "year",
+        "years": "years",
+        "month": "month",
+        "months": "months",
+        "yearTwo": "2 years",
+        "monthTwo": "2 months"
+      }
     },
     "details": {
       "title": "About",
@@ -575,6 +590,23 @@
         "dislikes": "Dislikes (separate with commas)",
         "description": "Description"
       }
+    }
+  },
+  "grammar": {
+    "genderPrefixes": {
+      "male": "",
+      "female": "",
+      "neutral": ""
+    },
+    "dualUnits": {
+      "year": "2 years",
+      "month": "2 months",
+      "day": "2 days",
+      "hour": "2 hours",
+      "week": "2 weeks"
+    },
+    "config": {
+      "dualFormOmitsNumber": false
     }
   },
   "toasts": {

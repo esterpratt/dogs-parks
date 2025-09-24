@@ -247,6 +247,7 @@
   "parkReviews": {
     "emptyTitle": "עוד אין נביחות על הפארק הזה",
     "firstReviewCta": "היו הראשונים להשאיר ביקורת!",
+    "count": "{{count}} ביקורות",
     "count_one": "ביקורת אחת",
     "count_other": "{{count}} ביקורות",
     "averageRank": "דירוג ממוצע: {{rank}}",
@@ -537,10 +538,24 @@
     },
     "age": {
       "justBorn": "נולד/ה זה עתה",
+      "justBornMale": "נולד זה עתה",
+      "justBornFemale": "נולדה זה עתה",
       "old": "בן/בת {{diff}} {{unit}}",
+      "oldMale": "בן {{diff}} {{unit}}",
+      "oldFemale": "בת {{diff}} {{unit}}",
       "oldCompliment": "בן/בת {{diff}} {{unit}}. לא פלא ש{{pronoun}} נראה/ת כל כך טוב!",
+      "oldComplimentMale": "בן {{diff}} {{unit}}. לא פלא שהוא נראה כל כך טוב!",
+      "oldComplimentFemale": "בת {{diff}} {{unit}}. לא פלא שהיא נראית כל כך טוב!",
       "she": "היא",
-      "he": "הוא"
+      "he": "הוא",
+      "units": {
+        "year": "שנה",
+        "years": "שנים",
+        "month": "חודש",
+        "months": "חודשים",
+        "yearTwo": "שנתיים",
+        "monthTwo": "חודשיים"
+      }
     },
     "details": {
       "title": "אודות",
@@ -575,6 +590,23 @@
         "dislikes": "מה לא אוהב/ת (להפריד בפסיקים)",
         "description": "תיאור"
       }
+    }
+  },
+  "grammar": {
+    "genderPrefixes": {
+      "male": "בן",
+      "female": "בת",
+      "neutral": "בן/בת"
+    },
+    "dualUnits": {
+      "year": "שנתיים",
+      "month": "חודשיים",
+      "day": "יומיים",
+      "hour": "שעתיים",
+      "week": "שבועיים"
+    },
+    "config": {
+      "dualFormOmitsNumber": true
     }
   },
   "toasts": {
