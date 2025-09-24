@@ -19,12 +19,17 @@ import { Button } from '../Button';
 import { useOrientationContext } from '../../context/OrientationContext';
 import { Image } from '../Image';
 import styles from './ParkPopup.module.scss';
+import { useGeoFormat } from '../../hooks/useGeoFormat';
 
 interface ParkPopupProps {
   activePark: Park | null;
   onGetDirections: (location: Location) => void;
   isLoadingDirections: boolean;
-  directions?: { distance?: string; duration?: string; error?: string };
+  directions?: {
+    distanceKm?: number;
+    durationSeconds?: number;
+    error?: string;
+  };
   onClose: () => void;
   canGetDirections: boolean;
 }
@@ -40,6 +45,7 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
   canGetDirections,
 }) => {
   const { t } = useTranslation();
+  const { formatDistanceKm, formatTravelDurationSeconds } = useGeoFormat();
   const navigate = useNavigate();
   const { data: image } = useQuery({
     queryKey: ['parkImage', activePark?.id],
@@ -143,7 +149,12 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
                           color={styles.pink}
                           size={16}
                         />
-                        <span>{directions?.distance}</span>
+                        <span>
+                          {formatDistanceKm({
+                            km: directions.distanceKm ?? 0,
+                            maximumFractionDigits: 1,
+                          })}
+                        </span>
                       </div>
                       <div className={styles.duration}>
                         <Hourglass
@@ -154,7 +165,11 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
                           color={styles.pink}
                           size={16}
                         />
-                        <span>{directions?.duration}</span>
+                        <span>
+                          {formatTravelDurationSeconds({
+                            seconds: directions.durationSeconds ?? 0,
+                          })}
+                        </span>
                       </div>
                     </>
                   )}

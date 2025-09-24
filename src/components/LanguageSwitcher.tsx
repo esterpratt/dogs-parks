@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { setPreferredLanguage } from '../utils/languageStorage';
 import { APP_LANGUAGES } from '../utils/consts';
+import { deriveAppLanguage } from '../utils/language';
 
 const LABEL_ENGLISH = 'English';
 const LABEL_HEBREW = 'עברית';
@@ -16,7 +17,7 @@ const LanguageSwitcher = (props: LanguageSwitcherProps) => {
   const { className, onClick } = props;
   const { i18n } = useTranslation();
 
-  const currentLang = i18n.language?.split('-')[0] || APP_LANGUAGES.EN;
+  const currentLang = deriveAppLanguage(i18n.language);
   const isHebrew = currentLang === APP_LANGUAGES.HE;
   const nextLang = isHebrew ? APP_LANGUAGES.EN : APP_LANGUAGES.HE;
   const label = isHebrew ? LABEL_ENGLISH : LABEL_HEBREW;

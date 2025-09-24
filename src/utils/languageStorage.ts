@@ -1,26 +1,15 @@
 import { Preferences } from '@capacitor/preferences';
 import { isMobile } from './platform';
 import type { AppLanguage } from '../types/language';
-import { APP_LANGUAGES } from './consts';
+import { isAppLanguage } from './language';
 
 const STORAGE_KEY = 'app:preferred_language';
-
-export function toAppLanguage(value: string | null | undefined): AppLanguage {
-  if (value === APP_LANGUAGES.HE) {
-    return APP_LANGUAGES.HE;
-  }
-  return APP_LANGUAGES.EN;
-}
-
-function isValidLang(value: unknown): value is AppLanguage {
-  return value === APP_LANGUAGES.EN || value === APP_LANGUAGES.HE;
-}
 
 function getPreferredLanguageSync(): AppLanguage | null {
   try {
     const preferredLanguage = window.localStorage.getItem(STORAGE_KEY);
-    if (isValidLang(preferredLanguage)) {
-      return preferredLanguage;
+    if (isAppLanguage(preferredLanguage || '')) {
+      return preferredLanguage as AppLanguage;
     }
   } catch (error) {
     console.error('languageStorage.getPreferredLanguageSync error', error);
@@ -32,8 +21,8 @@ async function getPreferredLanguageAsync(): Promise<AppLanguage | null> {
   try {
     if (isMobile()) {
       const { value } = await Preferences.get({ key: STORAGE_KEY });
-      if (isValidLang(value)) {
-        return value;
+      if (isAppLanguage(value || '')) {
+        return value as AppLanguage;
       }
     }
   } catch (error) {
@@ -43,7 +32,7 @@ async function getPreferredLanguageAsync(): Promise<AppLanguage | null> {
 }
 
 async function setPreferredLanguage(lang: AppLanguage): Promise<void> {
-  if (!isValidLang(lang)) {
+  if (!isAppLanguage(lang)) {
     console.error('languageStorage.setPreferredLanguage invalid lang', lang);
     return;
   }
@@ -73,5 +62,5 @@ export {
   getPreferredLanguageSync,
   getPreferredLanguageAsync,
   setPreferredLanguage,
-  isValidLang,
+  isAppLanguage,
 };

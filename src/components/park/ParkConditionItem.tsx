@@ -7,7 +7,7 @@ import {
 } from '../../types/parkCondition';
 import { useAddParkCondition } from '../../hooks/api/useAddParkCondition';
 import { Button } from '../Button';
-import { getFormattedPastDate } from '../../utils/time';
+import { useDateUtils } from '../../hooks/useDateUtils';
 import { PARK_CONDITIONS } from '../../utils/parkConditions';
 import { useNotification } from '../../context/NotificationContext';
 import styles from './ParkConditionItem.module.scss';
@@ -71,6 +71,7 @@ const ParkConditionItem = (props: ParkConditionItemProps) => {
   const conditionKey = PARK_CONDITIONS.find(
     (parkCondition) => parkCondition.id === conditionId
   )?.key;
+  const { getFormattedPastDate } = useDateUtils();
   const formattedReportedAt = capitalizeText(
     getFormattedPastDate(new Date(conditionObservation.last_reported_at))
   );

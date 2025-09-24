@@ -2,9 +2,6 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import en from './locales/en.json';
 import he from './locales/he.json';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import 'dayjs/locale/he';
 
 const resources = {
   en: { translation: en },
@@ -19,8 +16,6 @@ function initI18n(params: InitI18nParams = {}): typeof i18n {
   const { lng } = params;
 
   if (!i18n.isInitialized) {
-    // Register Day.js plugins once (safe to call multiple times; Day.js guards against duplicate extension)
-    dayjs.extend(relativeTime);
     i18n
       .use(initReactI18next)
       .init({
@@ -33,22 +28,17 @@ function initI18n(params: InitI18nParams = {}): typeof i18n {
         interpolation: { escapeValue: false },
         returnNull: false,
         returnEmptyString: false,
-        load: 'currentOnly',
+        load: 'currentOnly', // NOTE: you pass 'en'/'he' directly, so this is fine.
         react: { useSuspense: false },
       })
       .catch((error) => {
         console.error('i18n init error', error);
       });
-
-    // Sync Day.js locale with i18n on init
-    dayjs.locale(lng ?? 'en');
   } else {
     if (lng) {
       i18n.changeLanguage(lng).catch((error) => {
         console.error('i18n changeLanguage error', error);
       });
-      // Sync Day.js locale with i18n on language change
-      dayjs.locale(lng);
     }
   }
 

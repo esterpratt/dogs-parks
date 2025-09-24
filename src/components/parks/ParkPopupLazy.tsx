@@ -4,17 +4,17 @@ import { useUserLocation } from '../../context/LocationContext';
 import { getRoute } from '../../services/map';
 import { ParkPopup } from './ParkPopup';
 
-interface Directions {
-  distance?: string;
-  duration?: string;
+interface DirectionsRaw {
+  distanceKm?: number;
+  durationSeconds?: number;
   error?: string;
 }
 
 interface ParkPopupLazyProps {
-  setDirections: (directions: Directions | undefined) => void;
+  setDirections: (directions: DirectionsRaw | undefined) => void;
   onClose: () => void;
   activePark: Park | null;
-  directions?: Directions;
+  directions?: DirectionsRaw;
 }
 
 const ParkPopupLazy = (props: ParkPopupLazyProps) => {
@@ -31,7 +31,9 @@ const ParkPopupLazy = (props: ParkPopupLazyProps) => {
     if (!userLocation) {
       return;
     }
+
     setIsLoadingDirections(true);
+
     const res = await getRoute({
       startLocation: {
         lat: userLocation.lat,
@@ -42,7 +44,9 @@ const ParkPopupLazy = (props: ParkPopupLazyProps) => {
         lng: activePark!.location.long,
       },
     });
+
     setIsLoadingDirections(false);
+
     if (res) {
       setDirections(res);
     } else {
@@ -59,15 +63,7 @@ const ParkPopupLazy = (props: ParkPopupLazyProps) => {
       activePark={activePark}
       onGetDirections={getDirections}
       canGetDirections={!!userLocation}
-      directions={
-        directions
-          ? {
-              distance: directions.distance,
-              duration: directions.duration,
-              error: directions.error,
-            }
-          : undefined
-      }
+      directions={directions}
     />
   );
 };

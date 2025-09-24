@@ -9,7 +9,7 @@ import {
 import classnames from 'classnames';
 import { DOG_ENERGY, DOG_SIZE, Dog, GENDER } from '../../types/dog';
 import { UserContext } from '../../context/UserContext';
-import { getFormattedDate } from '../../utils/time';
+import { useDateUtils } from '../../hooks/useDateUtils';
 import { ControlledInput } from '../inputs/ControlledInput';
 import { RadioInputs } from '../inputs/RadioInputs';
 import { TextArea } from '../inputs/TextArea';
@@ -130,13 +130,17 @@ const EditDogModal: React.FC<EditDogModalProps> = ({
     onClose();
   };
 
+  const { getFormattedDateISO } = useDateUtils();
+
   const formattedBirthday = useMemo(() => {
-    return !dogData?.birthday ? '' : getFormattedDate(dogData.birthday);
-  }, [dogData?.birthday]);
+    return !dogData?.birthday
+      ? ''
+      : getFormattedDateISO(new Date(dogData.birthday));
+  }, [dogData?.birthday, getFormattedDateISO]);
 
   const formattedCurrentDate = useMemo(() => {
-    return getFormattedDate(new Date());
-  }, []);
+    return getFormattedDateISO(new Date());
+  }, [getFormattedDateISO]);
 
   useScrollToInputOnOpen(isOpen, inputRef, formRef);
 

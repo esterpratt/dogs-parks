@@ -4,7 +4,7 @@ import { Flag } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { Review } from '../types/review';
 import { Button } from './Button';
-import { getFormattedPastDate } from '../utils/time';
+import { useDateUtils } from '../hooks/useDateUtils';
 import { fetchUser } from '../services/users';
 import { Stars } from './Stars';
 import { fetchPark } from '../services/parks';
@@ -27,8 +27,8 @@ const ReviewPreview: React.FC<ReviewPreviewProps> = ({
   withName = true,
 }) => {
   const { t } = useTranslation();
+  const { getFormattedPastDate } = useDateUtils();
   const { setOpenedReview } = useContext(ReviewModalContext);
-  // Recompute on every render so language switch updates relative time (cheap operation)
   const reviewTime = capitalizeText(
     getFormattedPastDate(review.updated_at || review.created_at)
   );

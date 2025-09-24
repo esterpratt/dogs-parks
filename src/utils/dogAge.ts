@@ -1,6 +1,5 @@
 import { GENDER } from '../types/dog';
-import { getAge } from './time';
-// i18n not directly needed here; dual form logic handled via resolver
+import { getAge } from './date.ts';
 import { resolveDualForm } from './dualForm';
 
 interface GetLocalizedDogAgeTextParams {
@@ -17,12 +16,14 @@ function getLocalizedDogAgeText(
   params: GetLocalizedDogAgeTextParams
 ): string | null {
   const { birthday, gender, t } = params;
+
   if (!birthday) {
     return null;
   }
-  // getAge expects a Date; birthday may be a Date already or an ISO string.
+
   const dateObj = birthday instanceof Date ? birthday : new Date(birthday);
   const age = getAge(dateObj);
+
   if (age === null) {
     return null;
   }
@@ -45,6 +46,7 @@ function getLocalizedDogAgeText(
       ? 'month'
       : age.unit;
   const localizedUnit = t(`dogs.age.units.${age.unit}`);
+
   // Generic dual-form resolution (diff === 2) using grammar metadata
   const dualResolved = resolveDualForm({
     diff: age.diff,
@@ -53,6 +55,7 @@ function getLocalizedDogAgeText(
     t,
     includeGenderPrefix: true,
   });
+
   if (dualResolved) {
     return dualResolved;
   }
@@ -75,12 +78,14 @@ function getLocalizedDogAgeText(
       unit: localizedUnit,
     });
   }
+
   if (gender === GENDER.MALE) {
     return t('dogs.age.oldComplimentMale', {
       diff: age.diff,
       unit: localizedUnit,
     });
   }
+
   return t('dogs.age.oldCompliment', {
     diff: age.diff,
     unit: localizedUnit,

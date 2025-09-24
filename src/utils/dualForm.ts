@@ -2,11 +2,10 @@ import { GENDER } from '../types/dog';
 
 export interface ResolveDualFormParams {
   diff: number;
-  baseUnit: string; // normalized: year, month, day, hour, week, etc.
+  baseUnit: string;
   gender?: GENDER | null;
   t: (key: string, options?: Record<string, unknown>) => string;
-  includeGenderPrefix?: boolean; // default true for dog age; false for pure time phrases
-  // targetLang removed after flattening (was used when grammar had nested locale keys)
+  includeGenderPrefix?: boolean;
 }
 
 /**
@@ -26,35 +25,40 @@ export function resolveDualForm(params: ResolveDualFormParams): string | null {
   const omitsNumber = Boolean(
     (dualConfig as Record<string, unknown>).dualFormOmitsNumber
   );
+
   if (!omitsNumber) {
-    return null; // Caller will render standard numeric form
+    return null;
   }
 
-  // Grammar is now flattened per locale: grammar.dualUnits, grammar.genderPrefixes
   const dualUnits = t('grammar.dualUnits', { returnObjects: true }) as unknown;
+
   if (!dualUnits || typeof dualUnits !== 'object') {
     return null;
   }
 
   const unitMap = dualUnits as Record<string, string>;
   const dualUnit = unitMap[baseUnit];
+
   if (!dualUnit) {
     return null;
   }
 
   if (!includeGenderPrefix) {
-    return dualUnit; // raw dual unit only
+    return dualUnit;
   }
 
   const genderPrefixes = t('grammar.genderPrefixes', {
     returnObjects: true,
   }) as unknown;
+
   if (!genderPrefixes || typeof genderPrefixes !== 'object') {
     return null;
   }
+
   const prefixMap = genderPrefixes as Record<string, string>;
 
   let prefix: string | undefined;
+
   if (gender === GENDER.MALE) {
     prefix = prefixMap.male;
   } else if (gender === GENDER.FEMALE) {
@@ -62,8 +66,10 @@ export function resolveDualForm(params: ResolveDualFormParams): string | null {
   } else {
     prefix = prefixMap.neutral;
   }
+
   if (!prefix) {
-    return dualUnit; // fallback without prefix if misconfigured
+    return dualUnit;
   }
+
   return `${prefix} ${dualUnit}`;
 }

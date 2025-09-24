@@ -21,9 +21,9 @@ import { UserLocationMarker } from './UserLocationMarker';
 import { DEFAULT_LOCATION } from '../../utils/consts';
 import { useUserLocation } from '../../context/LocationContext';
 import { Button } from '../Button';
-import styles from './NewMap.module.scss';
 import { useInitLocation } from '../../hooks/useInitLocation';
 import { WeatherButton } from '../weather/WeatherButton';
+import styles from './NewMap.module.scss';
 
 const ParkPopupLazy = lazy(() => import('../parks/ParkPopupLazy'));
 
@@ -34,15 +34,14 @@ interface NewMapProps {
 
 const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
   const userLocation = useInitLocation();
-
   const setUserLocation = useUserLocation((state) => state.setUserLocation);
   const [center, setCenter] = useState<Location>(
     location ?? userLocation ?? DEFAULT_LOCATION
   );
   const [activePark, setActivePark] = useState<Park | null>(null);
   const [directions, setDirections] = useState<{
-    distance?: string;
-    duration?: string;
+    distanceKm?: number;
+    durationSeconds?: number;
     error?: string;
     geoJSONObj?: GeoJSON.GeometryObject;
   }>();
@@ -171,15 +170,7 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
           setDirections={setDirections}
           onClose={onCloseParkPopup}
           activePark={activePark}
-          directions={
-            directions
-              ? {
-                  distance: directions.distance,
-                  duration: directions.duration,
-                  error: directions.error,
-                }
-              : undefined
-          }
+          directions={directions}
         />
       </Suspense>
     </div>

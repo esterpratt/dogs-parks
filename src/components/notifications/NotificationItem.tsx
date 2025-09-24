@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useContext } from 'react';
 import classnames from 'classnames';
 import { Notification, NotificationType } from '../../types/notification';
-import { getFormattedPastDate } from '../../utils/time';
+import { useDateUtils } from '../../hooks/useDateUtils';
 import { markAsRead } from '../../services/notifications';
 import { queryClient } from '../../services/react-query';
 import { UserContext } from '../../context/UserContext';
@@ -69,8 +69,8 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
   const { type, app_message, read_at, created_at } = notification;
   const navigate = useNavigate();
   const { userId } = useContext(UserContext);
-
   const config = getNotificationConfig(type);
+  const { getFormattedPastDate } = useDateUtils();
   const url = config.getUrl(notification);
   const title = config.getTitle(notification);
   const IconComponent = config.icon;

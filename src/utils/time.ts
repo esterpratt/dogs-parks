@@ -1,62 +1,45 @@
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-dayjs.extend(relativeTime);
+// DEPRECATED MODULE: All functions now live in dateUtils / useDateUtils hook.
+// Keep thin wrappers for transition; remove after callers are migrated.
+import {
+  getFormattedPastDate as coreGetFormattedPastDate,
+  getFormattedDateISO,
+  getAge as coreGetAge,
+  getDurationFromNow as coreGetDurationFromNow,
+} from './date.ts';
+import { i18n } from '../i18n';
+import { deriveAppLanguage } from './language';
+
+const warned: Record<string, boolean> = {};
+function warnOnce(name: string) {
+  if (!warned[name]) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      `utils/time.${name} is deprecated. Use useDateUtils() or dateUtils instead.`
+    );
+    warned[name] = true;
+  }
+}
 
 const getFormattedPastDate = (date?: Date) => {
-  if (!date) {
-    return 'N/A';
-  }
-
-  const currentDayjs = dayjs();
-  const dateDayjs = dayjs(date);
-  const diff = currentDayjs.diff(dateDayjs, 'day');
-
-  if (diff < 31) {
-    // a solution for a bug where sometimes it returned 'in a few seconds' instead of 'a few seconds ago'
-    let relative = dateDayjs.subtract(1, 'second').fromNow();
-    // Hebrew dual-form normalization (only when current locale is Hebrew)
-    // Day.js sometimes outputs 'לפני 2 ימים/שעות/שבועות'. Desired: 'לפני יומיים/שעתיים/שבועיים'.
-    if (dayjs.locale() === 'he') {
-      relative = relative
-        .replace('לפני 2 ימים', 'לפני יומיים')
-        .replace('לפני 2 יום', 'לפני יומיים')
-        .replace('לפני 2 שעות', 'לפני שעתיים')
-        .replace('לפני 2 שעה', 'לפני שעתיים')
-        .replace('לפני 2 שבועות', 'לפני שבועיים')
-        .replace('לפני 2 שבוע', 'לפני שבועיים');
-    }
-    return relative;
-  }
-
-  return dateDayjs.format('DD/MM/YYYY');
+  warnOnce('getFormattedPastDate');
+  const locale = deriveAppLanguage(i18n.language);
+  return coreGetFormattedPastDate(date, locale);
 };
 
 const getFormattedDate = (date: Date) => {
-  const dateDayjs = dayjs(date);
-  return dateDayjs.format('YYYY-MM-DD');
+  warnOnce('getFormattedDate');
+  return getFormattedDateISO(date);
 };
 
 const getAge = (birthday: Date) => {
-  const currentDayjs = dayjs();
-  const dateDayjs = dayjs(birthday);
-  let diff = currentDayjs.diff(dateDayjs, 'year');
-  let unit = diff === 1 ? 'year' : 'years';
-
-  if (diff === 0) {
-    diff = currentDayjs.diff(dateDayjs, 'month');
-    unit = diff === 1 ? 'month' : 'months';
-  }
-
-  return {
-    diff,
-    unit,
-  };
+  warnOnce('getAge');
+  return coreGetAge(birthday);
 };
 
 const getDurationFromNow = (ms: number) => {
-  const now = new Date();
-  const timeFromNow = new Date(Date.now() + ms);
-  return dayjs(now).to(timeFromNow, true);
+  warnOnce('getDurationFromNow');
+  const locale = deriveAppLanguage(i18n.language);
+  return coreGetDurationFromNow(ms, locale);
 };
 
 export { getFormattedPastDate, getFormattedDate, getAge, getDurationFromNow };
