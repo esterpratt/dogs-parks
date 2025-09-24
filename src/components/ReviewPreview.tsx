@@ -1,4 +1,4 @@
-import { useMemo, useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Flag } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
@@ -28,12 +28,10 @@ const ReviewPreview: React.FC<ReviewPreviewProps> = ({
 }) => {
   const { t } = useTranslation();
   const { setOpenedReview } = useContext(ReviewModalContext);
-  const reviewTime = useMemo<string>(() => {
-    const formattedDate = getFormattedPastDate(
-      review.updated_at || review.created_at
-    );
-    return capitalizeText(formattedDate);
-  }, [review.created_at, review.updated_at]);
+  // Recompute on every render so language switch updates relative time (cheap operation)
+  const reviewTime = capitalizeText(
+    getFormattedPastDate(review.updated_at || review.created_at)
+  );
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
   const { data: user } = useQuery({

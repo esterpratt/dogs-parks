@@ -13,7 +13,19 @@ const getFormattedPastDate = (date?: Date) => {
 
   if (diff < 31) {
     // a solution for a bug where sometimes it returned 'in a few seconds' instead of 'a few seconds ago'
-    return dateDayjs.subtract(1, 'second').fromNow();
+    let relative = dateDayjs.subtract(1, 'second').fromNow();
+    // Hebrew dual-form normalization (only when current locale is Hebrew)
+    // Day.js sometimes outputs 'לפני 2 ימים/שעות/שבועות'. Desired: 'לפני יומיים/שעתיים/שבועיים'.
+    if (dayjs.locale() === 'he') {
+      relative = relative
+        .replace('לפני 2 ימים', 'לפני יומיים')
+        .replace('לפני 2 יום', 'לפני יומיים')
+        .replace('לפני 2 שעות', 'לפני שעתיים')
+        .replace('לפני 2 שעה', 'לפני שעתיים')
+        .replace('לפני 2 שבועות', 'לפני שבועיים')
+        .replace('לפני 2 שבוע', 'לפני שבועיים');
+    }
+    return relative;
   }
 
   return dateDayjs.format('DD/MM/YYYY');

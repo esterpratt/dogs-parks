@@ -3,6 +3,7 @@ import { initReactI18next } from 'react-i18next';
 import en from './locales/en.json';
 import he from './locales/he.json';
 import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/he';
 
 const resources = {
@@ -18,6 +19,8 @@ function initI18n(params: InitI18nParams = {}): typeof i18n {
   const { lng } = params;
 
   if (!i18n.isInitialized) {
+    // Register Day.js plugins once (safe to call multiple times; Day.js guards against duplicate extension)
+    dayjs.extend(relativeTime);
     i18n
       .use(initReactI18next)
       .init({

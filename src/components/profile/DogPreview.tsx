@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import classnames from 'classnames';
 import { Mars, Venus } from 'lucide-react';
 import { Dog, GENDER } from '../../types/dog';
-import { getAge } from '../../utils/time';
+import { getLocalizedDogAgeText } from '../../utils/dogAge';
 import { Card } from '../card/Card';
 import { Image } from '../Image';
 import DogIcon from '../../assets/dog.svg?react';
@@ -15,7 +15,6 @@ interface DogPreviewProps {
 
 const DogPreview: React.FC<DogPreviewProps> = ({ dog, image }) => {
   const { name, birthday, gender } = dog;
-  const age = !birthday ? null : getAge(birthday);
   const { t } = useTranslation();
 
   return (
@@ -47,20 +46,9 @@ const DogPreview: React.FC<DogPreviewProps> = ({ dog, image }) => {
               </>
             )}
           </div>
-          {age !== null && (
+          {getLocalizedDogAgeText({ birthday, gender, t }) !== null && (
             <div className={styles.age}>
-              {age.diff === 0
-                ? t('dogs.age.justBorn')
-                : age.diff > 0
-                  ? t('dogs.age.old', { diff: age.diff, unit: age.unit })
-                  : t('dogs.age.oldCompliment', {
-                      diff: age.diff,
-                      unit: age.unit,
-                      pronoun:
-                        gender === GENDER.FEMALE
-                          ? t('dogs.age.she')
-                          : t('dogs.age.he'),
-                    })}
+              {getLocalizedDogAgeText({ birthday, gender, t })}
             </div>
           )}
         </div>

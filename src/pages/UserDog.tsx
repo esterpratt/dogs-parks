@@ -13,7 +13,7 @@ import {
 } from '../services/dogs';
 import { GENDER } from '../types/dog';
 import { queryClient } from '../services/react-query';
-import { getAge } from '../utils/time';
+import { getLocalizedDogAgeText } from '../utils/dogAge';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import { Loader } from '../components/Loader';
 import { EnlargeImageModal } from '../components/EnlargeImageModal';
@@ -99,8 +99,6 @@ const UserDog = () => {
     return null;
   }
 
-  const age = !dog.birthday ? null : getAge(dog.birthday);
-
   return (
     <>
       <div className={styles.container}>
@@ -149,16 +147,19 @@ const UserDog = () => {
                   )}
                 </div>
                 <div>
-                  {age !== null && (
+                  {getLocalizedDogAgeText({
+                    birthday: dog.birthday,
+                    gender: dog.gender,
+                    t,
+                  }) && (
                     <span className={styles.age}>
                       <Cake color={styles.green} size={14} />
                       <span>
-                        {age.diff <= 0
-                          ? t('dogs.age.justBorn')
-                          : t('dogs.age.old', {
-                              diff: age.diff,
-                              unit: age.unit,
-                            })}
+                        {getLocalizedDogAgeText({
+                          birthday: dog.birthday,
+                          gender: dog.gender,
+                          t,
+                        })}
                       </span>
                     </span>
                   )}
