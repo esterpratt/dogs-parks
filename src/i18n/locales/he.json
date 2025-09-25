@@ -241,6 +241,8 @@
     },
     "list": {
       "headerNew_one": "התראה חדשה אחת",
+      "headerNew_two": "{{count}} התראות חדשות",
+      "headerNew_many": "{{count}} התראות חדשות",
       "headerNew_other": "{{count}} התראות חדשות",
       "headerNone": "אין התראות חדשות",
       "headerEarlier": "קודמות"
