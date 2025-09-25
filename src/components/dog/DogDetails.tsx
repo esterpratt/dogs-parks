@@ -11,6 +11,7 @@ import { Dog } from '../../types/dog';
 import { Button } from '../Button';
 import { Section } from '../section/Section';
 import styles from './DogDetails.module.scss';
+import { useTranslation } from 'react-i18next';
 
 interface DogDeatilsProps {
   dog: Dog;
@@ -25,10 +26,11 @@ const DogDetails: React.FC<DogDeatilsProps> = ({
   onEditDog,
   userName,
 }) => {
+  const { t } = useTranslation();
   const dogDetailsTextMap = useMemo(
     () => [
       {
-        label: 'Size',
+        label: t('dogs.details.fields.size'),
         data: dog.size,
         icon: (
           <div
@@ -42,7 +44,7 @@ const DogDetails: React.FC<DogDeatilsProps> = ({
         ),
       },
       {
-        label: 'Temperament',
+        label: t('dogs.details.fields.temperament'),
         data: dog.temperament,
         icon: (
           <div
@@ -56,7 +58,7 @@ const DogDetails: React.FC<DogDeatilsProps> = ({
         ),
       },
       {
-        label: 'Energy',
+        label: t('dogs.details.fields.energy'),
         data: dog.energy,
         icon: (
           <div
@@ -70,7 +72,7 @@ const DogDetails: React.FC<DogDeatilsProps> = ({
         ),
       },
       {
-        label: 'Possessive',
+        label: t('dogs.details.fields.possessive'),
         data: dog.possessive,
         icon: (
           <div
@@ -84,7 +86,7 @@ const DogDetails: React.FC<DogDeatilsProps> = ({
         ),
       },
     ],
-    [dog]
+    [dog, t]
   );
 
   const existedData = dogDetailsTextMap.filter((detail) => detail.data);
@@ -92,7 +94,7 @@ const DogDetails: React.FC<DogDeatilsProps> = ({
   return (
     <Section
       className={styles.container}
-      title="About"
+      title={t('dogs.details.title')}
       contentCmp={
         <div
           className={classnames(styles.content, {
@@ -107,12 +109,12 @@ const DogDetails: React.FC<DogDeatilsProps> = ({
                   className={styles.button}
                   onClick={onEditDog}
                 >
-                  Add your dog's details
+                  {t('dogs.details.addYourDetails')}
                 </Button>
               ) : (
                 <div className={styles.empty}>
                   <span className={styles.userName}>{userName} </span>
-                  <span>did not add their dog's details yet</span>
+                  <span>{t('dogs.details.notAddedYet')}</span>
                 </div>
               )}
             </>
@@ -136,7 +138,7 @@ const DogDetails: React.FC<DogDeatilsProps> = ({
             <div className={styles.description}>
               <div className={styles.descriptionTitle}>
                 <ScrollText color={styles.green} size={16} />
-                <span>Description</span>
+                <span>{t('dogs.details.description')}</span>
               </div>
               <div className={styles.descriptionText}>{dog.description}</div>
             </div>

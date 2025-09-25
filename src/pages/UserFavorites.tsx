@@ -7,9 +7,11 @@ import { fetchUserFavorites } from '../services/favorites';
 import { Loader } from '../components/Loader';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import styles from './UserFavorites.module.scss';
+import { useTranslation } from 'react-i18next';
 
 const UserFavorites = () => {
   const { id: userId } = useParams();
+  const { t } = useTranslation();
 
   const { data: favoriteParkIds, isLoading: isLoadingFavorites } = useQuery({
     queryKey: ['favorites', userId],
@@ -48,11 +50,11 @@ const UserFavorites = () => {
   if (!isLoading && !favoriteParkIds?.length) {
     return (
       <div className={classnames(styles.container, styles.empty)}>
-        <div>No favorite parks yet.</div>
+        <div>{t('favorites.none')}</div>
         <div>
-          Sniff out nearby parks{' '}
+          {t('favorites.sniffParksPrefix')}{' '}
           <Link to="/parks" className={styles.link}>
-            here!
+            {t('favorites.sniffParksLink')}
           </Link>
         </div>
       </div>
@@ -61,7 +63,7 @@ const UserFavorites = () => {
 
   return (
     <div className={styles.container}>
-      <span className={styles.title}>My favorite parks</span>
+      <span className={styles.title}>{t('favorites.title')}</span>
       <div className={styles.list}>
         {favoriteParks.map((park) => (
           <ParkPreview park={park} key={park.id} />

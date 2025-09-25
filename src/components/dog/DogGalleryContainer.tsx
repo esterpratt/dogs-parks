@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Plus } from 'lucide-react';
 import { Dog } from '../../types/dog';
@@ -27,6 +28,7 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
   isSignedInUser,
 }) => {
   const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
+  const { t } = useTranslation();
 
   const { data: dogImages, isLoading } = useQuery({
     queryKey: ['dogImages', dog.id],
@@ -84,7 +86,7 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
     <>
       <Section
         contentClassName={styles.contentContainer}
-        title="Gallery"
+        title={t('components.gallery.title')}
         actions={
           isSignedInUser && (dogImages ?? []).length < MAX_IMAGES ? (
             <Button

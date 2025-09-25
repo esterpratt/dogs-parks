@@ -7,9 +7,11 @@ import { EditUserModal } from '../components/profile/EditUserModal';
 import { TopModal } from '../components/modals/TopModal';
 import { ThemeToggle } from '../components/profile/ThemeToggle';
 import styles from './UserInfo.module.scss';
+import { useTranslation } from 'react-i18next';
 
 const UserInfo = () => {
   const { userLogout, userDeletion } = useContext(UserContext);
+  const { t } = useTranslation();
   const [isEditUserModalOpen, setIsEditUserModalOpen] = useState(false);
   const [isDeleteUserModalOpen, setIsDeleteUserModalOpen] = useState(false);
   const navigate = useNavigate();
@@ -40,7 +42,7 @@ const UserInfo = () => {
         </div>
         <Button onClick={onEditUser} className={styles.button}>
           <Pencil size={24} />
-          <span>Edit details</span>
+          <span>{t('userInfo.editDetails')}</span>
         </Button>
         <Button
           onClick={logout}
@@ -49,7 +51,7 @@ const UserInfo = () => {
           color={styles.blue}
         >
           <LogOut size={24} />
-          <span>Logout</span>
+          <span>{t('userInfo.logout')}</span>
         </Button>
         <Button
           variant="secondary"
@@ -58,7 +60,7 @@ const UserInfo = () => {
           className={styles.button}
         >
           <Trash2 size={24} />
-          <span>Delete my profile</span>
+          <span>{t('userInfo.deleteProfile')}</span>
         </Button>
       </div>
       <EditUserModal isOpen={isEditUserModalOpen} onClose={onCloseUserModal} />
@@ -68,12 +70,9 @@ const UserInfo = () => {
         className={styles.approveModal}
       >
         <div className={styles.approveContent}>
-          <span>Hold your leash!</span>
-          <span>
-            By clicking 'Delete', all your data and your dogs' data will be sent
-            to a farm up north where it can run free forever.
-          </span>
-          <span>Are you sure you want to say goodbye?</span>
+          <span>{t('userInfo.deleteModalTitle')}</span>
+          <span>{t('userInfo.deleteModalBody1')}</span>
+          <span>{t('userInfo.deleteModalBody2')}</span>
         </div>
         <div className={styles.buttonsContainer}>
           <Button
@@ -82,7 +81,7 @@ const UserInfo = () => {
             className={styles.modalButton}
           >
             <Trash2 size={16} />
-            <span>Delete</span>
+            <span>{t('userInfo.delete')}</span>
           </Button>
           <Button
             variant="secondary"
@@ -90,7 +89,7 @@ const UserInfo = () => {
             className={styles.modalButton}
           >
             <X size={16} />
-            <span>Cancel</span>
+            <span>{t('userInfo.cancel')}</span>
           </Button>
         </div>
       </TopModal>

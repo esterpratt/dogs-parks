@@ -113,11 +113,12 @@ const UserDog = () => {
             <Link to={`/profile/${dog.owner}/dogs`}>
               <MoveLeft size={16} />
               {isSignedInUser ? (
-                <span>My</span>
+                <span>{t('userDogs.titleMyPack')}</span>
               ) : (
-                <span className={styles.userName}>{userName}'s</span>
+                <span className={styles.userName}>
+                  {t('userDogs.titleUsersPack', { name: userName })}
+                </span>
               )}
-              <span> pack</span>
             </Link>
           }
           imgCmp={
@@ -148,7 +149,9 @@ const UserDog = () => {
                   )}
                   {!isSignedInUser && (
                     <span className={styles.userName}>
-                      {capitalizeText(userName)}'s dog
+                      {t('dogs.labels.ownersDog', {
+                        name: capitalizeText(userName),
+                      })}
                     </span>
                   )}
                 </div>
@@ -163,9 +166,13 @@ const UserDog = () => {
                     <span className={styles.breed}>
                       <Tag color={styles.green} size={14} />
                       <span>
-                        {dog.breed.toLowerCase() === 'other' && 'Breed: '}
-                        {dog.breed}
-                        {dog.breed.toLowerCase() === 'mixed' && ' breed'}
+                        {dog.breed.toLowerCase() === 'other' &&
+                          `${t('dogs.edit.labels.breed')}: `}
+                        {t(`dogs.breeds.${dog.breed}`, {
+                          defaultValue: dog.breed,
+                        })}
+                        {dog.breed.toLowerCase() === 'mixed' &&
+                          ` ${t('dogs.edit.labels.breed').toLowerCase()}`}
                       </span>
                     </span>
                   )}

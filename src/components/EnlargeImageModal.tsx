@@ -4,6 +4,7 @@ import { useOrientationContext } from '../context/OrientationContext';
 import { AppearModal } from './modals/AppearModal';
 import { Button } from './Button';
 import styles from './EnlargeImageModal.module.scss';
+import { useTranslation } from 'react-i18next';
 
 interface EnlargeImageModalProps {
   isOpen: boolean;
@@ -23,6 +24,7 @@ const EnlargeImageModal: React.FC<EnlargeImageModalProps> = ({
   setImgSrc,
 }) => {
   const orientation = useOrientationContext((state) => state.orientation);
+  const { t } = useTranslation();
 
   return (
     <AppearModal
@@ -52,7 +54,7 @@ const EnlargeImageModal: React.FC<EnlargeImageModalProps> = ({
                 color={styles.red}
               >
                 <Trash2 size={18} />
-                <span>Delete</span>
+                <span>{t('common.actions.delete')}</span>
               </Button>
             )}
             {!!onSetPrimaryImage && (
@@ -61,7 +63,7 @@ const EnlargeImageModal: React.FC<EnlargeImageModalProps> = ({
                 onClick={onSetPrimaryImage}
               >
                 <Star size={18} />
-                <span>Set as primary</span>
+                <span>{t('components.enlargeImage.setPrimary')}</span>
               </Button>
             )}
           </div>

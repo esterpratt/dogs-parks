@@ -18,11 +18,13 @@ import styles from './Profile.module.scss';
 import { usePrefetchFriendsWithDogs } from '../hooks/api/usePrefetchFriendsWithDogs';
 import { fetchDogPrimaryImage } from '../services/dogs';
 import { Dog } from '../types/dog';
+import { Trans, useTranslation } from 'react-i18next';
 
 const Profile: React.FC = () => {
   const { user, dogs } = useLoaderData();
   const { user: signedInUser, isLoadingUser } = useContext(UserContext);
   const isSignedInUser = signedInUser?.id === user.id;
+  const { t } = useTranslation();
 
   const dogImages = useQueries({
     queries: dogs.map((dog: Dog) => {
@@ -37,8 +39,8 @@ const Profile: React.FC = () => {
     !dogImages || dogImages.length === 0
       ? new Array(dogs?.length || 0)
       : dogImages.length > 4
-      ? dogImages.slice(0, 4)
-      : [...dogImages.map((image) => image.data)];
+        ? dogImages.slice(0, 4)
+        : [...dogImages.map((image) => image.data)];
 
   const { isAllowedToViewProfile } = useIsAllowedToViewProfile({
     user,
@@ -104,12 +106,12 @@ const Profile: React.FC = () => {
               {!!signedInUser && (
                 <Link to={`/profile/${signedInUser.id}/friends`}>
                   <MoveLeft size={16} />
-                  <span>My friends</span>
+                  <span>{t('profile.myFriends')}</span>
                 </Link>
               )}
               <Link to="/users">
                 {!signedInUser && <MoveLeft size={16} />}
-                <span>Users</span>
+                <span>{t('profile.users')}</span>
                 {!!signedInUser && <MoveRight size={16} />}
               </Link>
             </>
@@ -130,14 +132,22 @@ const Profile: React.FC = () => {
         bottomCmp={
           isSignedInUser ? (
             <div className={styles.welcome}>
-              Paws up, <span className={styles.userName}>{user.name}!</span>
+              <Trans
+                i18nKey="profile.pawsUpRich"
+                values={{ name: user.name }}
+                components={{ name: <span className={styles.userName} /> }}
+              />
             </div>
           ) : !!signedInUser && !isSignedInUser ? (
             <div className={styles.title}>
               <div className={styles.text}>
-                {!!dogs?.length && <span>Meet </span>}
+                {!!dogs?.length && <span>{t('profile.meetPrefix')} </span>}
                 <span className={styles.userName}>{user.name}</span>
-                {!!dogs?.length && <span>'s pack: {getDogNames(dogs)}</span>}
+                {!!dogs?.length && (
+                  <span>
+                    {t('profile.packSuffix', { dogs: getDogNames(dogs) })}
+                  </span>
+                )}
               </div>
               <FriendRequestButton
                 className={styles.friendRequestContainer}

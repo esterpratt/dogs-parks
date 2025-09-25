@@ -7,6 +7,7 @@ import { useUpdateFriendship } from '../../hooks/api/useUpdateFriendship';
 import { FRIENDSHIP_STATUS } from '../../types/friendship';
 import styles from './FriendRequestButton.module.scss';
 import { useUserFriendshipMap } from '../../hooks/api/useUserFriendshipMap';
+import { useTranslation } from 'react-i18next';
 
 interface PublicProfileProps {
   friendId: string;
@@ -22,6 +23,7 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
   const { userId } = useContext(UserContext);
   const { data: friendshipMap, isLoading } = useUserFriendshipMap(userId);
   const friendship = friendshipMap ? friendshipMap.get(friendId) : null;
+  const { t } = useTranslation();
 
   const { onUpdateFriendship } = useUpdateFriendship({
     friendId,
@@ -45,7 +47,7 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
         <>
           <span>
             <Check size={12} color={styles.green} />
-            You are friends
+            {t('users.friends.status.friends')}
           </span>
           <div className={styles.buttons}>
             <Button
@@ -54,7 +56,7 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
               className={styles.button}
             >
               <X size={12} />
-              <span>Unfriend</span>
+              <span>{t('users.friends.actions.unfriend')}</span>
             </Button>
           </div>
         </>
@@ -62,7 +64,7 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
       {status === FRIENDSHIP_STATUS.PENDING && isFriendIsRequester && (
         <>
           <div className={styles.userName}>
-            {userName} wants to be your friend!
+            {t('users.friends.status.wantsToBeYourFriend', { name: userName })}
           </div>
           <div className={styles.buttons}>
             <Button
@@ -71,7 +73,7 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
               onClick={() => onUpdateFriend(FRIENDSHIP_STATUS.APPROVED)}
             >
               <Check size={12} />
-              <span>Accept</span>
+              <span>{t('users.friends.actions.accept')}</span>
             </Button>
             <Button
               variant="secondary"
@@ -79,14 +81,14 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
               className={styles.button}
             >
               <X size={12} />
-              <span>Decline</span>
+              <span>{t('users.friends.actions.decline')}</span>
             </Button>
           </div>
         </>
       )}
       {status === FRIENDSHIP_STATUS.PENDING && !isFriendIsRequester && (
         <>
-          <span>Waiting friend's response</span>
+          <span>{t('users.friends.status.waitingResponse')}</span>
           <div className={styles.buttons}>
             <Button
               variant="secondary"
@@ -94,7 +96,7 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
               className={styles.button}
             >
               <X size={12} />
-              <span>Remove request</span>
+              <span>{t('users.friends.actions.removeRequest')}</span>
             </Button>
           </div>
         </>
@@ -106,7 +108,7 @@ const FriendRequestButton: React.FC<PublicProfileProps> = ({
             onClick={() => onUpdateFriend(FRIENDSHIP_STATUS.PENDING)}
             className={styles.button}
           >
-            <span>Add friend</span>
+            <span>{t('users.friends.actions.addFriend')}</span>
           </Button>
         </div>
       )}
