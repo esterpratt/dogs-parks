@@ -149,9 +149,13 @@ const UserDog = () => {
                   )}
                   {!isSignedInUser && (
                     <span className={styles.userName}>
-                      {t('dogs.labels.ownersDog', {
-                        name: capitalizeText(userName),
-                      })}
+                      {dog.gender === GENDER.FEMALE
+                        ? t('dogs.labels.ownersDogFemale', {
+                            name: capitalizeText(userName),
+                          })
+                        : t('dogs.labels.ownersDogMale', {
+                            name: capitalizeText(userName),
+                          })}
                     </span>
                   )}
                 </div>
@@ -166,13 +170,9 @@ const UserDog = () => {
                     <span className={styles.breed}>
                       <Tag color={styles.green} size={14} />
                       <span>
-                        {dog.breed.toLowerCase() === 'other' &&
-                          `${t('dogs.edit.labels.breed')}: `}
                         {t(`dogs.breeds.${dog.breed}`, {
                           defaultValue: dog.breed,
                         })}
-                        {dog.breed.toLowerCase() === 'mixed' &&
-                          ` ${t('dogs.edit.labels.breed').toLowerCase()}`}
                       </span>
                     </span>
                   )}

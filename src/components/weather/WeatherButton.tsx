@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import classnames from 'classnames';
 import { useQuery } from '@tanstack/react-query';
@@ -14,6 +15,7 @@ interface WeatherButtonProps {
 const ONE_MINUTE = 60 * 1000;
 
 const WeatherButton: React.FC<WeatherButtonProps> = ({ lat, long }) => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
   const { data: forecast } = useQuery<WeatherForecast | null>({
@@ -52,7 +54,7 @@ const WeatherButton: React.FC<WeatherButtonProps> = ({ lat, long }) => {
       <button
         type="button"
         aria-expanded={open}
-        aria-label="Weather forecast"
+        aria-label={t('weather.button.ariaLabel')}
         onClick={onToggle}
         className={styles.button}
       >
@@ -76,7 +78,9 @@ const WeatherButton: React.FC<WeatherButtonProps> = ({ lat, long }) => {
         </div>
         <div className={styles.row}>
           <span>
-            {forecast.precipitationProbability}% chance of rain in the next hour
+            {t('weather.chanceOfRainNextHour', {
+              count: forecast.precipitationProbability,
+            })}
           </span>
         </div>
       </div>

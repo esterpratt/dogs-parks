@@ -1,4 +1,4 @@
-import { MouseEvent, useMemo } from 'react';
+import { MouseEvent } from 'react';
 import {
   Activity,
   Ruler,
@@ -27,67 +27,69 @@ const DogDetails: React.FC<DogDeatilsProps> = ({
   userName,
 }) => {
   const { t } = useTranslation();
-  const dogDetailsTextMap = useMemo(
-    () => [
-      {
-        label: t('dogs.details.fields.size'),
-        data: dog.size,
-        icon: (
-          <div
-            style={{
-              border: `1px solid ${styles.green}`,
-              backgroundColor: styles.lightGreen,
-            }}
-          >
-            <Ruler color={styles.green} size={28} />
-          </div>
-        ),
-      },
-      {
-        label: t('dogs.details.fields.temperament'),
-        data: dog.temperament,
-        icon: (
-          <div
-            style={{
-              border: `1px solid ${styles.orange}`,
-              backgroundColor: styles.lightOrange,
-            }}
-          >
-            <Thermometer color={styles.orange} size={28} />
-          </div>
-        ),
-      },
-      {
-        label: t('dogs.details.fields.energy'),
-        data: dog.energy,
-        icon: (
-          <div
-            style={{
-              border: `1px solid ${styles.red}`,
-              backgroundColor: styles.lightRed,
-            }}
-          >
-            <Activity color={styles.red} size={28} />
-          </div>
-        ),
-      },
-      {
-        label: t('dogs.details.fields.possessive'),
-        data: dog.possessive,
-        icon: (
-          <div
-            style={{
-              border: `1px solid ${styles.blue}`,
-              backgroundColor: styles.lightBlue,
-            }}
-          >
-            <ShieldX color={styles.blue} size={28} />
-          </div>
-        ),
-      },
-    ],
-    [dog, t]
-  );
+
+  const dogDetailsTextMap = [
+    {
+      label: t('dogs.details.fields.size'),
+      data: dog.size
+        ? t(`dogs.size.${String(dog.size).toUpperCase()}`)
+        : undefined,
+      icon: (
+        <div
+          style={{
+            border: `1px solid ${styles.green}`,
+            backgroundColor: styles.lightGreen,
+          }}
+        >
+          <Ruler color={styles.green} size={28} />
+        </div>
+      ),
+    },
+    {
+      label: t('dogs.details.fields.temperament'),
+      data: dog.temperament,
+      icon: (
+        <div
+          style={{
+            border: `1px solid ${styles.orange}`,
+            backgroundColor: styles.lightOrange,
+          }}
+        >
+          <Thermometer color={styles.orange} size={28} />
+        </div>
+      ),
+    },
+    {
+      label: t('dogs.details.fields.energy'),
+      data: dog.energy
+        ? t(`dogs.energy.${String(dog.energy).toUpperCase()}`)
+        : undefined,
+      icon: (
+        <div
+          style={{
+            border: `1px solid ${styles.red}`,
+            backgroundColor: styles.lightRed,
+          }}
+        >
+          <Activity color={styles.red} size={28} />
+        </div>
+      ),
+    },
+    {
+      label: t('dogs.details.fields.possessive'),
+      data: dog.possessive,
+      icon: (
+        <div
+          style={{
+            border: `1px solid ${styles.blue}`,
+            backgroundColor: styles.lightBlue,
+          }}
+        >
+          <ShieldX color={styles.blue} size={28} />
+        </div>
+      ),
+    },
+  ];
 
   const existedData = dogDetailsTextMap.filter((detail) => detail.data);
 

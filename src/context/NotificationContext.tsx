@@ -6,6 +6,7 @@ import {
   ReactNode,
 } from 'react';
 import { NotificationModal } from '../components/modals/NotificationModal';
+import { useTranslation } from 'react-i18next';
 
 interface NotificationContextType {
   notify: (message?: string, isError?: boolean, timeout?: number) => void;
@@ -15,13 +16,14 @@ interface NotificationContextType {
 const NotificationContext = createContext<NotificationContextType | null>(null);
 
 export const NotificationProvider = ({ children }: { children: ReactNode }) => {
-  const [message, setMessage] = useState('Good boy!');
+  const { t } = useTranslation();
+  const [message, setMessage] = useState(() => t('toasts.default.goodBoy'));
   const [isError, setIsError] = useState(false);
   const [open, setOpen] = useState(false);
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   const notify = useCallback(
-    (msg = 'Good Boy!', isError = false, timeout = 2000) => {
+    (msg = t('toasts.default.goodBoy'), isError = false, timeout = 2000) => {
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
@@ -36,7 +38,7 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
 
       setTimeoutId(newTimeoutId);
     },
-    [timeoutId]
+    [timeoutId, t]
   );
 
   const close = useCallback(() => {
@@ -54,6 +56,7 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useNotification = () => {
   const ctx = useContext(NotificationContext);
 

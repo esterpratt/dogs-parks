@@ -39,6 +39,7 @@ export const ModeProvider = ({ children }: ModeProviderProps) => {
   return <ModeContext.Provider value={store}>{children}</ModeContext.Provider>;
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useModeContext = <T,>(selector: (state: ModeStoreProps) => T) => {
   const context = useContext(ModeContext);
 

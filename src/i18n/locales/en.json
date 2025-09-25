@@ -502,7 +502,10 @@
     },
     "checkin": {
       "title": "Enjoy your stay!",
-      "titleWithName": "Enjoy your stay, {{name}}!"
+      "titleWithName": "Enjoy your stay, {{name}}!",
+      "alreadyTitle": "Are you Schrödinger's dog?",
+      "alreadyBody": "You're currently checked in at another park. Do you want to check in here instead?",
+      "switchHere": "Check in here"
     },
     "visitors": {
       "onlyYou": "You're the only one here right now",
@@ -563,7 +566,8 @@
   "weather": {
     "button": {
       "ariaLabel": "Weather forecast"
-    }
+    },
+    "chanceOfRainNextHour": "{{count}}% chance of rain in the next hour"
   },
   "dogs": {
     "gender": {
@@ -581,7 +585,9 @@
       "HIGH": "High"
     },
     "labels": {
-      "ownersDog": "{{name}}'s dog"
+      "ownersDog": "{{name}}'s dog",
+      "ownersDogMale": "{{name}}'s dog",
+      "ownersDogFemale": "{{name}}'s dog"
     },
     "delete": {
       "confirm": "Are you sure you want to say goodbye to {{name}}?"
@@ -590,6 +596,12 @@
       "justBorn": "Just born",
       "justBornMale": "Just born",
       "justBornFemale": "Just born",
+      "oldSingularYear": "1 year old",
+      "oldMaleSingularYear": "1 year old",
+      "oldFemaleSingularYear": "1 year old",
+      "oldSingularMonth": "1 month old",
+      "oldMaleSingularMonth": "1 month old",
+      "oldFemaleSingularMonth": "1 month old",
       "old": "{{diff}} {{unit}} old",
       "oldMale": "{{diff}} {{unit}} old",
       "oldFemale": "{{diff}} {{unit}} old",
@@ -643,8 +655,8 @@
       }
     },
     "breeds": {
-      "Mixed": "Mixed",
-      "Other": "Other",
+      "Mixed": "Mixed breed",
+      "Other": "Unknown breed",
       "Affenpinscher": "Affenpinscher",
       "Afghan Hound": "Afghan Hound",
       "Airedale Terrier": "Airedale Terrier",

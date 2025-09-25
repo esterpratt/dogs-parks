@@ -47,6 +47,28 @@ function getLocalizedDogAgeText(
       : age.unit;
   const localizedUnit = t(`dogs.age.units.${age.unit}`);
 
+  // Special-case: singular year in Hebrew (and allow locale-specific phrasing via keys)
+  if (age.diff === 1 && baseUnit === 'year') {
+    if (gender === GENDER.FEMALE) {
+      return t('dogs.age.oldFemaleSingularYear');
+    }
+    if (gender === GENDER.MALE) {
+      return t('dogs.age.oldMaleSingularYear');
+    }
+    return t('dogs.age.oldSingularYear');
+  }
+
+  // Special-case: singular month handling
+  if (age.diff === 1 && baseUnit === 'month') {
+    if (gender === GENDER.FEMALE) {
+      return t('dogs.age.oldFemaleSingularMonth');
+    }
+    if (gender === GENDER.MALE) {
+      return t('dogs.age.oldMaleSingularMonth');
+    }
+    return t('dogs.age.oldSingularMonth');
+  }
+
   // Generic dual-form resolution (diff === 2) using grammar metadata
   const dualResolved = resolveDualForm({
     diff: age.diff,

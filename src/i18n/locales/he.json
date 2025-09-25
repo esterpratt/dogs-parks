@@ -504,7 +504,10 @@
     },
     "checkin": {
       "title": "תהנו מהשהות!",
-      "titleWithName": "{{name}}, תהנו מהשהות!"
+      "titleWithName": "{{name}}, תהנו מהשהות!",
+      "alreadyTitle": "האם אתה הכלב של שרדינגר?",
+      "alreadyBody": "אתם כבר בצ'ק-אין בפארק אחר. רוצים לעשות צ'ק-אין כאן במקום?",
+      "switchHere": "צ'ק-אין כאן"
     },
     "visitors": {
       "onlyYou": "את/ה היחיד/ה כאן כרגע",
@@ -565,7 +568,8 @@
   "weather": {
     "button": {
       "ariaLabel": "תחזית מזג אוויר"
-    }
+    },
+    "chanceOfRainNextHour": "{{count}}% סיכוי לגשם בשעה הקרובה"
   },
   "dogs": {
     "gender": {
@@ -583,7 +587,9 @@
       "HIGH": "גבוהה"
     },
     "labels": {
-      "ownersDog": "הכלב של {{name}}"
+      "ownersDog": "הכלב של {{name}}",
+      "ownersDogMale": "הכלב של {{name}}",
+      "ownersDogFemale": "הכלבה של {{name}}"
     },
     "delete": {
       "confirm": "בטוחים שרוצים להיפרד מ{{name}}?"
@@ -592,6 +598,12 @@
       "justBorn": "נולד/ה זה עתה",
       "justBornMale": "נולד זה עתה",
       "justBornFemale": "נולדה זה עתה",
+      "oldSingularYear": "בן שנה",
+      "oldMaleSingularYear": "בן שנה",
+      "oldFemaleSingularYear": "בת שנה",
+      "oldSingularMonth": "בן חודש",
+      "oldMaleSingularMonth": "בן חודש",
+      "oldFemaleSingularMonth": "בת חודש",
       "old": "בן/בת {{diff}} {{unit}}",
       "oldMale": "בן {{diff}} {{unit}}",
       "oldFemale": "בת {{diff}} {{unit}}",
@@ -644,8 +656,8 @@
       }
     },
     "breeds": {
-      "Mixed": "מעורב",
-      "Other": "אחר",
+      "Mixed": "גזע מעורב",
+      "Other": "גזע לא ידוע",
       "Affenpinscher": "אפנפינשר",
       "Afghan Hound": "כלב אפגני",
       "Airedale Terrier": "איירדייל טרייר",
