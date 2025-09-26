@@ -10,6 +10,7 @@
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
     "preview": "vite preview",
     "map": "vite build --sourcemap",
+    "analyze": "SME=1 vite build --sourcemap && source-map-explorer 'dist/assets/index-*.js' 'dist/assets/index-*.js.map' --no-border-checks --html dist/bundle-report.html && (open dist/bundle-report.html || xdg-open dist/bundle-report.html || true)",
     "test": "vitest run",
     "ios-setup": "./.claude/commands/ios-dev-setup.sh",
     "pr": "BR=$(git rev-parse --abbrev-ref HEAD); git push -u origin $BR; TITLE=$(node scripts/pr-title.js $BR); gh pr create --base main --head $BR --title \"$TITLE\" --fill || (echo 'PR likely exists; showing current PR' && gh pr view --web || true)",
