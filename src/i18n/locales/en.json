@@ -239,11 +239,36 @@
     "actions": {
       "markAllRead": "Mark all as read"
     },
+    "common": {
+      "someone": "Someone"
+    },
+    "general": {
+      "defaultTitle": "Notification",
+      "defaultMessage": "You have a new update"
+    },
     "list": {
       "headerNew_one": "{{count}} new notification",
       "headerNew_other": "{{count}} new notifications",
       "headerNone": "No new notifications",
       "headerEarlier": "Earlier"
+    },
+    "types": {
+      "friendRequest": {
+        "title": "{{name}} sent you a friend request",
+        "appMessage": "Click to respond"
+      },
+      "friendApproval": {
+        "title": "{{name}} accepted your friend request",
+        "appMessage": "You are now friends!"
+      },
+      "parkInvite": {
+        "title": "{{name}} invited you to a park",
+        "appMessage": "Click to respond"
+      },
+      "parkInviteResponse": {
+        "title": "{{name}} responded to your invite",
+        "appMessage": "Click to view the response"
+      }
     },
     "modal": {
       "title": "Update your notifications",

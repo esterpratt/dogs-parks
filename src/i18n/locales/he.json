@@ -239,6 +239,13 @@
     "actions": {
       "markAllRead": "סימון הכל כנקרא"
     },
+    "common": {
+      "someone": "מישהו/י"
+    },
+    "general": {
+      "defaultTitle": "התראה",
+      "defaultMessage": "יש לך עדכון חדש"
+    },
     "list": {
       "headerNew_one": "התראה חדשה אחת",
       "headerNew_two": "{{count}} התראות חדשות",
@@ -246,6 +253,24 @@
       "headerNew_other": "{{count}} התראות חדשות",
       "headerNone": "אין התראות חדשות",
       "headerEarlier": "קודמות"
+    },
+    "types": {
+      "friendRequest": {
+        "title": "{{name}} שלח/ה לך בקשת חברות",
+        "appMessage": "לחץ/י כדי להגיב"
+      },
+      "friendApproval": {
+        "title": "{{name}} אישר/ה את בקשת החברות שלך",
+        "appMessage": "אתם עכשיו חברים!"
+      },
+      "parkInvite": {
+        "title": "{{name}} הזמין/ה אותך לפארק",
+        "appMessage": "לחץ/י כדי להגיב"
+      },
+      "parkInviteResponse": {
+        "title": "{{name}} הגיב/ה להזמנה שלך",
+        "appMessage": "לחץ/י כדי לצפות בתגובה"
+      }
     },
     "modal": {
       "title": "עדכון הגדרות ההתראות",

@@ -8,6 +8,8 @@ import { useDateUtils } from '../../hooks/useDateUtils';
 import { markAsRead } from '../../services/notifications';
 import { queryClient } from '../../services/react-query';
 import { UserContext } from '../../context/UserContext';
+import { useTranslation } from 'react-i18next';
+import { translateNotification } from '../../utils/translateNotification';
 import styles from './NotificationItem.module.scss';
 
 interface NotificationItemProps {
@@ -18,7 +20,6 @@ interface NotificationConfig {
   icon: LucideIcon;
   iconStyle: string;
   getUrl: (notification: Notification) => string | null;
-  getTitle: (notification: Notification) => string;
   invalidateQueries: (userId: string) => void;
 }
 
@@ -29,7 +30,6 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
         icon: UserPlus,
         iconStyle: styles.friendRequest,
         getUrl: (notification) => `/profile/${notification.sender_id}`,
-        getTitle: (notification) => notification.title,
         invalidateQueries: (userId) => {
           queryClient.invalidateQueries({
             queryKey: ['friendsWithDogs', userId, 'PENDING', 'REQUESTER'],
@@ -44,7 +44,6 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
         icon: Heart,
         iconStyle: styles.friendApproval,
         getUrl: (notification) => `/profile/${notification.sender_id}`,
-        getTitle: (notification) => notification.title,
         invalidateQueries: (userId) => {
           queryClient.invalidateQueries({
             queryKey: ['friendsWithDogs', userId],
@@ -59,21 +58,36 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
         icon: Heart,
         iconStyle: styles.friendApproval,
         getUrl: () => null,
-        getTitle: (notification) => notification.title,
         invalidateQueries: () => {},
       };
   }
 };
 
 const NotificationItem = ({ notification }: NotificationItemProps) => {
-  const { type, app_message, read_at, created_at } = notification;
+  const {
+    type,
+    read_at,
+    created_at,
+    sender,
+    title: serverTitle,
+    app_message,
+  } = notification;
   const navigate = useNavigate();
-  const { userId } = useContext(UserContext);
-  const config = getNotificationConfig(type);
+  const { t } = useTranslation();
   const { getFormattedPastDate } = useDateUtils();
-  const url = config.getUrl(notification);
-  const title = config.getTitle(notification);
+  const { userId } = useContext(UserContext);
+
+  const config = getNotificationConfig(type);
   const IconComponent = config.icon;
+  const url = config.getUrl(notification);
+
+  const { title, appMessage } = translateNotification({
+    type,
+    senderName: sender?.name ?? null,
+    serverTitle,
+    serverAppMessage: app_message,
+    t,
+  });
 
   const { mutate: markAsReadMutation } = useMutation({
     mutationFn: () => markAsRead({ notificationId: notification.id }),
@@ -118,7 +132,7 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
           <div className={styles.userNameRow}>
             <div className={styles.userName}>{title}</div>
           </div>
-          <div className={styles.message}>{app_message}</div>
+          <div className={styles.message}>{appMessage}</div>
           <div className={styles.timestamp}>
             {getFormattedPastDate(new Date(created_at))}
           </div>
