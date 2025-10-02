@@ -56,7 +56,6 @@ const upsertDeviceToken = async (params: UpsertDeviceTokenParams) => {
       throw error;
     }
   } catch (error) {
-    console.error('[Push] upsertDeviceToken error:', error);
     throwError(error);
   }
 };
