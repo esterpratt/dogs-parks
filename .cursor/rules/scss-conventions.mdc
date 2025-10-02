@@ -1,0 +1,117 @@
+---
+description: SCSS styling conventions for Dogs Parks application
+globs: *.scss,*.sass
+alwaysApply: false
+---
+
+# SCSS Styling Conventions
+
+This rule outlines the established styling conventions for SCSS files in the Dogs Parks application.
+
+## 📏 Units & Measurements
+
+### **Use px Instead of rem**
+
+```scss
+// ✅ Good: Use px for all measurements
+.container {
+  width: 320px;
+  height: 200px;
+  padding: 16px;
+  margin: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.button {
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 8px;
+  min-height: 44px;
+}
+
+.modal {
+  max-width: 480px;
+  margin: 20px;
+  padding: 24px;
+}
+
+// ❌ Bad: Don't use rem units
+.container {
+  width: 20rem;
+  height: 12.5rem;
+  padding: 1rem;
+  margin: 0.5rem 0.75rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  min-height: 2.75rem;
+}
+```
+
+## 🔤 Typography
+
+### **Do Not Use font-weight Property**
+
+```scss
+// ✅ Good: Avoid font-weight property entirely
+.title {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.subtitle {
+  font-size: 18px;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+.body-text {
+  font-size: 14px;
+  color: #444;
+  line-height: 20px;
+}
+
+.caption {
+  font-size: 12px;
+  color: #888;
+}
+
+// ❌ Bad: Don't use font-weight
+.title {
+  font-size: 24px;
+  font-weight: bold; // Don't use this
+  color: #333;
+}
+
+.subtitle {
+  font-size: 18px;
+  font-weight: 600; // Don't use this
+  color: #666;
+}
+
+.body-text {
+  font-size: 14px;
+  font-weight: normal; // Don't use this
+  color: #444;
+}
+
+.light-text {
+  font-size: 14px;
+  font-weight: 300; // Don't use this
+  color: #666;
+}
+```
+
+## 📋 Checklist for SCSS Files
+
+- [ ] All measurements use px units (not rem, em, or other units)
+- [ ] No font-weight properties are used anywhere

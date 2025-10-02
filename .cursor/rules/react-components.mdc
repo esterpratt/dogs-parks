@@ -1,0 +1,471 @@
+---
+description: React component conventions and patterns for Dogs Parks application
+globs: *.tsx,*.jsx
+alwaysApply: false
+---
+
+# React Component Conventions
+
+This rule outlines the established patterns and conventions for React components in the Dogs Parks application.
+
+## 📁 File Structure & Naming
+
+### **File Organization**
+
+- **Components**: Place in `src/components/` with feature-based subdirectories
+- **Pages**: Place in `src/pages/` for route-level components
+- **Co-location**: Keep component-specific files together (`.tsx`, `.module.scss`, `.test.tsx`)
+
+### **Naming Conventions**
+
+- **Files**: Use PascalCase for component files (`UserDog.tsx`, `ReviewPreview.tsx`)
+- **CSS Modules**: Use `.module.scss` extension (`Profile.module.scss`)
+- **Components**: Use PascalCase for component names matching filename
+
+## 📦 Import Organization
+
+### **Import Order** (Always follow this sequence):
+
+1. **React imports** (React hooks, React Router)
+2. **Third-party libraries** (Lucide icons, classnames, TanStack Query)
+3. **Internal services** (API calls, utilities)
+4. **Types & interfaces**
+5. **Hooks** (custom hooks)
+6. **Context** (React context)
+7. **Internal components** (UI components, modals)
+8. **Assets** (SVG imports, images)
+9. **Styles** (CSS modules - always last)
+
+```tsx
+// ✅ Good: Proper import order
+import { useContext, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { Cake, Mars, Pencil } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import classnames from 'classnames';
+
+import { fetchDogs } from '../services/dogs';
+import { Dog } from '../types/dog';
+import { useDelayedLoading } from '../hooks/useDelayedLoading';
+import { UserContext } from '../context/UserContext';
+import { Button } from '../components/Button';
+import { Header } from '../components/Header';
+import DogIcon from '../assets/dog.svg?react';
+import styles from './UserDog.module.scss';
+```
+
+## 🎯 Component Structure
+
+### **Functional Components Pattern**
+
+- should use named exported unless the component/page is lazy loaded
+
+```tsx
+// ✅ Good: Standard component structure
+interface ComponentProps {
+  required: string;
+  optional?: boolean;
+  callback?: (data: string) => void;
+}
+
+const ComponentName: React.FC<ComponentProps> = (props) => {
+  // 1. Extract props inside component
+  const { required, optional = false, callback } = props;
+
+  // 2. Hooks (useState, useContext, custom hooks)
+  const { t } = useTranslation();
+  const [state, setState] = useState(initialValue);
+  const { user } = useContext(UserContext);
+
+  // 2. Queries and mutations
+  const { data, isLoading } = useQuery({
+    queryKey: ['key', id],
+    queryFn: () => fetchData(id),
+  });
+
+  // 3. Event handlers (prefixed with 'on')
+  const onHandleClick = () => {
+    // handler logic
+  };
+
+  // 4. Early returns for loading/error states
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (!data) {
+    return null;
+  }
+
+  // 5. Render logic
+  return <div className={styles.container}>{/* JSX content */}</div>;
+};
+
+export default ComponentName;
+// or
+export { ComponentName };
+```
+
+## 🪝 Hooks Usage Patterns
+
+### **React Query Pattern**
+
+```tsx
+// ✅ Good: Consistent query structure
+const { data: user } = useQuery({
+  queryKey: ['user', userId],
+  queryFn: () => fetchUser(userId!),
+  enabled: !!userId,
+});
+
+// ✅ Good: Mutation with proper callbacks
+const { mutate: updateUser, isPending } = useMutation({
+  mutationFn: updateUserData,
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ['user', userId] });
+    notify(t('success.message'));
+  },
+  onError: (error) => {
+    setError(error.message);
+  },
+});
+```
+
+### **State Management**
+
+```tsx
+// ✅ Good: Descriptive state naming
+const [isModalOpen, setIsModalOpen] = useState(false);
+const [selectedImage, setSelectedImage] = useState<string>('');
+const [isLoading, setIsLoading] = useState(false);
+
+// ✅ Good: Object state updates
+const [formData, setFormData] = useState({
+  name: '',
+  email: '',
+  phone: '',
+});
+
+const onUpdateFormData = (field: string, value: string) => {
+  setFormData((prev) => ({
+    ...prev,
+    [field]: value,
+  }));
+};
+```
+
+## 🎨 Styling Conventions
+
+### **CSS Modules Usage**
+
+```tsx
+// ✅ Good: CSS Modules import
+import styles from './Component.module.scss';
+
+// ✅ Good: Class name usage
+<div className={styles.container}>
+  <span className={styles.userName}>
+    {user.name}
+  </span>
+</div>
+
+// ✅ Good: Conditional classes with classnames
+<div className={classnames(styles.header, {
+  [styles.small]: isSignedInUser,
+  [styles.medium]: !isSignedInUser,
+})}>
+```
+
+### **Style Variables Access**
+
+```tsx
+// ✅ Good: Accessing CSS custom properties
+<Mars color={styles.green} size={18} />
+<Button color={styles.red} variant="secondary" />
+```
+
+## 🔄 Event Handler Patterns
+
+### **Naming Convention**
+
+- **Event handlers**: Always prefix with `handle` (`handleClick`, `handleSubmit`, `handleChange`)
+- **Callback props**: Use `on` prefix (`onClose`, `onSave`, `onSelect`)
+
+```tsx
+// ✅ Good: Event handler naming
+const handleCloseModal = () => {
+  setIsModalOpen(false);
+};
+
+const handleSubmitForm = async (event: FormEvent<HTMLFormElement>) => {
+  event.preventDefault();
+  // form logic
+};
+
+const handleImageClick = (imageUrl: string) => {
+  setSelectedImage(imageUrl);
+  setIsEnlargeModalOpen(true);
+};
+```
+
+## 🌍 Internationalization
+
+### **Translation Hook Usage**
+
+```tsx
+// ✅ Good: Translation pattern
+const { t } = useTranslation();
+
+// ✅ Good: Simple translations
+<span>{t('profile.myFriends')}</span>
+
+// ✅ Good: Translations with interpolation
+<span>{t('profile.titleUsersPack', { name: userName })}</span>
+
+// ✅ Good: Rich text translations with Trans component
+<Trans
+  i18nKey="profile.pawsUpRich"
+  values={{ name: user.name }}
+  components={{ name: <span className={styles.userName} /> }}
+/>
+```
+
+## 🧩 Component Composition
+
+### **Props Interface Pattern**
+
+```tsx
+// ✅ Good: Clear interface definition (component-specific, not exported)
+interface ReviewPreviewProps {
+  review: Review;
+  userId?: string | null;
+  showPark?: boolean;
+  withName?: boolean;
+}
+
+// ✅ Good: Extending HTML attributes when needed
+interface ControlledInputProps extends InputHTMLAttributes<HTMLInputElement> {
+  label?: string;
+  error?: string;
+  inputRef?: React.Ref<HTMLInputElement>;
+}
+
+// ❌ Bad: Exporting types from components
+export interface ComponentProps {
+  // Don't export from components
+}
+
+// ✅ Good: Shared types go in types folder
+// Move to src/types/shared.ts if used in multiple components
+```
+
+### **Conditional Rendering**
+
+```tsx
+// ✅ Good: Conditional rendering patterns
+{
+  isSignedInUser && <EditButton />;
+}
+
+{
+  !canCheckIn ? <CheckoutButton /> : <CheckinButton />;
+}
+
+{
+  !!userId && userId === review.user_id ? (
+    <EditReviewButton />
+  ) : (
+    <ReportButton />
+  );
+}
+```
+
+## 🔄 Loading & Error States
+
+### **Loading States**
+
+```tsx
+// ✅ Good: Loading state handling
+const { showLoader } = useDelayedLoading({
+  isLoading: isLoadingDog,
+  minDuration: 750,
+});
+
+if (showLoader) {
+  return <Loader style={{ paddingTop: '64px' }} />;
+}
+
+// ✅ Good: Inline loading states
+<HeaderImage
+  imgSrc={primaryImage}
+  isLoading={isPending}
+  onClickEditPhoto={isSignedInUser ? onOpenCamera : null}
+/>;
+```
+
+### **Error Handling**
+
+```tsx
+// ✅ Good: Error state management
+const [error, setError] = useState('');
+
+// Clear errors on relevant changes
+useEffect(() => {
+  setError('');
+}, [isSignup, setError]);
+
+// Display errors consistently
+{
+  error && <div className={styles.error}>{error}</div>;
+}
+```
+
+## 📱 Modal Patterns
+
+### **Modal State Management**
+
+```tsx
+// ✅ Good: Modal state pattern
+const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+const onOpenEditModal = () => setIsEditModalOpen(true);
+const onCloseEditModal = () => setIsEditModalOpen(false);
+
+// ✅ Good: Modal component usage
+<EditModal
+  isOpen={isEditModalOpen}
+  onClose={onCloseEditModal}
+  data={modalData}
+  onSubmit={onSubmitEdit}
+/>;
+```
+
+## 🎯 Performance Considerations
+
+### **Query Optimization**
+
+```tsx
+// ✅ Good: Conditional queries
+const { data: userReviews } = useQuery({
+  queryKey: ['reviews', userId],
+  queryFn: () => fetchUserReviews(userId!),
+  enabled: !!userId, // Only run when userId exists
+});
+
+// ✅ Good: Prefetching patterns
+usePrefetchRoutesOnIdle(['dog', 'userFriends', 'userFavorites']);
+```
+
+### **Memoization**
+
+```tsx
+// ✅ Good: Memoized computations
+const dogImagesToDisplay = useMemo(() => {
+  if (!dogImages || dogImages.length === 0) {
+    return new Array(dogs?.length || 0);
+  }
+  return dogImages.length > 4
+    ? dogImages.slice(0, 4)
+    : dogImages.map((image) => image.data);
+}, [dogImages, dogs?.length]);
+```
+
+### **useEffect Async Patterns**
+
+```tsx
+// ✅ Good: Proper async handling in useEffect
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const result = await apiCall();
+      setData(result);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  fetchData();
+}, [dependency]);
+
+// ✅ Good: Alternative pattern with separate async function
+const fetchUserData = async (userId: string) => {
+  try {
+    const user = await fetchUser(userId);
+    setUser(user);
+  } catch (error) {
+    setError(error.message);
+  }
+};
+
+useEffect(() => {
+  if (userId) {
+    fetchUserData(userId);
+  }
+}, [userId]);
+
+// ❌ Bad: IIFE (Immediately Invoked Function Expression) in useEffect
+useEffect(() => {
+  (async () => {
+    // Don't use IIFE for async tasks
+    const result = await apiCall();
+    setData(result);
+  })();
+}, [dependency]);
+```
+
+## 🚫 Anti-Patterns to Avoid
+
+```tsx
+// ❌ Bad: Inline styles instead of CSS modules
+<div style={{ marginTop: '20px', color: 'red' }}>
+
+// ❌ Bad: Direct DOM manipulation
+document.getElementById('element').style.display = 'none';
+
+// ❌ Bad: Non-descriptive prop names
+<Component data={data} handler={handler} />
+
+// ❌ Bad: Props destructured in function signature
+const Component = ({ prop1, prop2, prop3 }) => {
+  // Should extract props inside component
+};
+
+// ❌ Bad: Exporting types/interfaces from components
+export interface ComponentProps {
+  // Move to types folder if used elsewhere
+}
+
+// ❌ Bad: IIFE in useEffect
+useEffect(() => {
+  (async () => {
+    await fetchData();
+  })();
+}, []);
+
+// ❌ Bad: Missing error boundaries
+// Always handle potential errors in queries and mutations
+
+// ❌ Bad: Inconsistent naming
+const clickHandler = () => {}; // Should be handleClick
+const is_loading = useState(false); // Should be isLoading
+
+// ❌ Bad: Missing translations
+<span>Welcome back!</span> // Should use t('welcome.back')
+```
+
+## 📋 Checklist for New Components
+
+- [ ] Proper import organization (React → libraries → services → types → hooks → context → components → assets → styles)
+- [ ] TypeScript interface for props (not exported unless shared)
+- [ ] Props extracted inside component, not in function signature
+- [ ] CSS Modules for styling
+- [ ] Internationalization with `useTranslation`
+- [ ] Proper event handler naming (`handle` prefix for internal, `on` for props)
+- [ ] Loading and error state handling
+- [ ] Consistent query patterns with TanStack Query
+- [ ] Proper async handling in useEffect (no IIFE)
+- [ ] Proper cleanup in useEffect hooks
+- [ ] Shared types moved to `src/types/` folder
+- [ ] Accessibility considerations (ARIA labels, semantic HTML)
+- [ ] Named export statement at the end of file
