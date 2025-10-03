@@ -12,7 +12,8 @@ import { ReportModal } from './ReportModal';
 import styles from './ReviewPreview.module.scss';
 import { capitalizeText } from '../utils/text';
 import { useAppLocale } from '../hooks/useAppLocale';
-import { useParkWithTranslation } from '../hooks/api/useParkWithTranslation';
+import { fetchParkWithTranslation } from '../services/parks';
+import { parkKey } from '../hooks/api/keys';
 
 interface ReviewPreviewProps {
   review: Review;
@@ -43,9 +44,15 @@ const ReviewPreview: React.FC<ReviewPreviewProps> = ({
     enabled: !!review.user_id,
   });
 
-  const { park: translatedPark } = useParkWithTranslation({
-    parkId: review.park_id,
-    language: currentLanguage,
+  const { data: translatedPark } = useQuery({
+    queryKey: parkKey(review.park_id, currentLanguage),
+    queryFn: () =>
+      fetchParkWithTranslation({
+        parkId: review.park_id,
+        language: currentLanguage,
+      }),
+    enabled: !!review.park_id,
+    placeholderData: (prev) => prev,
   });
 
   return (

@@ -1,4 +1,3 @@
-// hooks/useParksCrossLanguageFilter.ts
 import { useMemo } from 'react';
 import { useQueries } from '@tanstack/react-query';
 import { fetchParksJSON } from '../services/parks';
@@ -18,14 +17,12 @@ function normalizeText(input: string): string {
 }
 
 function buildBlob(park: Park): string {
-  // ---------------- changed by me: centralize fields we search on ----------------
   return normalizeText(
     [park.name, park.city, park.address].filter(Boolean).join(' ')
   );
 }
 
 function useParksCrossLanguageFilter() {
-  // ---------------- changed by me: pull all languages so users can search in any language ----------------
   const availableLanguages = Object.values(APP_LANGUAGES);
 
   const languageQueries = useQueries({
@@ -35,43 +32,45 @@ function useParksCrossLanguageFilter() {
     })),
   });
 
-  // Build: parkId -> combined searchable blob (across ALL languages)
-  const blobById = useMemo(() => {
-    const map = new Map<string, string>();
+  const searchBlobByParkId = useMemo(() => {
+    const searchBlobMap = new Map<string, string>();
 
-    availableLanguages.forEach((language, idx) => {
-      const data = languageQueries[idx]?.data ?? [];
+    availableLanguages.forEach((_language, index) => {
+      const data = languageQueries[index]?.data ?? [];
       for (const park of data) {
-        const prev = map.get(park.id) ?? '';
+        const prev = searchBlobMap.get(park.id) ?? '';
         const next = prev.length
           ? `${prev} | ${buildBlob(park)}`
           : buildBlob(park);
-        map.set(park.id, next);
+        searchBlobMap.set(park.id, next);
       }
     });
 
-    return map;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [languageQueries]);
+    return searchBlobMap;
+  }, [languageQueries, availableLanguages]);
 
   const isLoading = languageQueries.some((q) => q.isLoading);
   const error = languageQueries.find((q) => q.error)?.error;
 
-  // ---------------- changed by me: return a synchronous filterFunc that uses the prebuilt blobs ----------------
   const filterFunc = useMemo(() => {
-    return (item: Park, searchInput: string): boolean => {
-      const term = normalizeText(searchInput);
-      if (!term) {
-        return true; // let the parent decide if empty input should show all
-      }
-      const blob = blobById.get(item.id);
-      if (!blob) {
-        // If we somehow don't have a blob yet (race), be conservative and keep the item
+    return (park: Park, userInput: string): boolean => {
+      const normalizedSearchTerm = normalizeText(userInput);
+
+      // let the parent decide if empty input should show all
+      if (!normalizedSearchTerm) {
         return true;
       }
-      return blob.includes(term);
+
+      const parkSearchBlob = searchBlobByParkId.get(park.id);
+
+      // If we somehow don't have a blob yet (race), be conservative and keep the item
+      if (!parkSearchBlob) {
+        return true;
+      }
+
+      return parkSearchBlob.includes(normalizedSearchTerm);
     };
-  }, [blobById]);
+  }, [searchBlobByParkId]);
 
   return { filterFunc, isLoading, error };
 }

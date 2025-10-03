@@ -1,4 +1,4 @@
-// removed unused useQuery: we consume parks via useParksJSON
+import { useQuery } from '@tanstack/react-query';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import type { ParkJSON as Park } from '../../types/park';
 import { fetchParkPrimaryImage } from '../../services/parks';
@@ -8,7 +8,8 @@ import { useEffect, useState } from 'react';
 import L from 'leaflet';
 import { queryClient } from '../../services/react-query';
 import { useAppLocale } from '../../hooks/useAppLocale';
-import { useParksJSON } from '../../hooks/api/useParksJSON';
+import { fetchParksJSON } from '../../services/parks';
+import { parksKey } from '../../hooks/api/keys';
 import { usePrefetchOtherLanguages } from '../../hooks/api/usePrefetchOtherLanguages';
 
 interface MarkerListProps {
@@ -22,7 +23,12 @@ const MarkerList: React.FC<MarkerListProps> = ({
 }) => {
   const currentLanguage = useAppLocale();
 
-  const { parks } = useParksJSON({ language: currentLanguage });
+  const { data: parks } = useQuery({
+    queryKey: parksKey(currentLanguage),
+    queryFn: () => fetchParksJSON({ language: currentLanguage }),
+    placeholderData: (previous) => previous,
+    retry: 0,
+  });
 
   usePrefetchOtherLanguages({ currentLanguage });
 

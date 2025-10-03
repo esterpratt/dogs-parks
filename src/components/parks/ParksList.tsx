@@ -25,7 +25,7 @@ interface ParksListProps {
 
 const ParksList: React.FC<ParksListProps> = ({ className }) => {
   const { t } = useTranslation();
-  const currentLanguage = useAppLocale(); // changed: use central app locale hook
+  const currentLanguage = useAppLocale();
   const { user } = useContext(UserContext);
   const userLocation = useInitLocation();
 
@@ -37,7 +37,7 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
   });
 
   const { data: sortedParks, isLoading: isLoadingSortedParks } = useQuery({
-    queryKey: ['sortedParks', userLocation],
+    queryKey: ['sortedParks', userLocation, currentLanguage],
     queryFn: () => fetchSortedParks(parks!, userLocation),
     enabled: !!parks,
     retry: 0,

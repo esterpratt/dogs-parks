@@ -18,13 +18,13 @@ import { fetchFavoriteParks } from '../../services/favorites';
 import { Button } from '../Button';
 import { useOrientationContext } from '../../context/OrientationContext';
 import { Image } from '../Image';
-import styles from './ParkPopup.module.scss';
 import { useGeoFormat } from '../../hooks/useGeoFormat';
 import { useAppLocale } from '../../hooks/useAppLocale';
-import { parksKey } from '../../hooks/api/keys';
+import { parksKey, parkKey } from '../../hooks/api/keys';
 import { APP_LANGUAGES } from '../../utils/consts';
-import { useParkWithTranslation } from '../../hooks/api/useParkWithTranslation';
+import { fetchParkWithTranslation } from '../../services/parks';
 import { resolveTranslatedPark } from '../../utils/parkTranslations';
+import styles from './ParkPopup.module.scss';
 
 interface ParkPopupProps {
   activePark: Park | null;
@@ -86,9 +86,14 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
   });
 
   // prefetch park with translation for current language
-  useParkWithTranslation({
-    parkId: activePark?.id || '',
-    language: currentLanguage,
+  useQuery({
+    queryKey: parkKey(activePark?.id || '', currentLanguage),
+    queryFn: () =>
+      fetchParkWithTranslation({
+        parkId: activePark!.id,
+        language: currentLanguage,
+      }),
+    enabled: !!activePark?.id,
   });
 
   const translatedFromCurrent = activePark

@@ -61,7 +61,7 @@ const fetchParksJSON = async (params: FetchParksJSONParams) => {
   const { language } = params;
 
   try {
-    const languageFileName = `parks/parks-${language}.json`;
+    const languageFileName = `parks-${language}.json`;
     const languageResult = await fetchAndParseParksFile(languageFileName);
 
     if (!languageResult) {
@@ -70,7 +70,7 @@ const fetchParksJSON = async (params: FetchParksJSONParams) => {
       }
 
       // fallback to english
-      const englishFileName = `parks/parks-${APP_LANGUAGES.EN}.json`;
+      const englishFileName = `parks-${APP_LANGUAGES.EN}.json`;
       const englishResult = await fetchAndParseParksFile(englishFileName);
 
       if (!englishResult) {
@@ -86,6 +86,7 @@ const fetchParksJSON = async (params: FetchParksJSONParams) => {
   }
 };
 
+// TODO: delete if not used
 const fetchPark = async (parkId: string) => {
   try {
     const { data: park, error } = await supabase
@@ -276,5 +277,3 @@ export {
   fetchAllParkImages,
   updatePark,
 };
-
-export type { FetchParksJSONParams, FetchParkWithTranslationParams };

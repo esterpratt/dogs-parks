@@ -5,7 +5,9 @@ import { memo } from 'react';
 import { Park } from '../types/park';
 import { usePrefetchRoutesOnIdle } from '../hooks/usePrefetchRoutesOnIdle';
 import { useAppLocale } from '../hooks/useAppLocale';
-import { useParkWithTranslation } from '../hooks/api/useParkWithTranslation';
+import { useQuery } from '@tanstack/react-query';
+import { fetchParkWithTranslation } from '../services/parks';
+import { parkKey } from '../hooks/api/keys';
 import { usePrefetchParkOtherLanguages } from '../hooks/api/usePrefetchParkOtherLanguages';
 import styles from './ParkResolved.module.scss';
 
@@ -17,9 +19,11 @@ const ParkResolved = memo((props: ParkResolvedProps) => {
   const { park } = props;
 
   const language = useAppLocale();
-  const { park: translatedPark } = useParkWithTranslation({
-    parkId: park.id,
-    language,
+
+  const { data: translatedPark } = useQuery({
+    queryKey: parkKey(park.id, language),
+    queryFn: () => fetchParkWithTranslation({ parkId: park.id, language }),
+    placeholderData: (prev) => prev,
   });
 
   // Prefetch park in other languages to enable fast locale switching
