@@ -55,7 +55,7 @@ interface ParkJSON {
   address: string;
   location: {
     lat: number;
-    lng: number;
+    long: number;
   };
 }
 

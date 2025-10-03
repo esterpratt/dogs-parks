@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Park } from '../../types/park';
+import { ParkJSON as Park } from '../../types/park';
 import { useUserLocation } from '../../context/LocationContext';
 import { getRoute } from '../../services/map';
 import { ParkPopup } from './ParkPopup';

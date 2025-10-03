@@ -11,8 +11,12 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import classnames from 'classnames';
 import { useQuery } from '@tanstack/react-query';
-import { Location, Park } from '../../types/park';
-import { fetchPark, fetchParkPrimaryImage } from '../../services/parks';
+import { Location, ParkJSON as Park } from '../../types/park';
+import {
+  fetchPark,
+  fetchParkPrimaryImage,
+  fetchParksJSON,
+} from '../../services/parks';
 import { FavoriteRibbon } from '../FavoriteRibbon';
 import { fetchFavoriteParks } from '../../services/favorites';
 import { Button } from '../Button';
@@ -20,6 +24,10 @@ import { useOrientationContext } from '../../context/OrientationContext';
 import { Image } from '../Image';
 import styles from './ParkPopup.module.scss';
 import { useGeoFormat } from '../../hooks/useGeoFormat';
+import { useAppLocale } from '../../hooks/useAppLocale';
+import { parksKey } from '../../hooks/api/keys';
+import { APP_LANGUAGES } from '../../utils/consts';
+import { resolveTranslatedPark } from '../../utils/parkTranslations';
 
 interface ParkPopupProps {
   activePark: Park | null;
@@ -47,6 +55,10 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
   const { t } = useTranslation();
   const { formatDistanceKm, formatTravelDurationSeconds } = useGeoFormat();
   const navigate = useNavigate();
+  const currentLanguage = useAppLocale();
+  const [isClosing, setIsClosing] = useState(false);
+  const orientation = useOrientationContext((state) => state.orientation);
+
   const { data: image } = useQuery({
     queryKey: ['parkImage', activePark?.id],
     queryFn: async () => fetchParkPrimaryImage(activePark!.id),
@@ -60,14 +72,44 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
     gcTime: HOUR_IN_MS,
   });
 
-  const [isClosing, setIsClosing] = useState(false);
-  const orientation = useOrientationContext((state) => state.orientation);
+  const { data: parksCurrentLang } = useQuery({
+    queryKey: parksKey(currentLanguage),
+    queryFn: () => fetchParksJSON({ language: currentLanguage }),
+    placeholderData: (previous) => previous,
+    retry: 0,
+  });
+
+  // prepare EN dataset as a fallback if needed
+  const { data: parksEnglish } = useQuery({
+    queryKey: parksKey(APP_LANGUAGES.EN),
+    queryFn: () => fetchParksJSON({ language: APP_LANGUAGES.EN }),
+    enabled: currentLanguage !== APP_LANGUAGES.EN,
+    placeholderData: (previous) => previous,
+    retry: 0,
+  });
 
   // prefetch park
   useQuery({
     queryKey: ['park', activePark?.id],
     queryFn: () => fetchPark(activePark!.id),
     enabled: !!activePark?.id,
+  });
+
+  const translatedFromCurrent = activePark
+    ? (parksCurrentLang?.find((p) => p.id === activePark.id) as undefined)
+    : undefined;
+  const translatedFromEnglish = activePark
+    ? (parksEnglish?.find((p) => p.id === activePark.id) as undefined)
+    : undefined;
+
+  const {
+    name: displayName,
+    city: displayCity,
+    address: displayAddress,
+  } = resolveTranslatedPark({
+    activePark,
+    preferred: translatedFromCurrent,
+    fallback: translatedFromEnglish,
   });
 
   const isFavorite =
@@ -123,11 +165,12 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
       <div className={styles.detailsContainer}>
         <div className={styles.details}>
           <Link to={`/parks/${activePark?.id}`} className={styles.name}>
-            <span>{activePark?.name}</span>
+            <span>{displayName}</span>{' '}
+            {/* changed by me: use translated name with fallback */}
           </Link>
           <div className={styles.addressContainer}>
-            <span className={styles.address}>{activePark?.address},</span>
-            <span className={styles.city}>{activePark?.city}</span>
+            <span className={styles.address}>{displayAddress},</span>{' '}
+            <span className={styles.city}>{displayCity}</span>
           </div>
         </div>
         <div>
