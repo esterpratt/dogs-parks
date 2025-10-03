@@ -9,7 +9,7 @@ import {
 } from 'react';
 import { Link } from 'react-router-dom';
 import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
-import { Location, Park } from '../../types/park';
+import { Location, ParkJSON as Park } from '../../types/park';
 import { MarkerList } from './MarkerList';
 import { AlignJustify, Locate } from 'lucide-react';
 import { MapEventHandler } from './mapHelpers/MapEventHandler';

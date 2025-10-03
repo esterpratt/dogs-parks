@@ -1,5 +1,5 @@
 import { orderByDistance } from 'geolib';
-import { Location, Park } from '../types/park';
+import { Location, ParkJSON as Park } from '../types/park';
 
 export const fetchSortedParks = async (
   parks: Park[] | undefined,
