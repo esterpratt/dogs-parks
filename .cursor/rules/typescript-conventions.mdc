@@ -294,6 +294,93 @@ type User = {
 };
 ```
 
+### **NEVER Use 'any' Type**
+
+```tsx
+// ✅ Good: Define proper interfaces for data structures
+interface RawParkData {
+  id: string;
+  name: string;
+  city: string;
+  address: string;
+  location: {
+    lat: number;
+    long?: number;
+    lng?: number;
+  };
+}
+
+const normalizeParks = (rawParks: RawParkData[]) => {
+  return rawParks.map((park) => ({
+    id: park.id,
+    name: park.name,
+    city: park.city,
+    address: park.address,
+    location: {
+      lat: park.location.lat,
+      lng: park.location.lng || park.location.long || 0,
+    },
+  }));
+};
+
+// ✅ Good: Use proper typing for API responses
+interface SupabaseResponse<T> {
+  data: T | null;
+  error: Error | null;
+}
+
+const handleApiResponse = (response: SupabaseResponse<User>) => {
+  if (response.error) {
+    throw response.error;
+  }
+  return response.data;
+};
+
+// ✅ Good: Use unknown for truly unknown data, then type guard
+const parseApiData = (data: unknown): User => {
+  if (typeof data === 'object' && data !== null && 'id' in data) {
+    return data as User; // Safe after type guard
+  }
+  throw new Error('Invalid user data');
+};
+
+// ❌ Bad: Using 'any' type
+const normalizeParks = (rawParks: any[]) => {
+  return rawParks.map((park: any) => ({
+    id: park.id,
+    name: park.name,
+    // ... loses all type safety
+  }));
+};
+
+const handleApiResponse = (response: any) => {
+  // No type safety, prone to runtime errors
+  return response.data;
+};
+
+// ❌ Bad: Casting to any
+const someFunction = (data: SomeType) => {
+  return (data as any).someProperty; // Defeats TypeScript's purpose
+};
+```
+
+**Why avoid 'any':**
+
+- **Loses type safety**: No compile-time error checking
+- **No IntelliSense**: IDE cannot provide autocomplete or suggestions
+- **Runtime errors**: Typos and property access errors only discovered at runtime
+- **Maintenance issues**: Refactoring becomes dangerous without type information
+- **Documentation loss**: Types serve as inline documentation
+
+**Alternatives to 'any':**
+
+- **Define proper interfaces**: Create specific types for your data structures
+- **Use 'unknown'**: For truly unknown data, then use type guards
+- **Use union types**: `string | number` instead of `any`
+- **Use generics**: `<T>` for reusable type-safe functions
+- **Use 'object'**: For object types when structure is unknown
+- **Use type assertions carefully**: Only after proper type guards
+
 ## 📋 Complete Examples
 
 ### **Service Function Example (.ts file)**
@@ -436,6 +523,13 @@ type User = {
   id: string;
   name: string;
 }; // Should be interface
+
+// ❌ Bad: Using 'any' type
+const processData = (data: any) => {
+  return data.someProperty; // No type safety
+};
+
+const items: any[] = []; // Should define proper array type
 ```
 
 ## 📋 Checklist for TypeScript/JavaScript Files
@@ -448,5 +542,6 @@ type User = {
 - [ ] Interfaces are used for object type definitions
 - [ ] Interface naming follows convention: `[FunctionName]Params` for .ts, `[ComponentName]Props` for .tsx
 - [ ] Types are used only for unions, primitives, and computed types
+- [ ] **NEVER use 'any' type** - define proper interfaces instead
 - [ ] Control structures consistently use braces
 - [ ] Code follows consistent formatting and style

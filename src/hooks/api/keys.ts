@@ -4,6 +4,22 @@ enum FRIENDS_KEY {
   MY_PENDING_FRIENDS = 'MY_PENDING_FRIENDS',
 }
 
-const getFriendshipMapKey = (userId?: string | null) => ['friendshipMap', userId]
+// Park-related query keys for hybrid caching strategy
+const getParksJSONKey = (language: string) => ['parks', language];
+const getParkWithTranslationKey = (parkId: string, language: string) => [
+  'park',
+  parkId,
+  language,
+];
 
-export { FRIENDS_KEY, getFriendshipMapKey };
+const getFriendshipMapKey = (userId?: string | null) => [
+  'friendshipMap',
+  userId,
+];
+
+export {
+  FRIENDS_KEY,
+  getFriendshipMapKey,
+  getParksJSONKey,
+  getParkWithTranslationKey,
+};

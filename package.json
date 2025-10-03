@@ -16,7 +16,20 @@
     "pr": "BR=$(git rev-parse --abbrev-ref HEAD); git push -u origin $BR; TITLE=$(node scripts/pr-title.js $BR); gh pr create --base main --head $BR --title \"$TITLE\" --fill || (echo 'PR likely exists; showing current PR' && gh pr view --web || true)",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "test:e2e:report": "playwright show-report"
+    "test:e2e:report": "playwright show-report",
+    "migrate-translations": "node scripts/migrate-park-translations.js",
+    "generate-hebrew-template": "node scripts/generate-hebrew-template.js",
+    "generate-hebrew-template:all": "node scripts/generate-hebrew-template.js all",
+    "generate-parks-json": "node scripts/generate-parks-json.js",
+    "generate-parks-json:en": "node scripts/generate-parks-json.js en",
+    "generate-parks-json:he": "node scripts/generate-parks-json.js he",
+    "validate-translations": "node scripts/validate-translations.js",
+    "validate-translations:files": "node scripts/validate-translations.js --check-files",
+    "apply-hebrew-translations": "node scripts/apply-hebrew-translations.js",
+    "i18n:setup": "npm run migrate-translations && npm run generate-hebrew-template:all",
+    "i18n:generate": "npm run generate-parks-json && npm run validate-translations",
+    "i18n:validate": "npm run validate-translations",
+    "i18n:apply-sample": "npm run apply-hebrew-translations && npm run generate-parks-json"
   },
   "dependencies": {
     "@capacitor-firebase/messaging": "7.3.0",

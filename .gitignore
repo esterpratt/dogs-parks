@@ -38,3 +38,4 @@ capacitor.config.ts.backup
 
 docs/features/*
 scripts/*
+exports/*
