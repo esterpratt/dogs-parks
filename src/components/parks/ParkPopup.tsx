@@ -12,11 +12,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import classnames from 'classnames';
 import { useQuery } from '@tanstack/react-query';
 import { Location, ParkJSON as Park } from '../../types/park';
-import {
-  fetchPark,
-  fetchParkPrimaryImage,
-  fetchParksJSON,
-} from '../../services/parks';
+import { fetchParkPrimaryImage, fetchParksJSON } from '../../services/parks';
 import { FavoriteRibbon } from '../FavoriteRibbon';
 import { fetchFavoriteParks } from '../../services/favorites';
 import { Button } from '../Button';
@@ -27,6 +23,7 @@ import { useGeoFormat } from '../../hooks/useGeoFormat';
 import { useAppLocale } from '../../hooks/useAppLocale';
 import { parksKey } from '../../hooks/api/keys';
 import { APP_LANGUAGES } from '../../utils/consts';
+import { useParkWithTranslation } from '../../hooks/api/useParkWithTranslation';
 import { resolveTranslatedPark } from '../../utils/parkTranslations';
 
 interface ParkPopupProps {
@@ -88,11 +85,10 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
     retry: 0,
   });
 
-  // prefetch park
-  useQuery({
-    queryKey: ['park', activePark?.id],
-    queryFn: () => fetchPark(activePark!.id),
-    enabled: !!activePark?.id,
+  // prefetch park with translation for current language
+  useParkWithTranslation({
+    parkId: activePark?.id || '',
+    language: currentLanguage,
   });
 
   const translatedFromCurrent = activePark

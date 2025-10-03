@@ -2,10 +2,12 @@ import { useParams, Link } from 'react-router-dom';
 import { useQueries, useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { ParkPreview } from '../components/parks/ParkPreview';
-import { fetchPark, fetchParksJSON } from '../services/parks';
+import { fetchParkWithTranslation, fetchParksJSON } from '../services/parks';
 import { fetchUserFavorites } from '../services/favorites';
 import { Loader } from '../components/Loader';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
+import { useAppLocale } from '../hooks/useAppLocale';
+import { parksKey, parkKey } from '../hooks/api/keys';
 import styles from './UserFavorites.module.scss';
 import { useTranslation } from 'react-i18next';
 
@@ -18,10 +20,14 @@ const UserFavorites = () => {
     queryFn: async () => fetchUserFavorites(userId!),
   });
 
+  const currentLanguage = useAppLocale();
+
   const { data: parks, isLoading: isLoadingParks } = useQuery({
-    queryKey: ['parks'],
-    queryFn: fetchParksJSON,
+    queryKey: parksKey(currentLanguage),
+    queryFn: () => fetchParksJSON({ language: currentLanguage }),
     enabled: !!favoriteParkIds?.length,
+    placeholderData: (previous) => previous,
+    retry: 0,
   });
 
   const isLoading = isLoadingParks || isLoadingFavorites;
@@ -35,11 +41,15 @@ const UserFavorites = () => {
     ? parks.filter((park) => favoriteParkIds?.includes(park.id))
     : [];
 
-  // prefetch parks
+  // prefetch favorite parks with translations for current language
   useQueries({
     queries: favoriteParks.map((park) => ({
-      queryKey: ['park', park.id],
-      queryFn: () => fetchPark(park.id),
+      queryKey: parkKey(park.id, currentLanguage),
+      queryFn: () =>
+        fetchParkWithTranslation({
+          parkId: park.id,
+          language: currentLanguage,
+        }),
     })),
   });
 
