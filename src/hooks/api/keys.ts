@@ -12,6 +12,10 @@ const getParkWithTranslationKey = (parkId: string, language: string) => [
   language,
 ];
 
+// Exposed key functions for external use
+const parksKey = (language: string) => ['parks', language];
+const parkKey = (parkId: string, language: string) => ['park', parkId, language];
+
 const getFriendshipMapKey = (userId?: string | null) => [
   'friendshipMap',
   userId,
@@ -22,4 +26,6 @@ export {
   getFriendshipMapKey,
   getParksJSONKey,
   getParkWithTranslationKey,
+  parksKey,
+  parkKey,
 };
