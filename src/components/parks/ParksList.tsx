@@ -16,13 +16,16 @@ import { SearchInput, SearchInputProps } from '../inputs/SearchInput';
 import { useInitLocation } from '../../hooks/useInitLocation';
 import styles from './ParksList.module.scss';
 import { useDelayedLoading } from '../../hooks/useDelayedLoading';
+import { useParksCrossLanguageFilter } from '../../hooks/useParksCrossLanguageFilter';
+import { deriveAppLanguage } from '../../utils/language';
 
 interface ParksListProps {
   className?: string;
 }
 
 const ParksList: React.FC<ParksListProps> = ({ className }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation(); // ---------------- changed by me: grab i18n to detect lang
+  const currentLanguage = deriveAppLanguage(i18n.language?.split('-')[0] ?? 'en'); // normalize like your RTL hook
   const { user } = useContext(UserContext);
   const userLocation = useInitLocation();
 
@@ -39,16 +42,17 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
     retry: 0,
   });
 
+  // ---------------- changed by me: build cross-language filter ----------------
+  const { filterFunc: crossLangFilter, isLoading: isBuildingIndex } =
+    useParksCrossLanguageFilter({ currentLanguage });
+
+  // ---------------- changed by me: include index loading in loader gate ----------------
   const { showLoader } = useDelayedLoading({
-    isLoading: isLoadingParks || isLoadingSortedParks,
+    isLoading: isLoadingParks || isLoadingSortedParks || isBuildingIndex,
   });
 
-  const searchParksFunc = (park: Park, searchInput: string) => {
-    return (
-      park.name.toLowerCase().includes(searchInput.toLowerCase()) ||
-      park.address.toLowerCase().includes(searchInput.toLowerCase())
-    );
-  };
+  // ---------------- removed by me: old inline filter (single-language) ----------------
+  // const searchParksFunc = (park: Park, searchInput: string) => { ... }
 
   const NoResultsLayout = user ? (
     <div className={styles.noResults}>
@@ -79,7 +83,7 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
       placeholder={t('parks.search.placeholder')}
       noResultsLayout={NoResultsLayout}
       itemKeyfn={(park) => park.id}
-      filterFunc={searchParksFunc}
+      filterFunc={crossLangFilter} {/* ---------------- changed by me: use cross-language filter ---------------- */}
       containerClassName={classnames(styles.list, className)}
       renderSearchInput={(props: SearchInputProps) => {
         return (
@@ -98,7 +102,7 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
         );
       }}
     >
-      {(park) => <ParkPreview park={park} />}
+      {(park: Park) => <ParkPreview park={park} />}
     </SearchList>
   );
 };
