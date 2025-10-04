@@ -6,6 +6,8 @@ import {
   useRef,
   useState,
 } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Trash2 } from 'lucide-react';
 import classnames from 'classnames';
 import { DOG_ENERGY, DOG_SIZE, Dog, GENDER } from '../../types/dog';
 import { UserContext } from '../../context/UserContext';
@@ -18,15 +20,14 @@ import { dogBreeds } from '../../services/dog-breeds';
 import { DeleteDogModal } from './DeleteDogModal';
 import { useOrientationContext } from '../../context/OrientationContext';
 import { Button } from '../Button';
-import { Trash2 } from 'lucide-react';
 import { FormModal } from '../modals/FormModal';
-import styles from './EditDogModal.module.scss';
 import useKeyboardFix from '../../hooks/useKeyboardFix';
 import { capitalizeText } from '../../utils/text';
 import { useUpdateDog } from '../../hooks/api/useUpdateDog';
 import { useAddDog } from '../../hooks/api/useAddDog';
 import { useScrollToInputOnOpen } from '../../hooks/useScrollToInputOnOpen';
-import { useTranslation } from 'react-i18next';
+import { doesBreedMatchUserInput } from '../../utils/searchDog';
+import styles from './EditDogModal.module.scss';
 
 interface EditDogModalProps {
   isOpen: boolean;
@@ -35,12 +36,9 @@ interface EditDogModalProps {
   dog?: Dog;
 }
 
-const EditDogModal: React.FC<EditDogModalProps> = ({
-  isOpen,
-  onClose,
-  onAddDog,
-  dog,
-}) => {
+const EditDogModal: React.FC<EditDogModalProps> = (props) => {
+  const { isOpen, onClose, onAddDog, dog } = props;
+
   const orientation = useOrientationContext((state) => state.orientation);
   const inputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -63,13 +61,14 @@ const EditDogModal: React.FC<EditDogModalProps> = ({
       return null;
     }
   });
+
   const { userId } = useContext(UserContext);
   const [isDeleteDogModalOpen, setIsDeleteDogModalOpen] = useState(false);
   const keyboardHeight = useKeyboardFix();
 
   const { mutateDog } = useUpdateDog();
   const { addDog } = useAddDog(onAddDog);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     if (dog) {
@@ -87,27 +86,29 @@ const EditDogModal: React.FC<EditDogModalProps> = ({
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     value?: string | number
   ) => {
-    setDogData((prev) => {
+    setDogData((previousDogData) => {
       return {
-        ...prev,
+        ...previousDogData,
         [event.target.name]: value || event.target.value,
       };
     });
   };
 
   const onAutoCompleteSelect = (name: string, value: string) => {
-    setDogData((prev) => {
+    setDogData((previousDogData) => {
       return {
-        ...prev,
+        ...previousDogData,
         [name]: value,
       };
     });
   };
 
   const onSubmit = async () => {
-    const likes = dogData!.likes?.split(',').map((like) => like.trim()) || [];
+    const likes =
+      dogData!.likes?.split(',').map((likeItem) => likeItem.trim()) || [];
     const dislikes =
-      dogData!.dislikes?.split(',').map((like) => like.trim()) || [];
+      dogData!.dislikes?.split(',').map((dislikeItem) => dislikeItem.trim()) ||
+      [];
     const birthday = !dogData!.birthday
       ? dogData!.birthday
       : new Date(dogData!.birthday);
@@ -149,6 +150,20 @@ const EditDogModal: React.FC<EditDogModalProps> = ({
   const isSaveButtonDisabled =
     !dogData?.name || !dogData.birthday || !dogData.gender || !dogData.breed;
 
+  const sortedDogBreeds = useMemo(() => {
+    const pinned = dogBreeds.slice(0, 2);
+
+    const tail = dogBreeds.slice(2);
+
+    const sortedTail = [...tail].sort((a, b) => {
+      const aLabel = t(`dogs.breeds.${a}`, { defaultValue: a });
+      const bLabel = t(`dogs.breeds.${b}`, { defaultValue: b });
+      return aLabel.localeCompare(bLabel, i18n.language);
+    });
+
+    return [...pinned, ...sortedTail];
+  }, [t, i18n.language]);
+
   return (
     <>
       <FormModal
@@ -179,27 +194,35 @@ const EditDogModal: React.FC<EditDogModalProps> = ({
             required
           />
           <AutoComplete
-            items={dogBreeds}
-            itemKeyfn={(item) => item}
-            filterFunc={(item, searchInput) =>
-              item.toLowerCase().includes(searchInput.toLowerCase())
+            items={sortedDogBreeds}
+            itemKeyfn={(breedId) => breedId}
+            filterFunc={(breedId, rawUserInput) =>
+              doesBreedMatchUserInput({
+                breedId,
+                rawUserInput,
+                translate: t,
+                currentLanguage: i18n.language,
+              })
             }
-            equalityFunc={(item, selectedInput) => item === selectedInput}
-            setSelectedInput={(item) => onAutoCompleteSelect('breed', item)}
+            equalityFunc={(breedId, selectedInput) => breedId === selectedInput}
+            setSelectedInput={(breedId) =>
+              onAutoCompleteSelect('breed', breedId)
+            }
             selectedInput={dogData?.breed || ''}
             label={t('dogs.edit.labels.breed')}
-            selectedInputFormatter={(selected) =>
-              t(`dogs.breeds.${selected}`, { defaultValue: selected })
+            selectedInputFormatter={(selectedId) =>
+              t(`dogs.breeds.${selectedId}`, { defaultValue: selectedId })
             }
           >
-            {(item, isChosen) => (
+            {(breedId, isChosen) => (
               <div
                 className={classnames(styles.breed, isChosen && styles.chosen)}
               >
-                {t(`dogs.breeds.${item}`, { defaultValue: item })}
+                {t(`dogs.breeds.${breedId}`, { defaultValue: breedId })}
               </div>
             )}
           </AutoComplete>
+
           <RadioInputs
             value={dogData?.gender || ''}
             options={[
