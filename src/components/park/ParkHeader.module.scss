@@ -1,7 +1,9 @@
 @use '../../variables' as *;
 
 .header {
-  background-size: 100% 98px, 100% 170px;
+  background-size:
+    100% 98px,
+    100% 170px;
   margin-top: $page-top-padding;
 }
 
@@ -83,7 +85,7 @@
 
   .share {
     &.align-right {
-      margin-left: auto;
+      margin-inline-start: auto;
     }
   }
 }

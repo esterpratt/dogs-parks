@@ -4,8 +4,7 @@
 .modal {
   @extend %modal;
   top: 100%;
-  left: 0;
-  right: 0;
+  inset-inline: 0;
   bottom: var(--safe-area-inset-bottom);
   margin: 0 auto;
   width: 90%;

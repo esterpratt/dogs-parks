@@ -52,17 +52,17 @@ $thumbWidth: 20;
 }
 
 .min {
-  left: 4px;
+  inset-inline-start: 4px;
 }
 
 .max {
-  right: 0;
+  inset-inline-end: 0;
 }
 
 .output {
   position: absolute;
   top: 28px;
-  left: 0;
+  inset-inline-start: 0;
   width: #{$bubbleWidth}px;
   height: 24px;
   display: flex;
@@ -82,8 +82,7 @@ $thumbWidth: 20;
     transform: translate(-50%);
     width: 0;
     height: 0;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
+    border-inline: 6px solid transparent;
     border-top: 6px solid $pink;
     border-bottom: 6px solid transparent;
   }

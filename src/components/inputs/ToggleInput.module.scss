@@ -28,8 +28,7 @@
     border-radius: 999px;
     position: absolute;
     top: 0;
-    left: 0;
-    right: 0;
+    inset-inline: 0;
     bottom: 0;
     transition: background-color 0.3s;
     cursor: pointer;
@@ -39,7 +38,7 @@
       position: absolute;
       height: 32px;
       width: 32px;
-      left: 2px;
+      inset-inline-start: 2px;
       top: 2px;
       background-color: var(--background-color);
       border-radius: 50%;
@@ -49,7 +48,7 @@
     .icon {
       position: absolute;
       top: 2px;
-      left: 2px;
+      inset-inline-start: 2px;
       height: 32px;
       width: 32px;
       display: flex;

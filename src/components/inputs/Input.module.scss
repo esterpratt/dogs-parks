@@ -5,7 +5,7 @@
 
   .right-icon {
     position: absolute;
-    right: 16px;
+    inset-inline-end: 16px;
     top: 50%;
     transform: translateY(-50%);
     display: flex;
@@ -62,7 +62,7 @@
     }
 
     &::-webkit-date-and-time-value {
-      text-align: left;
+      text-align: start;
     }
   }
 
