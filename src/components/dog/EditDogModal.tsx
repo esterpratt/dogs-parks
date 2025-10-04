@@ -188,6 +188,9 @@ const EditDogModal: React.FC<EditDogModalProps> = ({
             setSelectedInput={(item) => onAutoCompleteSelect('breed', item)}
             selectedInput={dogData?.breed || ''}
             label={t('dogs.edit.labels.breed')}
+            selectedInputFormatter={(selected) =>
+              t(`dogs.breeds.${selected}`, { defaultValue: selected })
+            }
           >
             {(item, isChosen) => (
               <div
@@ -316,10 +319,7 @@ const EditDogModal: React.FC<EditDogModalProps> = ({
             className={styles.deleteDogWrapper}
           >
             <Trash2 size={16} />
-            <div>
-              <span>{t('userInfo.deleteModalBody2')}</span>{' '}
-              <span className={styles.dogName}>{dog.name}</span>
-            </div>
+            <div>{t('userInfo.deleteDogButton', { name: dog.name })}</div>
           </Button>
         )}
       </FormModal>

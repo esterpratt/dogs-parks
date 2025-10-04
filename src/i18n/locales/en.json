@@ -156,6 +156,27 @@
     "offline": "You are offline. Connect to the internet to continue.",
     "notFound": "Could not find page"
   },
+  "auth": {
+    "invalid_credentials": "Incorrect email or password",
+    "email_not_confirmed": "Please verify your email before logging in",
+    "provider_not_enabled": "This sign in method isn’t available",
+    "rate_limited": "Too many attempts. Try again later",
+    "bad_request": "There was a problem with your request",
+    "unauthorized": "You’re not authorized",
+    "forbidden": "Access denied",
+    "user_not_found": "Account not found",
+    "server_error": "Server error. Try again",
+    "network": "Network error. Check your connection",
+    "unknown": "Something went wrong",
+    "email_already_exists": "This email is already registered",
+    "weak_password": "Password is too weak",
+    "signups_disabled": "Sign ups are currently disabled",
+    "session_expired": "Your session has expired. Please sign in again",
+    "captcha_failed": "CAPTCHA verification failed",
+    "too_many_mfa_factors": "Too many MFA factors enrolled",
+    "email_not_authorized": "This email address isn’t allowed to sign in",
+    "user_banned": "This account is temporarily suspended"
+  },
   "share": {
     "title": "Someone shared a park with you!",
     "subtitle": "Wanna sniff it out in the app?",
@@ -174,6 +195,7 @@
     "deleteModalTitle": "Hold your leash!",
     "deleteModalBody1": "By clicking 'Delete', all your data and your dogs' data will be sent to a farm up north where it can run free forever.",
     "deleteModalBody2": "Are you sure you want to say goodbye?",
+    "deleteDogButton": "Say goodbye to {{name}}",
     "delete": "Delete",
     "cancel": "Cancel",
     "edit": {

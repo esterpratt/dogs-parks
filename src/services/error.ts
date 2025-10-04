@@ -1,9 +1,11 @@
 import { AuthError } from '@supabase/supabase-js';
+import { i18n } from '../i18n';
+import { mapSupabaseAuthErrorToKey } from './supabase-auth-error-mapper';
 import type { StorageError } from '@supabase/storage-js';
 
 type LocalStorageError = StorageError & {
   statusCode: string;
-}
+};
 
 class AppError {
   message: string;
@@ -23,7 +25,10 @@ const throwError = (error: unknown, status?: number) => {
   }
 
   if (error instanceof AuthError) {
-    throw error;
+    const { key } = mapSupabaseAuthErrorToKey(error);
+    const statusFromError = (error as unknown as { status?: number }).status;
+    const translated = i18n.t(key);
+    throw new AppError(translated, statusFromError || 400);
   }
 
   if ((error as LocalStorageError).statusCode === '413') {

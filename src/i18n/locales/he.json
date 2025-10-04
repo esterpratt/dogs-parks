@@ -156,6 +156,27 @@
     "offline": "אין חיבור לאינטרנט. התחברו לרשת כדי להמשיך.",
     "notFound": "העמוד לא נמצא"
   },
+  "auth": {
+    "invalid_credentials": "דוא״ל או סיסמה שגויים",
+    "email_not_confirmed": "יש לאשר את הדוא״ל לפני ההתחברות",
+    "provider_not_enabled": "שיטת ההתחברות הזו אינה זמינה",
+    "rate_limited": "יותר מדי ניסיונות. נסו שוב מאוחר יותר",
+    "bad_request": "אירעה בעיה בבקשה",
+    "unauthorized": "אין לך הרשאה",
+    "forbidden": "הגישה נדחתה",
+    "user_not_found": "החשבון לא נמצא",
+    "server_error": "שגיאת שרת. נסו שוב",
+    "network": "שגיאת רשת. בדקו את החיבור",
+    "unknown": "אירעה שגיאה בלתי צפויה",
+    "email_already_exists": "הדוא״ל כבר רשום",
+    "weak_password": "הסיסמה חלשה מדי",
+    "signups_disabled": "הרשמה מושבתת כרגע",
+    "session_expired": "פג תוקף ההתחברות. התחברו מחדש",
+    "captcha_failed": "אימות CAPTCHA נכשל",
+    "too_many_mfa_factors": "נרשמו יותר מדי אמצעי אימות",
+    "email_not_authorized": "כתובת הדוא״ל אינה מורשית להתחבר",
+    "user_banned": "החשבון מושעה זמנית"
+  },
   "share": {
     "title": "מישהו שיתף איתך פארק!",
     "subtitle": "רוצים לבדוק אותו באפליקציה?",
@@ -174,6 +195,7 @@
     "deleteModalTitle": "להחזיק חזק את הרצועה!",
     "deleteModalBody1": "בלחיצה על 'מחק', כל הנתונים שלך ונתוני הכלבים שלך יישלחו לחווה בצפון, שם הם יוכלו לרוץ חופשי לנצח.",
     "deleteModalBody2": "בטוחים שרוצים להיפרד?",
+    "deleteDogButton": "פרידה מ{{name}}",
     "delete": "מחיקה",
     "cancel": "ביטול",
     "edit": {
