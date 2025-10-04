@@ -7,7 +7,6 @@ import { Plus, Trash2, X } from 'lucide-react';
 import classnames from 'classnames';
 import { usePreventVerticalScrollOnHorizontalSwipe } from '../hooks/usePreventVerticalScrollOnHorizontalSwipe';
 import { Button } from './Button';
-import { isRTL } from '../utils/language';
 import { EnlargeImageModal } from './EnlargeImageModal';
 import { TopModal } from './modals/TopModal';
 import { Image } from './Image';
@@ -58,16 +57,12 @@ const Carousel: React.FC<CarouselProps> = ({
     setIsEnlargeImageModalOpen(false);
   };
 
-  const { i18n } = useTranslation();
-  const isRTLValue = isRTL(i18n.language);
-
   const settings = {
     className: 'center',
     infinite: false,
     slidesToShow: 2,
     slidesToScroll: 1,
     swipeToSlide: true,
-    rtl: isRTLValue,
   };
 
   const onClickImage = (img: string) => {

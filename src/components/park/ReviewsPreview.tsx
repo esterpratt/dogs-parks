@@ -61,7 +61,7 @@ const ReviewsPreview = (props: ReviewsPreviewProps) => {
         <>
           <Stars rank={rank || 0} />
           <Link to="reviews" className={styles.reviewCount}>
-            {t('parkReviews.count', { count: reviewsCount })}
+            ({reviewsCount})
           </Link>
         </>
       )}

@@ -28,3 +28,15 @@
     fill: rgba($grey-bold, 0.3);
   }
 }
+
+:global(.rtl) .star {
+  &.half {
+    color: $grey-bold;
+    fill: rgba($grey-bold, 0.3);
+  }
+
+  &.second-half {
+    color: $orange;
+    fill: rgba($orange, 0.4);
+  }
+}

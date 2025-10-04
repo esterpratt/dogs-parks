@@ -317,9 +317,6 @@
   "parkReviews": {
     "emptyTitle": "No barks about this park yet",
     "firstReviewCta": "Be the first to leave a review!",
-    "count": "{{count}} reviews",
-    "count_one": "1 review",
-    "count_other": "{{count}} reviews",
     "averageRank": "Average rank: {{rank}}",
     "addReview": "Add review",
     "updateReview": "Update review"

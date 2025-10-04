@@ -319,9 +319,6 @@
   "parkReviews": {
     "emptyTitle": "עוד אין נביחות על הפארק הזה",
     "firstReviewCta": "היו הראשונים להשאיר ביקורת!",
-    "count": "{{count}} ביקורות",
-    "count_one": "ביקורת אחת",
-    "count_other": "{{count}} ביקורות",
     "averageRank": "דירוג ממוצע: {{rank}}",
     "addReview": "הוספת ביקורת",
     "updateReview": "עדכון ביקורת"

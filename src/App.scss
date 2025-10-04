@@ -73,7 +73,7 @@ textarea {
     }
 
     &.slick-prev {
-      inset-inline-start: -4px;
+      left: -4px;
 
       &::before {
         transform: rotate(180deg);
@@ -82,7 +82,8 @@ textarea {
     }
 
     &.slick-next {
-      inset-inline-end: -4px;
+      right: -4px;
+      left: auto;
 
       &::before {
         margin-bottom: 12px;
@@ -99,17 +100,17 @@ textarea {
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: stretch;
-    margin-inline-start: 0;
+    margin-left: 0;
 
     .slick-slide {
       height: 132px;
 
       > div {
         height: 100%;
-        margin-inline-end: 4px;
+        margin-right: 4px;
 
         &:first-child {
-          margin-inline-start: 4px;
+          margin-left: 4px;
         }
       }
     }

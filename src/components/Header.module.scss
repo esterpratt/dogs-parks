@@ -21,6 +21,14 @@
   }
 }
 
+:global(.rtl) .prev-links {
+  flex-direction: row-reverse;
+
+  a {
+    flex-direction: row-reverse;
+  }
+}
+
 .header {
   position: relative;
   height: 268px;
