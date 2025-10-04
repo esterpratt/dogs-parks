@@ -17,7 +17,15 @@ interface WeatherInfo {
   backgroundColor: string;
 }
 
-export const getWeatherInfo = (code: WeatherCode): WeatherInfo => {
+interface GetWeatherInfoParams {
+  code: WeatherCode;
+  t: (key: string) => string;
+}
+
+export const getWeatherInfo = ({
+  code,
+  t,
+}: GetWeatherInfoParams): WeatherInfo => {
   const simplifiedCode = (() => {
     if (code === WeatherCode.CLEAR_SKY) return WeatherCode.CLEAR_SKY;
     if (code === WeatherCode.MAINLY_CLEAR) return WeatherCode.MAINLY_CLEAR;
@@ -74,63 +82,63 @@ export const getWeatherInfo = (code: WeatherCode): WeatherInfo => {
   switch (simplifiedCode) {
     case WeatherCode.CLEAR_SKY:
       return {
-        description: 'Clear sky',
+        description: t('weather.descriptions.clearSky'),
         Icon: Sun,
         color: 'var(--weather-orange)',
         backgroundColor: 'var(--light-orange)',
       };
     case WeatherCode.MAINLY_CLEAR:
       return {
-        description: 'Mainly clear',
+        description: t('weather.descriptions.mainlyClear'),
         Icon: CloudSun,
         color: 'var(--weather-orange)',
         backgroundColor: 'var(--light-orange)',
       };
     case WeatherCode.PARTLY_CLOUDY:
       return {
-        description: 'Cloudy',
+        description: t('weather.descriptions.cloudy'),
         Icon: Cloud,
         color: 'var(--weather-blue)',
         backgroundColor: 'var(--light-blue)',
       };
     case WeatherCode.FOG:
       return {
-        description: 'Foggy',
+        description: t('weather.descriptions.foggy'),
         Icon: CloudFog,
         color: 'var(--weather-blue)',
         backgroundColor: 'var(--light-blue)',
       };
     case WeatherCode.SLIGHT_RAIN:
       return {
-        description: 'Light rain',
+        description: t('weather.descriptions.lightRain'),
         Icon: CloudRain,
         color: 'var(--weather-blue)',
         backgroundColor: 'var(--light-blue)',
       };
     case WeatherCode.HEAVY_RAIN:
       return {
-        description: 'Heavy rain',
+        description: t('weather.descriptions.heavyRain'),
         Icon: CloudRain,
         color: 'var(--weather-blue)',
         backgroundColor: 'var(--light-blue)',
       };
     case WeatherCode.THUNDERSTORM:
       return {
-        description: 'Thunderstorm',
+        description: t('weather.descriptions.thunderstorm'),
         Icon: CloudLightning,
         color: 'var(--weather-blue)',
         backgroundColor: 'var(--light-blue)',
       };
     case WeatherCode.SLIGHT_SNOW:
       return {
-        description: 'Snow',
+        description: t('weather.descriptions.snow'),
         Icon: Snowflake,
         color: 'var(--weather-blue)',
         backgroundColor: 'var(--light-blue)',
       };
     default:
       return {
-        description: 'Unknown',
+        description: t('weather.descriptions.unknown'),
         Icon: Sun,
         color: 'var(--weather-orange)',
         backgroundColor: 'var(--light-orange)',

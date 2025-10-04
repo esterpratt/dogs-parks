@@ -34,9 +34,10 @@ const WeatherButton: React.FC<WeatherButtonProps> = ({ lat, long }) => {
     return null;
   }
 
-  const { Icon, description, color, backgroundColor } = getWeatherInfo(
-    forecast.weatherCode
-  );
+  const { Icon, description, color, backgroundColor } = getWeatherInfo({
+    code: forecast.weatherCode,
+    t,
+  });
 
   const onToggle = () => {
     setOpen((prev) => !prev);

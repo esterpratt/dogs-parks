@@ -614,7 +614,18 @@
     "button": {
       "ariaLabel": "Weather forecast"
     },
-    "chanceOfRainNextHour": "{{count}}% chance of rain in the next hour"
+    "chanceOfRainNextHour": "{{count}}% chance of rain in the next hour",
+    "descriptions": {
+      "clearSky": "Clear sky",
+      "mainlyClear": "Mainly clear",
+      "cloudy": "Cloudy",
+      "foggy": "Foggy",
+      "lightRain": "Light rain",
+      "heavyRain": "Heavy rain",
+      "thunderstorm": "Thunderstorm",
+      "snow": "Snow",
+      "unknown": "Unknown"
+    }
   },
   "dogs": {
     "gender": {

@@ -616,7 +616,18 @@
     "button": {
       "ariaLabel": "תחזית מזג אוויר"
     },
-    "chanceOfRainNextHour": "{{count}}% סיכוי לגשם בשעה הקרובה"
+    "chanceOfRainNextHour": "{{count}}% סיכוי לגשם בשעה הקרובה",
+    "descriptions": {
+      "clearSky": "שמיים בהירים",
+      "mainlyClear": "בעיקר בהיר",
+      "cloudy": "מעונן",
+      "foggy": "ערפילי",
+      "lightRain": "גשם קל",
+      "heavyRain": "גשם חזק",
+      "thunderstorm": "סערת רעמים",
+      "snow": "שלג",
+      "unknown": "לא ידוע"
+    }
   },
   "dogs": {
     "gender": {
