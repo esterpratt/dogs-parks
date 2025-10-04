@@ -30,8 +30,13 @@
     align-self: flex-end;
 
     &:only-child {
-      margin-left: 100%;
+      margin-inline-start: 100%;
       transform: translateX(-100%);
+    }
+
+    // RTL support
+    :global(.rtl) .button-container:only-child {
+      transform: translateX(100%);
     }
   }
 
@@ -52,7 +57,7 @@
     .exit-button {
       position: absolute;
       top: 12px;
-      right: 12px;
+      inset-inline-end: 12px;
       display: flex;
       align-items: center;
       justify-content: center;

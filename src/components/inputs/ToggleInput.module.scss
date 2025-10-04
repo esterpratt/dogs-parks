@@ -75,4 +75,15 @@
   input:checked + .slider .icon {
     transform: translateX(48px);
   }
+
+  // RTL support
+  :global(.rtl) .toggle-input {
+    input:checked + .slider::before {
+      transform: translateX(-48px);
+    }
+
+    input:checked + .slider .icon {
+      transform: translateX(-48px);
+    }
+  }
 }

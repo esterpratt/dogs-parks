@@ -64,6 +64,15 @@ Specific entries
 - Scope: Global component (bottom navbar across the app).
 - Notes: Allowed to set `direction: ltr` on navbar containers and keep physical `right` positioning where used (e.g., `.menu-container`, `.notification-badge`).
 
+3. Header navigation arrows — Keep original direction
+
+- File: `src/components/Header.module.scss`, `src/components/park/ParkHeader.tsx`
+- Selector: `.prev-links a`, `MoveLeft` and `MoveRight` icons
+- Lines: Back/forward arrows in header navigation should maintain their original left/right direction.
+- Reason: Navigation arrows represent directional movement; flipping them would confuse users about actual page flow.
+- Scope: All header components with navigation arrows (ParkHeader, etc.).
+- Notes: Do not apply `scaleX(-1)` or flip `MoveLeft`/`MoveRight` icons; keep them as-is for consistent navigation UX.
+
 Categories to populate (pending entries)
 
 1. Icons and imagery
@@ -76,7 +85,12 @@ Categories to populate (pending entries)
 
 3. Maps (Leaflet controls, attributions, popups)
 
-- Pending
+- File: `src/components/map/NewMap.tsx`
+- Selector: All map buttons (list view, center location, weather)
+- Lines: Inline styles with direction-aware positioning
+- Reason: All map buttons should mirror to left side in RTL for better UX
+- Scope: All map buttons
+- Notes: Uses dynamic positioning `[isRTL ? 'left' : 'right']` to adapt to language direction
 
 4. Text and fields (force LTR where required)
 

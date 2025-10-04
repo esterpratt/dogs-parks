@@ -66,6 +66,19 @@
     }
   }
 
+  // Force LTR for specific input types that should remain LTR
+  &[type='email'],
+  &[type='url'],
+  &[type='tel'],
+  &[type='number'],
+  &[inputmode='email'],
+  &[inputmode='url'],
+  &[inputmode='tel'],
+  &[inputmode='numeric'] {
+    direction: ltr;
+    text-align: left;
+  }
+
   &::placeholder {
     color: var(--color-placeholder);
   }

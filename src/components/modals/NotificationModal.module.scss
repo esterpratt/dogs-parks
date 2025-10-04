@@ -16,14 +16,14 @@
   color: var(--color-text);
   font-size: 20px;
   z-index: 1200;
-  margin-right: -100%;
+  margin-inline-end: -100%;
 
   &[open] {
-    margin-right: 12px;
+    margin-inline-end: 12px;
   }
 
   &:not([open]) {
-    margin-right: -100%;
+    margin-inline-end: -100%;
   }
 }
 

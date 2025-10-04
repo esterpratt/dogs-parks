@@ -11,6 +11,24 @@
   gap: 12px;
 }
 
+// Move to left side in RTL
+:global(.rtl) .weather-button-wrapper {
+  right: auto;
+  left: calc(16px + var(--safe-area-inset-left, 0px));
+}
+
+// Fix weather content animation for RTL
+:global(.rtl) .weather-button-wrapper {
+  .content {
+    transform-origin: center left;
+    transform: translateX(-6px) scaleX(0.6) scaleY(0.96);
+  }
+
+  .content-open {
+    transform: translateX(0) scaleX(1) scaleY(1);
+  }
+}
+
 .button {
   background: var(--background-color);
   border-radius: 50%;

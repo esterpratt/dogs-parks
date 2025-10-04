@@ -23,6 +23,8 @@ import { useUserLocation } from '../../context/LocationContext';
 import { Button } from '../Button';
 import { useInitLocation } from '../../hooks/useInitLocation';
 import { WeatherButton } from '../weather/WeatherButton';
+import { useTranslation } from 'react-i18next';
+import { isRTL } from '../../utils/language';
 import styles from './NewMap.module.scss';
 
 const ParkPopupLazy = lazy(() => import('../parks/ParkPopupLazy'));
@@ -34,6 +36,8 @@ interface NewMapProps {
 
 const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
   const userLocation = useInitLocation();
+  const { i18n } = useTranslation();
+  const isRTLValue = isRTL(i18n.language);
   const setUserLocation = useUserLocation((state) => state.setUserLocation);
   const [center, setCenter] = useState<Location>(
     location ?? userLocation ?? DEFAULT_LOCATION
@@ -126,13 +130,14 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
             style={{
               position: 'absolute',
               top: 'calc(12px + var(--safe-area-inset-top, 0px))',
-              right: 'calc(16px + var(--safe-area-inset-right, 0px))',
+              [isRTLValue ? 'left' : 'right']:
+                `calc(16px + var(--safe-area-inset-${isRTLValue ? 'left' : 'right'}, 0px))`,
             }}
           >
             <AlignJustify />
           </Button>
         </Link>
-        <ZoomControl position="topright" />
+        <ZoomControl position={isRTLValue ? 'topleft' : 'topright'} />
         <MarkerList setActivePark={onSetActivePark} activePark={activePark} />
         {userLocation && (
           <UserLocationMarker
@@ -155,7 +160,8 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
           style={{
             position: 'absolute',
             top: `calc(120px + var(--safe-area-inset-top, 0px))`,
-            right: `calc(16px + var(--safe-area-inset-right, 0px))`,
+            [isRTLValue ? 'left' : 'right']:
+              `calc(16px + var(--safe-area-inset-${isRTLValue ? 'left' : 'right'}, 0px))`,
           }}
         >
           <Locate />

@@ -87,7 +87,7 @@
   width: 50%;
   border: 1px solid $blue;
   bottom: calc(var(--safe-area-inset-bottom) + $navbar-height + 2px);
-  right: 12px;
+  inset-inline-end: 12px;
   background-color: var(--background-color);
   box-shadow: var(--box-shadow);
   border-radius: 12px;

@@ -30,9 +30,9 @@ const WeatherButton: React.FC<WeatherButtonProps> = ({ lat, long }) => {
     return null;
   }
 
-  if (forecast.precipitationProbability <= 5) {
-    return null;
-  }
+  // if (forecast.precipitationProbability <= 5) {
+  //   return null;
+  // }
 
   const { Icon, description, color, backgroundColor } = getWeatherInfo({
     code: forecast.weatherCode,
