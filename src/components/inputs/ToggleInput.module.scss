@@ -77,7 +77,7 @@
   }
 
   // RTL support
-  :global(.rtl) .toggle-input {
+  :global(.rtl) & {
     input:checked + .slider::before {
       transform: translateX(-48px);
     }

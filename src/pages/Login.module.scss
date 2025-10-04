@@ -59,6 +59,11 @@
       background-color: black;
       color: white;
     }
+
+    // RTL support - keep icon and text in same order as LTR
+    :global(.rtl) & {
+      direction: ltr;
+    }
   }
 
   .apple-login-button {
@@ -78,6 +83,11 @@
 
     svg {
       margin-inline-start: -28px;
+    }
+
+    // RTL support - keep icon and text in same order as LTR
+    :global(.rtl) & {
+      direction: ltr;
     }
   }
 }
