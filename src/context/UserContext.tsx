@@ -3,6 +3,7 @@ import {
   PropsWithChildren,
   createContext,
   useEffect,
+  useRef,
   useState,
 } from 'react';
 import {
@@ -124,7 +125,7 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   });
 
   useEffect(() => {
-    if (session) {
+    if (session?.user?.id) {
       refetchUser({ throwOnError: true }).catch((error) => {
         if (!error?.silent) {
           if (!isLoggingOut) {
@@ -133,7 +134,7 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
         }
       });
     }
-  }, [session, refetchUser, userLogout, isLoggingOut]);
+  }, [session?.user?.id, refetchUser, userLogout, isLoggingOut]);
 
   const userLogin = ({
     withGoogle,
