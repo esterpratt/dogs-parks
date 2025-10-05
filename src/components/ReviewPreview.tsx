@@ -62,11 +62,15 @@ const ReviewPreview: React.FC<ReviewPreviewProps> = ({
       )}
       <div className={styles.review}>
         <div className={styles.top}>
-          <div className={styles.title}>{review.title}</div>
+          <div className={styles.title}>
+            <p dir="auto">{review.title}</p>
+          </div>
           <Stars rank={review.rank} className={styles.stars} />
         </div>
         {review.content && (
-          <div className={styles.content}>{review.content}</div>
+          <div className={styles.content}>
+            <p dir="auto">{review.content}</p>
+          </div>
         )}
         <div className={styles.bottom}>
           <div className={styles.details}>

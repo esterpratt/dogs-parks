@@ -25,6 +25,11 @@
 
 .content {
   display: flex;
+
+  p {
+    margin: 0;
+    padding: 0;
+  }
 }
 
 .top,
@@ -67,6 +72,11 @@
 .title {
   font-size: $second-title-font-size;
   margin-inline-end: 12px;
+
+  p {
+    margin: 0;
+    padding: 0;
+  }
 }
 
 .button {

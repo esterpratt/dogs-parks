@@ -142,7 +142,9 @@ const DogDetails: React.FC<DogDeatilsProps> = ({
                 <ScrollText color={styles.green} size={16} />
                 <span>{t('dogs.details.description')}</span>
               </div>
-              <div className={styles.descriptionText}>{dog.description}</div>
+              <div className={styles.descriptionText}>
+                <p dir="auto">{dog.description}</p>
+              </div>
             </div>
           )}
         </div>
