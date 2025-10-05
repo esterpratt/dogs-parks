@@ -15,6 +15,7 @@ import { getDogNames } from '../../utils/getDogNames';
 import { TopModal } from '../modals/TopModal';
 import { Button } from '../Button';
 import { Image } from '../Image';
+import { isRTL } from '../../utils/language';
 import DogIcon from '../../assets/dog.svg?react';
 import styles from './UserPreview.module.scss';
 
@@ -29,7 +30,7 @@ const UserPreview: React.FC<UserPreviewProps> = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { userId } = useContext(UserContext);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const { data: dogImage } = useQuery({
     queryKey: ['dogImage', user.dogs[0]?.id ?? null],
@@ -43,6 +44,7 @@ const UserPreview: React.FC<UserPreviewProps> = ({
   });
 
   const dogNames = user.dogs.length ? getDogNames(user.dogs) : null;
+  const isRTLLang = isRTL(i18n.language);
 
   return (
     <>
@@ -68,18 +70,35 @@ const UserPreview: React.FC<UserPreviewProps> = ({
               <>
                 <span className={styles.dogNames}>{dogNames}</span>
                 <span className={styles.userNameContainer}>
-                  <span className={styles.userName}>{user.name}</span>
-                  <span>
-                    {' '}
-                    {t('users.preview.dogsCount', {
-                      count: user.dogs.length,
-                      context:
-                        user.dogs.length === 1 &&
-                        user.dogs[0]?.gender === GENDER.FEMALE
-                          ? 'female'
-                          : undefined,
-                    })}
-                  </span>
+                  {isRTLLang ? (
+                    <>
+                      <span>
+                        {t('users.preview.dogsCount', {
+                          count: user.dogs.length,
+                          context:
+                            user.dogs.length === 1 &&
+                            user.dogs[0]?.gender === GENDER.FEMALE
+                              ? 'female'
+                              : undefined,
+                        })}
+                      </span>
+                      <span className={styles.userName}> {user.name}</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className={styles.userName}>{user.name}</span>
+                      <span>
+                        {t('users.preview.dogsCount', {
+                          count: user.dogs.length,
+                          context:
+                            user.dogs.length === 1 &&
+                            user.dogs[0]?.gender === GENDER.FEMALE
+                              ? 'female'
+                              : undefined,
+                        })}
+                      </span>
+                    </>
+                  )}
                 </span>
               </>
             ) : (

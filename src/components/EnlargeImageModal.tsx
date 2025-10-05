@@ -46,6 +46,15 @@ const EnlargeImageModal: React.FC<EnlargeImageModalProps> = ({
         </div>
         {(!!onClickDeleteImage || !!onSetPrimaryImage) && (
           <div className={styles.buttonsContainer}>
+            {!!onSetPrimaryImage && (
+              <Button
+                className={classnames(styles.button, styles.primaryButton)}
+                onClick={onSetPrimaryImage}
+              >
+                <Star size={18} />
+                <span>{t('components.enlargeImage.setPrimary')}</span>
+              </Button>
+            )}
             {!!onClickDeleteImage && (
               <Button
                 variant="secondary"
@@ -55,15 +64,6 @@ const EnlargeImageModal: React.FC<EnlargeImageModalProps> = ({
               >
                 <Trash2 size={18} />
                 <span>{t('common.actions.delete')}</span>
-              </Button>
-            )}
-            {!!onSetPrimaryImage && (
-              <Button
-                className={classnames(styles.button, styles.primaryButton)}
-                onClick={onSetPrimaryImage}
-              >
-                <Star size={18} />
-                <span>{t('components.enlargeImage.setPrimary')}</span>
               </Button>
             )}
           </div>

@@ -117,6 +117,7 @@
     "sniffFriends": "למצוא כמה חברים!",
     "searchPlaceholder": "חיפוש לפי שם משתמש או כלב",
     "preview": {
+      "dogsCount": "הכלבים של",
       "dogsCount_one": "הכלב של",
       "dogsCount_female_one": "הכלבה של",
       "dogsCount_other": "הכלבים של",

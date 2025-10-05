@@ -117,9 +117,10 @@
     "sniffFriends": "Sniff out some friends!",
     "searchPlaceholder": "Search by user or dog name",
     "preview": {
-      "dogsCount_one": "dog",
-      "dogsCount_female_one": "dog",
-      "dogsCount_other": "dogs",
+      "dogsCount": "'s dogs",
+      "dogsCount_one": "'s dog",
+      "dogsCount_female_one": "'s dog",
+      "dogsCount_other": "'s dogs",
       "accept": "Accept",
       "decline": "Decline",
       "exit": "Exit",
