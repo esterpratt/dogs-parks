@@ -52,18 +52,20 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
 
   const NoResultsLayout = user ? (
     <div className={styles.noResults}>
-      <span>{t('parks.noResults.titleSignedIn')}</span>
+      <span>{t('parks.noResults.user.title')}</span>
       <span>
-        {t('parks.noResults.helpPrefix')}{' '}
-        <Link to="new">{t('parks.noResults.helpLink')}</Link>
+        {t('parks.noResults.user.helpPrefix')}{' '}
+        <Link to="new">{t('parks.noResults.user.helpLink')}</Link>
       </span>
     </div>
   ) : (
     <div className={styles.noResults}>
-      <span>{t('parks.noResults.titleSignedOut')}</span>
+      <span>{t('parks.noResults.noUser.title')}</span>
       <span>
-        <Link to="/login?mode=login">{t('newPark.loginLink')}</Link>{' '}
-        {t('parks.noResults.ctaSignedOutSuffix')}
+        <Link to="/login?mode=login">
+          {t('parks.noResults.noUser.loginLink')}
+        </Link>{' '}
+        {t('parks.noResults.noUser.loginSuffix')}
       </span>
     </div>
   );

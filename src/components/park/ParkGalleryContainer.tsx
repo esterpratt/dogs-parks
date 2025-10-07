@@ -91,7 +91,7 @@ const ParkGalleryContainer: React.FC<ParkGalleryContainerProps> = ({
               <div>
                 <Button variant="simple" className={styles.link}>
                   <Link to="/login?mode=login">
-                    {t('common.actions.login')}
+                    {t('components.carousel.login')}
                   </Link>
                 </Button>
                 <span>

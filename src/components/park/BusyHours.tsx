@@ -92,7 +92,7 @@ const BusyHours: React.FC<BusyHoursProps> = (props: BusyHoursProps) => {
                 <div>
                   <Button variant="simple" className={styles.link}>
                     <Link to="/login?mode=login">
-                      {t('common.actions.login')}
+                      {t('parks.busyHours.login')}
                     </Link>
                   </Button>
                   <span> {t('parks.busyHours.toAddDataSuffix')}</span>

@@ -59,7 +59,7 @@ const Users = () => {
   return (
     <div className={styles.container}>
       <div className={styles.title}>
-        <span>{t('users.sniffFriends')}</span>
+        <span>{t('users.searchTitle')}</span>
       </div>
 
       <SearchListAsync

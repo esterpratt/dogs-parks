@@ -66,7 +66,7 @@ const ReviewsPreview = (props: ReviewsPreviewProps) => {
         </>
       )}
       {!reviewsCount && !isReviewsPage && (
-        <span>{t('parkReviews.emptyTitle')}</span>
+        <span>{t('parkReviews.emptyTitleShort')}</span>
       )}
       {!!reviewsCount && isReviewsPage && (
         <div className={styles.rank}>

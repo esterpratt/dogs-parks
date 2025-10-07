@@ -114,7 +114,8 @@
   },
   "users": {
     "noResults": "No users were found",
-    "sniffFriends": "Sniff out some friends!",
+    "searchTitle": "Sniff out some friends!",
+    "sniffFriends": "Sniff out some friends",
     "searchPlaceholder": "Search by user or dog name",
     "preview": {
       "dogsCount": "'s dogs",
@@ -158,6 +159,7 @@
     "notFound": "Could not find page"
   },
   "auth": {
+    "same_password": "Please enter a new password",
     "invalid_credentials": "Incorrect email or password",
     "email_not_confirmed": "Please verify your email before logging in",
     "provider_not_enabled": "This sign in method isn’t available",
@@ -452,11 +454,16 @@
       "dialogTitle": "Share {{name}}"
     },
     "noResults": {
-      "titleSignedIn": "Can’t sniff out your park?",
-      "helpPrefix": "Help us by",
-      "helpLink": "adding the park details!",
-      "titleSignedOut": "Sorry, can’t sniff out your park",
-      "ctaSignedOutSuffix": "to add your park!"
+      "user": {
+        "title": "Can’t sniff out your park?",
+        "helpPrefix": "Help us by",
+        "helpLink": "adding the park details!"
+      },
+      "noUser": {
+        "title": "Sorry, can’t sniff out your park",
+        "loginLink": "Log in",
+        "ctaSignedOutSuffix": "to add your park!"
+      }
     },
     "directions": {
       "error": "Sorry, my sniff powers are temporarily offline"
@@ -475,7 +482,8 @@
         "medium": "medium",
         "busy": "busy"
       },
-      "toAddDataSuffix": "to add live data.",
+      "login": "Log in",
+      "toAddDataSuffix": "to add live data",
       "modal": {
         "dogsCountLabel": "How many dogs are currently in the park?",
         "hintSuffix": "* You can always add a report by clicking the plus sign in the Busy Hours section."
@@ -554,10 +562,12 @@
     },
     "visitors": {
       "onlyYou": "You're the only one here right now",
-      "count_one": "1 visitor here now",
-      "count_other": "{{count}} visitors here now",
-      "countWithMore_one": "and 1 other",
-      "countWithMore_other": "and {{count}} others"
+      "count": "{{count}} visitors here right now",
+      "count_one": "1 KlavHuber here right now",
+      "count_other": "{{count}} KlavHubers here right now",
+      "countWithMore": "and {{count}} others KlavHubers",
+      "countWithMore_one": "and 1 other KlavHuber",
+      "countWithMore_other": "and {{count}} others KlavHubers"
     }
   },
   "components": {
@@ -566,6 +576,7 @@
       "confirmTitle": "Hold your leash!",
       "confirmBody": "Are you sure you want to send this pic to a farm up north where it can run free forever?",
       "noPhotosYet": "No photos for this park yet.",
+      "login": "Log in",
       "toAddDataSuffix": "to add data."
     },
     "camera": {
@@ -684,7 +695,7 @@
         "waitingResponse": "Waiting friend's response",
         "possessive": "Possessive"
       },
-      "addYourDetails": "Add your dog's details",
+      "addDetails": "Add your dog's details",
       "notAddedYet": "did not add their dog's details yet",
       "description": "Description"
     },
@@ -694,7 +705,7 @@
       "notAddedYet": "did not add their dog's preferences yet"
     },
     "edit": {
-      "titleUpdate": "Update {{name}}’s details",
+      "titleUpdate": "Update {{name}}'s details",
       "titleAdd": "Add your dog's details",
       "labels": {
         "name": "Name *",

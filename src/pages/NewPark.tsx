@@ -97,15 +97,13 @@ const NewPark: React.FC = () => {
 
   return (
     <>
+      <div className={styles.prevLinks}>
+        <Link to="/parks">
+          <MoveLeft size={16} />
+          <span>{t('newPark.breadcrumbAllParks')}</span>
+        </Link>
+      </div>
       <div className={styles.container}>
-        <div className={styles.prevLinks}>
-          {
-            <Link to="/parks">
-              <MoveLeft size={16} />
-              <span>{t('newPark.breadcrumbAllParks')}</span>
-            </Link>
-          }
-        </div>
         <div className={styles.contentContainer}>
           <div className={styles.title}>{t('newPark.fillDetailsTitle')}</div>
           <div className={classnames(styles.error, error && styles.show)}>

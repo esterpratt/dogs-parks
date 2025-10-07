@@ -111,7 +111,7 @@ const DogDetails: React.FC<DogDeatilsProps> = ({
                   className={styles.button}
                   onClick={onEditDog}
                 >
-                  {t('dogs.details.addYourDetails')}
+                  {t('dogs.details.addDetails')}
                 </Button>
               ) : (
                 <div className={styles.empty}>

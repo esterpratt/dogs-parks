@@ -13,6 +13,7 @@ const CODE_TO_I18N_KEY: Record<string, string> = {
   email_not_confirmed: 'auth.email_not_confirmed',
   user_not_found: 'auth.user_not_found',
   user_banned: 'auth.user_banned',
+  same_password: 'auth.same_password',
 
   // Sign-up
   email_exists: 'auth.email_already_exists',
