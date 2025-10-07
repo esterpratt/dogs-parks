@@ -40,10 +40,6 @@
   }
 }
 
-:global(.rtl) .prev-links {
-  justify-content: flex-end;
-}
-
 .title {
   font-size: $second-title-font-size;
   padding: 0 8px;
@@ -128,6 +124,10 @@
     padding: 8px 12px;
     border-radius: 8px;
   }
+}
+
+:global(.rtl) .prev-links {
+  justify-content: flex-end;
 }
 
 @media (orientation: landscape) {

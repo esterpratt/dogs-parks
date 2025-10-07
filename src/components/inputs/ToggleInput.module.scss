@@ -75,15 +75,14 @@
   input:checked + .slider .icon {
     transform: translateX(48px);
   }
+}
 
-  // RTL support
-  :global(.rtl) & {
-    input:checked + .slider::before {
-      transform: translateX(-48px);
-    }
+:global(.rtl) .switch {
+  input:checked + .slider::before {
+    transform: translateX(-48px);
+  }
 
-    input:checked + .slider .icon {
-      transform: translateX(-48px);
-    }
+  input:checked + .slider .icon {
+    transform: translateX(-48px);
   }
 }

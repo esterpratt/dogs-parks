@@ -33,11 +33,6 @@
       margin-inline-start: 100%;
       transform: translateX(-100%);
     }
-
-    // RTL support
-    :global(.rtl) .button-container:only-child {
-      transform: translateX(100%);
-    }
   }
 
   .primary-button {
@@ -72,6 +67,10 @@
       width: 100%;
     }
   }
+}
+
+:global(.rtl) .modal-image .button .button-container:only-child {
+  transform: translateX(100%);
 }
 
 @media (orientation: landscape) {

@@ -21,14 +21,6 @@
   }
 }
 
-:global(.rtl) .prev-links {
-  flex-direction: row-reverse;
-
-  a {
-    flex-direction: row-reverse;
-  }
-}
-
 .header {
   position: relative;
   height: 268px;
@@ -84,6 +76,14 @@
   gap: 12px;
   align-items: center;
   width: 100%;
+}
+
+:global(.rtl) .prev-links {
+  flex-direction: row-reverse;
+
+  a {
+    flex-direction: row-reverse;
+  }
 }
 
 @media (orientation: landscape) {
