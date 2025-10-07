@@ -187,7 +187,6 @@ const NavbarBottom = () => {
           </NavLink>
         </div>
         <div className={styles.menuItem}>
-          {/* Language switcher: no navigation, reuse inner class for look */}
           <LanguageSwitcher
             className={styles.inner}
             onClick={() => setIsMenuOpen(false)}

@@ -1,5 +1,7 @@
 {
   "language": {
+    "title": "Language",
+    "modalTitle": "Choose language",
     "english": "English",
     "hebrew": "Hebrew"
   },

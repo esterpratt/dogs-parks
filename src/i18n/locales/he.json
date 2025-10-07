@@ -1,5 +1,7 @@
 {
   "language": {
+    "title": "שפה",
+    "modalTitle": "בחירת שפה",
     "english": "אנגלית",
     "hebrew": "עברית"
   },
@@ -392,6 +394,7 @@
   "common": {
     "actions": {
       "cancel": "ביטול",
+      "close": "סגירה",
       "delete": "מחיקה",
       "login": "כניסה",
       "logout": "יציאה",

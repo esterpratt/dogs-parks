@@ -1,12 +1,9 @@
-import { MouseEvent } from 'react';
+import { MouseEvent, useState } from 'react';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { setPreferredLanguage } from '../utils/languageStorage';
-import { APP_LANGUAGES } from '../utils/consts';
-import { deriveAppLanguage } from '../utils/language';
-
-const LABEL_ENGLISH = 'English';
-const LABEL_HEBREW = 'עברית';
+import { Languages } from 'lucide-react';
+import { LanguageSelectionModal } from './modals/LanguageSelectionModal';
+import styles from './LanguageSwitcher.module.scss';
 
 interface LanguageSwitcherProps {
   className?: string;
@@ -15,30 +12,34 @@ interface LanguageSwitcherProps {
 
 const LanguageSwitcher = (props: LanguageSwitcherProps) => {
   const { className, onClick } = props;
-  const { i18n } = useTranslation();
+  const { t } = useTranslation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const currentLang = deriveAppLanguage(i18n.language);
-  const isHebrew = currentLang === APP_LANGUAGES.HE;
-  const nextLang = isHebrew ? APP_LANGUAGES.EN : APP_LANGUAGES.HE;
-  const label = isHebrew ? LABEL_ENGLISH : LABEL_HEBREW;
-
-  const handleToggle = async (e: MouseEvent<HTMLButtonElement>) => {
+  const handleOpenModal = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    await i18n.changeLanguage(nextLang);
-    await setPreferredLanguage(nextLang);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
     if (onClick) {
       onClick();
     }
   };
 
   return (
-    <button
-      type="button"
-      className={classnames(className)}
-      onClick={handleToggle}
-    >
-      <span>{label}</span>
-    </button>
+    <>
+      <button
+        type="button"
+        className={classnames(styles.button, className)}
+        onClick={handleOpenModal}
+      >
+        <Languages className={styles.icon} size={18} />
+        <span className={styles.label}>{t('language.title', 'Language')}</span>
+      </button>
+
+      <LanguageSelectionModal open={isModalOpen} onClose={handleCloseModal} />
+    </>
   );
 };
 

@@ -56,6 +56,76 @@ This rule outlines the established styling conventions for SCSS files in the Dog
 }
 ```
 
+## 🏷️ Class Naming
+
+### **SCSS Files: Use kebab-case for Class Names**
+
+```scss
+// ✅ Good: Use kebab-case for class names in SCSS files
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.exit-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.option-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.native-label {
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+// ❌ Bad: Don't use camelCase in SCSS files
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.exitButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+```
+
+### **TypeScript/JSX Files: Use camelCase for Class References**
+
+```tsx
+// ✅ Good: Use camelCase when referencing kebab-case classes in TSX
+<div className={styles.headerLeft}>
+<div className={styles.exitButton}>
+<div className={styles.optionsList}>
+<div className={styles.optionContent}>
+<div className={styles.nativeLabel}>
+
+// ❌ Bad: Don't use bracket notation for kebab-case classes
+<div className={styles['header-left']}>
+<div className={styles['exit-button']}>
+<div className={styles['options-list']}>
+```
+
+**Important**: CSS Modules automatically converts kebab-case class names in SCSS to camelCase properties in the styles object. This is why we use kebab-case in SCSS but camelCase in TypeScript/JSX.
+
 ## 🔤 Typography
 
 ### **Do Not Use font-weight Property**
@@ -114,4 +184,7 @@ This rule outlines the established styling conventions for SCSS files in the Dog
 ## 📋 Checklist for SCSS Files
 
 - [ ] All measurements use px units (not rem, em, or other units)
+- [ ] All SCSS class names use kebab-case (not camelCase)
+- [ ] All TypeScript/JSX class references use camelCase (not bracket notation)
 - [ ] No font-weight properties are used anywhere
+- [ ] CSS Modules automatically converts kebab-case to camelCase in the styles object
