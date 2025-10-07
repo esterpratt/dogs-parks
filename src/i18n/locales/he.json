@@ -277,7 +277,7 @@
       "headerNew_many": "{{count}} התראות חדשות",
       "headerNew_other": "{{count}} התראות חדשות",
       "headerNone": "אין התראות חדשות",
-      "headerEarlier": "קודמות"
+      "headerEarlier": "התראות קודמות"
     },
     "types": {
       "friendRequest": {

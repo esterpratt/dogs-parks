@@ -129,6 +129,15 @@
   }
 }
 
+:global(.rtl) {
+  .navbar .icons-container {
+    direction: ltr;
+  }
+  .menu-container {
+    inset-inline-start: 12px;
+  }
+}
+
 @media (orientation: landscape) {
   .menu-container {
     width: 40%;

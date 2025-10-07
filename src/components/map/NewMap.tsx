@@ -37,7 +37,7 @@ interface NewMapProps {
 const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
   const userLocation = useInitLocation();
   const { i18n } = useTranslation();
-  const isRTLValue = isRTL(i18n.language);
+  const isRTLMode = isRTL(i18n.language);
   const setUserLocation = useUserLocation((state) => state.setUserLocation);
   const [center, setCenter] = useState<Location>(
     location ?? userLocation ?? DEFAULT_LOCATION
@@ -130,14 +130,14 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
             style={{
               position: 'absolute',
               top: 'calc(12px + var(--safe-area-inset-top, 0px))',
-              [isRTLValue ? 'left' : 'right']:
-                `calc(16px + var(--safe-area-inset-${isRTLValue ? 'left' : 'right'}, 0px))`,
+              [isRTLMode ? 'left' : 'right']:
+                `calc(16px + var(--safe-area-inset-${isRTLMode ? 'left' : 'right'}, 0px))`,
             }}
           >
             <AlignJustify />
           </Button>
         </Link>
-        <ZoomControl position={isRTLValue ? 'topleft' : 'topright'} />
+        <ZoomControl position={isRTLMode ? 'topleft' : 'topright'} />
         <MarkerList setActivePark={onSetActivePark} activePark={activePark} />
         {userLocation && (
           <UserLocationMarker
@@ -160,8 +160,8 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
           style={{
             position: 'absolute',
             top: `calc(120px + var(--safe-area-inset-top, 0px))`,
-            [isRTLValue ? 'left' : 'right']:
-              `calc(16px + var(--safe-area-inset-${isRTLValue ? 'left' : 'right'}, 0px))`,
+            [isRTLMode ? 'left' : 'right']:
+              `calc(16px + var(--safe-area-inset-${isRTLMode ? 'left' : 'right'}, 0px))`,
           }}
         >
           <Locate />

@@ -18,7 +18,7 @@ const MapSearchAddress: React.FC<MapSearchAddressProps> = ({ setCenter }) => {
   const map = useMap();
   const orientation = useOrientationContext((state) => state.orientation);
   const { t, i18n } = useTranslation();
-  const isRTLValue = isRTL(i18n.language);
+  const isRTLMode = isRTL(i18n.language);
 
   useEffect(() => {
     const geocoderControl = new Geocoder({
@@ -31,7 +31,7 @@ const MapSearchAddress: React.FC<MapSearchAddressProps> = ({ setCenter }) => {
       }),
       defaultMarkGeocode: false,
       errorMessage: t('location.input.errorAddressNotFound'),
-      position: isRTLValue ? 'topright' : 'topleft',
+      position: isRTLMode ? 'topright' : 'topleft',
       placeholder: t('location.input.searchAddress'),
     });
     geocoderControl.addTo(map);
@@ -45,7 +45,7 @@ const MapSearchAddress: React.FC<MapSearchAddressProps> = ({ setCenter }) => {
     return () => {
       geocoderControl.remove();
     };
-  }, [map, setCenter, t, i18n.language, isRTLValue]);
+  }, [map, setCenter, t, i18n.language, isRTLMode]);
 
   useEffect(() => {
     let input: HTMLInputElement | null = null;

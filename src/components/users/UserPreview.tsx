@@ -44,7 +44,7 @@ const UserPreview: React.FC<UserPreviewProps> = ({
   });
 
   const dogNames = user.dogs.length ? getDogNames(user.dogs) : null;
-  const isRTLLang = isRTL(i18n.language);
+  const isRTLMode = isRTL(i18n.language);
 
   return (
     <>
@@ -70,7 +70,7 @@ const UserPreview: React.FC<UserPreviewProps> = ({
               <>
                 <span className={styles.dogNames}>{dogNames}</span>
                 <span className={styles.userNameContainer}>
-                  {isRTLLang ? (
+                  {isRTLMode ? (
                     <>
                       <span>
                         {t('users.preview.dogsCount', {

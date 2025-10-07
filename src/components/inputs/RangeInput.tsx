@@ -1,6 +1,8 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
+import { useTranslation } from 'react-i18next';
 import { ControlledInput } from './ControlledInput';
+import { isRTL } from '../../utils/language';
 import styles from './RangeInput.module.scss';
 
 interface RangeInputProps {
@@ -26,9 +28,11 @@ const RangeInput: React.FC<RangeInputProps> = ({
   onChange,
   className,
 }) => {
+  const { i18n } = useTranslation();
   const inputContainerRef = useRef<HTMLDivElement | null>(null);
   const [bubbleStep, setBubbleStep] = useState(0);
   const halfThumbWidth = Number(styles.thumbWidth) / 2 + 1;
+  const isRtlMode = isRTL(i18n.language);
 
   useEffect(() => {
     const element = inputContainerRef.current;
@@ -71,9 +75,9 @@ const RangeInput: React.FC<RangeInputProps> = ({
           className={styles.output}
           htmlFor="range"
           style={{
-            transform: `translateX(calc(${
-              bubbleStep * Number(value)
-            }px - 50% + ${halfThumbWidth}px))`,
+            transform: isRtlMode
+              ? `translateX(calc(-${bubbleStep * Number(value)}px + 50% - ${halfThumbWidth}px))`
+              : `translateX(calc(${bubbleStep * Number(value)}px - 50% + ${halfThumbWidth}px))`,
           }}
         >
           {value}
