@@ -1,0 +1,1046 @@
+{
+  "language": {
+    "title": "اللغة",
+    "modalTitle": "اختيار اللغة",
+    "english": "الإنجليزية",
+    "hebrew": "العبرية",
+    "arabic": "العربية"
+  },
+  "userDogs": {
+    "titleMyPack": "قطيعي",
+    "titleUsersPack": "قطيع {{name}}",
+    "addDog": "إضافة كلب",
+    "emptySignedIn1": "قطيعك فارغ",
+    "emptySignedIn2": "حان الوقت لإضافة بعض الأصدقاء ذوي الأرجل الأربع!",
+    "otherEmpty": "قطيع {{name}} فارغ",
+    "cameraModalTitle": "إضافة صورة"
+  },
+  "deleteAccount": {
+    "title": "حذف بياناتك في كلابهاب",
+    "fullDeleteTitle": "لحذف حسابك وجميع البيانات المرتبطة:",
+    "fullDeleteStep1": "اذهب إلى ملفك الشخصي",
+    "fullDeleteStep2": "اضغط على الإعدادات -> حذف ملفي الشخصي",
+    "fullDeleteStep3": "اضغط على حذف",
+    "fullDeleteNote": "هذا سيحذف حسابك وجميع البيانات المرتبطة نهائياً.",
+    "deleteDogTitle": "لحذف كلابك:",
+    "deleteDogStep1": "اذهب إلى ملفك الشخصي",
+    "deleteDogStep2": "اضغط على ملف الكلب",
+    "deleteDogStep3": "اضغط على أيقونة التحرير",
+    "deleteDogStep4": "مرر إلى 'وداعاً...' واضغط",
+    "deleteDogStep5": "اضغط على حذف",
+    "deleteDogBody": "عند حذف ملف الكلب، تُحذف البيانات من التطبيق ولا يمكن الوصول إليها. لا تظهر للمستخدمين الآخرين ولا تُحفظ للعرض أو المعالجة.",
+    "help": "تحتاج مساعدة؟ تواصل معنا على:",
+    "helpEmail": "esterpratt@gmail.com"
+  },
+  "privacyPolicy": {
+    "title": "سياسة الخصوصية",
+    "lastUpdated": "آخر تحديث: 1.7.25",
+    "introTitle": "مقدمة",
+    "intro": "مرحباً بكم في كلابهاب. توضح سياسة الخصوصية هذه كيفية جمعنا واستخدامنا وحماية معلوماتك عند استخدام تطبيقنا، كلابهاب (\"التطبيق\"). باستخدامك للتطبيق، توافق على جمع واستخدام المعلومات وفقاً لهذه السياسة.",
+    "dataWeCollect": {
+      "title": "المعلومات التي نجمعها",
+      "lead": "قد نجمع الأنواع التالية من المعلومات:",
+      "personalTitle": "معلومات شخصية (عند إنشاء حساب):",
+      "personalItems": [
+        "الاسم، عنوان البريد الإلكتروني.",
+        "إذا سجلت الدخول باستخدام Google، قد نجمع تفاصيل الملف الشخصي وفقاً لسياساتهم.",
+        "أي معلومات إضافية تضيفها عمداً لملفك الشخصي، مثل تفاصيل الكلب والتفاعلات في الحدائق."
+      ],
+      "usageTitle": "بيانات الاستخدام:",
+      "usageDesc": "معلومات حول كيفية تفاعلك مع التطبيق (مثل، الميزات المستخدمة، مدة الجلسة).",
+      "deviceTitle": "معلومات الجهاز:",
+      "deviceDesc": "نوع الجهاز، نظام التشغيل، والمعرفات الفريدة.",
+      "locationTitle": "الموقع المقدر أو الدقيق (بالإذن فقط).",
+      "photosTitle": "الصور والمحتويات الأخرى التي ترفعها للتطبيق."
+    },
+    "usage": {
+      "title": "كيف نستخدم المعلومات",
+      "lead": "نستخدم المعلومات من أجل:",
+      "items": [
+        "السماح لأصحاب الكلاب بالبحث عن أصدقاء ومشاهدة صفحات كلابهم. إذا كنت تفضل إبقاء صفحتك خاصة، يمكن تغيير ذلك في أي وقت في إعدادات الملف الشخصي.",
+        "تقديم وتحسين الخدمات.",
+        "تخصيص التجربة لك.",
+        "تقديم التحديثات والدعم.",
+        "تحليل الاستخدام لتحسين الأداء.",
+        "ضمان الأمان ومنع الاحتيال."
+      ]
+    },
+    "sharing": {
+      "title": "مشاركة المعلومات",
+      "lead": "نحن لا نبيع المعلومات الشخصية. ومع ذلك، قد نشارك البيانات مع:",
+      "items": [
+        "مقدمو الخدمات – لأغراض التحليل، الاستضافة أو الدعم.",
+        "السلطات القانونية – إذا طُلب منا بموجب القانون أو لمنع الاحتيال."
+      ]
+    },
+    "security": {
+      "title": "حفظ المعلومات والأمان",
+      "desc": "نحتفظ بالمعلومات فقط طالما كانت مطلوبة لغرضها. نطبق تدابير أمنية معيارية لحماية المعلومات. ومع ذلك، لا يوجد خدمة عبر الإنترنت آمنة بنسبة 100%، والاستخدام على مسؤولية المستخدمين."
+    },
+    "delete": {
+      "title": "حذف البيانات",
+      "desc": "يمكن حذف الحساب في أي وقت من خلال إعدادات الملف الشخصي. للحصول على تعليمات مفصلة لحذف البيانات",
+      "linkText": "اضغط هنا"
+    },
+    "privateOption": "إذا كنت تفضل إبقاء صفحتك خاصة، يمكن تغيير ذلك في أي وقت في إعدادات الملف الشخصي.",
+    "children": {
+      "title": "خصوصية الأطفال",
+      "desc": "التطبيق غير مخصص للأطفال دون سن 13 (أو 16 في مناطق معينة). نحن لا نجمع عمداً بيانات شخصية من القاصرين."
+    },
+    "thirdParties": {
+      "title": "خدمات الطرف الثالث",
+      "desc": "قد نستخدم خدمات طرف ثالث تجمع البيانات (مثل، Google Analytics، Supabase). لكل طرف ثالث سياسة خصوصية خاصة به:",
+      "links": ["Google Analytics: https://policies.google.com/privacy"]
+    },
+    "changes": {
+      "title": "تغييرات السياسة",
+      "desc": "قد تُحدث السياسة من وقت لآخر. سيتم إشعارك بالتغييرات الجوهرية من خلال تحديث تاريخ \"آخر تحديث\"."
+    },
+    "contact": {
+      "title": "التواصل",
+      "desc": "إذا كان لديك أسئلة حول سياسة الخصوصية هذه، يمكنك التواصل معنا على:"
+    }
+  },
+  "about": {
+    "welcomeTitle": "مرحباً بكم في كلابهاب!",
+    "welcomeBody": "تم بناء كلابهاب لأصحاب الكلاب الذين يبحثون عن أفضل حدائق الكلاب في منطقتهم ويريدون التواصل مع أصحاب كلاب آخرين.",
+    "helpTitle": "تحتاج مساعدة؟",
+    "helpBody": "إذا واجهت مشكلة، أو لديك اقتراح، سنكون سعداء للاستماع على:",
+    "privacyCta": "شاهد سياسة الخصوصية هنا.",
+    "earlyBody": "التطبيق في بداية الطريق، وسنكون سعداء للمساعدة في توسيع المجتمع. يمكن المساعدة من خلال الانضمام، المشاركة مع الأصدقاء، إضافة تفاصيل عن حدائق الكلاب وإضافة الحدائق المفقودة.",
+    "thankYou": "شكراً!",
+    "createdBy": "تم البناء بواسطة:",
+    "createdByName": "إستر برات",
+    "inspiredByTitle": "مستوحى من:",
+    "inspiredByBody": "كلبتي الخاصة نينا، الكلبة التي لا تذهب إلى حدائق الكلاب.",
+    "specialThanks": "شكر خاص: كفير أرد، روتام كولتس"
+  },
+  "users": {
+    "noResults": "لم يتم العثور على أصدقاء",
+    "searchTitle": "البحث عن أصدقاء",
+    "sniffFriends": "يمكن العثور على أصدقاء جدد",
+    "searchPlaceholder": "البحث بالاسم/الكلب",
+    "preview": {
+      "dogsCount": "كلاب",
+      "dogsCount_one": "كلب",
+      "dogsCount_female_one": "كلبة",
+      "dogsCount_other": "كلاب",
+      "accept": "قبول",
+      "decline": "رفض",
+      "exit": "خروج",
+      "gated": {
+        "prefix": "لمشاهدة ملف المستخدم وإضافة أصدقاء، عليك",
+        "login": "تسجيل الدخول!"
+      }
+    },
+    "friends": {
+      "status": {
+        "friends": "أنتم أصدقاء",
+        "waitingResponse": "في انتظار موافقة الصداقة",
+        "wantsToBeYourFriend": "{{name}} يريد أن يكون صديقك"
+      },
+      "actions": {
+        "unfriend": "إلغاء الصداقة",
+        "accept": "قبول",
+        "decline": "رفض",
+        "removeRequest": "إزالة الطلب",
+        "addFriend": "إضافة كصديق"
+      }
+    }
+  },
+  "favorites": {
+    "none": "ليس لديك حدائق مفضلة بعد",
+    "sniffParksPrefix": "يمكن العثور على حدائق قريبة",
+    "sniffParksLink": "هنا!",
+    "title": "حدائقي المفضلة"
+  },
+  "error": {
+    "title": "عذراً! {{message}}",
+    "tryAgain": "ربما أحتاج بعض المكافآت. ألقوا لي بعضاً وحاولوا مرة أخرى",
+    "generic": "حدثت مشكلة",
+    "offline": "لا يوجد اتصال بالإنترنت. اتصل بالشبكة للمتابعة.",
+    "notFound": "الصفحة غير موجودة"
+  },
+  "auth": {
+    "same_password": "يرجى إدخال كلمة مرور جديدة",
+    "invalid_credentials": "بريد إلكتروني أو كلمة مرور خاطئة",
+    "email_not_confirmed": "يجب تأكيد البريد الإلكتروني قبل تسجيل الدخول",
+    "provider_not_enabled": "طريقة تسجيل الدخول هذه غير متاحة",
+    "rate_limited": "محاولات كثيرة جداً. حاول مرة أخرى لاحقاً",
+    "bad_request": "حدثت مشكلة في الطلب",
+    "unauthorized": "ليس لديك صلاحية",
+    "forbidden": "تم رفض الوصول",
+    "user_not_found": "الحساب غير موجود",
+    "server_error": "خطأ في الخادم. حاول مرة أخرى",
+    "network": "خطأ في الشبكة. تحقق من الاتصال",
+    "unknown": "حدث خطأ غير متوقع",
+    "email_already_exists": "البريد الإلكتروني مسجل بالفعل",
+    "weak_password": "كلمة المرور ضعيفة جداً",
+    "signups_disabled": "التسجيل معطل حالياً",
+    "session_expired": "انتهت صلاحية تسجيل الدخول. سجل دخولك مرة أخرى",
+    "captcha_failed": "فشل التحقق من CAPTCHA",
+    "too_many_mfa_factors": "تم تسجيل الكثير من عوامل المصادقة",
+    "email_not_authorized": "عنوان البريد الإلكتروني غير مصرح بتسجيل الدخول",
+    "user_banned": "الحساب معلق مؤقتاً"
+  },
+  "share": {
+    "title": "شارك معك حديقة!",
+    "subtitle": "تريد رؤيتها في التطبيق؟",
+    "openInApp": "لفتح التطبيق",
+    "downloadFrom": "حمل كلابهاب من {{store}}",
+    "continueHere": "للمتابعة هنا",
+    "store": {
+      "appStore": "App Store",
+      "googlePlay": "Google Play"
+    }
+  },
+  "userInfo": {
+    "editDetails": "تحرير التفاصيل",
+    "logout": "خروج",
+    "deleteProfile": "حذف ملفي الشخصي",
+    "deleteModalTitle": "انتبه!",
+    "deleteModalBody1": "بالضغط على 'حذف'، ستُرسل جميع بياناتك وبيانات كلابك إلى مزرعة في الشمال، حيث يمكنها الجري بحرية إلى الأبد.",
+    "deleteModalBody2": "هل أنت متأكد أنك تريد الوداع؟",
+    "deleteDogButton": "وداعاً {{name}}",
+    "delete": "حذف",
+    "cancel": "إلغاء",
+    "edit": {
+      "titleUpdate": "تحديث التفاصيل",
+      "labels": {
+        "name": "الاسم *"
+      },
+      "privacy": {
+        "hideMe": "إخفائي",
+        "explanation": "* إذا كان ملفك مخفياً، لن يظهر في نتائج البحث. فقط الأصدقاء أو المستخدمون الذين أرسلت لهم طلب صداقة يمكنهم رؤية ملفك."
+      }
+    },
+    "theme": {
+      "darkMode": "الوضع الليلي"
+    }
+  },
+  "emailCallback": {
+    "title": "كم هو ممتع!",
+    "verified": "تم التحقق من الحساب وأنت الآن جزء رسمي من القطيع!",
+    "closeTab": "يمكن إغلاق التبويب والعودة للتطبيق",
+    "openApp": "لفتح التطبيق",
+    "continueHere": "للمتابعة هنا"
+  },
+  "userReviews": {
+    "title": "مراجعاتي"
+  },
+  "profile": {
+    "myFriends": "أصدقائي",
+    "users": "المستخدمون",
+    "pawsUp": "ممتع رؤيتك، {{name}}!",
+    "pawsUpRich": "ممتع رؤيتك، <name>{{name}}</name>!",
+    "meetPrefix": "تعرف على",
+    "packSuffix": " والقطيع: {{dogs}}",
+    "tabs": {
+      "dogs": "الكلاب",
+      "friends": "الأصدقاء",
+      "favorites": "المفضلة",
+      "reviews": "المراجعات",
+      "settings": "الإعدادات"
+    }
+  },
+  "visitors": {
+    "friendsTitle": "أصدقاء في الحديقة الآن",
+    "onlyFriendsDetails": "يمكن رؤية تفاصيل الأصدقاء فقط",
+    "sniffFriendsPrefix": "يمكن البحث عن أصدقاء جدد",
+    "sniffFriendsLink": "هنا!"
+  },
+  "updatePassword": {
+    "title": "كم هو ممتع!",
+    "updated": "تم تحديث كلمة المرور.",
+    "returnApp": "يمكن العودة للتطبيق ومتابعة المغامرة",
+    "openApp": "لفتح التطبيق",
+    "continueHere": "للمتابعة هنا",
+    "pawsASec": "لحظة ونكمل...",
+    "placeholderNewPassword": "كلمة مرور جديدة",
+    "buttonUpdate": "تحديث كلمة المرور",
+    "invalidLink": "هذا الرابط غير صحيح أو انتهت صلاحيته. يرجى طلب رابط جديد.",
+    "pleaseEnterNewPassword": "يرجى إدخال كلمة مرور جديدة"
+  },
+  "notifications": {
+    "title": "الإشعارات",
+    "empty": "لا توجد إشعارات",
+    "actions": {
+      "markAllRead": "تحديد الكل كمقروء"
+    },
+    "common": {
+      "someone": "شخص ما"
+    },
+    "general": {
+      "defaultTitle": "إشعار",
+      "defaultMessage": "لديك تحديث جديد"
+    },
+    "list": {
+      "headerNew_one": "إشعار جديد واحد",
+      "headerNew_two": "{{count}} إشعار جديد",
+      "headerNew_many": "{{count}} إشعار جديد",
+      "headerNew_other": "{{count}} إشعار جديد",
+      "headerNone": "لا توجد إشعارات جديدة",
+      "headerEarlier": "إشعارات سابقة"
+    },
+    "types": {
+      "friendRequest": {
+        "title": "{{name}} أرسل لك طلب صداقة",
+        "appMessage": "اضغط للرد"
+      },
+      "friendApproval": {
+        "title": "{{name}} وافق على طلب الصداقة الخاص بك",
+        "appMessage": "أنتم أصدقاء الآن!"
+      },
+      "parkInvite": {
+        "title": "{{name}} دعاك للحديقة",
+        "appMessage": "اضغط للرد"
+      },
+      "parkInviteResponse": {
+        "title": "{{name}} رد على دعوتك",
+        "appMessage": "اضغط لمشاهدة الرد"
+      }
+    },
+    "modal": {
+      "title": "تحديث إعدادات الإشعارات",
+      "section": {
+        "general": "عام",
+        "types": "أنواع الإشعارات"
+      },
+      "mute": {
+        "title": "كتم الإشعارات",
+        "description": "كتم جميع الإشعارات"
+      },
+      "types": {
+        "friendRequests": {
+          "title": "طلبات الصداقة",
+          "description": "تلقي إشعار عند إرسال طلب صداقة لك"
+        },
+        "friendApprovals": {
+          "title": "موافقة الصداقة",
+          "description": "تلقي إشعار عند موافقة طلب الصداقة الخاص بك"
+        }
+      }
+    }
+  },
+  "parkReviews": {
+    "emptyTitleShort": "لا توجد مراجعات",
+    "emptyTitle": "لا توجد مراجعات لهذه الحديقة بعد",
+    "firstReviewCta": "كن أول من يترك مراجعة!",
+    "averageRank": "التقييم المتوسط: {{rank}}",
+    "addReview": "إضافة مراجعة",
+    "updateReview": "تحديث المراجعة"
+  },
+  "userFriends": {
+    "noFriends": "ليس لديك أصدقاء كلابهابريين بعد",
+    "myFriends": "أصدقائي",
+    "friendRequests": "طلبات الصداقة",
+    "pendingRequests": "طلبات معلقة"
+  },
+  "newPark": {
+    "breadcrumbAllParks": "لجميع الحدائق",
+    "fillDetailsTitle": "املأ تفاصيل الحديقة",
+    "placeholderName": "اسم الحديقة",
+    "placeholderSize": "الحجم بالمتر المربع (إذا كان معروفاً)",
+    "placeholderCity": "المدينة *",
+    "placeholderAddress": "العنوان *",
+    "labelLocation": "موقع الحديقة *",
+    "addButton": "إضافة حديقة",
+    "onlyMembers": "فقط مستخدمو كلابهاب يمكنهم إضافة حديقة جديدة",
+    "loginLink": "لتسجيل الدخول",
+    "packInvite": "للانضمام للقطيع!",
+    "exit": "خروج",
+    "finishThankYou": "شكراً!",
+    "finishAddedSoon": "ستُضاف الحديقة قريباً",
+    "finishAddAnother": "تريد إضافة حديقة أخرى؟",
+    "finishAddButton": "إضافة حديقة",
+    "finishBackToParks": "العودة لجميع الحدائق"
+  },
+  "deletionConfirmation": {
+    "confirmation1": "تم إرسال بياناتك للمزرعة في الشمال",
+    "confirmation2": "شكراً لكونك جزءاً من القطيع! باب كلابهاب مفتوح دائماً — سنكون سعداء لعودتك في أي وقت!",
+    "goHome": "للصفحة الرئيسية"
+  },
+  "login": {
+    "titleSignup": "انضم إلى كلابهاب لإنشاء ملف شخصي، إضافة أصدقاء والمساهمة بمعلومات عن الحدائق.",
+    "titleLogin": "سجل دخولك إلى كلابهاب لإدارة ملفك الشخصي، إضافة أصدقاء ومشاركة تحديثات عن الحدائق.",
+    "checkMail": "تحقق من البريد الإلكتروني للتفاصيل",
+    "offline": "لا يوجد اتصال بالإنترنت. اتصل للمتابعة.",
+    "pawsASec": "لحظة ونكمل...",
+    "placeholderEmail": "البريد الإلكتروني *",
+    "placeholderPassword": "كلمة المرور *",
+    "placeholderName": "الاسم *",
+    "continue": "تسجيل الدخول مع",
+    "withApple": "Apple",
+    "withGoogle": "Google",
+    "missingDetails": "يرجى ملء التفاصيل المفقودة",
+    "pleaseEnterEmail": "يرجى إدخال البريد الإلكتروني",
+    "or": "أو سجل الدخول مع",
+    "alreadyMember": "جزء من القطيع بالفعل؟",
+    "login": "تسجيل الدخول",
+    "notMemberYet": "ليس جزءاً من القطيع بعد؟",
+    "signup": "التسجيل",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "resetPassword": "إعادة تعيين كلمة المرور",
+    "cta": {
+      "apple": {
+        "signup": "Apple",
+        "continue": "Apple"
+      },
+      "google": {
+        "signup": "Google",
+        "continue": "Google"
+      }
+    }
+  },
+  "common": {
+    "actions": {
+      "cancel": "إلغاء",
+      "close": "إغلاق",
+      "delete": "حذف",
+      "login": "تسجيل الدخول",
+      "logout": "خروج",
+      "search": "بحث",
+      "openSettings": "فتح الإعدادات",
+      "maybeLater": "ربما لاحقاً",
+      "dontShowAgain": "لا تظهر مرة أخرى",
+      "view": "عرض",
+      "add": "إضافة",
+      "accept": "قبول",
+      "decline": "رفض",
+      "report": "تقرير",
+      "share": "مشاركة",
+      "checkin": "تسجيل الوصول",
+      "checkout": "تسجيل الخروج",
+      "like": "إعجاب",
+      "unlike": "إزالة",
+      "submit": "إرسال",
+      "save": "حفظ"
+    },
+    "placeholders": {
+      "search": "بحث",
+      "searchPark": "البحث عن حديقة",
+      "reviewTitle": "العنوان",
+      "reviewContent": "نحب التفاصيل..."
+    },
+    "status": {
+      "errorLoadingImage": "حدث خطأ في تحميل الصورة",
+      "calculating": "يحسب...",
+      "currently": "حالياً",
+      "noData": "لا توجد بيانات بعد"
+    }
+  },
+  "nav": {
+    "bottom": {
+      "explore": "خريطة الحدائق",
+      "searchFriends": "البحث عن أصدقاء",
+      "addPark": "إضافة حديقة جديدة",
+      "privacy": "سياسة الخصوصية",
+      "about": "حول",
+      "login": "تسجيل الدخول"
+    }
+  },
+  "parks": {
+    "breadcrumb": {
+      "all": "لجميع الحدائق"
+    },
+    "preview": {
+      "view": "لصفحة الحديقة",
+      "seeOnMap": "للموقع على الخريطة"
+    },
+    "search": {
+      "placeholder": "البحث عن حديقة"
+    },
+    "tabs": {
+      "general": "عام",
+      "reviews": "المراجعات",
+      "visitors": "الزوار"
+    },
+    "share": {
+      "title": "مشاركة حديقة",
+      "text": "يستحق التحقق من {{name}} في كلابهاب",
+      "dialogTitle": "مشاركة {{name}}"
+    },
+    "noResults": {
+      "user": {
+        "title": "الحديقة غير موجودة؟",
+        "helpPrefix": "سنكون سعداء للمساعدة",
+        "helpLink": "في إضافة تفاصيل الحديقة!"
+      },
+      "noUser": {
+        "title": "عذراً، الحديقة غير موجودة",
+        "loginLink": "عليك تسجيل الدخول",
+        "ctaSignedOutSuffix": "لإضافة حديقتك"
+      }
+    },
+    "directions": {
+      "error": "عذراً، قدرات الشم ربما غير متاحة حالياً"
+    },
+    "popup": {
+      "loading": "نشم الطريق...",
+      "leadTheWay": "أظهر الطريق",
+      "view": "لصفحة الحديقة"
+    },
+    "favorite": {
+      "ribbon": "حديقة مفضلة!"
+    },
+    "busyHours": {
+      "status": {
+        "quiet": "هادئ",
+        "medium": "متوسط",
+        "busy": "مزدحم"
+      },
+      "login": "سجل الدخول",
+      "toAddDataSuffix": "لإضافة بيانات",
+      "modal": {
+        "dogsCountLabel": "كم كلب في الحديقة الآن؟",
+        "hintSuffix": "* يمكن دائماً إضافة تقرير بالضغط على علامة الزائد في قسم ساعات الازدحام."
+      }
+    },
+    "sections": {
+      "about": "حول",
+      "busyHours": "ساعات الازدحام",
+      "liveStatus": "الحالة الآن"
+    },
+    "about": {
+      "size": "الحجم",
+      "ground": "الأرض",
+      "shade": "الظل",
+      "facilities": "المرافق",
+      "boolean": {
+        "yes": "نعم",
+        "no": "لا",
+        "unknown": "؟"
+      },
+      "sizeLabel": {
+        "small": "صغير",
+        "medium": "متوسط",
+        "large": "كبير"
+      },
+      "groundOptions": {
+        "SAND": "رمل",
+        "DIRT": "تراب",
+        "GRASS": "عشب",
+        "SYNTHETIC_GRASS": "عشب اصطناعي"
+      }
+    },
+    "conditions": {
+      "stillThere": "ما زلت هناك؟",
+      "labels": {
+        "muddy": "طيني",
+        "gateClosed": "البوابة مغلقة",
+        "underConstruction": "تحت الإنشاء",
+        "brokenFountain": "نافورة مكسورة"
+      }
+    },
+    "live": {
+      "report": "تقرير",
+      "friends": "أصدقاء",
+      "visitors": "زوار",
+      "atTheParkRightNow": "في الحديقة الآن",
+      "reportModal": {
+        "title": "على ماذا تريد الإبلاغ؟",
+        "noReportable": "جميع المشاكل تم الإبلاغ عنها"
+      }
+    },
+    "edit": {
+      "modal": {
+        "title": "أضف تفاصيل الحديقة",
+        "sizeMeters": "الحجم (بالمتر)",
+        "groundCovering": "نوع الأرض",
+        "containsFacilities": "هل توجد مرافق؟",
+        "dailyShadeHours": "ساعات الظل اليومية"
+      },
+      "choose": {
+        "update": "تحديث تفاصيل الحديقة",
+        "report": "الإبلاغ عن تفاصيل خاطئة"
+      }
+    },
+    "report": {
+      "modal": {
+        "textLabel": "أخبرنا ما الخطأ هنا"
+      }
+    },
+    "checkin": {
+      "title": "زيارة ممتعة!",
+      "titleWithName": "زيارة ممتعة، {{name}}!",
+      "alreadyTitle": "هل أنت كلب شرودنغر؟",
+      "alreadyBody": "أبلغت أنك في حديقة أخرى. تريد تسجيل الوصول هنا بدلاً من ذلك؟",
+      "switchHere": "تسجيل الوصول هنا"
+    },
+    "visitors": {
+      "onlyYou": "أنت الوحيد هنا الآن",
+      "count": "{{count}} كلابهابريين في الحديقة الآن",
+      "count_one": "كلابهابري واحد في الحديقة الآن",
+      "count_other": "{{count}} كلابهابريين في الحديقة الآن",
+      "countWithMore": "و{{count}} كلابهابريين آخرين",
+      "countWithMore_one": "وكلابهابري آخر",
+      "countWithMore_other": "و{{count}} كلابهابريين آخرين"
+    }
+  },
+  "components": {
+    "carousel": {
+      "addPhoto": "إضافة صورة",
+      "confirmTitle": "انتبه!",
+      "confirmBody": "هل أنت متأكد أنك تريد إرسال الصورة للمزرعة في الشمال حيث يمكنها الجري بحرية إلى الأبد؟",
+      "noPhotosYet": "لا توجد صور لهذه الحديقة بعد",
+      "login": "سجل الدخول",
+      "toAddDataSuffix": "لإضافة بيانات"
+    },
+    "camera": {
+      "uploadImage": "رفع صورة",
+      "takePhoto": "التقاط صورة"
+    },
+    "enlargeImage": {
+      "setPrimary": "تعيين كصورة رئيسية"
+    },
+    "gallery": {
+      "title": "المعرض"
+    }
+  },
+  "reviews": {
+    "modal": {
+      "title": "كيف كانت لك في الحديقة؟",
+      "placeholderTitle": "العنوان",
+      "placeholderContent": "نحب الاستماع للمزيد...",
+      "placeholderContentLabel": "المحتوى",
+      "rankTitle": "تقييم الحديقة",
+      "reportAnonymously": "تقرير مجهول"
+    }
+  },
+  "location": {
+    "permissions": {
+      "message": "لم نتمكن من الوصول للموقع. يمكن تفعيل أذونات الموقع في إعدادات الجهاز.",
+      "dontShowAgain": "لا تظهر مرة أخرى"
+    },
+    "input": {
+      "clickMap": "اضغط على الخريطة أو",
+      "useCurrent": "استخدم الموقع الحالي",
+      "searchAddress": "البحث عن عنوان",
+      "errorAddressNotFound": "عذراً! لم نتمكن من العثور على هذا العنوان"
+    }
+  },
+  "charts": {
+    "busyHours": {
+      "weekdays": "أيام الأسبوع",
+      "weekend": "نهاية الأسبوع"
+    }
+  },
+  "weather": {
+    "button": {
+      "ariaLabel": "توقعات الطقس"
+    },
+    "chanceOfRainNextHour": "{{count}}% فرصة مطر في الساعة القادمة",
+    "descriptions": {
+      "clearSky": "سماء صافية",
+      "mainlyClear": "صافٍ في الغالب",
+      "cloudy": "غائم",
+      "foggy": "ضبابي",
+      "lightRain": "مطر خفيف",
+      "heavyRain": "مطر غزير",
+      "thunderstorm": "عاصفة رعدية",
+      "snow": "ثلج",
+      "unknown": "غير معروف"
+    }
+  },
+  "dogs": {
+    "gender": {
+      "MALE": "ذكر",
+      "FEMALE": "أنثى"
+    },
+    "size": {
+      "SMALL": "صغير",
+      "MEDIUM": "متوسط",
+      "LARGE": "كبير"
+    },
+    "energy": {
+      "LOW": "منخفضة",
+      "MEDIUM": "متوسطة",
+      "HIGH": "عالية"
+    },
+    "labels": {
+      "ownersDog": "كلب {{name}}",
+      "ownersDogMale": "كلب {{name}}",
+      "ownersDogFemale": "كلبة {{name}}"
+    },
+    "delete": {
+      "confirm": "هل أنت متأكد أنك تريد الوداع من {{name}}؟"
+    },
+    "age": {
+      "justBorn": "وُلد للتو",
+      "justBornMale": "وُلد للتو",
+      "justBornFemale": "وُلدت للتو",
+      "oldSingularYear": "بعمر سنة",
+      "oldMaleSingularYear": "بعمر سنة",
+      "oldFemaleSingularYear": "بعمر سنة",
+      "oldSingularMonth": "بعمر شهر",
+      "oldMaleSingularMonth": "بعمر شهر",
+      "oldFemaleSingularMonth": "بعمر شهر",
+      "old": "بعمر {{diff}} {{unit}}",
+      "oldMale": "بعمر {{diff}} {{unit}}",
+      "oldFemale": "بعمر {{diff}} {{unit}}",
+      "oldCompliment": "بعمر {{diff}} {{unit}}. لا عجب أن {{pronoun}} يبدو جيداً جداً!",
+      "oldComplimentMale": "بعمر {{diff}} {{unit}}. لا عجب أنه يبدو جيداً جداً!",
+      "oldComplimentFemale": "بعمر {{diff}} {{unit}}. لا عجب أنها تبدو جيدة جداً!",
+      "she": "هي",
+      "he": "هو",
+      "units": {
+        "year": "سنة",
+        "years": "سنوات",
+        "month": "شهر",
+        "months": "أشهر",
+        "yearTwo": "سنتين",
+        "monthTwo": "شهرين"
+      }
+    },
+    "details": {
+      "title": "حول",
+      "fields": {
+        "size": "الحجم",
+        "temperament": "الطبع",
+        "energy": "الطاقة",
+        "possessive": "التملك"
+      },
+      "addDetails": "إضافة",
+      "notAddedYet": "لم تُضاف التفاصيل بعد",
+      "description": "الوصف"
+    },
+    "prefs": {
+      "title": "التفضيلات",
+      "addYourPrefs": "إضافة",
+      "notAddedYet": "لم تُضاف التفاصيل بعد"
+    },
+    "edit": {
+      "titleUpdate": "تحديث تفاصيل {{name}}",
+      "titleAdd": "تفاصيل الكلب/ة",
+      "labels": {
+        "name": "الاسم *",
+        "breed": "السلالة *",
+        "gender": "الجنس *",
+        "birthday": "تاريخ الميلاد *",
+        "size": "الحجم",
+        "temperament": "الطبع",
+        "energy": "الطاقة",
+        "possessive": "التملك",
+        "likes": "ما يحب (افصل بفواصل)",
+        "dislikes": "ما لا يحب (افصل بفواصل)",
+        "description": "الوصف"
+      }
+    },
+    "breeds": {
+      "Mixed": "سلالة مختلطة",
+      "Other": "سلالة غير معروفة",
+      "Affenpinscher": "أفنبنشر",
+      "Afghan Hound": "كلب أفغاني",
+      "Airedale Terrier": "إيرديل تيرير",
+      "Akbash Dog": "أكباش",
+      "Akita": "أكيتا",
+      "Alaskan Klee Kai": "ألاسكان كلي كاي",
+      "Alaskan Malamute": "ألاسكان مالاموت",
+      "American Bulldog": "بولدوغ أمريكي",
+      "American Cocker Spaniel": "كوكر سبانييل أمريكي",
+      "American Eskimo Dog": "كلب إسكيمو أمريكي",
+      "American Foxhound": "فوكسهوند أمريكي",
+      "American Hairless Terrier": "تيرير أمريكي عديم الشعر",
+      "American Pit Bull Terrier": "بيت بول أمريكي",
+      "American Staffordshire Terrier": "ستافوردشاير تيرير أمريكي",
+      "American Water Spaniel": "سبانييل ماء أمريكي",
+      "Anatolian Shepherd Dog": "راعي أناضولي",
+      "Appenzeller Sennenhund": "أبنزلر زيننهوند",
+      "Australian Cattle Dog": "كلب ماشية أسترالي",
+      "Australian Kelpie": "كيلبي أسترالي",
+      "Australian Shepherd": "راعي أسترالي",
+      "Australian Terrier": "تيرير أسترالي",
+      "Azawakh": "أزاواخ",
+      "Basenji": "باسنجي",
+      "Basset Fauve de Bretagne": "باست فوف دي بريتاني",
+      "Basset Hound": "باست هوند",
+      "Bavarian Mountain Scent Hound": "كلب رائحة جبال بافاري",
+      "Beagle": "بيغل",
+      "Bearded Collie": "كولي ملتحي",
+      "Beauceron": "بوسرون",
+      "Bedlington Terrier": "بدلينغتون تيرير",
+      "Belgian Laekenois": "لاكينوا بلجيكي",
+      "Belgian Malinois": "مالينوا بلجيكي",
+      "Belgian Sheepdog": "راعي بلجيكي",
+      "Belgian Tervuren": "تيرفورن بلجيكي",
+      "Bergamasco Sheepdog": "راعي بيرغاماسكو",
+      "Berger Picard": "بيرجيه بيكار",
+      "Bernese Mountain Dog": "كلب جبال بيرنيز",
+      "Bichon Frise": "بيشون فريز",
+      "Biewer Terrier": "بيوير تيرير",
+      "Black Russian Terrier": "تيرير روسي أسود",
+      "Bloodhound": "بلادهوند",
+      "Bluetick Coonhound": "بلوتيك كونهاوند",
+      "Boerboel": "بوربول",
+      "Bolognese": "بولونيز",
+      "Border Collie": "بوردر كولي",
+      "Border Terrier": "بوردر تيرير",
+      "Borzoi": "بورزوي",
+      "Boston Terrier": "بوسطن تيرير",
+      "Bouvier des Flandres": "بوفيه دي فلاندر",
+      "Boxer": "بوكسر",
+      "Boykin Spaniel": "بويكين سبانييل",
+      "Bracco Italiano": "براكو إيطالي",
+      "Briard": "بريار",
+      "Brittany": "بريتاني",
+      "Brussels Griffon": "جريفون بروكسل",
+      "Bull Terrier": "بول تيرير",
+      "Bullmastiff": "بولماستيف",
+      "Cairn Terrier": "كيرن تيرير",
+      "Canaan Dog": "كلب كنعاني",
+      "Cane Corso": "كاني كورسو",
+      "Cardigan Welsh Corgi": "كورجي ويلزي كارديجان",
+      "Carolina Dog": "كلب كارولينا",
+      "Catahoula Leopard Dog": "كاتاهولا ليوبارد دوج",
+      "Cavalier King Charles Spaniel": "كافاليير كينغ تشارلز سبانييل",
+      "Cesky Terrier": "تشيسكي تيرير",
+      "Chesapeake Bay Retriever": "تشيسابيك باي ريتريفر",
+      "Chihuahua": "تشيهواهوا",
+      "Chinese Crested": "صيني متوج",
+      "Chinese Shar-Pei": "شار-باي صيني",
+      "Chinook": "شينوك",
+      "Chow Chow": "تشاو تشاو",
+      "Cirneco dell'Etna": "سيرنيكو ديل إتنا",
+      "Clumber Spaniel": "كلومبر سبانييل",
+      "Cocker Spaniel": "كوكر سبانييل",
+      "Collie": "كولي",
+      "Coton de Tulear": "كوتون دي توليار",
+      "Curly-Coated Retriever": "ريتريفر مجعد الشعر",
+      "Dachshund": "داشهوند",
+      "Dalmatian": "دالماتي",
+      "Dandie Dinmont Terrier": "داندي دينمونت تيرير",
+      "Doberman Pinscher": "دوبيرمان بنشر",
+      "Dogo Argentino": "دوجو أرجنتينو",
+      "Dogue de Bordeaux": "دوج دي بوردو",
+      "Dutch Shepherd": "راعي هولندي",
+      "English Cocker Spaniel": "كوكر سبانييل إنجليزي",
+      "English Foxhound": "فوكسهوند إنجليزي",
+      "English Setter": "سيتير إنجليزي",
+      "English Springer Spaniel": "سبرينغر سبانييل إنجليزي",
+      "English Toy Spaniel": "توي سبانييل إنجليزي",
+      "Entlebucher Mountain Dog": "كلب جبال إنتلبوخ",
+      "Estrela Mountain Dog": "كلب جبال إستريلا",
+      "Eurasier": "يوراسير",
+      "Field Spaniel": "فيلد سبانييل",
+      "Finnish Lapphund": "لابهوند فنلندي",
+      "Finnish Spitz": "شبيتز فنلندي",
+      "Flat-Coated Retriever": "ريتريفر أملس الشعر",
+      "French Bulldog": "بولدوغ فرنسي",
+      "French Spaniel": "سبانييل فرنسي",
+      "German Longhaired Pointer": "بوينتر ألماني طويل الشعر",
+      "German Pinscher": "بنشر ألماني",
+      "German Shepherd": "راعي ألماني",
+      "German Shorthaired Pointer": "بوينتر ألماني قصير الشعر",
+      "German Wirehaired Pointer": "بوينتر ألماني سلكي الشعر",
+      "Giant Schnauzer": "شنوزر عملاق",
+      "Glen of Imaal Terrier": "جلين أوف إيمال تيرير",
+      "Golden Retriever": "جولدن ريتريفر",
+      "Gordon Setter": "جوردون سيتير",
+      "Grand Basset Griffon Vendéen": "غراند باسيه جريفون فنديين",
+      "Great Dane": "داني عظيم",
+      "Great Pyrenees": "بيرينيه عظيم",
+      "Greater Swiss Mountain Dog": "كلب جبال سويسري عظيم",
+      "Greyhound": "جريهوند",
+      "Hamiltonstovare": "هاميلتونستوفار",
+      "Harrier": "هارير",
+      "Havanese": "هافانيز",
+      "Ibizan Hound": "إبيزان هوند",
+      "Icelandic Sheepdog": "كلب راعي أيسلندي",
+      "Irish Red and White Setter": "سيتير أيرلندي أحمر وأبيض",
+      "Irish Setter": "سيتير أيرلندي",
+      "Irish Terrier": "تيرير أيرلندي",
+      "Irish Water Spaniel": "سبانييل ماء أيرلندي",
+      "Irish Wolfhound": "وولفهاوند أيرلندي",
+      "Italian Greyhound": "جريهوند إيطالي",
+      "Jack Russell Terrier": "جاك راسل تيرير",
+      "Japanese Chin": "تشين ياباني",
+      "Japanese Spitz": "شبيتز ياباني",
+      "Jindo": "جيندو",
+      "Kai Ken": "كاي-كين",
+      "Karelian Bear Dog": "كلب دب كاريلي",
+      "Keeshond": "كيسهوند",
+      "Kerry Blue Terrier": "كاري بلو تيرير",
+      "Kishu Ken": "كيشو كين",
+      "Komondor": "كوموندور",
+      "Kooikerhondje": "كويكرهوندجي",
+      "Kuvasz": "كوفاز",
+      "Labrador Retriever": "لابردور ريتريفر",
+      "Lagotto Romagnolo": "لاغوتو رومانيولو",
+      "Lakeland Terrier": "ليكلاند تيرير",
+      "Lancashire Heeler": "لانكشاير هيلر",
+      "Leonberger": "ليونبرغر",
+      "Lhasa Apso": "لهاسا أبسو",
+      "Lowchen": "لوخن",
+      "Maltese": "مالتيز",
+      "Manchester Terrier": "مانشستر تيرير",
+      "Maremma Sheepdog": "راعي مارما",
+      "Mastiff": "ماستيف",
+      "Miniature American Shepherd": "راعي أمريكي مصغر",
+      "Miniature Bull Terrier": "بول تيرير مصغر",
+      "Miniature Pinscher": "بنشر مصغر",
+      "Miniature Schnauzer": "شنوزر مصغر",
+      "Mudi": "مودي",
+      "Neapolitan Mastiff": "ماستيف نابولي",
+      "Newfoundland": "نيوفاوندلاند",
+      "Norfolk Terrier": "نورفولك تيرير",
+      "Norwegian Buhund": "بوهوند نرويجي",
+      "Norwegian Elkhound": "إلكهوند نرويجي",
+      "Norwegian Lundehund": "لونديهوند نرويجي",
+      "Norwich Terrier": "نورويتش تيرير",
+      "Nova Scotia Duck Tolling Retriever": "نوفا سكوتيا داك تولينغ ريتريفر",
+      "Old English Sheepdog": "بوبتيل",
+      "Otterhound": "أوترهوند",
+      "Papillon": "بابيلون",
+      "Parson Russell Terrier": "بارسون راسل تيرير",
+      "Pekingese": "بكينيز",
+      "Pembroke Welsh Corgi": "كورجي ويلزي بيمبروك",
+      "Peruvian Inca Orchid": "كلب بيروفي إنكا أوركيد",
+      "Pharaoh Hound": "كلب فرعون",
+      "Plott Hound": "بلوت هوند",
+      "Pointer": "بوينتر",
+      "Polish Lowland Sheepdog": "كلب راعي بولندي منخفض الأرض",
+      "Pomeranian": "بوميرانيان",
+      "Poodle": "بودل",
+      "Portuguese Podengo": "بودينغو برتغالي",
+      "Portuguese Pointer": "بوينتر برتغالي",
+      "Portuguese Water Dog": "كلب ماء برتغالي",
+      "Presa Canario": "بريسا كاناريو",
+      "Pug": "باغ",
+      "Puli": "بولي",
+      "Pumi": "بومي",
+      "Pyrenean Shepherd": "راعي بيرينيه",
+      "Rat Terrier": "رات تيرير",
+      "Redbone Coonhound": "ريدبون كونهاوند",
+      "Rhodesian Ridgeback": "روديسيان ريدجباك",
+      "Rottweiler": "روتويلر",
+      "Russian Toy": "توي روسي",
+      "Saluki": "سلوقي",
+      "Samoyed": "سامويد",
+      "Schipperke": "شيبركا",
+      "Scottish Deerhound": "ديرهاوند اسكتلندي",
+      "Scottish Terrier": "تيرير اسكتلندي",
+      "Sealyham Terrier": "سيلهام تيرير",
+      "Shetland Sheepdog": "شيلتي",
+      "Shiba Inu": "شيبا إينو",
+      "Shih Tzu": "شي تزو",
+      "Shikoku": "شيكوكو",
+      "Siberian Husky": "هاسكي سيبيري",
+      "Silken Windhound": "سيلكن ويندهاوند",
+      "Silky Terrier": "سيلكي تيرير",
+      "Skye Terrier": "سكاي تيرير",
+      "Sloughi": "سلوقي",
+      "Slovakian Rough Haired Pointer": "بوينتر سلوفاكي خشن الشعر",
+      "Small Munsterlander": "مونسترلاندر صغير",
+      "Soft Coated Wheaten Terrier": "تيرير ويتن ناعم الشعر",
+      "Spanish Mastiff": "ماستيف إسباني",
+      "Spanish Water Dog": "كلب ماء إسباني",
+      "Spinone Italiano": "سبينونا إيطالي",
+      "St. Bernard": "سانت برنارد",
+      "Staffordshire Bull Terrier": "ستافوردشاير بول تيرير",
+      "Standard Schnauzer": "شنوزر قياسي",
+      "Sussex Spaniel": "ساسكس سبانييل",
+      "Swedish Vallhund": "فالهوند سويدي",
+      "Thai Ridgeback": "تاي ريدجباك",
+      "Tibetan Mastiff": "ماستيف تبتي",
+      "Tibetan Spaniel": "سبانييل تبتي",
+      "Tibetan Terrier": "تيرير تبتي",
+      "Tornjak": "تورنياك",
+      "Tosa": "توسا",
+      "Toy Fox Terrier": "توي فوكس تيرير",
+      "Toy Manchester Terrier": "توي مانشستر تيرير",
+      "Treeing Walker Coonhound": "تريينغ ووكر كونهاوند",
+      "Vizsla": "فيزلا",
+      "Weimaraner": "وايمارانر",
+      "Welsh Springer Spaniel": "سبرينغر سبانييل ويلزي",
+      "Welsh Terrier": "تيرير ويلزي",
+      "West Highland White Terrier": "وست هايلاند وايت تيرير",
+      "Whippet": "ويبت",
+      "Wire Fox Terrier": "واير فوكس تيرير",
+      "Wirehaired Pointing Griffon": "جريفون مؤشر سلكي الشعر",
+      "Xoloitzcuintli": "شولويزكوانتلي",
+      "Yorkshire Terrier": "يوركشاير تيرير"
+    }
+  },
+  "grammar": {
+    "genderPrefixes": {
+      "male": "ابن",
+      "female": "ابنة",
+      "neutral": "ابن/ابنة"
+    },
+    "dualUnits": {
+      "year": "سنتين",
+      "month": "شهرين",
+      "day": "يومين",
+      "hour": "ساعتين",
+      "week": "أسبوعين"
+    },
+    "config": {
+      "dualFormOmitsNumber": true
+    }
+  },
+  "toasts": {
+    "friendRequest": {
+      "removed": "تم إزالة طلب الصداقة",
+      "sent": "تم إرسال طلب الصداقة",
+      "fail": "فشل إرسال طلب الصداقة"
+    },
+    "friendship": {
+      "nowFriends": "أنتم أصدقاء الآن!",
+      "changed": "تم تغيير حالة الصداقة",
+      "noLongerFriends": "أنتم لستم أصدقاء بعد الآن"
+    },
+    "upload": {
+      "error": "عذراً، حدث خطأ"
+    },
+    "generic": {
+      "error": "عذراً، حدث خطأ"
+    },
+    "default": {
+      "goodBoy": "نعم!",
+      "goodBoyAlt": "نعم!"
+    },
+    "checkout": {
+      "hadFun": "نأمل أن تكون الزيارة كانت ممتعة!",
+      "askReview": "نأمل أن تكون الزيارة كانت ممتعة! نحب مراجعة عن الحديقة!"
+    },
+    "live": {
+      "reportThanks": "شكراً على التحديث!",
+      "reportRejected": "لم يتم قبول التقرير. حاول مرة أخرى لاحقاً.",
+      "confirmThanks": "شكراً على التحديث!",
+      "confirmRejected": "فشل التحديث. حاول مرة أخرى لاحقاً.",
+      "updateThanks": "شكراً على التحديث!",
+      "updateRejected": "فشل التحديث. حاول مرة أخرى لاحقاً."
+    },
+    "share": {
+      "thanks": "شكراً على المشاركة!",
+      "copied": "تم نسخ الرابط"
+    }
+  },
+  "reports": {
+    "reviewModal": {
+      "title": "لماذا تريد الإبلاغ عن هذه المراجعة"
+    },
+    "reasons": {
+      "spam": {
+        "title": "رسائل مزعجة",
+        "content": "تحتوي على معلومات إعلانية أو متكررة"
+      },
+      "inappropriate": {
+        "title": "محتوى غير مناسب",
+        "content": "تحتوي على لغة مسيئة، مضايقة أو كراهية"
+      },
+      "misinformation": {
+        "title": "معلومات مضللة",
+        "content": "تنشر معلومات خاطئة"
+      },
+      "fake": {
+        "title": "مزيف",
+        "content": "تحتوي على محتوى مزيف أو متحيز"
+      },
+      "personal": {
+        "title": "معلومات شخصية",
+        "content": "تحتوي على معلومات شخصية"
+      }
+    }
+  }
+}

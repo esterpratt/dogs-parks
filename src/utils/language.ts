@@ -2,7 +2,7 @@ import { APP_LANGUAGES } from './consts';
 import type { AppLanguage } from '../types/language';
 
 /**
- * Derive canonical AppLanguage ('en' | 'he') from an arbitrary language tag.
+ * Derive canonical AppLanguage ('en' | 'he' | 'ar') from an arbitrary language tag.
  * Falls back to EN.
  */
 function deriveAppLanguage(lang?: string): AppLanguage {
@@ -10,15 +10,22 @@ function deriveAppLanguage(lang?: string): AppLanguage {
   if (base === APP_LANGUAGES.HE) {
     return APP_LANGUAGES.HE;
   }
+  if (base === APP_LANGUAGES.AR) {
+    return APP_LANGUAGES.AR;
+  }
   return APP_LANGUAGES.EN;
 }
 
 /** Runtime type guard for AppLanguage */
 function isAppLanguage(value: string): value is AppLanguage {
-  return value === APP_LANGUAGES.EN || value === APP_LANGUAGES.HE;
+  return (
+    value === APP_LANGUAGES.EN ||
+    value === APP_LANGUAGES.HE ||
+    value === APP_LANGUAGES.AR
+  );
 }
 
-const RTL_LANGS = new Set<AppLanguage>([APP_LANGUAGES.HE]);
+const RTL_LANGS = new Set<AppLanguage>([APP_LANGUAGES.HE, APP_LANGUAGES.AR]);
 
 /**
  * Check if the given language is RTL (Right-to-Left)

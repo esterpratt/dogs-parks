@@ -2,14 +2,16 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import en from './locales/en.json';
 import he from './locales/he.json';
+import ar from './locales/ar.json';
 
 const resources = {
   en: { translation: en },
   he: { translation: he },
+  ar: { translation: ar },
 } as const;
 
 export interface InitI18nParams {
-  lng?: 'en' | 'he';
+  lng?: 'en' | 'he' | 'ar';
 }
 
 function initI18n(params: InitI18nParams = {}): typeof i18n {
@@ -22,13 +24,13 @@ function initI18n(params: InitI18nParams = {}): typeof i18n {
         resources,
         lng: lng ?? 'en',
         fallbackLng: 'en',
-        supportedLngs: ['en', 'he'],
+        supportedLngs: ['en', 'he', 'ar'],
         ns: ['translation'],
         defaultNS: 'translation',
         interpolation: { escapeValue: false },
         returnNull: false,
         returnEmptyString: false,
-        load: 'currentOnly', // NOTE: you pass 'en'/'he' directly, so this is fine.
+        load: 'currentOnly',
         react: { useSuspense: false },
       })
       .catch((error) => {

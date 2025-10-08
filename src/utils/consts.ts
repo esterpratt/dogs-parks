@@ -13,4 +13,5 @@ export const DEVICE_ID_KEY = 'device_id';
 export const APP_LANGUAGES = {
   EN: 'en',
   HE: 'he',
+  AR: 'ar',
 } as const;

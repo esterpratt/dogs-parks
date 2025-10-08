@@ -33,6 +33,10 @@ const LanguageSelectionModal = (props: LanguageSelectionModalProps) => {
       code: APP_LANGUAGES.HE,
       nativeLabel: 'עברית',
     },
+    {
+      code: APP_LANGUAGES.AR,
+      nativeLabel: 'العربية',
+    },
   ];
 
   const handleLanguageSelect = async (languageCode: AppLanguage) => {

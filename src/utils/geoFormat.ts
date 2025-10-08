@@ -67,6 +67,9 @@ function formatTravelDurationSecondsForLocale(
     if (locale === APP_LANGUAGES.HE) {
       return `${minutes} דק'`;
     }
+    if (locale === APP_LANGUAGES.AR) {
+      return `${minutes} دقيقة`;
+    }
     return `${minutes} min`;
   }
 
@@ -77,6 +80,12 @@ function formatTravelDurationSecondsForLocale(
       }
       return `${hours} ש'`;
     }
+    if (locale === APP_LANGUAGES.AR) {
+      if (hours === 1) {
+        return 'ساعة';
+      }
+      return `${hours} ساعة`;
+    }
     return `${hours}h`;
   }
 
@@ -85,6 +94,12 @@ function formatTravelDurationSecondsForLocale(
       return `שעה ו- ${minutes} דק'`;
     }
     return `${hours} ש' ו- ${minutes} דק'`;
+  }
+  if (locale === APP_LANGUAGES.AR) {
+    if (hours === 1) {
+      return `ساعة و ${minutes} دقيقة`;
+    }
+    return `${hours} ساعة و ${minutes} دقيقة`;
   }
   return `${hours}h ${minutes}m`;
 }
