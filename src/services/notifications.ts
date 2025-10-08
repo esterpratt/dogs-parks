@@ -35,6 +35,34 @@ interface UpsertDeviceTokenParams {
   token: string;
 }
 
+const normalizeSender = (
+  raw: unknown
+): { id: string; name: string | null } | undefined => {
+  if (Array.isArray(raw)) {
+    const first = raw[0] as unknown;
+    if (first && typeof first === 'object') {
+      const obj = first as { id?: unknown; name?: unknown };
+      if (typeof obj.id === 'string' || typeof obj.id === 'number') {
+        return {
+          id: String(obj.id),
+          name: (obj.name as string | null) ?? null,
+        };
+      }
+    }
+    return undefined;
+  }
+  if (raw && typeof raw === 'object') {
+    const obj = raw as { id?: unknown; name?: unknown };
+    if (typeof obj.id === 'string' || typeof obj.id === 'number') {
+      return {
+        id: String(obj.id),
+        name: (obj.name as string | null) ?? null,
+      };
+    }
+  }
+  return undefined;
+};
+
 const upsertDeviceToken = async (params: UpsertDeviceTokenParams) => {
   const { userId, deviceId, platform, token } = params;
   if (!Capacitor.isNativePlatform()) {
@@ -81,33 +109,6 @@ const getSeenNotifications = async ({
   limit,
   cursor,
 }: GetNotificationsParams) => {
-  const normalizeSender = (
-    raw: unknown
-  ): { id: string; name: string | null } | undefined => {
-    if (Array.isArray(raw)) {
-      const first = raw[0] as unknown;
-      if (first && typeof first === 'object') {
-        const obj = first as { id?: unknown; name?: unknown };
-        if (typeof obj.id === 'string' || typeof obj.id === 'number') {
-          return {
-            id: String(obj.id),
-            name: (obj.name as string | null) ?? null,
-          };
-        }
-      }
-      return undefined;
-    }
-    if (raw && typeof raw === 'object') {
-      const obj = raw as { id?: unknown; name?: unknown };
-      if (typeof obj.id === 'string' || typeof obj.id === 'number') {
-        return {
-          id: String(obj.id),
-          name: (obj.name as string | null) ?? null,
-        };
-      }
-    }
-    return undefined;
-  };
   try {
     let query = supabase
       .from('notifications')
@@ -290,34 +291,6 @@ const getUnseenNotifications = async (userId: string) => {
     if (error) {
       throw error;
     }
-
-    const normalizeSender = (
-      raw: unknown
-    ): { id: string; name: string | null } | undefined => {
-      if (Array.isArray(raw)) {
-        const first = raw[0] as unknown;
-        if (first && typeof first === 'object') {
-          const obj = first as { id?: unknown; name?: unknown };
-          if (typeof obj.id === 'string' || typeof obj.id === 'number') {
-            return {
-              id: String(obj.id),
-              name: (obj.name as string | null) ?? null,
-            };
-          }
-        }
-        return undefined;
-      }
-      if (raw && typeof raw === 'object') {
-        const obj = raw as { id?: unknown; name?: unknown };
-        if (typeof obj.id === 'string' || typeof obj.id === 'number') {
-          return {
-            id: String(obj.id),
-            name: (obj.name as string | null) ?? null,
-          };
-        }
-      }
-      return undefined;
-    };
 
     return (
       data?.map((notification) => ({
