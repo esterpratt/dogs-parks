@@ -86,25 +86,6 @@ const fetchParksJSON = async (params: FetchParksJSONParams) => {
   }
 };
 
-// TODO: delete if not used
-const fetchPark = async (parkId: string) => {
-  try {
-    const { data: park, error } = await supabase
-      .from('parks')
-      .select('*')
-      .eq('id', parkId)
-      .single();
-
-    if (error) {
-      throw error;
-    }
-
-    return park;
-  } catch (error) {
-    throwError(error);
-  }
-};
-
 const fetchParkDataWithLanguage = async (
   parkId: string,
   language: AppLanguage
@@ -268,7 +249,6 @@ const fetchAllParkImages = async (parkId: string) => {
 };
 
 export {
-  fetchPark,
   fetchParksJSON,
   fetchParkWithTranslation,
   uploadParkImage,
