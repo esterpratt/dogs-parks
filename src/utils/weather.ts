@@ -27,12 +27,18 @@ export const getWeatherInfo = ({
   t,
 }: GetWeatherInfoParams): WeatherInfo => {
   const simplifiedCode = (() => {
-    if (code === WeatherCode.CLEAR_SKY) return WeatherCode.CLEAR_SKY;
-    if (code === WeatherCode.MAINLY_CLEAR) return WeatherCode.MAINLY_CLEAR;
-    if ([WeatherCode.PARTLY_CLOUDY, WeatherCode.OVERCAST].includes(code))
+    if (code === WeatherCode.CLEAR_SKY) {
+      return WeatherCode.CLEAR_SKY;
+    }
+    if (code === WeatherCode.MAINLY_CLEAR) {
+      return WeatherCode.MAINLY_CLEAR;
+    }
+    if ([WeatherCode.PARTLY_CLOUDY, WeatherCode.OVERCAST].includes(code)) {
       return WeatherCode.PARTLY_CLOUDY;
-    if ([WeatherCode.FOG, WeatherCode.DEPOSITING_RIME_FOG].includes(code))
+    }
+    if ([WeatherCode.FOG, WeatherCode.DEPOSITING_RIME_FOG].includes(code)) {
       return WeatherCode.FOG;
+    }
     if (
       [
         WeatherCode.LIGHT_DRIZZLE,
@@ -42,8 +48,9 @@ export const getWeatherInfo = ({
         WeatherCode.LIGHT_FREEZING_DRIZZLE,
         WeatherCode.LIGHT_FREEZING_RAIN,
       ].includes(code)
-    )
+    ) {
       return WeatherCode.SLIGHT_RAIN;
+    }
     if (
       [
         WeatherCode.DENSE_DRIZZLE,
@@ -54,16 +61,18 @@ export const getWeatherInfo = ({
         WeatherCode.DENSE_FREEZING_DRIZZLE,
         WeatherCode.HEAVY_FREEZING_RAIN,
       ].includes(code)
-    )
+    ) {
       return WeatherCode.HEAVY_RAIN;
+    }
     if (
       [
         WeatherCode.THUNDERSTORM,
         WeatherCode.THUNDERSTORM_WITH_SLIGHT_HAIL,
         WeatherCode.THUNDERSTORM_WITH_HEAVY_HAIL,
       ].includes(code)
-    )
+    ) {
       return WeatherCode.THUNDERSTORM;
+    }
     if (
       [
         WeatherCode.SLIGHT_SNOW,
@@ -73,8 +82,9 @@ export const getWeatherInfo = ({
         WeatherCode.SLIGHT_SNOW_SHOWERS,
         WeatherCode.HEAVY_SNOW_SHOWERS,
       ].includes(code)
-    )
+    ) {
       return WeatherCode.SLIGHT_SNOW;
+    }
 
     return WeatherCode.PARTLY_CLOUDY;
   })();
