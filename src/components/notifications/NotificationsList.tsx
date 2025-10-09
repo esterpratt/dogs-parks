@@ -1,4 +1,5 @@
 import { useEffect, useRef, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import classnames from 'classnames';
 import { NotificationItem } from '../../components/notifications/NotificationItem';
@@ -30,6 +31,7 @@ interface NotificationsListProps {
 }
 
 const NotificationsList = (props: NotificationsListProps) => {
+  const { t } = useTranslation();
   const {
     historicalData,
     unseenNotifications,
@@ -66,9 +68,9 @@ const NotificationsList = (props: NotificationsListProps) => {
       rows.push({
         type: 'header',
         data: {
-          title: `${newList.length} new notification${
-            newList.length !== 1 ? 's' : ''
-          }`,
+          title: t('notifications.list.headerNew', {
+            count: newList.length,
+          }) as string,
           isNew: true,
         },
         id: 'new-header',
@@ -84,7 +86,10 @@ const NotificationsList = (props: NotificationsListProps) => {
     } else {
       rows.push({
         type: 'header',
-        data: { title: 'No new notifications', isNew: true },
+        data: {
+          title: t('notifications.list.headerNone') as string,
+          isNew: true,
+        },
         id: 'no-new-header',
       });
     }
@@ -92,7 +97,10 @@ const NotificationsList = (props: NotificationsListProps) => {
     if (oldList.length > 0) {
       rows.push({
         type: 'header',
-        data: { title: 'Earlier', isNew: false },
+        data: {
+          title: t('notifications.list.headerEarlier') as string,
+          isNew: false,
+        },
         id: 'earlier-header',
       });
 
@@ -106,7 +114,7 @@ const NotificationsList = (props: NotificationsListProps) => {
     }
 
     return rows;
-  }, [allNotifications, newIdsSet]);
+  }, [allNotifications, newIdsSet, t]);
 
   const unreadCount =
     allNotifications.filter((notification) => !notification.read_at).length ??

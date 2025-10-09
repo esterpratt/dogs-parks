@@ -126,6 +126,14 @@
   }
 }
 
+:global(.rtl) .prev-links {
+  justify-content: flex-end;
+
+  a {
+    flex-direction: row-reverse;
+  }
+}
+
 @media (orientation: landscape) {
   .map {
     width: 70%;

@@ -1,0 +1,547 @@
+---
+description: TypeScript and JavaScript code conventions for Dogs Parks application
+globs: *.ts,*.tsx,*.js,*.jsx
+alwaysApply: false
+---
+
+# TypeScript & JavaScript Code Conventions
+
+This rule outlines the established coding conventions for TypeScript and JavaScript files in the Dogs Parks application.
+
+## 📝 Variable Naming
+
+### **Clear and Descriptive Names**
+
+```tsx
+// ✅ Good: Clear variable names
+const userProfile = await fetchUser(userId);
+const filteredParks = parks.filter((park) => park.isActive);
+const sortedDogs = dogs.sort((dogA, dogB) =>
+  dogA.name.localeCompare(dogB.name)
+);
+
+// ✅ Good: Clear names in array functions
+const dogNames = dogs.map((dog) => dog.name);
+const activeFriends = friends.filter((friend) => friend.status === 'active');
+const totalReviews = reviews.reduce(
+  (total, review) => total + review.rating,
+  0
+);
+
+// ❌ Bad: Unclear or abbreviated names
+const u = await fetchUser(userId);
+const fp = parks.filter((p) => p.isActive);
+const sd = dogs.sort((a, b) => a.name.localeCompare(b.name));
+```
+
+### **Array Function Parameters**
+
+```tsx
+// ✅ Good: Descriptive parameter names
+const parkImages = parks.map((park) => park.primaryImage);
+const userDogs = users.flatMap((user) => user.dogs);
+const hasActiveDogs = dogs.some((dog) => dog.isActive);
+
+// ❌ Bad: Generic parameter names
+const parkImages = parks.map((x) => x.primaryImage);
+const userDogs = users.flatMap((item) => item.dogs);
+const hasActiveDogs = dogs.some((el) => el.isActive);
+```
+
+## 📤 Export Conventions
+
+### **Exports at End of File**
+
+```tsx
+// ✅ Good: All exports at the end
+const fetchUser = async (userId: string) => {
+  // function implementation
+};
+
+const createUser = async (userData: CreateUserParams) => {
+  // function implementation
+};
+
+const updateUser = async (userId: string, updates: UpdateUserParams) => {
+  // function implementation
+};
+
+// All exports at the end
+export { fetchUser, createUser, updateUser };
+
+export type { CreateUserParams, UpdateUserParams };
+```
+
+```tsx
+// ❌ Bad: Exports scattered throughout file
+export const fetchUser = async (userId: string) => {
+  // function implementation
+};
+
+const createUser = async (userData: CreateUserParams) => {
+  // function implementation
+};
+
+export const updateUser = async (userId: string, updates: UpdateUserParams) => {
+  // function implementation
+};
+
+export { createUser }; // Export in middle of file
+```
+
+## 🔧 Control Flow
+
+### **Always Use Curly Braces**
+
+```tsx
+// ✅ Good: Always use curly braces for if statements
+if (user.isActive) {
+  return user.profile;
+}
+
+if (dogs.length > 0) {
+  setHasDogs(true);
+}
+
+if (error) {
+  console.error('Error occurred:', error);
+  return null;
+}
+
+// ✅ Good: Multi-line conditions with braces
+if (user.isActive && user.hasPermission && user.dogs.length > 0) {
+  showUserProfile();
+}
+
+// ❌ Bad: Single-line if statements without braces
+if (user.isActive) return user.profile;
+if (dogs.length > 0) setHasDogs(true);
+if (error) console.error('Error occurred:', error);
+```
+
+### **Consistent Bracing for All Control Structures**
+
+```tsx
+// ✅ Good: Consistent bracing
+for (const dog of dogs) {
+  processDog(dog);
+}
+
+while (isLoading) {
+  await delay(100);
+}
+
+try {
+  const result = await apiCall();
+  return result;
+} catch (error) {
+  handleError(error);
+}
+
+// ❌ Bad: Inconsistent bracing
+for (const dog of dogs) processDog(dog);
+while (isLoading) await delay(100);
+```
+
+## 📊 Function Parameters
+
+### **Object Parameters for Multiple Props**
+
+```tsx
+// ✅ Good: Object parameter for multiple props/params
+const createPark = async (params: CreateParkParams) => {
+  const { name, location, size, facilities } = params;
+  // function implementation
+};
+
+const updateUserProfile = async (data: UpdateProfileParams) => {
+  const { userId, name, email, preferences } = data;
+  // function implementation
+};
+
+// ✅ Good: Single parameter can be direct
+const fetchUser = async (userId: string) => {
+  // function implementation
+};
+
+const deleteItem = async (itemId: string) => {
+  // function implementation
+};
+
+// ❌ Bad: Multiple individual parameters
+const createPark = async (
+  name: string,
+  location: Location,
+  size: number,
+  facilities: string[]
+) => {
+  // function implementation
+};
+
+const updateUserProfile = async (
+  userId: string,
+  name: string,
+  email: string,
+  preferences: UserPreferences
+) => {
+  // function implementation
+};
+```
+
+## 🏗️ Type Definitions
+
+### **Interface Naming Conventions**
+
+#### **For .ts Files (Services, Utils, etc.)**
+
+```tsx
+// ✅ Good: [FunctionName]Params for .ts files
+interface CreateUserParams {
+  name: string;
+  email: string;
+  password: string;
+}
+
+interface UpdateParkParams {
+  parkId: string;
+  name?: string;
+  size?: number;
+  facilities?: string[];
+}
+
+interface FetchNotificationsParams {
+  userId: string;
+  limit: number;
+  cursor?: string;
+}
+
+const createUser = async (params: CreateUserParams) => {
+  // implementation
+};
+
+const updatePark = async (params: UpdateParkParams) => {
+  // implementation
+};
+
+const fetchNotifications = async (params: FetchNotificationsParams) => {
+  // implementation
+};
+```
+
+#### **For .tsx Files (Components)**
+
+```tsx
+// ✅ Good: [ComponentName]Props for .tsx files
+interface UserProfileProps {
+  user: User;
+  isEditable: boolean;
+  onUpdate: (user: User) => void;
+}
+
+interface DogCardProps {
+  dog: Dog;
+  showOwner?: boolean;
+  onClick?: (dogId: string) => void;
+}
+
+interface ModalProps {
+  isOpen: boolean;
+  title: string;
+  children: ReactNode;
+  onClose: () => void;
+}
+
+const UserProfile: React.FC<UserProfileProps> = (props) => {
+  const { user, isEditable, onUpdate } = props;
+  // component implementation
+};
+
+const DogCard: React.FC<DogCardProps> = (props) => {
+  const { dog, showOwner = false, onClick } = props;
+  // component implementation
+};
+```
+
+### **Use Interfaces Over Types**
+
+```tsx
+// ✅ Good: Use interfaces for object shapes
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  createdAt: string;
+}
+
+interface CreateDogParams {
+  name: string;
+  breed: string;
+  birthday?: string;
+  owner: string;
+}
+
+// ✅ Good: Types for unions, primitives, and computed types
+type Status = 'pending' | 'approved' | 'rejected';
+type DogId = string;
+type PartialUser = Partial<User>;
+
+// ❌ Bad: Using type for object shapes that could be interfaces
+type User = {
+  id: string;
+  name: string;
+  email: string;
+  createdAt: string;
+};
+```
+
+### **NEVER Use 'any' Type**
+
+```tsx
+// ✅ Good: Define proper interfaces for data structures
+interface RawParkData {
+  id: string;
+  name: string;
+  city: string;
+  address: string;
+  location: {
+    lat: number;
+    long?: number;
+    lng?: number;
+  };
+}
+
+const normalizeParks = (rawParks: RawParkData[]) => {
+  return rawParks.map((park) => ({
+    id: park.id,
+    name: park.name,
+    city: park.city,
+    address: park.address,
+    location: {
+      lat: park.location.lat,
+      lng: park.location.lng || park.location.long || 0,
+    },
+  }));
+};
+
+// ✅ Good: Use proper typing for API responses
+interface SupabaseResponse<T> {
+  data: T | null;
+  error: Error | null;
+}
+
+const handleApiResponse = (response: SupabaseResponse<User>) => {
+  if (response.error) {
+    throw response.error;
+  }
+  return response.data;
+};
+
+// ✅ Good: Use unknown for truly unknown data, then type guard
+const parseApiData = (data: unknown): User => {
+  if (typeof data === 'object' && data !== null && 'id' in data) {
+    return data as User; // Safe after type guard
+  }
+  throw new Error('Invalid user data');
+};
+
+// ❌ Bad: Using 'any' type
+const normalizeParks = (rawParks: any[]) => {
+  return rawParks.map((park: any) => ({
+    id: park.id,
+    name: park.name,
+    // ... loses all type safety
+  }));
+};
+
+const handleApiResponse = (response: any) => {
+  // No type safety, prone to runtime errors
+  return response.data;
+};
+
+// ❌ Bad: Casting to any
+const someFunction = (data: SomeType) => {
+  return (data as any).someProperty; // Defeats TypeScript's purpose
+};
+```
+
+**Why avoid 'any':**
+
+- **Loses type safety**: No compile-time error checking
+- **No IntelliSense**: IDE cannot provide autocomplete or suggestions
+- **Runtime errors**: Typos and property access errors only discovered at runtime
+- **Maintenance issues**: Refactoring becomes dangerous without type information
+- **Documentation loss**: Types serve as inline documentation
+
+**Alternatives to 'any':**
+
+- **Define proper interfaces**: Create specific types for your data structures
+- **Use 'unknown'**: For truly unknown data, then use type guards
+- **Use union types**: `string | number` instead of `any`
+- **Use generics**: `<T>` for reusable type-safe functions
+- **Use 'object'**: For object types when structure is unknown
+- **Use type assertions carefully**: Only after proper type guards
+
+## 📋 Complete Examples
+
+### **Service Function Example (.ts file)**
+
+```tsx
+interface FetchUserDogsParams {
+  userId: string;
+  includeInactive?: boolean;
+  limit?: number;
+}
+
+interface CreateDogParams {
+  name: string;
+  breed: string;
+  birthday?: string;
+  owner: string;
+}
+
+const fetchUserDogs = async (params: FetchUserDogsParams) => {
+  const { userId, includeInactive = false, limit = 50 } = params;
+
+  try {
+    let query = supabase.from('dogs').select('*').eq('owner', userId);
+
+    if (!includeInactive) {
+      query = query.is('deleted_at', null);
+    }
+
+    if (limit) {
+      query = query.limit(limit);
+    }
+
+    const { data: dogs, error } = await query;
+
+    if (error) {
+      throw error;
+    }
+
+    return dogs;
+  } catch (error) {
+    throwError(error);
+  }
+};
+
+const createDog = async (params: CreateDogParams) => {
+  const { name, breed, birthday, owner } = params;
+
+  try {
+    const { data: dog, error } = await supabase
+      .from('dogs')
+      .insert([{ name, breed, birthday, owner }])
+      .select('id')
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return dog.id;
+  } catch (error) {
+    throwError(error);
+  }
+};
+
+export { fetchUserDogs, createDog };
+
+export type { FetchUserDogsParams, CreateDogParams };
+```
+
+### **Component Example (.tsx file)**
+
+```tsx
+interface DogListProps {
+  dogs: Dog[];
+  isLoading: boolean;
+  onDogSelect: (dogId: string) => void;
+  showOwnerInfo?: boolean;
+}
+
+const DogList: React.FC<DogListProps> = (props) => {
+  const { dogs, isLoading, onDogSelect, showOwnerInfo = false } = props;
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (dogs.length === 0) {
+    return <EmptyState message="No dogs found" />;
+  }
+
+  const activeDogs = dogs.filter((dog) => dog.isActive);
+
+  return (
+    <div className={styles.container}>
+      {activeDogs.map((dog) => (
+        <DogCard
+          key={dog.id}
+          dog={dog}
+          showOwner={showOwnerInfo}
+          onClick={() => onDogSelect(dog.id)}
+        />
+      ))}
+    </div>
+  );
+};
+
+export { DogList };
+```
+
+## 🚫 Anti-Patterns to Avoid
+
+```tsx
+// ❌ Bad: Unclear variable names
+const d = dogs.filter((x) => x.active);
+const u = await fetchUser(id);
+
+// ❌ Bad: Exports scattered throughout file
+export const func1 = () => {};
+const func2 = () => {};
+export const func3 = () => {};
+
+// ❌ Bad: Single-line if without braces
+if (error) throw error;
+if (user) return user.name;
+
+// ❌ Bad: Multiple individual parameters instead of object
+const createUser = async (
+  name: string,
+  email: string,
+  age: number,
+  city: string
+) => {};
+
+// ❌ Bad: Wrong interface naming
+interface CreateUserData {} // Should be CreateUserParams for .ts
+interface UserCardData {} // Should be UserCardProps for .tsx
+
+// ❌ Bad: Using type for object shapes
+type User = {
+  id: string;
+  name: string;
+}; // Should be interface
+
+// ❌ Bad: Using 'any' type
+const processData = (data: any) => {
+  return data.someProperty; // No type safety
+};
+
+const items: any[] = []; // Should define proper array type
+```
+
+## 📋 Checklist for TypeScript/JavaScript Files
+
+- [ ] Variable names are clear and descriptive
+- [ ] Array function parameters have meaningful names
+- [ ] All exports are at the end of the file
+- [ ] All if statements use curly braces (no single-line)
+- [ ] Functions with multiple parameters use object parameters
+- [ ] Interfaces are used for object type definitions
+- [ ] Interface naming follows convention: `[FunctionName]Params` for .ts, `[ComponentName]Props` for .tsx
+- [ ] Types are used only for unions, primitives, and computed types
+- [ ] **NEVER use 'any' type** - define proper interfaces instead
+- [ ] Control structures consistently use braces
+- [ ] Code follows consistent formatting and style

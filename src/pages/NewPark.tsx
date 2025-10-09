@@ -11,6 +11,7 @@ import { UserContext } from '../context/UserContext';
 import { Input } from '../components/inputs/Input';
 import { MoveLeft, Plus } from 'lucide-react';
 import { TopModal } from '../components/modals/TopModal';
+import { useTranslation } from 'react-i18next';
 import styles from './NewPark.module.scss';
 
 const NewPark: React.FC = () => {
@@ -26,6 +27,7 @@ const NewPark: React.FC = () => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFinishModalOpen, setIsFinishModalOpen] = useState(false);
+  const { t } = useTranslation();
 
   const { mutate } = useMutation({
     mutationFn: createParkSuggestion,
@@ -59,7 +61,7 @@ const NewPark: React.FC = () => {
     if (!user?.id) {
       setIsModalOpen(true);
     } else if (!markerLocation || !parkDetails.address || !parkDetails.city) {
-      setError('Please fill in the missing details');
+      setError(t('login.missingDetails'));
     } else {
       const newPark: NewParkDetails = {
         name: parkDetails.name || parkDetails.address,
@@ -95,23 +97,21 @@ const NewPark: React.FC = () => {
 
   return (
     <>
+      <div className={styles.prevLinks}>
+        <Link to="/parks">
+          <MoveLeft size={16} />
+          <span>{t('newPark.breadcrumbAllParks')}</span>
+        </Link>
+      </div>
       <div className={styles.container}>
-        <div className={styles.prevLinks}>
-          {
-            <Link to="/parks">
-              <MoveLeft size={16} />
-              <span>All parks</span>
-            </Link>
-          }
-        </div>
         <div className={styles.contentContainer}>
-          <div className={styles.title}>Fill the park details to add it</div>
+          <div className={styles.title}>{t('newPark.fillDetailsTitle')}</div>
           <div className={classnames(styles.error, error && styles.show)}>
             {error}
           </div>
           <div className={styles.inputsContainer}>
             <Input
-              placeholder="Park name"
+              placeholder={t('newPark.placeholderName')}
               name="name"
               value={parkDetails.name}
               onChange={onChangeParkDetails}
@@ -119,25 +119,25 @@ const NewPark: React.FC = () => {
             <Input
               type="number"
               inputMode="numeric"
-              placeholder="Size in square meters (if known)"
+              placeholder={t('newPark.placeholderSize')}
               name="size"
               value={parkDetails.size}
               onChange={onChangeParkDetails}
             />
             <Input
-              placeholder="City *"
+              placeholder={t('newPark.placeholderCity')}
               name="city"
               value={parkDetails.city}
               onChange={onChangeParkDetails}
             />
             <Input
-              placeholder="Address *"
+              placeholder={t('newPark.placeholderAddress')}
               name="address"
               value={parkDetails.address}
               onChange={onChangeParkDetails}
             />
             <LocationInput
-              label="Park location *"
+              label={t('newPark.labelLocation')}
               markerLocation={markerLocation}
               onMapClick={onMapClick}
               className={styles.map}
@@ -150,7 +150,7 @@ const NewPark: React.FC = () => {
                 !markerLocation || !parkDetails.address || !parkDetails.city
               }
             >
-              Add park
+              {t('newPark.addButton')}
             </Button>
           </div>
         </div>
@@ -161,16 +161,17 @@ const NewPark: React.FC = () => {
         className={styles.modal}
       >
         <div className={styles.modalContainer}>
-          <span>Only KlavHubers can add a new park.</span>
+          <span>{t('newPark.onlyMembers')}</span>
           <span>
-            <Link to="/login?mode=login">Log In</Link> to be part of the pack!
+            <Link to="/login?mode=login">{t('newPark.loginLink')}</Link>{' '}
+            {t('newPark.packInvite')}
           </span>
           <Button
             variant="secondary"
             className={styles.button}
             onClick={() => setIsModalOpen(false)}
           >
-            Exit
+            {t('newPark.exit')}
           </Button>
         </div>
       </TopModal>
@@ -181,14 +182,14 @@ const NewPark: React.FC = () => {
       >
         <div className={styles.finishModalContainer}>
           <div className={styles.text}>
-            <span>Thank you!</span>
-            <span>The park will be added shortly.</span>
-            <span>Want to add another one?</span>
+            <span>{t('newPark.finishThankYou')}</span>
+            <span>{t('newPark.finishAddedSoon')}</span>
+            <span>{t('newPark.finishAddAnother')}</span>
           </div>
           <div className={styles.buttonsContainer}>
             <Button className={styles.button} onClick={onClickAddAnotherPark}>
               <Plus size={16} />
-              <span>Add park</span>
+              <span>{t('newPark.finishAddButton')}</span>
             </Button>
             <Button
               variant="secondary"
@@ -196,7 +197,7 @@ const NewPark: React.FC = () => {
               onClick={onClickBackToParks}
             >
               <MoveLeft size={16} />
-              <span>Back to parks</span>
+              <span>{t('newPark.finishBackToParks')}</span>
             </Button>
           </div>
         </div>

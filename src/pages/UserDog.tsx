@@ -13,7 +13,7 @@ import {
 } from '../services/dogs';
 import { GENDER } from '../types/dog';
 import { queryClient } from '../services/react-query';
-import { getAge } from '../utils/time';
+import { getLocalizedDogAgeText } from '../utils/dogAge';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import { Loader } from '../components/Loader';
 import { EnlargeImageModal } from '../components/EnlargeImageModal';
@@ -26,6 +26,7 @@ import { CameraModal } from '../components/camera/CameraModal';
 import styles from './UserDog.module.scss';
 import { capitalizeText } from '../utils/text';
 import { useUploadImage } from '../hooks/api/useUploadImage';
+import { useTranslation } from 'react-i18next';
 
 const UserDog = () => {
   const { dogId } = useParams();
@@ -36,6 +37,7 @@ const UserDog = () => {
   const [isEnlargedImageModalOpen, setIsEnlargeImageModalOpen] =
     useState(false);
   const { isSignedInUser, userName } = state;
+  const { t } = useTranslation();
 
   const { data: dog, isLoading: isLoadingDog } = useQuery({
     queryKey: ['dogs', dogId],
@@ -97,7 +99,11 @@ const UserDog = () => {
     return null;
   }
 
-  const age = !dog.birthday ? null : getAge(dog.birthday);
+  const ageText = getLocalizedDogAgeText({
+    birthday: dog.birthday,
+    gender: dog.gender,
+    t,
+  });
 
   return (
     <>
@@ -107,11 +113,12 @@ const UserDog = () => {
             <Link to={`/profile/${dog.owner}/dogs`}>
               <MoveLeft size={16} />
               {isSignedInUser ? (
-                <span>My</span>
+                <span>{t('userDogs.titleMyPack')}</span>
               ) : (
-                <span className={styles.userName}>{userName}'s</span>
+                <span className={styles.userName}>
+                  {t('userDogs.titleUsersPack', { name: userName })}
+                </span>
               )}
-              <span> pack</span>
             </Link>
           }
           imgCmp={
@@ -142,28 +149,30 @@ const UserDog = () => {
                   )}
                   {!isSignedInUser && (
                     <span className={styles.userName}>
-                      {capitalizeText(userName)}'s dog
+                      {dog.gender === GENDER.FEMALE
+                        ? t('dogs.labels.ownersDogFemale', {
+                            name: capitalizeText(userName),
+                          })
+                        : t('dogs.labels.ownersDogMale', {
+                            name: capitalizeText(userName),
+                          })}
                     </span>
                   )}
                 </div>
                 <div>
-                  {age !== null && (
+                  {ageText && (
                     <span className={styles.age}>
                       <Cake color={styles.green} size={14} />
-                      <span>
-                        {age.diff <= 0
-                          ? 'Just born'
-                          : `${age.diff} ${age.unit} old`}
-                      </span>
+                      <span>{ageText}</span>
                     </span>
                   )}
                   {dog.breed && (
                     <span className={styles.breed}>
                       <Tag color={styles.green} size={14} />
                       <span>
-                        {dog.breed.toLowerCase() === 'other' && 'Breed: '}
-                        {dog.breed}
-                        {dog.breed.toLowerCase() === 'mixed' && ' breed'}
+                        {t(`dogs.breeds.${dog.breed}`, {
+                          defaultValue: dog.breed,
+                        })}
                       </span>
                     </span>
                   )}

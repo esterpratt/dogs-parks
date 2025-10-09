@@ -5,6 +5,7 @@ import { reportReview } from '../services/reviews';
 import { useNotification } from '../context/NotificationContext';
 import { FormModal } from './modals/FormModal';
 import styles from './ReportModal.module.scss';
+import { useTranslation } from 'react-i18next';
 
 interface ReportModalProps {
   isOpen: boolean;
@@ -19,6 +20,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
 }) => {
   const { notify } = useNotification();
   const [chosenReason, setChosenReason] = useState<ReportReason | null>(null);
+  const { t } = useTranslation();
 
   const onSubmitReport = async () => {
     if (chosenReason) {
@@ -38,13 +40,13 @@ export const ReportModal: React.FC<ReportModalProps> = ({
       open={isOpen}
       onClose={onClose}
       onSave={onSubmitReport}
-      saveText="Report"
+      saveText={t('common.actions.report')}
       disabled={!chosenReason}
       className={styles.modal}
-      title="Why do you wish to report this review?"
+      title={t('reports.reviewModal.title')}
     >
       <div className={styles.options}>
-        {Object.entries(REPORT_DESCRIPTION).map(([key, value]) => {
+        {Object.entries(REPORT_DESCRIPTION).map(([key]) => {
           return (
             <div
               key={key}
@@ -62,7 +64,8 @@ export const ReportModal: React.FC<ReportModalProps> = ({
                 onChange={() => onChooseReason(key as ReportReason)}
               />
               <label htmlFor={key}>
-                {value.title} - {value.content}
+                {t(`reports.reasons.${key}.title`)} -{' '}
+                {t(`reports.reasons.${key}.content`)}
               </label>
             </div>
           );

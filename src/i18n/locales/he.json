@@ -1,0 +1,1046 @@
+{
+  "language": {
+    "title": "שפה",
+    "modalTitle": "בחירת שפה",
+    "english": "אנגלית",
+    "hebrew": "עברית"
+  },
+  "userDogs": {
+    "titleMyPack": "החבורה שלי",
+    "titleUsersPack": "החבורה של {{name}}",
+    "addDog": "הוספת כלב",
+    "emptySignedIn1": "החבורה שלך ריקה",
+    "emptySignedIn2": "זה הזמן לצרף כמה חברים על 4!",
+    "otherEmpty": "החבורה של {{name}} ריקה",
+    "cameraModalTitle": "הוספת תמונה"
+  },
+  "deleteAccount": {
+    "title": "מחיקת הנתונים שלכם בכלבהאב",
+    "fullDeleteTitle": "כדי למחוק את החשבון שלכם ואת כל הנתונים הקשורים:",
+    "fullDeleteStep1": "עברו לפרופיל שלכם",
+    "fullDeleteStep2": "לחצו על הגדרות -> מחיקת הפרופיל שלי",
+    "fullDeleteStep3": "לחצו על מחיקה",
+    "fullDeleteNote": "פעולה זו תמחק לצמיתות את החשבון שלכם ואת כל הנתונים הקשורים.",
+    "deleteDogTitle": "כדי למחוק את הכלבים שלכם:",
+    "deleteDogStep1": "עברו לפרופיל שלכם",
+    "deleteDogStep2": "לחצו על פרופיל הכלב",
+    "deleteDogStep3": "לחצו על אייקון העריכה",
+    "deleteDogStep4": "גללו אל 'פרידה מ...' ולחצו",
+    "deleteDogStep5": "לחצו על מחיקה",
+    "deleteDogBody": "כאשר מוחקים את פרופיל הכלב, הנתונים מוסרים מהאפליקציה ואינם נגישים יותר. הם אינם גלויים למשתמשים אחרים ואינם נשמרים עוד להצגה או לעיבוד.",
+    "help": "צריכים עזרה? פנו אלינו בכתובת:",
+    "helpEmail": "esterpratt@gmail.com"
+  },
+  "privacyPolicy": {
+    "title": "מדיניות פרטיות",
+    "lastUpdated": "עודכן לאחרונה: 1.7.25",
+    "introTitle": "הקדמה",
+    "intro": "ברוכים הבאים לכלבהאב. מדיניות פרטיות זו מסבירה כיצד אנו אוספים, משתמשים ומגנים על המידע שלך בעת השימוש באפליקציה שלנו, כלבהאב (\"האפליקציה\"). בשימושך באפליקציה, מתקבלת הסכמתך לאיסוף ולשימוש במידע בהתאם למדיניות זו.",
+    "dataWeCollect": {
+      "title": "המידע שאנו אוספים",
+      "lead": "ייתכן שנאסוף את סוגי המידע הבאים:",
+      "personalTitle": "מידע אישי (בעת יצירת חשבון):",
+      "personalItems": [
+        "שם, כתובת דוא\"ל.",
+        "אם נכנסים באמצעות Google, ייתכן שייאספו פרטי פרופיל בהתאם למדיניות שלהם.",
+        "כל מידע נוסף שמוסיפים לפרופיל, כגון פרטי הכלב וביקורות על גינות."
+      ],
+      "usageTitle": "נתוני שימוש:",
+      "usageDesc": "מידע על אופן השימוש באפליקציה (למשל, משך סשן).",
+      "deviceTitle": "מידע על המכשיר:",
+      "deviceDesc": "סוג המכשיר, מערכת ההפעלה ומזהים ייחודיים.",
+      "locationTitle": "מיקום משוער או מדויק (רק באישור).",
+      "photosTitle": "תמונות ותכנים אחרים שמועלים לאפליקציה."
+    },
+    "usage": {
+      "title": "כיצד אנו משתמשים במידע",
+      "lead": "אנו משתמשים במידע כדי:",
+      "items": [
+        "לאפשר להורים לכלבים לחפש חברים ולצפות בעמודי הכלבים שלהם. אם הנכם מעדיפים לשמור את העמוד שלכם פרטי, ניתן לשנות זאת בכל עת בהגדרות הפרופיל.",
+        "להעניק ולשפר את השירותים.",
+        "להתאים את החוויה אליכם.",
+        "למסור עדכונים ותמיכה.",
+        "לנתח שימוש כדי לשפר ביצועים.",
+        "להבטיח אבטחה ולמנוע הונאה."
+      ]
+    },
+    "sharing": {
+      "title": "שיתוף המידע",
+      "lead": "איננו מוכרים מידע אישי. עם זאת, ייתכן שנשתף נתונים עם:",
+      "items": [
+        "ספקי שירות – למטרות אנליטיקה, הוסטינג או תמיכה.",
+        "רשויות חוק – אם נידרש על פי דין או לצורך מניעת הונאה."
+      ]
+    },
+    "security": {
+      "title": "שמירת מידע ואבטחה",
+      "desc": "אנו שומרים מידע רק כל עוד הוא נדרש למטרתו. אנו מיישמים אמצעי אבטחה מקובלים להגנה על המידע. עם זאת, אף שירות מקוון אינו מאובטח ב‑100%, והשימוש הוא על אחריות המשתמשים."
+    },
+    "delete": {
+      "title": "מחיקת הנתונים",
+      "desc": "אפשר למחוק את החשבון בכל עת דרך הגדרות הפרופיל. להנחיות מפורטות למחיקת הנתונים",
+      "linkText": "לחצו כאן"
+    },
+    "privateOption": "אם הנכם מעדיפים לשמור את העמוד שלכם פרטי, ניתן לשנות זאת בכל עת בהגדרות הפרופיל.",
+    "children": {
+      "title": "פרטיות ילדים",
+      "desc": "האפליקציה אינה מיועדת לילדים מתחת לגיל 13 (או 16 באזורים מסוימים). איננו אוספים ביודעין נתונים אישיים מקטינים."
+    },
+    "thirdParties": {
+      "title": "שירותים של צד שלישי",
+      "desc": "ייתכן שנעשה שימוש בשירותי צד שלישי האוספים נתונים (למשל, Google Analytics, Supabase). לכל צד שלישי מדיניות פרטיות משלו:",
+      "links": ["Google Analytics: https://policies.google.com/privacy"]
+    },
+    "changes": {
+      "title": "שינויים במדיניות",
+      "desc": "ייתכן שהמדיניות תעודכן מעת לעת. תימסר הודעה על שינויים מהותיים באמצעות עדכון תאריך \"עודכן לאחרונה\"."
+    },
+    "contact": {
+      "title": "יצירת קשר",
+      "desc": "אם יש לכם שאלות לגבי מדיניות פרטיות זו, ניתן לפנות אלינו בכתובת:"
+    }
+  },
+  "about": {
+    "welcomeTitle": "ברוכים הבאים לכלבהאב!",
+    "welcomeBody": "כלבהאב נבנתה עבור בעלי כלבים שמחפשים את גינות הכלבים הכי טובות באזורם ורוצים להתחבר לבעלי כלבים נוספים.",
+    "helpTitle": "צריכים עזרה?",
+    "helpBody": "אם נתקלתם בבעיה, או שיש לכם הצעה, נשמח לשמוע בכתובת:",
+    "privacyCta": "צפו במדיניות הפרטיות כאן.",
+    "earlyBody": "האפליקציה רק בתחילת הדרך, ונשמח לעזרה בהרחבת הקהילה. אפשר לעזור על ידי הצטרפות, שיתוף עם חברים, הוספת פרטים על גינות כלבים והוספת גינות חסרות.",
+    "thankYou": "תודה!",
+    "createdBy": "נבנה על ידי:",
+    "createdByName": "אסתר פרת",
+    "inspiredByTitle": "בהשראת:",
+    "inspiredByBody": "הכלבה המיוחדת שלי נינה, הכלבה שלא הולכת לגינות כלבים.",
+    "specialThanks": "תודה מיוחדת: כפיר ארד, רותם קולץ"
+  },
+  "users": {
+    "noResults": "לא נמצאו חברים",
+    "searchTitle": "חיפוש חברים",
+    "sniffFriends": "אפשר למצוא חברים חדשים",
+    "searchPlaceholder": "חיפוש לפי שם משתמש/כלב",
+    "preview": {
+      "dogsCount": "הכלבים של",
+      "dogsCount_one": "הכלב של",
+      "dogsCount_female_one": "הכלבה של",
+      "dogsCount_other": "הכלבים של",
+      "accept": "אישור",
+      "decline": "דחייה",
+      "exit": "יציאה",
+      "gated": {
+        "prefix": "על מנת לצפות בעמוד המשתמש/ת ולהוסיף חברים, עליכם",
+        "login": "להיכנס!"
+      }
+    },
+    "friends": {
+      "status": {
+        "friends": "אתם חברים",
+        "waitingResponse": "ממתין לאישור החברות",
+        "wantsToBeYourFriend": "{{name}} רוצה להיות חבר/ה שלך"
+      },
+      "actions": {
+        "unfriend": "הסרת חברות",
+        "accept": "אישור",
+        "decline": "דחייה",
+        "removeRequest": "הסרת הבקשה",
+        "addFriend": "הוספה לחברים"
+      }
+    }
+  },
+  "favorites": {
+    "none": "אין לך עדיין גינות מועדפות",
+    "sniffParksPrefix": "אפשר למצוא גינות קרובות",
+    "sniffParksLink": "כאן!",
+    "title": "הגינות המועדפות עליי"
+  },
+  "error": {
+    "title": "אופס! {{message}}",
+    "tryAgain": "אולי חסרים לי חטיפים. זרקו לי קצת ונסו שוב",
+    "generic": "קרתה בעיה",
+    "offline": "אין חיבור לאינטרנט. התחברו לרשת כדי להמשיך.",
+    "notFound": "העמוד לא נמצא"
+  },
+  "auth": {
+    "same_password": "בבקשה הכניסו סיסמה חדשה",
+    "invalid_credentials": "דוא״ל או סיסמה שגויים",
+    "email_not_confirmed": "יש לאשר את הדוא״ל לפני ההתחברות",
+    "provider_not_enabled": "שיטת ההתחברות הזו אינה זמינה",
+    "rate_limited": "יותר מדי ניסיונות. נסו שוב מאוחר יותר",
+    "bad_request": "אירעה בעיה בבקשה",
+    "unauthorized": "אין לך הרשאה",
+    "forbidden": "הגישה נדחתה",
+    "user_not_found": "החשבון לא נמצא",
+    "server_error": "שגיאת שרת. נסו שוב",
+    "network": "שגיאת רשת. בדקו את החיבור",
+    "unknown": "אירעה שגיאה בלתי צפויה",
+    "email_already_exists": "הדוא״ל כבר רשום",
+    "weak_password": "הסיסמה חלשה מדי",
+    "signups_disabled": "הרשמה מושבתת כרגע",
+    "session_expired": "פג תוקף ההתחברות. התחברו מחדש",
+    "captcha_failed": "אימות CAPTCHA נכשל",
+    "too_many_mfa_factors": "נרשמו יותר מדי אמצעי אימות",
+    "email_not_authorized": "כתובת הדוא״ל אינה מורשית להתחבר",
+    "user_banned": "החשבון מושעה זמנית"
+  },
+  "share": {
+    "title": "שיתפו איתך גינה!",
+    "subtitle": "רוצים לראות אותה באפליקציה?",
+    "openInApp": "לפתיחת האפליקציה",
+    "downloadFrom": "הורידו את כלבהאב מ‑{{store}}",
+    "continueHere": "להמשיך כאן",
+    "store": {
+      "appStore": "App Store",
+      "googlePlay": "Google Play"
+    }
+  },
+  "userInfo": {
+    "editDetails": "עריכת פרטים",
+    "logout": "יציאה",
+    "deleteProfile": "מחיקת הפרופיל שלי",
+    "deleteModalTitle": "שים/י לב!",
+    "deleteModalBody1": "בלחיצה על 'מחיקה', כל הנתונים שלך ונתוני הכלבים שלך יישלחו לחווה בצפון, שם הם יוכלו לרוץ חופשי לנצח.",
+    "deleteModalBody2": "את/ה בטוח/ה שברצונך להיפרד?",
+    "deleteDogButton": "פרידה מ{{name}}",
+    "delete": "מחיקה",
+    "cancel": "ביטול",
+    "edit": {
+      "titleUpdate": "עדכון פרטים",
+      "labels": {
+        "name": "שם *"
+      },
+      "privacy": {
+        "hideMe": "הסתר אותי",
+        "explanation": "* אם העמוד שלך מוסתר, הוא לא יופיע בתוצאות החיפוש. רק חברים או משתמשים ששלחת להם בקשת חברות יוכלו לראות את העמוד שלך."
+      }
+    },
+    "theme": {
+      "darkMode": "מצב לילה"
+    }
+  },
+  "emailCallback": {
+    "title": "איזה כיף!",
+    "verified": "החשבון אומת ואתם באופן רשמי חלק מהחבורה!",
+    "closeTab": "אפשר לסגור את הלשונית ולחזור לאפליקציה",
+    "openApp": "לפתיחת האפליקציה",
+    "continueHere": "להמשיך כאן"
+  },
+  "userReviews": {
+    "title": "הביקורות שלי"
+  },
+  "profile": {
+    "myFriends": "החברים שלי",
+    "users": "משתמשים",
+    "pawsUp": "כיף לראותך, {{name}}!",
+    "pawsUpRich": "כיף לראותך, <name>{{name}}</name>!",
+    "meetPrefix": "הכירו את",
+    "packSuffix": " והחבורה: {{dogs}}",
+    "tabs": {
+      "dogs": "כלבים",
+      "friends": "חברים",
+      "favorites": "מועדפים",
+      "reviews": "ביקורות",
+      "settings": "הגדרות"
+    }
+  },
+  "visitors": {
+    "friendsTitle": "חברים בגינה כרגע",
+    "onlyFriendsDetails": "ניתן לראות פרטים של חברים בלבד",
+    "sniffFriendsPrefix": "אפשר לחפש חברים חדשים",
+    "sniffFriendsLink": "כאן!"
+  },
+  "updatePassword": {
+    "title": "איזה כיף!",
+    "updated": "הסיסמה עודכנה.",
+    "returnApp": "ניתן לחזור לאפליקציה ולהמשיך בהרפתקה",
+    "openApp": "לפתיחת האפליקציה",
+    "continueHere": "להמשיך כאן",
+    "pawsASec": "עוד רגע ממשיכים...",
+    "placeholderNewPassword": "סיסמה חדשה",
+    "buttonUpdate": "עדכון סיסמה",
+    "invalidLink": "הקישור הזה אינו תקין או שפג תוקפו. אנא בקשו קישור חדש.",
+    "pleaseEnterNewPassword": "אנא הכניסו סיסמה חדשה"
+  },
+  "notifications": {
+    "title": "התראות",
+    "empty": "אין התראות",
+    "actions": {
+      "markAllRead": "סימון הכל כנקרא"
+    },
+    "common": {
+      "someone": "מישהו/י"
+    },
+    "general": {
+      "defaultTitle": "התראה",
+      "defaultMessage": "יש לך עדכון חדש"
+    },
+    "list": {
+      "headerNew_one": "התראה חדשה אחת",
+      "headerNew_two": "{{count}} התראות חדשות",
+      "headerNew_many": "{{count}} התראות חדשות",
+      "headerNew_other": "{{count}} התראות חדשות",
+      "headerNone": "אין התראות חדשות",
+      "headerEarlier": "התראות קודמות"
+    },
+    "types": {
+      "friendRequest": {
+        "title": "{{name}} שלח/ה לך בקשת חברות",
+        "appMessage": "לחץ/י כדי להגיב"
+      },
+      "friendApproval": {
+        "title": "{{name}} אישר/ה את בקשת החברות שלך",
+        "appMessage": "אתם עכשיו חברים!"
+      },
+      "parkInvite": {
+        "title": "{{name}} הזמין/ה אותך לגינה",
+        "appMessage": "לחץ/י כדי להגיב"
+      },
+      "parkInviteResponse": {
+        "title": "{{name}} הגיב/ה להזמנה שלך",
+        "appMessage": "לחץ/י כדי לצפות בתגובה"
+      }
+    },
+    "modal": {
+      "title": "עדכון הגדרות ההתראות",
+      "section": {
+        "general": "כללי",
+        "types": "סוגי התראות"
+      },
+      "mute": {
+        "title": "השתקת התראות",
+        "description": "השתקת כל ההתראות"
+      },
+      "types": {
+        "friendRequests": {
+          "title": "בקשות חברות",
+          "description": "קבלת התראה כאשר נשלחת אליך בקשת חברות"
+        },
+        "friendApprovals": {
+          "title": "אישור חברות",
+          "description": "קבלת התראה כאשר בקשת חברות שלך מאושרת"
+        }
+      }
+    }
+  },
+  "parkReviews": {
+    "emptyTitleShort": "אין ביקורות",
+    "emptyTitle": "אין ביקורות על גינה זו עדיין",
+    "firstReviewCta": "היו הראשונים להשאיר ביקורת!",
+    "averageRank": "דירוג ממוצע: {{rank}}",
+    "addReview": "הוספת ביקורת",
+    "updateReview": "עדכון ביקורת"
+  },
+  "userFriends": {
+    "noFriends": "אין לך עדיין חברים כלבהאברים",
+    "myFriends": "החברים שלי",
+    "friendRequests": "בקשות חברות",
+    "pendingRequests": "בקשות ממתינות"
+  },
+  "newPark": {
+    "breadcrumbAllParks": "לכל הגינות",
+    "fillDetailsTitle": "מלאו את פרטי הגינה",
+    "placeholderName": "שם הגינה",
+    "placeholderSize": "גודל במ\"ר (אם ידוע)",
+    "placeholderCity": "עיר *",
+    "placeholderAddress": "כתובת *",
+    "labelLocation": "מיקום הגינה *",
+    "addButton": "הוספת גינה",
+    "onlyMembers": "רק משתמשי כלבהאב יכולים להוסיף גינה חדשה",
+    "loginLink": "לכניסה",
+    "packInvite": "כדי להצטרף לחבורה!",
+    "exit": "יציאה",
+    "finishThankYou": "תודה!",
+    "finishAddedSoon": "הגינה תתווסף בקרוב",
+    "finishAddAnother": "רוצה להוסיף עוד גינה?",
+    "finishAddButton": "הוספת גינה",
+    "finishBackToParks": "חזרה לכל הגינות"
+  },
+  "deletionConfirmation": {
+    "confirmation1": "הנתונים שלך נשלחו לחווה בצפון",
+    "confirmation2": "תודה שהיית חלק מהחבורה! הדלת לכלבהאב פתוחה תמיד — נשמח לחזרתך בכל עת!",
+    "goHome": "לדף הבית"
+  },
+  "login": {
+    "titleSignup": "הצטרפו לכלבהאב כדי ליצור פרופיל, להוסיף חברים ולתרום מידע על גינות.",
+    "titleLogin": "התחברו לכלבהאב כדי לנהל את הפרופיל, להוסיף חברים ולשתף עדכונים על גינות.",
+    "checkMail": "בדקו את הדוא\"ל לפרטים",
+    "offline": "אין חיבור לאינטרנט. התחברו כדי להמשיך.",
+    "pawsASec": "עוד רגע ממשיכים...",
+    "placeholderEmail": "דוא\"ל *",
+    "placeholderPassword": "סיסמה *",
+    "placeholderName": "שם *",
+    "continue": "להתחבר עם",
+    "withApple": "Apple",
+    "withGoogle": "Google",
+    "missingDetails": "אנא מלאו את הפרטים החסרים",
+    "pleaseEnterEmail": "אנא הכניסו דוא\"ל",
+    "or": "או התחברו עם",
+    "alreadyMember": "כבר חלק מהחבורה?",
+    "login": "כניסה",
+    "notMemberYet": "עדיין לא חלק מהחבורה?",
+    "signup": "הרשמה",
+    "forgotPassword": "שכחת סיסמה?",
+    "resetPassword": "איפוס סיסמה",
+    "cta": {
+      "apple": {
+        "signup": "Apple",
+        "continue": "Apple"
+      },
+      "google": {
+        "signup": "Google",
+        "continue": "Google"
+      }
+    }
+  },
+  "common": {
+    "actions": {
+      "cancel": "ביטול",
+      "close": "סגירה",
+      "delete": "מחיקה",
+      "login": "כניסה",
+      "logout": "יציאה",
+      "search": "חיפוש",
+      "openSettings": "פתיחת ההגדרות",
+      "maybeLater": "אולי אחר כך",
+      "dontShowAgain": "לא להציג שוב",
+      "view": "צפייה",
+      "add": "הוספה",
+      "accept": "אישור",
+      "decline": "דחייה",
+      "report": "דיווח",
+      "share": "שיתוף",
+      "checkin": "צ'ק אין",
+      "checkout": "צ׳ק אאוט",
+      "like": "לייק",
+      "unlike": "הסרה",
+      "submit": "שליחה",
+      "save": "שמירה"
+    },
+    "placeholders": {
+      "search": "חיפוש",
+      "searchPark": "חיפוש גינה",
+      "reviewTitle": "כותרת",
+      "reviewContent": "נשמח לפירוט..."
+    },
+    "status": {
+      "errorLoadingImage": "אירעה שגיאה בטעינת התמונה",
+      "calculating": "מחשב...",
+      "currently": "כרגע",
+      "noData": "עוד אין נתונים"
+    }
+  },
+  "nav": {
+    "bottom": {
+      "explore": "מפת הגינות",
+      "searchFriends": "חיפוש חברים",
+      "addPark": "הוספת גינה חדשה",
+      "privacy": "מדיניות פרטיות",
+      "about": "אודות",
+      "login": "כניסה"
+    }
+  },
+  "parks": {
+    "breadcrumb": {
+      "all": "לכל הגינות"
+    },
+    "preview": {
+      "view": "לעמוד הגינה",
+      "seeOnMap": "למיקום במפה"
+    },
+    "search": {
+      "placeholder": "חיפוש גינה"
+    },
+    "tabs": {
+      "general": "כללי",
+      "reviews": "ביקורות",
+      "visitors": "מבקרים"
+    },
+    "share": {
+      "title": "שיתוף גינה",
+      "text": "שווה לך לבדוק את {{name}} בכלבהאב!",
+      "dialogTitle": "שיתוף {{name}}"
+    },
+    "noResults": {
+      "user": {
+        "title": "הגינה לא נמצאה?",
+        "helpPrefix": "נשמח לעזרה",
+        "helpLink": "בהוספת פרטי הגינה!"
+      },
+      "noUser": {
+        "title": "סליחה, הגינה לא נמצאה",
+        "loginLink": "עליך להיכנס",
+        "ctaSignedOutSuffix": "על מנת להוסיף את הגינה שלך"
+      }
+    },
+    "directions": {
+      "error": "סליחה, יכולות הרחרוח כנראה לא זמינים כרגע"
+    },
+    "popup": {
+      "loading": "מרחרחים את הדרך...",
+      "leadTheWay": "הראה את הדרך",
+      "view": "לעמוד הגינה"
+    },
+    "favorite": {
+      "ribbon": "גינה מועדפת!"
+    },
+    "busyHours": {
+      "status": {
+        "quiet": "שקט",
+        "medium": "בינוני",
+        "busy": "עמוס"
+      },
+      "login": "היכנסו",
+      "toAddDataSuffix": "כדי להוסיף נתונים",
+      "modal": {
+        "dogsCountLabel": "כמה כלבים יש כרגע בגינה?",
+        "hintSuffix": "* ניתן תמיד להוסיף דיווח על ידי לחיצה על סימן הפלוס בסעיף שעות העומס."
+      }
+    },
+    "sections": {
+      "about": "אודות",
+      "busyHours": "שעות עומס",
+      "liveStatus": "המצב כרגע"
+    },
+    "about": {
+      "size": "גודל",
+      "ground": "קרקע",
+      "shade": "צל",
+      "facilities": "מתקנים",
+      "boolean": {
+        "yes": "כן",
+        "no": "לא",
+        "unknown": "?"
+      },
+      "sizeLabel": {
+        "small": "קטן",
+        "medium": "בינוני",
+        "large": "גדול"
+      },
+      "groundOptions": {
+        "SAND": "חול",
+        "DIRT": "אדמה",
+        "GRASS": "דשא",
+        "SYNTHETIC_GRASS": "דשא סינטטי"
+      }
+    },
+    "conditions": {
+      "stillThere": "עדיין שם?",
+      "labels": {
+        "muddy": "בוץ",
+        "gateClosed": "שער סגור",
+        "underConstruction": "בעבודות",
+        "brokenFountain": "ברזיה מקולקלת"
+      }
+    },
+    "live": {
+      "report": "דיווח",
+      "friends": "חברים",
+      "visitors": "מבקרים",
+      "atTheParkRightNow": "בגינה כרגע",
+      "reportModal": {
+        "title": "על מה ברצונך לדווח?",
+        "noReportable": "כל הבעיות מדווחות"
+      }
+    },
+    "edit": {
+      "modal": {
+        "title": "הוסיפו את פרטי הגינה",
+        "sizeMeters": "גודל (במטרים)",
+        "groundCovering": "סוג הקרקע",
+        "containsFacilities": "האם יש מתקנים?",
+        "dailyShadeHours": "שעות צל ביום"
+      },
+      "choose": {
+        "update": "עדכון פרטי הגינה",
+        "report": "דיווח על פרטים שגויים"
+      }
+    },
+    "report": {
+      "modal": {
+        "textLabel": "ספרו לנו מה לא תקין כאן"
+      }
+    },
+    "checkin": {
+      "title": "ביקור נעים!",
+      "titleWithName": "ביקור נעים, {{name}}!",
+      "alreadyTitle": "האם את/ה הכלב של שרדינגר?",
+      "alreadyBody": "דיווחת שהנך בגינה אחרת. רוצה לעשות צ'ק-אין כאן במקום?",
+      "switchHere": "צ'ק-אין כאן"
+    },
+    "visitors": {
+      "onlyYou": "את/ה היחיד/ה כאן כרגע",
+      "count": "{{count}} כלבהאברים כרגע בגינה",
+      "count_one": "כלבהאבר/ית 1 כרגע בגינה",
+      "count_other": "{{count}} כלבהאברים כרגע בגינה",
+      "countWithMore": "ועוד {{count}} כלבהאברים",
+      "countWithMore_one": "ועוד כלבהאבר/ית אחד/ת",
+      "countWithMore_other": "ועוד {{count}} כלבהאברים"
+    }
+  },
+  "components": {
+    "carousel": {
+      "addPhoto": "הוספת תמונה",
+      "confirmTitle": "שים/י לב!",
+      "confirmBody": "האם את/ה בטוח/ה שברצונך לשלוח את התמונה לחווה בצפון שם היא תוכל לרוץ חופשיה לנצח?",
+      "noPhotosYet": "עוד אין תמונות לגינה זו",
+      "login": "היכנסו",
+      "toAddDataSuffix": "כדי להוסיף נתונים"
+    },
+    "camera": {
+      "uploadImage": "העלאת תמונה",
+      "takePhoto": "צילום תמונה"
+    },
+    "enlargeImage": {
+      "setPrimary": "הגדרה כתמונה ראשית"
+    },
+    "gallery": {
+      "title": "גלריה"
+    }
+  },
+  "reviews": {
+    "modal": {
+      "title": "איך היה לך בגינה?",
+      "placeholderTitle": "כותרת",
+      "placeholderContent": "נשמח לשמוע עוד...",
+      "placeholderContentLabel": "תוכן",
+      "rankTitle": "דירוג הגינה",
+      "reportAnonymously": "דיווח בעילום שם"
+    }
+  },
+
+  "location": {
+    "permissions": {
+      "message": "לא הצלחנו לגשת למיקום. ניתן להפעיל הרשאות מיקום בהגדרות המכשיר.",
+      "dontShowAgain": "לא להציג שוב"
+    },
+    "input": {
+      "clickMap": "לחצו על המפה או",
+      "useCurrent": "השתמשו במיקום הנוכחי",
+      "searchAddress": "חיפוש כתובת",
+      "errorAddressNotFound": "אופס! לא הצלחנו למצוא את הכתובת הזו"
+    }
+  },
+  "charts": {
+    "busyHours": {
+      "weekdays": "ימי חול",
+      "weekend": "סופ\"ש"
+    }
+  },
+  "weather": {
+    "button": {
+      "ariaLabel": "תחזית מזג אוויר"
+    },
+    "chanceOfRainNextHour": "{{count}}% סיכוי לגשם בשעה הקרובה",
+    "descriptions": {
+      "clearSky": "שמיים בהירים",
+      "mainlyClear": "בהיר לרוב",
+      "cloudy": "מעונן",
+      "foggy": "ערפילי",
+      "lightRain": "גשם קל",
+      "heavyRain": "גשם חזק",
+      "thunderstorm": "סופת רעמים",
+      "snow": "שלג",
+      "unknown": "לא ידוע"
+    }
+  },
+  "dogs": {
+    "gender": {
+      "MALE": "זכר",
+      "FEMALE": "נקבה"
+    },
+    "size": {
+      "SMALL": "קטן",
+      "MEDIUM": "בינוני",
+      "LARGE": "גדול"
+    },
+    "energy": {
+      "LOW": "נמוכה",
+      "MEDIUM": "בינונית",
+      "HIGH": "גבוהה"
+    },
+    "labels": {
+      "ownersDog": "הכלב של {{name}}",
+      "ownersDogMale": "הכלב של {{name}}",
+      "ownersDogFemale": "הכלבה של {{name}}"
+    },
+    "delete": {
+      "confirm": "את/ה בטוח/ה שברצונך להיפרד מ{{name}}?"
+    },
+    "age": {
+      "justBorn": "נולד/ה זה עתה",
+      "justBornMale": "נולד זה עתה",
+      "justBornFemale": "נולדה זה עתה",
+      "oldSingularYear": "בן שנה",
+      "oldMaleSingularYear": "בן שנה",
+      "oldFemaleSingularYear": "בת שנה",
+      "oldSingularMonth": "בן חודש",
+      "oldMaleSingularMonth": "בן חודש",
+      "oldFemaleSingularMonth": "בת חודש",
+      "old": "בן/בת {{diff}} {{unit}}",
+      "oldMale": "בן {{diff}} {{unit}}",
+      "oldFemale": "בת {{diff}} {{unit}}",
+      "oldCompliment": "בן/בת {{diff}} {{unit}}. לא פלא ש{{pronoun}} נראה/ת כל כך טוב!",
+      "oldComplimentMale": "בן {{diff}} {{unit}}. לא פלא שהוא נראה כל כך טוב!",
+      "oldComplimentFemale": "בת {{diff}} {{unit}}. לא פלא שהיא נראית כל כך טוב!",
+      "she": "היא",
+      "he": "הוא",
+      "units": {
+        "year": "שנה",
+        "years": "שנים",
+        "month": "חודש",
+        "months": "חודשים",
+        "yearTwo": "שנתיים",
+        "monthTwo": "חודשיים"
+      }
+    },
+    "details": {
+      "title": "אודות",
+      "fields": {
+        "size": "גודל",
+        "temperament": "אופי",
+        "energy": "אנרגיה",
+        "possessive": "רכושנות"
+      },
+      "addDetails": "הוספה",
+      "notAddedYet": "עוד לא הוסיפו את הפרטים",
+      "description": "תיאור"
+    },
+    "prefs": {
+      "title": "העדפות",
+      "addYourPrefs": "הוספה",
+      "notAddedYet": "עוד לא הוסיפו את הפרטים"
+    },
+    "edit": {
+      "titleUpdate": "עדכון הפרטים של {{name}}",
+      "titleAdd": "פרטי הכלבה/ה",
+      "labels": {
+        "name": "שם *",
+        "breed": "גזע *",
+        "gender": "מין *",
+        "birthday": "תאריך לידה *",
+        "size": "גודל",
+        "temperament": "אופי",
+        "energy": "אנרגיה",
+        "possessive": "רכושנות",
+        "likes": "מה אוהב/ת (להפריד בפסיקים)",
+        "dislikes": "מה לא אוהב/ת (להפריד בפסיקים)",
+        "description": "תיאור"
+      }
+    },
+    "breeds": {
+      "Mixed": "גזע מעורב",
+      "Other": "גזע לא ידוע",
+      "Affenpinscher": "אפנפינשר",
+      "Afghan Hound": "כלב אפגני",
+      "Airedale Terrier": "איירדייל טרייר",
+      "Akbash Dog": "אקבאש",
+      "Akita": "אקיטה",
+      "Alaskan Klee Kai": "אלסקן קלי קאי",
+      "Alaskan Malamute": "אלסקן מלמוט",
+      "American Bulldog": "בולדוג אמריקאי",
+      "American Cocker Spaniel": "קוקר ספנייל אמריקאי",
+      "American Eskimo Dog": "כלב אסכימו אמריקאי",
+      "American Foxhound": "פוקסהאונד אמריקאי",
+      "American Hairless Terrier": "טרייר אמריקאי חסר שיער",
+      "American Pit Bull Terrier": "פיטבול אמריקאי",
+      "American Staffordshire Terrier": "אמריקן סטאפורדשייר טרייר",
+      "American Water Spaniel": "ספנייל מים אמריקאי",
+      "Anatolian Shepherd Dog": "רועה אנטוליני",
+      "Appenzeller Sennenhund": "אפנצלר זננהונד",
+      "Australian Cattle Dog": "כלב בקר אוסטרלי",
+      "Australian Kelpie": "קלפי אוסטרלי",
+      "Australian Shepherd": "רועה אוסטרלי",
+      "Australian Terrier": "טרייר אוסטרלי",
+      "Azawakh": "אזוואק",
+      "Basenji": "בסנג'י",
+      "Basset Fauve de Bretagne": "באסט פוב דה ברטאן",
+      "Basset Hound": "בסט האונד",
+      "Bavarian Mountain Scent Hound": "כלב ריח הרים בווארי",
+      "Beagle": "ביגל",
+      "Bearded Collie": "קולי מזוקן",
+      "Beauceron": "בוסרון",
+      "Bedlington Terrier": "בדלינגטון טרייר",
+      "Belgian Laekenois": "לקנואה בלגי",
+      "Belgian Malinois": "מלינואה בלגי",
+      "Belgian Sheepdog": "רועה בלגי",
+      "Belgian Tervuren": "טרוורן בלגי",
+      "Bergamasco Sheepdog": "רועה ברגמסקו",
+      "Berger Picard": "ברז'ה פיקאר",
+      "Bernese Mountain Dog": "כלב הרים ברנזי",
+      "Bichon Frise": "בישון פריזה",
+      "Biewer Terrier": "בייוור טרייר",
+      "Black Russian Terrier": "טרייר רוסי שחור",
+      "Bloodhound": "בלאדהאונד",
+      "Bluetick Coonhound": "בלוטיק קוןהאונד",
+      "Boerboel": "בורבול",
+      "Bolognese": "בולונז",
+      "Border Collie": "בורדר קולי",
+      "Border Terrier": "בורדר טרייר",
+      "Borzoi": "בורזוי",
+      "Boston Terrier": "בוסטון טרייר",
+      "Bouvier des Flandres": "בובייה דה פלנדר",
+      "Boxer": "בוקסר",
+      "Boykin Spaniel": "בויקין ספנייל",
+      "Bracco Italiano": "בראקו איטלקי",
+      "Briard": "בריאר",
+      "Brittany": "בריטני",
+      "Brussels Griffon": "בריסל גריפון",
+      "Bull Terrier": "בול טרייר",
+      "Bullmastiff": "בולמסטיף",
+      "Cairn Terrier": "קרן טרייר",
+      "Canaan Dog": "כלב כנעני",
+      "Cane Corso": "קנה קורסו",
+      "Cardigan Welsh Corgi": "קורגי וולשי קרדיגן",
+      "Carolina Dog": "קרוליינה דוג",
+      "Catahoula Leopard Dog": "קטהולה לאופרד דוג",
+      "Cavalier King Charles Spaniel": "קווליר קינג צ'ארלס ספנייל",
+      "Cesky Terrier": "צ'סקי טרייר",
+      "Chesapeake Bay Retriever": "צ'ספיק ביי רטריבר",
+      "Chihuahua": "צ'יוואווה",
+      "Chinese Crested": "סיני מצויץ",
+      "Chinese Shar-Pei": "שאר‑פיי סיני",
+      "Chinook": "שינוק",
+      "Chow Chow": "צ'או צ'או",
+      "Cirneco dell'Etna": "צירנקו דל'אתנה",
+      "Clumber Spaniel": "קלמבר ספנייל",
+      "Cocker Spaniel": "קוקר ספנייל",
+      "Collie": "קולי",
+      "Coton de Tulear": "קוטון דה טולאר",
+      "Curly-Coated Retriever": "רטריבר מתולתל",
+      "Dachshund": "תחש",
+      "Dalmatian": "דלמטי",
+      "Dandie Dinmont Terrier": "דנדי דינמונט טרייר",
+      "Doberman Pinscher": "דוברמן פינשר",
+      "Dogo Argentino": "דוגו ארגנטינו",
+      "Dogue de Bordeaux": "דוג דה בורדו",
+      "Dutch Shepherd": "רועה הולנדי",
+      "English Cocker Spaniel": "קוקר ספנייל אנגלי",
+      "English Foxhound": "פוקסהאונד אנגלי",
+      "English Setter": "סטטר אנגלי",
+      "English Springer Spaniel": "ספרינגר ספנייל אנגלי",
+      "English Toy Spaniel": "טוי ספנייל אנגלי",
+      "Entlebucher Mountain Dog": "כלב הרים אנטלבוק",
+      "Estrela Mountain Dog": "כלב הרים אסטרלה",
+      "Eurasier": "יורזייר",
+      "Field Spaniel": "פילד ספנייל",
+      "Finnish Lapphund": "לפ'הונד פינלנדי",
+      "Finnish Spitz": "שפיץ פינלנדי",
+      "Flat-Coated Retriever": "רטריבר חלק שיער",
+      "French Bulldog": "בולדוג צרפתי",
+      "French Spaniel": "ספנייל צרפתי",
+      "German Longhaired Pointer": "פוינטר גרמני ארוך שיער",
+      "German Pinscher": "פינשר גרמני",
+      "German Shepherd": "רועה גרמני",
+      "German Shorthaired Pointer": "פוינטר גרמני קצר שיער",
+      "German Wirehaired Pointer": "פוינטר גרמני שיער‑תיל",
+      "Giant Schnauzer": "שנאוצר ענק",
+      "Glen of Imaal Terrier": "גלן אוף אימאל טרייר",
+      "Golden Retriever": "גולדן רטריבר",
+      "Gordon Setter": "גורדון סטטר",
+      "Grand Basset Griffon Vendéen": "גראן באסה גריפון ונדיין",
+      "Great Dane": "דני ענק",
+      "Great Pyrenees": "פירנאי גדול",
+      "Greater Swiss Mountain Dog": "כלב הרים שווייצרי גדול",
+      "Greyhound": "גרייהאונד",
+      "Hamiltonstovare": "המילטונסטאוורה",
+      "Harrier": "הארייר",
+      "Havanese": "הוואנז",
+      "Ibizan Hound": "איביזן האונד",
+      "Icelandic Sheepdog": "כלב רועים איסלנדי",
+      "Irish Red and White Setter": "סטטר אירי אדום‑לבן",
+      "Irish Setter": "סטטר אירי",
+      "Irish Terrier": "טרייר אירי",
+      "Irish Water Spaniel": "ספנייל מים אירי",
+      "Irish Wolfhound": "וולפהאונד אירי",
+      "Italian Greyhound": "גרייהאונד איטלקי",
+      "Jack Russell Terrier": "ג'ק ראסל טרייר",
+      "Japanese Chin": "יפני צ'ין",
+      "Japanese Spitz": "שפיץ יפני",
+      "Jindo": "ג'ינדו",
+      "Kai Ken": "קאי‑קן",
+      "Karelian Bear Dog": "כלב דוב קרלי",
+      "Keeshond": "קיסהונד",
+      "Kerry Blue Terrier": "קרי בלו טרייר",
+      "Kishu Ken": "קישו קן",
+      "Komondor": "קומונדור",
+      "Kooikerhondje": "קויקרהונדייה",
+      "Kuvasz": "קובאז",
+      "Labrador Retriever": "לברדור רטריבר",
+      "Lagotto Romagnolo": "לגוטו רומניאולו",
+      "Lakeland Terrier": "לקלנד טרייר",
+      "Lancashire Heeler": "לנקשייר הילר",
+      "Leonberger": "לאונברגר",
+      "Lhasa Apso": "להאסה אפסו",
+      "Lowchen": "לאוכן",
+      "Maltese": "מלטז",
+      "Manchester Terrier": "מנצ'סטר טרייר",
+      "Maremma Sheepdog": "רועה מרמה",
+      "Mastiff": "מסטיף",
+      "Miniature American Shepherd": "רועה אמריקאי ננסי",
+      "Miniature Bull Terrier": "בול טרייר ננסי",
+      "Miniature Pinscher": "פינשר ננסי",
+      "Miniature Schnauzer": "שנאוצר ננסי",
+      "Mudi": "מודי",
+      "Neapolitan Mastiff": "מסטיף נפוליטני",
+      "Newfoundland": "ניופאונדלנד",
+      "Norfolk Terrier": "נורפוק טרייר",
+      "Norwegian Buhund": "בוהונד נורבגי",
+      "Norwegian Elkhound": "אלקהאונד נורבגי",
+      "Norwegian Lundehund": "לונדהונד נורבגי",
+      "Norwich Terrier": "נוריץ' טרייר",
+      "Nova Scotia Duck Tolling Retriever": "נובה סקושה דאק טולינג רטריבר",
+      "Old English Sheepdog": "בובטל",
+      "Otterhound": "אוטרהאונד",
+      "Papillon": "פפילון",
+      "Parson Russell Terrier": "פרסון ראסל טרייר",
+      "Pekingese": "פקינז",
+      "Pembroke Welsh Corgi": "קורגי וולשי פמברוק",
+      "Peruvian Inca Orchid": "כלב פרואני אינקה אורכיד",
+      "Pharaoh Hound": "כלב פרעה",
+      "Plott Hound": "פלוט האונד",
+      "Pointer": "פוינטר",
+      "Polish Lowland Sheepdog": "כלב רועים פולני נמוך‑ארץ",
+      "Pomeranian": "פומרניאן",
+      "Poodle": "פודל",
+      "Portuguese Podengo": "פודנגו פורטוגזי",
+      "Portuguese Pointer": "פוינטר פורטוגזי",
+      "Portuguese Water Dog": "כלב מים פורטוגזי",
+      "Presa Canario": "פרסה קנריו",
+      "Pug": "פאג",
+      "Puli": "פולי",
+      "Pumi": "פומי",
+      "Pyrenean Shepherd": "רועה פירנאי",
+      "Rat Terrier": "ראט טרייר",
+      "Redbone Coonhound": "רדבון קוןהאונד",
+      "Rhodesian Ridgeback": "רודז'יאן רידג'בק",
+      "Rottweiler": "רוטוויילר",
+      "Russian Toy": "רוסיאן טוי",
+      "Saluki": "סלוקי",
+      "Samoyed": "סמויד",
+      "Schipperke": "שיפרקה",
+      "Scottish Deerhound": "דירהאונד סקוטי",
+      "Scottish Terrier": "סקוטי טרייר",
+      "Sealyham Terrier": "סילהאם טרייר",
+      "Shetland Sheepdog": "שלטי",
+      "Shiba Inu": "שיבה אינו",
+      "Shih Tzu": "שי צו",
+      "Shikoku": "שיקוקו",
+      "Siberian Husky": "האסקי סיבירי",
+      "Silken Windhound": "סילקן ווינדהאונד",
+      "Silky Terrier": "סילקי טרייר",
+      "Skye Terrier": "סקאי טרייר",
+      "Sloughi": "סלוגי",
+      "Slovakian Rough Haired Pointer": "פוינטר סלובקי שיער גס",
+      "Small Munsterlander": "מונסטרלנדר קטן",
+      "Soft Coated Wheaten Terrier": "טרייר ויטן שיער רך",
+      "Spanish Mastiff": "מסטיף ספרדי",
+      "Spanish Water Dog": "כלב מים ספרדי",
+      "Spinone Italiano": "ספינונה איטלקי",
+      "St. Bernard": "סן ברנרד",
+      "Staffordshire Bull Terrier": "סטאפורדשייר בול טרייר",
+      "Standard Schnauzer": "שנאוצר סטנדרטי",
+      "Sussex Spaniel": "סאסקס ספנייל",
+      "Swedish Vallhund": "ולהונד שבדי",
+      "Thai Ridgeback": "תאי רידג'בק",
+      "Tibetan Mastiff": "מסטיף טיבטי",
+      "Tibetan Spaniel": "ספנייל טיבטי",
+      "Tibetan Terrier": "טרייר טיבטי",
+      "Tornjak": "טורניאק",
+      "Tosa": "טוסה",
+      "Toy Fox Terrier": "טוי פוקס טרייר",
+      "Toy Manchester Terrier": "טוי מנצ'סטר טרייר",
+      "Treeing Walker Coonhound": "טרינג ווקר קוןהאונד",
+      "Vizsla": "ויזלה",
+      "Weimaraner": "ויימרנר",
+      "Welsh Springer Spaniel": "וולש ספרינגר ספנייל",
+      "Welsh Terrier": "וולש טרייר",
+      "West Highland White Terrier": "וסט היילנד וייט טרייר",
+      "Whippet": "וויפט",
+      "Wire Fox Terrier": "ווייר פוקס טרייר",
+      "Wirehaired Pointing Griffon": "גריפון מצביעה שיער‑תיל",
+      "Xoloitzcuintli": "שולואיצקווינטלי",
+      "Yorkshire Terrier": "יורקשייר טרייר"
+    }
+  },
+  "grammar": {
+    "genderPrefixes": {
+      "male": "בן",
+      "female": "בת",
+      "neutral": "בן/בת"
+    },
+    "dualUnits": {
+      "year": "שנתיים",
+      "month": "חודשיים",
+      "day": "יומיים",
+      "hour": "שעתיים",
+      "week": "שבועיים"
+    },
+    "config": {
+      "dualFormOmitsNumber": true
+    }
+  },
+  "toasts": {
+    "friendRequest": {
+      "removed": "בקשת החברות הוסרה",
+      "sent": "בקשת החברות נשלחה",
+      "fail": "שליחת בקשת החברות נכשלה"
+    },
+    "friendship": {
+      "nowFriends": "אתם עכשיו חברים!",
+      "changed": "סטטוס החברות שונה",
+      "noLongerFriends": "אתם כבר לא חברים"
+    },
+    "upload": {
+      "error": "סליחה, קרתה שגיאה"
+    },
+    "generic": {
+      "error": "סליחה, קרתה שגיאה"
+    },
+    "default": {
+      "goodBoy": "יס!",
+      "goodBoyAlt": "יס!"
+    },
+    "checkout": {
+      "hadFun": "מקווים שהביקור היה האו וואו!",
+      "askReview": "מקווים שהביקור היה האו וואו! נשמח לביקורת על הגינה!"
+    },
+    "live": {
+      "reportThanks": "תודה על העדכון!",
+      "reportRejected": "הדיווח לא התקבל. נסו שוב מאוחר יותר.",
+      "confirmThanks": "תודה על העדכון!",
+      "confirmRejected": "העדכון נכשל. נסו שוב מאוחר יותר.",
+      "updateThanks": "תודה על העדכון!",
+      "updateRejected": "העדכון נכשל. נסו שוב מאוחר יותר."
+    },
+    "share": {
+      "thanks": "תודה על השיתוף!",
+      "copied": "הקישור הועתק"
+    }
+  },
+  "reports": {
+    "reviewModal": {
+      "title": "למה ברצונך לדווח על הביקורת הזו"
+    },
+    "reasons": {
+      "spam": {
+        "title": "ספאם",
+        "content": "מכילה מידע פרסומי או חוזר על עצמו"
+      },
+      "inappropriate": {
+        "title": "תוכן לא הולם",
+        "content": "מכילה שפה פוגענית, הטרדה או דברי שנאה"
+      },
+      "misinformation": {
+        "title": "מידע מטעה",
+        "content": "מפיצה מידע שגוי"
+      },
+      "fake": {
+        "title": "פייק",
+        "content": "מכילה פייק או מוטה"
+      },
+      "personal": {
+        "title": "מידע אישי",
+        "content": "מכילה מידע אישי"
+      }
+    }
+  }
+}

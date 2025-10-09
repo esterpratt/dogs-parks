@@ -10,6 +10,7 @@ import { FormModal } from '../modals/FormModal';
 import styles from './ReportConditionModal.module.scss';
 import { useAddParkCondition } from '../../hooks/api/useAddParkCondition';
 import { PARK_CONDITIONS } from '../../utils/parkConditions';
+import { useTranslation } from 'react-i18next';
 
 interface ReportConditionModalProps {
   isOpen: boolean;
@@ -24,6 +25,7 @@ export const ReportConditionModal: React.FC<ReportConditionModalProps> = ({
   parkId,
   activeConditions,
 }) => {
+  const { t } = useTranslation();
   const { notify } = useNotification();
   const { mutate, isPending } = useAddParkCondition();
   const [chosenCondition, setChosenCondition] = useState<ParkCondition | null>(
@@ -47,12 +49,12 @@ export const ReportConditionModal: React.FC<ReportConditionModalProps> = ({
       },
       {
         onSuccess: () => {
-          notify('Thanks for keeping the pack updated!');
+          notify(t('toasts.live.reportThanks'));
           onClose();
           setChosenCondition(null);
         },
         onError: () => {
-          notify('Your report was not accepted. Please try again later.', true);
+          notify(t('toasts.live.reportRejected'), true);
         },
       }
     );
@@ -66,15 +68,15 @@ export const ReportConditionModal: React.FC<ReportConditionModalProps> = ({
         onClose();
       }}
       onSave={reportableConditions.length === 0 ? undefined : onSubmitReport}
-      saveText="Report"
+      saveText={t('parks.live.report')}
       disabled={!chosenCondition || isPending}
       className={styles.modal}
-      title="Spot an issue here?"
+      title={t('parks.live.reportModal.title')}
     >
       <div className={styles.options} data-test="report-condition-modal">
         {reportableConditions.length === 0 ? (
           <p className={styles.noReportableConditions}>
-            All conditions are currently reported.
+            {t('parks.live.reportModal.noReportable')}
           </p>
         ) : (
           reportableConditions.map((option) => {
@@ -97,7 +99,7 @@ export const ReportConditionModal: React.FC<ReportConditionModalProps> = ({
                   disabled={isPending}
                 />
                 <label htmlFor={option.id}>
-                  <option.icon size={18} /> <span>{option.value}</span>
+                  <option.icon size={18} /> <span>{t(option.key)}</span>
                 </label>
               </div>
             );

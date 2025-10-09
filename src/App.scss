@@ -83,6 +83,7 @@ textarea {
 
     &.slick-next {
       right: -4px;
+      left: auto;
 
       &::before {
         margin-bottom: 12px;
@@ -194,16 +195,27 @@ textarea {
   }
 }
 
-.leaflet-left .leaflet-control {
-  margin-left: 0px;
+.rtl .leaflet-touch .leaflet-control-layers,
+.rtl .leaflet-touch .leaflet-bar.leaflet-control-zoom {
+  margin-right: 0;
+  margin-left: calc(16px + var(--safe-area-inset-left, 0px));
 }
 
-.leaflet-top.leaflet-left {
+.leaflet-left .leaflet-control {
+  margin-inline-start: 0px;
+}
+
+.leaflet-top.leaflet-left,
+.leaflet-top.leaflet-right {
   width: 100%;
 }
 
 .leaflet-control {
   float: none;
+}
+
+.rtl .leaflet-control {
+  float: left;
 }
 
 .leaflet-control-geocoder {
@@ -232,6 +244,11 @@ textarea {
     }
   }
 
+  .rtl &.leaflet-bar.leaflet-control,
+  &.leaflet-bar.leaflet-control.leaflet-control-geocoder-expanded {
+    float: right;
+  }
+
   &.leaflet-bar.leaflet-control,
   &.leaflet-bar.leaflet-control.leaflet-control-geocoder-expanded {
     font-family: $font-family;
@@ -246,7 +263,7 @@ textarea {
     .leaflet-control-geocoder-alternatives {
       position: absolute;
       top: 120%;
-      left: 0;
+      inset-inline-start: 0;
       width: 100%;
       background-color: inherit;
       font-weight: inherit;
@@ -272,6 +289,7 @@ textarea {
 
         a {
           color: inherit;
+          text-align: start;
 
           .leaflet-control-geocoder-address-context {
             color: $orange;
@@ -291,7 +309,7 @@ textarea {
         outline: none;
         font-size: 20px;
         font-family: inherit;
-        padding-left: 12px;
+        padding-inline-start: 12px;
         color: var(--color-text);
         background-color: inherit;
         font-weight: inherit;

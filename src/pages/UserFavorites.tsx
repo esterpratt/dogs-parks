@@ -1,25 +1,34 @@
 import { useParams, Link } from 'react-router-dom';
-import { useQueries, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { ParkPreview } from '../components/parks/ParkPreview';
-import { fetchPark, fetchParksJSON } from '../services/parks';
+import { fetchParksJSON } from '../services/parks';
 import { fetchUserFavorites } from '../services/favorites';
 import { Loader } from '../components/Loader';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
+import { useAppLocale } from '../hooks/useAppLocale';
+import { parksKey } from '../hooks/api/keys';
+import { usePrefetchParksWithTranslation } from '../hooks/api/usePrefetchParksWithTranslation';
 import styles from './UserFavorites.module.scss';
+import { useTranslation } from 'react-i18next';
 
 const UserFavorites = () => {
   const { id: userId } = useParams();
+  const { t } = useTranslation();
 
   const { data: favoriteParkIds, isLoading: isLoadingFavorites } = useQuery({
     queryKey: ['favorites', userId],
     queryFn: async () => fetchUserFavorites(userId!),
   });
 
+  const currentLanguage = useAppLocale();
+
   const { data: parks, isLoading: isLoadingParks } = useQuery({
-    queryKey: ['parks'],
-    queryFn: fetchParksJSON,
+    queryKey: parksKey(currentLanguage),
+    queryFn: () => fetchParksJSON({ language: currentLanguage }),
     enabled: !!favoriteParkIds?.length,
+    placeholderData: (previous) => previous,
+    retry: 0,
   });
 
   const isLoading = isLoadingParks || isLoadingFavorites;
@@ -33,12 +42,10 @@ const UserFavorites = () => {
     ? parks.filter((park) => favoriteParkIds?.includes(park.id))
     : [];
 
-  // prefetch parks
-  useQueries({
-    queries: favoriteParks.map((park) => ({
-      queryKey: ['park', park.id],
-      queryFn: () => fetchPark(park.id),
-    })),
+  // prefetch favorite parks with translations for current language
+  usePrefetchParksWithTranslation({
+    parkIds: favoriteParks.map((p) => p.id),
+    language: currentLanguage,
   });
 
   if (showLoader) {
@@ -48,11 +55,11 @@ const UserFavorites = () => {
   if (!isLoading && !favoriteParkIds?.length) {
     return (
       <div className={classnames(styles.container, styles.empty)}>
-        <div>No favorite parks yet.</div>
+        <div>{t('favorites.none')}</div>
         <div>
-          Sniff out nearby parks{' '}
+          {t('favorites.sniffParksPrefix')}{' '}
           <Link to="/parks" className={styles.link}>
-            here!
+            {t('favorites.sniffParksLink')}
           </Link>
         </div>
       </div>
@@ -61,7 +68,7 @@ const UserFavorites = () => {
 
   return (
     <div className={styles.container}>
-      <span className={styles.title}>My favorite parks</span>
+      <span className={styles.title}>{t('favorites.title')}</span>
       <div className={styles.list}>
         {favoriteParks.map((park) => (
           <ParkPreview park={park} key={park.id} />

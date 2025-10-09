@@ -5,6 +5,7 @@ import { Dog } from '../../types/dog';
 import { Button } from '../Button';
 import { Section } from '../section/Section';
 import styles from './DogPreferences.module.scss';
+import { useTranslation } from 'react-i18next';
 
 interface DogPreferencesProps {
   dog: Dog;
@@ -19,13 +20,14 @@ const DogPreferences: React.FC<DogPreferencesProps> = ({
   userName,
   onEditDog,
 }) => {
+  const { t } = useTranslation();
   const likes = dog.likes ? dog.likes.filter((item) => item) : [];
   const dislikes = dog.dislikes ? dog.dislikes.filter((item) => item) : [];
 
   return (
     <Section
       className={styles.container}
-      title="Preferences"
+      title={t('dogs.prefs.title')}
       contentCmp={
         <div
           className={classnames(styles.content, {
@@ -40,12 +42,12 @@ const DogPreferences: React.FC<DogPreferencesProps> = ({
                   className={styles.button}
                   onClick={onEditDog}
                 >
-                  Add your dog's preferences
+                  {t('dogs.prefs.addYourPrefs')}
                 </Button>
               ) : (
                 <div className={styles.empty}>
                   <span className={styles.userName}>{userName} </span>
-                  <span>did not add their dog's preferences yet</span>
+                  <span>{t('dogs.prefs.notAddedYet')}</span>
                 </div>
               )}
             </>

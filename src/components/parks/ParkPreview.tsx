@@ -1,7 +1,8 @@
 import React, { MouseEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Eye, Navigation } from 'lucide-react';
-import { Park } from '../../types/park';
+import { useTranslation } from 'react-i18next';
+import { ParkJSON as Park } from '../../types/park';
 import { ParkImageLazy } from '../park/ParkImageLazy';
 import { Card } from '../card/Card';
 import styles from './ParkPreview.module.scss';
@@ -11,6 +12,7 @@ interface ParkPreviewProps {
 }
 
 const ParkPreview: React.FC<ParkPreviewProps> = ({ park }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const onClickMapLink = (event: MouseEvent) => {
     event.preventDefault();
@@ -47,7 +49,7 @@ const ParkPreview: React.FC<ParkPreviewProps> = ({ park }) => {
           children: (
             <Link to={`/parks/${park.id}`} className={styles.viewParkButton}>
               <Eye size={12} />
-              <span>View park</span>
+              <span>{t('parks.preview.view')}</span>
             </Link>
           ),
         },
@@ -55,7 +57,7 @@ const ParkPreview: React.FC<ParkPreviewProps> = ({ park }) => {
           children: (
             <>
               <Navigation size={12} />
-              <span>See in map</span>
+              <span>{t('parks.preview.seeOnMap')}</span>
             </>
           ),
           onClick: onClickMapLink,

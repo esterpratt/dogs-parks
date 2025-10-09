@@ -8,6 +8,7 @@ import {
 } from '../../services/favorites';
 import { queryClient } from '../../services/react-query';
 import { ParkIcon } from './ParkIcon';
+import { useTranslation } from 'react-i18next';
 import styles from './FavoriteButton.module.scss';
 
 interface FavoriteButtonProps {
@@ -16,6 +17,7 @@ interface FavoriteButtonProps {
 }
 
 const FavoriteButton: React.FC<FavoriteButtonProps> = ({ parkId, userId }) => {
+  const { t } = useTranslation();
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const { data: favoritesParkIds } = useQuery({
     queryKey: ['favorites', userId],
@@ -55,7 +57,11 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ parkId, userId }) => {
       IconCmp={Heart}
       onClick={toggleFavorite}
       iconColor={isFavorite ? styles.pink : styles.grey}
-      textCmp={<span>{isFavorite ? 'Unlike' : 'Like'}</span>}
+      textCmp={
+        <span>
+          {isFavorite ? t('common.actions.unlike') : t('common.actions.like')}
+        </span>
+      }
     />
   );
 };

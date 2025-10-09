@@ -1,4 +1,5 @@
 import { useState, useContext, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Settings, Bell } from 'lucide-react';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { Button } from '../components/Button';
@@ -16,6 +17,7 @@ import styles from './Notifications.module.scss';
 
 const Notifications = () => {
   const { userId } = useContext(UserContext);
+  const { t } = useTranslation();
 
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [newIds, setNewIds] = useState<string[]>([]);
@@ -91,11 +93,12 @@ const Notifications = () => {
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.titleRow}>
-          <h1 className={styles.title}>Notifications</h1>
+          <h1 className={styles.title}>{t('notifications.title')}</h1>
           <Button
             variant="simple"
             onClick={() => setIsSettingsModalOpen(true)}
             className={styles.settingsButton}
+            aria-label={t('common.actions.openSettings')}
           >
             <Settings size={24} />
           </Button>
@@ -110,7 +113,7 @@ const Notifications = () => {
               <div className={styles.emptyIcon}>
                 <Bell size={64} />
               </div>
-              <div className={styles.emptyText}>You have no notifications</div>
+              <div className={styles.emptyText}>{t('notifications.empty')}</div>
             </div>
           ) : (
             <NotificationsList

@@ -11,9 +11,11 @@ import { queryClient } from '../services/react-query';
 import { Review, ReviewData } from '../types/review';
 import { ReviewModalContextProvider } from '../context/ReviewModalContext';
 import styles from './UserReviews.module.scss';
+import { useTranslation } from 'react-i18next';
 
 const UserReviews = () => {
   const { user } = useOutletContext() as { user: User };
+  const { t } = useTranslation();
 
   const { data: reviews } = useQuery({
     queryKey: ['reviews', user.id],
@@ -75,7 +77,7 @@ const UserReviews = () => {
   return (
     <ReviewModalContextProvider onUpdateReview={onUpdateReview}>
       <div className={styles.container}>
-        <div className={styles.title}>My park reviews</div>
+        <div className={styles.title}>{t('userReviews.title')}</div>
         {reviews.map((review) => {
           return (
             <ReviewPreview

@@ -29,6 +29,7 @@ import { Share } from '@capacitor/share';
 import { Park } from '../../types/park';
 import styles from './ParkHeader.module.scss';
 import { useUploadImage } from '../../hooks/api/useUploadImage';
+import { useTranslation } from 'react-i18next';
 
 interface ParkHeaderProps {
   park: Park;
@@ -36,6 +37,7 @@ interface ParkHeaderProps {
 
 const ParkHeader = (props: ParkHeaderProps) => {
   const { park } = props;
+  const { t } = useTranslation();
   const { user } = useContext(UserContext);
   const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
   const [imageToEnlarge, setImageToEnlarge] = useState<string>('');
@@ -63,15 +65,15 @@ const ParkHeader = (props: ParkHeaderProps) => {
   const onClickShareButton = async () => {
     if (isMobile()) {
       await Share.share({
-        title: 'Check this park out!',
-        text: `Hey, check out ${park.name} park:`,
+        title: t('parks.share.title'),
+        text: t('parks.share.text', { name: park.name }),
         url: `https://klavhub.com/share/parks/${park.id}`,
-        dialogTitle: 'Share this park with friends',
+        dialogTitle: t('parks.share.dialogTitle'),
       });
-      notify('Thanks for sharing!');
+      notify(t('toasts.share.thanks'));
     } else if (navigator.clipboard) {
       navigator.clipboard.writeText(location.href);
-      notify('Park link copied to clipboard');
+      notify(t('toasts.share.copied'));
     }
   };
 
@@ -93,10 +95,10 @@ const ParkHeader = (props: ParkHeaderProps) => {
           <>
             <Link to="/parks">
               <MoveLeft size={16} />
-              <span>All parks</span>
+              <span>{t('parks.breadcrumb.all')}</span>
             </Link>
             <Link to="/" state={{ location: park!.location }}>
-              <span>See in map</span>
+              <span>{t('parks.preview.seeOnMap')}</span>
               <MoveRight size={16} />
             </Link>
           </>
@@ -152,7 +154,7 @@ const ParkHeader = (props: ParkHeaderProps) => {
                 iconColor={styles.blue}
                 IconCmp={ShareIcon}
                 onClick={onClickShareButton}
-                textCmp={<span>Share</span>}
+                textCmp={<span>{t('common.actions.share')}</span>}
                 className={classnames(styles.share, {
                   [styles.alignRight]: !user,
                 })}

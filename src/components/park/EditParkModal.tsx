@@ -1,4 +1,5 @@
 import { ChangeEvent, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useRevalidator } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { Park, ParkMaterial } from '../../types/park';
@@ -36,6 +37,7 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
   onClose,
   park,
 }) => {
+  const { t } = useTranslation();
   const orientation = useOrientationContext((state) => state.orientation);
   const { revalidate } = useRevalidator();
   const { notify } = useNotification();
@@ -53,8 +55,8 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
         park.has_facilities === false
           ? 'No'
           : park.has_facilities
-          ? 'Yes'
-          : null,
+            ? 'Yes'
+            : null,
       materials: park.materials,
     };
   });
@@ -149,7 +151,7 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
       height={orientation === 'landscape' ? 98 : null}
       onSave={onSubmit}
       className={styles.modal}
-      title="Add the following park details"
+      title={t('parks.edit.modal.title')}
       titleClassName={styles.title}
     >
       <form className={styles.form}>
@@ -160,41 +162,54 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
             value={parkDetails.size?.toString() || ''}
             onChange={onInputChange}
             name="size"
-            label="Size (in meters)"
+            label={t('parks.edit.modal.sizeMeters')}
           />
         )}
         {!park.materials?.length && (
           <MultiSelectInputs
             options={[
-              { id: ParkMaterial.SAND, value: ParkMaterial.SAND },
-              { id: ParkMaterial.DIRT, value: ParkMaterial.DIRT },
-              { id: ParkMaterial.GRASS, value: ParkMaterial.GRASS },
+              {
+                id: ParkMaterial.SAND,
+                value: ParkMaterial.SAND,
+                label: t('parks.about.groundOptions.SAND'),
+              },
+              {
+                id: ParkMaterial.DIRT,
+                value: ParkMaterial.DIRT,
+                label: t('parks.about.groundOptions.DIRT'),
+              },
+              {
+                id: ParkMaterial.GRASS,
+                value: ParkMaterial.GRASS,
+                label: t('parks.about.groundOptions.GRASS'),
+              },
               {
                 id: ParkMaterial.SYNTHETIC_GRASS,
                 value: ParkMaterial.SYNTHETIC_GRASS,
+                label: t('parks.about.groundOptions.SYNTHETIC_GRASS'),
               },
             ]}
             value={parkDetails.materials || []}
             onInputChange={onInputChange}
             name="materials"
-            label="Ground Covering"
+            label={t('parks.edit.modal.groundCovering')}
           />
         )}
         {park.has_facilities === null && (
           <RadioInputs
             value={parkDetails.hasFacilities || ''}
             options={[
-              { value: 'Yes', id: 'yes' },
-              { value: 'No', id: 'no' },
+              { value: 'Yes', label: t('parks.about.boolean.yes'), id: 'yes' },
+              { value: 'No', label: t('parks.about.boolean.no'), id: 'no' },
             ]}
             onOptionChange={onInputChange}
             name="hasFacilities"
-            label="Contains Facilities?"
+            label={t('parks.edit.modal.containsFacilities')}
           />
         )}
         {park.shade === null && (
           <RangeInput
-            label="Daily Shade Hours"
+            label={t('parks.edit.modal.dailyShadeHours')}
             name="shade"
             value={parkDetails.shade?.toString() || ''}
             onChange={onInputChange}

@@ -66,6 +66,7 @@ export const UserLocationProvider = ({
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useUserLocation = <T,>(
   selector: (state: LocationStoreProps) => T
 ) => {

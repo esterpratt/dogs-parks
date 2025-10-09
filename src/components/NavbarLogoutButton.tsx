@@ -4,6 +4,7 @@ import styles from './NavbarBottom.module.scss';
 import { useContext } from 'react';
 import { UserContext } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 interface NavbarLogoutButtonProps {
   onClick: () => void;
@@ -13,6 +14,7 @@ const NavbarLogoutButton = (props: NavbarLogoutButtonProps) => {
   const { onClick } = props;
   const { userLogout } = useContext(UserContext);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const logout = () => {
     userLogout();
@@ -29,7 +31,7 @@ const NavbarLogoutButton = (props: NavbarLogoutButtonProps) => {
       data-test="navbar-logout"
     >
       <LogOut size={18} strokeWidth={2} />
-      <span>Logout</span>
+      <span>{t('common.actions.logout')}</span>
     </Button>
   );
 };

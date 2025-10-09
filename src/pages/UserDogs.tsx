@@ -11,6 +11,7 @@ import { EditDogModal } from '../components/dog/EditDogModal';
 import styles from './UserDogs.module.scss';
 import { Plus } from 'lucide-react';
 import { useUploadImage } from '../hooks/api/useUploadImage';
+import { useTranslation } from 'react-i18next';
 
 interface UserDogsProps {
   user: User;
@@ -22,6 +23,7 @@ interface UserDogsProps {
 const UserDogs = () => {
   const { user, dogs, dogImages, isSignedInUser } =
     useOutletContext() as UserDogsProps;
+  const { t } = useTranslation();
 
   const [isEditDogsModalOpen, setIsEditDogsModalOpen] = useState(false);
   const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
@@ -62,9 +64,10 @@ const UserDogs = () => {
           <div className={styles.titleContainer}>
             <div className={styles.titleText}>
               <span className={styles.name}>
-                {isSignedInUser ? 'My' : `${user.name}'s`}
+                {isSignedInUser
+                  ? t('userDogs.titleMyPack')
+                  : t('userDogs.titleUsersPack', { name: user.name })}
               </span>{' '}
-              pack
             </div>
             {isSignedInUser && (
               <Button
@@ -72,22 +75,22 @@ const UserDogs = () => {
                 onClick={() => setIsEditDogsModalOpen(true)}
               >
                 <Plus size={16} />
-                <span>Add dog</span>
+                <span>{t('userDogs.addDog')}</span>
               </Button>
             )}
           </div>
         )}
         {!dogs?.length && isSignedInUser && (
           <div className={styles.noDogsTitleContainer}>
-            <span>Your dog squad is looking pretty empty.</span>
-            <span>Time to recruit some furry friends!</span>
+            <span>{t('userDogs.emptySignedIn1')}</span>
+            <span>{t('userDogs.emptySignedIn2')}</span>
             {isSignedInUser && (
               <Button
                 className={styles.addDogButton}
                 onClick={() => setIsEditDogsModalOpen(true)}
               >
                 <Plus size={16} />
-                <span>Add dog</span>
+                <span>{t('userDogs.addDog')}</span>
               </Button>
             )}
           </div>
@@ -95,8 +98,9 @@ const UserDogs = () => {
         {!dogs?.length && !isSignedInUser && (
           <div className={styles.noDogsTitleContainer}>
             <div>
-              <span className={styles.name}>{user.name}'s </span>
-              <span>pack seems to be empty</span>
+              <span className={styles.name}>
+                {t('userDogs.otherEmpty', { name: user.name })}
+              </span>
             </div>
           </div>
         )}
@@ -118,7 +122,7 @@ const UserDogs = () => {
         onAddDog={onAddDog}
       />
       <CameraModal
-        title="Add your dog image"
+        title={t('userDogs.cameraModalTitle')}
         variant="top"
         onUploadImg={onAddDogImage}
         open={isCameraModalOpen}

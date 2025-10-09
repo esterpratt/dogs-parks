@@ -1,37 +1,169 @@
-import { Park } from '../types/park';
+import { Park, ParkJSON, RawParkData, TranslatedPark } from '../types/park';
+import type { AppLanguage } from '../types/language';
+import { APP_LANGUAGES } from '../utils/consts';
 import { throwError } from './error';
 import { fetchImagesByDirectory, uploadImage } from './image';
 import { supabase } from './supabase-client';
 import { getFileUrl } from './supabase-storage';
 
-const fetchParksJSON = async () => {
+interface FetchParksJSONParams {
+  language: AppLanguage;
+}
+
+interface FetchParkWithTranslationParams {
+  parkId: string;
+  language: AppLanguage;
+}
+
+const normalizeParkData = (rawPark: RawParkData): ParkJSON => {
+  return {
+    id: rawPark.id,
+    name: rawPark.name,
+    city: rawPark.city,
+    address: rawPark.address,
+    location: {
+      lat: rawPark.location.lat,
+      long: rawPark.location.long,
+    },
+  };
+};
+
+const fetchAndParseParksFile = async (
+  fileName: string
+): Promise<RawParkData[] | null> => {
   try {
     const url = await getFileUrl({
       bucketName: 'parks',
-      fileName: 'parks.json',
+      fileName,
     });
+
     const response = await fetch(url);
-    if (!response.ok) throw new Error('Failed to fetch parks file');
+
+    if (!response.ok) {
+      return null;
+    }
+
     const parks = await response.json();
-    return parks as Park[];
+
+    if (!Array.isArray(parks)) {
+      console.error(`Invalid parks data format in ${fileName}: expected array`);
+      return null;
+    }
+
+    return parks as RawParkData[];
+  } catch (error) {
+    console.warn(`Error fetching ${fileName}:`, error);
+    return null;
+  }
+};
+
+const fetchParksJSON = async (params: FetchParksJSONParams) => {
+  const { language } = params;
+
+  try {
+    const languageFileName = `parks-${language}.json`;
+    const languageResult = await fetchAndParseParksFile(languageFileName);
+
+    if (!languageResult) {
+      if (language === APP_LANGUAGES.EN) {
+        throw new Error(`Failed to fetch parks JSON for language: ${language}`);
+      }
+
+      // fallback to english
+      const englishFileName = `parks-${APP_LANGUAGES.EN}.json`;
+      const englishResult = await fetchAndParseParksFile(englishFileName);
+
+      if (!englishResult) {
+        throw new Error(`Failed to fetch parks JSON for language: ${language}`);
+      }
+
+      return englishResult.map(normalizeParkData);
+    }
+
+    return languageResult.map(normalizeParkData);
   } catch (error) {
     throwError(error);
   }
 };
 
-const fetchPark = async (parkId: string) => {
-  try {
-    const { data: park, error } = await supabase
-      .from('parks')
-      .select('*')
-      .eq('id', parkId)
-      .single();
+const fetchParkDataWithLanguage = async (
+  parkId: string,
+  language: AppLanguage
+) => {
+  const { data, error } = await supabase
+    .from('parks')
+    .select(
+      `
+      *,
+      park_translations!inner(
+        name,
+        city,
+        address,
+        language
+      )
+    `
+    )
+    .eq('id', parkId)
+    .eq('park_translations.language', language)
+    .single();
 
-    if (error) {
-      throw error;
+  return { data, error };
+};
+
+const fetchParkWithTranslation = async (
+  params: FetchParkWithTranslationParams
+) => {
+  const { parkId, language } = params;
+
+  try {
+    const { data: parkData, error } = await fetchParkDataWithLanguage(
+      parkId,
+      language
+    );
+
+    if (error || !parkData) {
+      if (language === APP_LANGUAGES.EN) {
+        throw error || new Error('Park not found');
+      }
+
+      // fallback to english
+      const { data: fallbackData, error: fallbackError } =
+        await fetchParkDataWithLanguage(parkId, APP_LANGUAGES.EN);
+
+      if (fallbackError || !fallbackData) {
+        throw fallbackError || new Error('Park not found');
+      }
+
+      if (
+        !fallbackData.park_translations ||
+        fallbackData.park_translations.length === 0
+      ) {
+        throw new Error('No translation data found');
+      }
+
+      const fallbackTranslation = fallbackData.park_translations[0];
+      return {
+        ...fallbackData,
+        name: fallbackTranslation.name,
+        city: fallbackTranslation.city,
+        address: fallbackTranslation.address,
+      } as TranslatedPark;
     }
 
-    return park;
+    if (
+      !parkData.park_translations ||
+      parkData.park_translations.length === 0
+    ) {
+      throw new Error('No translation data found');
+    }
+
+    const translation = parkData.park_translations[0];
+    return {
+      ...parkData,
+      name: translation.name,
+      city: translation.city,
+      address: translation.address,
+    } as TranslatedPark;
   } catch (error) {
     throwError(error);
   }
@@ -117,8 +249,8 @@ const fetchAllParkImages = async (parkId: string) => {
 };
 
 export {
-  fetchPark,
   fetchParksJSON,
+  fetchParkWithTranslation,
   uploadParkImage,
   uploadParkPrimaryImage,
   fetchParkPrimaryImage,

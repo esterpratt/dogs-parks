@@ -2,6 +2,7 @@ import { Browser } from '@capacitor/browser';
 import { isMobile } from '../utils/platform';
 import { AppError, throwError } from './error';
 import { supabase } from './supabase-client';
+import { i18n } from '../i18n';
 
 interface LoginProps {
   email: string;
@@ -60,7 +61,8 @@ const signin = async ({ email, password, name }: SigninProps) => {
       throw error;
     }
     if (!data.user?.identities?.length) {
-      throw new AppError('You already signed up with this email', 400);
+      const key = 'auth.email_already_exists';
+      throw new AppError(i18n.t(key), 400);
     }
     return data;
   } catch (error) {

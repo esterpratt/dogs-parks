@@ -14,6 +14,7 @@ import { useOrientationContext } from '../../context/OrientationContext';
 import { useNotification } from '../../context/NotificationContext';
 import { FormModal } from '../modals/FormModal';
 import styles from './EditUserModal.module.scss';
+import { useTranslation } from 'react-i18next';
 
 interface EditUserModalProps {
   isOpen: boolean;
@@ -29,6 +30,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
   const [userData, setUserData] = useState(user);
   const { notify } = useNotification();
   const orientation = useOrientationContext((state) => state.orientation);
+  const { t } = useTranslation();
 
   useEffect(() => {
     setUserData(user);
@@ -101,28 +103,24 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
       onSave={onSubmit}
       disabled={!userData?.name}
       className={styles.modal}
-      title="Update your details"
+      title={t('userInfo.edit.titleUpdate')}
     >
       <form className={styles.form}>
         <ControlledInput
           value={userData?.name || ''}
           onChange={onInputChange}
           name="name"
-          label="Name *"
+          label={t('userInfo.edit.labels.name')}
           required
         />
         <div className={styles.privacyContainer}>
           <Checkbox
             id="visibility"
-            label="Hide me"
+            label={t('userInfo.edit.privacy.hideMe')}
             onChange={onPrivacyChange}
             isChecked={userData?.private ?? false}
           />
-          <span>
-            * If you are hidden, you won’t appear in search results. Only your
-            friends or users you have sent friend requests to will be able to
-            see your page.
-          </span>
+          <span>{t('userInfo.edit.privacy.explanation')}</span>
         </div>
       </form>
     </FormModal>

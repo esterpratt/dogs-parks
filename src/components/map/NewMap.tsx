@@ -9,7 +9,7 @@ import {
 } from 'react';
 import { Link } from 'react-router-dom';
 import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
-import { Location, Park } from '../../types/park';
+import { Location, ParkJSON as Park } from '../../types/park';
 import { MarkerList } from './MarkerList';
 import { AlignJustify, Locate } from 'lucide-react';
 import { MapEventHandler } from './mapHelpers/MapEventHandler';
@@ -21,9 +21,11 @@ import { UserLocationMarker } from './UserLocationMarker';
 import { DEFAULT_LOCATION } from '../../utils/consts';
 import { useUserLocation } from '../../context/LocationContext';
 import { Button } from '../Button';
-import styles from './NewMap.module.scss';
 import { useInitLocation } from '../../hooks/useInitLocation';
 import { WeatherButton } from '../weather/WeatherButton';
+import { useTranslation } from 'react-i18next';
+import { isRTL } from '../../utils/language';
+import styles from './NewMap.module.scss';
 
 const ParkPopupLazy = lazy(() => import('../parks/ParkPopupLazy'));
 
@@ -34,15 +36,16 @@ interface NewMapProps {
 
 const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
   const userLocation = useInitLocation();
-
+  const { i18n } = useTranslation();
+  const isRTLMode = isRTL(i18n.language);
   const setUserLocation = useUserLocation((state) => state.setUserLocation);
   const [center, setCenter] = useState<Location>(
     location ?? userLocation ?? DEFAULT_LOCATION
   );
   const [activePark, setActivePark] = useState<Park | null>(null);
   const [directions, setDirections] = useState<{
-    distance?: string;
-    duration?: string;
+    distanceKm?: number;
+    durationSeconds?: number;
     error?: string;
     geoJSONObj?: GeoJSON.GeometryObject;
   }>();
@@ -127,13 +130,14 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
             style={{
               position: 'absolute',
               top: 'calc(12px + var(--safe-area-inset-top, 0px))',
-              right: 'calc(16px + var(--safe-area-inset-right, 0px))',
+              [isRTLMode ? 'left' : 'right']:
+                `calc(16px + var(--safe-area-inset-${isRTLMode ? 'left' : 'right'}, 0px))`,
             }}
           >
             <AlignJustify />
           </Button>
         </Link>
-        <ZoomControl position="topright" />
+        <ZoomControl position={isRTLMode ? 'topleft' : 'topright'} />
         <MarkerList setActivePark={onSetActivePark} activePark={activePark} />
         {userLocation && (
           <UserLocationMarker
@@ -156,7 +160,8 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
           style={{
             position: 'absolute',
             top: `calc(120px + var(--safe-area-inset-top, 0px))`,
-            right: `calc(16px + var(--safe-area-inset-right, 0px))`,
+            [isRTLMode ? 'left' : 'right']:
+              `calc(16px + var(--safe-area-inset-${isRTLMode ? 'left' : 'right'}, 0px))`,
           }}
         >
           <Locate />
@@ -171,15 +176,7 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
           setDirections={setDirections}
           onClose={onCloseParkPopup}
           activePark={activePark}
-          directions={
-            directions
-              ? {
-                  distance: directions.distance,
-                  duration: directions.duration,
-                  error: directions.error,
-                }
-              : undefined
-          }
+          directions={directions}
         />
       </Suspense>
     </div>

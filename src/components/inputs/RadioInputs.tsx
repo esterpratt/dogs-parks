@@ -3,7 +3,7 @@ import { RadioInput } from './RadioInput';
 import styles from './RadioInputs.module.scss';
 
 interface RadioInputProps {
-  options: { id: string; value: string }[];
+  options: { id: string; value: string; label?: string }[];
   name: string;
   label: string;
   value: string;
@@ -28,6 +28,7 @@ const RadioInputs: React.FC<RadioInputProps> = ({
               name={name}
               id={option.id}
               value={option.value}
+              label={option.label}
               selectedValue={value}
               onOptionChange={onOptionChange}
             />

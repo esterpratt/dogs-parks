@@ -10,6 +10,7 @@ import { useAddReview } from '../../hooks/api/useAddReview';
 import { ReviewModal } from '../ReviewModal';
 import styles from './ReviewsPreview.module.scss';
 import { Plus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface ReviewsPreviewProps {
   variant?: 'title' | 'reviews';
@@ -19,6 +20,7 @@ interface ReviewsPreviewProps {
 const ReviewsPreview = (props: ReviewsPreviewProps) => {
   const { variant = 'title', className } = props;
   const { id: parkId } = useParams();
+  const { t } = useTranslation();
   const [isAddReviewModalOpen, setIsAddReviewModalOpen] = useState(false);
   const { userId } = useContext(UserContext);
 
@@ -59,14 +61,16 @@ const ReviewsPreview = (props: ReviewsPreviewProps) => {
         <>
           <Stars rank={rank || 0} />
           <Link to="reviews" className={styles.reviewCount}>
-            {reviewsCount === 1 ? '1 Review' : `${reviewsCount} Reviews`}
+            ({reviewsCount})
           </Link>
         </>
       )}
-      {!reviewsCount && !isReviewsPage && <span>No reviews yet</span>}
+      {!reviewsCount && !isReviewsPage && (
+        <span>{t('parkReviews.emptyTitleShort')}</span>
+      )}
       {!!reviewsCount && isReviewsPage && (
         <div className={styles.rank}>
-          Average rank: {(rank || 0).toFixed(1)}
+          {t('parkReviews.averageRank', { rank: (rank || 0).toFixed(1) })}
         </div>
       )}
       {userId && isReviewsPage && (
@@ -77,7 +81,7 @@ const ReviewsPreview = (props: ReviewsPreviewProps) => {
             variant="primary"
           >
             <Plus size={16} />
-            <span>Add review</span>
+            <span>{t('parkReviews.addReview')}</span>
           </Button>
           <ReviewModal
             onSubmitReview={onAddReview}

@@ -9,6 +9,7 @@ import { Location } from '../../types/park';
 import { DEFAULT_LOCATION } from '../../utils/consts';
 import { getUserLocation } from '../../utils/getUserLocation';
 import { Button } from '../Button';
+import { useTranslation } from 'react-i18next';
 import styles from './LocationInput.module.scss';
 
 interface LocationInputProps {
@@ -26,6 +27,7 @@ const LocationInput: React.FC<LocationInputProps> = ({
   markerLocation,
   className,
 }) => {
+  const { t } = useTranslation();
   const [center, setCenter] = useState(DEFAULT_LOCATION);
   const mapCenter = useMemo(() => {
     return { lat: center.lat, lng: center.long };
@@ -62,13 +64,13 @@ const LocationInput: React.FC<LocationInputProps> = ({
       <label className={styles.label}>
         <div className={styles.title}>{label}</div>
         <div className={styles.instructions}>
-          <span>Click the map or </span>
+          <span>{t('location.input.clickMap')} </span>
           <Button
             className={styles.button}
             variant="simple"
             onClick={handleSetCurrentLocation}
           >
-            use current location
+            {t('location.input.useCurrent')}
           </Button>
         </div>
       </label>

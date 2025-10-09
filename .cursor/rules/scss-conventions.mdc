@@ -1,0 +1,190 @@
+---
+description: SCSS styling conventions for Dogs Parks application
+globs: *.scss,*.sass
+alwaysApply: false
+---
+
+# SCSS Styling Conventions
+
+This rule outlines the established styling conventions for SCSS files in the Dogs Parks application.
+
+## 📏 Units & Measurements
+
+### **Use px Instead of rem**
+
+```scss
+// ✅ Good: Use px for all measurements
+.container {
+  width: 320px;
+  height: 200px;
+  padding: 16px;
+  margin: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.button {
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 8px;
+  min-height: 44px;
+}
+
+.modal {
+  max-width: 480px;
+  margin: 20px;
+  padding: 24px;
+}
+
+// ❌ Bad: Don't use rem units
+.container {
+  width: 20rem;
+  height: 12.5rem;
+  padding: 1rem;
+  margin: 0.5rem 0.75rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  min-height: 2.75rem;
+}
+```
+
+## 🏷️ Class Naming
+
+### **SCSS Files: Use kebab-case for Class Names**
+
+```scss
+// ✅ Good: Use kebab-case for class names in SCSS files
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.exit-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.option-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.native-label {
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+// ❌ Bad: Don't use camelCase in SCSS files
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.exitButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+```
+
+### **TypeScript/JSX Files: Use camelCase for Class References**
+
+```tsx
+// ✅ Good: Use camelCase when referencing kebab-case classes in TSX
+<div className={styles.headerLeft}>
+<div className={styles.exitButton}>
+<div className={styles.optionsList}>
+<div className={styles.optionContent}>
+<div className={styles.nativeLabel}>
+
+// ❌ Bad: Don't use bracket notation for kebab-case classes
+<div className={styles['header-left']}>
+<div className={styles['exit-button']}>
+<div className={styles['options-list']}>
+```
+
+**Important**: CSS Modules automatically converts kebab-case class names in SCSS to camelCase properties in the styles object. This is why we use kebab-case in SCSS but camelCase in TypeScript/JSX.
+
+## 🔤 Typography
+
+### **Do Not Use font-weight Property**
+
+```scss
+// ✅ Good: Avoid font-weight property entirely
+.title {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.subtitle {
+  font-size: 18px;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+.body-text {
+  font-size: 14px;
+  color: #444;
+  line-height: 20px;
+}
+
+.caption {
+  font-size: 12px;
+  color: #888;
+}
+
+// ❌ Bad: Don't use font-weight
+.title {
+  font-size: 24px;
+  font-weight: bold; // Don't use this
+  color: #333;
+}
+
+.subtitle {
+  font-size: 18px;
+  font-weight: 600; // Don't use this
+  color: #666;
+}
+
+.body-text {
+  font-size: 14px;
+  font-weight: normal; // Don't use this
+  color: #444;
+}
+
+.light-text {
+  font-size: 14px;
+  font-weight: 300; // Don't use this
+  color: #666;
+}
+```
+
+## 📋 Checklist for SCSS Files
+
+- [ ] All measurements use px units (not rem, em, or other units)
+- [ ] All SCSS class names use kebab-case (not camelCase)
+- [ ] All TypeScript/JSX class references use camelCase (not bracket notation)
+- [ ] No font-weight properties are used anywhere
+- [ ] CSS Modules automatically converts kebab-case to camelCase in the styles object

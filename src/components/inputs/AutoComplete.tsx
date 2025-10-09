@@ -23,6 +23,7 @@ interface AutoCompleteProps<T> {
   equalityFunc: (item: T, selectedInput?: string) => boolean;
   filterFunc: (item: T, searchInput: string) => boolean;
   children: (item: T, isChosen: boolean) => ReactNode;
+  selectedInputFormatter?: (selectedInput: string) => string;
 }
 
 const AutoComplete = <T,>({
@@ -36,6 +37,7 @@ const AutoComplete = <T,>({
   setSelectedInput,
   equalityFunc,
   children,
+  selectedInputFormatter,
 }: AutoCompleteProps<T>) => {
   const [input, setInput] = useState<string>(selectedInput || '');
   const { searchInput } = useDebounce(input);
@@ -49,8 +51,13 @@ const AutoComplete = <T,>({
   }, [items, searchInput, filterFunc]);
 
   useEffect(() => {
-    setInput(selectedInput || '');
-  }, [selectedInput]);
+    const displayValue = selectedInput || '';
+    setInput(
+      selectedInputFormatter && displayValue
+        ? selectedInputFormatter(displayValue)
+        : displayValue
+    );
+  }, [selectedInput, selectedInputFormatter]);
 
   const onChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
     setInput(event.target.value);
@@ -65,7 +72,12 @@ const AutoComplete = <T,>({
 
   const onInputBlur = () => {
     setShowItems(false);
-    setInput(selectedInput || '');
+    const displayValue = selectedInput || '';
+    setInput(
+      selectedInputFormatter && displayValue
+        ? selectedInputFormatter(displayValue)
+        : displayValue
+    );
   };
 
   return (

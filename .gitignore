@@ -35,3 +35,7 @@ capacitor.config.ts.backup
 *.sln
 *.sw?
 .env*
+
+.cursor/docs/features/*
+scripts/*
+exports/*

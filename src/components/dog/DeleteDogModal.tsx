@@ -10,6 +10,7 @@ import { Button } from '../Button';
 import { Loader } from '../Loader';
 import { TopModal } from '../modals/TopModal';
 import styles from './DeleteDogModal.module.scss';
+import { useTranslation } from 'react-i18next';
 
 interface DeleteDogModalProps {
   isOpen: boolean;
@@ -22,6 +23,7 @@ const DeleteDogModal: React.FC<DeleteDogModalProps> = ({
   onClose,
   dog,
 }) => {
+  const { t } = useTranslation();
   const { userId } = useContext(UserContext);
   const { revalidate } = useRevalidator();
   const navigate = useNavigate();
@@ -43,8 +45,11 @@ const DeleteDogModal: React.FC<DeleteDogModalProps> = ({
     <TopModal open={isOpen} onClose={onClose} className={styles.approveModal}>
       <div className={styles.approveContent}>
         <div>
-          <span>Are you sure you want to say goodbye to</span>{' '}
-          <span className={styles.dogName}>{dog.name}</span>?
+          <span>
+            {t('dogs.delete.confirm', {
+              name: dog.name,
+            })}
+          </span>
         </div>
       </div>
       <div className={styles.buttonsContainer}>
@@ -59,7 +64,7 @@ const DeleteDogModal: React.FC<DeleteDogModalProps> = ({
           ) : (
             <>
               <Trash2 size={16} />
-              <span>Delete</span>
+              <span>{t('common.actions.delete')}</span>
             </>
           )}
         </Button>
@@ -70,7 +75,7 @@ const DeleteDogModal: React.FC<DeleteDogModalProps> = ({
           disabled={isPending}
         >
           <X size={16} />
-          <span>Cancel</span>
+          <span>{t('common.actions.cancel')}</span>
         </Button>
       </div>
     </TopModal>

@@ -1,55 +1,34 @@
 import { Button } from '../components/Button';
+import { useTranslation } from 'react-i18next';
 import styles from './DeleteAcount.module.scss';
 
-// You can delete your full account and all associated data from inside the app:
-
-// Go to your Profile
-
-// Tap Settings > Delete Account
-
-// This will permanently remove your account and all related data.
-
-// Delete specific data (e.g., your dog)
-// If you'd prefer to remove only part of your data, such as your dog’s profile:
-
-// Open your Profile
-
-// Tap on your dog’s profile
-
-// Tap Delete Dog
-
-// This removes the dog’s information without deleting your entire account.
-
 const DeleteAcount = () => {
+  const { t } = useTranslation();
   return (
     <div className={styles.wrapper}>
-      <h1>Deleting Your Data on KlavHub</h1>
+      <h1>{t('deleteAccount.title')}</h1>
       <div className={styles.section}>
-        <h2>To delete your full account and all associated data:</h2>
-        <p>1. Go to your profile</p>
-        <p>2. {`Tap Settings -> Delete my profile`}</p>
-        <p>3. Tap Delete</p>
-        <p>This will permanently remove your account and all related data</p>
+        <h2>{t('deleteAccount.fullDeleteTitle')}</h2>
+        <p>1. {t('deleteAccount.fullDeleteStep1')}</p>
+        <p>2. {t('deleteAccount.fullDeleteStep2')}</p>
+        <p>3. {t('deleteAccount.fullDeleteStep3')}</p>
+        <p>{t('deleteAccount.fullDeleteNote')}</p>
       </div>
       <div className={styles.section}>
-        <h2>To delete your dog:</h2>
-        <p>1. Go to your profile</p>
-        <p>2. Tap on your dog's profile</p>
-        <p>3. Tap the edit icon</p>
-        <p>4. Scroll to and tap 'Say Goodbye...'</p>
-        <p>5. Tap Delete</p>
-        <p>
-          When you delete your dog's profile, the data is removed from the app
-          and inaccessible. It is not visible to other users and no longer
-          retained for display or processing.
-        </p>
+        <h2>{t('deleteAccount.deleteDogTitle')}</h2>
+        <p>1. {t('deleteAccount.deleteDogStep1')}</p>
+        <p>2. {t('deleteAccount.deleteDogStep2')}</p>
+        <p>3. {t('deleteAccount.deleteDogStep3')}</p>
+        <p>4. {t('deleteAccount.deleteDogStep4')}</p>
+        <p>5. {t('deleteAccount.deleteDogStep5')}</p>
+        <p>{t('deleteAccount.deleteDogBody')}</p>
       </div>
       <div className={styles.section}>
         <p>
-          If you need help, contact us at:{' '}
+          {t('deleteAccount.help')}{' '}
           <a href="mailto:esterpratt@gmail.com">
             <Button variant="simple" className={styles.button}>
-              esterpratt@gmail.com
+              {t('deleteAccount.helpEmail')}
             </Button>
           </a>
         </p>

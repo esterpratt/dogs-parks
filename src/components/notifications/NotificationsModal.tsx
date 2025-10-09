@@ -1,4 +1,5 @@
 import { useContext, useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Bell, BellOff } from 'lucide-react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { ToggleInput } from '../inputs/ToggleInput';
@@ -66,6 +67,7 @@ export const NotificationsModal: React.FC<NotificationsModalProps> = ({
   isOpen,
   onClose,
 }) => {
+  const { t } = useTranslation();
   const [muteAll, setMuteAll] = useState(false);
   const [preferences, setPreferences] = useState<NotificationPreferences>({
     friendRequests: true,
@@ -132,23 +134,23 @@ export const NotificationsModal: React.FC<NotificationsModalProps> = ({
       height={orientation === 'landscape' ? 98 : null}
       onSave={onSubmit}
       className={styles.modal}
-      title="Update your notifications"
+      title={t('notifications.modal.title')}
       disabled={isPending}
     >
       <form className={styles.form}>
         <div className={styles.sectionGroup}>
           <div className={styles.sectionHeader}>
-            <span>General</span>
+            <span>{t('notifications.modal.section.general')}</span>
           </div>
           <div className={styles.sectionContainer}>
             <div className={`${styles.settingItem} ${styles.settingItemLast}`}>
               <div className={styles.settingInfo}>
                 <div className={styles.settingDetails}>
                   <span className={styles.settingLabel}>
-                    Mute notifications
+                    {t('notifications.modal.mute.title')}
                   </span>
                   <span className={styles.settingDescription}>
-                    Turn off all notifications
+                    {t('notifications.modal.mute.description')}
                   </span>
                 </div>
               </div>
@@ -165,18 +167,22 @@ export const NotificationsModal: React.FC<NotificationsModalProps> = ({
         {!muteAll && (
           <div className={styles.sectionGroup}>
             <div className={styles.sectionHeader}>
-              <span>Notification Types</span>
+              <span>{t('notifications.modal.section.types')}</span>
             </div>
             <div className={styles.sectionContainer}>
               <NotificationSection
-                title="Friend requests"
-                description="Get notified when someone wants to be friends"
+                title={t('notifications.modal.types.friendRequests.title')}
+                description={t(
+                  'notifications.modal.types.friendRequests.description'
+                )}
                 value={preferences.friendRequests}
                 onChange={(value) => updatePreference('friendRequests', value)}
               />
               <NotificationSection
-                title="Friend approvals"
-                description="Get notified when your friend requests are accepted"
+                title={t('notifications.modal.types.friendApprovals.title')}
+                description={t(
+                  'notifications.modal.types.friendApprovals.description'
+                )}
                 value={preferences.friendApprovals}
                 onChange={(value) => updatePreference('friendApprovals', value)}
                 isLast={true}

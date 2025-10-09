@@ -37,18 +37,18 @@
   font-size: 16px;
   flex-grow: 1;
   height: 100%;
-  text-align: left;
+  text-align: start;
   justify-content: flex-start;
 
   span {
     flex-grow: 0;
-    margin-right: auto;
+    margin-inline-end: auto;
   }
 }
 
 .actions {
   height: 100%;
-  padding-right: 12px;
+  padding-inline-end: 12px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -71,7 +71,8 @@
   visibility: hidden;
   opacity: 0;
   overflow: hidden;
-  transition: max-height var(--transition-duration) ease,
+  transition:
+    max-height var(--transition-duration) ease,
     opacity var(--transition-duration) ease,
     visibility 0s linear var(--transition-duration);
 
@@ -90,8 +91,10 @@
   max-height: 500px;
   visibility: visible;
   opacity: 1;
-  transition: max-height var(--transition-duration) ease,
-    opacity var(--transition-duration) ease, visibility 0s linear;
+  transition:
+    max-height var(--transition-duration) ease,
+    opacity var(--transition-duration) ease,
+    visibility 0s linear;
 
   > div {
     transform: translateY(0);

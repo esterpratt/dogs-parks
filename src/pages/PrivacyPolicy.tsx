@@ -1,133 +1,103 @@
 import { Link } from 'react-router-dom';
 import { Button } from '../components/Button';
+import { useTranslation } from 'react-i18next';
 import styles from './PrivacyPolicy.module.scss';
 
 const PrivacyPolicy = () => {
+  const { t } = useTranslation();
   return (
     <div className={styles.wrapper}>
-      <h1>Privacy Policy</h1>
-      <p>Last Updated: 1.7.25</p>
+      <h1>{t('privacyPolicy.title')}</h1>
+      <p>{t('privacyPolicy.lastUpdated')}</p>
       <div className={styles.section}>
-        <h2>1. Introduction</h2>
-        <p>
-          Welcome to KluvHub. This privacy policy explains how we collect, use,
-          and protect your information when you use our app, KluvHub (the
-          "App"). By using the App, you agree to the collection and use of
-          information in accordance with this policy.
-        </p>
+        <h2>1. {t('privacyPolicy.introTitle')}</h2>
+        <p>{t('privacyPolicy.intro')}</p>
       </div>
       <div className={styles.section}>
-        <h2>2. Information We Collect</h2>
-        <span>We may collect the following types of information:</span>
-        <h3>Personal Information (when creating an account):</h3>
-        <span>Name, email address.</span>
-        <span>
-          If you sign in using Google, we may collect profile details as per
-          their policies.
-        </span>
-        <span>
-          Any additional data you deliberately add to your profile, such as your
-          dog's details and park interactions.
-        </span>
-        <h3>Usage Data:</h3>
-        <span>
-          Information about how you interact with the App (e.g. features used,
-          session duration).
-        </span>
-        <h3>Device Information:</h3>
-        <span>
-          Device type, operating system, and unique device identifiers.
-        </span>
-        <h3>Approximate or precise location (only with your permission).</h3>
-        <h3>Photos and other content you upload to the App.</h3>
+        <h2>2. {t('privacyPolicy.dataWeCollect.title')}</h2>
+        <span>{t('privacyPolicy.dataWeCollect.lead')}</span>
+        <h3>{t('privacyPolicy.dataWeCollect.personalTitle')}</h3>
+        {(
+          t('privacyPolicy.dataWeCollect.personalItems', {
+            returnObjects: true,
+          }) as unknown as string[]
+        ).map((item, idx) => (
+          <span key={`personal-${idx}`}>{item}</span>
+        ))}
+        <h3>{t('privacyPolicy.dataWeCollect.usageTitle')}</h3>
+        <span>{t('privacyPolicy.dataWeCollect.usageDesc')}</span>
+        <h3>{t('privacyPolicy.dataWeCollect.deviceTitle')}</h3>
+        <span>{t('privacyPolicy.dataWeCollect.deviceDesc')}</span>
+        <h3>{t('privacyPolicy.dataWeCollect.locationTitle')}</h3>
+        <h3>{t('privacyPolicy.dataWeCollect.photosTitle')}</h3>
       </div>
       <div className={styles.section}>
-        <h2>3. How We Use Your Information</h2>
-        <span>We use your data to:</span>
+        <h2>3. {t('privacyPolicy.usage.title')}</h2>
+        <span>{t('privacyPolicy.usage.lead')}</span>
         <ul>
-          <li>
-            Allow other dog parents to search for friends and view their dogs'
-            pages. If you prefer to keep your page private, you can change this
-            anytime in the profile settings.
-          </li>
-          <li>Provide and improve our services.</li>
-          <li>Personalize your experience.</li>
-          <li>Communicate updates and support.</li>
-          <li>Analyze usage to enhance performance.</li>
-          <li>Ensure security and prevent fraud</li>
+          {(
+            t('privacyPolicy.usage.items', {
+              returnObjects: true,
+            }) as unknown as string[]
+          ).map((item, idx) => (
+            <li key={`usage-${idx}`}>{item}</li>
+          ))}
         </ul>
       </div>
       <div className={styles.section}>
-        <h2>4. How We Share Your Information</h2>
-        <span>
-          We do not sell your personal information. However, we may share data
-          with:
-        </span>
+        <h2>4. {t('privacyPolicy.sharing.title')}</h2>
+        <span>{t('privacyPolicy.sharing.lead')}</span>
         <ul>
-          <li>
-            Service Providers – For analytics, hosting, or customer support.
-          </li>
-          <li>Legal Authorities – If required by law or to prevent fraud.</li>
+          {(
+            t('privacyPolicy.sharing.items', {
+              returnObjects: true,
+            }) as unknown as string[]
+          ).map((item, idx) => (
+            <li key={`share-${idx}`}>{item}</li>
+          ))}
         </ul>
       </div>
       <div className={styles.section}>
-        <h2>5. Data Retention & Security</h2>
-        <p>
-          We keep your data only as long as necessary for its intended purpose.
-          We implement industry-standard security measures to protect your data.
-          However, no online service is 100% secure, so use the App at your own
-          risk.
-        </p>
+        <h2>5. {t('privacyPolicy.security.title')}</h2>
+        <p>{t('privacyPolicy.security.desc')}</p>
       </div>
       <div className={styles.section}>
-        <h2>6. Your Rights & Choices</h2>
+        <h2>6. {t('privacyPolicy.delete.title')}</h2>
         <span>
-          You can delete your account anytime from the profile settings. For
-          detailed instructions on how to delete your data,{' '}
+          {t('privacyPolicy.delete.desc')}{' '}
           <Button variant="simple" className={styles.button}>
-            <Link to="/delete-account">click here</Link>
+            <Link to="/delete-account">
+              {t('privacyPolicy.delete.linkText')}.
+            </Link>
           </Button>
-          . Account deletion will erase all data linked to your profile. If you
-          encounter any issues, feel free to contact us at{' '}
-          <a href="mailto:esterpratt@gmail.com">
-            <Button variant="simple" className={styles.button}>
-              esterpratt@gmail.com.
-            </Button>
-          </a>
         </span>
-        <span>
-          If you prefer to keep your page private, you can change this anytime
-          in the profile settings.
-        </span>
+        <span>{t('privacyPolicy.privateOption')}</span>
       </div>
       <div className={styles.section}>
-        <h2>7. Children's Privacy</h2>
-        <p>
-          Our App is not intended for children under 13 (or 16 in some regions).
-          We do not knowingly collect personal data from minors.
-        </p>
+        <h2>7. {t('privacyPolicy.children.title')}</h2>
+        <p>{t('privacyPolicy.children.desc')}</p>
       </div>
       <div className={styles.section}>
-        <h2>8. Third-Party Services</h2>
-        <p>
-          We may use third-party services that collect data (e.g., Google
-          Analytics, Supabase). Each third party has its own privacy policy:
-        </p>
+        <h2>8. {t('privacyPolicy.thirdParties.title')}</h2>
+        <p>{t('privacyPolicy.thirdParties.desc')}</p>
         <ul>
-          <li>Google Analytics: https://policies.google.com/privacy</li>
+          {(
+            t('privacyPolicy.thirdParties.links', {
+              returnObjects: true,
+            }) as unknown as string[]
+          ).map((item, idx) => (
+            <li key={`link-${idx}`}>{item}</li>
+          ))}
         </ul>
       </div>
       <div className={styles.section}>
-        <h2>9. Changes to This Privacy Policy</h2>
-        <p>
-          We may update this policy periodically. We will notify you of
-          significant changes by updating the "Last Updated" date.
-        </p>
+        <h2>9. {t('privacyPolicy.changes.title')}</h2>
+        <p>{t('privacyPolicy.changes.desc')}</p>
       </div>
       <div className={styles.section}>
-        <h2>10. Contact Us</h2>
+        <h2>10. {t('privacyPolicy.contact.title')}</h2>
         <p>
-          If you have questions about this Privacy Policy, contact us at:{' '}
+          {t('privacyPolicy.contact.desc')}{' '}
           <a href="mailto:esterpratt@gmail.com">
             <Button variant="simple" className={styles.button}>
               esterpratt@gmail.com

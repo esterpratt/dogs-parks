@@ -14,12 +14,16 @@ $imgs-medium-top: 96px;
   .header {
     &.small {
       height: $small-height;
-      background-size: 100% $imgs-small-top, 100% 116px;
+      background-size:
+        100% $imgs-small-top,
+        100% 116px;
     }
 
     &.medium {
       height: $medium-height;
-      background-size: 100% $imgs-medium-top, 100% 172px;
+      background-size:
+        100% $imgs-medium-top,
+        100% 172px;
     }
   }
 
@@ -48,7 +52,7 @@ $imgs-medium-top: 96px;
 .img {
   &:not(:first-child) {
     z-index: 1;
-    margin-left: -20px;
+    margin-inline-start: -20px;
   }
 }
 
@@ -128,7 +132,7 @@ $imgs-medium-top: 96px;
 @media (max-width: 390px) {
   .img {
     &:not(:first-child) {
-      margin-left: -30px;
+      margin-inline-start: -30px;
     }
   }
 }
@@ -136,7 +140,7 @@ $imgs-medium-top: 96px;
 @media (max-width: 360px) {
   .img {
     &:not(:first-child) {
-      margin-left: -40px;
+      margin-inline-start: -40px;
     }
   }
 }

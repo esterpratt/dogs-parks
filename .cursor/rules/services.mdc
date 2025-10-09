@@ -1,0 +1,478 @@
+---
+description: Service layer conventions and patterns for Dogs Parks application
+globs: src/services/*.ts
+alwaysApply: false
+---
+
+# Services Layer Conventions
+
+This rule outlines the established patterns and conventions for service files in the Dogs Parks application.
+
+## 📁 File Structure & Naming
+
+### **File Organization**
+
+- **Location**: All service files in `src/services/` directory
+- **Naming**: Use kebab-case for service files (`park-reports.ts`, `dogs-count-orchestrator.ts`)
+- **Purpose**: Each service handles a specific domain or feature area
+
+### **Service Categories**
+
+- **Data Services**: Database operations (`dogs.ts`, `parks.ts`, `users.ts`)
+- **Auth Services**: Authentication logic (`authentication.ts`)
+- **Integration Services**: External APIs (`weather.ts`, `map.ts`)
+- **Utility Services**: Helper functions (`error.ts`, `image.ts`)
+- **Orchestrator Services**: Complex workflows (`logout-orchestrator.ts`)
+
+## 📦 Import Organization
+
+### **Import Order** (Always follow this sequence):
+
+1. **External libraries** (Capacitor, third-party packages)
+2. **Internal utilities** (platform detection, constants)
+3. **Types & interfaces** (from types folder)
+4. **Other services** (error handling, clients)
+5. **Supabase client** (always imported when needed)
+
+```tsx
+// ✅ Good: Proper import order
+import { Browser } from '@capacitor/browser';
+import { isMobile } from '../utils/platform';
+import { Dog } from '../types/dog';
+import { throwError } from './error';
+import { supabase } from './supabase-client';
+```
+
+## 🎯 Function Structure & Patterns
+
+### **Function Naming Conventions**
+
+- **CRUD Operations**: `fetch`, `create`, `update`, `delete` prefixes
+- **Specific Actions**: Descriptive verbs (`signin`, `signOut`, `upload`, `move`)
+- **Boolean Returns**: `is` or `has` prefixes when applicable
+
+```tsx
+// ✅ Good: Clear function naming
+const fetchPark = async (parkId: string) => {
+  /* */
+};
+const createDog = async (createDogProps: CreateDogProps) => {
+  /* */
+};
+const updateUser = async (userId: string, updates: Partial<User>) => {
+  /* */
+};
+const deleteDog = async (id: string) => {
+  /* */
+};
+const signinWithGoogle = () => {
+  /* */
+};
+const uploadParkImage = async (image: File | string, parkId: string) => {
+  /* */
+};
+```
+
+### **Function Structure Pattern**
+
+```tsx
+// ✅ Good: Standard service function structure
+const serviceFunctionName = async (params: ParamsType) => {
+  try {
+    // 1. Input validation (if needed)
+    if (!requiredParam) {
+      return; // or throw error
+    }
+
+    // 2. Main operation (database call, API call, etc.)
+    const { data, error } = await supabase.from('table').operation().filters();
+
+    // 3. Error handling
+    if (error) {
+      throw error;
+    }
+
+    // 4. Return processed data
+    return data;
+  } catch (error) {
+    // 5. Consistent error handling
+    throwError(error);
+  }
+};
+```
+
+## 🗄️ Database Operations
+
+### **Supabase Query Patterns**
+
+```tsx
+// ✅ Good: Consistent query structure
+const fetchUserDogs = async (userId: string) => {
+  try {
+    const { data: dogs, error } = await supabase
+      .from('dogs')
+      .select('*')
+      .eq('owner', userId)
+      .is('deleted_at', null);
+
+    if (error) {
+      throw error;
+    }
+
+    return dogs;
+  } catch (error) {
+    throwError(error);
+  }
+};
+
+// ✅ Good: Complex queries with joins
+const getSeenNotifications = async ({
+  userId,
+  limit,
+  cursor,
+}: GetNotificationsParams) => {
+  try {
+    let query = supabase
+      .from('notifications')
+      .select(
+        `
+        id,
+        type,
+        sender_id,
+        title,
+        sender:users!notifications_sender_id_fkey(
+          id,
+          name
+        )
+      `
+      )
+      .eq('receiver_id', userId)
+      .not('seen_at', 'is', null)
+      .order('created_at', { ascending: false })
+      .limit(limit);
+
+    if (cursor) {
+      query = query.lt('created_at', cursor);
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+      throw error;
+    }
+
+    return data?.map(transformNotification) || [];
+  } catch (error) {
+    console.error('Error fetching seen notifications:', error);
+    return [];
+  }
+};
+```
+
+### **RPC (Remote Procedure Call) Usage**
+
+```tsx
+// ✅ Good: RPC calls for complex operations
+const deleteDog = async (id: string) => {
+  try {
+    const { error } = await supabase.rpc('delete_dog', { dog_id: id });
+
+    if (error) {
+      throw error;
+    }
+  } catch (error) {
+    console.error(
+      `there was an error deleting dog with id ${id}: ${JSON.stringify(error)}`
+    );
+    return null;
+  }
+};
+```
+
+## 🔧 Type Definitions
+
+### **Interface Patterns**
+
+```tsx
+// ✅ Good: Clear parameter interfaces
+interface CreateDogProps extends Omit<Dog, 'id'> {}
+
+interface EditDogProps {
+  dogId: string;
+  dogDetails: Partial<Dog>;
+}
+
+interface GetNotificationsParams {
+  userId: string;
+  limit: number;
+  cursor?: string;
+}
+
+// ✅ Good: Service-specific interfaces (not exported unless shared)
+interface UpsertDeviceTokenParams {
+  userId: string;
+  deviceId: string;
+  platform: Platform;
+  token: string;
+}
+```
+
+### **Type Exports**
+
+```tsx
+// ✅ Good: Export types that are used by components
+export type { EditDogProps, LoginProps, SigninProps };
+
+// ❌ Bad: Don't export internal interfaces
+// export interface InternalServiceInterface { }
+```
+
+## 🚨 Error Handling
+
+### **Consistent Error Handling Pattern**
+
+```tsx
+// ✅ Good: Standard error handling
+const serviceFunction = async (params: ParamsType) => {
+  try {
+    const { data, error } = await supabase.operation();
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  } catch (error) {
+    throwError(error); // Centralized error handling
+  }
+};
+
+// ✅ Good: Graceful error handling for non-critical operations
+const fetchParkPrimaryImage = async (parkId: string) => {
+  try {
+    const res = await fetchImagesByDirectory({
+      bucket: 'parks',
+      path: `${parkId}/primary/`,
+    });
+    return res?.[0] ?? null;
+  } catch (error) {
+    console.error(
+      `there was a problem fetching primary image for park ${parkId}: ${JSON.stringify(error)}`
+    );
+    return null; // Graceful fallback
+  }
+};
+```
+
+### **Custom Error Types**
+
+```tsx
+// ✅ Good: Custom error handling for specific cases
+const fetchUser = async (id: string) => {
+  try {
+    const { data: user, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) {
+      throw new AppError(USER_NOT_FOUND_ERROR, 403);
+    }
+
+    return user;
+  } catch (error) {
+    throwError(error);
+  }
+};
+```
+
+## 🎯 Performance Optimizations
+
+### **Caching Patterns**
+
+```tsx
+// ✅ Good: Simple in-memory caching for frequently accessed data
+const dogOwnerCache = new Map<string, string>();
+
+const getDogOwnerId = async (dogId: string) => {
+  if (dogOwnerCache.has(dogId)) {
+    return dogOwnerCache.get(dogId);
+  }
+
+  const { data: dog, error } = await supabase
+    .from('dogs')
+    .select('owner')
+    .eq('id', dogId)
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  const ownerId = dog.owner;
+  dogOwnerCache.set(dogId, ownerId);
+  return ownerId;
+};
+```
+
+### **Batch Operations**
+
+```tsx
+// ✅ Good: Batch operations for better performance
+const fetchUsersDogs = async (userIds: string[]) => {
+  try {
+    const { data: dogs, error } = await supabase
+      .from('dogs')
+      .select('*')
+      .in('owner', userIds) // Batch query
+      .is('deleted_at', null);
+
+    if (error) {
+      throw error;
+    }
+
+    return dogs;
+  } catch (error) {
+    throwError(error);
+  }
+};
+```
+
+## 🔄 Async Operations & Promises
+
+### **Promise Handling**
+
+```tsx
+// ✅ Good: Promise.all for parallel operations
+const setDogPrimaryImage = async (imgPath: string, dogId: string) => {
+  try {
+    const curPrimaryImage = await fetchDogPrimaryImage(dogId);
+    const promises = [moveOtherImageToPrimary(imgPath, dogId)];
+
+    if (curPrimaryImage) {
+      promises.push(movePrimaryImageToOther(curPrimaryImage, dogId));
+    }
+
+    const [newPrimaryRes, oldPrimaryRes] = await Promise.all(promises);
+
+    if (!newPrimaryRes || !oldPrimaryRes) {
+      throw new Error('Error moving images');
+    }
+  } catch (error) {
+    console.error(
+      `there was a problem moving images for dog ${dogId}: ${JSON.stringify(error)}`
+    );
+  }
+};
+```
+
+### **Platform-Specific Logic**
+
+```tsx
+// ✅ Good: Platform detection for mobile-specific features
+const upsertDeviceToken = async (params: UpsertDeviceTokenParams) => {
+  const { userId, deviceId, platform, token } = params;
+
+  if (!Capacitor.isNativePlatform()) {
+    return; // Early return for web platform
+  }
+
+  try {
+    const { error } = await supabase
+      .from('device_tokens')
+      .upsert(
+        { user_id: userId, device_id: deviceId, platform, token },
+        { onConflict: 'device_id' }
+      );
+
+    if (error) {
+      throw error;
+    }
+  } catch (error) {
+    throwError(error);
+  }
+};
+```
+
+## 📤 Export Patterns
+
+### **Named Exports**
+
+```tsx
+// ✅ Good: Named exports for all service functions
+export {
+  fetchPark,
+  fetchParksJSON,
+  uploadParkImage,
+  uploadParkPrimaryImage,
+  fetchParkPrimaryImage,
+  fetchAllParkImages,
+  updatePark,
+};
+
+// ✅ Good: Export types when needed by consumers
+export type { EditDogProps, LoginProps, SigninProps };
+```
+
+### **Function Organization in Exports**
+
+- Group related functions together
+- Order by importance (most commonly used first)
+- Keep CRUD operations in logical order (fetch, create, update, delete)
+
+## 🚫 Anti-Patterns to Avoid
+
+```tsx
+// ❌ Bad: Missing error handling
+const badServiceFunction = async (id: string) => {
+  const { data } = await supabase.from('table').select('*').eq('id', id);
+  return data; // No error handling
+};
+
+// ❌ Bad: Inconsistent naming
+const get_user = async (id) => {}; // Should be fetchUser
+const userCreate = async (data) => {}; // Should be createUser
+
+// ❌ Bad: Not using throwError for consistency
+const inconsistentError = async () => {
+  try {
+    // operation
+  } catch (error) {
+    throw error; // Should use throwError(error)
+  }
+};
+
+// ❌ Bad: Missing type definitions
+const noTypes = async (data) => {
+  // Should have proper typing
+  return await supabase.from('table').insert(data);
+};
+
+// ❌ Bad: Inline complex logic without helper functions
+const complexInlineLogic = async () => {
+  // 50+ lines of complex logic that should be broken down
+};
+
+// ❌ Bad: Not handling platform differences
+const ignorePlatform = async () => {
+  // Mobile-specific code that runs on web too
+  await SomeCapacitorPlugin.doSomething();
+};
+```
+
+## 📋 Checklist for New Services
+
+- [ ] Proper file naming (kebab-case in services directory)
+- [ ] Correct import organization
+- [ ] TypeScript interfaces for parameters and return types
+- [ ] Consistent function naming (fetch/create/update/delete prefixes)
+- [ ] Try-catch blocks with throwError for error handling
+- [ ] Graceful error handling for non-critical operations
+- [ ] Platform-specific logic when needed (Capacitor.isNativePlatform())
+- [ ] Proper Supabase query patterns
+- [ ] Named exports at the end of file
+- [ ] Type exports for shared interfaces
+- [ ] Performance considerations (caching, batching)
+- [ ] Consistent logging for debugging
+- [ ] Input validation where appropriate

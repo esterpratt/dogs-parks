@@ -1,0 +1,221 @@
+---
+description: Application stack overview with dependencies, versions, and best practices for Dogs Parks mobile app
+globs:
+alwaysApply: true
+---
+
+# Dogs Parks Application Stack
+
+Complete overview of the technology stack, dependencies, and version management best practices.
+
+## 🏗️ Core Framework & Runtime
+
+### **React Ecosystem**
+
+- **React**: `18.2.0` ✅ **Stable LTS**
+  - _Note_: Excellent version choice. React 18 is the current stable release with concurrent features
+  - _Best Practice_: Stay on React 18.x for stability, monitor React 19 beta for future planning
+
+- **React DOM**: `18.2.0` ✅ **Matches React version**
+  - _Note_: Perfect version alignment with React core
+
+- **React Router DOM**: `7.5.3` ⚠️ **Latest Major**
+  - _Note_: React Router v7 is the latest with significant API changes
+  - _Best Practice_: Ensure all route configurations use the new v7 patterns
+
+### **TypeScript & Build Tools**
+
+- **TypeScript**: `5.7.3` ✅ **Latest Stable**
+  - _Note_: Excellent choice for latest language features and performance
+  - _Best Practice_: Keep updated for security patches and new features
+
+- **Vite**: `6.0.11` ✅ **Latest Major**
+  - _Note_: Vite 6 offers significant performance improvements
+  - _Best Practice_: Monitor for patch updates for build optimizations
+
+## 📱 Mobile Development
+
+### **Capacitor Ecosystem**
+
+- **@capacitor/core**: `7.4.3` ✅ **Latest Stable**
+- **@capacitor/android**: `7.4.3` ✅ **Consistent versions**
+- **@capacitor/ios**: `7.4.3` ✅ **Consistent versions**
+- **@capacitor/cli**: `7.4.3` ✅ **Matches core version**
+
+**Capacitor Plugins:**
+
+- **@capacitor/camera**: `7.0.2` ⚠️ **Minor version behind**
+- **@capacitor/geolocation**: `7.1.5` ✅ **Recent version**
+- **@capacitor/keyboard**: `7.0.2` ⚠️ **Minor version behind**
+- **@capacitor/share**: `7.0.2` ⚠️ **Minor version behind**
+
+_Best Practice_: Keep all Capacitor packages aligned to the same major.minor version for compatibility
+
+### **Firebase Integration**
+
+- **@capacitor-firebase/messaging**: `7.3.0` ✅ **Compatible with Capacitor 7**
+- **firebase**: `11.10.0` ✅ **Latest stable**
+
+## 🗄️ Backend & Data Management
+
+### **Supabase**
+
+- **@supabase/supabase-js**: `2.49.1` ✅ **Recent stable**
+- **@supabase/auth-ui-react**: `0.4.7` ✅ **Compatible**
+- **@supabase/auth-ui-shared**: `0.1.8` ✅ **Compatible**
+
+_Note_: Supabase v2 is stable and actively maintained
+
+### **State Management & Caching**
+
+- **@tanstack/react-query**: `5.37.1` ✅ **TanStack Query v5**
+  - _Note_: Excellent choice for server state management
+  - _Best Practice_: Use optimistic updates and proper cache invalidation
+
+- **zustand**: `5.0.3` ✅ **Latest major**
+  - _Note_: Great lightweight state management solution
+
+## 🎨 UI & Styling
+
+### **Styling**
+
+- **sass**: `1.75.0` ✅ **Latest stable**
+  - _Note_: Modern Dart Sass implementation
+  - _Best Practice_: Use CSS Modules pattern already implemented
+
+### **Icons & Graphics**
+
+- **lucide-react**: `0.488.0` ✅ **Actively updated**
+  - _Note_: Modern, tree-shakeable icon library
+- **react-slick**: `0.30.2` ✅ **Stable carousel**
+- **slick-carousel**: `1.8.1` ✅ **Required peer dependency**
+
+## 🗺️ Maps & Location
+
+### **Mapping Libraries**
+
+- **leaflet**: `1.9.4` ✅ **Latest stable**
+- **react-leaflet**: `4.2.1` ✅ **Compatible with Leaflet 1.9**
+- **react-leaflet-cluster**: `2.1.0` ✅ **Stable clustering**
+- **leaflet-control-geocoder**: `2.4.0` ✅ **Geocoding support**
+- **openrouteservice-js**: `0.3.2` ✅ **Route calculation**
+
+### **Geolocation**
+
+- **geolib**: `3.3.4` ✅ **Stable geo calculations**
+
+## 🌐 Internationalization
+
+### **i18n Support**
+
+- **i18next**: `25.5.2` ✅ **Latest major**
+- **react-i18next**: `15.7.3` ✅ **Compatible with i18next v25**
+
+_Best Practice_: Keep i18next and react-i18next versions compatible
+
+## 🧪 Testing & Quality
+
+### **Testing Framework**
+
+- **@playwright/test**: `1.55.0` ✅ **Recent stable**
+  - _Note_: Excellent E2E testing choice
+- **vitest**: `3.2.3` ✅ **Latest major**
+  - _Note_: Fast unit testing with Vite integration
+
+### **Testing Libraries**
+
+- **@testing-library/react**: `16.3.0` ✅ **Latest major**
+- **@testing-library/jest-dom**: `6.6.3` ✅ **Compatible**
+- **@testing-library/user-event**: `14.6.1` ✅ **Stable**
+- **happy-dom**: `18.0.1` ✅ **Fast DOM environment**
+
+### **Code Quality**
+
+- **eslint**: `8.57.0` ✅ **Latest v8 (stable)**
+- **@typescript-eslint/eslint-plugin**: `7.2.0` ✅ **Compatible**
+- **prettier**: `3.6.2` ✅ **Latest major**
+
+## 🔧 Utilities & Helpers
+
+### **Date & Time**
+
+- **dayjs**: `1.11.11` ✅ **Lightweight alternative to moment.js**
+
+### **Image Processing**
+
+- **browser-image-compression**: `2.0.2` ✅ **Client-side image optimization**
+- **react-webcam**: `7.2.0` ✅ **Camera access**
+
+### **UI Utilities**
+
+- **classnames**: `2.5.1` ✅ **CSS class management**
+- **react-intersection-observer**: `9.16.0` ✅ **Scroll-based triggers**
+- **@tanstack/react-virtual**: `3.13.6` ✅ **Virtual scrolling**
+
+### **Charts & Visualization**
+
+- **recharts**: `2.12.6` ✅ **React-native chart library**
+
+### **Utilities**
+
+- **uuid**: `9.0.1` ✅ **UUID generation**
+
+## 📋 Version Management Best Practices
+
+### 🟢 **Excellent Version Choices**
+
+- React 18.2.0 (stable LTS)
+- TypeScript 5.7.3 (latest)
+- Vite 6.0.11 (latest major)
+- Capacitor 7.4.3 (stable)
+
+### ⚠️ **Monitor for Updates**
+
+- Some Capacitor plugins are 1-2 minor versions behind core
+- React Router 7.5.3 is latest major - ensure migration is complete
+
+### 🔄 **Dependency Management Rules**
+
+1. **Use Exact Versions for Critical Dependencies:**
+
+   ```json
+   "react": "18.2.0",  // Exact version for stability
+   "typescript": "5.7.3"  // Exact version for consistency
+   ```
+
+2. **Use Caret (^) for Minor Updates:**
+
+   ```json
+   "@supabase/supabase-js": "^2.49.1",  // Allow patch updates
+   "dayjs": "^1.11.11"  // Allow minor updates
+   ```
+
+3. **Keep Related Packages Aligned:**
+   - All Capacitor packages should match major.minor versions
+   - React and React DOM should always match exactly
+   - i18next ecosystem packages should be compatible
+
+4. **Regular Maintenance Schedule:**
+   - **Weekly**: Check for security updates (`npm audit`)
+   - **Monthly**: Review patch updates for critical dependencies
+   - **Quarterly**: Evaluate minor version updates
+   - **Bi-annually**: Plan major version upgrades
+
+5. **Testing Strategy for Updates:**
+   - Always test Capacitor plugin updates on both iOS and Android
+   - Test React Query updates with your specific caching patterns
+   - Verify i18n updates don't break translations
+
+### 🚨 **Security Considerations**
+
+- Keep Firebase SDK updated for security patches
+- Monitor Supabase client for auth-related updates
+- Regular `npm audit` checks for vulnerabilities
+- Pin exact versions for production builds
+
+### 📱 **Mobile-Specific Considerations**
+
+- Capacitor plugins should be updated together
+- Test camera and geolocation plugins thoroughly after updates
+- Verify push notification compatibility with Firebase versions
+- Check iOS/Android compatibility matrices for Capacitor updates

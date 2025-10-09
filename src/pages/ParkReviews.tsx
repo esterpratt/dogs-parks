@@ -19,6 +19,7 @@ import styles from './ParkReviews.module.scss';
 import { Park } from '../types/park';
 import { Loader } from '../components/Loader';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
+import { useTranslation } from 'react-i18next';
 
 const Reviews: React.FC = () => {
   const { id: parkId } = useOutletContext() as Park;
@@ -33,6 +34,7 @@ const Reviews: React.FC = () => {
   const { showLoader } = useDelayedLoading({ isLoading: isPending });
 
   const { userId } = useContext(UserContext);
+  const { t } = useTranslation();
 
   const { addReview } = useAddReview(parkId!, userId);
 
@@ -98,7 +100,7 @@ const Reviews: React.FC = () => {
   if (!isPending && !reviews?.length) {
     return (
       <div className={styles.noReviews}>
-        <span className={styles.title}>No barks about this park yet</span>
+        <span className={styles.title}>{t('parkReviews.emptyTitle')}</span>
         {userId && (
           <div>
             <Button
@@ -106,7 +108,7 @@ const Reviews: React.FC = () => {
               className={styles.button}
               variant="simple"
             >
-              Be the first to leave a review!
+              {t('parkReviews.firstReviewCta')}
             </Button>
             <ReviewModal
               onSubmitReview={onAddReview}

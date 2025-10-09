@@ -1,25 +1,39 @@
-import { Construction, DropletOff, LockKeyhole, Waves } from 'lucide-react';
+import {
+  Construction,
+  DropletOff,
+  LockKeyhole,
+  Waves,
+  type LucideIcon,
+} from 'lucide-react';
 import { ParkCondition } from '../types/parkCondition';
 
-export const PARK_CONDITIONS = [
+interface ParkConditionDef {
+  id: ParkCondition;
+  key: string;
+  icon: LucideIcon;
+}
+
+export const PARK_CONDITIONS: readonly ParkConditionDef[] = [
   {
     id: ParkCondition.MUDDY,
-    value: 'Muddy',
+    key: 'parks.conditions.labels.muddy',
     icon: Waves,
   },
   {
     id: ParkCondition.GATE_CLOSED,
-    value: 'Gate closed',
+    key: 'parks.conditions.labels.gateClosed',
     icon: LockKeyhole,
   },
   {
     id: ParkCondition.UNDER_CONSTRUCTION,
-    value: 'Under construction',
+    key: 'parks.conditions.labels.underConstruction',
     icon: Construction,
   },
   {
     id: ParkCondition.BROKEN_FOUNTAIN,
-    value: 'Broken fountain',
+    key: 'parks.conditions.labels.brokenFountain',
     icon: DropletOff,
   },
 ];
+
+export type { ParkConditionDef };

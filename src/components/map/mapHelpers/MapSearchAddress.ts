@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import { useMap } from 'react-leaflet';
 import Geocoder from 'leaflet-control-geocoder';
 import { useOrientationContext } from '../../../context/OrientationContext';
+import { useTranslation } from 'react-i18next';
+import { isRTL } from '../../../utils/language';
 
 interface MapSearchAddressProps {
   setCenter: (center: {
@@ -14,7 +16,9 @@ interface MapSearchAddressProps {
 
 const MapSearchAddress: React.FC<MapSearchAddressProps> = ({ setCenter }) => {
   const map = useMap();
-  const orientation = useOrientationContext((state) => state.orientation)
+  const orientation = useOrientationContext((state) => state.orientation);
+  const { t, i18n } = useTranslation();
+  const isRTLMode = isRTL(i18n.language);
 
   useEffect(() => {
     const geocoderControl = new Geocoder({
@@ -26,12 +30,11 @@ const MapSearchAddress: React.FC<MapSearchAddressProps> = ({ setCenter }) => {
         },
       }),
       defaultMarkGeocode: false,
-      errorMessage: "Oops! We couldn't sniff out that address",
-      position: 'topleft',
-      placeholder: 'Search address',
+      errorMessage: t('location.input.errorAddressNotFound'),
+      position: isRTLMode ? 'topright' : 'topleft',
+      placeholder: t('location.input.searchAddress'),
     });
     geocoderControl.addTo(map);
-    
 
     geocoderControl.on('markgeocode', (event) => {
       const location = event.geocode.center;
@@ -42,7 +45,7 @@ const MapSearchAddress: React.FC<MapSearchAddressProps> = ({ setCenter }) => {
     return () => {
       geocoderControl.remove();
     };
-  }, [map, setCenter]);
+  }, [map, setCenter, t, i18n.language, isRTLMode]);
 
   useEffect(() => {
     let input: HTMLInputElement | null = null;

@@ -1,16 +1,19 @@
-import { useMemo, useContext, useState } from 'react';
+import { useContext, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Flag } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { Review } from '../types/review';
 import { Button } from './Button';
-import { getFormattedPastDate } from '../utils/time';
+import { useDateUtils } from '../hooks/useDateUtils';
 import { fetchUser } from '../services/users';
 import { Stars } from './Stars';
-import { fetchPark } from '../services/parks';
 import { ReviewModalContext } from '../context/ReviewModalContext';
 import { ReportModal } from './ReportModal';
 import styles from './ReviewPreview.module.scss';
 import { capitalizeText } from '../utils/text';
+import { useAppLocale } from '../hooks/useAppLocale';
+import { fetchParkWithTranslation } from '../services/parks';
+import { parkKey } from '../hooks/api/keys';
 
 interface ReviewPreviewProps {
   review: Review;
@@ -25,14 +28,15 @@ const ReviewPreview: React.FC<ReviewPreviewProps> = ({
   showPark = false,
   withName = true,
 }) => {
+  const { t } = useTranslation();
+  const { getFormattedPastDate } = useDateUtils();
   const { setOpenedReview } = useContext(ReviewModalContext);
-  const reviewTime = useMemo<string>(() => {
-    const formattedDate = getFormattedPastDate(
-      review.updated_at || review.created_at
-    );
-    return capitalizeText(formattedDate);
-  }, [review.created_at, review.updated_at]);
+  const reviewTime = capitalizeText(
+    getFormattedPastDate(review.updated_at || review.created_at)
+  );
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+
+  const currentLanguage = useAppLocale();
 
   const { data: user } = useQuery({
     queryKey: ['user', review.user_id],
@@ -40,21 +44,33 @@ const ReviewPreview: React.FC<ReviewPreviewProps> = ({
     enabled: !!review.user_id,
   });
 
-  const { data: park } = useQuery({
-    queryKey: ['park', review.park_id],
-    queryFn: () => fetchPark(review.park_id),
+  const { data: translatedPark } = useQuery({
+    queryKey: parkKey(review.park_id, currentLanguage),
+    queryFn: () =>
+      fetchParkWithTranslation({
+        parkId: review.park_id,
+        language: currentLanguage,
+      }),
+    enabled: !!review.park_id,
+    placeholderData: (prev) => prev,
   });
 
   return (
     <div className={styles.container}>
-      {showPark && <div className={styles.parkName}>{park?.name || 'N/A'}</div>}
+      {showPark && (
+        <div className={styles.parkName}>{translatedPark?.name || 'N/A'}</div>
+      )}
       <div className={styles.review}>
         <div className={styles.top}>
-          <div className={styles.title}>{review.title}</div>
+          <div className={styles.title}>
+            <p dir="auto">{review.title}</p>
+          </div>
           <Stars rank={review.rank} className={styles.stars} />
         </div>
         {review.content && (
-          <div className={styles.content}>{review.content}</div>
+          <div className={styles.content}>
+            <p dir="auto">{review.content}</p>
+          </div>
         )}
         <div className={styles.bottom}>
           <div className={styles.details}>
@@ -70,7 +86,7 @@ const ReviewPreview: React.FC<ReviewPreviewProps> = ({
                 className={styles.button}
                 variant="simple"
               >
-                Update review
+                {t('parkReviews.updateReview')}
               </Button>
             ) : (
               <>

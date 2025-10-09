@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useMarkAllNotificationsAsRead } from '../../hooks/api/useMarkAllNotificationsAsRead';
 import { Button } from '../Button';
 import { UserContext } from '../../context/UserContext';
@@ -7,6 +8,7 @@ import styles from './MarkAllReadButton.module.scss';
 const MarkAllReadButton = () => {
   const { userId } = useContext(UserContext);
   const { markAllNotificationsAsRead } = useMarkAllNotificationsAsRead();
+  const { t } = useTranslation();
 
   return (
     <Button
@@ -17,8 +19,9 @@ const MarkAllReadButton = () => {
         }
       }}
       className={styles.markAllButton}
+      aria-label={t('notifications.actions.markAllRead')}
     >
-      Mark all as read
+      {t('notifications.actions.markAllRead')}
     </Button>
   );
 };

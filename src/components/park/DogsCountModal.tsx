@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { reportDogsCount } from '../../services/dogs-count';
@@ -17,6 +18,7 @@ const DogsCountModal: React.FC<{
   title?: string;
 }> = ({ parkId, isOpen, onClose, showOnlyCount, title }) => {
   const { notify } = useNotification();
+  const { t } = useTranslation();
 
   const [shouldHideDogsModal, setShouldHideDogsModal] =
     useLocalStorage('hideDogsModal');
@@ -50,7 +52,7 @@ const DogsCountModal: React.FC<{
 
   return (
     <FormModal
-      saveText="Submit"
+      saveText={t('common.actions.submit')}
       title={title}
       open={isOpen}
       onClose={() => onClose()}
@@ -66,7 +68,7 @@ const DogsCountModal: React.FC<{
           type="number"
           inputMode="numeric"
           name="dogsCount"
-          label="How many dogs are currently in the park?"
+          label={t('parks.busyHours.modal.dogsCountLabel')}
           min={0}
           max={99}
           value={dogsCount}
@@ -77,14 +79,11 @@ const DogsCountModal: React.FC<{
         <div className={styles.privacyContainer}>
           <Checkbox
             id="show"
-            label="Please don't ask me again"
+            label={t('common.actions.dontShowAgain')}
             onChange={() => setShouldHideDogsModalLocal((prev) => !prev)}
             isChecked={shouldHideDogsModalLocal}
           />
-          <span>
-            * You can always add a report by clicking the plus sign in the Busy
-            Hours section.
-          </span>
+          <span>{t('parks.busyHours.modal.hintSuffix')}</span>
         </div>
       )}
     </FormModal>

@@ -1,6 +1,7 @@
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Slider from 'react-slick';
 import { Plus, Trash2, X } from 'lucide-react';
 import classnames from 'classnames';
@@ -27,6 +28,7 @@ const Carousel: React.FC<CarouselProps> = ({
   setPrimaryImage,
   isLoading,
 }) => {
+  const { t } = useTranslation();
   const [imageToEnlarge, setImageToEnlarge] = useState<string>('');
   const [isApproveDeleteModalOpen, setIsApproveDeleteModalOpen] =
     useState(false);
@@ -100,7 +102,7 @@ const Carousel: React.FC<CarouselProps> = ({
                 className={styles.addImage}
               >
                 <Plus size={48} className={styles.plus} />
-                <span>Add photo</span>
+                <span>{t('components.carousel.addPhoto')}</span>
               </Button>
             </div>
           )}
@@ -113,11 +115,8 @@ const Carousel: React.FC<CarouselProps> = ({
         className={styles.approveModal}
       >
         <div className={styles.approveContent}>
-          <span>Hold your leash!</span>
-          <span>
-            Are you sure you want to send this pic to a farm up north where it
-            can run free forever?
-          </span>
+          <span>{t('components.carousel.confirmTitle')}</span>
+          <span>{t('components.carousel.confirmBody')}</span>
         </div>
         <div className={styles.buttonsContainer}>
           <Button
@@ -126,7 +125,7 @@ const Carousel: React.FC<CarouselProps> = ({
             className={styles.button}
           >
             <Trash2 size={16} />
-            <span>Delete</span>
+            <span>{t('common.actions.delete')}</span>
           </Button>
           <Button
             variant="secondary"
@@ -134,7 +133,7 @@ const Carousel: React.FC<CarouselProps> = ({
             className={styles.button}
           >
             <X size={16} />
-            <span>Cancel</span>
+            <span>{t('common.actions.cancel')}</span>
           </Button>
         </div>
       </TopModal>

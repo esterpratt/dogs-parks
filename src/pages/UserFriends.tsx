@@ -7,9 +7,11 @@ import styles from './UserFriends.module.scss';
 import { queryClient } from '../services/react-query';
 import { useEffect } from 'react';
 import { useFetchFriendsWithDogs } from '../hooks/api/useFetchFriendsWithDogs';
+import { useTranslation } from 'react-i18next';
 
 const UserFriends = () => {
   const { user } = useOutletContext() as { user: User };
+  const { t } = useTranslation();
 
   const { friendsWithDogs: friends, isLoading: isLoadingFriends } =
     useFetchFriendsWithDogs({
@@ -64,11 +66,11 @@ const UserFriends = () => {
   ) {
     return (
       <div className={styles.noFriends}>
-        <div>No friends yet.</div>
+        <div>{t('userFriends.noFriends')}</div>
         <div>
-          Sniff out some friends{' '}
+          {t('users.sniffFriends')}{' '}
           <Link to="/users" className={styles.link}>
-            here!
+            {t('favorites.sniffParksLink')}
           </Link>
         </div>
       </div>
@@ -79,7 +81,7 @@ const UserFriends = () => {
     <div className={styles.container}>
       {!!friends?.length && (
         <div className={styles.friendsContainer}>
-          <div className={styles.title}>My friends</div>
+          <div className={styles.title}>{t('userFriends.myFriends')}</div>
           {friends.map((friend) => {
             return <UserPreview key={friend.id} user={friend} />;
           })}
@@ -87,7 +89,7 @@ const UserFriends = () => {
       )}
       {!!pendingFriends?.length && (
         <div className={styles.friendsContainer}>
-          <div className={styles.title}>Friend requests</div>
+          <div className={styles.title}>{t('userFriends.friendRequests')}</div>
           {pendingFriends.map((friend) => {
             return (
               <UserPreview key={friend.id} user={friend} showFriendshipButton />
@@ -97,7 +99,7 @@ const UserFriends = () => {
       )}
       {!!myPendingFriends?.length && (
         <div className={styles.friendsContainer}>
-          <div className={styles.title}>Pending requests</div>
+          <div className={styles.title}>{t('userFriends.pendingRequests')}</div>
           {myPendingFriends.map((friend) => {
             return <UserPreview key={friend.id} user={friend} />;
           })}

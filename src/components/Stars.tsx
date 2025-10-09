@@ -44,7 +44,7 @@ const Stars: React.FC<StarsProps> = ({
           className={classnames(styles.star, styles.half)}
         />
         <StarHalf
-          style={{ marginLeft: `-${size}px` }}
+          style={{ marginInlineStart: `-${size}px` }}
           size={size}
           onClick={() => (setRank ? setRank(index) : () => {})}
           className={classnames(styles.star, styles.secondHalf)}

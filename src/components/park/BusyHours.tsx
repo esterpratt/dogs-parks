@@ -11,6 +11,7 @@ import { Section } from '../section/Section';
 import { BusyHoursChart } from '../charts/BusyHoursChart';
 import styles from './BusyHours.module.scss';
 import { getBusyHoursData } from './getBusyHoursData';
+import { useTranslation } from 'react-i18next';
 
 interface BusyHoursProps {
   parkId: string;
@@ -20,6 +21,7 @@ const BusyHours: React.FC<BusyHoursProps> = (props: BusyHoursProps) => {
   const { parkId } = props;
   const [isDogsCountModalOpen, setIsDogsCountModalOpen] = useState(false);
   const { userId } = useContext(UserContext);
+  const { t } = useTranslation();
 
   const { data: dogsCount, isLoading } = useQuery({
     queryKey: ['dogsCount', parkId],
@@ -42,7 +44,7 @@ const BusyHours: React.FC<BusyHoursProps> = (props: BusyHoursProps) => {
   return (
     <>
       <Section
-        title="Busy hours"
+        title={t('parks.sections.busyHours')}
         actions={
           userId ? (
             <Button
@@ -67,19 +69,21 @@ const BusyHours: React.FC<BusyHoursProps> = (props: BusyHoursProps) => {
                   [styles.empty]: !userId && !dogsCount?.length,
                 })}
               >
-                {isLoading && <span>Calculating...</span>}
+                {isLoading && <span>{t('common.status.calculating')}</span>}
                 {!isLoading && (
                   <>
                     <Info size={12} color={styles.green} />
                     {dogsCount?.length ? (
                       <>
-                        <span>Currently:</span>
-                        <span className={styles[business!.className]}>
-                          {business!.str}
-                        </span>
+                        <span>{t('common.status.currently')}</span>
+                        {business && (
+                          <span className={styles[business.className]}>
+                            {t(business.key)}
+                          </span>
+                        )}
                       </>
                     ) : (
-                      <span>No data yet.</span>
+                      <span>{t('common.status.noData')}</span>
                     )}
                   </>
                 )}
@@ -87,9 +91,11 @@ const BusyHours: React.FC<BusyHoursProps> = (props: BusyHoursProps) => {
               {!userId && !dogsCount?.length && (
                 <div>
                   <Button variant="simple" className={styles.link}>
-                    <Link to="/login?mode=login">Log In</Link>
+                    <Link to="/login?mode=login">
+                      {t('parks.busyHours.login')}
+                    </Link>
                   </Button>
-                  <span> to add data.</span>
+                  <span> {t('parks.busyHours.toAddDataSuffix')}</span>
                 </div>
               )}
             </div>

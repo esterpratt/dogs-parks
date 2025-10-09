@@ -3,7 +3,7 @@ import { MultiSelectInput } from './MultiSelectInput';
 import styles from './RadioInputs.module.scss';
 
 interface MultiSelectInputsProps {
-  options: { id: string; value: string }[];
+  options: { id: string; value: string; label?: string }[];
   name: string;
   label: string;
   value?: string[];
@@ -45,6 +45,7 @@ const MultiSelectInputs: React.FC<MultiSelectInputsProps> = ({
               name={name}
               id={option.id}
               value={option.value}
+              label={option.label}
               isChecked={value.includes(option.value)}
               onOptionChange={(event) => onOptionChange(event, option.value)}
             />

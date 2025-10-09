@@ -1,0 +1,256 @@
+---
+description: Project directory structure and important files guide for the Dogs Parks mobile app
+globs:
+alwaysApply: true
+---
+
+# Dogs Parks Project Structure
+
+This is a React/TypeScript mobile app built with Capacitor for iOS and Android, featuring a dog park finder with social features.
+
+## 🏗️ Root Level Structure
+
+```
+dogs-parks/
+├── 📱 Mobile Platforms
+│   ├── android/          # Android Capacitor build
+│   └── ios/              # iOS Capacitor build
+├── 🎨 Assets & Static
+│   ├── assets/           # App icons and splash screens
+│   ├── icons/            # PWA icons (various sizes)
+│   ├── public/           # Static assets served by Vite
+│   └── dist/             # Built application output
+├── 🧪 Testing & Config
+│   ├── tests/            # E2E tests (Playwright)
+│   ├── test-results/     # Test execution results
+│   └── playwright-report/ # Test reports
+├── ⚙️ Configuration
+│   ├── capacitor.config.ts    # Capacitor configuration
+│   ├── vite.config.ts         # Vite build configuration
+│   ├── tsconfig.json          # TypeScript configuration
+│   ├── playwright.config.ts   # E2E test configuration
+│   └── package.json           # Dependencies and scripts
+├── 🗄️ Backend
+│   └── supabase/         # Supabase functions and config
+└── 📋 Data
+    └── parks.json        # Park data seed file
+```
+
+## 📂 Source Code Structure (`src/`)
+
+### Core Application Files
+
+- `main.tsx` - Application entry point
+- `App.tsx` - Root application component
+- `RootLayout.tsx` - Main layout wrapper
+- `App.scss` - Global application styles
+- `theme.scss` - Theme definitions
+- `variables.scss` - SCSS variables
+- `global.d.ts` - Global TypeScript declarations
+
+### 📄 Pages (`src/pages/`)
+
+Route-level components representing full screens:
+
+**Authentication & User Management:**
+
+- `Login.tsx` - User authentication
+- `AuthCallback.tsx` - OAuth callback handling
+- `Profile.tsx` - User profile management
+- `UserInfo.tsx` - User information editing
+- `UpdatePassword.tsx` - Password management
+- `DeleteAccount.tsx` - Account deletion
+- `PrivateRoute.tsx` - Protected route wrapper
+
+**Core Features:**
+
+- `Home.tsx` - Main dashboard/home screen
+- `Parks.tsx` - Parks listing and search
+- `Park.tsx` - Individual park details
+- `ParkDetails.tsx` - Detailed park information
+- `ParkReviews.tsx` - Park reviews listing
+- `ParkVisitors.tsx` - Current park visitors
+- `NewPark.tsx` - Add new park form
+
+**User Content:**
+
+- `UserDogs.tsx` - User's dogs management
+- `UserDog.tsx` - Individual dog details
+- `UserFavorites.tsx` - Favorite parks
+- `UserFriends.tsx` - User's friends
+- `UserReviews.tsx` - User's reviews
+- `Notifications.tsx` - Push notifications
+
+**Utility Pages:**
+
+- `About.tsx` - App information
+- `PrivacyPolicy.tsx` - Privacy policy
+- `Error.tsx` - Error boundary page
+- `ShareRedirect.tsx` - Deep link handling
+
+### 🧩 Components (`src/components/`)
+
+Reusable UI components organized by feature:
+
+**Core UI Components:**
+
+- `Button.tsx` - Standard button component
+- `Header.tsx` - Page headers
+- `Image.tsx` - Optimized image component
+- `Loader.tsx` - Loading indicators
+- `Carousel.tsx` - Image carousel
+
+**Navigation:**
+
+- `NavbarBottom.tsx` - Bottom navigation bar
+- `NavbarLogoutButton.tsx` - Logout functionality
+
+**Input Components (`inputs/`):**
+
+- `Input.tsx` - Basic text input
+- `ControlledInput.tsx` - Form-controlled input
+- `TextArea.tsx` - Multi-line text input
+- `SearchInput.tsx` - Search functionality
+- `LocationInput.tsx` - Location picker
+- `AutoComplete.tsx` - Autocomplete input
+- `Checkbox.tsx` - Checkbox input
+- `RadioInput.tsx` - Radio button input
+- `ToggleInput.tsx` - Toggle switch
+- `RangeInput.tsx` - Range slider
+- `FileInput.tsx` - File upload
+
+**Feature-Specific Components:**
+
+- `camera/` - Camera and photo capture
+- `map/` - Map integration and markers
+- `park/` - Park-related components
+- `dog/` - Dog management components
+- `profile/` - User profile components
+- `notifications/` - Notification system
+- `modals/` - Modal dialogs
+- `charts/` - Data visualization
+- `weather/` - Weather integration
+
+### 🎣 Hooks (`src/hooks/`)
+
+Custom React hooks for state and logic:
+
+**API Hooks (`api/`):**
+
+- `keys.ts` - React Query cache keys
+- `useAddDog.ts` - Add dog mutation
+- `useAddReview.ts` - Add review mutation
+- `useFetchFriendsWithDogs.ts` - Friends data fetching
+- `useNotificationsRealtime.ts` - Real-time notifications
+
+**Utility Hooks:**
+
+- `useAppLocale.ts` - Internationalization
+- `useDebounce.ts` - Input debouncing
+- `useLocalStorage.ts` - Local storage management
+- `useThemeMode.ts` - Dark/light theme
+- `useClickOutside.ts` - Outside click detection
+- `useKeyboardFix.ts` - Mobile keyboard handling
+
+### 🔧 Services (`src/services/`)
+
+Business logic and API integrations:
+
+**Core Services:**
+
+- `supabase-client.ts` - Supabase configuration
+- `authentication.ts` - User authentication
+- `react-query.ts` - Query client setup
+
+**Data Services:**
+
+- `parks.ts` - Park data management
+- `dogs.ts` - Dog data management
+- `users.ts` - User data management
+- `reviews.ts` - Review system
+- `favorites.ts` - Favorites management
+- `friendships.ts` - Social features
+- `notifications.ts` - Push notifications
+- `checkins.ts` - Park check-ins
+
+**Utility Services:**
+
+- `image.ts` - Image handling
+- `image-compression.ts` - Image optimization
+- `weather.ts` - Weather data
+- `map.ts` - Map integration
+- `error.ts` - Error handling
+
+### 📊 Types (`src/types/`)
+
+TypeScript type definitions:
+
+- `user.ts` - User-related types
+- `park.ts` - Park data types
+- `dog.ts` - Dog data types
+- `review.ts` - Review types
+- `notification.ts` - Notification types
+- `weather.ts` - Weather data types
+- `supabase.ts` - Database types
+
+### 🛠️ Utils (`src/utils/`)
+
+Helper functions and utilities:
+
+- `consts.ts` - Application constants
+- `date.ts` - Date formatting utilities
+- `geoFormat.ts` - Geographic formatting
+- `platform.ts` - Platform detection
+- `language.ts` - Internationalization helpers
+- `weather.ts` - Weather utilities
+
+### 🌍 Internationalization (`src/i18n/`)
+
+- `index.ts` - i18n configuration
+- `locales/` - Translation files
+
+### 📱 Context (`src/context/`)
+
+React context providers:
+
+- `UserContext.tsx` - User state management
+- `LocationContext.tsx` - Location management
+- `NotificationContext.tsx` - In-app notifications wrapper
+- `ModeContext.tsx` - Dark/lignt mode
+- `OrientationContext.tsx` - Device orientation
+
+## 📋 Key Configuration Files
+
+- `capacitor.config.ts` - Mobile app configuration
+- `vite.config.ts` - Build tool configuration
+- `tsconfig.json` - TypeScript compiler options
+- `package.json` - Dependencies and scripts
+- `vercel.json` - Deployment configuration
+
+## 🎨 Styling Architecture
+
+- **CSS Modules**: Component-scoped styles (`.module.scss`)
+- **Global Styles**: `theme.scss`, `variables.scss`
+- **SCSS**: Preprocessor for enhanced CSS features
+
+## 🧪 Testing Structure
+
+- `tests/e2e/` - End-to-end tests with Playwright
+- `*.test.ts` - Unit tests alongside source files
+- `playwright.config.ts` - E2E test configuration
+
+## 📱 Mobile Platform Files
+
+- `android/` - Android-specific Capacitor files
+- `ios/` - iOS-specific Capacitor files
+- Native build configurations and resources
+
+## 🔄 Key Development Patterns
+
+1. **Feature-based organization** in components
+2. **Custom hooks** for reusable logic
+3. **TypeScript** for type safety
+4. **CSS Modules** for component styling
+5. **React Query** for API state management
+6. **Supabase** for backend services
+7. **Capacitor** for mobile deployment

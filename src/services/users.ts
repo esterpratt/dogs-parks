@@ -16,8 +16,8 @@ const updateUser = async ({ userId, userDetails }: EditUserProps) => {
       .from('users')
       .update({ ...userDetails })
       .eq('id', userId);
-    
-      if (error) {
+
+    if (error) {
       throw error;
     }
   } catch (error) {
@@ -32,9 +32,9 @@ const fetchUser = async (id: string) => {
       .select('*')
       .eq('id', id)
       .single();
-    
+
     if (error) {
-      throw new AppError(USER_NOT_FOUND_ERROR, 403)
+      throw new AppError(USER_NOT_FOUND_ERROR, 403);
     }
 
     return user;
@@ -46,10 +46,8 @@ const fetchUser = async (id: string) => {
 const fetchUsers = async (ids?: string[]) => {
   try {
     if (!ids || !ids.length) {
-      const { data: users, error } = await supabase
-      .from('users')
-      .select("*")
-      
+      const { data: users, error } = await supabase.from('users').select('*');
+
       if (error) {
         throw error;
       }
@@ -58,8 +56,8 @@ const fetchUsers = async (ids?: string[]) => {
     } else {
       const { data: users, error } = await supabase
         .from('users')
-        .select("*")
-        .in('id', ids)
+        .select('*')
+        .in('id', ids);
 
       if (error) {
         throw error;
@@ -98,15 +96,19 @@ const fetchUsersWithDogsByIds = async (ids: string[]) => {
 
 const filterUsersAndDogs = async (input: string) => {
   try {
-    const { data, error } = await supabase.rpc('search_users_with_dogs', { input });
+    const { data, error } = await supabase.rpc('search_users_with_dogs', {
+      input,
+    });
 
     if (error) {
       throw error;
     }
-    
+
     return data;
   } catch (error) {
-    console.error(`there was an error searching users: ${JSON.stringify(error)}`);
+    console.error(
+      `there was an error searching users: ${JSON.stringify(error)}`
+    );
     return [];
   }
 };
@@ -116,7 +118,7 @@ export {
   fetchUser,
   fetchUsers,
   fetchUsersWithDogsByIds,
-  filterUsersAndDogs
+  filterUsersAndDogs,
 };
 
 export type { EditUserProps };

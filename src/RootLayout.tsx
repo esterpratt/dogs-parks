@@ -13,6 +13,7 @@ import { useUrlHandler } from './hooks/useUrlHandler';
 import { useThemeMode } from './hooks/useThemeMode';
 import { usePushNotifications } from './hooks/usePushNotifications';
 import { useNotificationsRealtime } from './hooks/api/useNotificationsRealtime';
+import { useI18nDirection } from './hooks/useI18nDirection';
 
 const RootLayout = () => {
   useUrlHandler();
@@ -20,6 +21,7 @@ const RootLayout = () => {
   useThemeMode();
   usePushNotifications();
   useNotificationsRealtime();
+  useI18nDirection();
   const keyboardHeight = useKeyboardFix();
   useSafeArea();
   const safeAreaAddition = !isIos()

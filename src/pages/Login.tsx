@@ -20,10 +20,12 @@ import { Input } from '../components/inputs/Input';
 import { useNotification } from '../context/NotificationContext';
 import { preserveCursor } from '../utils/input';
 import styles from './Login.module.scss';
+import { useTranslation } from 'react-i18next';
 import { useModeContext } from '../context/ModeContext';
 import { useTransportOnline } from '../hooks/useTransportOnline';
 
 const Login = () => {
+  const { t } = useTranslation();
   const {
     user,
     userSigninWithGoogle,
@@ -36,6 +38,12 @@ const Login = () => {
   const [searchParams, setSearchParams] = useSearchParams({ mode: 'signup' });
   const [showPassword, setShowPassword] = useState(false);
   const isSignup = searchParams.get('mode') === 'signup';
+  const providerAppleKey = isSignup
+    ? 'login.cta.apple.signup'
+    : 'login.cta.apple.continue';
+  const providerGoogleKey = isSignup
+    ? 'login.cta.google.signup'
+    : 'login.cta.google.continue';
   const mailRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const topRef = useRef<HTMLInputElement | null>(null);
@@ -70,7 +78,7 @@ const Login = () => {
         setError(error.message);
       },
       onSuccess: () => {
-        notify('Check your mail for details');
+        notify(t('login.checkMail'));
         setError('');
         changeMethod('login');
       },
@@ -78,7 +86,7 @@ const Login = () => {
 
   const googleSignin = async () => {
     if (isOffline) {
-      setError('You are offline. Connect to continue.');
+      setError(t('login.offline'));
       return;
     }
 
@@ -91,7 +99,7 @@ const Login = () => {
 
   const appleSignin = async () => {
     if (isOffline) {
-      setError('You are offline. Connect to continue.');
+      setError(t('login.offline'));
       return;
     }
 
@@ -115,7 +123,7 @@ const Login = () => {
         setError(error.message);
       },
       onSuccess: () => {
-        notify('Check your mail for details');
+        notify(t('login.checkMail'));
         setError('');
         changeMethod('login');
       },
@@ -125,7 +133,7 @@ const Login = () => {
     event.preventDefault();
 
     if (isOffline) {
-      setError('You are offline. Connect to log in.');
+      setError(t('login.offline'));
       return;
     }
 
@@ -134,13 +142,13 @@ const Login = () => {
     ) as unknown as Required<Omit<SigninProps, 'withGoogle'>>;
     if (isSignup) {
       if (!formData.email || !formData.password || !formData.name) {
-        setError('Please fill in the missing details');
+        setError(t('login.missingDetails'));
       } else {
         userSigninWithEmailAndPassowrd(formData);
       }
     } else {
       if (!formData.email || !formData.password) {
-        setError('Please fill in the missing details');
+        setError(t('login.missingDetails'));
       } else {
         userLogin(formData);
       }
@@ -151,7 +159,7 @@ const Login = () => {
     event.preventDefault();
 
     if (isOffline) {
-      setError('You are offline. Connect to reset your password.');
+      setError(t('login.offline'));
       return;
     }
 
@@ -159,7 +167,7 @@ const Login = () => {
     if (email) {
       resetPassword(email);
     } else {
-      setError('Please Enter Email');
+      setError(t('login.pleaseEnterEmail'));
     }
   };
 
@@ -175,9 +183,7 @@ const Login = () => {
       <div className={styles.container}>
         <div className={styles.formContainer} ref={topRef}>
           <h1 className={styles.title}>
-            {isSignup
-              ? 'Sign up to KlavHub to create a profile, add friends, and contribute park info.'
-              : 'Log in to KlavHub to manage your profile, add friends, and share park updates.'}
+            {isSignup ? t('login.titleSignup') : t('login.titleLogin')}
           </h1>
           <div className={styles.infoLine}>
             <div className={classnames(styles.error, error ? styles.show : '')}>
@@ -190,7 +196,7 @@ const Login = () => {
                   styles.show
               )}
             >
-              Paws a sec...
+              {t('login.pawsASec')}
             </span>
           </div>
           <form onSubmit={handleSubmit} className={styles.inputsContainer}>
@@ -202,7 +208,7 @@ const Login = () => {
                 ref={mailRef}
                 onChange={() => setError('')}
                 name="email"
-                placeholder="Email *"
+                placeholder={t('login.placeholderEmail')}
                 type="email"
                 data-test="login-email"
               />
@@ -213,7 +219,7 @@ const Login = () => {
                 ref={passwordRef}
                 onChange={() => setError('')}
                 name="password"
-                placeholder="Password *"
+                placeholder={t('login.placeholderPassword')}
                 type={showPassword ? 'text' : 'password'}
                 data-test="login-password"
                 rightIcon={
@@ -246,7 +252,7 @@ const Login = () => {
                 <Input
                   onChange={() => setError('')}
                   name="name"
-                  placeholder="Your name *"
+                  placeholder={t('login.placeholderName')}
                   type="text"
                   className={classnames(styles.input, {
                     [styles.dark]: mode === 'dark',
@@ -262,11 +268,11 @@ const Login = () => {
                 isOffline || isSigningIn || isLoading || isPendingResetPassword
               }
             >
-              {isSignup ? 'Sign up' : 'Dog in'}
+              {isSignup ? t('login.signup') : t('login.login')}
             </Button>
           </form>
           <div className={styles.lineThrough}>
-            <span>Or</span>
+            <span>{t('login.or')}</span>
           </div>
           <Button
             variant="secondary"
@@ -282,9 +288,7 @@ const Login = () => {
             ) : (
               <AppleBlack className={styles.appleIcon} />
             )}
-            <div className={styles.buttonText}>
-              {isSignup ? 'Sign up' : 'Continue'} with Apple
-            </div>
+            <div className={styles.buttonText}>{t(providerAppleKey)}</div>
           </Button>
           <Button
             variant="secondary"
@@ -296,46 +300,44 @@ const Login = () => {
             disabled={isOffline}
           >
             <GoogleIcon width={16} height={16} />
-            <div className={styles.buttonText}>
-              {isSignup ? 'Sign up' : 'Continue'} with Google
-            </div>
+            <div className={styles.buttonText}>{t(providerGoogleKey)}</div>
           </Button>
         </div>
         <div className={styles.changeMethod}>
           {isSignup ? (
             <>
-              <span>Already part of the pack?</span>
+              <span>{t('login.alreadyMember')}</span>
               <Button
                 className={styles.changeMethodButton}
                 variant="simple"
                 onClick={() => changeMethod('login')}
               >
-                Log in
+                {t('login.login')}
               </Button>
             </>
           ) : (
             <>
-              <span>Not part of the pack yet?</span>
+              <span>{t('login.notMemberYet')}</span>
               <Button
                 className={styles.changeMethodButton}
                 variant="simple"
                 onClick={() => changeMethod('signup')}
               >
-                Sign up
+                {t('login.signup')}
               </Button>
             </>
           )}
         </div>
         {!isSignup && (
           <div className={styles.resetPassword}>
-            <span>Forgot password?</span>
+            <span>{t('login.forgotPassword')}</span>
             <Button
               variant="simple"
               onClick={onClickResetPassword}
               className={styles.resetButton}
               disabled={isOffline}
             >
-              Reset password
+              {t('login.resetPassword')}
             </Button>
           </div>
         )}

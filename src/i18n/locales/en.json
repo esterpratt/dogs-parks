@@ -1,0 +1,1043 @@
+{
+  "language": {
+    "title": "Language",
+    "modalTitle": "Choose language",
+    "english": "English",
+    "hebrew": "Hebrew"
+  },
+  "userDogs": {
+    "titleMyPack": "My pack",
+    "titleUsersPack": "{{name}}'s pack",
+    "addDog": "Add dog",
+    "emptySignedIn1": "Your dog squad is looking pretty empty.",
+    "emptySignedIn2": "Time to recruit some furry friends!",
+    "otherEmpty": "{{name}}'s pack seems to be empty",
+    "cameraModalTitle": "Add your dog image"
+  },
+  "deleteAccount": {
+    "title": "Deleting Your Data on KlavHub",
+    "fullDeleteTitle": "To delete your full account and all associated data:",
+    "fullDeleteStep1": "Go to your profile",
+    "fullDeleteStep2": "Tap Settings -> Delete my profile",
+    "fullDeleteStep3": "Tap Delete",
+    "fullDeleteNote": "This will permanently remove your account and all related data",
+    "deleteDogTitle": "To delete your dog:",
+    "deleteDogStep1": "Go to your profile",
+    "deleteDogStep2": "Tap on your dog's profile",
+    "deleteDogStep3": "Tap the edit icon",
+    "deleteDogStep4": "Scroll to and tap 'Say Goodbye...'",
+    "deleteDogStep5": "Tap Delete",
+    "deleteDogBody": "When you delete your dog's profile, the data is removed from the app and inaccessible. It is not visible to other users and no longer retained for display or processing.",
+    "help": "If you need help, contact us at:",
+    "helpEmail": "esterpratt@gmail.com"
+  },
+  "privacyPolicy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last Updated: 1.7.25",
+    "introTitle": "Introduction",
+    "intro": "Welcome to KlavHub. This privacy policy explains how we collect, use, and protect your information when you use our app, KlavHub (the \"App\"). By using the App, you agree to the collection and use of information in accordance with this policy.",
+    "dataWeCollect": {
+      "title": "Information We Collect",
+      "lead": "We may collect the following types of information:",
+      "personalTitle": "Personal Information (when creating an account):",
+      "personalItems": [
+        "Name, email address.",
+        "If you sign in using Google, we may collect profile details as per their policies.",
+        "Any additional data you deliberately add to your profile, such as your dog's details and park interactions."
+      ],
+      "usageTitle": "Usage Data:",
+      "usageDesc": "Information about how you interact with the App (e.g., features used, session duration).",
+      "deviceTitle": "Device Information:",
+      "deviceDesc": "Device type, operating system, and unique device identifiers.",
+      "locationTitle": "Approximate or precise location (only with your permission).",
+      "photosTitle": "Photos and other content you upload to the App."
+    },
+    "usage": {
+      "title": "How We Use Your Information",
+      "lead": "We use your data to:",
+      "items": [
+        "Allow other dog parents to search for friends and view their dogs' pages. If you prefer to keep your page private, you can change this anytime in the profile settings.",
+        "Provide and improve our services.",
+        "Personalize your experience.",
+        "Communicate updates and support.",
+        "Analyze usage to enhance performance.",
+        "Ensure security and prevent fraud."
+      ]
+    },
+    "sharing": {
+      "title": "Sharing Your Information",
+      "lead": "We do not sell your personal information. However, we may share data with:",
+      "items": [
+        "Service Providers – For analytics, hosting, or customer support.",
+        "Legal Authorities – If required by law or to prevent fraud."
+      ]
+    },
+    "security": {
+      "title": "Data Retention and Security",
+      "desc": "We keep your data only as long as necessary for its intended purpose. We implement industry-standard security measures to protect your data. However, no online service is 100% secure, so use the App at your own risk."
+    },
+    "delete": {
+      "title": "Deleting Your Data",
+      "desc": "You can delete your account anytime from the profile settings. For detailed instructions on how to delete your data",
+      "linkText": "click here"
+    },
+    "privateOption": "If you prefer to keep your page private, you can change this anytime in the profile settings.",
+    "children": {
+      "title": "Children’s Privacy",
+      "desc": "Our App is not intended for children under 13 (or 16 in some regions). We do not knowingly collect personal data from minors."
+    },
+    "thirdParties": {
+      "title": "Third-Party Services",
+      "desc": "We may use third-party services that collect data (e.g., Google Analytics, Supabase). Each third party has its own privacy policy:",
+      "links": ["Google Analytics: https://policies.google.com/privacy"]
+    },
+    "changes": {
+      "title": "Changes to This Policy",
+      "desc": "We may update this policy periodically. We will notify you of significant changes by updating the \"Last Updated\" date."
+    },
+    "contact": {
+      "title": "Contact Us",
+      "desc": "If you have questions about this Privacy Policy, contact us at:"
+    }
+  },
+  "about": {
+    "welcomeTitle": "Welcome to KlavHub!",
+    "welcomeBody": "KlavHub is built for dog lovers looking to find the best nearby dog parks and connect with friends.",
+    "helpTitle": "Need help or have feedback?",
+    "helpBody": "If you're experiencing issues with the app or have any suggestions, feel free to reach out at:",
+    "privacyCta": "View our privacy policy here.",
+    "earlyBody": "This app is just getting started, and your help growing the community is deeply appreciated. You can support Klavhub by joining the community, sharing with friends, adding details about your local dog park, and contributing missing parks.",
+    "thankYou": "Thank you!",
+    "createdBy": "Created by:",
+    "createdByName": "Ester Pratt.",
+    "inspiredByTitle": "Inspired by:",
+    "inspiredByBody": "My special dog Nina, the dog who doesn't go to dog parks.",
+    "specialThanks": "Special thanks to: Kfir Arad, Rotem Koltz."
+  },
+  "users": {
+    "noResults": "No users were found",
+    "searchTitle": "Sniff out some friends!",
+    "sniffFriends": "Sniff out some friends",
+    "searchPlaceholder": "Search by user or dog name",
+    "preview": {
+      "dogsCount": "'s dogs",
+      "dogsCount_one": "'s dog",
+      "dogsCount_female_one": "'s dog",
+      "dogsCount_other": "'s dogs",
+      "accept": "Accept",
+      "decline": "Decline",
+      "exit": "Exit",
+      "gated": {
+        "prefix": "To see user's page and make friends, you must",
+        "login": "log in!"
+      }
+    },
+    "friends": {
+      "status": {
+        "friends": "You are friends",
+        "waitingResponse": "Waiting friend's response",
+        "wantsToBeYourFriend": "{{name}} wants to be your friend"
+      },
+      "actions": {
+        "unfriend": "Unfriend",
+        "accept": "Accept",
+        "decline": "Decline",
+        "removeRequest": "Remove request",
+        "addFriend": "Add friend"
+      }
+    }
+  },
+  "favorites": {
+    "none": "No favorite parks yet.",
+    "sniffParksPrefix": "Sniff out nearby parks",
+    "sniffParksLink": "here!",
+    "title": "My favorite parks"
+  },
+  "error": {
+    "title": "Uh-oh! {{message}}",
+    "tryAgain": "Toss me more treats and try again!",
+    "generic": "There was a problem",
+    "offline": "You are offline. Connect to the internet to continue.",
+    "notFound": "Could not find page"
+  },
+  "auth": {
+    "same_password": "Please enter a new password",
+    "invalid_credentials": "Incorrect email or password",
+    "email_not_confirmed": "Please verify your email before logging in",
+    "provider_not_enabled": "This sign in method isn’t available",
+    "rate_limited": "Too many attempts. Try again later",
+    "bad_request": "There was a problem with your request",
+    "unauthorized": "You’re not authorized",
+    "forbidden": "Access denied",
+    "user_not_found": "Account not found",
+    "server_error": "Server error. Try again",
+    "network": "Network error. Check your connection",
+    "unknown": "Something went wrong",
+    "email_already_exists": "This email is already registered",
+    "weak_password": "Password is too weak",
+    "signups_disabled": "Sign ups are currently disabled",
+    "session_expired": "Your session has expired. Please sign in again",
+    "captcha_failed": "CAPTCHA verification failed",
+    "too_many_mfa_factors": "Too many MFA factors enrolled",
+    "email_not_authorized": "This email address isn’t allowed to sign in",
+    "user_banned": "This account is temporarily suspended"
+  },
+  "share": {
+    "title": "Someone shared a park with you!",
+    "subtitle": "Wanna sniff it out in the app?",
+    "openInApp": "Open in app",
+    "downloadFrom": "Download KlavHub from {{store}}",
+    "continueHere": "Continue here",
+    "store": {
+      "appStore": "the App Store",
+      "googlePlay": "Google Play"
+    }
+  },
+  "userInfo": {
+    "editDetails": "Edit details",
+    "logout": "Logout",
+    "deleteProfile": "Delete my profile",
+    "deleteModalTitle": "Hold your leash!",
+    "deleteModalBody1": "By clicking 'Delete', all your data and your dogs' data will be sent to a farm up north where it can run free forever.",
+    "deleteModalBody2": "Are you sure you want to say goodbye?",
+    "deleteDogButton": "Say goodbye to {{name}}",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "edit": {
+      "titleUpdate": "Update your details",
+      "labels": {
+        "name": "Name *"
+      },
+      "privacy": {
+        "hideMe": "Hide me",
+        "explanation": "* If you are hidden, you won’t appear in search results. Only your friends or users you have sent friend requests to will be able to see your page."
+      }
+    },
+    "theme": {
+      "darkMode": "Dark mode"
+    }
+  },
+  "emailCallback": {
+    "title": "Good boy!",
+    "verified": "Your account is verified and you're officially part of the pack.",
+    "closeTab": "You can close this tab and fetch the app to continue your adventure.",
+    "openApp": "Open the app",
+    "continueHere": "Continue here"
+  },
+  "userReviews": {
+    "title": "My park reviews"
+  },
+  "profile": {
+    "myFriends": "My friends",
+    "users": "Users",
+    "pawsUp": "Paws up, {{name}}!",
+    "pawsUpRich": "Paws up, <name>{{name}}</name>!",
+    "meetPrefix": "Meet",
+    "packSuffix": "'s pack: {{dogs}}",
+    "tabs": {
+      "dogs": "Dogs",
+      "friends": "Friends",
+      "favorites": "Favorites",
+      "reviews": "Reviews",
+      "settings": "Settings"
+    }
+  },
+  "visitors": {
+    "friendsTitle": "Friends at the park right now",
+    "onlyFriendsDetails": "You can only see friends' details",
+    "sniffFriendsPrefix": "Sniff out some friends",
+    "sniffFriendsLink": "here!"
+  },
+  "updatePassword": {
+    "title": "Good boy!",
+    "updated": "Your password has been updated.",
+    "returnApp": "You can now return to the app and continue your adventure.",
+    "openApp": "Open the app",
+    "continueHere": "Continue here",
+    "pawsASec": "Paws a sec...",
+    "placeholderNewPassword": "Enter new password",
+    "buttonUpdate": "Update password",
+    "invalidLink": "This reset link is invalid or expired. Please request a new one.",
+    "pleaseEnterNewPassword": "Please enter a new password"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "You have no notifications",
+    "actions": {
+      "markAllRead": "Mark all as read"
+    },
+    "common": {
+      "someone": "Someone"
+    },
+    "general": {
+      "defaultTitle": "Notification",
+      "defaultMessage": "You have a new update"
+    },
+    "list": {
+      "headerNew_one": "{{count}} new notification",
+      "headerNew_other": "{{count}} new notifications",
+      "headerNone": "No new notifications",
+      "headerEarlier": "Earlier"
+    },
+    "types": {
+      "friendRequest": {
+        "title": "{{name}} sent you a friend request",
+        "appMessage": "Click to respond"
+      },
+      "friendApproval": {
+        "title": "{{name}} accepted your friend request",
+        "appMessage": "You are now friends!"
+      },
+      "parkInvite": {
+        "title": "{{name}} invited you to a park",
+        "appMessage": "Click to respond"
+      },
+      "parkInviteResponse": {
+        "title": "{{name}} responded to your invite",
+        "appMessage": "Click to view the response"
+      }
+    },
+    "modal": {
+      "title": "Update your notifications",
+      "section": {
+        "general": "General",
+        "types": "Notification Types"
+      },
+      "mute": {
+        "title": "Mute notifications",
+        "description": "Turn off all notifications"
+      },
+      "types": {
+        "friendRequests": {
+          "title": "Friend requests",
+          "description": "Get notified when someone wants to be friends"
+        },
+        "friendApprovals": {
+          "title": "Friend approvals",
+          "description": "Get notified when your friend requests are accepted"
+        }
+      }
+    }
+  },
+  "parkReviews": {
+    "emptyTitle": "No barks about this park yet",
+    "firstReviewCta": "Be the first to leave a review!",
+    "averageRank": "Average rank: {{rank}}",
+    "addReview": "Add review",
+    "updateReview": "Update review"
+  },
+  "userFriends": {
+    "noFriends": "No friends yet.",
+    "myFriends": "My friends",
+    "friendRequests": "Friend requests",
+    "pendingRequests": "Pending requests"
+  },
+  "newPark": {
+    "breadcrumbAllParks": "All parks",
+    "fillDetailsTitle": "Fill the park details to add it",
+    "placeholderName": "Park name",
+    "placeholderSize": "Size in square meters (if known)",
+    "placeholderCity": "City *",
+    "placeholderAddress": "Address *",
+    "labelLocation": "Park location *",
+    "addButton": "Add park",
+    "onlyMembers": "Only KlavHubers can add a new park.",
+    "loginLink": "Log In",
+    "packInvite": "to be part of the pack!",
+    "exit": "Exit",
+    "finishThankYou": "Thank you!",
+    "finishAddedSoon": "The park will be added shortly.",
+    "finishAddAnother": "Want to add another one?",
+    "finishAddButton": "Add park",
+    "finishBackToParks": "Back to parks"
+  },
+  "deletionConfirmation": {
+    "confirmation1": "Your data has been sent to a farm up north.",
+    "confirmation2": "Thanks for being part of the pack! The doggy door is always open — come back anytime!",
+    "goHome": "Go Home"
+  },
+  "login": {
+    "titleSignup": "Sign up to KlavHub to create a profile, add friends, and contribute park info.",
+    "titleLogin": "Log in to KlavHub to manage your profile, add friends, and share park updates.",
+    "checkMail": "Check your mail for details",
+    "offline": "You are offline. Connect to continue.",
+    "pawsASec": "Paws a sec...",
+    "placeholderEmail": "Email *",
+    "placeholderPassword": "Password *",
+    "placeholderName": "Your name *",
+    "continue": "Continue",
+    "withApple": "with Apple",
+    "withGoogle": "with Google",
+    "missingDetails": "Please fill in the missing details",
+    "pleaseEnterEmail": "Please enter email",
+    "or": "Or",
+    "alreadyMember": "Already part of the pack?",
+    "login": "Log in",
+    "notMemberYet": "Not part of the pack yet?",
+    "signup": "Sign up",
+    "forgotPassword": "Forgot password?",
+    "resetPassword": "Reset password",
+    "cta": {
+      "apple": {
+        "signup": "Sign up with Apple",
+        "continue": "Continue with Apple"
+      },
+      "google": {
+        "signup": "Sign up with Google",
+        "continue": "Continue with Google"
+      }
+    }
+  },
+  "common": {
+    "actions": {
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "login": "Log in",
+      "logout": "Logout",
+      "search": "Search",
+      "openSettings": "Open settings",
+      "maybeLater": "Maybe later",
+      "dontShowAgain": "Don't show again",
+      "view": "View",
+      "add": "Add",
+      "accept": "Accept",
+      "decline": "Decline",
+      "report": "Report",
+      "share": "Share",
+      "checkin": "Check in",
+      "checkout": "Check out",
+      "like": "Like",
+      "unlike": "Unlike",
+      "submit": "Submit",
+      "save": "Save"
+    },
+    "placeholders": {
+      "search": "Search",
+      "searchPark": "Search park",
+      "reviewTitle": "Review title",
+      "reviewContent": "Please elaborate..."
+    },
+    "status": {
+      "errorLoadingImage": "There was an error loading the image",
+      "calculating": "Calculating...",
+      "currently": "Currently",
+      "noData": "No data yet"
+    }
+  },
+  "nav": {
+    "bottom": {
+      "explore": "Explore",
+      "searchFriends": "Search friends",
+      "addPark": "Add new park",
+      "privacy": "Privacy policy",
+      "about": "About",
+      "login": "Login"
+    }
+  },
+  "parks": {
+    "breadcrumb": {
+      "all": "All parks"
+    },
+    "preview": {
+      "view": "View park",
+      "seeOnMap": "See in map"
+    },
+    "search": {
+      "placeholder": "Search park"
+    },
+    "tabs": {
+      "general": "General",
+      "reviews": "Reviews",
+      "visitors": "Visitors"
+    },
+    "share": {
+      "title": "Share a park",
+      "text": "Check out {{name}} on KlavHub",
+      "dialogTitle": "Share {{name}}"
+    },
+    "noResults": {
+      "user": {
+        "title": "Can’t sniff out your park?",
+        "helpPrefix": "Help us by",
+        "helpLink": "adding the park details!"
+      },
+      "noUser": {
+        "title": "Sorry, can’t sniff out your park",
+        "loginLink": "Log in",
+        "ctaSignedOutSuffix": "to add your park!"
+      }
+    },
+    "directions": {
+      "error": "Sorry, my sniff powers are temporarily offline"
+    },
+    "popup": {
+      "loading": "Sniffing the way...",
+      "leadTheWay": "Lead the way",
+      "view": "View park"
+    },
+    "favorite": {
+      "ribbon": "Favorite Park!"
+    },
+    "busyHours": {
+      "status": {
+        "quiet": "quiet",
+        "medium": "medium",
+        "busy": "busy"
+      },
+      "login": "Log in",
+      "toAddDataSuffix": "to add live data",
+      "modal": {
+        "dogsCountLabel": "How many dogs are currently in the park?",
+        "hintSuffix": "* You can always add a report by clicking the plus sign in the Busy Hours section."
+      }
+    },
+    "sections": {
+      "about": "About",
+      "busyHours": "Busy hours",
+      "liveStatus": "Live status"
+    },
+    "about": {
+      "size": "Size",
+      "ground": "Ground",
+      "shade": "Shade",
+      "facilities": "Facilities",
+      "boolean": {
+        "yes": "Yes",
+        "no": "No",
+        "unknown": "?"
+      },
+      "sizeLabel": {
+        "small": "Small",
+        "medium": "Medium",
+        "large": "Large"
+      },
+      "groundOptions": {
+        "SAND": "Sand",
+        "DIRT": "Dirt",
+        "GRASS": "Grass",
+        "SYNTHETIC_GRASS": "Synthetic grass"
+      }
+    },
+    "conditions": {
+      "stillThere": "Still there?",
+      "labels": {
+        "muddy": "Muddy",
+        "gateClosed": "Gate closed",
+        "underConstruction": "Under construction",
+        "brokenFountain": "Broken fountain"
+      }
+    },
+    "live": {
+      "report": "Report",
+      "friends": "Friends",
+      "visitors": "Visitors",
+      "atTheParkRightNow": "at the park right now",
+      "reportModal": {
+        "title": "Spot an issue here?",
+        "noReportable": "All conditions are currently reported."
+      }
+    },
+    "edit": {
+      "modal": {
+        "title": "Add the following park details",
+        "sizeMeters": "Size (in meters)",
+        "groundCovering": "Ground Covering",
+        "containsFacilities": "Contains Facilities?",
+        "dailyShadeHours": "Daily Shade Hours"
+      },
+      "choose": {
+        "update": "Update park details",
+        "report": "Report incorrect details"
+      }
+    },
+    "report": {
+      "modal": {
+        "textLabel": "Tell us what’s wrong here."
+      }
+    },
+    "checkin": {
+      "title": "Enjoy your stay!",
+      "titleWithName": "Enjoy your stay, {{name}}!",
+      "alreadyTitle": "Are you Schrödinger's dog?",
+      "alreadyBody": "You're currently checked in at another park. Do you want to check in here instead?",
+      "switchHere": "Check in here"
+    },
+    "visitors": {
+      "onlyYou": "You're the only one here right now",
+      "count": "{{count}} visitors here right now",
+      "count_one": "1 KlavHuber here right now",
+      "count_other": "{{count}} KlavHubers here right now",
+      "countWithMore": "and {{count}} others KlavHubers",
+      "countWithMore_one": "and 1 other KlavHuber",
+      "countWithMore_other": "and {{count}} others KlavHubers"
+    }
+  },
+  "components": {
+    "carousel": {
+      "addPhoto": "Add photo",
+      "confirmTitle": "Hold your leash!",
+      "confirmBody": "Are you sure you want to send this pic to a farm up north where it can run free forever?",
+      "noPhotosYet": "No photos for this park yet.",
+      "login": "Log in",
+      "toAddDataSuffix": "to add data."
+    },
+    "camera": {
+      "uploadImage": "Upload image",
+      "takePhoto": "Take a photo"
+    },
+    "enlargeImage": {
+      "setPrimary": "Set as primary"
+    },
+    "gallery": {
+      "title": "Gallery"
+    }
+  },
+  "reviews": {
+    "modal": {
+      "title": "How did you dig the park?",
+      "placeholderTitle": "Review title",
+      "placeholderContent": "Please elaborate...",
+      "placeholderContentLabel": "Content",
+      "rankTitle": "Rate the park",
+      "reportAnonymously": "Report anonymously"
+    }
+  },
+
+  "location": {
+    "permissions": {
+      "message": "We couldn’t access your location. You can enable location permissions in your device settings.",
+      "dontShowAgain": "Don't show again"
+    },
+    "input": {
+      "clickMap": "Click the map or",
+      "useCurrent": "use current location",
+      "searchAddress": "Search address",
+      "errorAddressNotFound": "Oops! We couldn't sniff out that address"
+    }
+  },
+  "charts": {
+    "busyHours": {
+      "weekdays": "Weekdays",
+      "weekend": "Weekend"
+    }
+  },
+  "weather": {
+    "button": {
+      "ariaLabel": "Weather forecast"
+    },
+    "chanceOfRainNextHour": "{{count}}% chance of rain in the next hour",
+    "descriptions": {
+      "clearSky": "Clear sky",
+      "mainlyClear": "Mainly clear",
+      "cloudy": "Cloudy",
+      "foggy": "Foggy",
+      "lightRain": "Light rain",
+      "heavyRain": "Heavy rain",
+      "thunderstorm": "Thunderstorm",
+      "snow": "Snow",
+      "unknown": "Unknown"
+    }
+  },
+  "dogs": {
+    "gender": {
+      "MALE": "Male",
+      "FEMALE": "Female"
+    },
+    "size": {
+      "SMALL": "Small",
+      "MEDIUM": "Medium",
+      "LARGE": "Large"
+    },
+    "energy": {
+      "LOW": "Low",
+      "MEDIUM": "Medium",
+      "HIGH": "High"
+    },
+    "labels": {
+      "ownersDog": "{{name}}'s dog",
+      "ownersDogMale": "{{name}}'s dog",
+      "ownersDogFemale": "{{name}}'s dog"
+    },
+    "delete": {
+      "confirm": "Are you sure you want to say goodbye to {{name}}?"
+    },
+    "age": {
+      "justBorn": "Just born",
+      "justBornMale": "Just born",
+      "justBornFemale": "Just born",
+      "oldSingularYear": "1 year old",
+      "oldMaleSingularYear": "1 year old",
+      "oldFemaleSingularYear": "1 year old",
+      "oldSingularMonth": "1 month old",
+      "oldMaleSingularMonth": "1 month old",
+      "oldFemaleSingularMonth": "1 month old",
+      "old": "{{diff}} {{unit}} old",
+      "oldMale": "{{diff}} {{unit}} old",
+      "oldFemale": "{{diff}} {{unit}} old",
+      "oldCompliment": "{{diff}} {{unit}} old. No wonder {{pronoun}} looks so good!",
+      "oldComplimentMale": "{{diff}} {{unit}} old. No wonder he looks so good!",
+      "oldComplimentFemale": "{{diff}} {{unit}} old. No wonder she looks so good!",
+      "she": "she",
+      "he": "he",
+      "units": {
+        "year": "year",
+        "years": "years",
+        "month": "month",
+        "months": "months",
+        "yearTwo": "2 years",
+        "monthTwo": "2 months"
+      }
+    },
+    "details": {
+      "title": "About",
+      "fields": {
+        "size": "Size",
+        "temperament": "Temperament",
+        "energy": "Energy",
+        "waitingResponse": "Waiting friend's response",
+        "possessive": "Possessive"
+      },
+      "addDetails": "Add your dog's details",
+      "notAddedYet": "did not add their dog's details yet",
+      "description": "Description"
+    },
+    "prefs": {
+      "title": "Preferences",
+      "addYourPrefs": "Add your dog's preferences",
+      "notAddedYet": "did not add their dog's preferences yet"
+    },
+    "edit": {
+      "titleUpdate": "Update {{name}}'s details",
+      "titleAdd": "Add your dog's details",
+      "labels": {
+        "name": "Name *",
+        "breed": "Breed *",
+        "gender": "Gender *",
+        "birthday": "Birthday *",
+        "size": "Size",
+        "temperament": "Temperament",
+        "energy": "Energy",
+        "possessive": "Possessive",
+        "likes": "Likes (separate with commas)",
+        "dislikes": "Dislikes (separate with commas)",
+        "description": "Description"
+      }
+    },
+    "breeds": {
+      "Mixed": "Mixed breed",
+      "Other": "Unknown breed",
+      "Affenpinscher": "Affenpinscher",
+      "Afghan Hound": "Afghan Hound",
+      "Airedale Terrier": "Airedale Terrier",
+      "Akbash Dog": "Akbash Dog",
+      "Akita": "Akita",
+      "Alaskan Klee Kai": "Alaskan Klee Kai",
+      "Alaskan Malamute": "Alaskan Malamute",
+      "American Bulldog": "American Bulldog",
+      "American Cocker Spaniel": "American Cocker Spaniel",
+      "American Eskimo Dog": "American Eskimo Dog",
+      "American Foxhound": "American Foxhound",
+      "American Hairless Terrier": "American Hairless Terrier",
+      "American Pit Bull Terrier": "American Pit Bull Terrier",
+      "American Staffordshire Terrier": "American Staffordshire Terrier",
+      "American Water Spaniel": "American Water Spaniel",
+      "Anatolian Shepherd Dog": "Anatolian Shepherd Dog",
+      "Appenzeller Sennenhund": "Appenzeller Sennenhund",
+      "Australian Cattle Dog": "Australian Cattle Dog",
+      "Australian Kelpie": "Australian Kelpie",
+      "Australian Shepherd": "Australian Shepherd",
+      "Australian Terrier": "Australian Terrier",
+      "Azawakh": "Azawakh",
+      "Basenji": "Basenji",
+      "Basset Fauve de Bretagne": "Basset Fauve de Bretagne",
+      "Basset Hound": "Basset Hound",
+      "Bavarian Mountain Scent Hound": "Bavarian Mountain Scent Hound",
+      "Beagle": "Beagle",
+      "Bearded Collie": "Bearded Collie",
+      "Beauceron": "Beauceron",
+      "Bedlington Terrier": "Bedlington Terrier",
+      "Belgian Laekenois": "Belgian Laekenois",
+      "Belgian Malinois": "Belgian Malinois",
+      "Belgian Sheepdog": "Belgian Sheepdog",
+      "Belgian Tervuren": "Belgian Tervuren",
+      "Bergamasco Sheepdog": "Bergamasco Sheepdog",
+      "Berger Picard": "Berger Picard",
+      "Bernese Mountain Dog": "Bernese Mountain Dog",
+      "Bichon Frise": "Bichon Frise",
+      "Biewer Terrier": "Biewer Terrier",
+      "Black Russian Terrier": "Black Russian Terrier",
+      "Bloodhound": "Bloodhound",
+      "Bluetick Coonhound": "Bluetick Coonhound",
+      "Boerboel": "Boerboel",
+      "Bolognese": "Bolognese",
+      "Border Collie": "Border Collie",
+      "Border Terrier": "Border Terrier",
+      "Borzoi": "Borzoi",
+      "Boston Terrier": "Boston Terrier",
+      "Bouvier des Flandres": "Bouvier des Flandres",
+      "Boxer": "Boxer",
+      "Boykin Spaniel": "Boykin Spaniel",
+      "Bracco Italiano": "Bracco Italiano",
+      "Briard": "Briard",
+      "Brittany": "Brittany",
+      "Brussels Griffon": "Brussels Griffon",
+      "Bull Terrier": "Bull Terrier",
+      "Bullmastiff": "Bullmastiff",
+      "Cairn Terrier": "Cairn Terrier",
+      "Canaan Dog": "Canaan Dog",
+      "Cane Corso": "Cane Corso",
+      "Cardigan Welsh Corgi": "Cardigan Welsh Corgi",
+      "Carolina Dog": "Carolina Dog",
+      "Catahoula Leopard Dog": "Catahoula Leopard Dog",
+      "Cavalier King Charles Spaniel": "Cavalier King Charles Spaniel",
+      "Cesky Terrier": "Cesky Terrier",
+      "Chesapeake Bay Retriever": "Chesapeake Bay Retriever",
+      "Chihuahua": "Chihuahua",
+      "Chinese Crested": "Chinese Crested",
+      "Chinese Shar-Pei": "Chinese Shar-Pei",
+      "Chinook": "Chinook",
+      "Chow Chow": "Chow Chow",
+      "Cirneco dell'Etna": "Cirneco dell'Etna",
+      "Clumber Spaniel": "Clumber Spaniel",
+      "Cocker Spaniel": "Cocker Spaniel",
+      "Collie": "Collie",
+      "Coton de Tulear": "Coton de Tulear",
+      "Curly-Coated Retriever": "Curly-Coated Retriever",
+      "Dachshund": "Dachshund",
+      "Dalmatian": "Dalmatian",
+      "Dandie Dinmont Terrier": "Dandie Dinmont Terrier",
+      "Doberman Pinscher": "Doberman Pinscher",
+      "Dogo Argentino": "Dogo Argentino",
+      "Dogue de Bordeaux": "Dogue de Bordeaux",
+      "Dutch Shepherd": "Dutch Shepherd",
+      "English Cocker Spaniel": "English Cocker Spaniel",
+      "English Foxhound": "English Foxhound",
+      "English Setter": "English Setter",
+      "English Springer Spaniel": "English Springer Spaniel",
+      "English Toy Spaniel": "English Toy Spaniel",
+      "Entlebucher Mountain Dog": "Entlebucher Mountain Dog",
+      "Estrela Mountain Dog": "Estrela Mountain Dog",
+      "Eurasier": "Eurasier",
+      "Field Spaniel": "Field Spaniel",
+      "Finnish Lapphund": "Finnish Lapphund",
+      "Finnish Spitz": "Finnish Spitz",
+      "Flat-Coated Retriever": "Flat-Coated Retriever",
+      "French Bulldog": "French Bulldog",
+      "French Spaniel": "French Spaniel",
+      "German Longhaired Pointer": "German Longhaired Pointer",
+      "German Pinscher": "German Pinscher",
+      "German Shepherd": "German Shepherd",
+      "German Shorthaired Pointer": "German Shorthaired Pointer",
+      "German Wirehaired Pointer": "German Wirehaired Pointer",
+      "Giant Schnauzer": "Giant Schnauzer",
+      "Glen of Imaal Terrier": "Glen of Imaal Terrier",
+      "Golden Retriever": "Golden Retriever",
+      "Gordon Setter": "Gordon Setter",
+      "Grand Basset Griffon Vendéen": "Grand Basset Griffon Vendéen",
+      "Great Dane": "Great Dane",
+      "Great Pyrenees": "Great Pyrenees",
+      "Greater Swiss Mountain Dog": "Greater Swiss Mountain Dog",
+      "Greyhound": "Greyhound",
+      "Hamiltonstovare": "Hamiltonstovare",
+      "Harrier": "Harrier",
+      "Havanese": "Havanese",
+      "Ibizan Hound": "Ibizan Hound",
+      "Icelandic Sheepdog": "Icelandic Sheepdog",
+      "Irish Red and White Setter": "Irish Red and White Setter",
+      "Irish Setter": "Irish Setter",
+      "Irish Terrier": "Irish Terrier",
+      "Irish Water Spaniel": "Irish Water Spaniel",
+      "Irish Wolfhound": "Irish Wolfhound",
+      "Italian Greyhound": "Italian Greyhound",
+      "Jack Russell Terrier": "Jack Russell Terrier",
+      "Japanese Chin": "Japanese Chin",
+      "Japanese Spitz": "Japanese Spitz",
+      "Jindo": "Jindo",
+      "Kai Ken": "Kai Ken",
+      "Karelian Bear Dog": "Karelian Bear Dog",
+      "Keeshond": "Keeshond",
+      "Kerry Blue Terrier": "Kerry Blue Terrier",
+      "Kishu Ken": "Kishu Ken",
+      "Komondor": "Komondor",
+      "Kooikerhondje": "Kooikerhondje",
+      "Kuvasz": "Kuvasz",
+      "Labrador Retriever": "Labrador Retriever",
+      "Lagotto Romagnolo": "Lagotto Romagnolo",
+      "Lakeland Terrier": "Lakeland Terrier",
+      "Lancashire Heeler": "Lancashire Heeler",
+      "Leonberger": "Leonberger",
+      "Lhasa Apso": "Lhasa Apso",
+      "Lowchen": "Lowchen",
+      "Maltese": "Maltese",
+      "Manchester Terrier": "Manchester Terrier",
+      "Maremma Sheepdog": "Maremma Sheepdog",
+      "Mastiff": "Mastiff",
+      "Miniature American Shepherd": "Miniature American Shepherd",
+      "Miniature Bull Terrier": "Miniature Bull Terrier",
+      "Miniature Pinscher": "Miniature Pinscher",
+      "Miniature Schnauzer": "Miniature Schnauzer",
+      "Mudi": "Mudi",
+      "Neapolitan Mastiff": "Neapolitan Mastiff",
+      "Newfoundland": "Newfoundland",
+      "Norfolk Terrier": "Norfolk Terrier",
+      "Norwegian Buhund": "Norwegian Buhund",
+      "Norwegian Elkhound": "Norwegian Elkhound",
+      "Norwegian Lundehund": "Norwegian Lundehund",
+      "Norwich Terrier": "Norwich Terrier",
+      "Nova Scotia Duck Tolling Retriever": "Nova Scotia Duck Tolling Retriever",
+      "Old English Sheepdog": "Old English Sheepdog",
+      "Otterhound": "Otterhound",
+      "Papillon": "Papillon",
+      "Parson Russell Terrier": "Parson Russell Terrier",
+      "Pekingese": "Pekingese",
+      "Pembroke Welsh Corgi": "Pembroke Welsh Corgi",
+      "Peruvian Inca Orchid": "Peruvian Inca Orchid",
+      "Pharaoh Hound": "Pharaoh Hound",
+      "Plott Hound": "Plott Hound",
+      "Pointer": "Pointer",
+      "Polish Lowland Sheepdog": "Polish Lowland Sheepdog",
+      "Pomeranian": "Pomeranian",
+      "Poodle": "Poodle",
+      "Portuguese Podengo": "Portuguese Podengo",
+      "Portuguese Pointer": "Portuguese Pointer",
+      "Portuguese Water Dog": "Portuguese Water Dog",
+      "Presa Canario": "Presa Canario",
+      "Pug": "Pug",
+      "Puli": "Puli",
+      "Pumi": "Pumi",
+      "Pyrenean Shepherd": "Pyrenean Shepherd",
+      "Rat Terrier": "Rat Terrier",
+      "Redbone Coonhound": "Redbone Coonhound",
+      "Rhodesian Ridgeback": "Rhodesian Ridgeback",
+      "Rottweiler": "Rottweiler",
+      "Russian Toy": "Russian Toy",
+      "Saluki": "Saluki",
+      "Samoyed": "Samoyed",
+      "Schipperke": "Schipperke",
+      "Scottish Deerhound": "Scottish Deerhound",
+      "Scottish Terrier": "Scottish Terrier",
+      "Sealyham Terrier": "Sealyham Terrier",
+      "Shetland Sheepdog": "Shetland Sheepdog",
+      "Shiba Inu": "Shiba Inu",
+      "Shih Tzu": "Shih Tzu",
+      "Shikoku": "Shikoku",
+      "Siberian Husky": "Siberian Husky",
+      "Silken Windhound": "Silken Windhound",
+      "Silky Terrier": "Silky Terrier",
+      "Skye Terrier": "Skye Terrier",
+      "Sloughi": "Sloughi",
+      "Slovakian Rough Haired Pointer": "Slovakian Rough Haired Pointer",
+      "Small Munsterlander": "Small Munsterlander",
+      "Soft Coated Wheaten Terrier": "Soft Coated Wheaten Terrier",
+      "Spanish Mastiff": "Spanish Mastiff",
+      "Spanish Water Dog": "Spanish Water Dog",
+      "Spinone Italiano": "Spinone Italiano",
+      "St. Bernard": "St. Bernard",
+      "Staffordshire Bull Terrier": "Staffordshire Bull Terrier",
+      "Standard Schnauzer": "Standard Schnauzer",
+      "Sussex Spaniel": "Sussex Spaniel",
+      "Swedish Vallhund": "Swedish Vallhund",
+      "Thai Ridgeback": "Thai Ridgeback",
+      "Tibetan Mastiff": "Tibetan Mastiff",
+      "Tibetan Spaniel": "Tibetan Spaniel",
+      "Tibetan Terrier": "Tibetan Terrier",
+      "Tornjak": "Tornjak",
+      "Tosa": "Tosa",
+      "Toy Fox Terrier": "Toy Fox Terrier",
+      "Toy Manchester Terrier": "Toy Manchester Terrier",
+      "Treeing Walker Coonhound": "Treeing Walker Coonhound",
+      "Vizsla": "Vizsla",
+      "Weimaraner": "Weimaraner",
+      "Welsh Springer Spaniel": "Welsh Springer Spaniel",
+      "Welsh Terrier": "Welsh Terrier",
+      "West Highland White Terrier": "West Highland White Terrier",
+      "Whippet": "Whippet",
+      "Wire Fox Terrier": "Wire Fox Terrier",
+      "Wirehaired Pointing Griffon": "Wirehaired Pointing Griffon",
+      "Xoloitzcuintli": "Xoloitzcuintli",
+      "Yorkshire Terrier": "Yorkshire Terrier"
+    }
+  },
+  "grammar": {
+    "genderPrefixes": {
+      "male": "",
+      "female": "",
+      "neutral": ""
+    },
+    "dualUnits": {
+      "year": "2 years",
+      "month": "2 months",
+      "day": "2 days",
+      "hour": "2 hours",
+      "week": "2 weeks"
+    },
+    "config": {
+      "dualFormOmitsNumber": false
+    }
+  },
+  "toasts": {
+    "friendRequest": {
+      "removed": "Friend request was removed",
+      "sent": "Friend request sent",
+      "fail": "Failed to send friend request"
+    },
+    "friendship": {
+      "nowFriends": "You are now friends!",
+      "changed": "Friendship was changed",
+      "noLongerFriends": "You are no longer friends"
+    },
+    "upload": {
+      "error": "Sorry, there was an error"
+    },
+    "generic": {
+      "error": "Sorry, there was an error"
+    },
+    "default": {
+      "goodBoy": "Good boy!",
+      "goodBoyAlt": "Good Boy!"
+    },
+    "checkout": {
+      "hadFun": "Hope you had a tail-wagging time!",
+      "askReview": "Hope you had a tail-wagging time! Leave a review if you can!"
+    },
+    "live": {
+      "reportThanks": "Thanks for keeping the pack updated!",
+      "reportRejected": "Your report was not accepted. Please try again later.",
+      "confirmThanks": "Thanks for confirming!",
+      "confirmRejected": "Your confirmation failed. Please try again later.",
+      "updateThanks": "Thanks for updating!",
+      "updateRejected": "Your update failed. Please try again later."
+    },
+    "share": {
+      "thanks": "Thanks for sharing!",
+      "copied": "Link copied to clipboard"
+    }
+  },
+  "reports": {
+    "reviewModal": {
+      "title": "Why do you wish to report this review?"
+    },
+    "reasons": {
+      "spam": {
+        "title": "Spam",
+        "content": "Promotional or repetitive."
+      },
+      "inappropriate": {
+        "title": "Inappropriate",
+        "content": "Contains offensive language, harassment or hate speech"
+      },
+      "misinformation": {
+        "title": "Misinformation",
+        "content": "Spreads false information."
+      },
+      "fake": {
+        "title": "Fake",
+        "content": "Appears to be fake or biased."
+      },
+      "personal": {
+        "title": "Personal Information",
+        "content": "Contains private information."
+      }
+    }
+  }
+}

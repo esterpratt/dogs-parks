@@ -1,6 +1,8 @@
 enum NotificationType {
   FRIEND_REQUEST = 'friend_request',
   FRIEND_APPROVAL = 'friend_approval',
+  PARK_INVITE = 'park_invite',
+  PARK_INVITE_RESPONSE = 'park_invite_response',
 }
 
 enum Platform {
@@ -22,6 +24,10 @@ interface Notification {
   delivered_at: boolean;
   created_at: string;
   is_ready: boolean;
+  sender?: {
+    id: string;
+    name: string | null;
+  };
 }
 
 export type { Notification };

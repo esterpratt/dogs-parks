@@ -10,6 +10,7 @@ interface MultiSelectInputProps {
   onOptionChange: (event: ChangeEvent<HTMLInputElement>) => void;
   icon?: ReactNode;
   className?: string;
+  label?: string;
 }
 
 const MultiSelectInput: React.FC<MultiSelectInputProps> = ({
@@ -20,6 +21,7 @@ const MultiSelectInput: React.FC<MultiSelectInputProps> = ({
   onOptionChange,
   icon,
   className,
+  label,
 }) => {
   return (
     <div
@@ -39,7 +41,7 @@ const MultiSelectInput: React.FC<MultiSelectInputProps> = ({
       />
       <label htmlFor={id}>
         {!!icon && icon}
-        <span>{value}</span>
+        <span>{label ?? value}</span>
       </label>
     </div>
   );

@@ -8,12 +8,14 @@ import { filterUsersAndDogs } from '../services/users';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import styles from './Users.module.scss';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 interface UserWithDogs extends User {
   dogs: Dog[];
 }
 
 const Users = () => {
+  const { t } = useTranslation();
   const { userId } = useContext(UserContext);
 
   const [input, setInput] = useState('');
@@ -51,13 +53,13 @@ const Users = () => {
   };
 
   const NoResultsLayout = (
-    <div className={styles.noResults}>No users were found</div>
+    <div className={styles.noResults}>{t('users.noResults')}</div>
   );
 
   return (
     <div className={styles.container}>
       <div className={styles.title}>
-        <span>Sniff out some friends!</span>
+        <span>{t('users.searchTitle')}</span>
       </div>
 
       <SearchListAsync
@@ -65,7 +67,7 @@ const Users = () => {
         onChangeInput={onChangeInput}
         showLoader={showLoader}
         showNoResults={showNoResults}
-        placeholder="Search by user or dog name"
+        placeholder={t('users.searchPlaceholder')}
         itemKeyfn={(userWithDog) => userWithDog.id}
         filteredItems={filteredUsers}
         onSearch={onSearch}

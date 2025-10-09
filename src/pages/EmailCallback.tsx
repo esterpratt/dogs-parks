@@ -4,27 +4,27 @@ import { Loader } from '../components/Loader';
 import styles from './EmailCallback.module.scss';
 import { Link } from 'react-router-dom';
 import { Button } from '../components/Button';
+import { useTranslation } from 'react-i18next';
 
 const EmailCallback = () => {
+  const { t } = useTranslation();
   const { user } = useContext(UserContext);
 
   if (user) {
     return (
       <div className={styles.container}>
-        <h1>Good boy!</h1>
-        <p>Your account is verified and you're officially part of the pack.</p>
-        <p>
-          You can close this tab and fetch the app to continue your adventure.
-        </p>
+        <h1>{t('emailCallback.title')}</h1>
+        <p>{t('emailCallback.verified')}</p>
+        <p>{t('emailCallback.closeTab')}</p>
         <div className={styles.buttonsContainer}>
           <Button>
             <a href="com.klavhub://login" className={styles.appLink}>
-              Open the app
+              {t('emailCallback.openApp')}
             </a>
           </Button>
           <Button variant="secondary">
             <Link to={`/profile/${user.id}`} className={styles.link}>
-              Continue here
+              {t('emailCallback.continueHere')}
             </Link>
           </Button>
         </div>
