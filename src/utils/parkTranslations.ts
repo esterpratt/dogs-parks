@@ -2,8 +2,8 @@ import type { Park, ParkJSON } from '../types/park';
 
 interface ResolveTranslatedParkParams {
   activePark?: Park | ParkJSON | null;
-  preferred?: ParkJSON | undefined;
-  fallback?: ParkJSON | undefined;
+  preferred?: ParkJSON | null;
+  fallback?: ParkJSON | null;
 }
 
 // Resolve translated display fields (name, city, address) with fallbacks.

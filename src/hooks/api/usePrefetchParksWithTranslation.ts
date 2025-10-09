@@ -13,13 +13,15 @@ function usePrefetchParksWithTranslation(
   params: UsePrefetchParksWithTranslationParams
 ): void {
   const { parkIds, language } = params;
+  const parkIdsString = parkIds?.join(',');
 
   useEffect(() => {
-    if (!parkIds || parkIds.length === 0) {
+    if (!parkIdsString) {
       return;
     }
 
-    parkIds.forEach((id) => {
+    const parkIdsArray = parkIdsString.split(',');
+    parkIdsArray.forEach((id) => {
       if (!id) {
         return;
       }
@@ -29,7 +31,7 @@ function usePrefetchParksWithTranslation(
         queryFn: () => fetchParkWithTranslation({ parkId: id, language }),
       });
     });
-  }, [parkIds?.join(','), language]);
+  }, [parkIdsString, language]);
 }
 
 export { usePrefetchParksWithTranslation };

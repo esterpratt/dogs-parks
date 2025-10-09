@@ -1,5 +1,3 @@
-// utils/mapSupabaseAuthErrorToKey.ts
-
 import type { AuthError } from '@supabase/supabase-js';
 
 interface AuthErrorMapResult {

@@ -53,10 +53,7 @@ interface ParkJSON {
   name: string;
   city: string;
   address: string;
-  location: {
-    lat: number;
-    long: number;
-  };
+  location: Location;
 }
 
 // Raw park data structure from JSON files (before normalization)
@@ -65,11 +62,7 @@ interface RawParkData {
   name: string;
   city: string;
   address: string;
-  location: {
-    lat: number;
-    long?: number; // Legacy format
-    lng?: number; // New format
-  };
+  location: Location;
 }
 
 interface NewParkDetails {

@@ -13,7 +13,6 @@ function useI18nDirection(): void {
     html.setAttribute('lang', lang);
     html.setAttribute('dir', dir);
 
-    // optional: set a css class for easier styling
     html.classList.toggle('rtl', dir === 'rtl');
     html.classList.toggle('ltr', dir === 'ltr');
   }, [i18n.language]);

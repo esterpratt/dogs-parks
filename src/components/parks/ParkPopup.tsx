@@ -97,11 +97,11 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
   });
 
   const translatedFromCurrent = activePark
-    ? (parksCurrentLang?.find((p) => p.id === activePark.id) as undefined)
-    : undefined;
+    ? parksCurrentLang?.find((p) => p.id === activePark.id)
+    : null;
   const translatedFromEnglish = activePark
-    ? (parksEnglish?.find((p) => p.id === activePark.id) as undefined)
-    : undefined;
+    ? parksEnglish?.find((p) => p.id === activePark.id)
+    : null;
 
   const {
     name: displayName,

@@ -23,7 +23,7 @@ const normalizeParkData = (rawPark: RawParkData): ParkJSON => {
     address: rawPark.address,
     location: {
       lat: rawPark.location.lat,
-      long: rawPark.location.lng || rawPark.location.long || 0,
+      long: rawPark.location.long,
     },
   };
 };
