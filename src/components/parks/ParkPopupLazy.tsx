@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ParkJSON as Park } from '../../types/park';
 import { useUserLocation } from '../../context/LocationContext';
 import { getRoute } from '../../services/map';
-import { ParkPopup } from './ParkPopup';
+import { ParkPopup6 } from './ParkPopup6';
 
 interface DirectionsRaw {
   distanceKm?: number;
@@ -59,7 +59,7 @@ const ParkPopupLazy = (props: ParkPopupLazyProps) => {
   };
 
   return (
-    <ParkPopup
+    <ParkPopup6
       isLoadingDirections={isLoadingDirections}
       onClose={onCloseParkPopup}
       activePark={activePark}

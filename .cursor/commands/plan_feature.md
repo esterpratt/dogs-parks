@@ -17,4 +17,6 @@ If the user's requirements are unclear, especially after researching the relevan
 
 Prioritize being concise and precise. Make the plan as tight as possible without losing any of the critical details from the user's requirements.
 
-Write the plan into an .cursor/docs/features/<N>\_PLAN.md new file with the next available feature number (starting with 0001)
+Write the plan into an .cursor/docs/features/<N>\_PLAN.md new file with the next available feature number (starting with 0001).
+
+**IMPORTANT**: Always check existing files in .cursor/docs/features/ directory first to find the next available sequence number. Do NOT overwrite existing plan files. If files 0001_PLAN.md, 0002_PLAN.md, etc. exist, use the next available number (e.g., if 0003_PLAN.md exists, create 0004_PLAN.md).

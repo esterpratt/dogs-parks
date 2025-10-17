@@ -11,8 +11,7 @@ import { Park } from '../types/park';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import { Loader } from '../components/Loader';
 import { useTranslation } from 'react-i18next';
-
-const ONE_MINUTE = 60 * 1000;
+import { ONE_MINUTE } from '../utils/consts';
 
 const ParkVisitors: React.FC = () => {
   const { t } = useTranslation();
