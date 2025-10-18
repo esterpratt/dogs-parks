@@ -28,7 +28,11 @@ export default defineConfig({
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     testIdAttribute: 'data-test',
-    headless: false,
+    headless: !!(
+      process.env.CI ||
+      process.env.NODE_ENV === 'test' ||
+      process.env.HEADLESS === 'true'
+    ),
   },
   webServer: {
     command: 'npm run dev',
