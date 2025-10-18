@@ -22,10 +22,7 @@ test.describe('parks (cross-language search)', () => {
     await expect(page).toHaveURL('/parks');
 
     // Resolve search input (by test id or placeholder)
-    let searchInput = page.getByTestId('park-search-input');
-    if (!(await searchInput.count())) {
-      searchInput = page.getByPlaceholder('Search park');
-    }
+    const searchInput = page.getByTestId('park-search-input');
     await expect(searchInput).toBeVisible();
 
     // Search for Hebrew park name "חיל הא" (partial Hebrew name for "Heil Haavir")
