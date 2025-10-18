@@ -14,9 +14,9 @@
     "test": "vitest run",
     "ios-setup": "./.claude/commands/ios-dev-setup.sh",
     "pr": "BR=$(git rev-parse --abbrev-ref HEAD); git push -u origin $BR; TITLE=$(node scripts/pr-title.js $BR); gh pr create --base main --head $BR --title \"$TITLE\" --fill || (echo 'PR likely exists; showing current PR' && gh pr view --web || true)",
-    "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui",
-    "test:e2e:report": "playwright show-report"
+    "test:e2e": "npx playwright test",
+    "test:e2e:ui": "npx playwright test --ui",
+    "test:e2e:report": "npx playwright show-report"
   },
   "dependencies": {
     "@capacitor-firebase/messaging": "7.3.0",

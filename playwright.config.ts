@@ -28,6 +28,7 @@ export default defineConfig({
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     testIdAttribute: 'data-test',
+    headless: false,
   },
   webServer: {
     command: 'npm run dev',
