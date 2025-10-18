@@ -77,10 +77,7 @@ test.describe('parks (cross-language search)', () => {
     await expect(page).toHaveURL('/parks');
 
     // Resolve search input (by test id or placeholder)
-    let searchInput = page.getByTestId('park-search-input');
-    if (!(await searchInput.count())) {
-      searchInput = page.getByPlaceholder('Search park');
-    }
+    const searchInput = page.getByTestId('park-search-input');
     await expect(searchInput).toBeVisible();
 
     // Search for full Hebrew park name "חיל האוויר" (Hebrew name for "Heil Haavir")
@@ -135,10 +132,7 @@ test.describe('parks (cross-language search)', () => {
     await expect(page).toHaveURL('/parks');
 
     // Resolve search input (by test id or placeholder)
-    let searchInput = page.getByTestId('park-search-input');
-    if (!(await searchInput.count())) {
-      searchInput = page.getByPlaceholder('Search park');
-    }
+    const searchInput = page.getByTestId('park-search-input');
     await expect(searchInput).toBeVisible();
 
     // Search for English park name "Heil Haavir"
@@ -212,15 +206,7 @@ test.describe('parks (cross-language search)', () => {
     await expect(page).toHaveURL('/parks');
 
     // Resolve search input - try Hebrew placeholder first since we switched language
-    let searchInput = page.getByTestId('park-search-input');
-    if (!(await searchInput.count())) {
-      // Try Hebrew placeholder text first
-      searchInput = page.getByPlaceholder('חפש פארק');
-      if (!(await searchInput.count())) {
-        // Fallback to English placeholder
-        searchInput = page.getByPlaceholder('Search park');
-      }
-    }
+    const searchInput = page.getByTestId('park-search-input');
     await expect(searchInput).toBeVisible();
 
     // Search for English park name "Heil Haavir" while app is in Hebrew
