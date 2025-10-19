@@ -33,6 +33,12 @@ jobs:
       - name: Run tests
         run: npm test
 
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Run E2E tests
+        run: npm run test:e2e
+
       - name: Security audit (fail on high)
         run: |
           set -e
