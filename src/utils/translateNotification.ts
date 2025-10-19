@@ -31,6 +31,10 @@ const typeKeyMap: Record<string, { title: string; appMessage: string }> = {
     title: 'notifications.types.parkInviteResponse.title',
     appMessage: 'notifications.types.parkInviteResponse.appMessage',
   },
+  PARK_INVITE_CANCELLED: {
+    title: 'notifications.types.parkInviteCancelled.title',
+    appMessage: 'notifications.types.parkInviteCancelled.appMessage',
+  },
 };
 
 function translateNotification(

@@ -3,6 +3,7 @@ enum NotificationType {
   FRIEND_APPROVAL = 'friend_approval',
   PARK_INVITE = 'park_invite',
   PARK_INVITE_RESPONSE = 'park_invite_response',
+  PARK_INVITE_CANCELLED = 'park_invite_cancelled',
 }
 
 enum Platform {
