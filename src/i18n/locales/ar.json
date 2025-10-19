@@ -298,6 +298,10 @@
       "parkInviteResponse": {
         "title": "{{name}} رد على دعوتك",
         "appMessage": "اضغط لمشاهدة الرد"
+      },
+      "parkInviteCancelled": {
+        "title": "تم إلغاء دعوة الحديقة",
+        "appMessage": "انقر لعرض التفاصيل"
       }
     },
     "modal": {

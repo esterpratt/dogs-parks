@@ -297,6 +297,10 @@
       "parkInviteResponse": {
         "title": "{{name}} הגיב/ה להזמנה שלך",
         "appMessage": "לחץ/י כדי לצפות בתגובה"
+      },
+      "parkInviteCancelled": {
+        "title": "הזמנה לפארק בוטלה",
+        "appMessage": "לחץ/י כדי לראות פרטים"
       }
     },
     "modal": {

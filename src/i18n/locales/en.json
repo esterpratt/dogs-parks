@@ -295,6 +295,10 @@
       "parkInviteResponse": {
         "title": "{{name}} responded to your invite",
         "appMessage": "Click to view the response"
+      },
+      "parkInviteCancelled": {
+        "title": "Park invitation was cancelled",
+        "appMessage": "Click to view details"
       }
     },
     "modal": {
