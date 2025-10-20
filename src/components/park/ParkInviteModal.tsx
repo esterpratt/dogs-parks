@@ -1,6 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { FormModal } from '../modals/FormModal';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { createParkEvent } from '../../services/events';
+import { useNotification } from '../../context/NotificationContext';
+import { ParkEventVisibility } from '../../types/parkEvent';
+import { useFetchFriends } from '../../hooks/api/useFetchFriends';
+
+const OFFSET_OPTIONS = [0, 15, 30, 60];
 
 interface ParkInviteModalProps {
   parkId?: string;
@@ -10,18 +17,53 @@ interface ParkInviteModalProps {
 }
 
 const ParkInviteModal = (props: ParkInviteModalProps) => {
-  const { /*parkId, userId,*/ isOpen, onClose } = props;
-  const [invitedFriends /*setInvitedFriends*/] = useState([]);
-  const { t } = useTranslation();
-  // const TIME_OPTIONS = [
-  //   t('invite.movile.time.now'),
-  //   t('invite.movile.time.15min'),
-  //   t('invite.movile.time.30min'),
-  //   t('invite.movile.time.hour'),
-  // ];
-  // const [fromTime, setFromTime] = useState(TIME_OPTIONS[0]);
+  const { parkId, userId, isOpen, onClose } = props;
+  const [invitedFriendsIds /*setInvitedFriendsIds*/] = useState([]);
+  const [visibility /*setVisibility*/] = useState<ParkEventVisibility>(
+    ParkEventVisibility.FRIENDS_SELECTED
+  );
+  const [message /*setMessage*/] = useState('');
+  const [minutesOffset /*setMinutesOffset*/] = useState(OFFSET_OPTIONS[0]);
 
-  const handleCreateEvent = () => {};
+  const { t } = useTranslation();
+  const { notify } = useNotification();
+
+  const { friends } = useFetchFriends({ userId });
+  const allFriendIds = useMemo(
+    () => friends?.map((friend) => friend.id),
+    [friends]
+  );
+
+  const { mutate: createInvite, isPending } = useMutation({
+    mutationFn: () =>
+      createParkEvent({
+        parkId: parkId!,
+        visibility,
+        inviteeIds:
+          visibility === ParkEventVisibility.FRIENDS_ALL
+            ? allFriendIds
+            : invitedFriendsIds,
+        message,
+        presetOffsetMinutes: minutesOffset,
+      }),
+    onSuccess: () => {
+      // TODO: invalidate lists of user events
+      notify(t('invite.messageSuccess'));
+    },
+    onError: () => {
+      notify(t('invite.messageError'));
+    },
+  });
+
+  const handleCreateEvent = () => {
+    if (
+      parkId &&
+      (visibility === ParkEventVisibility.FRIENDS_ALL ||
+        !!invitedFriendsIds.length)
+    ) {
+      createInvite();
+    }
+  };
 
   return (
     <FormModal
@@ -29,10 +71,15 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
       onClose={onClose}
       onSave={handleCreateEvent}
       saveText={t('invite.modal.buttonText')}
-      disabled={!invitedFriends.length}
+      disabled={!invitedFriendsIds.length || !!parkId || isPending}
       title={t('.invite.modal.title')}
     >
-      <div>Invite friends to park</div>
+      <div>
+        Invite friends to park:{' '}
+        {friends?.map((friend) => (
+          <div key={friend.id}>{friend.name}</div>
+        ))}
+      </div>
     </FormModal>
   );
 };

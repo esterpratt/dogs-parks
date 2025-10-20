@@ -30,6 +30,7 @@ import { Park } from '../../types/park';
 import styles from './ParkHeader.module.scss';
 import { useUploadImage } from '../../hooks/api/useUploadImage';
 import { useTranslation } from 'react-i18next';
+import { ParkInvite } from './ParkInvite';
 
 interface ParkHeaderProps {
   park: Park;
@@ -147,6 +148,7 @@ const ParkHeader = (props: ParkHeaderProps) => {
                     userId={user?.id ?? null}
                     userName={user?.name}
                   />
+                  <ParkInvite userId={user.id} parkId={park.id} />
                 </>
               )}
               {!user && <ReviewsPreview className={styles.reviews} />}

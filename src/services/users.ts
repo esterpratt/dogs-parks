@@ -43,7 +43,7 @@ const fetchUser = async (id: string) => {
   }
 };
 
-const fetchUsers = async (ids?: string[]) => {
+const fetchUsers = async (ids?: string[]): Promise<User[] | undefined> => {
   try {
     if (!ids || !ids.length) {
       const { data: users, error } = await supabase.from('users').select('*');
