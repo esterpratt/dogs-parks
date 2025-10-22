@@ -1,38 +1,42 @@
-import { MouseEvent, ReactNode, useEffect, useRef, useState } from 'react';
+import { MouseEvent, ReactNode, useRef, useState } from 'react';
 import classnames from 'classnames';
 import { Input } from './Input';
 import { SearchListItems } from '../searchList/SearchListItems';
 import styles from './AutoComplete.module.scss';
 import { useAutoComplete } from '../../hooks/useAutoComplete';
 
-interface AutoCompleteProps<T> {
-  selectedInput?: string;
+interface AutoCompleteMultiSelectProps<T> {
+  selectedInputs?: T[];
   items: T[];
   placeholder?: string;
   className?: string;
   label: string;
   itemKeyfn: (item: T) => string;
-  setSelectedInput: (item: T) => void;
-  equalityFunc: (item: T, selectedInput?: string) => boolean;
+  selectedItemKeyfn: (item: T) => string;
+  onSelectItem: (item: T) => void;
+  onRemoveItem: (item: T) => void;
+  equalityFunc: (item: T, selectedInputs?: T[]) => boolean;
   filterFunc: (item: T, searchInput: string) => boolean;
   children: (item: T, isChosen: boolean) => ReactNode;
-  selectedInputFormatter?: (selectedInput: string) => string;
+  selectedInputsFormatter: (selectedInput: T) => string;
 }
 
-const AutoComplete = <T,>({
+const AutoCompleteMultiSelect = <T,>({
   items,
-  selectedInput,
+  selectedInputs,
   placeholder,
   className,
   itemKeyfn,
+  selectedItemKeyfn,
   label,
   filterFunc,
-  setSelectedInput,
+  onSelectItem,
+  onRemoveItem,
   equalityFunc,
   children,
-  selectedInputFormatter,
-}: AutoCompleteProps<T>) => {
-  const { input, setInput, filteredItems, onChangeInput } = useAutoComplete({
+  selectedInputsFormatter,
+}: AutoCompleteMultiSelectProps<T>) => {
+  const { input, filteredItems, onChangeInput } = useAutoComplete({
     items,
     filterFunc,
   });
@@ -40,35 +44,28 @@ const AutoComplete = <T,>({
   const [showItems, setShowItems] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  useEffect(() => {
-    const displayValue = selectedInput || '';
-    setInput(
-      selectedInputFormatter && displayValue
-        ? selectedInputFormatter(displayValue)
-        : displayValue
-    );
-  }, [selectedInput, selectedInputFormatter, setInput]);
-
   const onClickOption = (event: MouseEvent<HTMLDivElement>, item: T) => {
     event.preventDefault();
-    setSelectedInput(item);
+    onSelectItem(item);
     setShowItems(false);
     inputRef.current!.blur();
   };
 
   const onInputBlur = () => {
     setShowItems(false);
-    const displayValue = selectedInput || '';
-    setInput(
-      selectedInputFormatter && displayValue
-        ? selectedInputFormatter(displayValue)
-        : displayValue
-    );
   };
 
   return (
     <div className={classnames(styles.container, className)}>
       <label className={styles.label}>{label}</label>
+      <ul>
+        {selectedInputs?.map((item) => (
+          <div key={selectedItemKeyfn(item)}>
+            <span>{selectedInputsFormatter(item)}</span>
+            <button onClick={() => onRemoveItem(item)}>X</button>
+          </div>
+        ))}
+      </ul>
       <Input
         ref={inputRef}
         onFocus={() => setShowItems(true)}
@@ -98,10 +95,10 @@ const AutoComplete = <T,>({
               <div
                 onMouseDown={(event) => onClickOption(event, item)}
                 className={
-                  equalityFunc(item, selectedInput) ? styles.chosen : ''
+                  equalityFunc(item, selectedInputs) ? styles.chosen : ''
                 }
               >
-                {children(item, equalityFunc(item, selectedInput))}
+                {children(item, equalityFunc(item, selectedInputs))}
               </div>
             )}
           </SearchListItems>
@@ -111,4 +108,4 @@ const AutoComplete = <T,>({
   );
 };
 
-export { AutoComplete };
+export { AutoCompleteMultiSelect };
