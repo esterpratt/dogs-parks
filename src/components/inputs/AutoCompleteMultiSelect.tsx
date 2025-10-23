@@ -1,9 +1,10 @@
 import { MouseEvent, ReactNode, useRef, useState } from 'react';
+import { X } from 'lucide-react';
 import classnames from 'classnames';
 import { Input } from './Input';
 import { SearchListItems } from '../searchList/SearchListItems';
-import styles from './AutoComplete.module.scss';
 import { useAutoComplete } from '../../hooks/useAutoComplete';
+import styles from './AutoComplete.module.scss';
 
 interface AutoCompleteMultiSelectProps<T> {
   selectedInputs?: T[];
@@ -56,55 +57,60 @@ const AutoCompleteMultiSelect = <T,>({
   };
 
   return (
-    <div className={classnames(styles.container, className)}>
-      <label className={styles.label}>{label}</label>
+    <>
+      <div className={classnames(styles.container, className)}>
+        <label className={styles.label}>{label}</label>
+        <Input
+          ref={inputRef}
+          onFocus={() => setShowItems(true)}
+          onBlur={onInputBlur}
+          value={input}
+          onChange={onChangeInput}
+          placeholder={placeholder}
+          className={classnames(
+            styles.input,
+            showItems && filteredItems.length && styles.listOpen
+          )}
+        />
+        {showItems && (
+          <div
+            className={classnames(
+              styles.listContainer,
+              !filteredItems.length && styles.noResults
+            )}
+          >
+            <SearchListItems
+              items={filteredItems}
+              itemKeyfn={itemKeyfn}
+              className={styles.items}
+              isAutoCompleteList
+            >
+              {(item) => (
+                <div
+                  onMouseDown={(event) => onClickOption(event, item)}
+                  className={
+                    equalityFunc(item, selectedInputs) ? styles.chosen : ''
+                  }
+                >
+                  {children(item, equalityFunc(item, selectedInputs))}
+                </div>
+              )}
+            </SearchListItems>
+          </div>
+        )}
+      </div>
+
       <ul>
         {selectedInputs?.map((item) => (
           <div key={selectedItemKeyfn(item)}>
             <span>{selectedInputsFormatter(item)}</span>
-            <button onClick={() => onRemoveItem(item)}>X</button>
+            <button onClick={() => onRemoveItem(item)}>
+              <X />
+            </button>
           </div>
         ))}
       </ul>
-      <Input
-        ref={inputRef}
-        onFocus={() => setShowItems(true)}
-        onBlur={onInputBlur}
-        value={input}
-        onChange={onChangeInput}
-        placeholder={placeholder}
-        className={classnames(
-          styles.input,
-          showItems && filteredItems.length && styles.listOpen
-        )}
-      />
-      {showItems && (
-        <div
-          className={classnames(
-            styles.listContainer,
-            !filteredItems.length && styles.noResults
-          )}
-        >
-          <SearchListItems
-            items={filteredItems}
-            itemKeyfn={itemKeyfn}
-            className={styles.items}
-            isAutoCompleteList
-          >
-            {(item) => (
-              <div
-                onMouseDown={(event) => onClickOption(event, item)}
-                className={
-                  equalityFunc(item, selectedInputs) ? styles.chosen : ''
-                }
-              >
-                {children(item, equalityFunc(item, selectedInputs))}
-              </div>
-            )}
-          </SearchListItems>
-        </div>
-      )}
-    </div>
+    </>
   );
 };
 

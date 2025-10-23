@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import { Check } from 'lucide-react';
 import classnames from 'classnames';
 import { FormModal } from '../modals/FormModal';
 import { createParkEvent } from '../../services/events';
@@ -10,9 +11,9 @@ import { User } from '../../types/user';
 import { useFetchFriends } from '../../hooks/api/useFetchFriends';
 import { ToggleInput } from '../inputs/ToggleInput';
 import { AutoCompleteMultiSelect } from '../inputs/AutoCompleteMultiSelect';
+import { TextArea } from '../inputs/TextArea';
 import styles from './ParkInviteModal.module.scss';
-
-const OFFSET_OPTIONS = [0, 15, 30, 60];
+import { RadioInputs } from '../inputs/RadioInputs';
 
 interface ParkInviteModalProps {
   parkId?: string;
@@ -27,11 +28,18 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
   const [visibility, setVisibility] = useState<ParkEventVisibility>(
     ParkEventVisibility.FRIENDS_SELECTED
   );
-  const [message /*setMessage*/] = useState('');
-  const [minutesOffset /*setMinutesOffset*/] = useState(OFFSET_OPTIONS[0]);
-
+  const [message, setMessage] = useState('');
   const { t } = useTranslation();
   const { notify } = useNotification();
+
+  const OFFSET_OPTIONS = [
+    { id: '0', value: '0', label: t('invite.modal.offest.now') },
+    { id: '15', value: '15', label: t('invite.modal.offest.min15') },
+    { id: '30', value: '30', label: t('invite.modal.offest.min30') },
+    { id: '60', value: '60', label: t('invite.modal.offest.hour1') },
+  ];
+
+  const [minutesOffset, setMinutesOffset] = useState(OFFSET_OPTIONS[0].value);
 
   const { friends } = useFetchFriends({ userId });
 
@@ -45,7 +53,7 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
             ? friends?.map((friend) => friend.id)
             : invitedFriends?.map((friend) => friend.id),
         message,
-        presetOffsetMinutes: minutesOffset,
+        presetOffsetMinutes: Number(minutesOffset),
       }),
     onSuccess: () => {
       // TODO: invalidate lists of user events
@@ -98,6 +106,14 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
     return (friend.name || '').includes(input);
   };
 
+  const handleChangeMessage = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setMessage(event.target.value);
+  };
+
+  const handleOffestSelect = (event: ChangeEvent<HTMLInputElement>) => {
+    setMinutesOffset(event.target.value);
+  };
+
   return (
     <FormModal
       open={isOpen}
@@ -105,46 +121,64 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
       onSave={handleCreateEvent}
       saveText={t('invite.modal.buttonText')}
       disabled={!invitedFriends.length || !!parkId || isPending}
-      title={t('.invite.modal.title')}
+      title={t('invite.modal.title')}
     >
       <div className={styles.container}>
-        <ToggleInput
-          label={t('invite.modal.visibility.title')}
-          value={visibility}
-          valueOn={ParkEventVisibility.FRIENDS_ALL}
-          valueOff={ParkEventVisibility.FRIENDS_SELECTED}
-          onChange={(newValue) => setVisibility(newValue)}
+        <RadioInputs
+          onOptionChange={handleOffestSelect}
+          options={OFFSET_OPTIONS}
+          name="offsetOptions"
+          label={t('invite.modal.offset.label')}
+          value={minutesOffset}
         />
-        {visibility === ParkEventVisibility.FRIENDS_SELECTED &&
-          !!friends?.length && (
-            <AutoCompleteMultiSelect
-              selectedInputs={invitedFriends}
-              items={friends}
-              placeholder={t('invite.modal.friends.placeholder')}
-              label={t('invite.modal.friends.label')}
-              itemKeyfn={(friend) => friend.id}
-              selectedItemKeyfn={(friend) => `$selected-${friend.id}`}
-              onSelectItem={handleSelectFriend}
-              onRemoveItem={handleRemoveFriend}
-              equalityFunc={checkIsFriendSelected}
-              filterFunc={filterFriends}
-              selectedInputsFormatter={(friend) =>
-                friend.name || 'Unnamed friend'
-              }
-            >
-              {(friend, isChosen) => (
-                <div
-                  className={classnames(
-                    styles.friend,
-                    isChosen && styles.chosen
-                  )}
-                >
-                  {isChosen && <span>V</span>}
-                  <span>{friend.name}</span>
-                </div>
-              )}
-            </AutoCompleteMultiSelect>
-          )}
+        <div>
+          <span>{t('invite.modal.friends.title')}</span>
+          <ToggleInput
+            label={t('invite.modal.visibility.title')}
+            value={visibility}
+            valueOn={ParkEventVisibility.FRIENDS_ALL}
+            valueOff={ParkEventVisibility.FRIENDS_SELECTED}
+            onChange={(newValue) => setVisibility(newValue)}
+          />
+          {visibility === ParkEventVisibility.FRIENDS_SELECTED &&
+            !!friends?.length && (
+              <AutoCompleteMultiSelect
+                selectedInputs={invitedFriends}
+                items={friends}
+                placeholder={t('invite.modal.friends.placeholder')}
+                label={t('invite.modal.friends.label')}
+                itemKeyfn={(friend) => friend.id}
+                selectedItemKeyfn={(friend) => `$selected-${friend.id}`}
+                onSelectItem={handleSelectFriend}
+                onRemoveItem={handleRemoveFriend}
+                equalityFunc={checkIsFriendSelected}
+                filterFunc={filterFriends}
+                selectedInputsFormatter={(friend) =>
+                  friend.name || 'Unnamed friend'
+                }
+              >
+                {(friend, isChosen) => (
+                  <div
+                    className={classnames(
+                      styles.friend,
+                      isChosen && styles.chosen
+                    )}
+                  >
+                    {isChosen && <Check />}
+                    <span>{friend.name}</span>
+                  </div>
+                )}
+              </AutoCompleteMultiSelect>
+            )}
+        </div>
+
+        <TextArea
+          value={message}
+          name="inviteMessage"
+          label={t('invite.modal.message.label')}
+          onChange={handleChangeMessage}
+          maxLength={200}
+        />
       </div>
     </FormModal>
   );

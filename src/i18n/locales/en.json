@@ -545,9 +545,9 @@
       "modal": {
         "title": "Add the following park details",
         "sizeMeters": "Size (in meters)",
-        "groundCovering": "Ground Covering",
-        "containsFacilities": "Contains Facilities?",
-        "dailyShadeHours": "Daily Shade Hours"
+        "groundCovering": "Ground covering",
+        "containsFacilities": "Contains facilities?",
+        "dailyShadeHours": "Daily shade hours"
       },
       "choose": {
         "update": "Update park details",
@@ -1041,6 +1041,35 @@
       "personal": {
         "title": "Personal Information",
         "content": "Contains private information."
+      }
+    }
+  },
+  "invite": {
+    "buttonTxt": "Invite",
+    "messageSuccess": "Invitation sent successfully!",
+    "messageError": "Failed to send invitation. Please try again.",
+    "modal": {
+      "title": "Invite friends to the park",
+      "buttonText": "Send",
+      "offset": {
+        "label": "When are you planning to go?"
+      },
+      "offest": {
+        "now": "Right now",
+        "min15": "In 15 minutes",
+        "min30": "In 30 minutes",
+        "hour1": "In 1 hour"
+      },
+      "visibility": {
+        "title": "Invite all friends"
+      },
+      "friends": {
+        "title": "Who do you want to invite?",
+        "placeholder": "Search friends",
+        "label": "Select friends"
+      },
+      "message": {
+        "label": "Add a message"
       }
     }
   }
