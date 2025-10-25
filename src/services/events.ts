@@ -35,16 +35,44 @@ const createParkEvent = async (params: CreateParkEventParams) => {
   }
 };
 
-const fetchUserEvents = async (userId: string) => {
-  console.log('fetching events for user: ', userId);
+const fetchUserOrganizedEvents = async () => {
   try {
-    return [{}];
+    const { data: events, error } = await supabase.rpc(
+      'get_user_events_organized'
+    );
+
+    if (error) {
+      throw error;
+    }
+
+    console.log('events are: ', events);
+
+    return events;
   } catch (error) {
     console.error(
-      `there was an error while fetching events: ${JSON.stringify(error)}`
+      `there was an error while fetching user organized events: ${JSON.stringify(error)}`
     );
     return [];
   }
 };
 
-export { createParkEvent, fetchUserEvents };
+const fetchUserInvitedEvents = async () => {
+  try {
+    const { data: events, error } = await supabase.rpc(
+      'get_user_events_invited'
+    );
+
+    if (error) {
+      throw error;
+    }
+
+    return events;
+  } catch (error) {
+    console.error(
+      `there was an error while fetching user invited events: ${JSON.stringify(error)}`
+    );
+    return [];
+  }
+};
+
+export { createParkEvent, fetchUserOrganizedEvents, fetchUserInvitedEvents };

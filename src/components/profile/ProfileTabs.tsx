@@ -2,7 +2,10 @@ import { useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { UserContext } from '../../context/UserContext';
 import { fetchUserReviews } from '../../services/reviews';
-import { fetchUserEvents } from '../../services/events';
+import {
+  fetchUserOrganizedEvents,
+  fetchUserInvitedEvents,
+} from '../../services/events';
 import { TabsList } from '../tabs/TabsList';
 import styles from './ProfileTabs.module.scss';
 import { useTranslation } from 'react-i18next';
@@ -16,9 +19,14 @@ const ProfileTabs = () => {
     queryFn: () => fetchUserReviews(userId!),
   });
 
-  const { data: events } = useQuery({
-    queryKey: ['events', userId],
-    queryFn: () => fetchUserEvents(userId!),
+  const { data: organizedEvents } = useQuery({
+    queryKey: ['events', 'organized', userId],
+    queryFn: () => fetchUserOrganizedEvents(),
+  });
+
+  const { data: invitedEvents } = useQuery({
+    queryKey: ['events', 'invited', userId],
+    queryFn: () => fetchUserInvitedEvents(),
   });
 
   return (
@@ -33,7 +41,7 @@ const ProfileTabs = () => {
         {
           text: t('profile.tabs.events'),
           url: 'events',
-          disabled: !events?.length,
+          disabled: !organizedEvents?.length && !invitedEvents?.length,
         },
         {
           text: t('profile.tabs.favorites'),

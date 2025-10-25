@@ -7,4 +7,11 @@ enum ParkEventStatus {
   CANCELED = 'CANCELED',
 }
 
-export { ParkEventVisibility, ParkEventStatus };
+enum ParkEventInviteeStatus {
+  INVITED = 'INVITED',
+  DECLINED = 'DECLINED',
+  REMOVED = 'REMOVED',
+  ACCEPTED = 'ACCEPTED',
+}
+
+export { ParkEventVisibility, ParkEventStatus, ParkEventInviteeStatus };
