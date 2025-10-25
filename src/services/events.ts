@@ -1,5 +1,5 @@
 import { ParkEventVisibility } from '../types/parkEvent';
-// import { supabase } from './supabase-client';
+import { supabase } from './supabase-client';
 
 interface CreateParkEventParams {
   inviteeIds?: string[];
@@ -14,27 +14,19 @@ const createParkEvent = async (params: CreateParkEventParams) => {
     const { inviteeIds, message, parkId, presetOffsetMinutes, visibility } =
       params;
 
-    console.log(
-      'creating park event: ',
-      inviteeIds,
+    const { data: event, error } = await supabase.rpc('create_park_event', {
+      invitee_ids: inviteeIds,
       message,
-      parkId,
-      presetOffsetMinutes,
-      visibility
-    );
-    // const { data: event, error } = await supabase.rpc('create_park_event', {
-    //   invitee_ids: inviteeIds,
-    //   message,
-    //   park_id: parkId,
-    //   preset_offset_minutes: presetOffsetMinutes,
-    //   visibility,
-    // });
+      park_id: parkId,
+      preset_offset_minutes: presetOffsetMinutes,
+      visibility,
+    });
 
-    // if (error) {
-    //   throw error;
-    // }
+    if (error) {
+      throw error;
+    }
 
-    // return event;
+    return event;
   } catch (error) {
     console.error(
       `there was an error while creating the event: ${JSON.stringify(error)}`
@@ -43,4 +35,16 @@ const createParkEvent = async (params: CreateParkEventParams) => {
   }
 };
 
-export { createParkEvent };
+const fetchUserEvents = async (userId: string) => {
+  console.log('fetching events for user: ', userId);
+  try {
+    return [{}];
+  } catch (error) {
+    console.error(
+      `there was an error while fetching events: ${JSON.stringify(error)}`
+    );
+    return [];
+  }
+};
+
+export { createParkEvent, fetchUserEvents };

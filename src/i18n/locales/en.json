@@ -193,7 +193,9 @@
       "googlePlay": "Google Play"
     }
   },
-  "userInfo": {
+  "settings": {
+    "title": "Settings",
+    "backToProfile": "To my profile",
     "editDetails": "Edit details",
     "logout": "Logout",
     "deleteProfile": "Delete my profile",
@@ -239,7 +241,7 @@
       "friends": "Friends",
       "favorites": "Favorites",
       "reviews": "Reviews",
-      "settings": "Settings"
+      "events": "Events"
     }
   },
   "visitors": {

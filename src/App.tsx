@@ -26,7 +26,8 @@ const UserDog = lazy(() => import('./pages/UserDog'));
 const UserReviews = lazy(() => import('./pages/UserReviews'));
 const UserFriends = lazy(() => import('./pages/UserFriends'));
 const UserFavorites = lazy(() => import('./pages/UserFavorites'));
-const UserInfo = lazy(() => import('./pages/UserInfo'));
+const Settings = lazy(() => import('./pages/Settings'));
+const UserEvents = lazy(() => import('./pages/UserEvents'));
 const ParkReviews = lazy(() => import('./pages/ParkReviews'));
 const ParkVisitors = lazy(() => import('./pages/ParkVisitors'));
 const Profile = lazy(() => import('./pages/Profile'));
@@ -148,10 +149,18 @@ const App = () => {
               element: <UserFavorites />,
             },
             {
-              path: 'info',
-              element: <UserInfo />,
+              path: 'events',
+              element: <UserEvents />,
             },
           ],
+        },
+        {
+          path: '/profile/:id/settings',
+          element: (
+            <PrivateRoute>
+              <Settings />
+            </PrivateRoute>
+          ),
         },
         {
           path: 'dogs/:dogId',

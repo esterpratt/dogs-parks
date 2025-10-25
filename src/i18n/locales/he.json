@@ -193,7 +193,9 @@
       "googlePlay": "Google Play"
     }
   },
-  "userInfo": {
+  "settings": {
+    "title": "הגדרות",
+    "backToProfile": "לפרופיל שלי",
     "editDetails": "עריכת פרטים",
     "logout": "יציאה",
     "deleteProfile": "מחיקת הפרופיל שלי",
@@ -239,7 +241,7 @@
       "friends": "חברים",
       "favorites": "מועדפים",
       "reviews": "ביקורות",
-      "settings": "הגדרות"
+      "events": "אירועים"
     }
   },
   "visitors": {

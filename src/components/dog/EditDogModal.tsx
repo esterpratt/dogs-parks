@@ -342,7 +342,7 @@ const EditDogModal: React.FC<EditDogModalProps> = (props) => {
             className={styles.deleteDogWrapper}
           >
             <Trash2 size={16} />
-            <div>{t('userInfo.deleteDogButton', { name: dog.name })}</div>
+            <div>{t('settings.deleteDogButton', { name: dog.name })}</div>
           </Button>
         )}
       </FormModal>

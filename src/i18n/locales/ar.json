@@ -194,7 +194,9 @@
       "googlePlay": "Google Play"
     }
   },
-  "userInfo": {
+  "settings": {
+    "title": "الإعدادات",
+    "backToProfile": "To my profile",
     "editDetails": "تحرير التفاصيل",
     "logout": "خروج",
     "deleteProfile": "حذف ملفي الشخصي",
@@ -240,7 +242,7 @@
       "friends": "الأصدقاء",
       "favorites": "المفضلة",
       "reviews": "المراجعات",
-      "settings": "الإعدادات"
+      "events": "Events"
     }
   },
   "visitors": {

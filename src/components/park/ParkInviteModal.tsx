@@ -62,17 +62,10 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
     onError: () => {
       notify(t('invite.messageError'));
     },
+    onSettled: () => {
+      onClose();
+    },
   });
-
-  const handleCreateEvent = () => {
-    if (
-      parkId &&
-      (visibility === ParkEventVisibility.FRIENDS_ALL ||
-        !!invitedFriends.length)
-    ) {
-      createInvite();
-    }
-  };
 
   const checkIsFriendSelected = (friend: User) => {
     return (
@@ -114,16 +107,31 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
     setMinutesOffset(event.target.value);
   };
 
+  const handleCreateEvent = () => {
+    if (
+      parkId &&
+      (visibility === ParkEventVisibility.FRIENDS_ALL ||
+        !!invitedFriends.length)
+    ) {
+      createInvite();
+    }
+  };
+
   return (
     <FormModal
       open={isOpen}
       onClose={onClose}
       onSave={handleCreateEvent}
       saveText={t('invite.modal.buttonText')}
-      disabled={!invitedFriends.length || !!parkId || isPending}
+      disabled={
+        (!invitedFriends.length &&
+          visibility === ParkEventVisibility.FRIENDS_SELECTED) ||
+        !parkId ||
+        isPending
+      }
       title={t('invite.modal.title')}
     >
-      <div className={styles.container}>
+      <form className={styles.container}>
         <RadioInputs
           onOptionChange={handleOffestSelect}
           options={OFFSET_OPTIONS}
@@ -171,7 +179,6 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
               </AutoCompleteMultiSelect>
             )}
         </div>
-
         <TextArea
           value={message}
           name="inviteMessage"
@@ -179,7 +186,7 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
           onChange={handleChangeMessage}
           maxLength={200}
         />
-      </div>
+      </form>
     </FormModal>
   );
 };

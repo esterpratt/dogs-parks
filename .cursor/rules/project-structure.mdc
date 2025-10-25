@@ -57,7 +57,7 @@ Route-level components representing full screens:
 - `Login.tsx` - User authentication
 - `AuthCallback.tsx` - OAuth callback handling
 - `Profile.tsx` - User profile management
-- `UserInfo.tsx` - User information editing
+- `Settings.tsx` - User information editing
 - `UpdatePassword.tsx` - Password management
 - `DeleteAccount.tsx` - Account deletion
 - `PrivateRoute.tsx` - Protected route wrapper

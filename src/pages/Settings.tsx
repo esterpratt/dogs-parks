@@ -1,16 +1,16 @@
 import { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
-import { LogOut, Pencil, Trash2, X } from 'lucide-react';
+import { LogOut, MoveLeft, Pencil, Trash2, X } from 'lucide-react';
 import { Button } from '../components/Button';
 import { EditUserModal } from '../components/profile/EditUserModal';
 import { TopModal } from '../components/modals/TopModal';
 import { ThemeToggle } from '../components/profile/ThemeToggle';
-import styles from './UserInfo.module.scss';
+import styles from './Settings.module.scss';
 import { useTranslation } from 'react-i18next';
 
-const UserInfo = () => {
-  const { userLogout, userDeletion } = useContext(UserContext);
+const Settings = () => {
+  const { userLogout, userDeletion, userId } = useContext(UserContext);
   const { t } = useTranslation();
   const [isEditUserModalOpen, setIsEditUserModalOpen] = useState(false);
   const [isDeleteUserModalOpen, setIsDeleteUserModalOpen] = useState(false);
@@ -36,32 +36,41 @@ const UserInfo = () => {
 
   return (
     <>
+      <div className={styles.prevLinks}>
+        <Link to={`/profile/${userId}`}>
+          <MoveLeft size={16} />
+          <span>{t('settings.backToProfile')}</span>
+        </Link>
+      </div>
       <div className={styles.container}>
-        <div className={styles.themeContainer}>
-          <ThemeToggle />
+        <div className={styles.title}>{t('settings.title')}</div>
+        <div className={styles.formContainer}>
+          <div className={styles.themeContainer}>
+            <ThemeToggle />
+          </div>
+          <Button onClick={onEditUser} className={styles.button}>
+            <Pencil size={24} />
+            <span>{t('settings.editDetails')}</span>
+          </Button>
+          <Button
+            onClick={logout}
+            className={styles.button}
+            variant="secondary"
+            color={styles.blue}
+          >
+            <LogOut size={24} />
+            <span>{t('settings.logout')}</span>
+          </Button>
+          <Button
+            variant="secondary"
+            color={styles.red}
+            onClick={() => setIsDeleteUserModalOpen(true)}
+            className={styles.button}
+          >
+            <Trash2 size={24} />
+            <span>{t('settings.deleteProfile')}</span>
+          </Button>
         </div>
-        <Button onClick={onEditUser} className={styles.button}>
-          <Pencil size={24} />
-          <span>{t('userInfo.editDetails')}</span>
-        </Button>
-        <Button
-          onClick={logout}
-          className={styles.button}
-          variant="secondary"
-          color={styles.blue}
-        >
-          <LogOut size={24} />
-          <span>{t('userInfo.logout')}</span>
-        </Button>
-        <Button
-          variant="secondary"
-          color={styles.red}
-          onClick={() => setIsDeleteUserModalOpen(true)}
-          className={styles.button}
-        >
-          <Trash2 size={24} />
-          <span>{t('userInfo.deleteProfile')}</span>
-        </Button>
       </div>
       <EditUserModal isOpen={isEditUserModalOpen} onClose={onCloseUserModal} />
       <TopModal
@@ -70,9 +79,9 @@ const UserInfo = () => {
         className={styles.approveModal}
       >
         <div className={styles.approveContent}>
-          <span>{t('userInfo.deleteModalTitle')}</span>
-          <span>{t('userInfo.deleteModalBody1')}</span>
-          <span>{t('userInfo.deleteModalBody2')}</span>
+          <span>{t('settings.deleteModalTitle')}</span>
+          <span>{t('settings.deleteModalBody1')}</span>
+          <span>{t('settings.deleteModalBody2')}</span>
         </div>
         <div className={styles.buttonsContainer}>
           <Button
@@ -81,7 +90,7 @@ const UserInfo = () => {
             className={styles.modalButton}
           >
             <Trash2 size={16} />
-            <span>{t('userInfo.delete')}</span>
+            <span>{t('settings.delete')}</span>
           </Button>
           <Button
             variant="secondary"
@@ -89,7 +98,7 @@ const UserInfo = () => {
             className={styles.modalButton}
           >
             <X size={16} />
-            <span>{t('userInfo.cancel')}</span>
+            <span>{t('settings.cancel')}</span>
           </Button>
         </div>
       </TopModal>
@@ -97,4 +106,4 @@ const UserInfo = () => {
   );
 };
 
-export default UserInfo;
+export default Settings;

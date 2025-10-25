@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { Link, Navigate, Outlet, useLoaderData } from 'react-router-dom';
-import { MoveLeft, MoveRight } from 'lucide-react';
+import { MoveLeft, MoveRight, Settings } from 'lucide-react';
 import classnames from 'classnames';
 import { useQueries, useQuery } from '@tanstack/react-query';
 import { UserContext } from '../context/UserContext';
@@ -54,7 +54,7 @@ const Profile: React.FC = () => {
     'userFriends',
     'userFavorites',
     'userReviews',
-    'userInfo',
+    'userSettings',
   ]);
 
   useQuery({
@@ -137,6 +137,12 @@ const Profile: React.FC = () => {
                 values={{ name: user.name }}
                 components={{ name: <span className={styles.userName} /> }}
               />
+              <Link
+                className={styles.settingsButton}
+                to={`/profile/${signedInUser!.id}/settings`}
+              >
+                <Settings color={styles.pink} size={24} />
+              </Link>
             </div>
           ) : !!signedInUser && !isSignedInUser ? (
             <div className={styles.title}>

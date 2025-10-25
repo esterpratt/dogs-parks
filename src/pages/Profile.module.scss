@@ -49,6 +49,14 @@ $imgs-medium-top: 96px;
   }
 }
 
+.settings-button {
+  position: absolute;
+  bottom: 16px;
+  inset-inline-end: 12px;
+  width: 24px;
+  height: 24px;
+}
+
 .img {
   &:not(:first-child) {
     z-index: 1;
@@ -143,4 +151,8 @@ $imgs-medium-top: 96px;
       margin-inline-start: -40px;
     }
   }
+}
+
+:export {
+  pink: $pink;
 }
