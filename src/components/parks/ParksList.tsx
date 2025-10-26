@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import classnames from 'classnames';
 import { useQuery } from '@tanstack/react-query';
 import { Map } from 'lucide-react';
@@ -36,18 +36,19 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
     retry: 0,
   });
 
-  const { data: sortedParks, isLoading: isLoadingSortedParks } = useQuery({
-    queryKey: ['sortedParks', userLocation, currentLanguage],
-    queryFn: () => fetchSortedParks(parks!, userLocation),
-    enabled: !!parks,
-    retry: 0,
-  });
-
   const { filterFunc: crossLangFilter, isLoading: isBuildingIndex } =
     useParksCrossLanguageFilter();
 
+  const sortedParks = useMemo(() => {
+    if (!parks?.length) {
+      return [];
+    }
+
+    return fetchSortedParks(parks!, userLocation);
+  }, [parks, userLocation]);
+
   const { showLoader } = useDelayedLoading({
-    isLoading: isLoadingParks || isLoadingSortedParks || isBuildingIndex,
+    isLoading: isLoadingParks || isBuildingIndex,
   });
 
   const NoResultsLayout = user ? (
@@ -70,7 +71,7 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
     </div>
   );
 
-  if (showLoader || !sortedParks) {
+  if (showLoader) {
     return <Loader style={{ paddingTop: '64px' }} />;
   }
 

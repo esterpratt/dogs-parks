@@ -1,8 +1,8 @@
 import { orderByDistance } from 'geolib';
 import { Location, ParkJSON as Park } from '../types/park';
 
-export const fetchSortedParks = async (
-  parks: Park[] | undefined,
+export const fetchSortedParks = (
+  parks: Park[],
   userLocation: Location | undefined
 ) => {
   if (!userLocation || !parks) return parks;
