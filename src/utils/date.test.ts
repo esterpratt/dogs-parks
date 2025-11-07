@@ -53,12 +53,12 @@ describe('date.ts utils', () => {
     expect(getFormattedPastDate(tenDaysAgo, 'he')).toBe('לפני 10 ימים');
   });
 
-  it('getFormattedPastDate uses absolute format DD/MM/YYYY for > 31 days', () => {
+  it('getFormattedPastDate uses locale fomraatted for > 31 days', () => {
     const d = new Date('2024-01-01T00:00:00Z');
     const en = getFormattedPastDate(d, 'en');
     const he = getFormattedPastDate(d, 'he');
-    expect(en).toBe('01/01/2024');
-    expect(he).toBe('01/01/2024');
+    expect(en).toBe('1/1/24');
+    expect(he).toBe('1.1.2024');
   });
 
   it('getFormattedPastDate returns N/A if no date is provided (legacy parity)', () => {
