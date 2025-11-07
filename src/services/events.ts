@@ -45,8 +45,6 @@ const fetchUserOrganizedEvents = async () => {
       throw error;
     }
 
-    console.log('events are: ', events);
-
     return events;
   } catch (error) {
     console.error(

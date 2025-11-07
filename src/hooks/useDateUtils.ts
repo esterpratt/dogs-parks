@@ -6,6 +6,7 @@ import {
   formatAbsoluteDate as formatAbsoluteDateInternal,
   getAge,
   getDurationFromNow as getDurationFromNowInternal,
+  formatFutureCalendar as formatFutureCalendarInternal,
   type AgeResult,
   type FormatDateOptions,
 } from '../utils/date.ts';
@@ -20,6 +21,9 @@ function useDateUtils() {
       },
       formatAbsoluteDate(date: Date, opts?: FormatDateOptions) {
         return formatAbsoluteDateInternal(date, locale, opts);
+      },
+      formatFutureCalendar(date: Date | string) {
+        return formatFutureCalendarInternal(date, locale);
       },
       getDurationFromNow(ms: number) {
         return getDurationFromNowInternal(ms, locale);

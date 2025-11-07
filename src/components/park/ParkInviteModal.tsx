@@ -33,10 +33,10 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
   const { notify } = useNotification();
 
   const OFFSET_OPTIONS = [
-    { id: '0', value: '0', label: t('invite.modal.offest.now') },
-    { id: '15', value: '15', label: t('invite.modal.offest.min15') },
-    { id: '30', value: '30', label: t('invite.modal.offest.min30') },
-    { id: '60', value: '60', label: t('invite.modal.offest.hour1') },
+    { id: '0', value: '0', label: t('parkInvite.modal.offest.now') },
+    { id: '15', value: '15', label: t('parkInvite.modal.offest.min15') },
+    { id: '30', value: '30', label: t('parkInvite.modal.offest.min30') },
+    { id: '60', value: '60', label: t('parkInvite.modal.offest.hour1') },
   ];
 
   const [minutesOffset, setMinutesOffset] = useState(OFFSET_OPTIONS[0].value);
@@ -57,10 +57,10 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
       }),
     onSuccess: () => {
       // TODO: invalidate lists of user events
-      notify(t('invite.messageSuccess'));
+      notify(t('parkInvite.messageSuccess'));
     },
     onError: () => {
-      notify(t('invite.messageError'));
+      notify(t('parkInvite.messageError'));
     },
     onSettled: () => {
       onClose();
@@ -122,27 +122,27 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
       open={isOpen}
       onClose={onClose}
       onSave={handleCreateEvent}
-      saveText={t('invite.modal.buttonText')}
+      saveText={t('parkInvite.modal.buttonText')}
       disabled={
         (!invitedFriends.length &&
           visibility === ParkEventVisibility.FRIENDS_SELECTED) ||
         !parkId ||
         isPending
       }
-      title={t('invite.modal.title')}
+      title={t('parkInvite.modal.title')}
     >
       <form className={styles.container}>
         <RadioInputs
           onOptionChange={handleOffestSelect}
           options={OFFSET_OPTIONS}
           name="offsetOptions"
-          label={t('invite.modal.offset.label')}
+          label={t('parkInvite.modal.offset.label')}
           value={minutesOffset}
         />
         <div>
-          <span>{t('invite.modal.friends.title')}</span>
+          <span>{t('parkInvite.modal.friends.title')}</span>
           <ToggleInput
-            label={t('invite.modal.visibility.title')}
+            label={t('parkInvite.modal.visibility.title')}
             value={visibility}
             valueOn={ParkEventVisibility.FRIENDS_ALL}
             valueOff={ParkEventVisibility.FRIENDS_SELECTED}
@@ -153,8 +153,8 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
               <AutoCompleteMultiSelect
                 selectedInputs={invitedFriends}
                 items={friends}
-                placeholder={t('invite.modal.friends.placeholder')}
-                label={t('invite.modal.friends.label')}
+                placeholder={t('parkInvite.modal.friends.placeholder')}
+                label={t('parkInvite.modal.friends.label')}
                 itemKeyfn={(friend) => friend.id}
                 selectedItemKeyfn={(friend) => `$selected-${friend.id}`}
                 onSelectItem={handleSelectFriend}
@@ -182,7 +182,7 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
         <TextArea
           value={message}
           name="inviteMessage"
-          label={t('invite.modal.message.label')}
+          label={t('parkInvite.modal.message.label')}
           onChange={handleChangeMessage}
           maxLength={200}
         />

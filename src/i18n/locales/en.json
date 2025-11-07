@@ -325,12 +325,46 @@
       }
     }
   },
+  "userEvents": {
+    "upcomingEvents": "Upcoming events",
+    "organizedEvents": "Organized by me",
+    "invitedEvents": "Invited to"
+  },
   "parkReviews": {
     "emptyTitle": "No barks about this park yet",
     "firstReviewCta": "Be the first to leave a review!",
     "averageRank": "Average rank: {{rank}}",
     "addReview": "Add review",
     "updateReview": "Update review"
+  },
+  "parkInvite": {
+    "buttonTxt": "Invite",
+    "messageSuccess": "Invitation sent successfully!",
+    "messageError": "Failed to send invitation. Please try again.",
+    "modal": {
+      "title": "Invite friends to the park",
+      "buttonText": "Send",
+      "offset": {
+        "label": "When are you planning to go?"
+      },
+      "offest": {
+        "now": "Right now",
+        "min15": "In 15 minutes",
+        "min30": "In 30 minutes",
+        "hour1": "In 1 hour"
+      },
+      "visibility": {
+        "title": "Invite all friends"
+      },
+      "friends": {
+        "title": "Who do you want to invite?",
+        "placeholder": "Search friends",
+        "label": "Select friends"
+      },
+      "message": {
+        "label": "Add a message"
+      }
+    }
   },
   "userFriends": {
     "noFriends": "No friends yet.",
@@ -608,7 +642,6 @@
       "reportAnonymously": "Report anonymously"
     }
   },
-
   "location": {
     "permissions": {
       "message": "We couldn’t access your location. You can enable location permissions in your device settings.",
@@ -1043,35 +1076,6 @@
       "personal": {
         "title": "Personal Information",
         "content": "Contains private information."
-      }
-    }
-  },
-  "invite": {
-    "buttonTxt": "Invite",
-    "messageSuccess": "Invitation sent successfully!",
-    "messageError": "Failed to send invitation. Please try again.",
-    "modal": {
-      "title": "Invite friends to the park",
-      "buttonText": "Send",
-      "offset": {
-        "label": "When are you planning to go?"
-      },
-      "offest": {
-        "now": "Right now",
-        "min15": "In 15 minutes",
-        "min30": "In 30 minutes",
-        "hour1": "In 1 hour"
-      },
-      "visibility": {
-        "title": "Invite all friends"
-      },
-      "friends": {
-        "title": "Who do you want to invite?",
-        "placeholder": "Search friends",
-        "label": "Select friends"
-      },
-      "message": {
-        "label": "Add a message"
       }
     }
   }

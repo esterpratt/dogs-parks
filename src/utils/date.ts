@@ -11,7 +11,10 @@ interface FormatDateOptions {
   timeStyle?: 'full' | 'long' | 'medium' | 'short';
 }
 
-function getFormattedPastDate(date?: Date, locale: AppLanguage = 'en'): string {
+function getFormattedPastDate(
+  date?: Date | string,
+  locale: AppLanguage = 'en'
+): string {
   if (!date) {
     return 'N/A';
   }
@@ -24,7 +27,7 @@ function getFormattedPastDate(date?: Date, locale: AppLanguage = 'en'): string {
     return target.locale(locale).subtract(1, 'second').fromNow();
   }
 
-  return target.format('DD/MM/YYYY');
+  return formatAbsoluteDate(date, locale, { dateStyle: 'short' });
 }
 
 function getFormattedDateISO(date: Date): string {
@@ -32,12 +35,16 @@ function getFormattedDateISO(date: Date): string {
 }
 
 function formatAbsoluteDate(
-  date: Date,
+  date: Date | string,
   locale: AppLanguage = 'en',
   opts: FormatDateOptions = { dateStyle: 'medium' }
 ): string {
   const formatter = new Intl.DateTimeFormat(locale, opts);
-  return formatter.format(date);
+  return formatter.format(typeof date === 'string' ? new Date(date) : date);
+}
+
+function formatFutureCalendar(date: Date | string, locale: AppLanguage) {
+  return dayjs(date).locale(locale).calendar(date);
 }
 
 function getAge(birthday: Date): AgeResult {
@@ -66,4 +73,5 @@ export {
   formatAbsoluteDate,
   getAge,
   getDurationFromNow,
+  formatFutureCalendar,
 };

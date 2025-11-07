@@ -327,6 +327,40 @@
       }
     }
   },
+  "parkInvite": {
+    "buttonTxt": "הזמנה",
+    "messageSuccess": "ההזמנה נשלחה בהצלחה!",
+    "messageError": "שליחת ההזמנה נכשלה. נסו שוב.",
+    "modal": {
+      "title": "הזמנת חברים לגינה",
+      "buttonText": "שליחה",
+      "offset": {
+        "label": "זמן הגעה מתוכנן"
+      },
+      "offest": {
+        "now": "עכשיו",
+        "min15": "בעוד 15 דקות",
+        "min30": "בעוד 30 דקות",
+        "hour1": "בעוד שעה"
+      },
+      "visibility": {
+        "title": "כל החברים"
+      },
+      "friends": {
+        "title": "את מי ברצונך להזמין?",
+        "placeholder": "חיפוש לפי שם",
+        "label": "בחר/י חברים"
+      },
+      "message": {
+        "label": "הודעה"
+      }
+    }
+  },
+  "userEvents": {
+    "upcomingEvents": "אירועים עתידיים",
+    "organizedEvents": "האירועים שלי",
+    "invitedEvents": "הזמנות"
+  },
   "parkReviews": {
     "emptyTitleShort": "אין ביקורות",
     "emptyTitle": "אין ביקורות על גינה זו עדיין",
@@ -1046,35 +1080,6 @@
       "personal": {
         "title": "מידע אישי",
         "content": "מכילה מידע אישי"
-      }
-    }
-  },
-  "invite": {
-    "buttonTxt": "הזמנה",
-    "messageSuccess": "ההזמנה נשלחה בהצלחה!",
-    "messageError": "שליחת ההזמנה נכשלה. נסו שוב.",
-    "modal": {
-      "title": "הזמנת חברים לגינה",
-      "buttonText": "שליחה",
-      "offset": {
-        "label": "זמן הגעה מתוכנן"
-      },
-      "offest": {
-        "now": "עכשיו",
-        "min15": "בעוד 15 דקות",
-        "min30": "בעוד 30 דקות",
-        "hour1": "בעוד שעה"
-      },
-      "visibility": {
-        "title": "כל החברים"
-      },
-      "friends": {
-        "title": "את מי ברצונך להזמין?",
-        "placeholder": "חיפוש לפי שם",
-        "label": "בחר/י חברים"
-      },
-      "message": {
-        "label": "הודעה"
       }
     }
   }

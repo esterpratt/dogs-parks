@@ -328,6 +328,40 @@
       }
     }
   },
+  "userEvents": {
+    "upcomingEvents": "Upcoming events",
+    "organizedEvents": "Organized by me",
+    "invitedEvents": "Invited to"
+  },
+  "parkInvite": {
+    "buttonTxt": "دعوة",
+    "messageSuccess": "تم إرسال الدعوة بنجاح!",
+    "messageError": "فشل إرسال الدعوة. حاول مرة أخرى.",
+    "modal": {
+      "title": "دعوة الأصدقاء للحديقة",
+      "buttonText": "إرسال",
+      "offset": {
+        "label": "متى تخططون للذهاب؟"
+      },
+      "offest": {
+        "now": "الآن",
+        "min15": "خلال 15 دقيقة",
+        "min30": "خلال 30 دقيقة",
+        "hour1": "خلال ساعة"
+      },
+      "visibility": {
+        "title": "دعوة جميع الأصدقاء"
+      },
+      "friends": {
+        "title": "من تريد دعوته؟",
+        "placeholder": "البحث عن أصدقاء",
+        "label": "اختيار الأصدقاء"
+      },
+      "message": {
+        "label": "إضافة رسالة"
+      }
+    }
+  },
   "parkReviews": {
     "emptyTitleShort": "لا توجد مراجعات",
     "emptyTitle": "لا توجد مراجعات لهذه الحديقة بعد",
@@ -1046,35 +1080,6 @@
       "personal": {
         "title": "معلومات شخصية",
         "content": "تحتوي على معلومات شخصية"
-      }
-    }
-  },
-  "invite": {
-    "buttonTxt": "دعوة",
-    "messageSuccess": "تم إرسال الدعوة بنجاح!",
-    "messageError": "فشل إرسال الدعوة. حاول مرة أخرى.",
-    "modal": {
-      "title": "دعوة الأصدقاء للحديقة",
-      "buttonText": "إرسال",
-      "offset": {
-        "label": "متى تخططون للذهاب؟"
-      },
-      "offest": {
-        "now": "الآن",
-        "min15": "خلال 15 دقيقة",
-        "min30": "خلال 30 دقيقة",
-        "hour1": "خلال ساعة"
-      },
-      "visibility": {
-        "title": "دعوة جميع الأصدقاء"
-      },
-      "friends": {
-        "title": "من تريد دعوته؟",
-        "placeholder": "البحث عن أصدقاء",
-        "label": "اختيار الأصدقاء"
-      },
-      "message": {
-        "label": "إضافة رسالة"
       }
     }
   }

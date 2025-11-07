@@ -21,7 +21,7 @@ const ParkInvite = (props: ParkInviteProps) => {
         IconCmp={CalendarPlus}
         iconColor={styles.pink}
         onClick={() => setOpenInviteModal(true)}
-        textCmp={<span>{t('invite.buttonTxt')}</span>}
+        textCmp={<span>{t('parkInvite.buttonTxt')}</span>}
       />
       <ParkInviteModal
         parkId={parkId}
