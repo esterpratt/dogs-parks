@@ -15,12 +15,17 @@ enum ParkEventInviteeStatus {
 }
 
 interface ParkEventBase {
-  event_id: string;
+  id: string;
   park_id: string;
   start_at: string;
   end_at: string;
   status: ParkEventStatus;
   message?: string;
+}
+
+interface ParkEvent extends ParkEventBase {
+  creator_name?: string;
+  creator_id: string;
 }
 
 interface ParkEventInvite extends ParkEventBase {
@@ -30,5 +35,14 @@ interface ParkEventInvite extends ParkEventBase {
   my_invite_status: ParkEventInviteeStatus;
 }
 
+interface Invitee {
+  user_id: string;
+  name: string;
+  status: ParkEventInviteeStatus;
+  responded_at: string;
+  added_at: string;
+  added_by: string;
+}
+
 export { ParkEventVisibility, ParkEventStatus, ParkEventInviteeStatus };
-export type { ParkEventBase, ParkEventInvite };
+export type { ParkEventBase, ParkEventInvite, Invitee, ParkEvent };

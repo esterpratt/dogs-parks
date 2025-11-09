@@ -1058,7 +1058,8 @@
   },
   "reports": {
     "reviewModal": {
-      "title": "لماذا تريد الإبلاغ عن هذه المراجعة"
+      "title": "لماذا تريد الإبلاغ عن هذه المراجعة",
+      "success": "Report sent"
     },
     "reasons": {
       "spam": {

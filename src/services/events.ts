@@ -1,4 +1,9 @@
-import { ParkEventVisibility } from '../types/parkEvent';
+import {
+  ParkEventInviteeStatus,
+  ParkEventStatus,
+  ParkEventVisibility,
+} from '../types/parkEvent';
+import { throwError } from './error';
 import { supabase } from './supabase-client';
 
 interface CreateParkEventParams {
@@ -7,6 +12,17 @@ interface CreateParkEventParams {
   parkId: string;
   presetOffsetMinutes?: number;
   visibility: ParkEventVisibility;
+}
+
+interface FetchInviteeParams {
+  eventId: string;
+  userId: string;
+}
+
+interface UpdateInviteeParams {
+  eventId: string;
+  userId: string;
+  status: ParkEventInviteeStatus;
 }
 
 const createParkEvent = async (params: CreateParkEventParams) => {
@@ -32,6 +48,75 @@ const createParkEvent = async (params: CreateParkEventParams) => {
       `there was an error while creating the event: ${JSON.stringify(error)}`
     );
     return null;
+  }
+};
+
+const fetchEvent = async (id: string) => {
+  try {
+    const { data: event, error } = await supabase.rpc(
+      'get_event_with_invitees',
+      { p_event_id: id }
+    );
+
+    if (error) {
+      throw error;
+    }
+
+    return event;
+  } catch (error) {
+    throwError(error);
+  }
+};
+
+const cancelEvent = async (eventId: string) => {
+  try {
+    const { error } = await supabase
+      .from('park_events')
+      .update({ status: ParkEventStatus.CANCELED })
+      .eq('id', eventId);
+
+    if (error) {
+      throw error;
+    }
+  } catch (error) {
+    throwError(error);
+  }
+};
+
+const fetchInvitee = async (params: FetchInviteeParams) => {
+  try {
+    const { eventId, userId } = params;
+    const { data: invitee, error } = await supabase
+      .from('park_event_invitees')
+      .select('*')
+      .eq('event_id', eventId)
+      .eq('user_id', userId)
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return invitee;
+  } catch (error) {
+    throwError(error);
+  }
+};
+
+const updateInvitee = async (params: UpdateInviteeParams) => {
+  try {
+    const { userId, eventId, status } = params;
+    const { error } = await supabase
+      .from('park_event_invitees')
+      .update({ status })
+      .eq('event_id', eventId)
+      .eq('user_id', userId);
+
+    if (error) {
+      throw error;
+    }
+  } catch (error) {
+    throwError(error);
   }
 };
 
@@ -73,4 +158,12 @@ const fetchUserInvitedEvents = async () => {
   }
 };
 
-export { createParkEvent, fetchUserOrganizedEvents, fetchUserInvitedEvents };
+export {
+  createParkEvent,
+  fetchUserOrganizedEvents,
+  fetchUserInvitedEvents,
+  fetchEvent,
+  fetchInvitee,
+  updateInvitee,
+  cancelEvent,
+};

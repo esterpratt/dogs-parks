@@ -1054,7 +1054,8 @@
   },
   "reports": {
     "reviewModal": {
-      "title": "Why do you wish to report this review?"
+      "title": "Why do you wish to report this review?",
+      "success": "Report sent"
     },
     "reasons": {
       "spam": {

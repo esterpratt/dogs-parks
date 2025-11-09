@@ -9,13 +9,14 @@ import {
 } from '../services/events';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import { Loader } from '../components/Loader';
-import { EventPreview } from '../components/EventPreview';
-import { ParkEventBase, ParkEventInvite } from '../types/parkEvent';
-import { useAppLocale } from '../hooks/useAppLocale';
-import { parksKey } from '../hooks/api/keys';
-import { fetchParksJSON } from '../services/parks';
-import { useMemo } from 'react';
-import { buildParkNameMap } from '../utils/parkNamesMap';
+import { EventPreview } from '../components/event/EventPreview';
+import {
+  ParkEventBase,
+  ParkEventInvite,
+  ParkEventInviteeStatus,
+  ParkEventStatus,
+} from '../types/parkEvent';
+import { useParkNamesMap } from '../hooks/useParkNameMap';
 
 const UserEvents = () => {
   const { t } = useTranslation();
@@ -32,23 +33,10 @@ const UserEvents = () => {
     queryFn: fetchUserInvitedEvents,
   });
 
-  const currentLanguage = useAppLocale();
+  const { parkNamesMap, isLoading: isLoadingParks } = useParkNamesMap();
 
-  const { data: parks } = useQuery({
-    queryKey: parksKey(currentLanguage),
-    queryFn: () => fetchParksJSON({ language: currentLanguage }),
-    placeholderData: (previous) => previous,
-    retry: 0,
-  });
-
-  const parkNamesMap = useMemo(() => {
-    if (!parks) {
-      return null;
-    }
-    return buildParkNameMap(parks);
-  }, [parks]);
-
-  const isLoading = isLoadingOrganizedEvents || isLoadingInvitedEvents;
+  const isLoading =
+    isLoadingOrganizedEvents || isLoadingInvitedEvents || isLoadingParks;
 
   const { showLoader } = useDelayedLoading({
     isLoading,
@@ -70,7 +58,9 @@ const UserEvents = () => {
             </div>
             {organizedEvents.map((event: ParkEventBase) => (
               <EventPreview
-                key={event.event_id}
+                isCancelled={event.status === ParkEventStatus.CANCELED}
+                cancelledMessage={t('event.cancelled')}
+                key={event.id}
                 event={event}
                 parkName={parkNamesMap?.[event.park_id] || ''}
               />
@@ -84,7 +74,11 @@ const UserEvents = () => {
             </div>
             {invitedEvents.map((event: ParkEventInvite) => (
               <EventPreview
-                key={event.event_id}
+                isCancelled={
+                  event.my_invite_status === ParkEventInviteeStatus.DECLINED
+                }
+                cancelledMessage={t('event.declined')}
+                key={event.id}
                 event={event}
                 parkName={parkNamesMap?.[event.park_id] || ''}
               />

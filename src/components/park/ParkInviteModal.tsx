@@ -14,6 +14,7 @@ import { AutoCompleteMultiSelect } from '../inputs/AutoCompleteMultiSelect';
 import { TextArea } from '../inputs/TextArea';
 import styles from './ParkInviteModal.module.scss';
 import { RadioInputs } from '../inputs/RadioInputs';
+import { queryClient } from '../../services/react-query';
 
 interface ParkInviteModalProps {
   parkId?: string;
@@ -43,7 +44,7 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
 
   const { friends } = useFetchFriends({ userId });
 
-  const { mutate: createInvite, isPending } = useMutation({
+  const { mutate: createEvent, isPending } = useMutation({
     mutationFn: () =>
       createParkEvent({
         parkId: parkId!,
@@ -58,6 +59,9 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
     onSuccess: () => {
       // TODO: invalidate lists of user events
       notify(t('parkInvite.messageSuccess'));
+      queryClient.invalidateQueries({
+        queryKey: ['events', 'organized', userId],
+      });
     },
     onError: () => {
       notify(t('parkInvite.messageError'));
@@ -113,7 +117,7 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
       (visibility === ParkEventVisibility.FRIENDS_ALL ||
         !!invitedFriends.length)
     ) {
-      createInvite();
+      createEvent();
     }
   };
 
