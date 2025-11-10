@@ -1,19 +1,20 @@
-import { useContext, useState } from 'react';
-import { useDateUtils } from '../../hooks/useDateUtils';
-import { Invitee, ParkEvent, ParkEventStatus } from '../../types/parkEvent';
-import styles from './EventDetails.module.scss';
-import { UserContext } from '../../context/UserContext';
-import { Button } from '../Button';
-import { InviteeActions } from './InviteeActions';
-import { useMutation } from '@tanstack/react-query';
-import { TopModal } from '../modals/TopModal';
-import { useNotification } from '../../context/NotificationContext';
+import { useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { cancelEvent } from '../../services/events';
-import { useNavigate } from 'react-router';
-import { queryClient } from '../../services/react-query';
-import { Loader } from '../Loader';
+import { useDateUtils } from '../../hooks/useDateUtils';
+import { useFetchFriends } from '../../hooks/api/useFetchFriends';
+import { User } from '../../types/user';
+import { Invitee, ParkEvent, ParkEventStatus } from '../../types/parkEvent';
+import { UserContext } from '../../context/UserContext';
+import { InviteeActions } from './InviteeActions';
 import { InviteesList } from './InviteesList';
+import { SelectUsers } from '../SelectUsers';
+import { OrganizerActions } from './OrganizerActions';
+import styles from './EventDetails.module.scss';
+import { useMutation } from '@tanstack/react-query';
+import { useNotification } from '../../context/NotificationContext';
+import { queryClient } from '../../services/react-query';
+import { useNavigate } from 'react-router';
+import { addEventInvitees } from '../../services/events';
 
 interface EventDetailsProps {
   event: ParkEvent;
@@ -34,42 +35,58 @@ const EventDetails: React.FC<EventDetailsProps> = (
   } = event;
 
   const { userId } = useContext(UserContext);
-  const [isCancelEventModalOpen, setIsCancelEventModalOpen] = useState(false);
+
+  const [addedFriends, setAddedFriends] = useState<User[]>([]);
+  const { friends } = useFetchFriends({ userId });
+
   const { t } = useTranslation();
   const { notify } = useNotification();
   const navigate = useNavigate();
+
   const { formatFutureCalendar } = useDateUtils();
 
   const startTime = formatFutureCalendar(startAt);
   const userIsOrganizer = userId && userId === creator_id;
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: () => cancelEvent(event.id),
-    onError: () => {
-      notify(t('event.cancel.error'), true);
-    },
-    onSuccess: () => {
-      notify(t('event.cancel.success'));
-      queryClient.invalidateQueries({
-        queryKey: ['events', 'organized', userId],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['event', event.id],
-      });
-      navigate(`/profile/${userId}/events`);
-    },
-    onSettled: () => {
-      setIsCancelEventModalOpen(false);
-    },
-  });
+  const { otherInvitees, otherInviteesSet } = useMemo(() => {
+    const usersInvited = invitees.filter(
+      (invitee) => invitee.user_id !== userId
+    );
+    const usersInviteesSet = new Set(
+      usersInvited.map((invitee) => invitee.user_id)
+    );
+    return { otherInvitees: usersInvited, otherInviteesSet: usersInviteesSet };
+  }, [invitees, userId]);
 
-  const handleCancelEvent = () => {
-    mutate();
+  const notInvitedFriends = useMemo(() => {
+    return friends?.filter((friend) => !otherInviteesSet.has(friend.id));
+  }, [friends, otherInviteesSet]);
+
+  const { mutate: saveAddedFriends, isPending: isPendingAddFriends } =
+    useMutation({
+      mutationFn: () =>
+        addEventInvitees({
+          eventId: event.id,
+          inviteeIds: addedFriends.map((friend) => friend.id),
+        }),
+      onError: () => {
+        notify(t('event.save.error'), true);
+      },
+      onSuccess: () => {
+        notify(t('event.save.success'));
+        queryClient.invalidateQueries({
+          queryKey: ['events', 'organized', userId],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ['event', event.id],
+        });
+        navigate(`/profile/${userId}/events`);
+      },
+    });
+
+  const handleSaveEvent = () => {
+    saveAddedFriends();
   };
-
-  const otherInvitees = invitees.filter(
-    (invitee) => invitee.user_id !== userId
-  );
 
   return (
     <>
@@ -79,7 +96,14 @@ const EventDetails: React.FC<EventDetailsProps> = (
         <div>Organized by {userIsOrganizer ? 'me' : creator_name}</div>
         <div>
           <InviteesList invitees={otherInvitees} userId={userId} />
-          {userIsOrganizer && <>Invite more friends</>}
+          {userIsOrganizer && !!notInvitedFriends?.length && (
+            <SelectUsers
+              label={t('event.addFriends')}
+              users={notInvitedFriends}
+              selectedUsers={addedFriends}
+              setSelectedUsers={setAddedFriends}
+            />
+          )}
         </div>
         <div>
           <span>More details:</span>
@@ -87,48 +111,19 @@ const EventDetails: React.FC<EventDetailsProps> = (
         </div>
         {userIsOrganizer ? (
           status !== ParkEventStatus.CANCELED ? (
-            <Button onClick={() => setIsCancelEventModalOpen(true)}>
-              Cancel event
-            </Button>
+            <OrganizerActions
+              showSaveButton={!!notInvitedFriends?.length}
+              isPendingSave={isPendingAddFriends}
+              disableSaveButton={!addedFriends.length}
+              userId={userId}
+              eventId={event.id}
+              onSaveEvent={handleSaveEvent}
+            />
           ) : null
         ) : (
           <InviteeActions eventId={event.id} userId={userId!} />
         )}
       </div>
-      <TopModal
-        open={isCancelEventModalOpen}
-        onClose={() => setIsCancelEventModalOpen(false)}
-      >
-        <div className={styles.cancelModal}>
-          <div>
-            <span>{t('event.cancel.title')}</span>
-          </div>
-        </div>
-        <div className={styles.buttonsContainer}>
-          <Button
-            variant="primary"
-            onClick={handleCancelEvent}
-            className={styles.modalButton}
-            disabled={isPending}
-          >
-            {isPending ? (
-              <Loader variant="secondary" inside className={styles.loader} />
-            ) : (
-              <>
-                <span>{t('event.cancel.button')}</span>
-              </>
-            )}
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={() => setIsCancelEventModalOpen(false)}
-            className={styles.modalButton}
-            disabled={isPending}
-          >
-            <span>{t('common.actions.cancel')}</span>
-          </Button>
-        </div>
-      </TopModal>
     </>
   );
 };

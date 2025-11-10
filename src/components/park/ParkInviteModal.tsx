@@ -1,8 +1,6 @@
 import { ChangeEvent, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { Check } from 'lucide-react';
-import classnames from 'classnames';
 import { FormModal } from '../modals/FormModal';
 import { createParkEvent } from '../../services/events';
 import { useNotification } from '../../context/NotificationContext';
@@ -10,11 +8,11 @@ import { ParkEventVisibility } from '../../types/parkEvent';
 import { User } from '../../types/user';
 import { useFetchFriends } from '../../hooks/api/useFetchFriends';
 import { ToggleInput } from '../inputs/ToggleInput';
-import { AutoCompleteMultiSelect } from '../inputs/AutoCompleteMultiSelect';
 import { TextArea } from '../inputs/TextArea';
 import styles from './ParkInviteModal.module.scss';
 import { RadioInputs } from '../inputs/RadioInputs';
 import { queryClient } from '../../services/react-query';
+import { SelectUsers } from '../SelectUsers';
 
 interface ParkInviteModalProps {
   parkId?: string;
@@ -57,7 +55,6 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
         presetOffsetMinutes: Number(minutesOffset),
       }),
     onSuccess: () => {
-      // TODO: invalidate lists of user events
       notify(t('parkInvite.messageSuccess'));
       queryClient.invalidateQueries({
         queryKey: ['events', 'organized', userId],
@@ -70,38 +67,6 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
       onClose();
     },
   });
-
-  const checkIsFriendSelected = (friend: User) => {
-    return (
-      invitedFriends.findIndex(
-        (invitedFriend) => invitedFriend.id === friend.id
-      ) !== -1
-    );
-  };
-
-  const handleAddFriend = (friend: User) => {
-    setInvitedFriends([...invitedFriends, friend]);
-  };
-
-  const handleRemoveFriend = (removedFriend: User) => {
-    const newFriends = [...invitedFriends].filter(
-      (friend) => friend.id !== removedFriend.id
-    );
-    setInvitedFriends(newFriends);
-  };
-
-  const handleSelectFriend = (friend: User) => {
-    const isFriendSelected = checkIsFriendSelected(friend);
-    if (!isFriendSelected) {
-      handleAddFriend(friend);
-    } else {
-      handleRemoveFriend(friend);
-    }
-  };
-
-  const filterFriends = (friend: User, input: string) => {
-    return (friend.name || '').includes(input);
-  };
 
   const handleChangeMessage = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(event.target.value);
@@ -154,33 +119,13 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
           />
           {visibility === ParkEventVisibility.FRIENDS_SELECTED &&
             !!friends?.length && (
-              <AutoCompleteMultiSelect
-                selectedInputs={invitedFriends}
-                items={friends}
+              <SelectUsers
                 placeholder={t('parkInvite.modal.friends.placeholder')}
                 label={t('parkInvite.modal.friends.label')}
-                itemKeyfn={(friend) => friend.id}
-                selectedItemKeyfn={(friend) => `$selected-${friend.id}`}
-                onSelectItem={handleSelectFriend}
-                onRemoveItem={handleRemoveFriend}
-                equalityFunc={checkIsFriendSelected}
-                filterFunc={filterFriends}
-                selectedInputsFormatter={(friend) =>
-                  friend.name || 'Unnamed friend'
-                }
-              >
-                {(friend, isChosen) => (
-                  <div
-                    className={classnames(
-                      styles.friend,
-                      isChosen && styles.chosen
-                    )}
-                  >
-                    {isChosen && <Check />}
-                    <span>{friend.name}</span>
-                  </div>
-                )}
-              </AutoCompleteMultiSelect>
+                users={friends}
+                selectedUsers={invitedFriends}
+                setSelectedUsers={setInvitedFriends}
+              />
             )}
         </div>
         <TextArea

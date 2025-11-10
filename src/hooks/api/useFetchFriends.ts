@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchUsers } from '../../services/users';
 
 interface UseFetchFriendsParams {
-  userId: string;
+  userId: string | null;
   status?: FRIENDSHIP_STATUS;
 }
 

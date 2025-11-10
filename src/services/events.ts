@@ -25,17 +25,22 @@ interface UpdateInviteeParams {
   status: ParkEventInviteeStatus;
 }
 
+interface AddEventIniviteesParams {
+  eventId: string;
+  inviteeIds?: string[];
+}
+
 const createParkEvent = async (params: CreateParkEventParams) => {
   try {
     const { inviteeIds, message, parkId, presetOffsetMinutes, visibility } =
       params;
 
     const { data: event, error } = await supabase.rpc('create_park_event', {
-      invitee_ids: inviteeIds,
-      message,
       park_id: parkId,
-      preset_offset_minutes: presetOffsetMinutes,
       visibility,
+      message,
+      invitee_ids: inviteeIds,
+      preset_offset_minutes: presetOffsetMinutes,
     });
 
     if (error) {
@@ -120,6 +125,22 @@ const updateInvitee = async (params: UpdateInviteeParams) => {
   }
 };
 
+const addEventInvitees = async (params: AddEventIniviteesParams) => {
+  try {
+    const { eventId, inviteeIds } = params;
+    const { error } = await supabase.rpc('add_event_invitees', {
+      p_event_id: eventId,
+      p_invitee_ids: inviteeIds,
+    });
+
+    if (error) {
+      throw error;
+    }
+  } catch (error) {
+    throwError(error);
+  }
+};
+
 const fetchUserOrganizedEvents = async () => {
   try {
     const { data: events, error } = await supabase.rpc(
@@ -166,4 +187,5 @@ export {
   fetchInvitee,
   updateInvitee,
   cancelEvent,
+  addEventInvitees,
 };
