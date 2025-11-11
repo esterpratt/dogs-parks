@@ -1055,7 +1055,7 @@
   "reports": {
     "reviewModal": {
       "title": "Why do you wish to report this review?",
-      "success": "Report sent"
+      "sentMessage": "Report sent"
     },
     "reasons": {
       "spam": {

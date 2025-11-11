@@ -1059,7 +1059,7 @@
   "reports": {
     "reviewModal": {
       "title": "למה ברצונך לדווח על הביקורת הזו",
-      "success": "הדיווח נשלח"
+      "sentMessage": "תודה על הדיווח!"
     },
     "reasons": {
       "spam": {

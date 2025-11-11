@@ -28,7 +28,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
     }
 
     onClose();
-    notify(t('reports.reviewModal.success'));
+    notify(t('reports.sentMessage'));
   };
 
   const onChooseReason = (reason: ReportReason) => {

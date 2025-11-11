@@ -1059,7 +1059,7 @@
   "reports": {
     "reviewModal": {
       "title": "لماذا تريد الإبلاغ عن هذه المراجعة",
-      "success": "Report sent"
+      "sentMessage": "Report sent"
     },
     "reasons": {
       "spam": {
