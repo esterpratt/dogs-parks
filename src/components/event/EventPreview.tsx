@@ -1,9 +1,9 @@
-import { useNavigate } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import { useDateUtils } from '../../hooks/useDateUtils';
 import { ParkEventBase, ParkEventInvite } from '../../types/parkEvent';
 import { type ButtonProps, Card } from '../card/Card';
+import { ParkImageLazy } from '../park/ParkImageLazy';
 import styles from './EventPreview.module.scss';
-import { useTranslation } from 'react-i18next';
 
 interface EventPreviewProps {
   event: ParkEventBase | ParkEventInvite;
@@ -13,37 +13,6 @@ interface EventPreviewProps {
   buttons?: ButtonProps[];
   invitedBy?: string;
 }
-
-interface EventContainerProps {
-  isCancelled: boolean;
-  cancelledMessage?: string;
-  eventId: string;
-  children: React.ReactNode;
-}
-
-const EventContainer = (props: EventContainerProps) => {
-  const { isCancelled, cancelledMessage, eventId, children } = props;
-  const navigate = useNavigate();
-
-  const navigateToEvent = () => {
-    navigate(`/events/${eventId}`);
-  };
-
-  if (!isCancelled) {
-    return (
-      <div role="button" onClick={navigateToEvent}>
-        {children}
-      </div>
-    );
-  }
-
-  return (
-    <div>
-      {!!cancelledMessage && <span>{cancelledMessage}</span>}
-      {children}
-    </div>
-  );
-};
 
 const EventPreview: React.FC<EventPreviewProps> = (
   props: EventPreviewProps
@@ -56,7 +25,7 @@ const EventPreview: React.FC<EventPreviewProps> = (
     cancelledMessage,
     invitedBy,
   } = props;
-  const { start_at: startAt, id: eventId } = event;
+  const { start_at: startAt, id: eventId, park_id: parkId } = event;
 
   const { t } = useTranslation();
 
@@ -65,13 +34,21 @@ const EventPreview: React.FC<EventPreviewProps> = (
   const startTime = formatFutureCalendar(startAt);
 
   return (
-    <EventContainer
-      isCancelled={isCancelled}
-      cancelledMessage={cancelledMessage}
-      eventId={eventId}
-    >
+    <>
+      {!!cancelledMessage && isCancelled && <div>{cancelledMessage}</div>}
       <Card
-        imgCmp={<></>}
+        url={!isCancelled ? `/events/${eventId}` : undefined}
+        imgCmp={
+          <div className={styles.img}>
+            <ParkImageLazy
+              parkId={parkId}
+              alt={parkName}
+              noImgClassName={styles.noImg}
+              iconSize={48}
+              lazy
+            />
+          </div>
+        }
         detailsCmp={
           <div className={styles.details}>
             <span>{parkName}</span>
@@ -81,7 +58,7 @@ const EventPreview: React.FC<EventPreviewProps> = (
         }
         buttons={buttons}
       />
-    </EventContainer>
+    </>
   );
 };
 
