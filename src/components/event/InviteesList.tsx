@@ -1,19 +1,28 @@
-import { Invitee } from '../../types/parkEvent';
-// import styles from './InviteesList.module.scss';
+import { User } from '../../types/user';
+import styles from './InviteesList.module.scss';
 
 interface InviteesListProps {
-  invitees: Invitee[];
-  userId: string | null;
+  users: User[];
+  title: string;
 }
 
 const InviteesList: React.FC<InviteesListProps> = (
   props: InviteesListProps
 ) => {
-  const { invitees, userId } = props;
+  const { users, title } = props;
 
-  console.log(invitees, userId);
-
-  return <div>Invitees:</div>;
+  return (
+    <div className={styles.container}>
+      <span>{title}</span>
+      <ul className={styles.list}>
+        {users.map((user) => (
+          <div key={user.id} className={styles.name}>
+            {user.name}
+          </div>
+        ))}
+      </ul>
+    </div>
+  );
 };
 
 export { InviteesList };

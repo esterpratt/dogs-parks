@@ -1,15 +1,13 @@
+import { SyntheticEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
-import styles from './UserEvents.module.scss';
 import { useOutletContext } from 'react-router';
-import { User } from '../types/user';
+import { Check, X } from 'lucide-react';
 import {
   fetchUserInvitedEvents,
   fetchUserOrganizedEvents,
 } from '../services/events';
-import { useDelayedLoading } from '../hooks/useDelayedLoading';
-import { Loader } from '../components/Loader';
-import { EventPreview } from '../components/event/EventPreview';
+import { User } from '../types/user';
 import {
   ParkEventBase,
   ParkEventInvite,
@@ -17,8 +15,17 @@ import {
   ParkEventStatus,
 } from '../types/parkEvent';
 import { useParkNamesMap } from '../hooks/useParkNameMap';
+import { useUpdateInvitee } from '../hooks/api/useUpdateInvitee';
+import { type ButtonProps } from '../components/card/Card';
+import { Loader } from '../components/Loader';
+import { EventPreview } from '../components/event/EventPreview';
+import { DeclineInviteeModal } from '../components/event/DeclineInviteeModal';
+import styles from './UserEvents.module.scss';
 
 const UserEvents = () => {
+  const [pendingDeclineEventId, setPendingDeclineEventId] = useState<
+    string | null
+  >(null);
   const { t } = useTranslation();
   const { user } = useOutletContext() as { user: User };
 
@@ -35,15 +42,85 @@ const UserEvents = () => {
 
   const { parkNamesMap, isLoading: isLoadingParks } = useParkNamesMap();
 
-  const isLoading =
-    isLoadingOrganizedEvents || isLoadingInvitedEvents || isLoadingParks;
+  const { handleUpdateInvitee, isPendingAccept, isPendingDecline } =
+    useUpdateInvitee({
+      userId: user.id,
+      onSettledDecline: () => setPendingDeclineEventId(null),
+    });
 
-  const { showLoader } = useDelayedLoading({
-    isLoading,
-    minDuration: 750,
-  });
+  const isDeclineInviteModalOpen = !!pendingDeclineEventId;
 
-  if (showLoader) {
+  const openDeclineModal = (ev: SyntheticEvent, eventId: string) => {
+    ev.stopPropagation();
+    setPendingDeclineEventId(eventId);
+  };
+
+  const closeDeclineModal = () => {
+    setPendingDeclineEventId(null);
+  };
+
+  const handleAcceptInvitee = (ev: SyntheticEvent, eventId: string) => {
+    ev.stopPropagation();
+    handleUpdateInvitee({
+      eventId,
+      status: ParkEventInviteeStatus.ACCEPTED,
+    });
+  };
+
+  const confirmDecline = () => {
+    if (!pendingDeclineEventId) {
+      return;
+    }
+    handleUpdateInvitee({
+      eventId: pendingDeclineEventId,
+      status: ParkEventInviteeStatus.DECLINED,
+    });
+  };
+
+  const buildButtons = (event: ParkEventInvite) => {
+    const buttons: ButtonProps[] = [];
+
+    if (
+      event.my_invite_status === ParkEventInviteeStatus.INVITED ||
+      event.my_invite_status === ParkEventInviteeStatus.ACCEPTED
+    ) {
+      if (event.my_invite_status === ParkEventInviteeStatus.INVITED) {
+        buttons.push({
+          children: (
+            <>
+              {isPendingAccept ? (
+                <Loader variant="secondary" inside className={styles.loader} />
+              ) : (
+                <>
+                  <Check size={12} />
+
+                  <span>{t('common.actions.accept')}</span>
+                </>
+              )}
+            </>
+          ),
+          onClick: (ev: SyntheticEvent) => handleAcceptInvitee(ev, event.id),
+          disabled: isPendingAccept,
+        });
+      }
+
+      buttons.push({
+        children: (
+          <>
+            <X size={12} />
+            <span>{t('common.actions.decline')}</span>
+          </>
+        ),
+        variant: 'secondary',
+        onClick: (ev: SyntheticEvent) => openDeclineModal(ev, event.id),
+        disabled: isPendingAccept,
+      });
+    }
+
+    return buttons;
+  };
+
+  if (isLoadingOrganizedEvents || isLoadingInvitedEvents || isLoadingParks) {
     return <Loader inside className={styles.loader} />;
   }
 
@@ -81,11 +158,19 @@ const UserEvents = () => {
                 key={event.id}
                 event={event}
                 parkName={parkNamesMap?.[event.park_id] || ''}
+                buttons={buildButtons(event)}
+                invitedBy={event.my_invite_added_by_name}
               />
             ))}
           </div>
         )}
       </div>
+      <DeclineInviteeModal
+        handleDeclineInvite={confirmDecline}
+        isOpen={isDeclineInviteModalOpen}
+        closeModal={closeDeclineModal}
+        isPendingDecline={isPendingDecline}
+      />
     </>
   );
 };

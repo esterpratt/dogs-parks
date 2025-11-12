@@ -5,7 +5,6 @@ import { ParkPreview } from '../components/parks/ParkPreview';
 import { fetchParksJSON } from '../services/parks';
 import { fetchUserFavorites } from '../services/favorites';
 import { Loader } from '../components/Loader';
-import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import { useAppLocale } from '../hooks/useAppLocale';
 import { parksKey } from '../hooks/api/keys';
 import { usePrefetchParksWithTranslation } from '../hooks/api/usePrefetchParksWithTranslation';
@@ -33,11 +32,6 @@ const UserFavorites = () => {
 
   const isLoading = isLoadingParks || isLoadingFavorites;
 
-  const { showLoader } = useDelayedLoading({
-    isLoading,
-    minDuration: 750,
-  });
-
   const favoriteParks = parks?.length
     ? parks.filter((park) => favoriteParkIds?.includes(park.id))
     : [];
@@ -48,7 +42,7 @@ const UserFavorites = () => {
     language: currentLanguage,
   });
 
-  if (showLoader) {
+  if (isLoading) {
     return <Loader inside className={styles.loader} />;
   }
 

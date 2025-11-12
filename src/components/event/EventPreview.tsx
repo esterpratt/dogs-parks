@@ -1,14 +1,17 @@
-import { Link } from 'react-router';
+import { useNavigate } from 'react-router';
 import { useDateUtils } from '../../hooks/useDateUtils';
 import { ParkEventBase, ParkEventInvite } from '../../types/parkEvent';
-import { Card } from '../card/Card';
+import { type ButtonProps, Card } from '../card/Card';
 import styles from './EventPreview.module.scss';
+import { useTranslation } from 'react-i18next';
 
 interface EventPreviewProps {
   event: ParkEventBase | ParkEventInvite;
   parkName: string;
   isCancelled?: boolean;
   cancelledMessage?: string;
+  buttons?: ButtonProps[];
+  invitedBy?: string;
 }
 
 interface EventContainerProps {
@@ -20,9 +23,18 @@ interface EventContainerProps {
 
 const EventContainer = (props: EventContainerProps) => {
   const { isCancelled, cancelledMessage, eventId, children } = props;
+  const navigate = useNavigate();
+
+  const navigateToEvent = () => {
+    navigate(`/events/${eventId}`);
+  };
 
   if (!isCancelled) {
-    return <Link to={`/events/${eventId}`}>{children}</Link>;
+    return (
+      <div role="button" onClick={navigateToEvent}>
+        {children}
+      </div>
+    );
   }
 
   return (
@@ -36,8 +48,17 @@ const EventContainer = (props: EventContainerProps) => {
 const EventPreview: React.FC<EventPreviewProps> = (
   props: EventPreviewProps
 ) => {
-  const { event, parkName, isCancelled = false, cancelledMessage } = props;
+  const {
+    event,
+    parkName,
+    isCancelled = false,
+    buttons,
+    cancelledMessage,
+    invitedBy,
+  } = props;
   const { start_at: startAt, id: eventId } = event;
+
+  const { t } = useTranslation();
 
   const { formatFutureCalendar } = useDateUtils();
 
@@ -55,8 +76,10 @@ const EventPreview: React.FC<EventPreviewProps> = (
           <div className={styles.details}>
             <span>{parkName}</span>
             <span>{startTime}</span>
+            {!!invitedBy && t('event.invitedBy', { name: invitedBy })}
           </div>
         }
+        buttons={buttons}
       />
     </EventContainer>
   );
