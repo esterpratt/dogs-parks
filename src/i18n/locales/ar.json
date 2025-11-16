@@ -333,6 +333,53 @@
     "organizedEvents": "Organized by me",
     "invitedEvents": "Invited to"
   },
+  "event": {
+    "cancelled": "Cancelled",
+    "decline": "Declined",
+    "invitedBy": "Invited by",
+    "noInvitees": "No other invited friends",
+    "addFriends": "Add friends",
+    "organizedBy": "Organized by",
+    "title": {
+      "going": "You are going to",
+      "invited": "You are invited to"
+    },
+    "invitees": {
+      "going": "Friends participating",
+      "invited": "Invited friends"
+    },
+    "invitee": {
+      "decline": {
+        "title": "Are you sure you want to decline the event?",
+        "button": "Yes",
+        "error": "Sorry, there was an error declining the event",
+        "success": "The event was declined"
+      },
+      "accept": {
+        "error": "Sorry, there was an error approving the event",
+        "success": "You are going to the event!"
+      }
+    },
+    "header": {
+      "location": "Location",
+      "when": "Time"
+    },
+    "breadcrumbs": {
+      "events": "To all events"
+    },
+    "cancel": {
+      "title": "Are you sure you want to cancel the event?",
+      "modalBtnTxt": "Yes",
+      "buttonTxt": "Cancel event",
+      "error": "Sorry, there was an error with the cancelation",
+      "success": "The event was cancelled"
+    },
+    "save": {
+      "buttonTxt": "Save event",
+      "error": "There was an error saving the event",
+      "success": "The event was saved succesfully!"
+    }
+  },
   "parkInvite": {
     "buttonTxt": "دعوة",
     "messageSuccess": "تم إرسال الدعوة بنجاح!",
@@ -454,7 +501,9 @@
       "like": "إعجاب",
       "unlike": "إزالة",
       "submit": "إرسال",
-      "save": "حفظ"
+      "save": "حفظ",
+      "areYouSure": "Are you sure?",
+      "yes": "Yes"
     },
     "placeholders": {
       "search": "بحث",

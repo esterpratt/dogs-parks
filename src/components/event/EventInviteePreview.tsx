@@ -1,13 +1,17 @@
-import { SyntheticEvent, useCallback, useMemo, useState } from 'react';
+import { SyntheticEvent, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Check, X } from 'lucide-react';
-import { ParkEventInvite, ParkEventInviteeStatus } from '../../types/parkEvent';
+import {
+  ParkEventInvite,
+  ParkEventInviteeStatus,
+  ParkEventStatus,
+} from '../../types/parkEvent';
 import { useUpdateInvitee } from '../../hooks/api/useUpdateInvitee';
 import { type ButtonProps } from '../card/Card';
 import { Loader } from '../Loader';
 import { EventPreview } from './EventPreview';
-import { DeclineInviteeModal } from './DeclineInviteeModal';
 import styles from './EventPreview.module.scss';
+import { useConfirm } from '../../context/ConfirmModalContext';
 
 interface EventPreviewProps {
   event: ParkEventInvite;
@@ -19,24 +23,30 @@ const EventInviteePreview: React.FC<EventPreviewProps> = (
   props: EventPreviewProps
 ) => {
   const { event, parkName, userId } = props;
-
   const { my_invite_status, my_invite_added_by_name } = event;
-  const [isDeclineModalOpen, setisDeclineModalOpen] = useState(false);
+  const { t } = useTranslation();
+  const { showModal } = useConfirm();
   const { handleUpdateInvitee, isPendingAccept, isPendingDecline } =
     useUpdateInvitee({
       userId,
-      onSettledDecline: () => setisDeclineModalOpen(false),
     });
 
-  const openDeclineModal = (ev: SyntheticEvent) => {
-    ev.stopPropagation();
-    ev.preventDefault();
-    setisDeclineModalOpen(true);
-  };
-
-  const closeDeclineModal = () => {
-    setisDeclineModalOpen(false);
-  };
+  const openDeclineModal = useCallback(
+    (ev: SyntheticEvent) => {
+      ev.stopPropagation();
+      ev.preventDefault();
+      showModal({
+        title: t('event.invitee.decline.title'),
+        confirmText: t('event.invitee.decline.button'),
+        onConfirm: async () =>
+          handleUpdateInvitee({
+            eventId: event.id,
+            status: ParkEventInviteeStatus.DECLINED,
+          }),
+      });
+    },
+    [event.id, handleUpdateInvitee, t, showModal]
+  );
 
   const handleAcceptInvitee = useCallback(
     (ev: SyntheticEvent) => {
@@ -49,15 +59,6 @@ const EventInviteePreview: React.FC<EventPreviewProps> = (
     },
     [event.id, handleUpdateInvitee]
   );
-
-  const confirmDecline = () => {
-    handleUpdateInvitee({
-      eventId: event.id,
-      status: ParkEventInviteeStatus.DECLINED,
-    });
-  };
-
-  const { t } = useTranslation();
 
   const buttons = useMemo(() => {
     const buttons: ButtonProps[] = [];
@@ -104,26 +105,26 @@ const EventInviteePreview: React.FC<EventPreviewProps> = (
     isPendingDecline,
     my_invite_status,
     handleAcceptInvitee,
+    openDeclineModal,
     t,
   ]);
 
   return (
-    <>
-      <EventPreview
-        invitedBy={my_invite_added_by_name}
-        buttons={buttons}
-        event={event}
-        parkName={parkName}
-        cancelledMessage={t('event.declined')}
-        isCancelled={my_invite_status === ParkEventInviteeStatus.DECLINED}
-      />
-      <DeclineInviteeModal
-        handleDeclineInvite={confirmDecline}
-        isOpen={isDeclineModalOpen}
-        closeModal={closeDeclineModal}
-        isPendingDecline={isPendingDecline}
-      />
-    </>
+    <EventPreview
+      invitedBy={my_invite_added_by_name}
+      buttons={event.status !== ParkEventStatus.CANCELED ? buttons : undefined}
+      event={event}
+      parkName={parkName}
+      cancelledMessage={
+        event.status === ParkEventStatus.CANCELED
+          ? t('event.cancelled')
+          : t('event.declined')
+      }
+      isCancelled={
+        my_invite_status === ParkEventInviteeStatus.DECLINED ||
+        event.status === ParkEventStatus.CANCELED
+      }
+    />
   );
 };
 

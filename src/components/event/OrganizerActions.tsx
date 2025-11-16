@@ -1,14 +1,13 @@
-import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { cancelEvent } from '../../services/events';
 import { queryClient } from '../../services/react-query';
 import { useNotification } from '../../context/NotificationContext';
-import { TopModal } from '../modals/TopModal';
 import { Loader } from '../Loader';
 import { Button } from '../Button';
 import styles from './OrganizerActions.module.scss';
+import { useConfirm } from '../../context/ConfirmModalContext';
 
 interface OrganizerActionsProps {
   eventId: string;
@@ -28,13 +27,13 @@ const OrganizerActions = (props: OrganizerActionsProps) => {
     isPendingSave,
     showSaveButton,
   } = props;
-  const [isCancelEventModalOpen, setIsCancelEventModalOpen] = useState(false);
+  const { showModal } = useConfirm();
 
   const { t } = useTranslation();
   const { notify } = useNotification();
   const navigate = useNavigate();
 
-  const { mutate, isPending } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: () => cancelEvent(eventId),
     onError: () => {
       notify(t('event.cancel.error'), true);
@@ -49,70 +48,34 @@ const OrganizerActions = (props: OrganizerActionsProps) => {
       });
       navigate(`/profile/${userId}/events`);
     },
-    onSettled: () => {
-      setIsCancelEventModalOpen(false);
-    },
   });
 
-  const handleCancelEvent = () => {
-    mutate();
+  const handleOpenConfirmModal = () => {
+    showModal({
+      title: t('event.cancel.title'),
+      confirmText: t('event.cancel.modalBtnTxt'),
+      onConfirm: () => mutate(),
+    });
   };
 
   return (
-    <>
-      <div className={styles.buttonsContainer}>
-        {showSaveButton && (
-          <Button
-            disabled={disableSaveButton || isPendingSave}
-            onClick={onSaveEvent}
-          >
-            {isPendingSave ? (
-              <Loader variant="secondary" inside className={styles.loader} />
-            ) : (
-              <span>{t('event.save.buttonTxt')}</span>
-            )}
-          </Button>
-        )}
+    <div className={styles.buttonsContainer}>
+      {showSaveButton && (
         <Button
-          variant="secondary"
-          onClick={() => setIsCancelEventModalOpen(true)}
+          disabled={disableSaveButton || isPendingSave}
+          onClick={onSaveEvent}
         >
-          {t('event.cancel.buttonTxt')}
+          {isPendingSave ? (
+            <Loader variant="secondary" inside className={styles.loader} />
+          ) : (
+            <span>{t('event.save.buttonTxt')}</span>
+          )}
         </Button>
-      </div>
-      <TopModal
-        open={isCancelEventModalOpen}
-        onClose={() => setIsCancelEventModalOpen(false)}
-      >
-        <div className={styles.cancelModal}>
-          <div>
-            <span>{t('event.cancel.title')}</span>
-          </div>
-        </div>
-        <div className={styles.buttonsContainer}>
-          <Button
-            variant="primary"
-            onClick={handleCancelEvent}
-            className={styles.modalButton}
-            disabled={isPending}
-          >
-            {isPending ? (
-              <Loader variant="secondary" inside className={styles.loader} />
-            ) : (
-              <span>{t('event.cancel.button')}</span>
-            )}
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={() => setIsCancelEventModalOpen(false)}
-            className={styles.modalButton}
-            disabled={isPending}
-          >
-            <span>{t('common.actions.cancel')}</span>
-          </Button>
-        </div>
-      </TopModal>
-    </>
+      )}
+      <Button variant="secondary" onClick={handleOpenConfirmModal}>
+        {t('event.cancel.buttonTxt')}
+      </Button>
+    </div>
   );
 };
 

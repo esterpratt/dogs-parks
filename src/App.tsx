@@ -10,6 +10,8 @@ import { NotificationProvider } from './context/NotificationContext';
 import { UserContextProvider } from './context/UserContext';
 import { UserLocationProvider } from './context/LocationContext';
 import { OrientationProvider } from './context/OrientationContext';
+import { ModeProvider } from './context/ModeContext';
+import { ConfirmModalProvider } from './context/ConfirmModalContext';
 import { Home } from './pages/Home';
 import { RootLayout } from './RootLayout';
 import { ErrorPage } from './pages/Error';
@@ -20,7 +22,6 @@ import { PrivateRoute } from './pages/PrivateRoute';
 import { userLoader } from './loaders/userLoader';
 import { parkLoader } from './loaders/parkLoader';
 import { ShareRedirect } from './pages/ShareRedirect';
-import { ModeProvider } from './context/ModeContext';
 
 const UserDog = lazy(() => import('./pages/UserDog'));
 const UserReviews = lazy(() => import('./pages/UserReviews'));
@@ -199,13 +200,15 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <NotificationProvider>
         <ModeProvider>
-          <UserLocationProvider>
-            <OrientationProvider>
-              <UserContextProvider>
-                <RouterProvider router={router} />
-              </UserContextProvider>
-            </OrientationProvider>
-          </UserLocationProvider>
+          <ConfirmModalProvider>
+            <UserLocationProvider>
+              <OrientationProvider>
+                <UserContextProvider>
+                  <RouterProvider router={router} />
+                </UserContextProvider>
+              </OrientationProvider>
+            </UserLocationProvider>
+          </ConfirmModalProvider>
         </ModeProvider>
       </NotificationProvider>
     </QueryClientProvider>

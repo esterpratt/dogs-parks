@@ -2,12 +2,11 @@ import { ParkEventInviteeStatus } from '../../types/parkEvent';
 import { Button } from '../Button';
 import { useQuery } from '@tanstack/react-query';
 import { fetchInvitee } from '../../services/events';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Loader } from '../Loader';
 import { useUpdateInvitee } from '../../hooks/api/useUpdateInvitee';
-import { DeclineInviteeModal } from './DeclineInviteeModal';
 import styles from './InviteeActions.module.scss';
+import { useConfirm } from '../../context/ConfirmModalContext';
 
 interface InviteeActionsProps {
   eventId: string;
@@ -18,20 +17,29 @@ const InviteeActions: React.FC<InviteeActionsProps> = (
   props: InviteeActionsProps
 ) => {
   const { eventId, userId } = props;
-  const [isDeclineInviteModalOpen, setIsDeclineInviteModalOpen] =
-    useState(false);
   const { t } = useTranslation();
+  const { showModal } = useConfirm();
 
   const { data: invitee, isLoading } = useQuery({
     queryKey: ['event-invitee', userId],
     queryFn: () => fetchInvitee({ userId, eventId }),
   });
 
-  const { handleUpdateInvitee, isPendingAccept, isPendingDecline } =
-    useUpdateInvitee({
-      userId,
-      onSettledDecline: () => setIsDeclineInviteModalOpen(false),
+  const { handleUpdateInvitee, isPendingAccept } = useUpdateInvitee({
+    userId,
+  });
+
+  const handleOpenConfirmModal = () => {
+    showModal({
+      title: t('event.invitee.decline.title'),
+      confirmText: t('event.invitee.decline.button'),
+      onConfirm: () =>
+        handleUpdateInvitee({
+          eventId,
+          status: ParkEventInviteeStatus.DECLINED,
+        }),
     });
+  };
 
   const isInvited = invitee?.status === ParkEventInviteeStatus.INVITED;
   const isDeclined = invitee?.status === ParkEventInviteeStatus.DECLINED;
@@ -64,22 +72,11 @@ const InviteeActions: React.FC<InviteeActionsProps> = (
         <Button
           disabled={isLoading || isPendingAccept}
           variant="secondary"
-          onClick={() => setIsDeclineInviteModalOpen(true)}
+          onClick={handleOpenConfirmModal}
         >
           <span>{t('common.actions.decline')}</span>
         </Button>
       </div>
-      <DeclineInviteeModal
-        handleDeclineInvite={() =>
-          handleUpdateInvitee({
-            eventId,
-            status: ParkEventInviteeStatus.DECLINED,
-          })
-        }
-        isPendingDecline={isPendingDecline}
-        isOpen={isDeclineInviteModalOpen}
-        closeModal={() => setIsDeclineInviteModalOpen(false)}
-      />
     </>
   );
 };
