@@ -331,15 +331,20 @@
     "invitedEvents": "Invited to"
   },
   "event": {
+    "general": "General",
+    "friends": "Friends",
+    "extra": "More details",
     "cancelled": "Cancelled",
     "decline": "Declined",
     "invitedBy": "Invited by",
     "noInvitees": "No other invited friends",
     "addFriends": "Add friends",
     "organizedBy": "Organized by",
+    "location": "Location",
+    "when": "Time",
     "title": {
-      "going": "You are going to",
-      "invited": "You are invited to"
+      "going": "You are going to event in ",
+      "invited": "You are invited to event in "
     },
     "invitees": {
       "going": "Friends participating",
@@ -356,10 +361,6 @@
         "error": "Sorry, there was an error approving the event",
         "success": "You are going to the event!"
       }
-    },
-    "header": {
-      "location": "Location",
-      "when": "Time"
     },
     "breadcrumb": {
       "events": "To all events"
