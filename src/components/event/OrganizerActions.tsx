@@ -4,29 +4,17 @@ import { useNavigate } from 'react-router';
 import { cancelEvent } from '../../services/events';
 import { queryClient } from '../../services/react-query';
 import { useNotification } from '../../context/NotificationContext';
-import { Loader } from '../Loader';
+import { useConfirm } from '../../context/ConfirmModalContext';
 import { Button } from '../Button';
 import styles from './OrganizerActions.module.scss';
-import { useConfirm } from '../../context/ConfirmModalContext';
 
 interface OrganizerActionsProps {
   eventId: string;
   userId: string;
-  onSaveEvent: () => void;
-  disableSaveButton?: boolean;
-  isPendingSave?: boolean;
-  showSaveButton?: boolean;
 }
 
 const OrganizerActions = (props: OrganizerActionsProps) => {
-  const {
-    eventId,
-    userId,
-    onSaveEvent,
-    disableSaveButton,
-    isPendingSave,
-    showSaveButton,
-  } = props;
+  const { eventId, userId } = props;
   const { showModal } = useConfirm();
 
   const { t } = useTranslation();
@@ -60,18 +48,6 @@ const OrganizerActions = (props: OrganizerActionsProps) => {
 
   return (
     <div className={styles.buttonsContainer}>
-      {showSaveButton && (
-        <Button
-          disabled={disableSaveButton || isPendingSave}
-          onClick={onSaveEvent}
-        >
-          {isPendingSave ? (
-            <Loader variant="secondary" inside className={styles.loader} />
-          ) : (
-            <span>{t('event.save.buttonTxt')}</span>
-          )}
-        </Button>
-      )}
       <Button variant="secondary" onClick={handleOpenConfirmModal}>
         {t('event.cancel.buttonTxt')}
       </Button>

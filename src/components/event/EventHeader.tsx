@@ -1,7 +1,6 @@
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { MoveLeft, TreeDeciduous } from 'lucide-react';
-import { useDateUtils } from '../../hooks/useDateUtils';
 import { Header } from '../Header';
 import { HeaderImage } from '../HeaderImage';
 // import styles from './EventHeader.module.scss';
@@ -9,16 +8,14 @@ import { HeaderImage } from '../HeaderImage';
 interface EventHeaderProps {
   parkName: string;
   parkImage: string;
-  startAt: string;
+  title?: string | null;
   userId?: string;
 }
 
 const EventHeader: React.FC<EventHeaderProps> = (props: EventHeaderProps) => {
-  const { startAt, userId, parkName, parkImage } = props;
+  const { userId, parkName, parkImage, title } = props;
 
   const { t } = useTranslation();
-  const { formatFutureCalendar } = useDateUtils();
-  const startTime = formatFutureCalendar(startAt);
 
   return (
     <Header
@@ -34,10 +31,8 @@ const EventHeader: React.FC<EventHeaderProps> = (props: EventHeaderProps) => {
       bottomCmp={
         <div>
           <span>
-            {t('event.header.location')}: {parkName}
-          </span>
-          <span>
-            {t('event.header.when')}: {startTime}
+            {title ? title : t('event.location') + ': '}
+            {parkName}
           </span>
         </div>
       }

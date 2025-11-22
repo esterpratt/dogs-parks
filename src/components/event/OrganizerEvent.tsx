@@ -1,9 +1,5 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router';
-import { useMutation } from '@tanstack/react-query';
-import { queryClient } from '../../services/react-query';
-import { addEventInvitees } from '../../services/events';
 import { useFetchFriends } from '../../hooks/api/useFetchFriends';
 import { User } from '../../types/user';
 import {
@@ -12,12 +8,11 @@ import {
   ParkEventInviteeStatus,
   ParkEventStatus,
 } from '../../types/parkEvent';
-import { useNotification } from '../../context/NotificationContext';
-import { SelectUsers } from '../SelectUsers';
 import { OrganizerActions } from './OrganizerActions';
 import { EventHeader } from './EventHeader';
 import { EventBody } from './EventBody';
 import { EventDetails } from './EventDetails';
+import { AddFriendsModal } from './AddFriendsModal';
 
 interface OrganizerEventProps {
   event: ParkEvent;
@@ -30,13 +25,11 @@ interface OrganizerEventProps {
 const OrganizerEvent = (props: OrganizerEventProps) => {
   const { event, invitees, parkName, parkImage, userId } = props;
   const { status, start_at, message } = event;
-
-  const [addedFriends, setAddedFriends] = useState<User[]>([]);
   const { friends } = useFetchFriends({ userId });
 
+  const [isFriendsModalOpen, setIsFriendsModalOpen] = useState(false);
+
   const { t } = useTranslation();
-  const { notify } = useNotification();
-  const navigate = useNavigate();
 
   const { invitedFriends, goingFriends, notInvitedFriends } = useMemo(() => {
     const invitedFriends: User[] = [];
@@ -71,73 +64,42 @@ const OrganizerEvent = (props: OrganizerEventProps) => {
     };
   }, [invitees, friends]);
 
-  const { mutate: saveAddedFriends, isPending: isPendingAddFriends } =
-    useMutation({
-      mutationFn: () =>
-        addEventInvitees({
-          eventId: event.id,
-          inviteeIds: addedFriends.map((friend) => friend.id),
-        }),
-      onError: () => {
-        notify(t('event.save.error'), true);
-      },
-      onSuccess: () => {
-        notify(t('event.save.success'));
-        queryClient.invalidateQueries({
-          queryKey: ['events', 'organized', userId],
-        });
-        queryClient.invalidateQueries({
-          queryKey: ['event', event.id],
-        });
-        navigate(`/profile/${userId}/events`);
-      },
-    });
-
-  const handleSaveEvent = () => {
-    saveAddedFriends();
-  };
-
   return (
-    <EventDetails
-      eventHeader={
-        <EventHeader
-          startAt={start_at}
-          parkName={parkName}
-          parkImage={parkImage}
+    <>
+      <EventDetails
+        eventHeader={
+          <EventHeader
+            parkName={parkName}
+            parkImage={parkImage}
+            userId={userId}
+          />
+        }
+        eventBody={
+          <EventBody
+            startAt={start_at}
+            organizedBy={t('event.organizedBy', { name: 'me' })}
+            message={message}
+            invitedFriends={invitedFriends}
+            goingFriends={goingFriends}
+            onClickFriendsAddition={() => setIsFriendsModalOpen(true)}
+          />
+        }
+        eventActions={
+          status !== ParkEventStatus.CANCELED && (
+            <OrganizerActions userId={userId} eventId={event.id} />
+          )
+        }
+      />
+      {!!notInvitedFriends?.length && (
+        <AddFriendsModal
+          onClose={() => setIsFriendsModalOpen(false)}
+          open={isFriendsModalOpen}
+          notInvitedFriends={notInvitedFriends}
+          eventId={event.id}
           userId={userId}
         />
-      }
-      eventBody={
-        <EventBody
-          organizedBy={t('event.organizedBy', { name: 'me' })}
-          friendsSelection={
-            !!notInvitedFriends?.length && (
-              <SelectUsers
-                label={t('event.addFriends')}
-                users={notInvitedFriends}
-                selectedUsers={addedFriends}
-                setSelectedUsers={setAddedFriends}
-              />
-            )
-          }
-          message={message}
-          invitedFriends={invitedFriends}
-          goingFriends={goingFriends}
-        />
-      }
-      eventActions={
-        status !== ParkEventStatus.CANCELED && (
-          <OrganizerActions
-            showSaveButton={!!notInvitedFriends?.length}
-            isPendingSave={isPendingAddFriends}
-            disableSaveButton={!addedFriends.length}
-            userId={userId}
-            eventId={event.id}
-            onSaveEvent={handleSaveEvent}
-          />
-        )
-      }
-    />
+      )}
+    </>
   );
 };
 
