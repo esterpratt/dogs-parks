@@ -1,14 +1,14 @@
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router";
-import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { User } from "../../types/user";
-import { useNotification } from "../../context/NotificationContext";
-import { queryClient } from "../../services/react-query";
-import { addEventInvitees } from "../../services/events";
-import { FormModal } from "../modals/FormModal";
-import { SelectUsers } from "../SelectUsers";
-import styles from "./AddFriendsModal.module.scss";
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router';
+import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { User } from '../../types/user';
+import { useNotification } from '../../context/NotificationContext';
+import { queryClient } from '../../services/react-query';
+import { addEventInvitees } from '../../services/events';
+import { FormModal } from '../modals/FormModal';
+import { SelectUsers } from '../SelectUsers';
+import styles from './AddFriendsModal.module.scss';
 
 interface AddFriendsModalProps {
   notInvitedFriends: User[];
@@ -35,15 +35,15 @@ const AddFriendsModal = (props: AddFriendsModalProps) => {
           inviteeIds: addedFriends.map((friend) => friend.id),
         }),
       onError: () => {
-        notify(t("event.save.error"), true);
+        notify(t('event.save.error'), true);
       },
       onSuccess: () => {
-        notify(t("event.save.success"));
+        notify(t('event.save.success'));
         queryClient.invalidateQueries({
-          queryKey: ["events", "organized", userId],
+          queryKey: ['events', 'organized', userId],
         });
         queryClient.invalidateQueries({
-          queryKey: ["event", eventId],
+          queryKey: ['event', eventId],
         });
         navigate(`/profile/${userId}/events`);
       },
@@ -58,12 +58,15 @@ const AddFriendsModal = (props: AddFriendsModalProps) => {
       open={open}
       onClose={onClose}
       onSave={handleSaveEvent}
-      saveText={t("event.save.buttonTxt")}
+      saveText={t('event.save.buttonTxt')}
       disabled={isPendingAddFriends}
+      className={styles.modalContainer}
+      formContainerClassName={styles.formContainer}
+      formClassName={styles.form}
     >
       <div className={styles.friendsSelectionContainer}>
         <SelectUsers
-          label={t("event.addFriends")}
+          label={t('event.addFriends')}
           users={notInvitedFriends}
           selectedUsers={addedFriends}
           setSelectedUsers={setAddedFriends}
