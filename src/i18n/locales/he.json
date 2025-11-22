@@ -362,50 +362,50 @@
     "invitedEvents": "הזמנות"
   },
   "event": {
-    "cancelled": "Cancelled",
-    "decline": "Declined",
-    "invitedBy": "Invited by",
-    "noInvitees": "No other invited friends",
-    "addFriends": "Add friends",
-    "organizedBy": "Organized by",
+    "cancelled": "בוטל",
+    "decline": "דחית השתתפות",
+    "invitedBy": "הוזמנת על ידי",
+    "noInvitees": "אין חברים אחרים שהוזמנו",
+    "addFriends": "הוספת חברים",
+    "organizedBy": "אורגן על ידי",
     "title": {
-      "going": "You are going to",
-      "invited": "You are invited to"
+      "going": "אישרת השתתפות באירוע",
+      "invited": "הוזמנת לאירוע"
     },
     "invitees": {
-      "going": "Friends participating",
-      "invited": "Invited friends"
+      "going": "חברים שאישרו השתתפות",
+      "invited": "חברים שהוזמנו"
     },
     "invitee": {
       "decline": {
-        "title": "Are you sure you want to decline the event?",
-        "button": "Yes",
-        "error": "Sorry, there was an error declining the event",
-        "success": "The event was declined"
+        "title": "הנך בטוח/ה שברצונך לדחות את ההזמנה לאירוע?",
+        "button": "כן, דחה הזמנה",
+        "error": "מצטערים, היתה תקלה בדחיית האירוע",
+        "success": "ההשתפות באירוע נדחתה על ידך"
       },
       "accept": {
-        "error": "Sorry, there was an error approving the event",
-        "success": "You are going to the event!"
+        "error": "מצטערים, היתה תקלה באישור ההשתתפות",
+        "success": "אישרת השתתפות באירוע!"
       }
     },
     "header": {
-      "location": "Location",
-      "when": "Time"
+      "location": "מיקום",
+      "when": "זמן"
     },
-    "breadcrumbs": {
-      "events": "To all events"
+    "breadcrumb": {
+      "events": "לכל האירועים"
     },
     "cancel": {
-      "title": "Are you sure you want to cancel the event?",
-      "modalBtnTxt": "Yes",
-      "buttonTxt": "Cancel event",
-      "error": "Sorry, there was an error with the cancelation",
-      "success": "The event was cancelled"
+      "title": "הנך בטוח/ה שברצונך לבטל את האירוע?",
+      "modalBtnTxt": "כן, בטל אירוע",
+      "buttonTxt": "ביטול האירוע",
+      "error": "מצטערים, היתה תקלה בביטול האירוע",
+      "success": "האירוע בוטל"
     },
     "save": {
-      "buttonTxt": "Save event",
-      "error": "There was an error saving the event",
-      "success": "The event was saved succesfully!"
+      "buttonTxt": "עדכון",
+      "error": "מצטערים, היתה תקלה בעדכון האירוע",
+      "success": "האירוע עודכן בהצלחה!"
     }
   },
   "parkReviews": {

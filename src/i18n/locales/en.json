@@ -361,7 +361,7 @@
       "location": "Location",
       "when": "Time"
     },
-    "breadcrumbs": {
+    "breadcrumb": {
       "events": "To all events"
     },
     "cancel": {

@@ -90,7 +90,7 @@
     "thirdParties": {
       "title": "خدمات الطرف الثالث",
       "desc": "قد نستخدم خدمات طرف ثالث تجمع البيانات (مثل، Google Analytics، Supabase). لكل طرف ثالث سياسة خصوصية خاصة به:",
-      "links": ["Google Analytics: https://policies.google.com/privacy"]
+      "links": ["تحليلات جوجل: https://policies.google.com/privacy"]
     },
     "changes": {
       "title": "تغييرات السياسة",
@@ -190,13 +190,13 @@
     "downloadFrom": "حمل كلابهاب من {{store}}",
     "continueHere": "للمتابعة هنا",
     "store": {
-      "appStore": "App Store",
-      "googlePlay": "Google Play"
+      "appStore": "متجر آب ستور",
+      "googlePlay": "متجر جوجل بلاي"
     }
   },
   "settings": {
     "title": "الإعدادات",
-    "backToProfile": "To my profile",
+    "backToProfile": "إلى ملفي الشخصي",
     "editDetails": "تحرير التفاصيل",
     "logout": "خروج",
     "deleteProfile": "حذف ملفي الشخصي",
@@ -242,7 +242,7 @@
       "friends": "الأصدقاء",
       "favorites": "المفضلة",
       "reviews": "المراجعات",
-      "events": "Events"
+      "events": "الفعاليات"
     }
   },
   "visitors": {
@@ -329,55 +329,55 @@
     }
   },
   "userEvents": {
-    "upcomingEvents": "Upcoming events",
-    "organizedEvents": "Organized by me",
-    "invitedEvents": "Invited to"
+    "upcomingEvents": "الفعاليات القادمة",
+    "organizedEvents": "الفعاليات التي نظمتها",
+    "invitedEvents": "الفعاليات المدعو إليها"
   },
   "event": {
-    "cancelled": "Cancelled",
-    "decline": "Declined",
-    "invitedBy": "Invited by",
-    "noInvitees": "No other invited friends",
-    "addFriends": "Add friends",
-    "organizedBy": "Organized by",
+    "cancelled": "أُلغيت",
+    "decline": "مرفوض",
+    "invitedBy": "بدعوة من",
+    "noInvitees": "لا يوجد أصدقاء مدعوون آخرون",
+    "addFriends": "أضف أصدقاء",
+    "organizedBy": "من تنظيم",
     "title": {
-      "going": "You are going to",
-      "invited": "You are invited to"
+      "going": "أنت ذاهب إلى",
+      "invited": "أنت مدعو إلى"
     },
     "invitees": {
-      "going": "Friends participating",
-      "invited": "Invited friends"
+      "going": "الأصدقاء المشاركون",
+      "invited": "الأصدقاء المدعوون"
     },
     "invitee": {
       "decline": {
-        "title": "Are you sure you want to decline the event?",
-        "button": "Yes",
-        "error": "Sorry, there was an error declining the event",
-        "success": "The event was declined"
+        "title": "هل أنت متأكد أنك تريد رفض الفعالية؟",
+        "button": "نعم",
+        "error": "عذراً، حدث خطأ أثناء رفض الفعالية",
+        "success": "تم رفض الفعالية"
       },
       "accept": {
-        "error": "Sorry, there was an error approving the event",
-        "success": "You are going to the event!"
+        "error": "عذراً، حدث خطأ أثناء قبول الفعالية",
+        "success": "أنت ذاهب إلى الفعالية!"
       }
     },
     "header": {
-      "location": "Location",
-      "when": "Time"
+      "location": "الموقع",
+      "when": "الوقت"
     },
-    "breadcrumbs": {
-      "events": "To all events"
+    "breadcrumb": {
+      "events": "إلى جميع الفعاليات"
     },
     "cancel": {
-      "title": "Are you sure you want to cancel the event?",
-      "modalBtnTxt": "Yes",
-      "buttonTxt": "Cancel event",
-      "error": "Sorry, there was an error with the cancelation",
-      "success": "The event was cancelled"
+      "title": "هل أنت متأكد أنك تريد إلغاء الفعالية؟",
+      "modalBtnTxt": "نعم",
+      "buttonTxt": "إلغاء الفعالية",
+      "error": "عذراً، حدث خطأ أثناء الإلغاء",
+      "success": "تم إلغاء الفعالية"
     },
     "save": {
-      "buttonTxt": "Save event",
-      "error": "There was an error saving the event",
-      "success": "The event was saved succesfully!"
+      "buttonTxt": "حفظ الفعالية",
+      "error": "حدث خطأ أثناء حفظ الفعالية",
+      "success": "تم حفظ الفعالية بنجاح!"
     }
   },
   "parkInvite": {
@@ -457,8 +457,8 @@
     "placeholderPassword": "كلمة المرور *",
     "placeholderName": "الاسم *",
     "continue": "تسجيل الدخول مع",
-    "withApple": "Apple",
-    "withGoogle": "Google",
+    "withApple": "آبل",
+    "withGoogle": "جوجل",
     "missingDetails": "يرجى ملء التفاصيل المفقودة",
     "pleaseEnterEmail": "يرجى إدخال البريد الإلكتروني",
     "or": "أو سجل الدخول مع",
@@ -470,12 +470,12 @@
     "resetPassword": "إعادة تعيين كلمة المرور",
     "cta": {
       "apple": {
-        "signup": "Apple",
-        "continue": "Apple"
+        "signup": "آبل",
+        "continue": "آبل"
       },
       "google": {
-        "signup": "Google",
-        "continue": "Google"
+        "signup": "جوجل",
+        "continue": "جوجل"
       }
     }
   },
@@ -502,8 +502,8 @@
       "unlike": "إزالة",
       "submit": "إرسال",
       "save": "حفظ",
-      "areYouSure": "Are you sure?",
-      "yes": "Yes"
+      "areYouSure": "هل أنت متأكد؟",
+      "yes": "نعم"
     },
     "placeholders": {
       "search": "بحث",
@@ -1108,7 +1108,7 @@
   "reports": {
     "reviewModal": {
       "title": "لماذا تريد الإبلاغ عن هذه المراجعة",
-      "sentMessage": "Report sent"
+      "sentMessage": "تم إرسال البلاغ"
     },
     "reasons": {
       "spam": {
