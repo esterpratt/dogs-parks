@@ -1,12 +1,12 @@
-import { useTranslation } from 'react-i18next';
-import { InviteesList } from './InviteesList';
-import { User } from '../../types/user';
 import { ReactNode } from 'react';
-import styles from './EventBody.module.scss';
+import { useTranslation } from 'react-i18next';
+import { Plus } from 'lucide-react';
+import { User } from '../../types/user';
 import { useDateUtils } from '../../hooks/useDateUtils';
 import { Section } from '../section/Section';
-import { Plus } from 'lucide-react';
 import { Button } from '../Button';
+import { InviteesList } from './InviteesList';
+import styles from './EventBody.module.scss';
 
 interface EventBodyProps {
   message?: string;
