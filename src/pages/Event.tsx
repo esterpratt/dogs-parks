@@ -10,7 +10,7 @@ import {
   fetchParkWithTranslation,
 } from '../services/parks';
 import { Loader } from '../components/Loader';
-import { InviteeEvent } from '../components/event/InvitedEvent';
+import { InvitedEvent } from '../components/event/InvitedEvent';
 import { OrganizerEvent } from '../components/event/OrganizerEvent';
 import styles from './Event.module.scss';
 
@@ -65,7 +65,7 @@ const Event = () => {
           userId={userId}
         />
       ) : (
-        <InviteeEvent
+        <InvitedEvent
           event={eventData.event}
           invitees={eventData?.invitees}
           parkName={park!.name}

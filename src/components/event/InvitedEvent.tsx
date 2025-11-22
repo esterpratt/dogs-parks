@@ -20,7 +20,7 @@ interface InviteeEventProps {
   userId: string;
 }
 
-const InviteeEvent = (props: InviteeEventProps) => {
+const InvitedEvent = (props: InviteeEventProps) => {
   const { event, invitees, parkName, parkImage, userId } = props;
   const { start_at, creator_name, message } = event;
 
@@ -65,14 +65,6 @@ const InviteeEvent = (props: InviteeEventProps) => {
     <EventDetails
       eventHeader={
         <EventHeader
-          startAt={start_at}
-          parkName={parkName}
-          parkImage={parkImage}
-          userId={userId}
-        />
-      }
-      eventBody={
-        <EventBody
           title={
             userInvitationStatus === ParkEventInviteeStatus.ACCEPTED
               ? t('event.title.going')
@@ -80,6 +72,14 @@ const InviteeEvent = (props: InviteeEventProps) => {
                 ? t('event.title.invited')
                 : null
           }
+          parkName={parkName}
+          parkImage={parkImage}
+          userId={userId}
+        />
+      }
+      eventBody={
+        <EventBody
+          startAt={start_at}
           organizedBy={t('event.organizedBy', { name: creator_name })}
           message={message}
           invitedFriends={invitedFriends}
@@ -91,4 +91,4 @@ const InviteeEvent = (props: InviteeEventProps) => {
   );
 };
 
-export { InviteeEvent };
+export { InvitedEvent };
