@@ -379,6 +379,7 @@
     }
   },
   "parkReviews": {
+    "emptyTitleShort": "No reviews",
     "emptyTitle": "No barks about this park yet",
     "firstReviewCta": "Be the first to leave a review!",
     "averageRank": "Average rank: {{rank}}",

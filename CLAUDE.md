@@ -118,7 +118,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Don't use single line if statements - always use curly braces {}
 - Use interface for functions/components props type
 - Types that are used in more than one file should be set in the 'types' folder. Types that are used only in one file should be set on the file
-- Run Prettier formatting after every code change
 
 **For folder-specific conventions, see:** `.claude/folder-conventions.md`
 
@@ -126,4 +125,3 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - Use pixels and not rems
 - Do not use font weight
-

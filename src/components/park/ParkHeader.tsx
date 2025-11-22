@@ -31,6 +31,7 @@ import styles from './ParkHeader.module.scss';
 import { useUploadImage } from '../../hooks/api/useUploadImage';
 import { useTranslation } from 'react-i18next';
 import { ParkInvite } from './ParkInvite';
+import { useFetchFriends } from '../../hooks/api/useFetchFriends';
 
 interface ParkHeaderProps {
   park: Park;
@@ -45,6 +46,7 @@ const ParkHeader = (props: ParkHeaderProps) => {
   const [isEnlargedImageModalOpen, setIsEnlargeImageModalOpen] =
     useState(false);
   const { notify } = useNotification();
+  const { friends } = useFetchFriends({ userId: user?.id });
 
   const { data: primaryImage } = useQuery({
     queryKey: ['parkImage', park.id],
@@ -148,7 +150,9 @@ const ParkHeader = (props: ParkHeaderProps) => {
                     userId={user?.id ?? null}
                     userName={user?.name}
                   />
-                  <ParkInvite userId={user.id} parkId={park.id} />
+                  {!!friends?.length && (
+                    <ParkInvite userId={user.id} parkId={park.id} />
+                  )}
                 </>
               )}
               {!user && <ReviewsPreview className={styles.reviews} />}
