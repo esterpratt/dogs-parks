@@ -8,7 +8,7 @@ import styles from './HeaderImage.module.scss';
 interface HeaderImageProps {
   imgSrc?: string | null;
   onClickImg?: (imgSrc: string) => void;
-  NoImgIcon: LucideIcon | React.FC<React.SVGProps<SVGSVGElement>>;
+  NoImgIcon?: LucideIcon | React.FC<React.SVGProps<SVGSVGElement>>;
   onClickEditPhoto?: null | (() => void);
   className?: string;
   editButtonClassName?: string;
@@ -45,13 +45,15 @@ const HeaderImage = (props: HeaderImageProps) => {
       ) : (
         <div className={styles.img}>
           <div className={styles.noImg}>
-            <NoImgIcon
-              width={'100%'}
-              height={'100%'}
-              size={'100%'}
-              color={styles.green}
-              strokeWidth={1}
-            />
+            {!!NoImgIcon && (
+              <NoImgIcon
+                width={'100%'}
+                height={'100%'}
+                size={'100%'}
+                color={styles.green}
+                strokeWidth={1}
+              />
+            )}
           </div>
         </div>
       )}

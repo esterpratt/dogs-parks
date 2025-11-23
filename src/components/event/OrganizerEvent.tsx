@@ -69,6 +69,7 @@ const OrganizerEvent = (props: OrganizerEventProps) => {
       <EventDetails
         eventHeader={
           <EventHeader
+            title={t('event.title.yours')}
             parkName={parkName}
             parkImage={parkImage}
             userId={userId}
@@ -77,11 +78,15 @@ const OrganizerEvent = (props: OrganizerEventProps) => {
         eventBody={
           <EventBody
             startAt={start_at}
-            organizedBy={t('event.organizedBy', { name: 'me' })}
+            messageTitle={t('event.message.organizerTitle')}
             message={message}
             invitedFriends={invitedFriends}
             goingFriends={goingFriends}
-            onClickFriendsAddition={() => setIsFriendsModalOpen(true)}
+            onClickFriendsAddition={
+              notInvitedFriends?.length
+                ? () => setIsFriendsModalOpen(true)
+                : null
+            }
           />
         }
         eventActions={

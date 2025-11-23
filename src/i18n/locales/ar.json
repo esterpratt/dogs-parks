@@ -334,23 +334,28 @@
     "invitedEvents": "الفعاليات المدعو إليها"
   },
   "event": {
-    "general": "عام",
-    "friends": "الأصدقاء",
-    "extra": "تفاصيل إضافية",
+    "general": "نظرة عامة",
+    "friends": "قائمة الضيوف",
+    "extra": "معلومات إضافية",
     "cancelled": "أُلغيت",
     "decline": "مرفوض",
-    "invitedBy": "بدعوة من",
+    "invitedBy": "بدعوة من <name>{{name}}</name>",
     "noInvitees": "لا يوجد أصدقاء مدعوون آخرون",
     "addFriends": "أضف أصدقاء",
     "organizedBy": "من تنظيم",
     "location": "الموقع",
-    "when": "الوقت",
+    "time": "الوقت",
     "title": {
-      "going": "أنت ذاهب إلى فعالية في ",
-      "invited": "أنت مدعو إلى فعالية في "
+      "yours": "فعاليتك في",
+      "going": "أنت ذاهب إلى فعالية في",
+      "invited": "أنت مدعو إلى فعالية في"
+    },
+    "message": {
+      "title": "رسالة المضيف",
+      "organizerTitle": "رسالتك"
     },
     "invitees": {
-      "going": "الأصدقاء المشاركون",
+      "going": "الأصدقاء الحاضرون",
       "invited": "الأصدقاء المدعوون"
     },
     "invitee": {

@@ -1,8 +1,9 @@
-import { useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 import { useDateUtils } from '../../hooks/useDateUtils';
 import { ParkEventBase, ParkEventInvite } from '../../types/parkEvent';
 import { type ButtonProps, Card } from '../card/Card';
 import { ParkImageLazy } from '../park/ParkImageLazy';
+import { EventImageOverlay } from './EventImageOverlay';
 import styles from './EventPreview.module.scss';
 
 interface EventPreviewProps {
@@ -27,8 +28,6 @@ const EventPreview: React.FC<EventPreviewProps> = (
   } = props;
   const { start_at: startAt, id: eventId, park_id: parkId } = event;
 
-  const { t } = useTranslation();
-
   const { formatFutureCalendar } = useDateUtils();
 
   const startTime = formatFutureCalendar(startAt);
@@ -40,20 +39,23 @@ const EventPreview: React.FC<EventPreviewProps> = (
         url={!isCancelled ? `/events/${eventId}` : undefined}
         imgCmp={
           <div className={styles.img}>
-            <ParkImageLazy
-              parkId={parkId}
-              alt={parkName}
-              noImgClassName={styles.noImg}
-              iconSize={48}
-              lazy
-            />
+            <ParkImageLazy parkId={parkId} alt={parkName} hideNoImgIcon lazy />
+            <EventImageOverlay size={32} />
           </div>
         }
         detailsCmp={
           <div className={styles.details}>
-            <span>{parkName}</span>
-            <span>{startTime}</span>
-            {!!invitedBy && t('event.invitedBy', { name: invitedBy })}
+            <span className={styles.parkName}>{parkName}</span>
+            <span className={styles.time}>{startTime}</span>
+            {!!invitedBy && (
+              <span className={styles.invitedBy}>
+                <Trans
+                  i18nKey="event.invitedBy"
+                  values={{ name: invitedBy }}
+                  components={{ name: <span className={styles.name} /> }}
+                />
+              </span>
+            )}
           </div>
         }
         buttons={buttons}

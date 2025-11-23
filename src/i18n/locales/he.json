@@ -363,23 +363,28 @@
   },
   "event": {
     "general": "מידע כללי",
-    "friends": "חברים",
+    "friends": "רשימת משתתפים",
     "extra": "פרטים נוספים",
     "cancelled": "בוטל",
     "decline": "דחית השתתפות",
-    "invitedBy": "הוזמנת על ידי",
+    "invitedBy": "הוזמנת על ידי <name>{{name}}</name>",
     "noInvitees": "אין חברים אחרים שהוזמנו",
     "addFriends": "הוספת חברים",
     "organizedBy": "אורגן על ידי",
     "location": "מיקום",
-    "when": "זמן",
+    "time": "זמן",
     "title": {
-      "going": "אישרת השתתפות באירוע ב",
-      "invited": "הוזמנת לאירוע ב"
+      "yours": "האירוע שלך ב:",
+      "going": "אישרת השתתפות באירוע ב:",
+      "invited": "הוזמנת לאירוע ב:"
+    },
+    "message": {
+      "title": "מסר מהמארגן/ת",
+      "organizerTitle": "ביקשת למסור"
     },
     "invitees": {
-      "going": "חברים שאישרו השתתפות",
-      "invited": "חברים שהוזמנו"
+      "going": "חברים שאישרו נוכחות",
+      "invited": "חברים מוזמנים"
     },
     "invitee": {
       "decline": {

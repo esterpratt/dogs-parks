@@ -331,23 +331,28 @@
     "invitedEvents": "Invited to"
   },
   "event": {
-    "general": "General",
-    "friends": "Friends",
-    "extra": "More details",
+    "general": "Overview",
+    "friends": "Guest list",
+    "extra": "Additional info",
     "cancelled": "Cancelled",
     "decline": "Declined",
-    "invitedBy": "Invited by",
+    "invitedBy": "Invited by <name>{{name}}</name>",
     "noInvitees": "No other invited friends",
     "addFriends": "Add friends",
     "organizedBy": "Organized by",
     "location": "Location",
-    "when": "Time",
+    "time": "Time",
     "title": {
-      "going": "You are going to event in ",
-      "invited": "You are invited to event in "
+      "yours": "Your event at",
+      "going": "You are going to an event at",
+      "invited": "You are invited to an event at"
+    },
+    "message": {
+      "title": "Host's message",
+      "organizerTitle": "Your message"
     },
     "invitees": {
-      "going": "Friends participating",
+      "going": "Attending friends",
       "invited": "Invited friends"
     },
     "invitee": {
@@ -358,7 +363,7 @@
         "success": "The event was declined"
       },
       "accept": {
-        "error": "Sorry, there was an error approving the event",
+        "error": "Sorry, there was an error accepting the event",
         "success": "You are going to the event!"
       }
     },
@@ -369,13 +374,13 @@
       "title": "Are you sure you want to cancel the event?",
       "modalBtnTxt": "Yes",
       "buttonTxt": "Cancel event",
-      "error": "Sorry, there was an error with the cancelation",
+      "error": "Sorry, there was an error with the cancellation",
       "success": "The event was cancelled"
     },
     "save": {
       "buttonTxt": "Save event",
       "error": "There was an error saving the event",
-      "success": "The event was saved succesfully!"
+      "success": "The event was saved successfully!"
     }
   },
   "parkReviews": {

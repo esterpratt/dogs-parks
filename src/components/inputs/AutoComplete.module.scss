@@ -54,3 +54,50 @@
     background-color: rgba($pink, 0.2);
   }
 }
+
+.selected-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  list-style: none;
+  padding: 0;
+  max-height: 400px;
+
+  .selected-input {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: rgba($pink, 0.2);
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 13px;
+    color: var(--color-text);
+
+    span {
+      line-height: 1.2;
+    }
+
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      padding: 2px;
+      color: var(--color-text);
+      border-radius: 50%;
+      transition: background-color 0.15s ease;
+
+      svg {
+        width: 14px;
+        height: 14px;
+      }
+    }
+
+    :global(.dark) {
+      background-color: rgba($pink, 0.3);
+    }
+  }
+}

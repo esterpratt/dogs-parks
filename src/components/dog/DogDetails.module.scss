@@ -57,18 +57,15 @@
 .text-container {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 
   :first-child {
-    font-size: 14px;
-
-    &::first-letter {
-      text-transform: capitalize;
-    }
+    font-size: 11px;
+    text-transform: uppercase;
   }
 
   :last-child {
-    font-size: 12px;
+    font-size: 14px;
 
     &::first-letter {
       text-transform: capitalize;

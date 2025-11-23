@@ -7,6 +7,7 @@ import { Loader } from '../Loader';
 import { useUpdateInvitee } from '../../hooks/api/useUpdateInvitee';
 import styles from './InviteeActions.module.scss';
 import { useConfirm } from '../../context/ConfirmModalContext';
+import { Check, X } from 'lucide-react';
 
 interface InviteeActionsProps {
   eventId: string;
@@ -50,34 +51,36 @@ const InviteeActions: React.FC<InviteeActionsProps> = (
   }
 
   return (
-    <>
-      <div className={styles.container}>
-        {isInvited && (
-          <Button
-            disabled={isLoading || isPendingAccept}
-            onClick={() =>
-              handleUpdateInvitee({
-                eventId,
-                status: ParkEventInviteeStatus.ACCEPTED,
-              })
-            }
-          >
-            {isPendingAccept ? (
-              <Loader variant="secondary" inside className={styles.loader} />
-            ) : (
-              <span>{t('common.actions.accept')}</span>
-            )}
-          </Button>
-        )}
+    <div className={styles.container}>
+      {isInvited && (
         <Button
           disabled={isLoading || isPendingAccept}
-          variant="secondary"
-          onClick={handleOpenConfirmModal}
+          onClick={() =>
+            handleUpdateInvitee({
+              eventId,
+              status: ParkEventInviteeStatus.ACCEPTED,
+            })
+          }
         >
-          <span>{t('common.actions.decline')}</span>
+          {isPendingAccept ? (
+            <Loader variant="secondary" inside className={styles.loader} />
+          ) : (
+            <>
+              <Check size={14} />
+              <span>{t('common.actions.accept')}</span>
+            </>
+          )}
         </Button>
-      </div>
-    </>
+      )}
+      <Button
+        disabled={isLoading || isPendingAccept}
+        variant="secondary"
+        onClick={handleOpenConfirmModal}
+      >
+        <X size={14} />
+        <span>{t('common.actions.decline')}</span>
+      </Button>
+    </div>
   );
 };
 

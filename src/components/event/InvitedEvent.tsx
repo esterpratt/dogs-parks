@@ -77,13 +77,14 @@ const InvitedEvent = (props: InviteeEventProps) => {
           userId={userId}
         />
       }
-      eventBody={
-        <EventBody
-          startAt={start_at}
-          organizedBy={t('event.organizedBy', { name: creator_name })}
-          message={message}
-          invitedFriends={invitedFriends}
-          goingFriends={goingFriends}
+        eventBody={
+          <EventBody
+            startAt={start_at}
+            organizedBy={creator_name}
+            message={message}
+            messageTitle={t('event.message.title')}
+            invitedFriends={invitedFriends}
+            goingFriends={goingFriends}
         />
       }
       eventActions={<InviteeActions eventId={event.id} userId={userId!} />}

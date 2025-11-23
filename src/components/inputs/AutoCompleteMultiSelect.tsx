@@ -100,14 +100,14 @@ const AutoCompleteMultiSelect = <T,>({
         )}
       </div>
 
-      <ul>
+      <ul className={styles.selectedInputs}>
         {selectedInputs?.map((item) => (
-          <div key={selectedItemKeyfn(item)}>
+          <li className={styles.selectedInput} key={selectedItemKeyfn(item)}>
             <span>{selectedInputsFormatter(item)}</span>
             <button onClick={() => onRemoveItem(item)}>
               <X />
             </button>
-          </div>
+          </li>
         ))}
       </ul>
     </>

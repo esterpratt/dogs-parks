@@ -13,8 +13,8 @@ const EventDetails = (props: EventDetailsProps) => {
   return (
     <div className={styles.container}>
       {eventHeader}
-      {eventBody}
-      {!!eventActions && eventActions}
+      <div className={styles.bodyContainer}>{eventBody}</div>
+      {!!eventActions && <div className={styles.actions}>{eventActions}</div>}
     </div>
   );
 };

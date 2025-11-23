@@ -59,7 +59,7 @@ const AddFriendsModal = (props: AddFriendsModalProps) => {
       onClose={onClose}
       onSave={handleSaveEvent}
       saveText={t('event.save.buttonTxt')}
-      disabled={isPendingAddFriends}
+      disabled={!addedFriends.length || isPendingAddFriends}
       className={styles.modalContainer}
       formContainerClassName={styles.formContainer}
       formClassName={styles.form}

@@ -1,9 +1,10 @@
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { MoveLeft, TreeDeciduous } from 'lucide-react';
+import { MoveLeft, MapPin } from 'lucide-react';
 import { Header } from '../Header';
 import { HeaderImage } from '../HeaderImage';
-// import styles from './EventHeader.module.scss';
+import { EventImageOverlay } from './EventImageOverlay';
+import styles from './EventHeader.module.scss';
 
 interface EventHeaderProps {
   parkName: string;
@@ -25,15 +26,22 @@ const EventHeader: React.FC<EventHeaderProps> = (props: EventHeaderProps) => {
           <span>{t('event.breadcrumb.events')}</span>
         </Link>
       }
+      size="small"
       imgCmp={
-        <HeaderImage size={132} imgSrc={parkImage} NoImgIcon={TreeDeciduous} />
+        <div className={styles.imageContainer}>
+          <HeaderImage size={128} imgSrc={parkImage} />
+          <EventImageOverlay size={40} />
+        </div>
       }
       bottomCmp={
-        <div>
-          <span>
-            {title ? title : t('event.location') + ': '}
-            {parkName}
+        <div className={styles.titleContainer}>
+          <span className={styles.titleText}>
+            {title ? title : `${t('event.location')}: `}
           </span>
+          <div className={styles.parkName}>
+            <MapPin className={styles.locationIcon} size={14} />
+            <span>{parkName}</span>
+          </div>
         </div>
       }
     />

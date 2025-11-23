@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Check } from 'lucide-react';
 import classnames from 'classnames';
 import { User } from '../types/user';
+import { capitalizeWords } from '../utils/text';
 import { AutoCompleteMultiSelect } from './inputs/AutoCompleteMultiSelect';
 import styles from './SelectUsers.module.scss';
 
@@ -64,26 +65,30 @@ const SelectUsers = (props: SelectUsersProps) => {
   };
 
   return (
-    <AutoCompleteMultiSelect
-      selectedInputs={selectedUsers}
-      items={users}
-      placeholder={placeholder || t('parkInvite.modal.friends.placeholder')}
-      label={label ?? t('parkInvite.modal.friends.label')}
-      itemKeyfn={(user) => user.id}
-      selectedItemKeyfn={(user) => `selected-${user.id}`}
-      onSelectItem={handleClickUser}
-      onRemoveItem={handleRemoveUser}
-      equalityFunc={checkIsUserSelected}
-      filterFunc={filterUsers}
-      selectedInputsFormatter={(user) => user.name || defaultUserName}
-    >
-      {(user, isChosen) => (
-        <div className={classnames(styles.user, isChosen && styles.chosen)}>
-          {isChosen && <Check />}
-          <span>{user.name}</span>
-        </div>
-      )}
-    </AutoCompleteMultiSelect>
+    <div className={styles.container}>
+      <AutoCompleteMultiSelect
+        selectedInputs={selectedUsers}
+        items={users}
+        placeholder={placeholder || t('parkInvite.modal.friends.placeholder')}
+        label={label ?? t('parkInvite.modal.friends.label')}
+        itemKeyfn={(user) => user.id}
+        selectedItemKeyfn={(user) => `selected-${user.id}`}
+        onSelectItem={handleClickUser}
+        onRemoveItem={handleRemoveUser}
+        equalityFunc={checkIsUserSelected}
+        filterFunc={filterUsers}
+        selectedInputsFormatter={(user) =>
+          capitalizeWords(user.name || defaultUserName)
+        }
+      >
+        {(user, isChosen) => (
+          <div className={classnames(styles.user, isChosen && styles.chosen)}>
+            {isChosen && <Check size={16} />}
+            <span>{user.name}</span>
+          </div>
+        )}
+      </AutoCompleteMultiSelect>
+    </div>
   );
 };
 

@@ -14,6 +14,7 @@ interface ParkImageLazyProps {
   className?: string;
   noImgClassName?: string;
   iconSize?: number;
+  hideNoImgIcon?: boolean;
 }
 
 const ParkImageLazy = ({
@@ -24,6 +25,7 @@ const ParkImageLazy = ({
   className,
   noImgClassName,
   iconSize,
+  hideNoImgIcon,
 }: ParkImageLazyProps) => {
   const { ref, inView } = useInView({ triggerOnce: true, rootMargin: '100px' });
 
@@ -46,11 +48,13 @@ const ParkImageLazy = ({
       )}
       {!primaryImage && (
         <div className={classnames(styles.noImg, noImgClassName)}>
-          <TreeDeciduous
-            size={iconSize || 24}
-            color={styles.green}
-            strokeWidth={1}
-          />
+          {!hideNoImgIcon && (
+            <TreeDeciduous
+              size={iconSize || 24}
+              color={styles.green}
+              strokeWidth={1}
+            />
+          )}
         </div>
       )}
     </div>
