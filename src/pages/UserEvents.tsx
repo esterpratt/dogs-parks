@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { useOutletContext } from 'react-router';
+import { CalendarHeart } from 'lucide-react';
 import {
   fetchUserInvitedEvents,
   fetchUserOrganizedEvents,
@@ -40,7 +41,10 @@ const UserEvents = () => {
 
   return (
     <div className={styles.container}>
-      <span className={styles.title}>{t('userEvents.upcomingEvents')}</span>
+      <div className={styles.title}>
+        <CalendarHeart className={styles.titleIcon} size={20} />
+        <span>{t('userEvents.upcomingEvents')}</span>
+      </div>
       {!!organizedEvents?.length && (
         <div className={styles.eventsContainer}>
           <div className={styles.subtitle}>
