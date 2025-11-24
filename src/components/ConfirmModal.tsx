@@ -25,8 +25,8 @@ const ConfirmModal = (props: ConfirmModalProps) => {
   const { t } = useTranslation();
 
   return (
-    <TopModal open={isOpen} onClose={handleClose}>
-      <div className={styles.ConfirmModal}>
+    <TopModal open={isOpen} onClose={handleClose} className={styles.modal}>
+      <div className={styles.content}>
         <span className={styles.title}>
           {title ?? t('common.actions.areYouSure')}
         </span>
