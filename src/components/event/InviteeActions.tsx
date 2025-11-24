@@ -31,6 +31,7 @@ const InviteeActions: React.FC<InviteeActionsProps> = (
   });
 
   const handleOpenConfirmModal = () => {
+    console.log('should open');
     showModal({
       title: t('event.invitee.decline.title'),
       confirmText: t('event.invitee.decline.button'),
