@@ -10,8 +10,8 @@ import { useUpdateInvitee } from '../../hooks/api/useUpdateInvitee';
 import { type ButtonProps } from '../card/Card';
 import { Loader } from '../Loader';
 import { EventPreview } from './EventPreview';
-import styles from './EventPreview.module.scss';
 import { useConfirm } from '../../context/ConfirmModalContext';
+import styles from './EventPreview.module.scss';
 
 interface EventPreviewProps {
   event: ParkEventInvite;

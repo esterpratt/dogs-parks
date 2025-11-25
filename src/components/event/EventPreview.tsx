@@ -1,4 +1,6 @@
 import { Trans } from 'react-i18next';
+import { Ban } from 'lucide-react';
+import classnames from 'classnames';
 import { useDateUtils } from '../../hooks/useDateUtils';
 import { ParkEventBase, ParkEventInvite } from '../../types/parkEvent';
 import { type ButtonProps, Card } from '../card/Card';
@@ -33,8 +35,12 @@ const EventPreview: React.FC<EventPreviewProps> = (
   const startTime = formatFutureCalendar(startAt);
 
   return (
-    <>
-      {!!cancelledMessage && isCancelled && <div>{cancelledMessage}</div>}
+    <div
+      className={classnames(styles.cardWrapper, {
+        [styles.isCancelled]: isCancelled,
+      })}
+      aria-disabled={isCancelled}
+    >
       <Card
         url={!isCancelled ? `/events/${eventId}` : undefined}
         imgCmp={
@@ -60,7 +66,17 @@ const EventPreview: React.FC<EventPreviewProps> = (
         }
         buttons={buttons}
       />
-    </>
+      {isCancelled && (
+        <div className={styles.stateOverlay} role="status">
+          <div className={styles.stateRail}>
+            <Ban size={18} className={styles.stateIcon} />
+            {!!cancelledMessage && (
+              <span className={styles.stateText}>{cancelledMessage}</span>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 

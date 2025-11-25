@@ -366,7 +366,7 @@
     "friends": "רשימת משתתפים",
     "extra": "פרטים נוספים",
     "cancelled": "בוטל",
-    "decline": "דחית השתתפות",
+    "declined": "דחית השתתפות",
     "invitedBy": "הוזמנת על ידי <name>{{name}}</name>",
     "noInvitees": "אין חברים אחרים שהוזמנו",
     "addFriends": "הוספת חברים",

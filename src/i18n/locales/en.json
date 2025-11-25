@@ -335,7 +335,7 @@
     "friends": "Guest list",
     "extra": "Additional info",
     "cancelled": "Cancelled",
-    "decline": "Declined",
+    "declined": "Declined",
     "invitedBy": "Invited by <name>{{name}}</name>",
     "noInvitees": "No other invited friends",
     "addFriends": "Add friends",

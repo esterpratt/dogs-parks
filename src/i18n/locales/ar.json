@@ -338,7 +338,7 @@
     "friends": "قائمة الضيوف",
     "extra": "معلومات إضافية",
     "cancelled": "أُلغيت",
-    "decline": "مرفوض",
+    "declined": "مرفوض",
     "invitedBy": "بدعوة من <name>{{name}}</name>",
     "noInvitees": "لا يوجد أصدقاء مدعوون آخرون",
     "addFriends": "أضف أصدقاء",

@@ -14,7 +14,7 @@ import {
 } from '../types/parkEvent';
 import { useParkNamesMap } from '../hooks/useParkNameMap';
 import { Loader } from '../components/Loader';
-import { EventPreview } from '../components/event/EventPreview';
+import { EventPreviewV11 } from '../components/event/variations/EventPreviewV11';
 import { EventInviteePreview } from '../components/event/EventInviteePreview';
 import styles from './UserEvents.module.scss';
 
@@ -51,7 +51,7 @@ const UserEvents = () => {
             {t('userEvents.organizedEvents')}
           </div>
           {organizedEvents.map((event: ParkEventBase) => (
-            <EventPreview
+            <EventPreviewV11
               isCancelled={event.status === ParkEventStatus.CANCELED}
               cancelledMessage={t('event.cancelled')}
               key={event.id}
