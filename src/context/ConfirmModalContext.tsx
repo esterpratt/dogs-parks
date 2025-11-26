@@ -11,6 +11,7 @@ import { ConfirmModal } from '../components/ConfirmModal';
 interface ModalConfig {
   title: string;
   confirmText: string;
+  cancelText?: string;
   onConfirm: () => void | Promise<void>;
 }
 
@@ -67,6 +68,7 @@ const ConfirmModalProvider = (props: ConfirmModalContextProviderProps) => {
       <ConfirmModal
         title={modalConfig?.title}
         confirmationText={modalConfig?.confirmText}
+        cancelText={modalConfig?.cancelText}
         handleClose={handleClose}
         handleConfirm={handleConfirm}
         isOpen={isOpen}

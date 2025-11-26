@@ -21,6 +21,7 @@ interface ParkEventBase {
   end_at: string;
   status: ParkEventStatus;
   message?: string;
+  duration_minutes: number;
 }
 
 interface ParkEvent extends ParkEventBase {

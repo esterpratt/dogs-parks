@@ -1,6 +1,6 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useMemo, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { FormModal } from '../modals/FormModal';
 import { createParkEvent } from '../../services/events';
 import { useNotification } from '../../context/NotificationContext';
@@ -13,6 +13,8 @@ import styles from './ParkInviteModal.module.scss';
 import { RadioInputs } from '../inputs/RadioInputs';
 import { queryClient } from '../../services/react-query';
 import { SelectUsers } from '../SelectUsers';
+import { MS_IN_MINUTE, useEventConflicts } from '../../hooks/useEventConflicts';
+import { Link } from 'react-router';
 
 interface ParkInviteModalProps {
   parkId?: string;
@@ -32,15 +34,25 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
   const { notify } = useNotification();
 
   const OFFSET_OPTIONS = [
-    { id: '0', value: '0', label: t('parkInvite.modal.offest.now') },
-    { id: '15', value: '15', label: t('parkInvite.modal.offest.min15') },
-    { id: '30', value: '30', label: t('parkInvite.modal.offest.min30') },
-    { id: '60', value: '60', label: t('parkInvite.modal.offest.hour1') },
+    { id: '0', value: '0', label: t('parkInvite.modal.offset.now') },
+    { id: '15', value: '15', label: t('parkInvite.modal.offset.min15') },
+    { id: '30', value: '30', label: t('parkInvite.modal.offset.min30') },
+    { id: '60', value: '60', label: t('parkInvite.modal.offset.hour1') },
   ];
 
   const [minutesOffset, setMinutesOffset] = useState(OFFSET_OPTIONS[0].value);
 
   const { friends } = useFetchFriends({ userId });
+
+  const { getConflictedEvents } = useEventConflicts(userId, isOpen);
+
+  const conflictedEvents = useMemo(() => {
+    return getConflictedEvents({
+      startMs: Date.now() + Number(minutesOffset) * MS_IN_MINUTE,
+    });
+  }, [minutesOffset, getConflictedEvents]);
+
+  console.log(conflictedEvents);
 
   const { mutate: createEvent, isPending } = useMutation({
     mutationFn: () =>
@@ -72,7 +84,7 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
     setMessage(event.target.value);
   };
 
-  const handleOffestSelect = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleOffsetSelect = (event: ChangeEvent<HTMLInputElement>) => {
     setMinutesOffset(event.target.value);
   };
 
@@ -99,24 +111,47 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
         isPending
       }
       title={t('parkInvite.modal.title')}
+      className={styles.modal}
     >
-      <form className={styles.container}>
-        <RadioInputs
-          onOptionChange={handleOffestSelect}
-          options={OFFSET_OPTIONS}
-          name="offsetOptions"
-          label={t('parkInvite.modal.offset.label')}
-          value={minutesOffset}
-        />
-        <div>
-          <span>{t('parkInvite.modal.friends.title')}</span>
-          <ToggleInput
-            label={t('parkInvite.modal.visibility.title')}
-            value={visibility}
-            valueOn={ParkEventVisibility.FRIENDS_ALL}
-            valueOff={ParkEventVisibility.FRIENDS_SELECTED}
-            onChange={(newValue) => setVisibility(newValue)}
+      <form className={styles.form}>
+        <div className={styles.timeSection}>
+          <RadioInputs
+            onOptionChange={handleOffsetSelect}
+            options={OFFSET_OPTIONS}
+            name="offsetOptions"
+            label={t('parkInvite.modal.offset.label')}
+            value={minutesOffset}
           />
+
+          {!!conflictedEvents.length && (
+            <span className={styles.conflict}>
+              <Trans
+                i18nKey="parkInvite.modal.conflict"
+                components={{
+                  eventLink: (
+                    <Link
+                      to={`/profile/${userId}/events`}
+                      className={styles.conflictLink}
+                    />
+                  ),
+                }}
+              />
+            </span>
+          )}
+        </div>
+        <div className={styles.friendsSection}>
+          <div className={styles.sectionHeader}>
+            <span className={styles.sectionTitle}>
+              {t('parkInvite.modal.friends.title')}
+            </span>
+            <ToggleInput
+              label={t('parkInvite.modal.visibility.title')}
+              value={visibility}
+              valueOn={ParkEventVisibility.FRIENDS_ALL}
+              valueOff={ParkEventVisibility.FRIENDS_SELECTED}
+              onChange={(newValue) => setVisibility(newValue)}
+            />
+          </div>
           {visibility === ParkEventVisibility.FRIENDS_SELECTED &&
             !!friends?.length && (
               <SelectUsers
@@ -134,6 +169,7 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
           label={t('parkInvite.modal.message.label')}
           onChange={handleChangeMessage}
           maxLength={200}
+          className={styles.message}
         />
       </form>
     </FormModal>

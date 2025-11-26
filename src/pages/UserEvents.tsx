@@ -1,11 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { useQuery } from '@tanstack/react-query';
 import { useOutletContext } from 'react-router';
 import { CalendarHeart } from 'lucide-react';
-import {
-  fetchUserInvitedEvents,
-  fetchUserOrganizedEvents,
-} from '../services/events';
 import { User } from '../types/user';
 import {
   ParkEventBase,
@@ -17,21 +12,19 @@ import { Loader } from '../components/Loader';
 import { EventPreview } from '../components/event/EventPreview';
 import { EventInviteePreview } from '../components/event/EventInviteePreview';
 import styles from './UserEvents.module.scss';
+import { useUserInvitedEvents } from '../hooks/api/useUserInvitedEvents';
+import { useUserOrganizedEvents } from '../hooks/api/useUserOrganizedEvents';
 
 const UserEvents = () => {
   const { t } = useTranslation();
   const { user } = useOutletContext() as { user: User };
 
-  const { data: organizedEvents, isLoading: isLoadingOrganizedEvents } =
-    useQuery({
-      queryKey: ['events', 'organized', user.id],
-      queryFn: fetchUserOrganizedEvents,
-    });
-
-  const { data: invitedEvents, isLoading: isLoadingInvitedEvents } = useQuery({
-    queryKey: ['events', 'invited', user.id],
-    queryFn: fetchUserInvitedEvents,
-  });
+  const { invitedEvents, isLoadingInvitedEvents } = useUserInvitedEvents(
+    user.id
+  );
+  const { organizedEvents, isLoadingOrganizedEvents } = useUserOrganizedEvents(
+    user.id
+  );
 
   const { parkNamesMap, isLoading: isLoadingParks } = useParkNamesMap();
 

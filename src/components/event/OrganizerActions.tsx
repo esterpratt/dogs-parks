@@ -42,6 +42,7 @@ const OrganizerActions = (props: OrganizerActionsProps) => {
     showModal({
       title: t('event.cancel.title'),
       confirmText: t('event.cancel.modalBtnTxt'),
+      cancelText: t('event.cancel.modalCancelBtnTxt'),
       onConfirm: () => mutate(),
     });
   };

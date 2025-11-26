@@ -11,6 +11,7 @@ interface ConfirmModalProps {
   isPending?: boolean;
   title?: string;
   confirmationText?: string;
+  cancelText?: string;
 }
 
 const ConfirmModal = (props: ConfirmModalProps) => {
@@ -21,6 +22,7 @@ const ConfirmModal = (props: ConfirmModalProps) => {
     isPending,
     title,
     confirmationText,
+    cancelText,
   } = props;
   const { t } = useTranslation();
 
@@ -50,7 +52,7 @@ const ConfirmModal = (props: ConfirmModalProps) => {
           className={styles.modalButton}
           disabled={isPending}
         >
-          <span>{t('common.actions.cancel')}</span>
+          <span>{cancelText ?? t('common.actions.cancel')}</span>
         </Button>
       </div>
     </TopModal>

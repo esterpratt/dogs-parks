@@ -372,7 +372,8 @@
     },
     "cancel": {
       "title": "Are you sure you want to cancel the event?",
-      "modalBtnTxt": "Yes",
+      "modalBtnTxt": "Yes, cancel",
+      "modalCancelBtnTxt": "No, keep it",
       "buttonTxt": "Cancel event",
       "error": "Sorry, there was an error with the cancellation",
       "success": "The event was cancelled"
@@ -398,13 +399,12 @@
     "modal": {
       "title": "Invite friends to the park",
       "buttonText": "Send",
+      "conflict": "Are you Schrödinger's dog? You've got <eventLink>another event</eventLink> at this time!",
       "offset": {
-        "label": "When are you planning to go?"
-      },
-      "offest": {
-        "now": "Right now",
-        "min15": "In 15 minutes",
-        "min30": "In 30 minutes",
+        "label": "When are you planning to go?",
+        "now": "Now",
+        "min15": "In 15 min",
+        "min30": "In 30 min",
         "hour1": "In 1 hour"
       },
       "visibility": {
