@@ -13,8 +13,10 @@ import styles from './ParkInviteModal.module.scss';
 import { RadioInputs } from '../inputs/RadioInputs';
 import { queryClient } from '../../services/react-query';
 import { SelectUsers } from '../SelectUsers';
-import { MS_IN_MINUTE, useEventConflicts } from '../../hooks/useEventConflicts';
+import { useEventSlots } from '../../hooks/useEventConflicts';
 import { Link } from 'react-router';
+import { getConflictedEvents } from '../../utils/events';
+import { MS_IN_MINUTE } from '../../utils/consts';
 
 interface ParkInviteModalProps {
   parkId?: string;
@@ -44,13 +46,18 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
 
   const { friends } = useFetchFriends({ userId });
 
-  const { getConflictedEvents } = useEventConflicts(userId, isOpen);
+  const normalizedForConflictEvents = useEventSlots(userId, isOpen);
 
   const conflictedEvents = useMemo(() => {
+    if (!isOpen) {
+      return;
+    }
+
     return getConflictedEvents({
+      events: normalizedForConflictEvents,
       startMs: Date.now() + Number(minutesOffset) * MS_IN_MINUTE,
     });
-  }, [minutesOffset, getConflictedEvents]);
+  }, [minutesOffset, normalizedForConflictEvents, isOpen]);
 
   const { mutate: createEvent, isPending } = useMutation({
     mutationFn: () =>
@@ -121,7 +128,7 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
             value={minutesOffset}
           />
 
-          {!!conflictedEvents.length && (
+          {!!conflictedEvents?.length && (
             <span className={styles.conflict}>
               <Trans
                 i18nKey="parkInvite.modal.conflict"

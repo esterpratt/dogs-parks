@@ -45,5 +45,19 @@ interface Invitee {
   added_by: string;
 }
 
+interface EventConflictSlot {
+  id: string;
+  parkId: string;
+  type: 'organized' | 'invited';
+  startMs: number;
+  endMs: number;
+}
+
 export { ParkEventVisibility, ParkEventStatus, ParkEventInviteeStatus };
-export type { ParkEventBase, ParkEventInvite, Invitee, ParkEvent };
+export type {
+  ParkEventBase,
+  ParkEventInvite,
+  Invitee,
+  ParkEvent,
+  EventConflictSlot,
+};

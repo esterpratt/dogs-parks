@@ -4,31 +4,13 @@ import {
   fetchUserOrganizedEvents,
 } from '../services/events';
 import {
+  EventConflictSlot,
   ParkEvent,
   ParkEventInvite,
   ParkEventInviteeStatus,
   ParkEventStatus,
 } from '../types/parkEvent';
-import { useCallback, useMemo } from 'react';
-
-const MS_IN_MINUTE = 60000;
-
-interface HasConflictParams {
-  startMs: number;
-  durationMinutes?: number;
-}
-
-interface EventConflictSlot {
-  id: string;
-  parkId: string;
-  type: 'organized' | 'invited';
-  startMs: number;
-  endMs: number;
-}
-
-// interface UseEventConflictsResult {
-//   conflicetdEvent: EventConflictSlot[];
-// }
+import { useMemo } from 'react';
 
 const mapEventToSlot = (
   event: ParkEvent | ParkEventInvite,
@@ -45,7 +27,7 @@ const mapEventToSlot = (
   };
 };
 
-const useEventConflicts = (userId: string, isOpen: boolean) => {
+const useEventSlots = (userId: string, isOpen: boolean) => {
   const { data: organizedEvents } = useQuery({
     queryKey: ['events', 'organized', userId, 'conflict'],
     queryFn: fetchUserOrganizedEvents,
@@ -84,19 +66,7 @@ const useEventConflicts = (userId: string, isOpen: boolean) => {
     return [...(organizedEvents ?? []), ...(invitedEvents ?? [])];
   }, [organizedEvents, invitedEvents]);
 
-  const getConflictedEvents = useCallback(
-    (params: HasConflictParams) => {
-      const { startMs, durationMinutes = 60 } = params;
-      const endMs = startMs + durationMinutes * MS_IN_MINUTE;
-
-      return events.filter(
-        (event) => startMs < event.endMs && endMs > event.startMs
-      );
-    },
-    [events]
-  );
-
-  return { getConflictedEvents };
+  return events;
 };
 
-export { useEventConflicts, MS_IN_MINUTE };
+export { useEventSlots };
