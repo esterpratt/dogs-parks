@@ -13,7 +13,7 @@ import styles from './ParkInviteModal.module.scss';
 import { RadioInputs } from '../inputs/RadioInputs';
 import { queryClient } from '../../services/react-query';
 import { SelectUsers } from '../SelectUsers';
-import { useEventSlots } from '../../hooks/useEventConflicts';
+import { useEventSlots } from '../../hooks/useEventSlots';
 import { Link } from 'react-router';
 import { getConflictedEvents } from '../../utils/events';
 import { MS_IN_MINUTE } from '../../utils/consts';
