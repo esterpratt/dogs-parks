@@ -52,8 +52,6 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
     });
   }, [minutesOffset, getConflictedEvents]);
 
-  console.log(conflictedEvents);
-
   const { mutate: createEvent, isPending } = useMutation({
     mutationFn: () =>
       createParkEvent({
