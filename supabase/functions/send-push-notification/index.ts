@@ -340,11 +340,25 @@ function renderCopy(type: NotificationType, vars: { senderName?: string }) {
         appMessage: 'Click to respond',
       };
     }
-    case NotificationType.PARK_INVITE_RESPONSE: {
+    case NotificationType.PARK_INVITE_ACCEPT: {
       return {
-        title: `${who} responded to your invite`,
-        pushMessage: 'Open KlavHub to view the response',
-        appMessage: 'Click to view the response',
+        title: `${who} accepted your park event invitation`,
+        pushMessage: 'Open KlavHub to view the details',
+        appMessage: 'Click to view the details',
+      };
+    }
+    case NotificationType.PARK_INVITE_DECLINE: {
+      return {
+        title: `${who} declined your park event invitation`,
+        pushMessage: 'Open KlavHub to view the details',
+        appMessage: 'Click to view the details',
+      };
+    }
+    case NotificationType.PARK_INVITE_CANCELLED: {
+      return {
+        title: 'Park event invitation was cancelled',
+        pushMessage: 'Open KlavHub to view the details',
+        appMessage: 'Click to view the details',
       };
     }
     default: {
