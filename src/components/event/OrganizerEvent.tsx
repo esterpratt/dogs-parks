@@ -25,7 +25,9 @@ interface OrganizerEventProps {
 const OrganizerEvent = (props: OrganizerEventProps) => {
   const { event, invitees, parkName, parkImage, userId } = props;
   const { status, start_at, message } = event;
-  const { friends } = useFetchFriends({ userId });
+  const { friends, isLoadingFriends, isLoadingFriendshipMap } = useFetchFriends(
+    { userId }
+  );
 
   const [isFriendsModalOpen, setIsFriendsModalOpen] = useState(false);
 
@@ -57,6 +59,7 @@ const OrganizerEvent = (props: OrganizerEventProps) => {
         notInvitedFriends.push(friend);
       }
     });
+
     return {
       invitedFriends,
       goingFriends,
@@ -82,6 +85,7 @@ const OrganizerEvent = (props: OrganizerEventProps) => {
             message={message}
             invitedFriends={invitedFriends}
             goingFriends={goingFriends}
+            isLoadingFriends={isLoadingFriends || isLoadingFriendshipMap}
             onClickFriendsAddition={
               notInvitedFriends?.length
                 ? () => setIsFriendsModalOpen(true)

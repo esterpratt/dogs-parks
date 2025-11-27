@@ -24,7 +24,9 @@ const InvitedEvent = (props: InviteeEventProps) => {
   const { event, invitees, parkName, parkImage, userId } = props;
   const { start_at, creator_name, message } = event;
 
-  const { friends } = useFetchFriends({ userId });
+  const { friends, isLoadingFriends, isLoadingFriendshipMap } = useFetchFriends(
+    { userId }
+  );
 
   const { t } = useTranslation();
 
@@ -55,6 +57,7 @@ const InvitedEvent = (props: InviteeEventProps) => {
         }
       }
     });
+
     return {
       invitedFriends,
       goingFriends,
@@ -77,14 +80,15 @@ const InvitedEvent = (props: InviteeEventProps) => {
           userId={userId}
         />
       }
-        eventBody={
-          <EventBody
-            startAt={start_at}
-            organizedBy={creator_name}
-            message={message}
-            messageTitle={t('event.message.title')}
-            invitedFriends={invitedFriends}
-            goingFriends={goingFriends}
+      eventBody={
+        <EventBody
+          startAt={start_at}
+          organizedBy={creator_name}
+          message={message}
+          messageTitle={t('event.message.title')}
+          invitedFriends={invitedFriends}
+          goingFriends={goingFriends}
+          isLoadingFriends={isLoadingFriends || isLoadingFriendshipMap}
         />
       }
       eventActions={<InviteeActions eventId={event.id} userId={userId!} />}

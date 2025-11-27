@@ -47,7 +47,7 @@ const Event = () => {
     userId && eventData && userId === eventData.event.creator_id;
 
   if (isLoadingEvent || isLoadingPark || isLoadingImage) {
-    return <Loader />;
+    return <Loader style={{ paddingTop: '64px' }} />;
   }
 
   if (!userId) {
@@ -59,7 +59,7 @@ const Event = () => {
       {userIsOrganizer ? (
         <OrganizerEvent
           event={eventData.event}
-          invitees={eventData?.invitees}
+          invitees={eventData.invitees}
           parkName={park!.name}
           parkImage={parkImage!}
           userId={userId}
@@ -67,7 +67,7 @@ const Event = () => {
       ) : (
         <InvitedEvent
           event={eventData.event}
-          invitees={eventData?.invitees}
+          invitees={eventData.invitees}
           parkName={park!.name}
           parkImage={parkImage!}
           userId={userId!}

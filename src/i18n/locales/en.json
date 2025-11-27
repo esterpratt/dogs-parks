@@ -337,7 +337,7 @@
     "cancelled": "Cancelled",
     "declined": "Declined",
     "invitedBy": "Invited by <name>{{name}}</name>",
-    "noInvitees": "No other invited friends",
+    "noInvitees": "No other friends invited",
     "addFriends": "Add friends",
     "organizedBy": "Organized by",
     "location": "Location",

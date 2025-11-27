@@ -21,6 +21,7 @@ interface EventBodyProps {
   startAt: string;
   goingFriends: User[];
   invitedFriends: User[];
+  isLoadingFriends: boolean;
   friendsSelection?: ReactNode;
   organizedBy?: string | ReactNode;
   onClickFriendsAddition?: (() => void) | null;
@@ -35,6 +36,7 @@ const EventBody = (props: EventBodyProps) => {
     organizedBy,
     startAt,
     onClickFriendsAddition,
+    isLoadingFriends,
   } = props;
 
   const { t } = useTranslation();
@@ -96,28 +98,32 @@ const EventBody = (props: EventBodyProps) => {
         }
         title={t('event.friends')}
         contentCmp={
-          <div className={styles.friendsContent}>
-            {!goingFriends.length && !invitedFriends.length ? (
-              <span className={styles.noInvitees}>{t('event.noInvitees')}</span>
-            ) : (
-              <div className={styles.inviteesContainer}>
-                {!!goingFriends.length && (
-                  <InviteesList
-                    users={goingFriends}
-                    title={t('event.invitees.going')}
-                    variant="going"
-                  />
-                )}
-                {!!invitedFriends.length && (
-                  <InviteesList
-                    users={invitedFriends}
-                    title={t('event.invitees.invited')}
-                    variant="invited"
-                  />
-                )}
-              </div>
-            )}
-          </div>
+          !isLoadingFriends && (
+            <div className={styles.friendsContent}>
+              {!goingFriends.length && !invitedFriends.length ? (
+                <span className={styles.noInvitees}>
+                  {t('event.noInvitees')}
+                </span>
+              ) : (
+                <div className={styles.inviteesContainer}>
+                  {!!goingFriends.length && (
+                    <InviteesList
+                      users={goingFriends}
+                      title={t('event.invitees.going')}
+                      variant="going"
+                    />
+                  )}
+                  {!!invitedFriends.length && (
+                    <InviteesList
+                      users={invitedFriends}
+                      title={t('event.invitees.invited')}
+                      variant="invited"
+                    />
+                  )}
+                </div>
+              )}
+            </div>
+          )
         }
       />
       {!!message && (
@@ -129,7 +135,9 @@ const EventBody = (props: EventBodyProps) => {
                 <MessageCircle size={12} className={styles.messageTitleIcon} />
                 <span className={styles.messageTitle}>{messageTitle}</span>
               </div>
-              <span className={styles.messageContent}>{message}</span>
+              <p dir="auto" className={styles.messageContent}>
+                {message}
+              </p>
             </div>
           }
         />
