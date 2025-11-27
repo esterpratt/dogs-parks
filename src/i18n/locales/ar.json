@@ -297,9 +297,13 @@
         "title": "{{name}} دعاك للحديقة",
         "appMessage": "اضغط للرد"
       },
-      "parkInviteResponse": {
-        "title": "{{name}} رد على دعوتك",
-        "appMessage": "اضغط لمشاهدة الرد"
+      "parkInviteAccept": {
+        "title": "{{name}} قبل دعوتك لفعالية في الحديقة",
+        "appMessage": "اضغط لعرض التفاصيل"
+      },
+      "parkInviteDecline": {
+        "title": "{{name}} رفض دعوتك لفعالية في الحديقة",
+        "appMessage": "اضغط لعرض التفاصيل"
       },
       "parkInviteCancelled": {
         "title": "تم إلغاء دعوة الحديقة",

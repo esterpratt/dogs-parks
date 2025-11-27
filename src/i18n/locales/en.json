@@ -294,12 +294,16 @@
         "title": "{{name}} invited you to a park",
         "appMessage": "Click to respond"
       },
-      "parkInviteResponse": {
-        "title": "{{name}} responded to your invite",
-        "appMessage": "Click to view the response"
+      "parkInviteAccept": {
+        "title": "{{name}} accepted your park event invitation",
+        "appMessage": "Click to view details"
+      },
+      "parkInviteDecline": {
+        "title": "{{name}} declined your park event invitation",
+        "appMessage": "Click to view details"
       },
       "parkInviteCancelled": {
-        "title": "Park invitation was cancelled",
+        "title": "Park event was cancelled",
         "appMessage": "Click to view details"
       }
     },

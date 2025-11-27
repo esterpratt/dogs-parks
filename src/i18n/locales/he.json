@@ -296,12 +296,16 @@
         "title": "{{name}} הזמין/ה אותך לגינה",
         "appMessage": "לחץ/י כדי להגיב"
       },
-      "parkInviteResponse": {
-        "title": "{{name}} הגיב/ה להזמנה שלך",
-        "appMessage": "לחץ/י כדי לצפות בתגובה"
+      "parkInviteAccept": {
+        "title": "{{name}} קיבל/ה את הזמנתך לאירוע",
+        "appMessage": "לחץ/י כדי לראות פרטים"
+      },
+      "parkInviteDecline": {
+        "title": "{{name}} דחה/תה את הזמנך לאירוע",
+        "appMessage": "לחץ/י כדי לראות פרטים"
       },
       "parkInviteCancelled": {
-        "title": "הזמנה לפארק בוטלה",
+        "title": "הזמנה לאירוע בפארק בוטלה",
         "appMessage": "לחץ/י כדי לראות פרטים"
       }
     },

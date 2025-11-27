@@ -27,9 +27,13 @@ const typeKeyMap: Record<string, { title: string; appMessage: string }> = {
     title: 'notifications.types.parkInvite.title',
     appMessage: 'notifications.types.parkInvite.appMessage',
   },
-  PARK_INVITE_RESPONSE: {
-    title: 'notifications.types.parkInviteResponse.title',
-    appMessage: 'notifications.types.parkInviteResponse.appMessage',
+  PARK_INVITE_ACCEPT: {
+    title: 'notifications.types.parkInviteAccept.title',
+    appMessage: 'notifications.types.parkInviteAccept.appMessage',
+  },
+  PARK_INVITE_DECLINE: {
+    title: 'notifications.types.parkInviteDecline.title',
+    appMessage: 'notifications.types.parkInviteDecline.appMessage',
   },
   PARK_INVITE_CANCELLED: {
     title: 'notifications.types.parkInviteCancelled.title',
