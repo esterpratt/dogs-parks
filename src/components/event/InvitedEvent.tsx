@@ -11,6 +11,8 @@ import { EventHeader } from './EventHeader';
 import { EventBody } from './EventBody';
 import { EventDetails } from './EventDetails';
 import { InviteeActions } from './InviteeActions';
+import { fetchInvitee } from '../../services/events';
+import { useQuery } from '@tanstack/react-query';
 
 interface InviteeEventProps {
   event: ParkEvent;
@@ -30,9 +32,12 @@ const InvitedEvent = (props: InviteeEventProps) => {
 
   const { t } = useTranslation();
 
-  const userInvitationStatus = invitees.find(
-    (invitee) => invitee.user_id === userId
-  )?.status;
+  const { data: invitee, isLoading: isLoadingInvitee } = useQuery({
+    queryKey: ['event-invitee', event.id, userId],
+    queryFn: () => fetchInvitee({ userId, eventId: event.id }),
+  });
+
+  const inviteeStatus = invitee?.status;
 
   const { invitedFriends, goingFriends } = useMemo(() => {
     const invitedFriends: User[] = [];
@@ -69,9 +74,9 @@ const InvitedEvent = (props: InviteeEventProps) => {
       eventHeader={
         <EventHeader
           title={
-            userInvitationStatus === ParkEventInviteeStatus.ACCEPTED
+            inviteeStatus === ParkEventInviteeStatus.ACCEPTED
               ? t('event.title.going')
-              : userInvitationStatus === ParkEventInviteeStatus.INVITED
+              : inviteeStatus === ParkEventInviteeStatus.INVITED
                 ? t('event.title.invited')
                 : null
           }
@@ -91,7 +96,15 @@ const InvitedEvent = (props: InviteeEventProps) => {
           isLoadingFriends={isLoadingFriends || isLoadingFriendshipMap}
         />
       }
-      eventActions={<InviteeActions eventId={event.id} userId={userId!} />}
+      eventActions={
+        !isLoadingInvitee && (
+          <InviteeActions
+            status={inviteeStatus}
+            eventId={event.id}
+            userId={userId!}
+          />
+        )
+      }
     />
   );
 };

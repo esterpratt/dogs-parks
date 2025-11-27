@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useNotification } from '../../context/NotificationContext';
 
 interface UseUpdateInviteeParams {
+  eventId: string;
   userId: string;
   onSettledDecline?:
     | ((
@@ -18,7 +19,7 @@ interface UseUpdateInviteeParams {
 }
 
 const useUpdateInvitee = (params: UseUpdateInviteeParams) => {
-  const { userId, onSettledDecline } = params;
+  const { eventId, userId, onSettledDecline } = params;
   const { t } = useTranslation();
   const { notify } = useNotification();
 
@@ -35,7 +36,7 @@ const useUpdateInvitee = (params: UseUpdateInviteeParams) => {
     onSuccess: () => {
       notify(t('event.invitee.accept.success'));
       queryClient.invalidateQueries({
-        queryKey: ['event-invitee', userId],
+        queryKey: ['event-invitee', eventId, userId],
       });
       queryClient.invalidateQueries({
         queryKey: ['events', 'invited', userId],
@@ -56,7 +57,7 @@ const useUpdateInvitee = (params: UseUpdateInviteeParams) => {
     onSuccess: () => {
       notify(t('event.invitee.decline.success'));
       queryClient.invalidateQueries({
-        queryKey: ['event-invitee', userId],
+        queryKey: ['event-invitee', eventId, userId],
       });
       queryClient.invalidateQueries({
         queryKey: ['events', 'invited', userId],

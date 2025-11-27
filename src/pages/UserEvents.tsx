@@ -8,12 +8,12 @@ import {
   ParkEventStatus,
 } from '../types/parkEvent';
 import { useParkNamesMap } from '../hooks/useParkNameMap';
+import { useUserInvitedEvents } from '../hooks/api/useUserInvitedEvents';
+import { useUserOrganizedEvents } from '../hooks/api/useUserOrganizedEvents';
 import { Loader } from '../components/Loader';
 import { EventPreview } from '../components/event/EventPreview';
 import { EventInviteePreview } from '../components/event/EventInviteePreview';
 import styles from './UserEvents.module.scss';
-import { useUserInvitedEvents } from '../hooks/api/useUserInvitedEvents';
-import { useUserOrganizedEvents } from '../hooks/api/useUserOrganizedEvents';
 
 const UserEvents = () => {
   const { t } = useTranslation();

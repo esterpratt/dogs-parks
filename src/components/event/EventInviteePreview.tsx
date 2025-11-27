@@ -26,8 +26,10 @@ const EventInviteePreview: React.FC<EventPreviewProps> = (
   const { my_invite_status, my_invite_added_by_name } = event;
   const { t } = useTranslation();
   const { showModal } = useConfirm();
+
   const { handleUpdateInvitee, isPendingAccept, isPendingDecline } =
     useUpdateInvitee({
+      eventId: event.id,
       userId,
     });
 

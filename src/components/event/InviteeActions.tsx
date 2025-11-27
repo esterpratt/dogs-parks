@@ -1,15 +1,16 @@
 import { ParkEventInviteeStatus } from '../../types/parkEvent';
 import { Button } from '../Button';
-import { useQuery } from '@tanstack/react-query';
-import { fetchInvitee } from '../../services/events';
 import { useTranslation } from 'react-i18next';
 import { Loader } from '../Loader';
 import { useUpdateInvitee } from '../../hooks/api/useUpdateInvitee';
-import styles from './InviteeActions.module.scss';
 import { useConfirm } from '../../context/ConfirmModalContext';
 import { Check, X } from 'lucide-react';
+import { useNavigate } from 'react-router';
+import { useCallback } from 'react';
+import styles from './InviteeActions.module.scss';
 
 interface InviteeActionsProps {
+  status: ParkEventInviteeStatus;
   eventId: string;
   userId: string;
 }
@@ -17,21 +18,22 @@ interface InviteeActionsProps {
 const InviteeActions: React.FC<InviteeActionsProps> = (
   props: InviteeActionsProps
 ) => {
-  const { eventId, userId } = props;
+  const { eventId, userId, status } = props;
   const { t } = useTranslation();
   const { showModal } = useConfirm();
+  const navigate = useNavigate();
 
-  const { data: invitee, isLoading } = useQuery({
-    queryKey: ['event-invitee', userId],
-    queryFn: () => fetchInvitee({ userId, eventId }),
-  });
+  const onSettledDecline = useCallback(() => {
+    navigate(`/profile/${userId}/events`);
+  }, [userId, navigate]);
 
   const { handleUpdateInvitee, isPendingAccept } = useUpdateInvitee({
+    eventId,
     userId,
+    onSettledDecline,
   });
 
   const handleOpenConfirmModal = () => {
-    console.log('should open');
     showModal({
       title: t('event.invitee.decline.title'),
       confirmText: t('event.invitee.decline.button'),
@@ -43,9 +45,9 @@ const InviteeActions: React.FC<InviteeActionsProps> = (
     });
   };
 
-  const isInvited = invitee?.status === ParkEventInviteeStatus.INVITED;
-  const isDeclined = invitee?.status === ParkEventInviteeStatus.DECLINED;
-  const isRemoved = invitee?.status === ParkEventInviteeStatus.REMOVED;
+  const isInvited = status === ParkEventInviteeStatus.INVITED;
+  const isDeclined = status === ParkEventInviteeStatus.DECLINED;
+  const isRemoved = status === ParkEventInviteeStatus.REMOVED;
 
   if (isRemoved || isDeclined) {
     return null;
@@ -55,7 +57,7 @@ const InviteeActions: React.FC<InviteeActionsProps> = (
     <div className={styles.container}>
       {isInvited && (
         <Button
-          disabled={isLoading || isPendingAccept}
+          disabled={isPendingAccept}
           onClick={() =>
             handleUpdateInvitee({
               eventId,
@@ -74,7 +76,7 @@ const InviteeActions: React.FC<InviteeActionsProps> = (
         </Button>
       )}
       <Button
-        disabled={isLoading || isPendingAccept}
+        disabled={isPendingAccept}
         variant="secondary"
         onClick={handleOpenConfirmModal}
       >
