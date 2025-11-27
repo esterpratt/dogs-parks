@@ -336,7 +336,7 @@ function renderCopy(type: NotificationType, vars: { senderName?: string }) {
     case NotificationType.PARK_INVITE: {
       return {
         title: `${who} invited you to a park`,
-        pushMessage: 'See the details in KlavHub',
+        pushMessage: 'Open KlavHub to respond',
         appMessage: 'Click to respond',
       };
     }
