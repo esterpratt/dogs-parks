@@ -25,6 +25,10 @@
   .conflict-link {
     color: $pink;
   }
+
+  :global(.dark) & {
+    color: $red;
+  }
 }
 
 .friends-section {

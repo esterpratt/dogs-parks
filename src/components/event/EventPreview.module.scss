@@ -68,8 +68,8 @@
 
   &.is-cancelled {
     > :first-child {
-      filter: blur(0.5px) brightness(0.98);
-      opacity: 0.95;
+      filter: blur(0.5px);
+      opacity: 0.65;
     }
   }
 }
@@ -77,8 +77,8 @@
 .state-overlay {
   position: absolute;
   z-index: 2;
-  top: -16px;
-  right: 14px;
+  top: -10px;
+  right: 12px;
   pointer-events: none;
 }
 
@@ -87,7 +87,7 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  align-items: end;
+  align-items: center;
   font-size: 14px;
   padding: 4px 8px;
   border-radius: 8px;
