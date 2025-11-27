@@ -10,6 +10,7 @@ export const routePreloadMap: Record<
   userFriends: () => import('../pages/UserFriends'),
   userFavorites: () => import('../pages/UserFavorites'),
   userReviews: () => import('../pages/UserReviews'),
+  userEvents: () => import('../pages/UserEvents'),
   userSettings: () => import('../pages/Settings'),
   parkReviews: () => import('../pages/ParkReviews'),
   parkVisitors: () => import('../pages/ParkVisitors'),

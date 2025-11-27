@@ -19,6 +19,11 @@ import { usePrefetchFriendsWithDogs } from '../hooks/api/usePrefetchFriendsWithD
 import { fetchDogPrimaryImage } from '../services/dogs';
 import { Dog } from '../types/dog';
 import { Trans, useTranslation } from 'react-i18next';
+import {
+  fetchUserInvitedEvents,
+  fetchUserOrganizedEvents,
+} from '../services/events';
+import { ONE_MINUTE } from '../utils/consts';
 
 const Profile: React.FC = () => {
   const { user, dogs } = useLoaderData();
@@ -48,18 +53,31 @@ const Profile: React.FC = () => {
     isSignedInUser,
   });
 
-  // prefetch friends and favorites requests
+  // prefetch user requests
   usePrefetchRoutesOnIdle([
     'dog',
     'userFriends',
     'userFavorites',
     'userReviews',
+    'userEvents',
     'userSettings',
   ]);
 
   useQuery({
     queryKey: ['favorites', user.id],
     queryFn: async () => fetchUserFavorites(user.id),
+  });
+
+  useQuery({
+    queryKey: ['events', 'invited', user.id, 'list'],
+    queryFn: fetchUserInvitedEvents,
+    staleTime: ONE_MINUTE,
+  });
+
+  useQuery({
+    queryKey: ['events', 'organized', user.id, 'list'],
+    queryFn: fetchUserOrganizedEvents,
+    staleTime: ONE_MINUTE,
   });
 
   usePrefetchFriendsWithDogs({
