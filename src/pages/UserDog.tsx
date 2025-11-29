@@ -26,7 +26,7 @@ import { CameraModal } from '../components/camera/CameraModal';
 import styles from './UserDog.module.scss';
 import { capitalizeText } from '../utils/text';
 import { useUploadImage } from '../hooks/api/useUploadImage';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 const UserDog = () => {
   const { dogId } = useParams();
@@ -115,14 +115,21 @@ const UserDog = () => {
               {isSignedInUser ? (
                 <span>{t('userDogs.titleMyPack')}</span>
               ) : (
-                <span className={styles.userName}>
-                  {t('userDogs.titleUsersPack', { name: userName })}
+                <span>
+                  <Trans
+                    i18nKey="userDogs.titleUsersPack"
+                    values={{ name: userName }}
+                    components={{
+                      name: <span className={styles.name} />,
+                    }}
+                  />
                 </span>
               )}
             </Link>
           }
           imgCmp={
             <HeaderImage
+              size={136}
               imgSrc={primaryImage}
               onClickImg={onClickImage}
               NoImgIcon={DogIcon}
@@ -132,7 +139,6 @@ const UserDog = () => {
               isLoading={isPending}
             />
           }
-          imgsClassName={styles.imgContainer}
           bottomCmp={
             <>
               <div className={styles.details}>

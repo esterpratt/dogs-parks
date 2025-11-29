@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { CalendarPlus } from 'lucide-react';
+import { ParkInviteModal } from './ParkInviteModal';
 import { ParkIcon } from './ParkIcon';
 import styles from './ParkCheckIn.module.scss';
-import { useTranslation } from 'react-i18next';
-import { ParkInviteModal } from './ParkInviteModal';
 
 interface ParkInviteProps {
   parkId: string;
@@ -12,7 +11,6 @@ interface ParkInviteProps {
 
 const ParkInvite = (props: ParkInviteProps) => {
   const { parkId, userId } = props;
-  const { t } = useTranslation();
   const [openInviteModal, setOpenInviteModal] = useState(false);
 
   return (
@@ -21,7 +19,6 @@ const ParkInvite = (props: ParkInviteProps) => {
         IconCmp={CalendarPlus}
         iconColor={styles.pink}
         onClick={() => setOpenInviteModal(true)}
-        textCmp={<span>{t('parkInvite.buttonTxt')}</span>}
       />
       <ParkInviteModal
         parkId={parkId}

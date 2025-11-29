@@ -2,23 +2,38 @@
 
 .button.button {
   display: flex;
-  gap: 4px;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  padding: 6px;
-  font-size: 11px;
-  border-radius: 4px;
+  justify-content: center;
+  padding: 0;
+  border-radius: 8px;
+  border: none;
+  background-color: transparent;
   box-shadow: $box-shadow;
-  border: 1px solid var(--icon-color);
-  background-color: var(--icon-bgcolor);
-  width: 96px;
 
-  svg {
-    fill: $white;
-    stroke: var(--icon-color);
+  .iconWrapper {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background-color: var(--icon-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: $white;
+    }
   }
 }
 
 :export {
   pink: $pink;
+  green: $green;
+  blue: $blue;
+  orange: $orange;
+  red: $red;
+  grey: $grey-bold;
 }

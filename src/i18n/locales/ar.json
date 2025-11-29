@@ -8,11 +8,11 @@
   },
   "userDogs": {
     "titleMyPack": "قطيعي",
-    "titleUsersPack": "قطيع {{name}}",
+    "titleUsersPack": "قطيع <name>{{name}}</name>",
     "addDog": "إضافة كلب",
     "emptySignedIn1": "قطيعك فارغ",
     "emptySignedIn2": "حان الوقت لإضافة بعض الأصدقاء ذوي الأرجل الأربع!",
-    "otherEmpty": "قطيع {{name}} فارغ",
+    "otherEmpty": "قطيع <name>{{name}}</name> فارغ",
     "cameraModalTitle": "إضافة صورة"
   },
   "deleteAccount": {

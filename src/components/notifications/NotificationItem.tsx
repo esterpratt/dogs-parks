@@ -53,6 +53,20 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
           });
         },
       };
+    case NotificationType.PARK_INVITE:
+      return {
+        icon: Heart,
+        iconStyle: styles.friendApproval,
+        getUrl: (notification) => `/profile/${notification.sender_id}`,
+        invalidateQueries: (userId) => {
+          queryClient.invalidateQueries({
+            queryKey: ['friendsWithDogs', userId],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ['friendshipMap', userId],
+          });
+        },
+      };
     default:
       return {
         icon: Heart,
@@ -129,8 +143,8 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
           <IconComponent size={24} />
         </div>
         <div className={styles.content}>
-          <div className={styles.userNameRow}>
-            <div className={styles.userName}>{title}</div>
+          <div className={styles.titleRow}>
+            <div className={styles.title}>{title}</div>
           </div>
           <div className={styles.message}>{appMessage}</div>
           <div className={styles.timestamp}>

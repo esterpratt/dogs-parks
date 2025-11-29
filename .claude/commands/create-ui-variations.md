@@ -17,7 +17,7 @@ This is a React dog-parks application with the following technology stack:
 
 - **UI Framework**: React components with scss modules
 - **Design System**: Playful, fun, simple
-- **Responsiveness**: Only consider mobile sizes. Consider portrait and landscape.
+- **Responsiveness**: Only consider mobile design sizes. Consider portrait and landscape. Do not consider hover states.
 - **Colorful Gradient**: The colors are set in the theme.scss and variables.scss files. Main theme colors from the theme variables are the blue, pink, and green colors. Orange is also used sometimes. Red is mainly for warnings.
 
 ### Important Notes

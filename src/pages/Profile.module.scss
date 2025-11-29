@@ -1,40 +1,13 @@
 @use '../variables' as *;
 
 $small-height: 188px;
-$imgs-small-top: 72px;
-$medium-height: 268px;
-$imgs-medium-top: 96px;
+$medium-height: 262px;
 
 .profile-container {
   margin-top: $page-top-padding;
   max-height: $content-max-height;
   overflow: hidden;
   height: 100%;
-
-  .header {
-    &.small {
-      height: $small-height;
-      background-size:
-        100% $imgs-small-top,
-        100% 116px;
-    }
-
-    &.medium {
-      height: $medium-height;
-      background-size:
-        100% $imgs-medium-top,
-        100% 172px;
-    }
-  }
-
-  .imgs-container {
-    &.small {
-      top: $imgs-small-top;
-    }
-    &.medium {
-      top: $imgs-medium-top;
-    }
-  }
 }
 
 .container {
@@ -58,9 +31,19 @@ $imgs-medium-top: 96px;
 }
 
 .img {
+  width: var(--img-size);
+
   &:not(:first-child) {
     z-index: 1;
     margin-inline-start: -20px;
+  }
+
+  &:nth-child(odd):not(:only-child) {
+    transform: rotate(4deg);
+  }
+
+  &:nth-child(even):not(:only-child) {
+    transform: rotate(-4deg);
   }
 }
 

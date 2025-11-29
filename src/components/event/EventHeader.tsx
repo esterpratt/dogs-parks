@@ -26,10 +26,10 @@ const EventHeader: React.FC<EventHeaderProps> = (props: EventHeaderProps) => {
           <span>{t('event.breadcrumb.events')}</span>
         </Link>
       }
-      size="small"
+      size="medium"
       imgCmp={
         <div className={styles.imageContainer}>
-          <HeaderImage size={128} imgSrc={parkImage} />
+          <HeaderImage size={124} imgSrc={parkImage} />
           <EventImageOverlay size={40} />
         </div>
       }

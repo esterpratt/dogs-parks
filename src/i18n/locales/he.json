@@ -7,11 +7,11 @@
   },
   "userDogs": {
     "titleMyPack": "החבורה שלי",
-    "titleUsersPack": "החבורה של {{name}}",
+    "titleUsersPack": "החבורה של <name>{{name}}</name>",
     "addDog": "הוספת כלב",
     "emptySignedIn1": "החבורה שלך ריקה",
     "emptySignedIn2": "זה הזמן לצרף כמה חברים על 4!",
-    "otherEmpty": "החבורה של {{name}} ריקה",
+    "otherEmpty": "החבורה של <name>{{name}}</name> ריקה",
     "cameraModalTitle": "הוספת תמונה"
   },
   "deleteAccount": {

@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import styles from './Header.module.scss';
 
 interface HeaderProps {
-  size?: 'small' | 'medium' | 'large';
+  size?: 'small' | 'medium' | 'large' | 'xlarge';
   containerClassName?: string;
   bottomClassName?: string;
   imgsClassName?: string;
@@ -15,7 +15,7 @@ interface HeaderProps {
 
 const Header = (props: HeaderProps) => {
   const {
-    size = 'medium',
+    size = 'large',
     imgCmp,
     bottomCmp,
     prevLinksCmp,

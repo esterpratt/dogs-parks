@@ -38,16 +38,20 @@
   height: 100%;
 }
 
-.user-name-row {
+.title-row {
   display: flex;
   justify-content: flex-start;
   align-items: center;
 }
 
-.user-name {
+.title {
   font-size: 14px;
   color: var(--color-text);
   text-align: start;
+
+  &::first-letter {
+    text-transform: capitalize;
+  }
 }
 
 .message {

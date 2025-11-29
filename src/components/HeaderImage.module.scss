@@ -1,13 +1,14 @@
 @use '../variables.scss' as *;
 
 .img-container {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: var(--img-size);
+  width: calc(var(--img-size) * 1.5);
   height: var(--img-size);
   border: 2px solid $white;
-  border-radius: 50%;
+  border-radius: 12px;
   background-color: var(--background-color);
 
   .edit-photo-icon {
@@ -18,8 +19,9 @@
     justify-content: center;
     border: 1px solid $pink;
     position: absolute;
-    top: 2px;
-    inset-inline-end: 4px;
+    top: 0;
+    inset-inline-end: -10px;
+    transform: translateY(-36%);
     padding: 0;
     box-shadow: $box-shadow;
   }
@@ -29,7 +31,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 50%;
+  border-radius: 12px;
   background-color: $white;
   box-shadow: var(--box-shadow);
   display: flex;
@@ -41,7 +43,7 @@
   border: 1px solid var(--color-grey-light);
   width: 100%;
   height: 100%;
-  border-radius: 50%;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;

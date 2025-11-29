@@ -7,11 +7,11 @@
   },
   "userDogs": {
     "titleMyPack": "My pack",
-    "titleUsersPack": "{{name}}'s pack",
+    "titleUsersPack": "<name>{{name}}</name>'s pack",
     "addDog": "Add dog",
     "emptySignedIn1": "Your dog squad is looking pretty empty.",
     "emptySignedIn2": "Time to recruit some furry friends!",
-    "otherEmpty": "{{name}}'s pack seems to be empty",
+    "otherEmpty": "<name>{{name}}</name>'s pack seems to be empty",
     "cameraModalTitle": "Add your dog image"
   },
   "deleteAccount": {
