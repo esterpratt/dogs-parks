@@ -26,14 +26,10 @@
   flex-shrink: 0;
   background-image: var(--gradient);
   background-repeat: no-repeat;
-  background-position: top, bottom;
-  border-bottom: 1px solid var(--color-grey-light);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 
   &.small {
     height: 188px;
-    background-size:
-      100% 72px,
-      100% 116px;
 
     .imgs-container {
       top: 72px;
@@ -42,9 +38,6 @@
 
   &.medium {
     height: 216px;
-    background-size:
-      100% 94px,
-      100% 122px;
 
     .imgs-container {
       top: 94px;
@@ -53,9 +46,6 @@
 
   &.large {
     height: 250px;
-    background-size:
-      100% 110px,
-      100% 140px;
 
     .imgs-container {
       top: 110px;
@@ -64,9 +54,6 @@
 
   &.xlarge {
     height: 262px;
-    background-size:
-      100% 94px,
-      100% 168px;
 
     .imgs-container {
       top: 94px;
@@ -101,6 +88,10 @@
   a {
     flex-direction: row-reverse;
   }
+}
+
+:global(body.dark) .header {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
 @media (orientation: landscape) {
