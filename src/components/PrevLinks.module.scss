@@ -1,0 +1,42 @@
+@use '../variables' as *;
+
+.prev-links {
+  position: fixed;
+  top: 0;
+  background-color: var(--background-color);
+  display: flex;
+  justify-content: flex-start;
+  padding: $page-top-padding calc(12px + var(--safe-area-inset-right)) 6px
+    calc(12px + var(--safe-area-inset-left));
+  width: 100%;
+  z-index: 500;
+
+  &.space-between {
+    justify-content: space-between;
+  }
+
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    color: $pink;
+    font-size: 14px;
+
+    &.reverse {
+      flex-direction: row-reverse;
+    }
+  }
+}
+
+:global(.rtl) .prev-links {
+  flex-direction: row-reverse;
+
+  a {
+    flex-direction: row-reverse;
+
+    &.reverse {
+      flex-direction: row;
+    }
+  }
+}

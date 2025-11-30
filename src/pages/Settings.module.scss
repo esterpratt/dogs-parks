@@ -16,26 +16,6 @@
   align-items: center;
 }
 
-.prev-links {
-  position: fixed;
-  top: 0;
-  z-index: 100;
-  padding: $page-top-padding 4px 8px;
-  background-color: var(--background-color);
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-
-  a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    color: $pink;
-    font-size: 14px;
-  }
-}
-
 .title {
   font-size: $title-font-size;
 }
@@ -91,14 +71,6 @@
   .container {
     height: unset;
     padding-bottom: 16px;
-  }
-}
-
-:global(.rtl) .prev-links {
-  justify-content: flex-end;
-
-  a {
-    flex-direction: row-reverse;
   }
 }
 

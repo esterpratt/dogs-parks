@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import {
   MapPin,
@@ -23,6 +22,7 @@ import { useUploadImage } from '../../hooks/api/useUploadImage';
 import { useFetchFriends } from '../../hooks/api/useFetchFriends';
 import { Header } from '../Header';
 import { HeaderImage } from '../HeaderImage';
+import { PrevLinks } from '../PrevLinks';
 import { CameraModal } from '../camera/CameraModal';
 import { EnlargeImageModal } from '../EnlargeImageModal';
 import { ReviewsPreview } from './ReviewsPreview';
@@ -94,16 +94,21 @@ const ParkHeader = (props: ParkHeaderProps) => {
         containerClassName={styles.header}
         imgsClassName={styles.imageWithButtons}
         prevLinksCmp={
-          <>
-            <Link to="/parks">
-              <MoveLeft size={16} />
-              <span>{t('parks.breadcrumb.all')}</span>
-            </Link>
-            <Link to="/" state={{ location: park!.location }}>
-              <span>{t('parks.preview.seeOnMap')}</span>
-              <MoveRight size={16} />
-            </Link>
-          </>
+          <PrevLinks
+            links={[
+              {
+                to: '/parks',
+                icon: <MoveLeft size={16} />,
+                text: t('parks.breadcrumb.all'),
+              },
+              {
+                to: '/',
+                icon: <MoveRight size={16} />,
+                text: t('parks.preview.seeOnMap'),
+                state: { location: park!.location },
+              },
+            ]}
+          />
         }
         imgCmp={
           <>

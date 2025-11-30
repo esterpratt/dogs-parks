@@ -1,8 +1,8 @@
-import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { MoveLeft, MapPin } from 'lucide-react';
 import { Header } from '../Header';
 import { HeaderImage } from '../HeaderImage';
+import { PrevLinks } from '../PrevLinks';
 import { EventImageOverlay } from './EventImageOverlay';
 import styles from './EventHeader.module.scss';
 
@@ -21,10 +21,13 @@ const EventHeader: React.FC<EventHeaderProps> = (props: EventHeaderProps) => {
   return (
     <Header
       prevLinksCmp={
-        <Link to={`/profile/${userId}/events`}>
-          <MoveLeft size={16} />
-          <span>{t('event.breadcrumb.events')}</span>
-        </Link>
+        <PrevLinks
+          links={{
+            to: `/profile/${userId}/events`,
+            icon: <MoveLeft size={16} />,
+            text: t('event.breadcrumb.events'),
+          }}
+        />
       }
       size="medium"
       imgCmp={

@@ -1,26 +1,5 @@
 @use '../variables' as *;
 
-.prev-links {
-  position: fixed;
-  top: 0;
-  background-color: var(--background-color);
-  display: flex;
-  justify-content: space-between;
-  padding: $page-top-padding calc(12px + var(--safe-area-inset-right)) 6px
-    calc(12px + var(--safe-area-inset-left));
-  width: 100%;
-  z-index: 500;
-
-  a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    color: $pink;
-    font-size: 14px;
-  }
-}
-
 .header {
   position: relative;
   flex-shrink: 0;
@@ -80,14 +59,6 @@
   gap: 12px;
   align-items: center;
   width: 100%;
-}
-
-:global(.rtl) .prev-links {
-  flex-direction: row-reverse;
-
-  a {
-    flex-direction: row-reverse;
-  }
 }
 
 :global(body.dark) .header {

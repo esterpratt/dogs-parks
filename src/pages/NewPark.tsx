@@ -2,16 +2,17 @@ import { ChangeEvent, useContext, useState } from 'react';
 import classnames from 'classnames';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
+import { MoveLeft, Plus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { LeafletMouseEvent } from 'leaflet';
 import { Location, NewParkDetails } from '../types/park';
-import { Button } from '../components/Button';
-import { LocationInput } from '../components/inputs/LocationInput';
 import { createParkSuggestion } from '../services/park-suggestions';
 import { UserContext } from '../context/UserContext';
+import { Button } from '../components/Button';
+import { LocationInput } from '../components/inputs/LocationInput';
 import { Input } from '../components/inputs/Input';
-import { MoveLeft, Plus } from 'lucide-react';
 import { TopModal } from '../components/modals/TopModal';
-import { useTranslation } from 'react-i18next';
+import { PrevLinks } from '../components/PrevLinks';
 import styles from './NewPark.module.scss';
 
 const NewPark: React.FC = () => {
@@ -97,12 +98,13 @@ const NewPark: React.FC = () => {
 
   return (
     <>
-      <div className={styles.prevLinks}>
-        <Link to="/parks">
-          <MoveLeft size={16} />
-          <span>{t('newPark.breadcrumbAllParks')}</span>
-        </Link>
-      </div>
+      <PrevLinks
+        links={{
+          to: '/parks',
+          icon: <MoveLeft size={16} />,
+          text: t('newPark.breadcrumbAllParks'),
+        }}
+      />
       <div className={styles.container}>
         <div className={styles.contentContainer}>
           <div className={styles.title}>{t('newPark.fillDetailsTitle')}</div>

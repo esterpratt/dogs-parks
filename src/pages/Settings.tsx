@@ -1,13 +1,14 @@
 import { useContext, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { UserContext } from '../context/UserContext';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { LogOut, MoveLeft, Pencil, Trash2, X } from 'lucide-react';
+import { UserContext } from '../context/UserContext';
 import { Button } from '../components/Button';
 import { EditUserModal } from '../components/profile/EditUserModal';
 import { TopModal } from '../components/modals/TopModal';
 import { ThemeToggle } from '../components/profile/ThemeToggle';
+import { PrevLinks } from '../components/PrevLinks';
 import styles from './Settings.module.scss';
-import { useTranslation } from 'react-i18next';
 
 const Settings = () => {
   const { userLogout, userDeletion, userId } = useContext(UserContext);
@@ -36,12 +37,13 @@ const Settings = () => {
 
   return (
     <>
-      <div className={styles.prevLinks}>
-        <Link to={`/profile/${userId}`}>
-          <MoveLeft size={16} />
-          <span>{t('settings.backToProfile')}</span>
-        </Link>
-      </div>
+      <PrevLinks
+        links={{
+          to: `/profile/${userId}`,
+          icon: <MoveLeft size={16} />,
+          text: t('settings.backToProfile'),
+        }}
+      />
       <div className={styles.container}>
         <div className={styles.title}>{t('settings.title')}</div>
         <div className={styles.formContainer}>

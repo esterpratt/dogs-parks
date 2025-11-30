@@ -18,6 +18,7 @@ import { ProfileTabs } from '../components/profile/ProfileTabs';
 import { FriendRequestButton } from '../components/profile/FriendRequestButton';
 import { Header } from '../components/Header';
 import { HeaderImage } from '../components/HeaderImage';
+import { PrevLinks } from '../components/PrevLinks';
 import DogIcon from '../assets/dog.svg?react';
 import styles from './Profile.module.scss';
 
@@ -113,19 +114,28 @@ const Profile: React.FC = () => {
         size={isSignedInUser ? 'small' : 'xlarge'}
         prevLinksCmp={
           !isSignedInUser && !isLoadingUser ? (
-            <>
-              {!!signedInUser && (
-                <Link to={`/profile/${signedInUser.id}/friends`}>
-                  <MoveLeft size={16} />
-                  <span>{t('profile.myFriends')}</span>
-                </Link>
-              )}
-              <Link to="/users">
-                {!signedInUser && <MoveLeft size={16} />}
-                <span>{t('profile.users')}</span>
-                {!!signedInUser && <MoveRight size={16} />}
-              </Link>
-            </>
+            <PrevLinks
+              links={
+                signedInUser
+                  ? [
+                      {
+                        to: `/profile/${signedInUser.id}/friends`,
+                        icon: <MoveLeft size={16} />,
+                        text: t('profile.myFriends'),
+                      },
+                      {
+                        to: '/users',
+                        icon: <MoveRight size={16} />,
+                        text: t('profile.users'),
+                      },
+                    ]
+                  : {
+                      to: '/users',
+                      icon: <MoveLeft size={16} />,
+                      text: t('profile.users'),
+                    }
+              }
+            />
           ) : null
         }
         imgCmp={dogImagesToDisplay.map((dogImage: string, index: number) => {
