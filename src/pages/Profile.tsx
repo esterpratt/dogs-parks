@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Link, Navigate, Outlet, useLoaderData } from 'react-router-dom';
+import { Navigate, Outlet, useLoaderData, useNavigate } from 'react-router-dom';
 import { MoveLeft, MoveRight, Settings } from 'lucide-react';
 import { Trans, useTranslation } from 'react-i18next';
 import classnames from 'classnames';
@@ -26,12 +26,14 @@ import {
   fetchUserInvitedEvents,
   fetchUserOrganizedEvents,
 } from '../services/events';
+import { Button } from '../components/Button';
 
 const Profile: React.FC = () => {
   const { user, dogs } = useLoaderData();
   const { user: signedInUser, isLoadingUser } = useContext(UserContext);
   const isSignedInUser = signedInUser?.id === user.id;
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const dogImages = useQueries({
     queries: dogs.map((dog: Dog) => {
@@ -100,6 +102,10 @@ const Profile: React.FC = () => {
     enabled: isSignedInUser,
   });
 
+  const onClickSettings = () => {
+    navigate(`/profile/${signedInUser!.id}/settings`);
+  };
+
   if (!user) {
     return null;
   }
@@ -153,17 +159,20 @@ const Profile: React.FC = () => {
         bottomCmp={
           isSignedInUser ? (
             <div className={styles.welcome}>
-              <Trans
-                i18nKey="profile.pawsUpRich"
-                values={{ name: user.name }}
-                components={{ name: <span className={styles.userName} /> }}
-              />
-              <Link
+              <span className={styles.welcomeText}>
+                <Trans
+                  i18nKey="profile.pawsUpRich"
+                  values={{ name: user.name }}
+                  components={{ name: <span className={styles.userName} /> }}
+                />
+              </span>
+              <Button
+                variant="secondary"
                 className={styles.settingsButton}
-                to={`/profile/${signedInUser!.id}/settings`}
+                onClick={onClickSettings}
               >
-                <Settings color={styles.pink} size={24} />
-              </Link>
+                <Settings color={styles.pink} size={18} />
+              </Button>
             </div>
           ) : !!signedInUser && !isSignedInUser ? (
             <div className={styles.title}>

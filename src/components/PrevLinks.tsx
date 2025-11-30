@@ -5,7 +5,7 @@ import styles from './PrevLinks.module.scss';
 
 interface LinkItem {
   to: string;
-  text: string;
+  text: ReactNode;
   icon: ReactNode;
   state?: Record<string, unknown>;
 }

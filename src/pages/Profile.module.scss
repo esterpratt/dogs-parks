@@ -22,14 +22,6 @@ $medium-height: 262px;
   }
 }
 
-.settings-button {
-  position: absolute;
-  bottom: 16px;
-  inset-inline-end: 12px;
-  width: 24px;
-  height: 24px;
-}
-
 .img {
   &:not(:first-child) {
     z-index: 1;
@@ -75,15 +67,27 @@ $medium-height: 262px;
 }
 
 .welcome {
-  position: absolute;
-  bottom: 0;
-  padding-bottom: 16px;
-  font-size: $second-title-font-size;
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  align-items: center;
   width: 100%;
+  padding: 0 16px 4px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: end;
+
+  .welcome-text {
+    font-size: $second-title-font-size;
+  }
+
+  .settings-button {
+    border-radius: 8px;
+    height: 36px;
+    width: 36px;
+    box-shadow: $box-shadow;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .user-name {

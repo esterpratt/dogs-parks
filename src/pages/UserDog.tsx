@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { Cake, Mars, MoveLeft, Pencil, Tag, Venus } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import classnames from 'classnames';
 import { GENDER } from '../types/dog';
 import {
@@ -116,9 +116,17 @@ const UserDog = () => {
               links={{
                 to: `/profile/${dog.owner}/dogs`,
                 icon: <MoveLeft size={16} />,
-                text: isSignedInUser
-                  ? t('userDogs.titleMyPack')
-                  : t('userDogs.titleUsersPack', { name: userName }),
+                text: isSignedInUser ? (
+                  t('userDogs.titleMyPack')
+                ) : (
+                  <Trans
+                    i18nKey="userDogs.titleUsersPack"
+                    values={{ name: userName }}
+                    components={{
+                      name: <span className={styles.name} />,
+                    }}
+                  />
+                ),
               }}
             />
           }
