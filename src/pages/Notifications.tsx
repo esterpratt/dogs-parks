@@ -95,12 +95,12 @@ const Notifications = () => {
         <div className={styles.titleRow}>
           <h1 className={styles.title}>{t('notifications.title')}</h1>
           <Button
-            variant="simple"
+            variant="secondary"
             onClick={() => setIsSettingsModalOpen(true)}
             className={styles.settingsButton}
             aria-label={t('common.actions.openSettings')}
           >
-            <Settings size={24} />
+            <Settings size={18} />
           </Button>
         </div>
       </div>

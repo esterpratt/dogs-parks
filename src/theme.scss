@@ -3,6 +3,7 @@
 :root {
   --light-green: rgba(125, 201, 94, 0.2);
   --light-blue: rgba(13, 162, 231, 0.2);
+  --light-pink: rgba(236, 72, 153, 0.2);
   --light-red: rgba(255, 87, 20, 0.2);
   --light-orange: rgba(245, 183, 0, 0.2);
   --weather-blue: #{$blue};
@@ -24,6 +25,7 @@
 body.dark {
   --light-green: rgba(125, 201, 94, 0.1);
   --light-blue: rgba(13, 162, 231, 0.1);
+  --light-pink: rgba(236, 72, 153, 0.1);
   --light-red: rgba(255, 87, 20, 0.1);
   --light-orange: rgba(245, 183, 0, 0.1);
   --color-text: #f0f0f0;

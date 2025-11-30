@@ -36,10 +36,12 @@ const PrevLinks: React.FC<PrevLinksProps> = (props) => {
             key={index}
             to={link.to}
             state={link.state}
-            className={classnames({ [styles.reverse]: isLastLink })}
+            className={classnames(styles.link, {
+              [styles.reverse]: isLastLink,
+            })}
           >
-            {link.icon}
-            <span>{link.text}</span>
+            <div className={styles.iconCircle}>{link.icon}</div>
+            <span className={styles.text}>{link.text}</span>
           </Link>
         );
       })}

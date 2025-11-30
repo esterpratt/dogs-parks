@@ -14,7 +14,6 @@ import { Button } from '../Button';
 import { SearchInput, SearchInputProps } from '../inputs/SearchInput';
 import { useInitLocation } from '../../hooks/useInitLocation';
 import styles from './ParksList.module.scss';
-import { useDelayedLoading } from '../../hooks/useDelayedLoading';
 import { useParksCrossLanguageFilter } from '../../hooks/useParksCrossLanguageFilter';
 import { useAppLocale } from '../../hooks/useAppLocale';
 import { parksKey } from '../../hooks/api/keys';
@@ -47,10 +46,6 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
     return fetchSortedParks(parks!, userLocation);
   }, [parks, userLocation]);
 
-  const { showLoader } = useDelayedLoading({
-    isLoading: isLoadingParks || isBuildingIndex,
-  });
-
   const NoResultsLayout = user ? (
     <div className={styles.noResults}>
       <span>{t('parks.noResults.user.title')}</span>
@@ -71,7 +66,7 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
     </div>
   );
 
-  if (showLoader) {
+  if (isLoadingParks || isBuildingIndex) {
     return <Loader style={{ paddingTop: '64px' }} />;
   }
 

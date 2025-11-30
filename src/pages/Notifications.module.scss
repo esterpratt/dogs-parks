@@ -1,6 +1,6 @@
 @use '../variables.scss' as *;
 
-$header-height: 48px;
+$header-height: 60px;
 
 .container {
   margin-top: $page-top-padding;
@@ -12,14 +12,19 @@ $header-height: 48px;
 
 .header {
   height: $header-height;
-  padding: 12px calc(16px + var(--safe-area-inset-right, 0px)) 12px
+  padding: 0 calc(16px + var(--safe-area-inset-right, 0px)) 0
     calc(16px + var(--safe-area-inset-left, 0px));
   background: var(--color-background);
+  box-shadow: $box-shadow-sm;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 1;
 }
 
 .content {
-  padding: 12px calc(8px + var(--safe-area-inset-right, 0px)) calc(12px + $navbar-height)
-    calc(8px + var(--safe-area-inset-left, 0px));
+  padding: 0 calc(8px + var(--safe-area-inset-right, 0px))
+    calc(12px + $navbar-height) calc(8px + var(--safe-area-inset-left, 0px));
 }
 
 .loader {
@@ -27,18 +32,26 @@ $header-height: 48px;
 }
 
 .title-row {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  .settings-button {
+    border-radius: 8px;
+    height: 36px;
+    width: 36px;
+    box-shadow: $box-shadow;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .title {
   margin: 0;
   font-size: $title-font-size;
-}
-
-.settings-button {
-  display: flex;
 }
 
 .empty-state {

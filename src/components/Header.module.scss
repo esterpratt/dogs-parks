@@ -8,18 +8,18 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 
   &.small {
-    height: 188px;
+    height: 190px;
 
     .imgs-container {
-      top: 72px;
+      top: 74px;
     }
   }
 
   &.medium {
-    height: 216px;
+    height: 220px;
 
     .imgs-container {
-      top: 94px;
+      top: 100px;
     }
   }
 
@@ -27,15 +27,15 @@
     height: 250px;
 
     .imgs-container {
-      top: 110px;
+      top: 112px;
     }
   }
 
   &.xlarge {
-    height: 262px;
+    height: 264px;
 
     .imgs-container {
-      top: 94px;
+      top: 100px;
     }
   }
 }
