@@ -44,7 +44,7 @@ const Profile: React.FC = () => {
 
   const dogImagesToDisplay =
     !dogImages || dogImages.length === 0
-      ? new Array(dogs?.length || 0)
+      ? new Array(dogs?.length || 1).fill(null)
       : dogImages.length > 4
         ? dogImages.slice(0, 4)
         : [...dogImages.map((image) => image.data)];
