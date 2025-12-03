@@ -6,7 +6,6 @@ import {
   Invitee,
   ParkEvent,
   ParkEventInviteeStatus,
-  ParkEventStatus,
 } from '../../types/parkEvent';
 import { OrganizerActions } from './OrganizerActions';
 import { EventHeader } from './EventHeader';
@@ -33,39 +32,46 @@ const OrganizerEvent = (props: OrganizerEventProps) => {
 
   const { t } = useTranslation();
 
-  const { invitedFriends, goingFriends, notInvitedFriends } = useMemo(() => {
-    const invitedFriends: User[] = [];
-    const goingFriends: User[] = [];
-    const notInvitedFriends: User[] = [];
+  const { invitedFriends, goingFriends, notGoingFriends, notInvitedFriends } =
+    useMemo(() => {
+      const invitedFriends: User[] = [];
+      const goingFriends: User[] = [];
+      const notGoingFriends: User[] = [];
+      const notInvitedFriends: User[] = [];
 
-    if (!friends) {
-      return { invitedFriends, goingFriends, notInvitedFriends };
-    }
-
-    const invitedUsersMap = new Map<string, Invitee>();
-    for (const invitee of invitees) {
-      invitedUsersMap.set(invitee.user_id, invitee);
-    }
-
-    friends?.forEach((friend) => {
-      const invitedFriend = invitedUsersMap.get(friend.id);
-      if (invitedFriend) {
-        if (invitedFriend.status === ParkEventInviteeStatus.ACCEPTED) {
-          goingFriends.push(friend);
-        } else if (invitedFriend!.status === ParkEventInviteeStatus.INVITED) {
-          invitedFriends.push(friend);
-        }
-      } else {
-        notInvitedFriends.push(friend);
+      if (!friends) {
+        return { invitedFriends, goingFriends, notInvitedFriends };
       }
-    });
 
-    return {
-      invitedFriends,
-      goingFriends,
-      notInvitedFriends,
-    };
-  }, [invitees, friends]);
+      const invitedUsersMap = new Map<string, Invitee>();
+      for (const invitee of invitees) {
+        invitedUsersMap.set(invitee.user_id, invitee);
+      }
+
+      friends?.forEach((friend) => {
+        const invitedFriend = invitedUsersMap.get(friend.id);
+        if (invitedFriend) {
+          if (invitedFriend.status === ParkEventInviteeStatus.ACCEPTED) {
+            goingFriends.push(friend);
+          } else if (invitedFriend!.status === ParkEventInviteeStatus.INVITED) {
+            invitedFriends.push(friend);
+          } else if (
+            invitedFriend!.status === ParkEventInviteeStatus.DECLINED
+          ) {
+            notGoingFriends.push(friend);
+          }
+        } else {
+          notInvitedFriends.push(friend);
+        }
+      });
+
+      return {
+        invitedFriends,
+        goingFriends,
+        notGoingFriends,
+        notInvitedFriends,
+      };
+    }, [invitees, friends]);
 
   return (
     <>
@@ -85,6 +91,7 @@ const OrganizerEvent = (props: OrganizerEventProps) => {
             message={message}
             invitedFriends={invitedFriends}
             goingFriends={goingFriends}
+            notGoingFriends={notGoingFriends}
             isLoadingFriends={isLoadingFriends || isLoadingFriendshipMap}
             onClickFriendsAddition={
               notInvitedFriends?.length
@@ -94,9 +101,11 @@ const OrganizerEvent = (props: OrganizerEventProps) => {
           />
         }
         eventActions={
-          status !== ParkEventStatus.CANCELED && (
-            <OrganizerActions userId={userId} eventId={event.id} />
-          )
+          <OrganizerActions
+            userId={userId}
+            eventId={event.id}
+            status={status}
+          />
         }
       />
       {!!notInvitedFriends?.length && (

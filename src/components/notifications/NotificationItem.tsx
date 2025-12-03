@@ -1,81 +1,20 @@
-import { UserPlus, Heart, LucideIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { useContext } from 'react';
 import classnames from 'classnames';
-import { Notification, NotificationType } from '../../types/notification';
+import { Notification } from '../../types/notification';
 import { useDateUtils } from '../../hooks/useDateUtils';
 import { markAsRead } from '../../services/notifications';
 import { queryClient } from '../../services/react-query';
 import { UserContext } from '../../context/UserContext';
 import { useTranslation } from 'react-i18next';
 import { translateNotification } from '../../utils/translateNotification';
+import { getNotificationConfig } from '../../utils/notificationConfig';
 import styles from './NotificationItem.module.scss';
 
 interface NotificationItemProps {
   notification: Notification;
 }
-
-interface NotificationConfig {
-  icon: LucideIcon;
-  iconStyle: string;
-  getUrl: (notification: Notification) => string | null;
-  invalidateQueries: (userId: string) => void;
-}
-
-const getNotificationConfig = (type: NotificationType): NotificationConfig => {
-  switch (type) {
-    case NotificationType.FRIEND_REQUEST:
-      return {
-        icon: UserPlus,
-        iconStyle: styles.friendRequest,
-        getUrl: (notification) => `/profile/${notification.sender_id}`,
-        invalidateQueries: (userId) => {
-          queryClient.invalidateQueries({
-            queryKey: ['friendsWithDogs', userId, 'PENDING', 'REQUESTER'],
-          });
-          queryClient.invalidateQueries({
-            queryKey: ['friendshipMap', userId],
-          });
-        },
-      };
-    case NotificationType.FRIEND_APPROVAL:
-      return {
-        icon: Heart,
-        iconStyle: styles.friendApproval,
-        getUrl: (notification) => `/profile/${notification.sender_id}`,
-        invalidateQueries: (userId) => {
-          queryClient.invalidateQueries({
-            queryKey: ['friendsWithDogs', userId],
-          });
-          queryClient.invalidateQueries({
-            queryKey: ['friendshipMap', userId],
-          });
-        },
-      };
-    case NotificationType.PARK_INVITE:
-      return {
-        icon: Heart,
-        iconStyle: styles.friendApproval,
-        getUrl: (notification) => `/profile/${notification.sender_id}`,
-        invalidateQueries: (userId) => {
-          queryClient.invalidateQueries({
-            queryKey: ['friendsWithDogs', userId],
-          });
-          queryClient.invalidateQueries({
-            queryKey: ['friendshipMap', userId],
-          });
-        },
-      };
-    default:
-      return {
-        icon: Heart,
-        iconStyle: styles.friendApproval,
-        getUrl: () => null,
-        invalidateQueries: () => {},
-      };
-  }
-};
 
 const NotificationItem = ({ notification }: NotificationItemProps) => {
   const {
@@ -139,7 +78,7 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
       type="button"
     >
       <div className={styles.notificationContent}>
-        <div className={classnames(styles.notificationIcon, config.iconStyle)}>
+        <div className={classnames(styles.notificationIcon, styles[config.color])}>
           <IconComponent size={24} />
         </div>
         <div className={styles.content}>

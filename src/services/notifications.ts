@@ -1,6 +1,10 @@
 import { Capacitor } from '@capacitor/core';
 import { supabase } from './supabase-client';
-import { NotificationType, Platform } from '../types/notification';
+import {
+  NotificationType,
+  NotificationTargetType,
+  Platform,
+} from '../types/notification';
 import { throwError } from './error';
 import { Preferences } from '@capacitor/preferences';
 import { DEVICE_ID_KEY } from '../utils/consts';
@@ -116,6 +120,8 @@ const getSeenNotifications = async ({
         `
         id,
         type,
+        target_type,
+        target_id,
         sender_id,
         title,
         app_message,
@@ -148,6 +154,8 @@ const getSeenNotifications = async ({
       data?.map((notification) => ({
         id: notification.id,
         type: notification.type as NotificationType,
+        target_type: notification.target_type as NotificationTargetType,
+        target_id: notification.target_id,
         sender_id: notification.sender_id,
         receiver_id: userId,
         title: notification.title,
@@ -271,6 +279,8 @@ const getUnseenNotifications = async (userId: string) => {
         `
         id,
         type,
+        target_type,
+        target_id,
         sender_id,
         title,
         app_message,
@@ -296,6 +306,8 @@ const getUnseenNotifications = async (userId: string) => {
       data?.map((notification) => ({
         id: notification.id,
         type: notification.type as NotificationType,
+        target_type: notification.target_type as NotificationTargetType,
+        target_id: notification.target_id,
         sender_id: notification.sender_id,
         receiver_id: userId,
         title: notification.title,

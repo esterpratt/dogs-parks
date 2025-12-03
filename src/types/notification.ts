@@ -7,6 +7,13 @@ enum NotificationType {
   PARK_INVITE_CANCELLED = 'park_invite_cancelled',
 }
 
+enum NotificationTargetType {
+  USER = 'user',
+  PARK_EVENT = 'park_event',
+  PARK = 'park',
+  SYSTEM = 'system',
+}
+
 enum Platform {
   IOS = 'ios',
   ANDROID = 'android',
@@ -15,6 +22,8 @@ enum Platform {
 
 interface Notification {
   id: string;
+  target_type: NotificationTargetType;
+  target_id: string;
   type: NotificationType;
   sender_id: string;
   receiver_id: string;
@@ -33,4 +42,4 @@ interface Notification {
 }
 
 export type { Notification };
-export { NotificationType, Platform };
+export { NotificationType, NotificationTargetType, Platform };

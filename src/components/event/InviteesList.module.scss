@@ -32,6 +32,16 @@
   }
 }
 
+.declined-title {
+  .title-icon {
+    color: $red;
+  }
+
+  .title {
+    color: var(--color-text-medium);
+  }
+}
+
 .title-icon {
   flex-shrink: 0;
 }
@@ -64,6 +74,11 @@
 
 .invited-chip {
   background-color: var(--light-orange);
+  color: var(--color-text);
+}
+
+.declined-chip {
+  background-color: var(--light-red);
   color: var(--color-text);
 }
 

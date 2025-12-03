@@ -1,13 +1,13 @@
 import { useEffect, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useVirtualizer } from '@tanstack/react-virtual';
+import { InfiniteData } from '@tanstack/react-query';
 import classnames from 'classnames';
-import { NotificationItem } from '../../components/notifications/NotificationItem';
 import { Notification } from '../../types/notification';
+import { NotificationItem } from '../../components/notifications/NotificationItem';
 import { Loader } from '../../components/Loader';
 import { MarkAllReadButton } from './MarkAllReadButton';
 import styles from './NotificationsList.module.scss';
-import { InfiniteData } from '@tanstack/react-query';
 
 type ListRow =
   | {

@@ -5,16 +5,18 @@ import { cancelEvent } from '../../services/events';
 import { queryClient } from '../../services/react-query';
 import { useNotification } from '../../context/NotificationContext';
 import { useConfirm } from '../../context/ConfirmModalContext';
+import { ParkEventStatus } from '../../types/parkEvent';
 import { Button } from '../Button';
 import styles from './OrganizerActions.module.scss';
 
 interface OrganizerActionsProps {
   eventId: string;
   userId: string;
+  status: ParkEventStatus;
 }
 
 const OrganizerActions = (props: OrganizerActionsProps) => {
-  const { eventId, userId } = props;
+  const { eventId, userId, status } = props;
   const { showModal } = useConfirm();
 
   const { t } = useTranslation();
@@ -49,9 +51,13 @@ const OrganizerActions = (props: OrganizerActionsProps) => {
 
   return (
     <div className={styles.buttonsContainer}>
-      <Button variant="secondary" onClick={handleOpenConfirmModal}>
-        {t('event.cancel.buttonTxt')}
-      </Button>
+      {status === ParkEventStatus.CANCELED ? (
+        <span className={styles.text}>{t('event.organizer.cancelled')}</span>
+      ) : (
+        <Button variant="secondary" onClick={handleOpenConfirmModal}>
+          {t('event.cancel.buttonTxt')}
+        </Button>
+      )}
     </div>
   );
 };

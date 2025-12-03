@@ -1,4 +1,4 @@
-import { ParkEventInviteeStatus } from '../../types/parkEvent';
+import { ParkEventInviteeStatus, ParkEventStatus } from '../../types/parkEvent';
 import { Button } from '../Button';
 import { useTranslation } from 'react-i18next';
 import { Loader } from '../Loader';
@@ -10,7 +10,8 @@ import { useCallback } from 'react';
 import styles from './InviteeActions.module.scss';
 
 interface InviteeActionsProps {
-  status: ParkEventInviteeStatus;
+  eventStatus: ParkEventStatus;
+  inviteeStatus: ParkEventInviteeStatus;
   eventId: string;
   userId: string;
 }
@@ -18,7 +19,7 @@ interface InviteeActionsProps {
 const InviteeActions: React.FC<InviteeActionsProps> = (
   props: InviteeActionsProps
 ) => {
-  const { eventId, userId, status } = props;
+  const { eventId, userId, inviteeStatus, eventStatus } = props;
   const { t } = useTranslation();
   const { showModal } = useConfirm();
   const navigate = useNavigate();
@@ -45,12 +46,21 @@ const InviteeActions: React.FC<InviteeActionsProps> = (
     });
   };
 
-  const isInvited = status === ParkEventInviteeStatus.INVITED;
-  const isDeclined = status === ParkEventInviteeStatus.DECLINED;
-  const isRemoved = status === ParkEventInviteeStatus.REMOVED;
+  const isInvited = inviteeStatus === ParkEventInviteeStatus.INVITED;
+  const isDeclined = inviteeStatus === ParkEventInviteeStatus.DECLINED;
+  const isRemoved = inviteeStatus === ParkEventInviteeStatus.REMOVED;
+  const isCancelled = eventStatus === ParkEventStatus.CANCELED;
 
-  if (isRemoved || isDeclined) {
-    return null;
+  if (isRemoved || isDeclined || isCancelled) {
+    return (
+      <div className={styles.container}>
+        <span className={styles.text}>
+          {t(
+            `event.invitee.${isCancelled ? 'cancelled' : isDeclined ? 'declined' : 'removed'}`
+          )}
+        </span>
+      </div>
+    );
   }
 
   return (

@@ -20,12 +20,20 @@
     color: $white;
   }
 
-  &.friend-request {
+  &.pink {
+    background: $pink;
+  }
+
+  &.blue {
+    background: $blue;
+  }
+
+  &.green {
     background: $green;
   }
 
-  &.friend-approval {
-    background: $pink;
+  &.red {
+    background: $red;
   }
 }
 

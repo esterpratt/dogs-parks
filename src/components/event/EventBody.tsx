@@ -21,6 +21,7 @@ interface EventBodyProps {
   startAt: string;
   goingFriends: User[];
   invitedFriends: User[];
+  notGoingFriends?: User[];
   isLoadingFriends: boolean;
   friendsSelection?: ReactNode;
   organizedBy?: string | ReactNode;
@@ -33,6 +34,7 @@ const EventBody = (props: EventBodyProps) => {
     messageTitle,
     goingFriends,
     invitedFriends,
+    notGoingFriends,
     organizedBy,
     startAt,
     onClickFriendsAddition,
@@ -118,6 +120,13 @@ const EventBody = (props: EventBodyProps) => {
                       users={invitedFriends}
                       title={t('event.invitees.invited')}
                       variant="invited"
+                    />
+                  )}
+                  {!!notGoingFriends?.length && (
+                    <InviteesList
+                      users={notGoingFriends}
+                      title={t('event.invitees.declined')}
+                      variant="declined"
                     />
                   )}
                 </div>

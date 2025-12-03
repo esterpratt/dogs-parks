@@ -349,7 +349,8 @@
     "title": {
       "yours": "Your event at",
       "going": "You are going to an event at",
-      "invited": "You are invited to an event at"
+      "invited": "You are invited to an event at",
+      "cancelled": "Cancelled event at"
     },
     "message": {
       "title": "Host's message",
@@ -357,9 +358,16 @@
     },
     "invitees": {
       "going": "Attending friends",
-      "invited": "Invited friends"
+      "invited": "Invited friends",
+      "declined": "Not attending"
+    },
+    "organizer": {
+      "cancelled": "You cancelled the event"
     },
     "invitee": {
+      "declined": "You declined the invitation",
+      "cancelled": "The event was cancelled",
+      "removed": "The event was removed",
       "decline": {
         "title": "Are you sure you want to decline the event?",
         "button": "Yes",

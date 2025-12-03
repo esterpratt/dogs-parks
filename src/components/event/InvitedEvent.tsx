@@ -6,6 +6,7 @@ import {
   Invitee,
   ParkEvent,
   ParkEventInviteeStatus,
+  ParkEventStatus,
 } from '../../types/parkEvent';
 import { EventHeader } from './EventHeader';
 import { EventBody } from './EventBody';
@@ -74,11 +75,13 @@ const InvitedEvent = (props: InviteeEventProps) => {
       eventHeader={
         <EventHeader
           title={
-            inviteeStatus === ParkEventInviteeStatus.ACCEPTED
-              ? t('event.title.going')
-              : inviteeStatus === ParkEventInviteeStatus.INVITED
-                ? t('event.title.invited')
-                : null
+            event.status === ParkEventStatus.CANCELED
+              ? t('event.title.cancelled')
+              : inviteeStatus === ParkEventInviteeStatus.ACCEPTED
+                ? t('event.title.going')
+                : inviteeStatus === ParkEventInviteeStatus.INVITED
+                  ? t('event.title.invited')
+                  : null
           }
           parkName={parkName}
           parkImage={parkImage}
@@ -99,7 +102,8 @@ const InvitedEvent = (props: InviteeEventProps) => {
       eventActions={
         !isLoadingInvitee && (
           <InviteeActions
-            status={inviteeStatus}
+            eventStatus={event.status}
+            inviteeStatus={inviteeStatus}
             eventId={event.id}
             userId={userId!}
           />
