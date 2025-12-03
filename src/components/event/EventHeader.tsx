@@ -32,7 +32,7 @@ const EventHeader: React.FC<EventHeaderProps> = (props: EventHeaderProps) => {
       size="medium"
       imgCmp={
         <div className={styles.imageContainer}>
-          <HeaderImage size={124} imgSrc={parkImage} />
+          <HeaderImage imgSrc={parkImage} />
           <EventImageOverlay size={40} />
         </div>
       }

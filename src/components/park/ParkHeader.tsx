@@ -113,7 +113,6 @@ const ParkHeader = (props: ParkHeaderProps) => {
         imgCmp={
           <>
             <HeaderImage
-              size={136}
               imgSrc={primaryImage}
               NoImgIcon={TreeDeciduous}
               onClickImg={onClickImage}

@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import styles from './Header.module.scss';
 
 interface HeaderProps {
-  size?: 'small' | 'medium' | 'large' | 'xlarge';
+  size?: 'small' | 'medium' | 'large';
   containerClassName?: string;
   bottomClassName?: string;
   imgsClassName?: string;
@@ -15,7 +15,7 @@ interface HeaderProps {
 
 const Header = (props: HeaderProps) => {
   const {
-    size = 'large',
+    size = 'medium',
     imgCmp,
     bottomCmp,
     prevLinksCmp,
@@ -29,7 +29,7 @@ const Header = (props: HeaderProps) => {
     <div
       className={classnames(styles.header, styles[size], containerClassName)}
     >
-      {!!prevLinksCmp && <div className={styles.prevLinks}>{prevLinksCmp}</div>}
+      {!!prevLinksCmp && prevLinksCmp}
       <div className={classnames(styles.imgsContainer, imgsClassName)}>
         {imgCmp}
       </div>

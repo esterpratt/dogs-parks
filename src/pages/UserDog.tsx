@@ -132,7 +132,6 @@ const UserDog = () => {
           }
           imgCmp={
             <HeaderImage
-              size={136}
               imgSrc={primaryImage}
               onClickImg={onClickImage}
               NoImgIcon={DogIcon}

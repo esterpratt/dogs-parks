@@ -19,7 +19,7 @@ interface HeaderImageProps {
 
 const HeaderImage = (props: HeaderImageProps) => {
   const {
-    size = 152,
+    size = 124,
     imgSrc,
     onClickImg,
     NoImgIcon,
