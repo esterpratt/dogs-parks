@@ -17,25 +17,36 @@ dayjs.extend(isToday);
 dayjs.extend(isTomorrow);
 dayjs.extend(calendar);
 
+dayjs.updateLocale('en', {
+  calendar: {
+    sameDay: '[Today at] HH:mm',
+    nextDay: '[Tomorrow at] HH:mm',
+    nextWeek: 'dddd [at] HH:mm',
+    lastDay: '[Yesterday at] HH:mm',
+    lastWeek: '[Last] dddd [at] HH:mm',
+    sameElse: 'L [at] HH:mm',
+  },
+});
+
 dayjs.updateLocale('he', {
   calendar: {
-    sameDay: '[היום ב־]LT',
-    nextDay: '[מחר ב־]LT',
-    nextWeek: 'dddd [ב־]LT',
-    lastDay: '[אתמול ב־]LT',
-    lastWeek: '[ביום] dddd [ב־]LT',
-    sameElse: 'L [ב־]LT',
+    sameDay: '[היום ב־]HH:mm',
+    nextDay: '[מחר ב־]HH:mm',
+    nextWeek: 'dddd [ב־]HH:mm',
+    lastDay: '[אתמול ב־]HH:mm',
+    lastWeek: '[ביום] dddd [ב־]HH:mm',
+    sameElse: 'L [ב־]HH:mm',
   },
 });
 
 dayjs.updateLocale('ar', {
   calendar: {
-    sameDay: '[اليوم في] LT',
-    nextDay: '[غدًا في] LT',
-    nextWeek: 'dddd [في] LT',
-    lastDay: '[أمس في] LT',
-    lastWeek: '[يوم] dddd [الماضي في] LT',
-    sameElse: 'L [في] LT',
+    sameDay: '[اليوم في] HH:mm',
+    nextDay: '[غدًا في] HH:mm',
+    nextWeek: 'dddd [في] HH:mm',
+    lastDay: '[أمس في] HH:mm',
+    lastWeek: '[يوم] dddd [الماضي في] HH:mm',
+    sameElse: 'L [في] HH:mm',
   },
 });
 
