@@ -65,7 +65,7 @@ function usePushNotifications() {
               id: 'default',
               name: 'Default',
               description: 'General notifications',
-              importance: 3,
+              importance: 5,
               sound: 'default',
             });
           } catch (error) {

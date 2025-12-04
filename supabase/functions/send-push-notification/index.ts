@@ -163,7 +163,7 @@ serve(async (req) => {
         notification: {
           channel_id: 'default',
           default_sound: true,
-          notification_count: unseenCount,
+          notification_count: null,
         },
       },
       apns: {

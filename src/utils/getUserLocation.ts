@@ -3,7 +3,29 @@ import { isMobile } from './platform';
 import { DEFAULT_LOCATION } from './consts';
 import { runWhenActive } from './runWhenActive';
 
+let inFlightRequest: Promise<{
+  position: GeolocationPosition;
+  error?: unknown;
+} | null> | null = null;
+
+// Solve the issue of:
+// Android returns an error when 2 requests are been sent at the same time
 export async function getUserLocation() {
+  if (inFlightRequest) {
+    return inFlightRequest;
+  }
+
+  inFlightRequest = getUserLocationInternal();
+
+  try {
+    const result = await inFlightRequest;
+    return result;
+  } finally {
+    inFlightRequest = null;
+  }
+}
+
+async function getUserLocationInternal() {
   let position: { position: GeolocationPosition; error?: unknown } | null =
     null;
 
@@ -23,7 +45,12 @@ export async function getUserLocation() {
         throw new Error('PERMISSION_DENIED');
       }
 
-      const capPosition = await Geolocation.getCurrentPosition();
+      const capPosition = await Geolocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 0,
+      });
+
       position = {
         position: {
           coords: {
