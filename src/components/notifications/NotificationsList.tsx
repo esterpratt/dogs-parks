@@ -134,7 +134,7 @@ const NotificationsList = (props: NotificationsListProps) => {
       }
 
       if (item.type === 'header') {
-        return 36;
+        return 48;
       } else {
         return 120;
       }

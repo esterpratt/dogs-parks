@@ -23,7 +23,7 @@ interface OrganizerEventProps {
 
 const OrganizerEvent = (props: OrganizerEventProps) => {
   const { event, invitees, parkName, parkImage, userId } = props;
-  const { status, start_at, message } = event;
+  const { status, start_at, end_at, message } = event;
   const { friends, isLoadingFriends, isLoadingFriendshipMap } = useFetchFriends(
     { userId }
   );
@@ -31,6 +31,8 @@ const OrganizerEvent = (props: OrganizerEventProps) => {
   const [isFriendsModalOpen, setIsFriendsModalOpen] = useState(false);
 
   const { t } = useTranslation();
+
+  const isEventEnded = end_at && new Date() > new Date(end_at);
 
   const { invitedFriends, goingFriends, notGoingFriends, notInvitedFriends } =
     useMemo(() => {
@@ -81,12 +83,14 @@ const OrganizerEvent = (props: OrganizerEventProps) => {
             title={t('event.title.yours')}
             parkName={parkName}
             parkImage={parkImage}
+            parkId={event.park_id}
             userId={userId}
           />
         }
         eventBody={
           <EventBody
             startAt={start_at}
+            endAt={end_at}
             messageTitle={t('event.message.organizerTitle')}
             message={message}
             invitedFriends={invitedFriends}
@@ -105,6 +109,7 @@ const OrganizerEvent = (props: OrganizerEventProps) => {
             userId={userId}
             eventId={event.id}
             status={status}
+            isEventEnded={isEventEnded}
           />
         }
       />

@@ -60,7 +60,7 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
     }
 
     if (userId) {
-      config.invalidateQueries(userId);
+      config.invalidateQueries(userId, notification);
     }
 
     if (url) {
@@ -78,7 +78,9 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
       type="button"
     >
       <div className={styles.notificationContent}>
-        <div className={classnames(styles.notificationIcon, styles[config.color])}>
+        <div
+          className={classnames(styles.notificationIcon, styles[config.color])}
+        >
           <IconComponent size={24} />
         </div>
         <div className={styles.content}>

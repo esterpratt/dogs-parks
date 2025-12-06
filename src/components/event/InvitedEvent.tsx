@@ -25,7 +25,7 @@ interface InviteeEventProps {
 
 const InvitedEvent = (props: InviteeEventProps) => {
   const { event, invitees, parkName, parkImage, userId } = props;
-  const { start_at, creator_name, message } = event;
+  const { start_at, end_at, creator_name, message } = event;
 
   const { friends, isLoadingFriends, isLoadingFriendshipMap } = useFetchFriends(
     { userId }
@@ -39,6 +39,7 @@ const InvitedEvent = (props: InviteeEventProps) => {
   });
 
   const inviteeStatus = invitee?.status;
+  const isEventEnded = end_at && new Date() > new Date(end_at);
 
   const { invitedFriends, goingFriends } = useMemo(() => {
     const invitedFriends: User[] = [];
@@ -78,19 +79,25 @@ const InvitedEvent = (props: InviteeEventProps) => {
             event.status === ParkEventStatus.CANCELED
               ? t('event.title.cancelled')
               : inviteeStatus === ParkEventInviteeStatus.ACCEPTED
-                ? t('event.title.going')
+                ? isEventEnded
+                  ? t('event.title.wentTo')
+                  : t('event.title.going')
                 : inviteeStatus === ParkEventInviteeStatus.INVITED
-                  ? t('event.title.invited')
+                  ? isEventEnded
+                    ? t('event.title.wereInvited')
+                    : t('event.title.invited')
                   : null
           }
           parkName={parkName}
           parkImage={parkImage}
+          parkId={event.park_id}
           userId={userId}
         />
       }
       eventBody={
         <EventBody
           startAt={start_at}
+          endAt={end_at}
           organizedBy={creator_name}
           message={message}
           messageTitle={t('event.message.title')}
@@ -106,6 +113,7 @@ const InvitedEvent = (props: InviteeEventProps) => {
             inviteeStatus={inviteeStatus}
             eventId={event.id}
             userId={userId!}
+            isEventEnded={isEventEnded}
           />
         )
       }

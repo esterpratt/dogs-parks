@@ -13,10 +13,11 @@ interface OrganizerActionsProps {
   eventId: string;
   userId: string;
   status: ParkEventStatus;
+  isEventEnded?: boolean;
 }
 
 const OrganizerActions = (props: OrganizerActionsProps) => {
-  const { eventId, userId, status } = props;
+  const { eventId, userId, status, isEventEnded } = props;
   const { showModal } = useConfirm();
 
   const { t } = useTranslation();
@@ -53,6 +54,8 @@ const OrganizerActions = (props: OrganizerActionsProps) => {
     <div className={styles.buttonsContainer}>
       {status === ParkEventStatus.CANCELED ? (
         <span className={styles.text}>{t('event.organizer.cancelled')}</span>
+      ) : isEventEnded ? (
+        <span className={styles.text}>{t('event.organizer.ended')}</span>
       ) : (
         <Button variant="secondary" onClick={handleOpenConfirmModal}>
           {t('event.cancel.buttonTxt')}

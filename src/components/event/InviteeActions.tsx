@@ -14,12 +14,13 @@ interface InviteeActionsProps {
   inviteeStatus: ParkEventInviteeStatus;
   eventId: string;
   userId: string;
+  isEventEnded?: boolean;
 }
 
 const InviteeActions: React.FC<InviteeActionsProps> = (
   props: InviteeActionsProps
 ) => {
-  const { eventId, userId, inviteeStatus, eventStatus } = props;
+  const { eventId, userId, inviteeStatus, eventStatus, isEventEnded } = props;
   const { t } = useTranslation();
   const { showModal } = useConfirm();
   const navigate = useNavigate();
@@ -47,11 +48,12 @@ const InviteeActions: React.FC<InviteeActionsProps> = (
   };
 
   const isInvited = inviteeStatus === ParkEventInviteeStatus.INVITED;
+  const isAccepted = inviteeStatus === ParkEventInviteeStatus.ACCEPTED;
   const isDeclined = inviteeStatus === ParkEventInviteeStatus.DECLINED;
   const isRemoved = inviteeStatus === ParkEventInviteeStatus.REMOVED;
   const isCancelled = eventStatus === ParkEventStatus.CANCELED;
 
-  if (isRemoved || isDeclined || isCancelled) {
+  if (isCancelled || isDeclined || isRemoved) {
     return (
       <div className={styles.container}>
         <span className={styles.text}>
@@ -59,6 +61,14 @@ const InviteeActions: React.FC<InviteeActionsProps> = (
             `event.invitee.${isCancelled ? 'cancelled' : isDeclined ? 'declined' : 'removed'}`
           )}
         </span>
+      </div>
+    );
+  }
+
+  if (isEventEnded && (isInvited || isAccepted)) {
+    return (
+      <div className={styles.container}>
+        <span className={styles.text}>{t('event.invitee.ended')}</span>
       </div>
     );
   }

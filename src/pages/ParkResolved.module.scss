@@ -1,3 +1,13 @@
+@use '../variables' as *;
+
+.page-container {
+  margin-top: $page-top-padding;
+  max-height: $content-max-height;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .content-container {
   flex: 1;
   display: flex;

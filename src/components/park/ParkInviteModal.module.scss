@@ -10,6 +10,10 @@
   gap: 24px;
   color: var(--color-text);
   font-size: 16px;
+
+  &.extra-padding {
+    padding-bottom: 150px;
+  }
 }
 
 .time-section {

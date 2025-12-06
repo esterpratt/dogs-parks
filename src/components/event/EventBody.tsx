@@ -19,6 +19,7 @@ interface EventBodyProps {
   message?: string;
   messageTitle?: string;
   startAt: string;
+  endAt?: string;
   goingFriends: User[];
   invitedFriends: User[];
   notGoingFriends?: User[];
@@ -37,6 +38,7 @@ const EventBody = (props: EventBodyProps) => {
     notGoingFriends,
     organizedBy,
     startAt,
+    endAt,
     onClickFriendsAddition,
     isLoadingFriends,
   } = props;
@@ -44,6 +46,9 @@ const EventBody = (props: EventBodyProps) => {
   const { t } = useTranslation();
   const { formatFutureCalendar } = useDateUtils();
   const startTime = formatFutureCalendar(startAt);
+
+  const isEventEnded = endAt && new Date() > new Date(endAt);
+  const timeDisplay = isEventEnded ? t('event.ended') : startTime;
 
   const generalDetails = [
     organizedBy
@@ -58,7 +63,7 @@ const EventBody = (props: EventBodyProps) => {
       key: 'time',
       icon: <Clock size={24} />,
       label: t('event.time'),
-      content: startTime,
+      content: timeDisplay,
     },
   ].filter(Boolean) as DetailsAttributes[];
 
@@ -102,7 +107,9 @@ const EventBody = (props: EventBodyProps) => {
         contentCmp={
           !isLoadingFriends && (
             <div className={styles.friendsContent}>
-              {!goingFriends.length && !invitedFriends.length ? (
+              {!goingFriends.length &&
+              !invitedFriends.length &&
+              !notGoingFriends?.length ? (
                 <span className={styles.noInvitees}>
                   {t('event.noInvitees')}
                 </span>

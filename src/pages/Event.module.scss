@@ -1,3 +1,7 @@
+@use '../variables' as *;
+
 .container {
+  margin-top: $page-top-padding;
+  max-height: $content-max-height;
   height: 100%;
 }

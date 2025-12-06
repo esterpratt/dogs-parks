@@ -349,11 +349,14 @@
     "organizedBy": "من تنظيم",
     "location": "الموقع",
     "time": "الوقت",
+    "ended": "انتهى",
     "title": {
       "yours": "فعاليتك في",
       "going": "أنت ذاهب إلى فعالية في",
       "invited": "أنت مدعو إلى فعالية في",
-      "cancelled": "Cancelled event at"
+      "cancelled": "Cancelled event at",
+      "wentTo": "لقد ذهبت إلى فعالية في",
+      "wereInvited": "كنت مدعواً إلى فعالية في"
     },
     "message": {
       "title": "رسالة المضيف",
@@ -365,12 +368,14 @@
       "declined": "الأصدقاء غير الحاضرين"
     },
     "organizer": {
-      "cancelled": "You cancelled the event"
+      "cancelled": "You cancelled the event",
+      "ended": "انتهت الفعالية"
     },
     "invitee": {
       "declined": "You declined the invitation",
       "cancelled": "The event was cancelled",
       "removed": "The event was removed",
+      "ended": "انتهت الفعالية",
       "decline": {
         "title": "هل أنت متأكد أنك تريد رفض الفعالية؟",
         "button": "نعم",

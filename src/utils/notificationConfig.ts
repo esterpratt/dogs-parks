@@ -14,7 +14,7 @@ interface NotificationConfig {
   icon: LucideIcon;
   color: 'pink' | 'blue' | 'green' | 'red';
   getUrl: (notification: Notification) => string | null;
-  invalidateQueries: (userId: string) => void;
+  invalidateQueries: (userId: string, notification: Notification) => void;
 }
 
 const getNotificationConfig = (type: NotificationType): NotificationConfig => {
@@ -52,9 +52,12 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
         icon: CalendarPlus,
         color: 'pink',
         getUrl: (notification) => `/events/${notification.target_id}`,
-        invalidateQueries: (userId) => {
+        invalidateQueries: (userId, notification) => {
           queryClient.invalidateQueries({
             queryKey: ['events', 'invited', userId],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ['event', notification.target_id],
           });
         },
       };
@@ -63,9 +66,12 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
         icon: XCircle,
         color: 'red',
         getUrl: (notification) => `/events/${notification.target_id}`,
-        invalidateQueries: (userId) => {
+        invalidateQueries: (userId, notification) => {
           queryClient.invalidateQueries({
             queryKey: ['events', 'invited', userId],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ['event', notification.target_id],
           });
         },
       };
@@ -74,9 +80,12 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
         icon: CalendarCheck,
         color: 'green',
         getUrl: (notification) => `/events/${notification.target_id}`,
-        invalidateQueries: (userId) => {
+        invalidateQueries: (userId, notification) => {
           queryClient.invalidateQueries({
             queryKey: ['events', 'organized', userId],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ['event', notification.target_id],
           });
         },
       };
@@ -85,9 +94,12 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
         icon: CalendarX,
         color: 'red',
         getUrl: (notification) => `/events/${notification.target_id}`,
-        invalidateQueries: (userId) => {
+        invalidateQueries: (userId, notification) => {
           queryClient.invalidateQueries({
             queryKey: ['events', 'organized', userId],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ['event', notification.target_id],
           });
         },
       };

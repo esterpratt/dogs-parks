@@ -346,11 +346,14 @@
     "organizedBy": "Organized by",
     "location": "Location",
     "time": "Time",
+    "ended": "Ended",
     "title": {
       "yours": "Your event at",
       "going": "You are going to an event at",
       "invited": "You are invited to an event at",
-      "cancelled": "Cancelled event at"
+      "cancelled": "Cancelled event at",
+      "wentTo": "You went to an event at",
+      "wereInvited": "You were invited to an event at"
     },
     "message": {
       "title": "Host's message",
@@ -362,12 +365,14 @@
       "declined": "Not attending"
     },
     "organizer": {
-      "cancelled": "You cancelled the event"
+      "cancelled": "You cancelled the event",
+      "ended": "The event has ended"
     },
     "invitee": {
       "declined": "You declined the invitation",
       "cancelled": "The event was cancelled",
       "removed": "The event was removed",
+      "ended": "The event has ended",
       "decline": {
         "title": "Are you sure you want to decline the event?",
         "button": "Yes",

@@ -1,22 +1,24 @@
 import { ChangeEvent, useMemo, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { Trans, useTranslation } from 'react-i18next';
-import { FormModal } from '../modals/FormModal';
-import { createParkEvent } from '../../services/events';
-import { useNotification } from '../../context/NotificationContext';
+import classnames from 'classnames';
+import { Link } from 'react-router';
 import { ParkEventVisibility } from '../../types/parkEvent';
 import { User } from '../../types/user';
-import { useFetchFriends } from '../../hooks/api/useFetchFriends';
-import { ToggleInput } from '../inputs/ToggleInput';
-import { TextArea } from '../inputs/TextArea';
-import styles from './ParkInviteModal.module.scss';
-import { RadioInputs } from '../inputs/RadioInputs';
-import { queryClient } from '../../services/react-query';
-import { SelectUsers } from '../SelectUsers';
-import { useEventSlots } from '../../hooks/useEventSlots';
-import { Link } from 'react-router';
 import { getConflictedEvents } from '../../utils/events';
 import { MS_IN_MINUTE } from '../../utils/consts';
+import { createParkEvent } from '../../services/events';
+import { queryClient } from '../../services/react-query';
+import { useNotification } from '../../context/NotificationContext';
+import { useFetchFriends } from '../../hooks/api/useFetchFriends';
+import { useEventSlots } from '../../hooks/useEventSlots';
+import useKeyboardFix from '../../hooks/useKeyboardFix';
+import { FormModal } from '../modals/FormModal';
+import { ToggleInput } from '../inputs/ToggleInput';
+import { TextArea } from '../inputs/TextArea';
+import { RadioInputs } from '../inputs/RadioInputs';
+import { SelectUsers } from '../SelectUsers';
+import styles from './ParkInviteModal.module.scss';
 
 interface ParkInviteModalProps {
   parkId?: string;
@@ -34,6 +36,7 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
   const [message, setMessage] = useState('');
   const { t } = useTranslation();
   const { notify } = useNotification();
+  const keyboardHeight = useKeyboardFix();
 
   const OFFSET_OPTIONS = [
     { id: '0', value: '0', label: t('parkInvite.modal.offset.now') },
@@ -118,7 +121,11 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
       title={t('parkInvite.modal.title')}
       className={styles.modal}
     >
-      <form className={styles.form}>
+      <form
+        className={classnames(styles.form, {
+          [styles.extraPadding]: !!keyboardHeight,
+        })}
+      >
         <div className={styles.timeSection}>
           <RadioInputs
             onOptionChange={handleOffsetSelect}
