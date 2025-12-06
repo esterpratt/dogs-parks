@@ -25,7 +25,7 @@ import useKeyboardFix from '../../hooks/useKeyboardFix';
 import { capitalizeText } from '../../utils/text';
 import { useUpdateDog } from '../../hooks/api/useUpdateDog';
 import { useAddDog } from '../../hooks/api/useAddDog';
-import { useScrollToInputOnOpen } from '../../hooks/useScrollToInputOnOpen';
+import { useScrollToElementOnOpen } from '../../hooks/useScrollToElementOnOpen';
 import { doesBreedMatchUserInput } from '../../utils/searchDog';
 import styles from './EditDogModal.module.scss';
 
@@ -41,7 +41,6 @@ const EditDogModal: React.FC<EditDogModalProps> = (props) => {
 
   const orientation = useOrientationContext((state) => state.orientation);
   const inputRef = useRef<HTMLInputElement>(null);
-  const formRef = useRef<HTMLFormElement>(null);
 
   const [dogData, setDogData] = useState<
     | (Partial<Omit<Dog, 'likes' | 'dislikes'>> &
@@ -145,7 +144,7 @@ const EditDogModal: React.FC<EditDogModalProps> = (props) => {
     return getFormattedDateISO(new Date());
   }, [getFormattedDateISO]);
 
-  useScrollToInputOnOpen(isOpen, inputRef, formRef);
+  useScrollToElementOnOpen(isOpen, inputRef);
 
   const isSaveButtonDisabled =
     !dogData?.name || !dogData.birthday || !dogData.gender || !dogData.breed;
@@ -180,7 +179,6 @@ const EditDogModal: React.FC<EditDogModalProps> = (props) => {
         }
       >
         <form
-          ref={formRef}
           className={classnames(styles.form, {
             [styles.extraPadding]: !!keyboardHeight,
             [styles.withDog]: !!dog,

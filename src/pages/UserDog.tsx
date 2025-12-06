@@ -79,7 +79,7 @@ const UserDog = () => {
   const onEditDog = (scrollToInput?: boolean) => {
     setIsEditDogsModalOpen(true);
     if (scrollToInput) {
-      sessionStorage.setItem('scroll-to-input', 'true');
+      sessionStorage.setItem('scroll-to-element', 'true');
     }
   };
 

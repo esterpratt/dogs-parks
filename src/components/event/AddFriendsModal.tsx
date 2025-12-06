@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router';
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { User } from '../../types/user';
@@ -23,7 +22,6 @@ const AddFriendsModal = (props: AddFriendsModalProps) => {
 
   const { t } = useTranslation();
   const { notify } = useNotification();
-  const navigate = useNavigate();
 
   const [addedFriends, setAddedFriends] = useState<User[]>([]);
 
@@ -45,7 +43,6 @@ const AddFriendsModal = (props: AddFriendsModalProps) => {
         queryClient.invalidateQueries({
           queryKey: ['event', eventId],
         });
-        navigate(`/profile/${userId}/events`);
       },
     });
 

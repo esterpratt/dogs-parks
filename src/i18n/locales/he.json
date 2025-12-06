@@ -3,7 +3,8 @@
     "title": "שפה",
     "modalTitle": "בחירת שפה",
     "english": "אנגלית",
-    "hebrew": "עברית"
+    "hebrew": "עברית",
+    "arabic": "ערבית"
   },
   "userDogs": {
     "titleMyPack": "החבורה שלי",
@@ -390,8 +391,9 @@
       "organizerTitle": "ביקשת למסור"
     },
     "invitees": {
-      "going": "חברים שאישרו נוכחות",
-      "invited": "חברים מוזמנים"
+      "going": "אישרו נוכחות",
+      "invited": "חברים מוזמנים",
+      "declined": "לא מגיעים"
     },
     "organizer": {
       "cancelled": "ביטלת את האירוע",
@@ -418,8 +420,8 @@
     },
     "cancel": {
       "title": "הנך בטוח/ה שברצונך לבטל את האירוע?",
-      "modalBtnTxt": "כן, בטל אירוע",
-      "modalCancelBtnTxt": "לא, השאר אירוע",
+      "modalBtnTxt": "כן, בטל",
+      "modalCancelBtnTxt": "לא, השאר",
       "buttonTxt": "ביטול האירוע",
       "error": "מצטערים, היתה תקלה בביטול האירוע",
       "success": "האירוע בוטל"
@@ -822,7 +824,7 @@
     },
     "edit": {
       "titleUpdate": "עדכון הפרטים של {{name}}",
-      "titleAdd": "פרטי הכלבה/ה",
+      "titleAdd": "פרטי הכלב/ה",
       "labels": {
         "name": "שם *",
         "breed": "גזע *",

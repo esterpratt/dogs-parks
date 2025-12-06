@@ -354,7 +354,7 @@
       "yours": "فعاليتك في",
       "going": "أنت ذاهب إلى فعالية في",
       "invited": "أنت مدعو إلى فعالية في",
-      "cancelled": "Cancelled event at",
+      "cancelled": "أُلغي الحدث في",
       "wentTo": "لقد ذهبت إلى فعالية في",
       "wereInvited": "كنت مدعواً إلى فعالية في"
     },
@@ -368,13 +368,13 @@
       "declined": "الأصدقاء غير الحاضرين"
     },
     "organizer": {
-      "cancelled": "You cancelled the event",
+      "cancelled": "لقد ألغيت الفعالية",
       "ended": "انتهت الفعالية"
     },
     "invitee": {
-      "declined": "You declined the invitation",
-      "cancelled": "The event was cancelled",
-      "removed": "The event was removed",
+      "declined": "لقد رفضت الدعوة",
+      "cancelled": "تم إلغاء الفعالية",
+      "removed": "تم حذف الفعالية",
       "ended": "انتهت الفعالية",
       "decline": {
         "title": "هل أنت متأكد أنك تريد رفض الفعالية؟",
@@ -393,7 +393,7 @@
     "cancel": {
       "title": "هل أنت متأكد أنك تريد إلغاء الفعالية؟",
       "modalBtnTxt": "نعم",
-      "modalCancelBtnTxt": "No, keep it",
+      "modalCancelBtnTxt": "لا، احتفظ به",
       "buttonTxt": "إلغاء الفعالية",
       "error": "عذراً، حدث خطأ أثناء الإلغاء",
       "success": "تم إلغاء الفعالية"

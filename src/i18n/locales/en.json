@@ -3,7 +3,8 @@
     "title": "Language",
     "modalTitle": "Choose language",
     "english": "English",
-    "hebrew": "Hebrew"
+    "hebrew": "Hebrew",
+    "arabic": "Arabic"
   },
   "userDogs": {
     "titleMyPack": "My pack",

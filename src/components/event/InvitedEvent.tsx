@@ -97,7 +97,7 @@ const InvitedEvent = (props: InviteeEventProps) => {
       eventBody={
         <EventBody
           startAt={start_at}
-          endAt={end_at}
+          isEventEnded={isEventEnded}
           organizedBy={creator_name}
           message={message}
           messageTitle={t('event.message.title')}

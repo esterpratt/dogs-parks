@@ -6,6 +6,7 @@ import {
   Invitee,
   ParkEvent,
   ParkEventInviteeStatus,
+  ParkEventStatus,
 } from '../../types/parkEvent';
 import { OrganizerActions } from './OrganizerActions';
 import { EventHeader } from './EventHeader';
@@ -90,7 +91,7 @@ const OrganizerEvent = (props: OrganizerEventProps) => {
         eventBody={
           <EventBody
             startAt={start_at}
-            endAt={end_at}
+            isEventEnded={isEventEnded}
             messageTitle={t('event.message.organizerTitle')}
             message={message}
             invitedFriends={invitedFriends}
@@ -98,7 +99,9 @@ const OrganizerEvent = (props: OrganizerEventProps) => {
             notGoingFriends={notGoingFriends}
             isLoadingFriends={isLoadingFriends || isLoadingFriendshipMap}
             onClickFriendsAddition={
-              notInvitedFriends?.length
+              notInvitedFriends?.length &&
+              status !== ParkEventStatus.CANCELED &&
+              !isEventEnded
                 ? () => setIsFriendsModalOpen(true)
                 : null
             }

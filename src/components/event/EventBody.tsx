@@ -19,7 +19,7 @@ interface EventBodyProps {
   message?: string;
   messageTitle?: string;
   startAt: string;
-  endAt?: string;
+  isEventEnded: boolean;
   goingFriends: User[];
   invitedFriends: User[];
   notGoingFriends?: User[];
@@ -38,7 +38,7 @@ const EventBody = (props: EventBodyProps) => {
     notGoingFriends,
     organizedBy,
     startAt,
-    endAt,
+    isEventEnded,
     onClickFriendsAddition,
     isLoadingFriends,
   } = props;
@@ -47,7 +47,6 @@ const EventBody = (props: EventBodyProps) => {
   const { formatFutureCalendar } = useDateUtils();
   const startTime = formatFutureCalendar(startAt);
 
-  const isEventEnded = endAt && new Date() > new Date(endAt);
   const timeDisplay = isEventEnded ? t('event.ended') : startTime;
 
   const generalDetails = [
