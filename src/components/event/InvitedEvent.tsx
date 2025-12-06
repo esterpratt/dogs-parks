@@ -39,7 +39,7 @@ const InvitedEvent = (props: InviteeEventProps) => {
   });
 
   const inviteeStatus = invitee?.status;
-  const isEventEnded = end_at && new Date() > new Date(end_at);
+  const isEventEnded = !!end_at && new Date() > new Date(end_at);
 
   const { invitedFriends, goingFriends } = useMemo(() => {
     const invitedFriends: User[] = [];

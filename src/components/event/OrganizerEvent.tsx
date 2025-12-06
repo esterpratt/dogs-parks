@@ -32,7 +32,7 @@ const OrganizerEvent = (props: OrganizerEventProps) => {
 
   const { t } = useTranslation();
 
-  const isEventEnded = end_at && new Date() > new Date(end_at);
+  const isEventEnded = !!end_at && new Date() > new Date(end_at);
 
   const { invitedFriends, goingFriends, notGoingFriends, notInvitedFriends } =
     useMemo(() => {
