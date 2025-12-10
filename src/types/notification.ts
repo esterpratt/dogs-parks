@@ -28,13 +28,11 @@ interface Notification {
   sender_id: string;
   receiver_id: string;
   title: string;
-  app_message: string;
-  push_message?: string;
+  app_message: string | null;
+  push_message: string | null;
   read_at: string | null;
   seen_at: string | null;
-  delivered_at: boolean;
   created_at: string;
-  is_ready: boolean;
   sender?: {
     id: string;
     name: string | null;

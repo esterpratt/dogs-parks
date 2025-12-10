@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, type InfiniteData } from '@tanstack/react-query';
 import { useContext } from 'react';
 import classnames from 'classnames';
 import { Notification } from '../../types/notification';
@@ -44,13 +44,71 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
 
   const { mutate: markAsReadMutation } = useMutation({
     mutationFn: () => markAsRead({ notificationId: notification.id }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
+    onMutate: async () => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries({
         queryKey: ['unseenNotifications', userId],
       });
-      queryClient.invalidateQueries({
+      await queryClient.cancelQueries({
         queryKey: ['seenNotifications', userId],
       });
+
+      // Snapshot previous values for rollback
+      const prevUnseen = queryClient.getQueryData([
+        'unseenNotifications',
+        userId,
+      ]);
+      const prevSeen = queryClient.getQueryData([
+        'seenNotifications',
+        userId,
+      ]);
+
+      const now = new Date().toISOString();
+
+      // Optimistically update unseenNotifications
+      queryClient.setQueryData(
+        ['unseenNotifications', userId],
+        (old: Notification[] | undefined) => {
+          if (!old) {
+            return old;
+          }
+          return old.map((n) =>
+            n.id === notification.id ? { ...n, read_at: now } : n
+          );
+        }
+      );
+
+      // Optimistically update seenNotifications (infinite query)
+      queryClient.setQueryData(
+        ['seenNotifications', userId],
+        (old: InfiniteData<Notification[]> | undefined) => {
+          if (!old) {
+            return old;
+          }
+          return {
+            ...old,
+            pages: old.pages.map((page) =>
+              page.map((n) =>
+                n.id === notification.id ? { ...n, read_at: now } : n
+              )
+            ),
+          };
+        }
+      );
+
+      return { prevUnseen, prevSeen };
+    },
+    onError: (_err, _variables, context) => {
+      // Rollback on error
+      if (context?.prevUnseen) {
+        queryClient.setQueryData(
+          ['unseenNotifications', userId],
+          context.prevUnseen
+        );
+      }
+      if (context?.prevSeen) {
+        queryClient.setQueryData(['seenNotifications', userId], context.prevSeen);
+      }
     },
   });
 

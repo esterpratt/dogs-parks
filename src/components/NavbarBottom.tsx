@@ -18,7 +18,7 @@ import classnames from 'classnames';
 import { UserContext } from '../context/UserContext';
 import { useClickOutside } from '../hooks/useClickOutside';
 import { NavbarLogoutButton } from './NavbarLogoutButton';
-import { useNotificationCount } from '../hooks/api/useNotificationCount';
+import { useUnseenNotificationsCount } from '../hooks/api/useUnseenNotificationsCount';
 import styles from './NavbarBottom.module.scss';
 import { LanguageSwitcher } from './LanguageSwitcher';
 
@@ -29,7 +29,7 @@ const NavbarBottom = () => {
   const menuRef = useRef(null);
   const moreButtonRef = useRef(null);
 
-  const unseenNotificationCount = useNotificationCount();
+  const unseenNotificationCount = useUnseenNotificationsCount();
 
   useClickOutside({
     refs: [menuRef, moreButtonRef],

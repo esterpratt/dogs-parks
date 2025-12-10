@@ -21,6 +21,10 @@ interface NotificationsModalProps {
 interface NotificationPreferences {
   friendRequests: boolean;
   friendApprovals: boolean;
+  parkInvite: boolean;
+  parkInviteAccept: boolean;
+  parkInviteDecline: boolean;
+  parkInviteCancelled: boolean;
 }
 
 interface NotificationSectionProps {
@@ -72,6 +76,10 @@ export const NotificationsModal: React.FC<NotificationsModalProps> = ({
   const [preferences, setPreferences] = useState<NotificationPreferences>({
     friendRequests: true,
     friendApprovals: true,
+    parkInvite: true,
+    parkInviteAccept: true,
+    parkInviteDecline: true,
+    parkInviteCancelled: true,
   });
 
   const { userId } = useContext(UserContext);
@@ -89,6 +97,10 @@ export const NotificationsModal: React.FC<NotificationsModalProps> = ({
       setPreferences({
         friendRequests: serverPreferences.friend_request,
         friendApprovals: serverPreferences.friend_approval,
+        parkInvite: serverPreferences.park_invite,
+        parkInviteAccept: serverPreferences.park_invite_accept,
+        parkInviteDecline: serverPreferences.park_invite_decline,
+        parkInviteCancelled: serverPreferences.park_invite_cancelled,
       });
     }
   }, [serverPreferences]);
@@ -110,6 +122,10 @@ export const NotificationsModal: React.FC<NotificationsModalProps> = ({
         muted: muteAll,
         friend_request: preferences.friendRequests,
         friend_approval: preferences.friendApprovals,
+        park_invite: preferences.parkInvite,
+        park_invite_accept: preferences.parkInviteAccept,
+        park_invite_decline: preferences.parkInviteDecline,
+        park_invite_cancelled: preferences.parkInviteCancelled,
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -185,6 +201,38 @@ export const NotificationsModal: React.FC<NotificationsModalProps> = ({
                 )}
                 value={preferences.friendApprovals}
                 onChange={(value) => updatePreference('friendApprovals', value)}
+              />
+              <NotificationSection
+                title={t('notifications.modal.types.parkInvite.title')}
+                description={t(
+                  'notifications.modal.types.parkInvite.description'
+                )}
+                value={preferences.parkInvite}
+                onChange={(value) => updatePreference('parkInvite', value)}
+              />
+              <NotificationSection
+                title={t('notifications.modal.types.parkInviteAccept.title')}
+                description={t(
+                  'notifications.modal.types.parkInviteAccept.description'
+                )}
+                value={preferences.parkInviteAccept}
+                onChange={(value) => updatePreference('parkInviteAccept', value)}
+              />
+              <NotificationSection
+                title={t('notifications.modal.types.parkInviteDecline.title')}
+                description={t(
+                  'notifications.modal.types.parkInviteDecline.description'
+                )}
+                value={preferences.parkInviteDecline}
+                onChange={(value) => updatePreference('parkInviteDecline', value)}
+              />
+              <NotificationSection
+                title={t('notifications.modal.types.parkInviteCancelled.title')}
+                description={t(
+                  'notifications.modal.types.parkInviteCancelled.description'
+                )}
+                value={preferences.parkInviteCancelled}
+                onChange={(value) => updatePreference('parkInviteCancelled', value)}
                 isLast={true}
               />
             </div>

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import { InfiniteData } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { Notification } from '../../types/notification';
 import { NotificationItem } from '../../components/notifications/NotificationItem';
@@ -22,8 +21,7 @@ type ListRow =
     };
 
 interface NotificationsListProps {
-  historicalData: InfiniteData<Notification[], unknown> | undefined;
-  unseenNotifications: Notification[];
+  notifications: Notification[];
   newIds: string[];
   hasNextPage: boolean;
   isFetchingNextPage: boolean;
@@ -33,8 +31,7 @@ interface NotificationsListProps {
 const NotificationsList = (props: NotificationsListProps) => {
   const { t } = useTranslation();
   const {
-    historicalData,
-    unseenNotifications,
+    notifications,
     newIds,
     hasNextPage,
     isFetchingNextPage,
@@ -43,24 +40,16 @@ const NotificationsList = (props: NotificationsListProps) => {
 
   const parentRef = useRef<HTMLDivElement>(null);
 
-  const historicalNotifications = useMemo(() => {
-    return historicalData?.pages.flat() ?? [];
-  }, [historicalData]);
-
-  const allNotifications = useMemo(() => {
-    return [...unseenNotifications, ...historicalNotifications];
-  }, [unseenNotifications, historicalNotifications]);
-
   const newIdsSet = useMemo(() => new Set(newIds), [newIds]);
 
-  // Build virtualized rows (new section based on newIds + historical section)
+  // build new/old lists from the single merged list
   const virtualizedItems: ListRow[] = useMemo(() => {
     const rows: ListRow[] = [];
 
-    const newList = allNotifications.filter((notification) =>
+    const newList = notifications.filter((notification) =>
       newIdsSet.has(notification.id)
     );
-    const oldList = allNotifications.filter(
+    const oldList = notifications.filter(
       (notification) => !newIdsSet.has(notification.id)
     );
 
@@ -114,11 +103,10 @@ const NotificationsList = (props: NotificationsListProps) => {
     }
 
     return rows;
-  }, [allNotifications, newIdsSet, t]);
+  }, [notifications, newIdsSet, t]);
 
   const unreadCount =
-    allNotifications.filter((notification) => !notification.read_at).length ??
-    0;
+    notifications.filter((notification) => !notification.read_at).length ?? 0;
 
   const dataCount = virtualizedItems.length;
   const hasLoaderRow = hasNextPage;

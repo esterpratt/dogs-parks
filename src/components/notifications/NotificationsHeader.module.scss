@@ -1,0 +1,38 @@
+@use '../../variables.scss' as *;
+
+$header-height: 60px;
+
+.header {
+  height: $header-height;
+  padding: 0 calc(16px + var(--safe-area-inset-right, 0px)) 0
+    calc(16px + var(--safe-area-inset-left, 0px));
+  background: var(--color-background);
+  box-shadow: $box-shadow-sm;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.title-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .settings-button {
+    border-radius: 8px;
+    height: 36px;
+    width: 36px;
+    box-shadow: $box-shadow;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.title {
+  margin: 0;
+  font-size: $title-font-size;
+}
