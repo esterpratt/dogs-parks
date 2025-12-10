@@ -328,6 +328,22 @@
         "friendApprovals": {
           "title": "موافقة الصداقة",
           "description": "تلقي إشعار عند موافقة طلب الصداقة الخاص بك"
+        },
+        "parkInvite": {
+          "title": "دعوات الحديقة",
+          "description": "تلقي إشعار عند دعوتك من صديق إلى حديقة"
+        },
+        "parkInviteAccept": {
+          "title": "قبول دعوة الحديقة",
+          "description": "تلقي إشعار عند قبول صديق لدعوتك إلى حديقة"
+        },
+        "parkInviteDecline": {
+          "title": "رفض دعوة الحديقة",
+          "description": "تلقي إشعار عند رفض صديق لدعوتك إلى حديقة"
+        },
+        "parkInviteCancelled": {
+          "title": "إلغاء دعوة الحديقة",
+          "description": "تلقي إشعار عند إلغاء صديق لفعالية أنت مدعو إليها"
         }
       }
     }

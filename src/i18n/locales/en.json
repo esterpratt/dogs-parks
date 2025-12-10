@@ -326,6 +326,22 @@
         "friendApprovals": {
           "title": "Friend approvals",
           "description": "Get notified when your friend requests are accepted"
+        },
+        "parkInvite": {
+          "title": "Park invites",
+          "description": "Get notified when a friend invites you to a park"
+        },
+        "parkInviteAccept": {
+          "title": "Park invite acceptances",
+          "description": "Get notified when a friend accepts your invitation to a park"
+        },
+        "parkInviteDecline": {
+          "title": "Park invite declines",
+          "description": "Get notified when a friend declines your invitation to a park"
+        },
+        "parkInviteCancelled": {
+          "title": "Park invite cancellations",
+          "description": "Get notified when a friend cancels an event you are invited to"
         }
       }
     }

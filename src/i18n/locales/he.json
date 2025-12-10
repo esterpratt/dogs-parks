@@ -328,6 +328,22 @@
         "friendApprovals": {
           "title": "אישור חברות",
           "description": "קבלת התראה כאשר בקשת חברות שלך מאושרת"
+        },
+        "parkInvite": {
+          "title": "הזמנה לגינה",
+          "description": "קבלת התראה כאשר נשלחת אליך הזמנה לגינה"
+        },
+        "parkInviteAccept": {
+          "title": "אישור הזמנה לגינה",
+          "description": "קבלת התראה כאשר הזמנה שלך לגינה מאושרת"
+        },
+        "parkInviteDecline": {
+          "title": "דחיית הזמנה לגינה",
+          "description": "קבלת התראה כאשר הזמנה שלך לגינה נדחית"
+        },
+        "parkInviteCancelled": {
+          "title": "ביטול הזמנה לגינה",
+          "description": "קבלת התראה כאשר הזמנה לגינה מבוטלת"
         }
       }
     }
