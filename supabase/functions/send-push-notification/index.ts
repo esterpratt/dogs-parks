@@ -33,6 +33,10 @@ interface NotificationPreferencesRow {
   muted: boolean | null;
   friend_request: boolean | null;
   friend_approval: boolean | null;
+  park_invite: boolean | null;
+  park_invite_accept: boolean | null;
+  park_invite_decline: boolean | null;
+  park_invite_cancelled: boolean | null;
 }
 
 interface ServiceAccountCredentials {
@@ -107,7 +111,7 @@ serve(async (req) => {
     // ---- Preferences ----
     const { data: prefs, error: prefsErr } = await supabase
       .from('notifications_preferences')
-      .select('muted, friend_request, friend_approval')
+      .select('muted, friend_request, friend_approval, park_invite, park_invite_accept, park_invite_decline, park_invite_cancelled')
       .eq('user_id', record.receiver_id)
       .maybeSingle<NotificationPreferencesRow>();
     if (prefsErr) {
@@ -294,6 +298,18 @@ function getPrefKey(
     }
     case NotificationType.FRIEND_APPROVAL: {
       return 'friend_approval';
+    }
+    case NotificationType.PARK_INVITE: {
+      return 'park_invite';
+    }
+    case NotificationType.PARK_INVITE_ACCEPT: {
+      return 'park_invite_accept';
+    }
+    case NotificationType.PARK_INVITE_DECLINE: {
+      return 'park_invite_decline';
+    }
+    case NotificationType.PARK_INVITE_CANCELLED: {
+      return 'park_invite_cancelled';
     }
     default: {
       return null;
