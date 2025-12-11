@@ -1,8 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
-import { updateInvitee } from '../../services/events';
-import { ParkEventInviteeStatus } from '../../types/parkEvent';
-import { queryClient } from '../../services/react-query';
 import { useTranslation } from 'react-i18next';
+import { ParkEventInviteeStatus } from '../../types/parkEvent';
+import { updateInvitee } from '../../services/events';
+import { queryClient } from '../../services/react-query';
 import { useNotification } from '../../context/NotificationContext';
 
 interface UseUpdateInviteeParams {

@@ -1,12 +1,12 @@
 import { useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
+import { useUserInvitedEvents } from '../../hooks/api/useUserInvitedEvents';
+import { useUserOrganizedEvents } from '../../hooks/api/useUserOrganizedEvents';
 import { UserContext } from '../../context/UserContext';
 import { fetchUserReviews } from '../../services/reviews';
 import { TabsList } from '../tabs/TabsList';
 import styles from './ProfileTabs.module.scss';
-import { useTranslation } from 'react-i18next';
-import { useUserInvitedEvents } from '../../hooks/api/useUserInvitedEvents';
-import { useUserOrganizedEvents } from '../../hooks/api/useUserOrganizedEvents';
 
 const ProfileTabs = () => {
   const { userId } = useContext(UserContext);

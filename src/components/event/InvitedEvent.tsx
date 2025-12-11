@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useQuery } from '@tanstack/react-query';
 import { useFetchFriends } from '../../hooks/api/useFetchFriends';
 import { User } from '../../types/user';
 import {
@@ -8,12 +9,11 @@ import {
   ParkEventInviteeStatus,
   ParkEventStatus,
 } from '../../types/parkEvent';
+import { fetchInvitee } from '../../services/events';
 import { EventHeader } from './EventHeader';
 import { EventBody } from './EventBody';
 import { EventDetails } from './EventDetails';
 import { InviteeActions } from './InviteeActions';
-import { fetchInvitee } from '../../services/events';
-import { useQuery } from '@tanstack/react-query';
 
 interface InviteeEventProps {
   event: ParkEvent;

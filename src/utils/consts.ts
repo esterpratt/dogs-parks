@@ -4,8 +4,6 @@ export const FIVE_MINUTES = 1000 * 60 * 5;
 
 export const ONE_MINUTE = 1000 * 60;
 
-export const MS_IN_MINUTE = 60000;
-
 export const MAX_IMAGES = 5;
 
 export const USER_NOT_FOUND_ERROR = 'User not found';

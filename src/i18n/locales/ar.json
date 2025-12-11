@@ -190,8 +190,8 @@
     "downloadFrom": "حمل كلابهاب من {{store}}",
     "continueHere": "للمتابعة هنا",
     "store": {
-      "appStore": "متجر آب ستور",
-      "googlePlay": "متجر جوجل بلاي"
+      "appStore": "App Store",
+      "googlePlay": "Google Play"
     }
   },
   "settings": {
@@ -496,8 +496,8 @@
     "placeholderPassword": "كلمة المرور *",
     "placeholderName": "الاسم *",
     "continue": "تسجيل الدخول مع",
-    "withApple": "آبل",
-    "withGoogle": "جوجل",
+    "withApple": "Apple",
+    "withGoogle": "Google",
     "missingDetails": "يرجى ملء التفاصيل المفقودة",
     "pleaseEnterEmail": "يرجى إدخال البريد الإلكتروني",
     "or": "أو سجل الدخول مع",
@@ -509,12 +509,12 @@
     "resetPassword": "إعادة تعيين كلمة المرور",
     "cta": {
       "apple": {
-        "signup": "آبل",
-        "continue": "آبل"
+        "signup": "Apple",
+        "continue": "Apple"
       },
       "google": {
-        "signup": "جوجل",
-        "continue": "جوجل"
+        "signup": "Google",
+        "continue": "Google"
       }
     }
   },

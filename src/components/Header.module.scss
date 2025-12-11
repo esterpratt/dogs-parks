@@ -53,7 +53,7 @@
   width: 100%;
 }
 
-:global(body.dark) .header {
+:global(.dark) .header {
   border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 

@@ -11,6 +11,10 @@ import { getDogNames } from '../utils/getDogNames';
 import { ONE_MINUTE } from '../utils/consts';
 import { fetchDogPrimaryImage } from '../services/dogs';
 import { fetchUserFavorites } from '../services/favorites';
+import {
+  fetchUserInvitedEvents,
+  fetchUserOrganizedEvents,
+} from '../services/events';
 import { usePrefetchRoutesOnIdle } from '../hooks/usePrefetchRoutesOnIdle';
 import { useIsAllowedToViewProfile } from '../hooks/useIsAllowedToViewProfile';
 import { usePrefetchFriendsWithDogs } from '../hooks/api/usePrefetchFriendsWithDogs';
@@ -19,14 +23,9 @@ import { FriendRequestButton } from '../components/profile/FriendRequestButton';
 import { Header } from '../components/Header';
 import { HeaderImage } from '../components/HeaderImage';
 import { PrevLinks } from '../components/PrevLinks';
+import { Button } from '../components/Button';
 import DogIcon from '../assets/dog.svg?react';
 import styles from './Profile.module.scss';
-
-import {
-  fetchUserInvitedEvents,
-  fetchUserOrganizedEvents,
-} from '../services/events';
-import { Button } from '../components/Button';
 
 const Profile: React.FC = () => {
   const { user, dogs } = useLoaderData();

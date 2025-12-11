@@ -6,7 +6,7 @@ import { Link } from 'react-router';
 import { ParkEventVisibility } from '../../types/parkEvent';
 import { User } from '../../types/user';
 import { getConflictedEvents } from '../../utils/events';
-import { MS_IN_MINUTE } from '../../utils/consts';
+import { ONE_MINUTE } from '../../utils/consts';
 import { createParkEvent } from '../../services/events';
 import { queryClient } from '../../services/react-query';
 import { useNotification } from '../../context/NotificationContext';
@@ -58,7 +58,7 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
 
     return getConflictedEvents({
       events: normalizedForConflictEvents,
-      startMs: Date.now() + Number(minutesOffset) * MS_IN_MINUTE,
+      startMs: Date.now() + Number(minutesOffset) * ONE_MINUTE,
     });
   }, [minutesOffset, normalizedForConflictEvents, isOpen]);
 

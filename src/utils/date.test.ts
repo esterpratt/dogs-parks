@@ -53,7 +53,7 @@ describe('date.ts utils', () => {
     expect(getFormattedPastDate(tenDaysAgo, 'he')).toBe('לפני 10 ימים');
   });
 
-  it('getFormattedPastDate uses locale fomraatted for > 31 days', () => {
+  it('getFormattedPastDate uses locale formatted for > 31 days', () => {
     const d = new Date('2024-01-01T00:00:00Z');
     const en = getFormattedPastDate(d, 'en');
     const he = getFormattedPastDate(d, 'he');

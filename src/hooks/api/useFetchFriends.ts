@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { fetchUsers } from '../../services/users';
 import { FRIENDSHIP_STATUS } from '../../types/friendship';
 import { getFriendIdsByStatus } from '../../utils/friendship';
 import { useUserFriendshipMap } from './useUserFriendshipMap';
-import { useQuery } from '@tanstack/react-query';
-import { fetchUsers } from '../../services/users';
 
 interface UseFetchFriendsParams {
   userId?: string | null;

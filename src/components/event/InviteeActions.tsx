@@ -1,12 +1,12 @@
-import { ParkEventInviteeStatus, ParkEventStatus } from '../../types/parkEvent';
-import { Button } from '../Button';
 import { useTranslation } from 'react-i18next';
-import { Loader } from '../Loader';
-import { useUpdateInvitee } from '../../hooks/api/useUpdateInvitee';
-import { useConfirm } from '../../context/ConfirmModalContext';
 import { Check, X } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { useCallback } from 'react';
+import { ParkEventInviteeStatus, ParkEventStatus } from '../../types/parkEvent';
+import { useUpdateInvitee } from '../../hooks/api/useUpdateInvitee';
+import { useConfirm } from '../../context/ConfirmModalContext';
+import { Button } from '../Button';
+import { Loader } from '../Loader';
 import styles from './InviteeActions.module.scss';
 
 interface InviteeActionsProps {
