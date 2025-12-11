@@ -45,6 +45,7 @@
     "dayjs": "1.11.11",
     "geolib": "3.3.4",
     "i18next": "^25.5.2",
+    "i18next-http-backend": "^3.0.2",
     "leaflet": "1.9.4",
     "leaflet-control-geocoder": "2.4.0",
     "lucide-react": "0.488.0",

@@ -1,14 +1,6 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import en from './locales/en.json';
-import he from './locales/he.json';
-import ar from './locales/ar.json';
-
-const resources = {
-  en: { translation: en },
-  he: { translation: he },
-  ar: { translation: ar },
-} as const;
+import HttpBackend from 'i18next-http-backend';
 
 export interface InitI18nParams {
   lng?: 'en' | 'he' | 'ar';
@@ -19,9 +11,9 @@ function initI18n(params: InitI18nParams = {}): typeof i18n {
 
   if (!i18n.isInitialized) {
     i18n
+      .use(HttpBackend)
       .use(initReactI18next)
       .init({
-        resources,
         lng: lng ?? 'en',
         fallbackLng: 'en',
         supportedLngs: ['en', 'he', 'ar'],
@@ -32,6 +24,9 @@ function initI18n(params: InitI18nParams = {}): typeof i18n {
         returnEmptyString: false,
         load: 'currentOnly',
         react: { useSuspense: false },
+        backend: {
+          loadPath: '/locales/{{lng}}/{{ns}}.json',
+        },
       })
       .catch((error) => {
         console.error('i18n init error', error);
@@ -47,4 +42,4 @@ function initI18n(params: InitI18nParams = {}): typeof i18n {
   return i18n;
 }
 
-export { i18n, resources, initI18n };
+export { i18n, initI18n };
