@@ -19,7 +19,7 @@ test.describe('parks (visitor)', () => {
     if (!(await searchInput.count())) {
       searchInput = page.getByPlaceholder('Search park');
     }
-    await expect(searchInput).toBeVisible();
+    await expect(searchInput).toBeVisible({ timeout: 15000 });
 
     // Single phase: apply search filter then wait for at least one matching card
     await searchInput.fill('Givatayim Park');

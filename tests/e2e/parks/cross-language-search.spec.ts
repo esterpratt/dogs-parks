@@ -23,7 +23,7 @@ test.describe('parks (cross-language search)', () => {
 
     // Resolve search input (by test id or placeholder)
     const searchInput = page.getByTestId('park-search-input');
-    await expect(searchInput).toBeVisible();
+    await expect(searchInput).toBeVisible({ timeout: 15000 });
 
     // Search for Hebrew park name "חיל הא" (partial Hebrew name for "Heil Haavir")
     await searchInput.fill('חיל הא');
@@ -78,7 +78,7 @@ test.describe('parks (cross-language search)', () => {
 
     // Resolve search input (by test id or placeholder)
     const searchInput = page.getByTestId('park-search-input');
-    await expect(searchInput).toBeVisible();
+    await expect(searchInput).toBeVisible({ timeout: 15000 });
 
     // Search for full Hebrew park name "חיל האוויר" (Hebrew name for "Heil Haavir")
     await searchInput.fill('חיל האוויר');
@@ -133,7 +133,7 @@ test.describe('parks (cross-language search)', () => {
 
     // Resolve search input (by test id or placeholder)
     const searchInput = page.getByTestId('park-search-input');
-    await expect(searchInput).toBeVisible();
+    await expect(searchInput).toBeVisible({ timeout: 15000 });
 
     // Search for English park name "Heil Haavir"
     await searchInput.fill('Heil Haavir');

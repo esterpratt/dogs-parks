@@ -38,6 +38,9 @@ jobs:
 
       - name: Run E2E tests
         run: npm run test:e2e
+        env:
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
 
       - name: Security audit (fail on high)
         run: |
