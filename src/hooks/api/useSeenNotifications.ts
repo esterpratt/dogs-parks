@@ -30,6 +30,7 @@ const useSeenNotifications = () => {
     },
     enabled: !!userId,
     staleTime: 0,
+    gcTime: 0,
     refetchOnMount: 'always',
     refetchOnWindowFocus: false,
     refetchOnReconnect: true,
