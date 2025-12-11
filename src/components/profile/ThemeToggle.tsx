@@ -10,7 +10,7 @@ export const ThemeToggle = () => {
 
   return (
     <ToggleInput
-      label={t('userInfo.theme.darkMode')}
+      label={t('settings.theme.darkMode')}
       value={mode}
       valueOn="dark"
       valueOff="light"

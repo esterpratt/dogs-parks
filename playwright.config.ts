@@ -21,6 +21,7 @@ export default defineConfig({
   testDir: 'tests/e2e',
   fullyParallel: true,
   retries: process.env.CI ? 1 : 0,
+  maxFailures: process.env.CI ? undefined : 1, // Stop after first failure in local dev
   reporter: [['list'], ['html', { open: 'never' }]],
   use: {
     baseURL: 'http://localhost:5173',

@@ -1,21 +1,29 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import type { RealtimeChannel, Session } from '@supabase/supabase-js';
 import { supabase } from '../../services/supabase-client';
-import { UserContext } from '../../context/UserContext';
-import { queryClient } from '../../services/react-query';
 import type { Notification } from '../../types/notification';
+import { queryClient } from '../../services/react-query';
+import { UserContext } from '../../context/UserContext';
 
 // Keep one channel across mounts
 let activeChannelKey: string | null = null;
 let activeChannelRef: RealtimeChannel | null = null;
 let lastAccessToken: string | null = null;
 
-function invalidateNotificationsKeys(uid: string): void {
+function invalidateNotificationsKeys(
+  uid: string,
+  isOnNotificationsPage: boolean
+): void {
   queryClient.invalidateQueries({ queryKey: ['unseenNotifications', uid] });
   queryClient.invalidateQueries({ queryKey: ['seenNotifications', uid] });
-  queryClient.invalidateQueries({
-    queryKey: ['notification-preferences', uid],
-  });
+
+  // Only invalidate count if user is NOT on notifications page
+  // (if on page, notifications get marked immediately, count stays 0)
+  if (!isOnNotificationsPage) {
+    queryClient.invalidateQueries({
+      queryKey: ['notifications', 'unseenCount', uid],
+    });
+  }
 }
 
 function useNotificationsRealtime() {
@@ -41,37 +49,27 @@ function useNotificationsRealtime() {
       return;
     }
 
-    function upsertReadyUnseen(newRow?: Notification) {
-      if (!newRow || !newRow.is_ready || newRow.seen_at) {
-        return;
-      }
-      queryClient.setQueryData<Notification[]>(
-        ['unseenNotifications', userId],
-        (prev = []) => {
-          const exists = prev.some((n) => n.id === newRow.id);
-          const next = exists
-            ? prev.map((n) => (n.id === newRow.id ? { ...n, ...newRow } : n))
-            : [newRow, ...prev];
-
-          next.sort(
-            (a, b) =>
-              new Date(b.created_at).getTime() -
-              new Date(a.created_at).getTime()
-          );
-          return next.slice(0, 200);
-        }
-      );
-    }
-
     async function startChannelFor(uid: string) {
+      function handleNotificationInsert(newRow?: Notification) {
+        if (!newRow) {
+          return;
+        }
+
+        const onNotificationsPage =
+          window.location.pathname === '/notifications';
+        invalidateNotificationsKeys(uid, onNotificationsPage);
+      }
+
       if (startingRef.current) {
         return;
       }
+
       startingRef.current = true;
 
       const {
         data: { session },
       } = await supabase.auth.getSession();
+
       const token = session?.access_token ?? null;
       if (!token) {
         startingRef.current = false;
@@ -101,8 +99,10 @@ function useNotificationsRealtime() {
           activeChannelRef.subscribe((status) => {
             if (status === 'SUBSCRIBED') {
               setIsConnected(true);
-              // Pull anything missed before join
-              invalidateNotificationsKeys(uid);
+              invalidateNotificationsKeys(
+                uid,
+                window.location.pathname === '/notifications'
+              );
             }
           });
         }
@@ -110,23 +110,25 @@ function useNotificationsRealtime() {
         return;
       }
 
-      // Create a fresh channel
+      // Listen to INSERT events
       const channel = supabase.channel(key).on(
         'postgres_changes',
         {
-          event: 'UPDATE',
+          event: 'INSERT',
           schema: 'public',
           table: 'notifications',
           filter: `receiver_id=eq.${uid}`,
         },
-        (payload) => upsertReadyUnseen(payload.new as Notification)
+        (payload) => handleNotificationInsert(payload.new as Notification)
       );
 
       channel.subscribe((status) => {
         if (status === 'SUBSCRIBED') {
           setIsConnected(true);
-          // Guarantee a cold pull on first subscribe
-          invalidateNotificationsKeys(uid);
+          invalidateNotificationsKeys(
+            uid,
+            window.location.pathname === '/notifications'
+          );
           return;
         }
         if (
@@ -135,9 +137,8 @@ function useNotificationsRealtime() {
           status === 'TIMED_OUT'
         ) {
           setIsConnected(false);
-          // Keep UI fresh if socket drops
           queryClient.invalidateQueries({
-            queryKey: ['unseenNotifications', uid],
+            queryKey: ['notifications', 'unseenCount', uid],
           });
         }
       });
@@ -158,7 +159,10 @@ function useNotificationsRealtime() {
         if (token && token !== lastAccessToken) {
           supabase.realtime.setAuth(token);
           lastAccessToken = token;
-          invalidateNotificationsKeys(uid);
+          invalidateNotificationsKeys(
+            uid,
+            window.location.pathname === '/notifications'
+          );
         }
 
         await startChannelFor(uid);
@@ -167,7 +171,7 @@ function useNotificationsRealtime() {
       }
     }
 
-    primeAndStart(userId);
+    void primeAndStart(userId);
 
     // Auth listener (handles initial session + refresh + sign-out)
     const { data: listener } = supabase.auth.onAuthStateChange(
@@ -178,7 +182,10 @@ function useNotificationsRealtime() {
           if (next) {
             supabase.realtime.setAuth(next);
             lastAccessToken = next;
-            invalidateNotificationsKeys(userId);
+            invalidateNotificationsKeys(
+              userId,
+              window.location.pathname === '/notifications'
+            );
 
             if (!activeChannelRef || activeChannelRef.state !== 'joined') {
               void startChannelFor(userId);

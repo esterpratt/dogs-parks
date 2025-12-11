@@ -1,32 +1,34 @@
 import { useState } from 'react';
-import { useLocation, useParams, Link } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { Cake, Mars, MoveLeft, Pencil, Tag, Venus } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
+import { Trans, useTranslation } from 'react-i18next';
 import classnames from 'classnames';
-import DogIcon from '../assets/dog.svg?react';
-import { DogDetails } from '../components/dog/DogDetails';
-import { DogGalleryContainer } from '../components/dog/DogGalleryContainer';
+import { GENDER } from '../types/dog';
 import {
   fetchDogPrimaryImage,
   fetchDogs,
   uploadDogPrimaryImage,
 } from '../services/dogs';
-import { GENDER } from '../types/dog';
 import { queryClient } from '../services/react-query';
 import { getLocalizedDogAgeText } from '../utils/dogAge';
+import { capitalizeText } from '../utils/text';
+import { useUploadImage } from '../hooks/api/useUploadImage';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
+import DogIcon from '../assets/dog.svg?react';
+import { DogDetails } from '../components/dog/DogDetails';
+import { DogGalleryContainer } from '../components/dog/DogGalleryContainer';
 import { Loader } from '../components/Loader';
 import { EnlargeImageModal } from '../components/EnlargeImageModal';
 import { Button } from '../components/Button';
 import { DogPreferences } from '../components/dog/DogPreferences';
 import { Header } from '../components/Header';
 import { HeaderImage } from '../components/HeaderImage';
+import { PrevLinks } from '../components/PrevLinks';
 import { EditDogModal } from '../components/dog/EditDogModal';
 import { CameraModal } from '../components/camera/CameraModal';
+
 import styles from './UserDog.module.scss';
-import { capitalizeText } from '../utils/text';
-import { useUploadImage } from '../hooks/api/useUploadImage';
-import { useTranslation } from 'react-i18next';
 
 const UserDog = () => {
   const { dogId } = useParams();
@@ -77,7 +79,7 @@ const UserDog = () => {
   const onEditDog = (scrollToInput?: boolean) => {
     setIsEditDogsModalOpen(true);
     if (scrollToInput) {
-      sessionStorage.setItem('scroll-to-input', 'true');
+      sessionStorage.setItem('scroll-to-element', 'true');
     }
   };
 
@@ -110,16 +112,23 @@ const UserDog = () => {
       <div className={styles.container}>
         <Header
           prevLinksCmp={
-            <Link to={`/profile/${dog.owner}/dogs`}>
-              <MoveLeft size={16} />
-              {isSignedInUser ? (
-                <span>{t('userDogs.titleMyPack')}</span>
-              ) : (
-                <span className={styles.userName}>
-                  {t('userDogs.titleUsersPack', { name: userName })}
-                </span>
-              )}
-            </Link>
+            <PrevLinks
+              links={{
+                to: `/profile/${dog.owner}/dogs`,
+                icon: <MoveLeft size={16} />,
+                text: isSignedInUser ? (
+                  t('userDogs.titleMyPack')
+                ) : (
+                  <Trans
+                    i18nKey="userDogs.titleUsersPack"
+                    values={{ name: userName }}
+                    components={{
+                      name: <span className={styles.name} />,
+                    }}
+                  />
+                ),
+              }}
+            />
           }
           imgCmp={
             <HeaderImage
@@ -132,7 +141,6 @@ const UserDog = () => {
               isLoading={isPending}
             />
           }
-          imgsClassName={styles.imgContainer}
           bottomCmp={
             <>
               <div className={styles.details}>

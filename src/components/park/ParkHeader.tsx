@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import {
   MapPin,
@@ -7,16 +6,9 @@ import {
   ShareIcon,
   TreeDeciduous,
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
-import classnames from 'classnames';
-import { Header } from '../Header';
-import { HeaderImage } from '../HeaderImage';
-import { ReviewsPreview } from './ReviewsPreview';
-import { FavoriteButton } from './FavoriteButton';
-import { ParkCheckIn } from './ParkCheckIn';
-import { ParkIcon } from './ParkIcon';
-import { CameraModal } from '../camera/CameraModal';
-import { EnlargeImageModal } from '../EnlargeImageModal';
+import { Share } from '@capacitor/share';
 import { useNotification } from '../../context/NotificationContext';
 import { UserContext } from '../../context/UserContext';
 import {
@@ -25,11 +17,20 @@ import {
 } from '../../services/parks';
 import { queryClient } from '../../services/react-query';
 import { isMobile } from '../../utils/platform';
-import { Share } from '@capacitor/share';
 import { Park } from '../../types/park';
-import styles from './ParkHeader.module.scss';
 import { useUploadImage } from '../../hooks/api/useUploadImage';
-import { useTranslation } from 'react-i18next';
+import { useFetchFriends } from '../../hooks/api/useFetchFriends';
+import { Header } from '../Header';
+import { HeaderImage } from '../HeaderImage';
+import { PrevLinks } from '../PrevLinks';
+import { CameraModal } from '../camera/CameraModal';
+import { EnlargeImageModal } from '../EnlargeImageModal';
+import { ReviewsPreview } from './ReviewsPreview';
+import { FavoriteButton } from './FavoriteButton';
+import { ParkCheckIn } from './ParkCheckIn';
+import { ParkInvite } from './ParkInvite';
+import { ParkIcon } from './ParkIcon';
+import styles from './ParkHeader.module.scss';
 
 interface ParkHeaderProps {
   park: Park;
@@ -44,6 +45,7 @@ const ParkHeader = (props: ParkHeaderProps) => {
   const [isEnlargedImageModalOpen, setIsEnlargeImageModalOpen] =
     useState(false);
   const { notify } = useNotification();
+  const { friends } = useFetchFriends({ userId: user?.id });
 
   const { data: primaryImage } = useQuery({
     queryKey: ['parkImage', park.id],
@@ -90,38 +92,67 @@ const ParkHeader = (props: ParkHeaderProps) => {
     <>
       <Header
         containerClassName={styles.header}
-        imgsClassName={styles.imgContainer}
+        imgsClassName={styles.imageWithButtons}
         prevLinksCmp={
-          <>
-            <Link to="/parks">
-              <MoveLeft size={16} />
-              <span>{t('parks.breadcrumb.all')}</span>
-            </Link>
-            <Link to="/" state={{ location: park!.location }}>
-              <span>{t('parks.preview.seeOnMap')}</span>
-              <MoveRight size={16} />
-            </Link>
-          </>
-        }
-        imgCmp={
-          <HeaderImage
-            size={132}
-            imgSrc={primaryImage}
-            NoImgIcon={TreeDeciduous}
-            onClickImg={onClickImage}
-            onClickEditPhoto={
-              !!user && !primaryImage
-                ? () => setIsAddImageModalOpen(true)
-                : null
-            }
+          <PrevLinks
+            links={[
+              {
+                to: '/parks',
+                icon: <MoveLeft size={16} />,
+                text: t('parks.breadcrumb.all'),
+              },
+              {
+                to: '/',
+                icon: <MoveRight size={16} />,
+                text: t('parks.preview.seeOnMap'),
+                state: { location: park!.location },
+              },
+            ]}
           />
         }
+        imgCmp={
+          <>
+            <HeaderImage
+              imgSrc={primaryImage}
+              NoImgIcon={TreeDeciduous}
+              onClickImg={onClickImage}
+              onClickEditPhoto={
+                !!user && !primaryImage
+                  ? () => setIsAddImageModalOpen(true)
+                  : null
+              }
+              className={styles.imgContainer}
+            />
+            {user ? (
+              <div className={styles.buttonGrid}>
+                <FavoriteButton parkId={park.id} userId={user.id} />
+                <ParkCheckIn
+                  parkId={park.id}
+                  userId={user?.id ?? null}
+                  userName={user?.name}
+                />
+                {!!friends?.length && (
+                  <ParkInvite userId={user.id} parkId={park.id} />
+                )}
+                <ParkIcon
+                  iconColor={styles.blue}
+                  IconCmp={ShareIcon}
+                  onClick={onClickShareButton}
+                />
+              </div>
+            ) : (
+              <div className={styles.shareOnly}>
+                <ParkIcon
+                  iconColor={styles.blue}
+                  IconCmp={ShareIcon}
+                  onClick={onClickShareButton}
+                />
+              </div>
+            )}
+          </>
+        }
         bottomCmp={
-          <div
-            className={classnames(styles.basicDetails, {
-              [styles.user]: !!user,
-            })}
-          >
+          <div className={styles.basicDetails}>
             <div className={styles.top} data-test="park-name">
               {park.name}
             </div>
@@ -132,33 +163,7 @@ const ParkHeader = (props: ParkHeaderProps) => {
                   {park.address}, {park.city}
                 </div>
               </div>
-              {user && <ReviewsPreview className={styles.reviews} />}
-            </div>
-            <div
-              className={classnames(styles.userEngagementRow, {
-                [styles.user]: !!user,
-              })}
-            >
-              {user && (
-                <>
-                  <FavoriteButton parkId={park.id} userId={user.id} />
-                  <ParkCheckIn
-                    parkId={park.id}
-                    userId={user?.id ?? null}
-                    userName={user?.name}
-                  />
-                </>
-              )}
-              {!user && <ReviewsPreview className={styles.reviews} />}
-              <ParkIcon
-                iconColor={styles.blue}
-                IconCmp={ShareIcon}
-                onClick={onClickShareButton}
-                textCmp={<span>{t('common.actions.share')}</span>}
-                className={classnames(styles.share, {
-                  [styles.alignRight]: !user,
-                })}
-              />
+              <ReviewsPreview className={styles.reviews} />
             </div>
           </div>
         }

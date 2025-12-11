@@ -17,27 +17,7 @@
 }
 
 .content-container {
-  padding: 32px 8px 12px;
-}
-
-.prev-links {
-  position: fixed;
-  top: 0;
-  z-index: 100;
-  padding: $page-top-padding 4px 8px;
-  background-color: var(--background-color);
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-
-  a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    color: $pink;
-    font-size: 14px;
-  }
+  padding: 36px 8px 12px;
 }
 
 .title {
@@ -123,14 +103,6 @@
     gap: 4px;
     padding: 8px 12px;
     border-radius: 8px;
-  }
-}
-
-:global(.rtl) .prev-links {
-  justify-content: flex-end;
-
-  a {
-    flex-direction: row-reverse;
   }
 }
 

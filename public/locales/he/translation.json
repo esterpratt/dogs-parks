@@ -3,15 +3,16 @@
     "title": "שפה",
     "modalTitle": "בחירת שפה",
     "english": "אנגלית",
-    "hebrew": "עברית"
+    "hebrew": "עברית",
+    "arabic": "ערבית"
   },
   "userDogs": {
     "titleMyPack": "החבורה שלי",
-    "titleUsersPack": "החבורה של {{name}}",
+    "titleUsersPack": "החבורה של <name>{{name}}</name>",
     "addDog": "הוספת כלב",
     "emptySignedIn1": "החבורה שלך ריקה",
-    "emptySignedIn2": "זה הזמן לצרף כמה חברים על 4!",
-    "otherEmpty": "החבורה של {{name}} ריקה",
+    "emptySignedIn2": "זה הזמן לצרף כמה חברים על ארבע!",
+    "otherEmpty": "החבורה של <name>{{name}}</name> ריקה",
     "cameraModalTitle": "הוספת תמונה"
   },
   "deleteAccount": {
@@ -193,7 +194,9 @@
       "googlePlay": "Google Play"
     }
   },
-  "userInfo": {
+  "settings": {
+    "title": "הגדרות",
+    "backToProfile": "לפרופיל שלי",
     "editDetails": "עריכת פרטים",
     "logout": "יציאה",
     "deleteProfile": "מחיקת הפרופיל שלי",
@@ -239,7 +242,7 @@
       "friends": "חברים",
       "favorites": "מועדפים",
       "reviews": "ביקורות",
-      "settings": "הגדרות"
+      "events": "אירועים"
     }
   },
   "visitors": {
@@ -294,9 +297,17 @@
         "title": "{{name}} הזמין/ה אותך לגינה",
         "appMessage": "לחץ/י כדי להגיב"
       },
-      "parkInviteResponse": {
-        "title": "{{name}} הגיב/ה להזמנה שלך",
-        "appMessage": "לחץ/י כדי לצפות בתגובה"
+      "parkInviteAccept": {
+        "title": "{{name}} קיבל/ה את הזמנתך לאירוע",
+        "appMessage": "לחץ/י כדי לראות פרטים"
+      },
+      "parkInviteDecline": {
+        "title": "{{name}} דחה/תה את הזמנך לאירוע",
+        "appMessage": "לחץ/י כדי לראות פרטים"
+      },
+      "parkInviteCancelled": {
+        "title": "הזמנה לאירוע בגינה בוטלה",
+        "appMessage": "לחץ/י כדי לראות פרטים"
       }
     },
     "modal": {
@@ -317,8 +328,124 @@
         "friendApprovals": {
           "title": "אישור חברות",
           "description": "קבלת התראה כאשר בקשת חברות שלך מאושרת"
+        },
+        "parkInvite": {
+          "title": "הזמנה לגינה",
+          "description": "קבלת התראה כאשר נשלחת אליך הזמנה לגינה"
+        },
+        "parkInviteAccept": {
+          "title": "אישור הזמנה לגינה",
+          "description": "קבלת התראה כאשר הזמנה שלך לגינה מאושרת"
+        },
+        "parkInviteDecline": {
+          "title": "דחיית הזמנה לגינה",
+          "description": "קבלת התראה כאשר הזמנה שלך לגינה נדחית"
+        },
+        "parkInviteCancelled": {
+          "title": "ביטול הזמנה לגינה",
+          "description": "קבלת התראה כאשר הזמנה לגינה מבוטלת"
         }
       }
+    }
+  },
+  "parkInvite": {
+    "buttonTxt": "הזמנה",
+    "messageSuccess": "ההזמנה נשלחה בהצלחה!",
+    "messageError": "שליחת ההזמנה נכשלה. נסו שוב.",
+    "modal": {
+      "title": "הזמנת חברים לגינה",
+      "buttonText": "שליחה",
+      "conflict": "את/ה הכלב של שרדינגר? יש לך <eventLink>אירוע אחר</eventLink> בזמן זה!",
+      "offset": {
+        "label": "זמן הגעה מתוכנן",
+        "now": "עכשיו",
+        "min15": "בעוד 15 דקות",
+        "min30": "בעוד 30 דקות",
+        "hour1": "בעוד שעה"
+      },
+      "visibility": {
+        "title": "כל החברים"
+      },
+      "friends": {
+        "title": "את מי ברצונך להזמין?",
+        "placeholder": "חיפוש לפי שם",
+        "label": "בחר/י חברים"
+      },
+      "message": {
+        "label": "הודעה"
+      }
+    }
+  },
+  "userEvents": {
+    "upcomingEvents": "אירועים עתידיים",
+    "organizedEvents": "האירועים שלי",
+    "invitedEvents": "הזמנות"
+  },
+  "event": {
+    "general": "מידע כללי",
+    "friends": "רשימת משתתפים",
+    "extra": "פרטים נוספים",
+    "cancelled": "בוטל",
+    "declined": "דחית השתתפות",
+    "invitedBy": "הוזמנת על ידי <name>{{name}}</name>",
+    "noInvitees": "אין חברים אחרים שהוזמנו",
+    "addFriends": "הוספת חברים",
+    "organizedBy": "אורגן על ידי",
+    "location": "מיקום",
+    "time": "זמן",
+    "ended": "הסתיים",
+    "title": {
+      "yours": "האירוע שלך ב:",
+      "going": "אישרת השתתפות באירוע ב:",
+      "invited": "הוזמנת לאירוע ב:",
+      "cancelled": "בוטל האירוע ב:",
+      "wentTo": "הגעת לאירוע ב:",
+      "wereInvited": "הוזמנת לאירוע ב:"
+    },
+    "message": {
+      "title": "מסר מהמארגן/ת",
+      "organizerTitle": "ביקשת למסור"
+    },
+    "invitees": {
+      "going": "אישרו נוכחות",
+      "invited": "חברים מוזמנים",
+      "declined": "לא מגיעים"
+    },
+    "organizer": {
+      "cancelled": "ביטלת את האירוע",
+      "ended": "האירוע הסתיים"
+    },
+    "invitee": {
+      "declined": "דחית את ההזמנה",
+      "cancelled": "האירוע בוטל",
+      "removed": "האירוע הוסר",
+      "ended": "האירוע הסתיים",
+      "decline": {
+        "title": "הנך בטוח/ה שברצונך לדחות את ההזמנה לאירוע?",
+        "button": "כן, דחה הזמנה",
+        "error": "מצטערים, היתה תקלה בדחיית האירוע",
+        "success": "ההשתתפות באירוע נדחתה על ידך"
+      },
+      "accept": {
+        "error": "מצטערים, היתה תקלה באישור ההשתתפות",
+        "success": "אישרת השתתפות באירוע!"
+      }
+    },
+    "breadcrumb": {
+      "events": "לכל האירועים"
+    },
+    "cancel": {
+      "title": "הנך בטוח/ה שברצונך לבטל את האירוע?",
+      "modalBtnTxt": "כן, בטל",
+      "modalCancelBtnTxt": "לא, השאר",
+      "buttonTxt": "ביטול האירוע",
+      "error": "מצטערים, היתה תקלה בביטול האירוע",
+      "success": "האירוע בוטל"
+    },
+    "save": {
+      "buttonTxt": "עדכון",
+      "error": "מצטערים, היתה תקלה בעדכון האירוע",
+      "success": "האירוע עודכן בהצלחה!"
     }
   },
   "parkReviews": {
@@ -413,7 +540,9 @@
       "like": "לייק",
       "unlike": "הסרה",
       "submit": "שליחה",
-      "save": "שמירה"
+      "save": "שמירה",
+      "areYouSure": "האם הנך בטוח/ה?",
+      "yes": "כן"
     },
     "placeholders": {
       "search": "חיפוש",
@@ -711,7 +840,7 @@
     },
     "edit": {
       "titleUpdate": "עדכון הפרטים של {{name}}",
-      "titleAdd": "פרטי הכלבה/ה",
+      "titleAdd": "פרטי הכלב/ה",
       "labels": {
         "name": "שם *",
         "breed": "גזע *",

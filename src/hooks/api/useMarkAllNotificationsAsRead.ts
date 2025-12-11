@@ -59,14 +59,6 @@ const useMarkAllNotificationsAsRead = () => {
         queryClient.setQueryData(['seenNotifications', user?.id], ctx.prevSeen);
       }
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['unseenNotifications', user?.id],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['seenNotifications', user?.id],
-      });
-    },
   });
 
   return { markAllNotificationsAsRead: mutate };

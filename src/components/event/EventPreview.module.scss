@@ -1,0 +1,116 @@
+@use '../../variables' as *;
+
+.img-container {
+  background-color: var(--background-color);
+  border: 1px solid var(--color-grey-light);
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+}
+
+.img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-grey-light);
+  border-radius: 12px;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+  .upper {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.invited-by {
+  font-size: 13px;
+  display: -webkit-box;
+  line-clamp: 1;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.name {
+  text-transform: capitalize;
+}
+
+.park-name {
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-wrapper {
+  position: relative;
+
+  > :first-child {
+    transition:
+      filter 200ms ease,
+      opacity 200ms ease;
+  }
+
+  &.is-cancelled {
+    > :first-child {
+      filter: blur(0.5px);
+      opacity: 0.65;
+    }
+  }
+}
+
+.state-overlay {
+  position: absolute;
+  z-index: 2;
+  top: -10px;
+  inset-inline-end: 12px;
+  pointer-events: none;
+}
+
+.state-rail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  align-items: center;
+  font-size: 14px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  color: $white;
+  background-color: $red;
+  box-shadow: var(--box-shadow);
+}
+
+.state-icon {
+  flex-shrink: 0;
+  color: $white;
+  width: 18px;
+  height: 18px;
+}
+
+.state-text {
+  font-size: 14px;
+  color: $white;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.loader {
+  width: 20px;
+  height: 20px;
+}

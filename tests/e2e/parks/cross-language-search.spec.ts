@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { setupTestEnvironment } from '../helpers/setup';
+import { setupTestEnvironment, waitForAppReady } from '../helpers/setup';
 
 // Cross-language search test: search for Hebrew park name while app is in English
 // Tests the useParksCrossLanguageFilter functionality
@@ -10,20 +10,18 @@ test.describe('parks (cross-language search)', () => {
   }) => {
     await setupTestEnvironment(page);
 
-    // Navigate to parks page
-    await page.goto('/parks');
+    // Navigate to parks page (wait for DOM only, not all resources)
+    await page.goto('/parks', { waitUntil: 'domcontentloaded' });
 
-    // Allow initial data (parks + location) to resolve before interacting
-    await page.waitForLoadState('networkidle');
-    // Fallback small delay to cover React Query state propagation
-    await page.waitForTimeout(500);
+    // Wait for React app to hydrate and be ready
+    await waitForAppReady(page);
 
     // Verify we're on the parks page
     await expect(page).toHaveURL('/parks');
 
     // Resolve search input (by test id or placeholder)
     const searchInput = page.getByTestId('park-search-input');
-    await expect(searchInput).toBeVisible();
+    await expect(searchInput).toBeVisible({ timeout: 15000 });
 
     // Search for Hebrew park name "חיל הא" (partial Hebrew name for "Heil Haavir")
     await searchInput.fill('חיל הא');
@@ -65,20 +63,18 @@ test.describe('parks (cross-language search)', () => {
   }) => {
     await setupTestEnvironment(page);
 
-    // Navigate to parks page
-    await page.goto('/parks');
+    // Navigate to parks page (wait for DOM only, not all resources)
+    await page.goto('/parks', { waitUntil: 'domcontentloaded' });
 
-    // Allow initial data (parks + location) to resolve before interacting
-    await page.waitForLoadState('networkidle');
-    // Fallback small delay to cover React Query state propagation
-    await page.waitForTimeout(500);
+    // Wait for React app to hydrate and be ready
+    await waitForAppReady(page);
 
     // Verify we're on the parks page
     await expect(page).toHaveURL('/parks');
 
     // Resolve search input (by test id or placeholder)
     const searchInput = page.getByTestId('park-search-input');
-    await expect(searchInput).toBeVisible();
+    await expect(searchInput).toBeVisible({ timeout: 15000 });
 
     // Search for full Hebrew park name "חיל האוויר" (Hebrew name for "Heil Haavir")
     await searchInput.fill('חיל האוויר');
@@ -120,20 +116,18 @@ test.describe('parks (cross-language search)', () => {
   }) => {
     await setupTestEnvironment(page);
 
-    // Navigate to parks page
-    await page.goto('/parks');
+    // Navigate to parks page (wait for DOM only, not all resources)
+    await page.goto('/parks', { waitUntil: 'domcontentloaded' });
 
-    // Allow initial data (parks + location) to resolve before interacting
-    await page.waitForLoadState('networkidle');
-    // Fallback small delay to cover React Query state propagation
-    await page.waitForTimeout(500);
+    // Wait for React app to hydrate and be ready
+    await waitForAppReady(page);
 
     // Verify we're on the parks page
     await expect(page).toHaveURL('/parks');
 
     // Resolve search input (by test id or placeholder)
     const searchInput = page.getByTestId('park-search-input');
-    await expect(searchInput).toBeVisible();
+    await expect(searchInput).toBeVisible({ timeout: 15000 });
 
     // Search for English park name "Heil Haavir"
     await searchInput.fill('Heil Haavir');

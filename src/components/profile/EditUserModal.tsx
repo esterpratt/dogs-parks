@@ -103,24 +103,24 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
       onSave={onSubmit}
       disabled={!userData?.name}
       className={styles.modal}
-      title={t('userInfo.edit.titleUpdate')}
+      title={t('settings.edit.titleUpdate')}
     >
       <form className={styles.form}>
         <ControlledInput
           value={userData?.name || ''}
           onChange={onInputChange}
           name="name"
-          label={t('userInfo.edit.labels.name')}
+          label={t('settings.edit.labels.name')}
           required
         />
         <div className={styles.privacyContainer}>
           <Checkbox
             id="visibility"
-            label={t('userInfo.edit.privacy.hideMe')}
+            label={t('settings.edit.privacy.hideMe')}
             onChange={onPrivacyChange}
             isChecked={userData?.private ?? false}
           />
-          <span>{t('userInfo.edit.privacy.explanation')}</span>
+          <span>{t('settings.edit.privacy.explanation')}</span>
         </div>
       </form>
     </FormModal>

@@ -1,0 +1,28 @@
+@use '../../variables.scss' as *;
+
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+
+  button {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+}
+
+.text {
+  width: 100%;
+  font-size: 18px;
+  text-align: center;
+  color: $red;
+}
+
+.loader {
+  width: 20px;
+  height: 20px;
+}

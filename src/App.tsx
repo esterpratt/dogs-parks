@@ -10,6 +10,8 @@ import { NotificationProvider } from './context/NotificationContext';
 import { UserContextProvider } from './context/UserContext';
 import { UserLocationProvider } from './context/LocationContext';
 import { OrientationProvider } from './context/OrientationContext';
+import { ModeProvider } from './context/ModeContext';
+import { ConfirmModalProvider } from './context/ConfirmModalContext';
 import { Home } from './pages/Home';
 import { RootLayout } from './RootLayout';
 import { ErrorPage } from './pages/Error';
@@ -20,13 +22,13 @@ import { PrivateRoute } from './pages/PrivateRoute';
 import { userLoader } from './loaders/userLoader';
 import { parkLoader } from './loaders/parkLoader';
 import { ShareRedirect } from './pages/ShareRedirect';
-import { ModeProvider } from './context/ModeContext';
 
 const UserDog = lazy(() => import('./pages/UserDog'));
 const UserReviews = lazy(() => import('./pages/UserReviews'));
 const UserFriends = lazy(() => import('./pages/UserFriends'));
 const UserFavorites = lazy(() => import('./pages/UserFavorites'));
-const UserInfo = lazy(() => import('./pages/UserInfo'));
+const Settings = lazy(() => import('./pages/Settings'));
+const UserEvents = lazy(() => import('./pages/UserEvents'));
 const ParkReviews = lazy(() => import('./pages/ParkReviews'));
 const ParkVisitors = lazy(() => import('./pages/ParkVisitors'));
 const Profile = lazy(() => import('./pages/Profile'));
@@ -43,6 +45,7 @@ const DeletionConfirmation = lazy(() => import('./pages/DeletionConfirmation'));
 const About = lazy(() => import('./pages/About'));
 const Login = lazy(() => import('./pages/Login'));
 const Notifications = lazy(() => import('./pages/Notifications'));
+const Event = lazy(() => import('./pages/Event'));
 
 const App = () => {
   const router = createBrowserRouter([
@@ -148,16 +151,32 @@ const App = () => {
               element: <UserFavorites />,
             },
             {
-              path: 'info',
-              element: <UserInfo />,
+              path: 'events',
+              element: <UserEvents />,
             },
           ],
+        },
+        {
+          path: '/profile/:id/settings',
+          element: (
+            <PrivateRoute>
+              <Settings />
+            </PrivateRoute>
+          ),
         },
         {
           path: 'dogs/:dogId',
           element: (
             <PrivateRoute>
               <UserDog />
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: '/events/:eventId',
+          element: (
+            <PrivateRoute>
+              <Event />
             </PrivateRoute>
           ),
         },
@@ -181,13 +200,15 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <NotificationProvider>
         <ModeProvider>
-          <UserLocationProvider>
-            <OrientationProvider>
-              <UserContextProvider>
-                <RouterProvider router={router} />
-              </UserContextProvider>
-            </OrientationProvider>
-          </UserLocationProvider>
+          <ConfirmModalProvider>
+            <UserLocationProvider>
+              <OrientationProvider>
+                <UserContextProvider>
+                  <RouterProvider router={router} />
+                </UserContextProvider>
+              </OrientationProvider>
+            </UserLocationProvider>
+          </ConfirmModalProvider>
         </ModeProvider>
       </NotificationProvider>
     </QueryClientProvider>

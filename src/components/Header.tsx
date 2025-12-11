@@ -29,7 +29,7 @@ const Header = (props: HeaderProps) => {
     <div
       className={classnames(styles.header, styles[size], containerClassName)}
     >
-      {!!prevLinksCmp && <div className={styles.prevLinks}>{prevLinksCmp}</div>}
+      {!!prevLinksCmp && prevLinksCmp}
       <div className={classnames(styles.imgsContainer, imgsClassName)}>
         {imgCmp}
       </div>

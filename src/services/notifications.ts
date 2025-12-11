@@ -1,6 +1,10 @@
 import { Capacitor } from '@capacitor/core';
 import { supabase } from './supabase-client';
-import { NotificationType, Platform } from '../types/notification';
+import {
+  NotificationType,
+  NotificationTargetType,
+  Platform,
+} from '../types/notification';
 import { throwError } from './error';
 import { Preferences } from '@capacitor/preferences';
 import { DEVICE_ID_KEY } from '../utils/consts';
@@ -10,11 +14,15 @@ interface NotificationPreferences {
   muted: boolean;
   friend_request: boolean;
   friend_approval: boolean;
+  park_invite: boolean;
+  park_invite_accept: boolean;
+  park_invite_decline: boolean;
+  park_invite_cancelled: boolean;
   created_at?: string;
   updated_at?: string;
 }
 
-interface GetNotificationsParams {
+interface GetSeenNotificationsParams {
   userId: string;
   limit: number;
   cursor?: string;
@@ -33,6 +41,10 @@ interface UpsertDeviceTokenParams {
   deviceId: string;
   platform: Platform;
   token: string;
+}
+
+interface MarkNotificationsSeenParams {
+  notificationIds: string[];
 }
 
 const normalizeSender = (
@@ -104,69 +116,6 @@ const cleanupDeviceTokensBeforeLogout = async () => {
   }
 };
 
-const getSeenNotifications = async ({
-  userId,
-  limit,
-  cursor,
-}: GetNotificationsParams) => {
-  try {
-    let query = supabase
-      .from('notifications')
-      .select(
-        `
-        id,
-        type,
-        sender_id,
-        title,
-        app_message,
-        push_message,
-        read_at,
-        seen_at,
-        created_at,
-        sender:users!notifications_sender_id_fkey(
-          id,
-          name
-        )
-      `
-      )
-      .eq('receiver_id', userId)
-      .not('seen_at', 'is', null)
-      .order('created_at', { ascending: false })
-      .limit(limit);
-
-    if (cursor) {
-      query = query.lt('created_at', cursor);
-    }
-
-    const { data, error } = await query;
-
-    if (error) {
-      throw error;
-    }
-
-    return (
-      data?.map((notification) => ({
-        id: notification.id,
-        type: notification.type as NotificationType,
-        sender_id: notification.sender_id,
-        receiver_id: userId,
-        title: notification.title,
-        app_message: notification.app_message,
-        push_message: notification.push_message,
-        read_at: notification.read_at,
-        seen_at: notification.seen_at,
-        delivered_at: true,
-        created_at: notification.created_at,
-        is_ready: true,
-        sender: normalizeSender(notification.sender),
-      })) || []
-    );
-  } catch (error) {
-    console.error('Error fetching seen notifications:', error);
-    return [];
-  }
-};
-
 const markAsRead = async ({ notificationId }: MarkAsReadParams) => {
   try {
     await supabase.rpc('mark_notification_read', {
@@ -182,14 +131,6 @@ const markAllAsRead = async () => {
     await supabase.rpc('mark_all_notifications_as_read');
   } catch (error) {
     console.error('Error marking all notifications as read:', error);
-  }
-};
-
-const markAllAsSeen = async () => {
-  try {
-    await supabase.rpc('mark_all_notifications_as_seen');
-  } catch (error) {
-    console.error('Error marking all notifications as seen:', error);
   }
 };
 
@@ -222,6 +163,10 @@ const updateNotificationPreferences = async (
     muted = false,
     friend_request = true,
     friend_approval = true,
+    park_invite = true,
+    park_invite_accept = true,
+    park_invite_decline = true,
+    park_invite_cancelled = true,
   } = preferences;
 
   try {
@@ -229,7 +174,7 @@ const updateNotificationPreferences = async (
       .from('notifications_preferences')
       .select('*')
       .eq('user_id', user_id)
-      .single();
+      .maybeSingle();
 
     if (existing) {
       const { error } = await supabase
@@ -251,6 +196,10 @@ const updateNotificationPreferences = async (
             muted: muted,
             friend_request,
             friend_approval,
+            park_invite,
+            park_invite_accept,
+            park_invite_decline,
+            park_invite_cancelled,
           },
         ]);
 
@@ -263,55 +212,140 @@ const updateNotificationPreferences = async (
   }
 };
 
-const getUnseenNotifications = async (userId: string) => {
+const getSeenNotifications = async ({
+  userId,
+  limit,
+  cursor,
+}: GetSeenNotificationsParams) => {
   try {
-    const { data, error } = await supabase
-      .from('notifications')
-      .select(
-        `
-        id,
-        type,
-        sender_id,
-        title,
-        app_message,
-        push_message,
-        read_at,
-        seen_at,
-        created_at,
-        sender:users!notifications_sender_id_fkey(
-          id,
-          name
-        )
-      `
-      )
-      .eq('receiver_id', userId)
-      .is('seen_at', null)
-      .order('created_at', { ascending: false });
+    const { data, error } = await supabase.rpc('get_seen_notifications', {
+      p_user_id: userId,
+      p_limit: limit,
+      p_cursor: cursor ?? null,
+    });
 
     if (error) {
       throw error;
     }
 
-    return (
-      data?.map((notification) => ({
-        id: notification.id,
-        type: notification.type as NotificationType,
-        sender_id: notification.sender_id,
-        receiver_id: userId,
-        title: notification.title,
-        app_message: notification.app_message,
-        push_message: notification.push_message,
-        read_at: notification.read_at,
-        seen_at: notification.seen_at,
-        delivered_at: true,
-        created_at: notification.created_at,
-        is_ready: true,
-        sender: normalizeSender(notification.sender),
-      })) || []
-    );
+    const rows = (data ?? []) as Array<{
+      id: string;
+      type: string;
+      target_type: string;
+      target_id: string;
+      sender_id: string;
+      receiver_id: string;
+      title: string;
+      app_message: string | null;
+      push_message: string | null;
+      read_at: string | null;
+      seen_at: string | null;
+      created_at: string;
+      sender: unknown;
+    }>;
+
+    return rows.map((notification) => ({
+      id: notification.id,
+      type: notification.type as NotificationType,
+      target_type: notification.target_type as NotificationTargetType,
+      target_id: notification.target_id,
+      sender_id: notification.sender_id,
+      receiver_id: notification.receiver_id ?? userId,
+      title: notification.title,
+      app_message: notification.app_message,
+      push_message: notification.push_message,
+      read_at: notification.read_at,
+      seen_at: notification.seen_at,
+      created_at: notification.created_at,
+      sender: normalizeSender(notification.sender),
+    }));
   } catch (error) {
-    console.error('Error fetching unseen notifications:', error);
+    console.error('Error fetching seen notifications (RPC):', error);
     return [];
+  }
+};
+
+const getUnseenNotifications = async (userId: string) => {
+  try {
+    const { data, error } = await supabase.rpc('get_unseen_notifications', {
+      p_user_id: userId,
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    const rows = (data ?? []) as Array<{
+      id: string;
+      type: string;
+      target_type: string;
+      target_id: string;
+      sender_id: string;
+      receiver_id: string;
+      title: string;
+      app_message: string | null;
+      push_message: string | null;
+      read_at: string | null;
+      seen_at: string | null;
+      created_at: string;
+      sender: unknown;
+    }>;
+
+    return rows.map((notification) => ({
+      id: notification.id,
+      type: notification.type as NotificationType,
+      target_type: notification.target_type as NotificationTargetType,
+      target_id: notification.target_id,
+      sender_id: notification.sender_id,
+      receiver_id: notification.receiver_id ?? userId,
+      title: notification.title,
+      app_message: notification.app_message,
+      push_message: notification.push_message,
+      read_at: notification.read_at,
+      seen_at: notification.seen_at,
+      created_at: notification.created_at,
+      sender: normalizeSender(notification.sender),
+    }));
+  } catch (error) {
+    console.error('Error fetching unseen notifications (RPC):', error);
+    return [];
+  }
+};
+
+const getUnseenNotificationsCount = async (): Promise<number> => {
+  try {
+    const { data, error } = await supabase.rpc('count_unseen_notifications');
+
+    if (error) {
+      throw error;
+    }
+
+    return data ?? 0;
+  } catch (error) {
+    console.error('Error fetching unseen notifications count:', error);
+    return 0;
+  }
+};
+
+const markNotificationsSeen = async (
+  params: MarkNotificationsSeenParams
+): Promise<void> => {
+  const { notificationIds } = params;
+
+  if (notificationIds.length === 0) {
+    return;
+  }
+
+  try {
+    const { error } = await supabase.rpc('mark_notifications_seen', {
+      p_notification_ids: notificationIds,
+    });
+
+    if (error) {
+      throw error;
+    }
+  } catch (error) {
+    console.error('Error marking notifications as seen:', error);
   }
 };
 
@@ -322,7 +356,8 @@ export {
   getUnseenNotifications,
   markAsRead,
   markAllAsRead,
-  markAllAsSeen,
   getNotificationPreferences,
   updateNotificationPreferences,
+  getUnseenNotificationsCount,
+  markNotificationsSeen,
 };

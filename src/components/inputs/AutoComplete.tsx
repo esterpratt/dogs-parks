@@ -1,16 +1,9 @@
-import {
-  ChangeEvent,
-  MouseEvent,
-  ReactNode,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { MouseEvent, ReactNode, useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 import { Input } from './Input';
 import { SearchListItems } from '../searchList/SearchListItems';
-import { useDebounce } from '../../hooks/useDebounce';
 import styles from './AutoComplete.module.scss';
+import { useAutoComplete } from '../../hooks/useAutoComplete';
 
 interface AutoCompleteProps<T> {
   selectedInput?: string;
@@ -39,16 +32,13 @@ const AutoComplete = <T,>({
   children,
   selectedInputFormatter,
 }: AutoCompleteProps<T>) => {
-  const [input, setInput] = useState<string>(selectedInput || '');
-  const { searchInput } = useDebounce(input);
-  const [filteredItems, setFilteredItems] = useState<T[]>([]);
+  const { input, setInput, filteredItems, onChangeInput } = useAutoComplete({
+    items,
+    filterFunc,
+  });
+
   const [showItems, setShowItems] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
-
-  useEffect(() => {
-    const filteredItems = items.filter((item) => filterFunc(item, searchInput));
-    setFilteredItems(filteredItems);
-  }, [items, searchInput, filterFunc]);
 
   useEffect(() => {
     const displayValue = selectedInput || '';
@@ -57,11 +47,7 @@ const AutoComplete = <T,>({
         ? selectedInputFormatter(displayValue)
         : displayValue
     );
-  }, [selectedInput, selectedInputFormatter]);
-
-  const onChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
-    setInput(event.target.value);
-  };
+  }, [selectedInput, selectedInputFormatter, setInput]);
 
   const onClickOption = (event: MouseEvent<HTMLDivElement>, item: T) => {
     event.preventDefault();

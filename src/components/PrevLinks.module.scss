@@ -1,0 +1,66 @@
+@use '../variables' as *;
+
+.prev-links {
+  position: fixed;
+  top: 0;
+  z-index: 500;
+  padding: calc($page-top-padding + 4px)
+    calc(8px + var(--safe-area-inset-right)) 4px
+    calc(8px + var(--safe-area-inset-left));
+  width: 100%;
+  background-color: var(--background-color);
+  display: flex;
+  justify-content: flex-start;
+  gap: 8px;
+  box-shadow: $box-shadow-sm;
+
+  &.space-between {
+    justify-content: space-between;
+  }
+
+  .link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-text);
+    font-size: 12px;
+
+    .icon-circle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--light-pink);
+      color: $pink;
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+
+      svg {
+        width: 14px;
+        height: 14px;
+      }
+    }
+
+    .text {
+      color: $pink;
+    }
+
+    &.reverse {
+      flex-direction: row-reverse;
+    }
+  }
+}
+
+:global(.rtl) .prev-links {
+  flex-direction: row-reverse;
+
+  .link {
+    flex-direction: row-reverse;
+
+    &.reverse {
+      flex-direction: row;
+    }
+  }
+}

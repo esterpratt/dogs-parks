@@ -2,6 +2,18 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+# Rules for you
+
+1. First think through the problem, read the codebase for relevant files, and write a plan to `.claude/todos/[task-name].md` (create a descriptive filename for each task).
+2. The plan should have a list of todo items that you can check off as you complete them
+3. Before you begin working, check in with me and I will verify the plan.
+4. Then, begin working on the todo items, marking them as complete as you go.
+5. Please every step of the way just give me a high level explanation of what changes you made
+6. Make every task and code change you do as simple as possible. We want to avoid making any massive or complex changes. Every change should impact as little code as possible. Everything is about simplicity.
+7. Finally, add a review section to the todo.md file with a summary of the changes you made and any other relevant information.
+8. DO NOT BE LAZY. NEVER BE LAZY. IF THERE IS A BUG FIND THE ROOT CAUSE AND FIX IT. NO TEMPORARY FIXES. YOU ARE A SENIOR DEVELOPER. NEVER BE LAZY
+9. MAKE ALL FIXES AND CODE CHANGES AS SIMPLE AS HUMANLY POSSIBLE. THEY SHOULD ONLY IMPACT NECESSARY CODE RELEVANT TO THE TASK AND NOTHING ELSE. IT SHOULD IMPACT AS LITTLE CODE AS POSSIBLE. YOUR GOAL IS TO NOT INTRODUCE ANY BUGS. IT'S ALL ABOUT SIMPLICITY
+
 ## Development Commands
 
 ### Essential Commands
@@ -9,7 +21,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run dev` - Start development server with Vite
 - `npm run build` - Build for production (runs TypeScript compilation then Vite build)
 - `npm run lint` - Run ESLint with TypeScript support
-- `npm run format` - Format code with Prettier
 - `npm run test` - Run tests with Vitest
 - `npm run preview` - Preview production build locally
 
@@ -118,7 +129,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Don't use single line if statements - always use curly braces {}
 - Use interface for functions/components props type
 - Types that are used in more than one file should be set in the 'types' folder. Types that are used only in one file should be set on the file
-- Run Prettier formatting after every code change
 
 **For folder-specific conventions, see:** `.claude/folder-conventions.md`
 
@@ -127,3 +137,55 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Use pixels and not rems
 - Do not use font weight
 
+## Problem-Solving Philosophy
+
+When you encounter a problem with your implementation, follow this approach to find the best solution:
+
+### 1. Question the Architecture First
+Before working around a problem, ask yourself: **"Is the fundamental design wrong?"**
+
+Consider if there's a simpler approach that eliminates the problem entirely rather than managing it with workarounds.
+
+**Example:** If refetches are causing bugs, instead of preventing refetches, ask: "Can I design this so refetches are harmless?"
+
+### 2. Separation of Concerns
+When state is causing issues, check if you're mixing responsibilities. Consider separating:
+- **What determines behavior** (IDs, flags, membership)
+- **What provides data** (query cache, API responses)
+- **What drives UI** (derived state, computed values)
+
+**Example:** Instead of storing full objects in local state and syncing them, store only IDs locally and always use fresh data from the query cache.
+
+### 3. Think in Primitives
+Prefer storing minimal data (IDs, booleans, enums) over rich objects in local state. Let the source of truth (query cache, database) provide the full objects.
+
+**Why:**
+- Less state to manage = fewer bugs
+- Eliminates synchronization problems
+- Makes refetches and updates safe
+
+### 4. Root Cause Analysis
+When a solution requires complex workarounds (intricate optimistic updates, careful invalidation logic, conditional refetches, etc.), pause and ask:
+- **"Am I solving the right problem?"**
+- **"Is there a design that makes this trivial?"**
+- **"What would need to change to avoid this problem entirely?"**
+
+If you find yourself writing lots of defensive code to prevent edge cases, it's often a sign the architecture needs rethinking.
+
+### 5. Discuss Trade-offs
+When proposing a solution, explicitly discuss:
+- What problem does this solve?
+- What's the simplest alternative?
+- What would need to change to avoid this problem?
+- Are there simpler architectural changes that eliminate the need for this complexity?
+
+### Key Principle: "Make the Problem Impossible"
+
+**Prefer:** Designs that make problems impossible
+**Over:** Carefully avoiding problems with complex logic
+
+**Example:**
+- ❌ Bad: Complex optimistic updates to avoid refetches that break state logic
+- ✅ Good: Store IDs only, making refetches harmless
+
+**Remember:** The best code is the code you don't have to write. If a design requires extensive workarounds, consider a simpler architecture instead.

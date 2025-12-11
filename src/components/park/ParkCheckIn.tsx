@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { MapPinCheckInside, MapPinXInside } from 'lucide-react';
 import { checkin, checkout } from '../../services/checkins';
@@ -6,14 +7,13 @@ import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { useAddReview } from '../../hooks/api/useAddReview';
 import { queryClient } from '../../services/react-query';
 import { fetchUserReviews } from '../../services/reviews';
+import { useNotification } from '../../context/NotificationContext';
+import { capitalizeText } from '../../utils/text';
 import { ParkIcon } from './ParkIcon';
 import { ReviewModal } from '../ReviewModal';
 import { DogsCountModal } from './DogsCountModal';
-import styles from './ParkCheckIn.module.scss';
-import { useNotification } from '../../context/NotificationContext';
-import { capitalizeText } from '../../utils/text';
 import CheckoutFromAnotherParkModal from './CheckoutFromAnotherParkModal';
-import { useTranslation } from 'react-i18next';
+import styles from './ParkCheckIn.module.scss';
 
 const ParkCheckIn: React.FC<{
   parkId: string;
@@ -122,13 +122,6 @@ const ParkCheckIn: React.FC<{
         IconCmp={!canCheckIn ? MapPinXInside : MapPinCheckInside}
         iconColor={!canCheckIn ? styles.orange : styles.green}
         onClick={onClickCheckIn}
-        textCmp={
-          <span>
-            {!canCheckIn
-              ? t('common.actions.checkout')
-              : t('common.actions.checkin')}
-          </span>
-        }
       />
       <DogsCountModal
         parkId={parkId}

@@ -4,11 +4,12 @@ import classnames from 'classnames';
 import { Button } from '../Button';
 import styles from './Card.module.scss';
 
-interface ButtonProps {
+export interface ButtonProps {
   children: ReactNode;
   onClick?: (event: MouseEvent) => void;
   variant?: 'primary' | 'secondary';
   className?: string;
+  disabled?: boolean;
 }
 
 interface CardProps {
@@ -42,6 +43,7 @@ const Card = (props: CardProps) => {
               variant={button.variant || 'primary'}
               onClick={button.onClick}
               className={classnames(styles.button, button.className)}
+              disabled={button.disabled}
             >
               {button.children}
             </Button>

@@ -1,0 +1,11 @@
+@use '../../variables.scss' as *;
+
+.modal-container,
+.form-container,
+.form {
+  overflow: visible;
+}
+
+.modal-container {
+  padding-bottom: 48px;
+}

@@ -1,11 +1,12 @@
 @use '../../variables.scss' as *;
 
-$header-height: 48px;
+$header-height: 60px;
 
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-top: 12px;
 
   h2 {
     margin: 0;
@@ -14,7 +15,6 @@ $header-height: 48px;
 
 .section-title {
   font-size: 16px;
-  font-weight: 600;
   margin: 0;
 
   &.lighter {
@@ -39,6 +39,6 @@ $header-height: 48px;
 }
 
 .virtual-scroll-container {
-  height: calc($content-max-height - $header-height - 12px);
+  height: calc($content-max-height - $header-height);
   overflow: auto;
 }

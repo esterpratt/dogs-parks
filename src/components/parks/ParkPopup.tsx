@@ -167,7 +167,6 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
         <div className={styles.details}>
           <Link to={`/parks/${activePark?.id}`} className={styles.name}>
             <span>{displayName}</span>{' '}
-            {/* changed by me: use translated name with fallback */}
           </Link>
           <div className={styles.addressContainer}>
             <span className={styles.address}>{displayAddress},</span>{' '}

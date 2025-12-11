@@ -1,64 +1,39 @@
 @use '../variables' as *;
 
-.prev-links {
-  position: fixed;
-  top: 0;
-  background-color: var(--background-color);
-  display: flex;
-  justify-content: space-between;
-  padding: $page-top-padding calc(12px + var(--safe-area-inset-right)) 6px
-    calc(12px + var(--safe-area-inset-left));
-  width: 100%;
-  z-index: 500;
-
-  a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    color: $pink;
-    font-size: 14px;
-  }
-}
-
 .header {
   position: relative;
-  height: 268px;
   flex-shrink: 0;
   background-image: var(--gradient);
   background-repeat: no-repeat;
-  background-size:
-    100% 114px,
-    100% 154px;
-  background-position: top, bottom;
-  border-bottom: 1px solid var(--color-grey-light);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 
   &.small {
-    height: 220px;
-    background-size:
-      100% 92px,
-      100% 128px;
+    height: 190px;
 
     .imgs-container {
-      top: 92px;
+      top: 74px;
+    }
+  }
+
+  &.medium {
+    height: 238px;
+
+    .imgs-container {
+      top: 108px;
     }
   }
 
   &.large {
-    height: 280px;
-    background-size:
-      100% 114px,
-      100% 166px;
+    height: 264px;
 
     .imgs-container {
-      top: 114px;
+      top: 100px;
     }
   }
 }
 
 .imgs-container {
   position: absolute;
-  top: 114px;
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
@@ -78,12 +53,8 @@
   width: 100%;
 }
 
-:global(.rtl) .prev-links {
-  flex-direction: row-reverse;
-
-  a {
-    flex-direction: row-reverse;
-  }
+:global(.dark) .header {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
 @media (orientation: landscape) {

@@ -1,30 +1,38 @@
 import { useContext } from 'react';
-import { Link, Navigate, Outlet, useLoaderData } from 'react-router-dom';
-import { MoveLeft, MoveRight } from 'lucide-react';
+import { Navigate, Outlet, useLoaderData, useNavigate } from 'react-router-dom';
+import { MoveLeft, MoveRight, Settings } from 'lucide-react';
+import { Trans, useTranslation } from 'react-i18next';
 import classnames from 'classnames';
 import { useQueries, useQuery } from '@tanstack/react-query';
 import { UserContext } from '../context/UserContext';
-import { ProfileTabs } from '../components/profile/ProfileTabs';
 import { FRIENDSHIP_STATUS, USER_ROLE } from '../types/friendship';
+import { Dog } from '../types/dog';
 import { getDogNames } from '../utils/getDogNames';
+import { ONE_MINUTE } from '../utils/consts';
+import { fetchDogPrimaryImage } from '../services/dogs';
+import { fetchUserFavorites } from '../services/favorites';
+import {
+  fetchUserInvitedEvents,
+  fetchUserOrganizedEvents,
+} from '../services/events';
+import { usePrefetchRoutesOnIdle } from '../hooks/usePrefetchRoutesOnIdle';
+import { useIsAllowedToViewProfile } from '../hooks/useIsAllowedToViewProfile';
+import { usePrefetchFriendsWithDogs } from '../hooks/api/usePrefetchFriendsWithDogs';
+import { ProfileTabs } from '../components/profile/ProfileTabs';
 import { FriendRequestButton } from '../components/profile/FriendRequestButton';
 import { Header } from '../components/Header';
 import { HeaderImage } from '../components/HeaderImage';
+import { PrevLinks } from '../components/PrevLinks';
+import { Button } from '../components/Button';
 import DogIcon from '../assets/dog.svg?react';
-import { fetchUserFavorites } from '../services/favorites';
-import { usePrefetchRoutesOnIdle } from '../hooks/usePrefetchRoutesOnIdle';
-import { useIsAllowedToViewProfile } from '../hooks/useIsAllowedToViewProfile';
 import styles from './Profile.module.scss';
-import { usePrefetchFriendsWithDogs } from '../hooks/api/usePrefetchFriendsWithDogs';
-import { fetchDogPrimaryImage } from '../services/dogs';
-import { Dog } from '../types/dog';
-import { Trans, useTranslation } from 'react-i18next';
 
 const Profile: React.FC = () => {
   const { user, dogs } = useLoaderData();
   const { user: signedInUser, isLoadingUser } = useContext(UserContext);
   const isSignedInUser = signedInUser?.id === user.id;
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const dogImages = useQueries({
     queries: dogs.map((dog: Dog) => {
@@ -37,7 +45,7 @@ const Profile: React.FC = () => {
 
   const dogImagesToDisplay =
     !dogImages || dogImages.length === 0
-      ? new Array(dogs?.length || 0)
+      ? new Array(dogs?.length || 1).fill(null)
       : dogImages.length > 4
         ? dogImages.slice(0, 4)
         : [...dogImages.map((image) => image.data)];
@@ -48,18 +56,31 @@ const Profile: React.FC = () => {
     isSignedInUser,
   });
 
-  // prefetch friends and favorites requests
+  // prefetch user requests
   usePrefetchRoutesOnIdle([
     'dog',
     'userFriends',
     'userFavorites',
     'userReviews',
-    'userInfo',
+    'userEvents',
+    'userSettings',
   ]);
 
   useQuery({
     queryKey: ['favorites', user.id],
     queryFn: async () => fetchUserFavorites(user.id),
+  });
+
+  useQuery({
+    queryKey: ['events', 'invited', user.id, 'list'],
+    queryFn: fetchUserInvitedEvents,
+    staleTime: ONE_MINUTE,
+  });
+
+  useQuery({
+    queryKey: ['events', 'organized', user.id, 'list'],
+    queryFn: fetchUserOrganizedEvents,
+    staleTime: ONE_MINUTE,
   });
 
   usePrefetchFriendsWithDogs({
@@ -80,6 +101,10 @@ const Profile: React.FC = () => {
     enabled: isSignedInUser,
   });
 
+  const onClickSettings = () => {
+    navigate(`/profile/${signedInUser!.id}/settings`);
+  };
+
   if (!user) {
     return null;
   }
@@ -91,30 +116,31 @@ const Profile: React.FC = () => {
   return (
     <div className={styles.profileContainer}>
       <Header
-        size={isSignedInUser ? 'small' : 'medium'}
-        containerClassName={classnames(
-          styles.header,
-          isSignedInUser || !signedInUser ? styles.small : styles.medium
-        )}
-        imgsClassName={classnames(
-          styles.imgsContainer,
-          isSignedInUser || !signedInUser ? styles.small : styles.medium
-        )}
+        size={isSignedInUser ? 'small' : 'large'}
         prevLinksCmp={
           !isSignedInUser && !isLoadingUser ? (
-            <>
-              {!!signedInUser && (
-                <Link to={`/profile/${signedInUser.id}/friends`}>
-                  <MoveLeft size={16} />
-                  <span>{t('profile.myFriends')}</span>
-                </Link>
-              )}
-              <Link to="/users">
-                {!signedInUser && <MoveLeft size={16} />}
-                <span>{t('profile.users')}</span>
-                {!!signedInUser && <MoveRight size={16} />}
-              </Link>
-            </>
+            <PrevLinks
+              links={
+                signedInUser
+                  ? [
+                      {
+                        to: `/profile/${signedInUser.id}/friends`,
+                        icon: <MoveLeft size={16} />,
+                        text: t('profile.myFriends'),
+                      },
+                      {
+                        to: '/users',
+                        icon: <MoveRight size={16} />,
+                        text: t('profile.users'),
+                      },
+                    ]
+                  : {
+                      to: '/users',
+                      icon: <MoveLeft size={16} />,
+                      text: t('profile.users'),
+                    }
+              }
+            />
           ) : null
         }
         imgCmp={dogImagesToDisplay.map((dogImage: string, index: number) => {
@@ -125,18 +151,27 @@ const Profile: React.FC = () => {
               className={styles.img}
               style={{ zIndex: dogImagesToDisplay.length - index }}
               NoImgIcon={DogIcon}
-              size={112}
+              size={dogs.length > 1 ? 112 : undefined}
             />
           );
         })}
         bottomCmp={
           isSignedInUser ? (
             <div className={styles.welcome}>
-              <Trans
-                i18nKey="profile.pawsUpRich"
-                values={{ name: user.name }}
-                components={{ name: <span className={styles.userName} /> }}
-              />
+              <span className={styles.welcomeText}>
+                <Trans
+                  i18nKey="profile.pawsUpRich"
+                  values={{ name: user.name }}
+                  components={{ name: <span className={styles.userName} /> }}
+                />
+              </span>
+              <Button
+                variant="secondary"
+                className={styles.settingsButton}
+                onClick={onClickSettings}
+              >
+                <Settings color={styles.pink} size={18} />
+              </Button>
             </div>
           ) : !!signedInUser && !isSignedInUser ? (
             <div className={styles.title}>

@@ -8,11 +8,11 @@
   },
   "userDogs": {
     "titleMyPack": "قطيعي",
-    "titleUsersPack": "قطيع {{name}}",
+    "titleUsersPack": "قطيع <name>{{name}}</name>",
     "addDog": "إضافة كلب",
     "emptySignedIn1": "قطيعك فارغ",
     "emptySignedIn2": "حان الوقت لإضافة بعض الأصدقاء ذوي الأرجل الأربع!",
-    "otherEmpty": "قطيع {{name}} فارغ",
+    "otherEmpty": "قطيع <name>{{name}}</name> فارغ",
     "cameraModalTitle": "إضافة صورة"
   },
   "deleteAccount": {
@@ -90,7 +90,7 @@
     "thirdParties": {
       "title": "خدمات الطرف الثالث",
       "desc": "قد نستخدم خدمات طرف ثالث تجمع البيانات (مثل، Google Analytics، Supabase). لكل طرف ثالث سياسة خصوصية خاصة به:",
-      "links": ["Google Analytics: https://policies.google.com/privacy"]
+      "links": ["تحليلات جوجل: https://policies.google.com/privacy"]
     },
     "changes": {
       "title": "تغييرات السياسة",
@@ -194,7 +194,9 @@
       "googlePlay": "Google Play"
     }
   },
-  "userInfo": {
+  "settings": {
+    "title": "الإعدادات",
+    "backToProfile": "إلى ملفي الشخصي",
     "editDetails": "تحرير التفاصيل",
     "logout": "خروج",
     "deleteProfile": "حذف ملفي الشخصي",
@@ -240,7 +242,7 @@
       "friends": "الأصدقاء",
       "favorites": "المفضلة",
       "reviews": "المراجعات",
-      "settings": "الإعدادات"
+      "events": "الفعاليات"
     }
   },
   "visitors": {
@@ -295,9 +297,17 @@
         "title": "{{name}} دعاك للحديقة",
         "appMessage": "اضغط للرد"
       },
-      "parkInviteResponse": {
-        "title": "{{name}} رد على دعوتك",
-        "appMessage": "اضغط لمشاهدة الرد"
+      "parkInviteAccept": {
+        "title": "{{name}} قبل دعوتك لفعالية في الحديقة",
+        "appMessage": "اضغط لعرض التفاصيل"
+      },
+      "parkInviteDecline": {
+        "title": "{{name}} رفض دعوتك لفعالية في الحديقة",
+        "appMessage": "اضغط لعرض التفاصيل"
+      },
+      "parkInviteCancelled": {
+        "title": "تم إلغاء دعوة الحديقة",
+        "appMessage": "انقر لعرض التفاصيل"
       }
     },
     "modal": {
@@ -318,7 +328,123 @@
         "friendApprovals": {
           "title": "موافقة الصداقة",
           "description": "تلقي إشعار عند موافقة طلب الصداقة الخاص بك"
+        },
+        "parkInvite": {
+          "title": "دعوات الحديقة",
+          "description": "تلقي إشعار عند دعوتك من صديق إلى حديقة"
+        },
+        "parkInviteAccept": {
+          "title": "قبول دعوة الحديقة",
+          "description": "تلقي إشعار عند قبول صديق لدعوتك إلى حديقة"
+        },
+        "parkInviteDecline": {
+          "title": "رفض دعوة الحديقة",
+          "description": "تلقي إشعار عند رفض صديق لدعوتك إلى حديقة"
+        },
+        "parkInviteCancelled": {
+          "title": "إلغاء دعوة الحديقة",
+          "description": "تلقي إشعار عند إلغاء صديق لفعالية أنت مدعو إليها"
         }
+      }
+    }
+  },
+  "userEvents": {
+    "upcomingEvents": "الفعاليات القادمة",
+    "organizedEvents": "الفعاليات التي نظمتها",
+    "invitedEvents": "الفعاليات المدعو إليها"
+  },
+  "event": {
+    "general": "نظرة عامة",
+    "friends": "قائمة الضيوف",
+    "extra": "معلومات إضافية",
+    "cancelled": "أُلغيت",
+    "declined": "مرفوض",
+    "invitedBy": "بدعوة من <name>{{name}}</name>",
+    "noInvitees": "لا يوجد أصدقاء مدعوون آخرون",
+    "addFriends": "أضف أصدقاء",
+    "organizedBy": "من تنظيم",
+    "location": "الموقع",
+    "time": "الوقت",
+    "ended": "انتهى",
+    "title": {
+      "yours": "فعاليتك في",
+      "going": "أنت ذاهب إلى فعالية في",
+      "invited": "أنت مدعو إلى فعالية في",
+      "cancelled": "أُلغي الحدث في",
+      "wentTo": "لقد ذهبت إلى فعالية في",
+      "wereInvited": "كنت مدعواً إلى فعالية في"
+    },
+    "message": {
+      "title": "رسالة المضيف",
+      "organizerTitle": "رسالتك"
+    },
+    "invitees": {
+      "going": "الأصدقاء الحاضرون",
+      "invited": "الأصدقاء المدعوون",
+      "declined": "الأصدقاء غير الحاضرين"
+    },
+    "organizer": {
+      "cancelled": "لقد ألغيت الفعالية",
+      "ended": "انتهت الفعالية"
+    },
+    "invitee": {
+      "declined": "لقد رفضت الدعوة",
+      "cancelled": "تم إلغاء الفعالية",
+      "removed": "تم حذف الفعالية",
+      "ended": "انتهت الفعالية",
+      "decline": {
+        "title": "هل أنت متأكد أنك تريد رفض الفعالية؟",
+        "button": "نعم",
+        "error": "عذراً، حدث خطأ أثناء رفض الفعالية",
+        "success": "تم رفض الفعالية"
+      },
+      "accept": {
+        "error": "عذراً، حدث خطأ أثناء قبول الفعالية",
+        "success": "أنت ذاهب إلى الفعالية!"
+      }
+    },
+    "breadcrumb": {
+      "events": "إلى جميع الفعاليات"
+    },
+    "cancel": {
+      "title": "هل أنت متأكد أنك تريد إلغاء الفعالية؟",
+      "modalBtnTxt": "نعم",
+      "modalCancelBtnTxt": "لا، احتفظ به",
+      "buttonTxt": "إلغاء الفعالية",
+      "error": "عذراً، حدث خطأ أثناء الإلغاء",
+      "success": "تم إلغاء الفعالية"
+    },
+    "save": {
+      "buttonTxt": "حفظ الفعالية",
+      "error": "حدث خطأ أثناء حفظ الفعالية",
+      "success": "تم حفظ الفعالية بنجاح!"
+    }
+  },
+  "parkInvite": {
+    "buttonTxt": "دعوة",
+    "messageSuccess": "تم إرسال الدعوة بنجاح!",
+    "messageError": "فشل إرسال الدعوة. حاول مرة أخرى.",
+    "modal": {
+      "title": "دعوة الأصدقاء للحديقة",
+      "buttonText": "إرسال",
+      "conflict": "هل أنت كلب شرودينغر؟ لديك <eventLink>فعالية أخرى</eventLink> في هذا الوقت!",
+      "offset": {
+        "label": "متى تخططون للذهاب؟",
+        "now": "الآن",
+        "min15": "خلال 15 دقيقة",
+        "min30": "خلال 30 دقيقة",
+        "hour1": "خلال ساعة"
+      },
+      "visibility": {
+        "title": "دعوة جميع الأصدقاء"
+      },
+      "friends": {
+        "title": "من تريد دعوته؟",
+        "placeholder": "البحث عن أصدقاء",
+        "label": "اختيار الأصدقاء"
+      },
+      "message": {
+        "label": "إضافة رسالة"
       }
     }
   },
@@ -414,7 +540,9 @@
       "like": "إعجاب",
       "unlike": "إزالة",
       "submit": "إرسال",
-      "save": "حفظ"
+      "save": "حفظ",
+      "areYouSure": "هل أنت متأكد؟",
+      "yes": "نعم"
     },
     "placeholders": {
       "search": "بحث",
@@ -698,6 +826,7 @@
         "size": "الحجم",
         "temperament": "الطبع",
         "energy": "الطاقة",
+        "waitingResponse": "بانتظار رد الصديق",
         "possessive": "التملك"
       },
       "addDetails": "إضافة",
@@ -1019,7 +1148,7 @@
   "reports": {
     "reviewModal": {
       "title": "لماذا تريد الإبلاغ عن هذه المراجعة",
-      "sentMessage": "Report sent"
+      "sentMessage": "تم إرسال البلاغ"
     },
     "reasons": {
       "spam": {

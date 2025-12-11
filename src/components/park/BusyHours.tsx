@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Info, Plus } from 'lucide-react';
@@ -28,6 +28,14 @@ const BusyHours: React.FC<BusyHoursProps> = (props: BusyHoursProps) => {
     queryFn: () => fetchDogsCount(parkId),
   });
 
+  const busyData = useMemo(() => {
+    if (!dogsCount?.length) {
+      return null;
+    }
+
+    return getBusyHoursData(dogsCount);
+  }, [dogsCount]);
+
   const {
     currentStrHour,
     fullData,
@@ -35,7 +43,7 @@ const BusyHours: React.FC<BusyHoursProps> = (props: BusyHoursProps) => {
     weekdaysHoursChartData,
     weekendHoursChartData,
     isWeekend,
-  } = dogsCount?.length ? getBusyHoursData(dogsCount) : {};
+  } = busyData || {};
 
   const handleClickReportDogCount = () => {
     setIsDogsCountModalOpen(true);

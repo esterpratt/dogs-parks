@@ -1,4 +1,7 @@
-export const routePreloadMap: Record<string, () => Promise<{ default: React.ComponentType<JSX.IntrinsicAttributes> }>> = {
+export const routePreloadMap: Record<
+  string,
+  () => Promise<{ default: React.ComponentType<JSX.IntrinsicAttributes> }>
+> = {
   profile: () => import('../pages/Profile'),
   park: () => import('../pages/Park'),
   parks: () => import('../pages/Parks'),
@@ -7,7 +10,8 @@ export const routePreloadMap: Record<string, () => Promise<{ default: React.Comp
   userFriends: () => import('../pages/UserFriends'),
   userFavorites: () => import('../pages/UserFavorites'),
   userReviews: () => import('../pages/UserReviews'),
-  userInfo: () => import('../pages/UserInfo'),
+  userEvents: () => import('../pages/UserEvents'),
+  userSettings: () => import('../pages/Settings'),
   parkReviews: () => import('../pages/ParkReviews'),
   parkVisitors: () => import('../pages/ParkVisitors'),
 };

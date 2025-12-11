@@ -35,7 +35,7 @@ const ParkResolved = memo((props: ParkResolvedProps) => {
   const effectivePark = translatedPark || park;
 
   return (
-    <>
+    <div className={styles.pageContainer}>
       <ParkHeader park={effectivePark} />
       <div className={styles.contentContainer}>
         <ParkTabs parkId={effectivePark.id} />
@@ -43,7 +43,7 @@ const ParkResolved = memo((props: ParkResolvedProps) => {
           <Outlet context={effectivePark} />
         </div>
       </div>
-    </>
+    </div>
   );
 });
 

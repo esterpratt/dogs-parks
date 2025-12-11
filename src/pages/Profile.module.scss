@@ -1,40 +1,13 @@
 @use '../variables' as *;
 
-$small-height: 188px;
-$imgs-small-top: 72px;
-$medium-height: 268px;
-$imgs-medium-top: 96px;
+$small-height: 190px;
+$medium-height: 262px;
 
 .profile-container {
   margin-top: $page-top-padding;
   max-height: $content-max-height;
   overflow: hidden;
   height: 100%;
-
-  .header {
-    &.small {
-      height: $small-height;
-      background-size:
-        100% $imgs-small-top,
-        100% 116px;
-    }
-
-    &.medium {
-      height: $medium-height;
-      background-size:
-        100% $imgs-medium-top,
-        100% 172px;
-    }
-  }
-
-  .imgs-container {
-    &.small {
-      top: $imgs-small-top;
-    }
-    &.medium {
-      top: $imgs-medium-top;
-    }
-  }
 }
 
 .container {
@@ -54,6 +27,18 @@ $imgs-medium-top: 96px;
     z-index: 1;
     margin-inline-start: -20px;
   }
+
+  &:not(:only-child) {
+    width: var(--img-size);
+  }
+
+  &:nth-child(odd):not(:only-child) {
+    transform: rotate(4deg);
+  }
+
+  &:nth-child(even):not(:only-child) {
+    transform: rotate(-4deg);
+  }
 }
 
 .title {
@@ -63,7 +48,7 @@ $imgs-medium-top: 96px;
   font-size: $second-title-font-size;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
   align-items: center;
   width: 100%;
 }
@@ -82,15 +67,27 @@ $imgs-medium-top: 96px;
 }
 
 .welcome {
-  position: absolute;
-  bottom: 0;
-  padding-bottom: 16px;
-  font-size: $second-title-font-size;
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  align-items: center;
   width: 100%;
+  padding: 0 16px 4px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: end;
+
+  .welcome-text {
+    font-size: $second-title-font-size;
+  }
+
+  .settings-button {
+    border-radius: 8px;
+    height: 36px;
+    width: 36px;
+    box-shadow: $box-shadow;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .user-name {
@@ -143,4 +140,8 @@ $imgs-medium-top: 96px;
       margin-inline-start: -40px;
     }
   }
+}
+
+:export {
+  pink: $pink;
 }

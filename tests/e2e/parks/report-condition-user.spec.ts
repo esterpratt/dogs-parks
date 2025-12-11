@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { setupTestEnvironment } from '../helpers/setup';
+import { setupTestEnvironment, waitForAppReady } from '../helpers/setup';
 import { loginTestUser } from '../helpers/auth';
 
 // User flow: open first park and open report condition modal from Live status section.
@@ -12,9 +12,8 @@ test.describe('parks (user)', () => {
     await setupTestEnvironment(page);
     await loginTestUser(page);
 
-    await page.goto('/parks');
-    await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(500);
+    await page.goto('/parks', { waitUntil: 'domcontentloaded' });
+    await waitForAppReady(page);
 
     const firstCard = page.getByTestId('park-card').first();
     await firstCard.waitFor({ timeout: 15000 });

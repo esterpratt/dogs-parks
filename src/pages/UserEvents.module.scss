@@ -1,0 +1,44 @@
+@use '../variables' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.title {
+  font-size: $title-font-size;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.title-icon {
+  color: $green;
+}
+
+.subtitle {
+  font-size: $title-font-size;
+  height: 34px;
+}
+
+.events-container {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.loader {
+  margin-bottom: 29%;
+}
+
+@media (orientation: landscape) {
+  .container {
+    padding-bottom: 16px;
+  }
+
+  .loader {
+    margin-bottom: 0;
+  }
+}

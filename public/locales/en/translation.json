@@ -3,15 +3,16 @@
     "title": "Language",
     "modalTitle": "Choose language",
     "english": "English",
-    "hebrew": "Hebrew"
+    "hebrew": "Hebrew",
+    "arabic": "Arabic"
   },
   "userDogs": {
     "titleMyPack": "My pack",
-    "titleUsersPack": "{{name}}'s pack",
+    "titleUsersPack": "<name>{{name}}</name>'s pack",
     "addDog": "Add dog",
     "emptySignedIn1": "Your dog squad is looking pretty empty.",
     "emptySignedIn2": "Time to recruit some furry friends!",
-    "otherEmpty": "{{name}}'s pack seems to be empty",
+    "otherEmpty": "<name>{{name}}</name>'s pack seems to be empty",
     "cameraModalTitle": "Add your dog image"
   },
   "deleteAccount": {
@@ -193,7 +194,9 @@
       "googlePlay": "Google Play"
     }
   },
-  "userInfo": {
+  "settings": {
+    "title": "Settings",
+    "backToProfile": "To my profile",
     "editDetails": "Edit details",
     "logout": "Logout",
     "deleteProfile": "Delete my profile",
@@ -239,7 +242,7 @@
       "friends": "Friends",
       "favorites": "Favorites",
       "reviews": "Reviews",
-      "settings": "Settings"
+      "events": "Events"
     }
   },
   "visitors": {
@@ -292,9 +295,17 @@
         "title": "{{name}} invited you to a park",
         "appMessage": "Click to respond"
       },
-      "parkInviteResponse": {
-        "title": "{{name}} responded to your invite",
-        "appMessage": "Click to view the response"
+      "parkInviteAccept": {
+        "title": "{{name}} accepted your park event invitation",
+        "appMessage": "Click to view details"
+      },
+      "parkInviteDecline": {
+        "title": "{{name}} declined your park event invitation",
+        "appMessage": "Click to view details"
+      },
+      "parkInviteCancelled": {
+        "title": "Park event was cancelled",
+        "appMessage": "Click to view details"
       }
     },
     "modal": {
@@ -315,8 +326,96 @@
         "friendApprovals": {
           "title": "Friend approvals",
           "description": "Get notified when your friend requests are accepted"
+        },
+        "parkInvite": {
+          "title": "Park invites",
+          "description": "Get notified when a friend invites you to a park"
+        },
+        "parkInviteAccept": {
+          "title": "Park invite acceptances",
+          "description": "Get notified when a friend accepts your invitation to a park"
+        },
+        "parkInviteDecline": {
+          "title": "Park invite declines",
+          "description": "Get notified when a friend declines your invitation to a park"
+        },
+        "parkInviteCancelled": {
+          "title": "Park invite cancellations",
+          "description": "Get notified when a friend cancels an event you are invited to"
         }
       }
+    }
+  },
+  "userEvents": {
+    "upcomingEvents": "Upcoming events",
+    "organizedEvents": "Organized by me",
+    "invitedEvents": "Invited to"
+  },
+  "event": {
+    "general": "Overview",
+    "friends": "Guest list",
+    "extra": "Additional info",
+    "cancelled": "Cancelled",
+    "declined": "Declined",
+    "invitedBy": "Invited by <name>{{name}}</name>",
+    "noInvitees": "No other friends invited",
+    "addFriends": "Add friends",
+    "organizedBy": "Organized by",
+    "location": "Location",
+    "time": "Time",
+    "ended": "Ended",
+    "title": {
+      "yours": "Your event at",
+      "going": "You are going to an event at",
+      "invited": "You are invited to an event at",
+      "cancelled": "Cancelled event at",
+      "wentTo": "You went to an event at",
+      "wereInvited": "You were invited to an event at"
+    },
+    "message": {
+      "title": "Host's message",
+      "organizerTitle": "Your message"
+    },
+    "invitees": {
+      "going": "Attending friends",
+      "invited": "Invited friends",
+      "declined": "Not attending"
+    },
+    "organizer": {
+      "cancelled": "You cancelled the event",
+      "ended": "The event has ended"
+    },
+    "invitee": {
+      "declined": "You declined the invitation",
+      "cancelled": "The event was cancelled",
+      "removed": "The event was removed",
+      "ended": "The event has ended",
+      "decline": {
+        "title": "Are you sure you want to decline the event?",
+        "button": "Yes",
+        "error": "Sorry, there was an error declining the event",
+        "success": "The event was declined"
+      },
+      "accept": {
+        "error": "Sorry, there was an error accepting the event",
+        "success": "You are going to the event!"
+      }
+    },
+    "breadcrumb": {
+      "events": "To all events"
+    },
+    "cancel": {
+      "title": "Are you sure you want to cancel the event?",
+      "modalBtnTxt": "Yes, cancel",
+      "modalCancelBtnTxt": "No, keep it",
+      "buttonTxt": "Cancel event",
+      "error": "Sorry, there was an error with the cancellation",
+      "success": "The event was cancelled"
+    },
+    "save": {
+      "buttonTxt": "Save event",
+      "error": "There was an error saving the event",
+      "success": "The event was saved successfully!"
     }
   },
   "parkReviews": {
@@ -326,6 +425,34 @@
     "averageRank": "Average rank: {{rank}}",
     "addReview": "Add review",
     "updateReview": "Update review"
+  },
+  "parkInvite": {
+    "buttonTxt": "Invite",
+    "messageSuccess": "Invitation sent successfully!",
+    "messageError": "Failed to send invitation. Please try again.",
+    "modal": {
+      "title": "Invite friends to the park",
+      "buttonText": "Send",
+      "conflict": "Are you Schrödinger's dog? You've got <eventLink>another event</eventLink> at this time!",
+      "offset": {
+        "label": "When are you planning to go?",
+        "now": "Now",
+        "min15": "In 15 min",
+        "min30": "In 30 min",
+        "hour1": "In 1 hour"
+      },
+      "visibility": {
+        "title": "Invite all friends"
+      },
+      "friends": {
+        "title": "Who do you want to invite?",
+        "placeholder": "Search friends",
+        "label": "Select friends"
+      },
+      "message": {
+        "label": "Add a message"
+      }
+    }
   },
   "userFriends": {
     "noFriends": "No friends yet.",
@@ -410,7 +537,9 @@
       "like": "Like",
       "unlike": "Unlike",
       "submit": "Submit",
-      "save": "Save"
+      "save": "Save",
+      "areYouSure": "Are you sure?",
+      "yes": "Yes"
     },
     "placeholders": {
       "search": "Search",
@@ -542,9 +671,9 @@
       "modal": {
         "title": "Add the following park details",
         "sizeMeters": "Size (in meters)",
-        "groundCovering": "Ground Covering",
-        "containsFacilities": "Contains Facilities?",
-        "dailyShadeHours": "Daily Shade Hours"
+        "groundCovering": "Ground covering",
+        "containsFacilities": "Contains facilities?",
+        "dailyShadeHours": "Daily shade hours"
       },
       "choose": {
         "update": "Update park details",
@@ -603,7 +732,6 @@
       "reportAnonymously": "Report anonymously"
     }
   },
-
   "location": {
     "permissions": {
       "message": "We couldn’t access your location. You can enable location permissions in your device settings.",

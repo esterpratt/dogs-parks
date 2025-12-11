@@ -9,6 +9,8 @@ interface FormModalProps {
   open: boolean;
   onClose?: () => void;
   className?: string;
+  formContainerClassName?: string;
+  formClassName?: string;
   titleClassName?: string;
   children: ReactNode;
   onSave?: () => void;
@@ -23,6 +25,8 @@ const FormModal = ({
   onClose,
   children,
   className,
+  formContainerClassName,
+  formClassName,
   titleClassName,
   height,
   onSave,
@@ -38,8 +42,8 @@ const FormModal = ({
       height={height}
       className={classnames(styles.modal, className)}
     >
-      <div className={styles.container}>
-        <div className={styles.formContainer}>
+      <div className={classnames(styles.container, formContainerClassName)}>
+        <div className={classnames(styles.formContainer, formClassName)}>
           {title && (
             <div className={classnames(styles.title, titleClassName)}>
               {title}

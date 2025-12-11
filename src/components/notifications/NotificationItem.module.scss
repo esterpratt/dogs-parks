@@ -20,12 +20,20 @@
     color: $white;
   }
 
-  &.friend-request {
+  &.pink {
+    background: $pink;
+  }
+
+  &.blue {
+    background: $blue;
+  }
+
+  &.green {
     background: $green;
   }
 
-  &.friend-approval {
-    background: $pink;
+  &.red {
+    background: $red;
   }
 }
 
@@ -38,16 +46,20 @@
   height: 100%;
 }
 
-.user-name-row {
+.title-row {
   display: flex;
   justify-content: flex-start;
   align-items: center;
 }
 
-.user-name {
+.title {
   font-size: 14px;
   color: var(--color-text);
   text-align: start;
+
+  &::first-letter {
+    text-transform: capitalize;
+  }
 }
 
 .message {
@@ -81,10 +93,6 @@
     border-inline: 3px solid rgba($pink, 0.5);
     background-color: rgba($pink, 0.03);
 
-    .user-name {
-      font-weight: 600;
-    }
-
     .message {
       opacity: 1;
     }
@@ -92,10 +100,6 @@
 
   &.read {
     border-inline: 3px solid rgba($pink, 0);
-
-    .user-name {
-      font-weight: 400;
-    }
 
     .message {
       opacity: 0.7;

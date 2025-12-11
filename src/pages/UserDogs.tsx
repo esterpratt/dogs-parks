@@ -11,7 +11,8 @@ import { EditDogModal } from '../components/dog/EditDogModal';
 import styles from './UserDogs.module.scss';
 import { Plus } from 'lucide-react';
 import { useUploadImage } from '../hooks/api/useUploadImage';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
+import { capitalizeText } from '../utils/text';
 
 interface UserDogsProps {
   user: User;
@@ -63,11 +64,19 @@ const UserDogs = () => {
         {!!dogs?.length && (
           <div className={styles.titleContainer}>
             <div className={styles.titleText}>
-              <span className={styles.name}>
-                {isSignedInUser
-                  ? t('userDogs.titleMyPack')
-                  : t('userDogs.titleUsersPack', { name: user.name })}
-              </span>{' '}
+              <span>
+                {isSignedInUser ? (
+                  capitalizeText(t('userDogs.titleMyPack'))
+                ) : (
+                  <Trans
+                    i18nKey="userDogs.titleUsersPack"
+                    values={{ name: user.name }}
+                    components={{
+                      name: <span className={styles.name} />,
+                    }}
+                  />
+                )}
+              </span>
             </div>
             {isSignedInUser && (
               <Button
@@ -98,9 +107,13 @@ const UserDogs = () => {
         {!dogs?.length && !isSignedInUser && (
           <div className={styles.noDogsTitleContainer}>
             <div>
-              <span className={styles.name}>
-                {t('userDogs.otherEmpty', { name: user.name })}
-              </span>
+              <Trans
+                i18nKey="userDogs.otherEmpty"
+                values={{ name: user.name }}
+                components={{
+                  name: <span className={styles.name} />,
+                }}
+              />
             </div>
           </div>
         )}

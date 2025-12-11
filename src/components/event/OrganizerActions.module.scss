@@ -1,0 +1,17 @@
+@use '../../variables.scss' as *;
+
+.buttons-container {
+  display: flex;
+  width: 100%;
+
+  button {
+    flex: 1;
+  }
+}
+
+.text {
+  width: 100%;
+  font-size: 18px;
+  text-align: center;
+  color: $red;
+}
