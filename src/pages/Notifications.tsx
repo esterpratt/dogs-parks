@@ -17,10 +17,16 @@ const Notifications = () => {
 
   const { markNotificationsAsSeen } = useMarkNotificationsAsSeen();
 
-  const { unseenNotifications } = useUnseenNotifications();
+  const { unseenNotifications, isLoading: isLoadingUnseen } =
+    useUnseenNotifications();
 
-  const { historicalData, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useSeenNotifications();
+  const {
+    historicalData,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    historicalStatus,
+  } = useSeenNotifications();
 
   useEffect(() => {
     if (!unseenNotifications || unseenNotifications.length === 0) {
@@ -69,11 +75,13 @@ const Notifications = () => {
     return deduped;
   }, [unseenNotifications, historicalNotifications]);
 
+  const isLoading = isLoadingUnseen || historicalStatus === 'pending';
+
   return (
     <div className={styles.container}>
       <NotificationsHeader />
       <div className={styles.content}>
-        {!allNotifications.length ? (
+        {!allNotifications.length && !isLoading ? (
           <div className={styles.emptyState}>
             <div className={styles.emptyIcon}>
               <Bell size={64} />
