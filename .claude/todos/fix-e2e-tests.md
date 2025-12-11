@@ -40,6 +40,18 @@ Update [report-condition-user.spec.ts](tests/e2e/parks/report-condition-user.spe
 - Document that TEST_EMAIL and TEST_PASSWORD must be set in CI secrets
 - Consider adding a check to skip or provide better error message
 
+## Root Cause Analysis
+
+The real issue was **not just timeouts** but that the page was blocked from rendering entirely.
+
+In [ParksList.tsx:69](src/components/parks/ParksList.tsx#L69), the component showed a loader while `isLoadingParks || isBuildingIndex`.
+
+The problem:
+- `isBuildingIndex` comes from `useParksCrossLanguageFilter()` which fetches parks data for ALL languages (English + Hebrew)
+- If these API calls fail or are very slow in CI (network issues, Supabase access problems), `isBuildingIndex` stays true forever
+- The page never renders because it's waiting for all language data to load
+- This is why search input, navbar, and all other elements were not found - they literally didn't exist in the DOM
+
 ## Review
 
 ### Changes Made
@@ -49,9 +61,17 @@ Updated visibility timeout from default 5s to 15s in:
 - [cross-language-search.spec.ts:26, 81, 136](tests/e2e/parks/cross-language-search.spec.ts) - All 3 test cases now wait up to 15s for search input
 - [detail-visitor.spec.ts:22](tests/e2e/parks/detail-visitor.spec.ts) - Visitor test now waits up to 15s for search input
 
-This accounts for slower CI environments where the cross-language search index takes longer to build.
+**Note: This alone was not sufficient** - it only helped IF the page rendered.
 
-#### 2. Added Environment Variables to CI
+#### 2. Fixed Root Cause: Removed Blocking Loader
+Updated [ParksList.tsx:69](src/components/parks/ParksList.tsx#L69):
+- Removed `isBuildingIndex` from the loading condition
+- Changed from `if (isLoadingParks || isBuildingIndex)` to `if (isLoadingParks)`
+- Now the page renders as soon as the primary parks data loads
+- Cross-language search index builds in the background and activates when ready
+- Basic search still works immediately
+
+#### 3. Added Environment Variables to CI
 Updated [pr-checks.yml:39-43](.github/workflows/pr-checks.yml#L39-L43):
 - Added `TEST_EMAIL` and `TEST_PASSWORD` environment variables to the "Run E2E tests" step
 - These pull from GitHub repository secrets
@@ -65,6 +85,7 @@ Updated [pr-checks.yml:39-43](.github/workflows/pr-checks.yml#L39-L43):
    - `TEST_PASSWORD`: Password for test user account
 
 ### Impact
-- All 6 e2e tests should now pass in CI
-- Tests are more resilient to slower environments
-- No code changes to application logic
+- Page now renders immediately when parks data loads, regardless of cross-language index status
+- Cross-language search is now progressive - works as soon as ready, doesn't block page
+- Tests should pass consistently in CI
+- Better user experience - no waiting for background index building
