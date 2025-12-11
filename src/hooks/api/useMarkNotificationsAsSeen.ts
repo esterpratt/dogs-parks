@@ -26,12 +26,6 @@ const useMarkNotificationsAsSeen = () => {
       queryClient.invalidateQueries({
         queryKey: ['notifications', 'unseenCount', userId],
       });
-      queryClient.invalidateQueries({
-        queryKey: ['unseenNotifications', userId],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['seenNotifications', userId],
-      });
 
       // Update native badge
       if (Capacitor.isNativePlatform()) {

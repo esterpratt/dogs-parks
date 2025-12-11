@@ -15,6 +15,7 @@ const useUnseenNotifications = () => {
     queryFn: () => getUnseenNotifications(userId!),
     enabled: !!userId,
     staleTime: 0,
+    gcTime: 0,
     refetchOnMount: 'always',
     refetchOnWindowFocus: false,
     refetchOnReconnect: true,
