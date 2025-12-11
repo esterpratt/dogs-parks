@@ -35,8 +35,7 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
     retry: 0,
   });
 
-  const { filterFunc: crossLangFilter, isLoading: isBuildingIndex } =
-    useParksCrossLanguageFilter();
+  const { filterFunc: crossLangFilter } = useParksCrossLanguageFilter();
 
   const sortedParks = useMemo(() => {
     if (!parks?.length) {
@@ -66,7 +65,7 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
     </div>
   );
 
-  if (isLoadingParks || isBuildingIndex) {
+  if (isLoadingParks) {
     return <Loader style={{ paddingTop: '64px' }} />;
   }
 
