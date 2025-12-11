@@ -22,11 +22,8 @@ export default defineConfig({
   fullyParallel: true,
   retries: process.env.CI ? 1 : 0,
   reporter: [['list'], ['html', { open: 'never' }]],
-  timeout: 60_000, // 60 seconds per test
   use: {
     baseURL: 'http://localhost:5173',
-    navigationTimeout: 60_000, // 60 seconds for page.goto()
-    actionTimeout: 15_000, // 15 seconds for actions like click, fill, etc.
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',

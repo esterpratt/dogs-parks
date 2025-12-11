@@ -22,3 +22,13 @@ export async function setupTestEnvironment(
   // Force mobile viewport
   await page.setViewportSize(viewport);
 }
+
+/**
+ * Wait for the React app to hydrate and be ready.
+ * This waits for the #preload loading screen to be removed from the DOM.
+ */
+export async function waitForAppReady(page: Page) {
+  // Wait for the preload element to be hidden/removed
+  // The preload element is removed when React hydrates (see main.tsx)
+  await page.waitForSelector('#preload', { state: 'hidden', timeout: 30000 });
+}

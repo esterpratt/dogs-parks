@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { setupTestEnvironment } from '../helpers/setup';
+import { setupTestEnvironment, waitForAppReady } from '../helpers/setup';
 
 // Visitor flow: open Givatayim Park details page and verify live status heading has no report button for visitors.
 
@@ -8,11 +8,9 @@ test.describe('parks (visitor)', () => {
     page,
   }) => {
     await setupTestEnvironment(page);
-    await page.goto('/parks');
-    // Allow initial data (parks + location) to resolve before interacting
-    await page.waitForLoadState('networkidle');
-    // Fallback small delay to cover React Query state propagation
-    await page.waitForTimeout(500);
+    await page.goto('/parks', { waitUntil: 'domcontentloaded' });
+    // Wait for React app to hydrate and be ready
+    await waitForAppReady(page);
 
     // Resolve search input (by test id or placeholder)
     let searchInput = page.getByTestId('park-search-input');

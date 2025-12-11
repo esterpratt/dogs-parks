@@ -1,4 +1,5 @@
 import { Page, expect } from '@playwright/test';
+import { waitForAppReady } from './setup';
 
 interface LoginWithEmailParams {
   email: string;
@@ -14,7 +15,8 @@ export async function loginWithEmail(
   page: Page,
   { email, password }: LoginWithEmailParams
 ): Promise<void> {
-  await page.goto('/login?mode=login');
+  await page.goto('/login?mode=login', { waitUntil: 'domcontentloaded' });
+  await waitForAppReady(page);
 
   const emailField = page.getByTestId('login-email');
   const passwordField = page.getByTestId('login-password');
