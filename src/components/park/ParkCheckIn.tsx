@@ -8,7 +8,7 @@ import { useAddReview } from '../../hooks/api/useAddReview';
 import { queryClient } from '../../services/react-query';
 import { fetchUserReviews } from '../../services/reviews';
 import { useNotification } from '../../context/NotificationContext';
-import { capitalizeText } from '../../utils/text';
+import { capitalizeWords } from '../../utils/text';
 import { ParkIcon } from './ParkIcon';
 import { ReviewModal } from '../ReviewModal';
 import { DogsCountModal } from './DogsCountModal';
@@ -30,7 +30,7 @@ const ParkCheckIn: React.FC<{
   const { notify } = useNotification();
 
   const title = userName
-    ? t('parks.checkin.titleWithName', { name: capitalizeText(userName) })
+    ? t('parks.checkin.titleWithName', { name: capitalizeWords(userName) })
     : t('parks.checkin.title');
 
   const { mutateAsync: parkCheckIn } = useMutation({
