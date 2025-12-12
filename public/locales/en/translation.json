@@ -736,8 +736,7 @@
   },
   "location": {
     "permissions": {
-      "message": "We couldn’t access your location. You can enable location permissions in your device settings.",
-      "dontShowAgain": "Don't show again"
+      "message": "We couldn’t access your location. You can enable location permissions in your device settings."
     },
     "input": {
       "clickMap": "Click the map or",
@@ -1109,7 +1108,8 @@
     "friendRequest": {
       "removed": "Friend request was removed",
       "sent": "Friend request sent",
-      "fail": "Failed to send friend request"
+      "fail": "Failed to send friend request",
+      "alreadyHave": "You already have a pending friend request"
     },
     "friendship": {
       "nowFriends": "You are now friends!",

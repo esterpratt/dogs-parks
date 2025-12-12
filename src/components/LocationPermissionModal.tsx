@@ -7,9 +7,11 @@ import { useState } from 'react';
 import { useUserLocation } from '../context/LocationContext';
 import { Button } from './Button';
 import styles from './LocationPermissionModal.module.scss';
+import { useTranslation } from 'react-i18next';
 
 const LocationPermissionModal = () => {
   const isLocationDenied = useUserLocation((state) => state.isLocationDenied);
+  const { t } = useTranslation();
 
   const dismissedForever =
     localStorage.getItem('locationModalDismissed') === 'true';
@@ -42,20 +44,17 @@ const LocationPermissionModal = () => {
   return (
     <div className={styles.modal}>
       <div className={styles.content}>
-        <p className={styles.text}>
-          We couldn’t access your location. You can enable location permissions
-          in your device settings.
-        </p>
+        <p className={styles.text}>{t('location.permissions.message')}</p>
         <div className={styles.buttonsContainer}>
           <Button className={styles.button} onClick={openAppSettings}>
-            Open settings
+            {t('common.actions.openSettings')}
           </Button>
           <Button
             className={styles.button}
             variant="secondary"
             onClick={handleCancel}
           >
-            Maybe later
+            {t('common.actions.maybeLater')}
           </Button>
           <Button
             className={styles.button}
@@ -63,7 +62,7 @@ const LocationPermissionModal = () => {
             color={styles.red}
             onClick={handleCancelForGood}
           >
-            Don't show again
+            {t('common.actions.dontShowAgain')}
           </Button>
         </div>
       </div>

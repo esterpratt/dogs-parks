@@ -126,12 +126,17 @@ export const useUpdateFriendship = ({
         );
         return { previous };
       },
-      onSuccess: () => {
+      onSuccess: (_data, vars) => {
         queryClient.invalidateQueries({ queryKey: ['friendshipMap', userId] });
         queryClient.invalidateQueries({
           queryKey: ['friendsWithDogs', userId],
         });
-        notify(t('toasts.friendship.nowFriends'));
+
+        if (vars.status === FRIENDSHIP_STATUS.APPROVED) {
+          notify(t('toasts.friendship.nowFriends'));
+        } else if (vars.status === FRIENDSHIP_STATUS.PENDING) {
+          notify(t('toasts.friendRequest.alreadyHave'), true);
+        }
       },
       onError: (_err, _vars, context) => {
         queryClient.setQueryData(['friendshipMap', userId], context?.previous);
@@ -142,6 +147,18 @@ export const useUpdateFriendship = ({
   const onUpdateFriendship = async (status: FRIENDSHIP_STATUS) => {
     const friendship = await fetchFriendship([friendId, userId]);
     if (friendship) {
+      if (
+        status === FRIENDSHIP_STATUS.PENDING &&
+        friendship.status === FRIENDSHIP_STATUS.PENDING
+      ) {
+        queryClient.invalidateQueries({ queryKey: ['friendshipMap', userId] });
+        queryClient.invalidateQueries({
+          queryKey: ['friendsWithDogs', userId],
+        });
+        notify(t('toasts.friendRequest.alreadyHave'), true);
+        return;
+      }
+
       if (status === FRIENDSHIP_STATUS.ABORTED) {
         removeFriendship({ friendshipId: friendship.id });
       } else if (status === FRIENDSHIP_STATUS.REMOVED) {
