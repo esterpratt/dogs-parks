@@ -1,8 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Bell, BellOff } from 'lucide-react';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { ToggleInput } from '../inputs/ToggleInput';
 import { useOrientationContext } from '../../context/OrientationContext';
 import { UserContext } from '../../context/UserContext';
 import { FormModal } from '../modals/FormModal';
@@ -11,6 +9,7 @@ import {
   updateNotificationPreferences,
 } from '../../services/notifications';
 import { queryClient } from '../../services/react-query';
+import { NotificationSection } from './NotificationSection';
 import styles from './NotificationsModal.module.scss';
 
 interface NotificationsModalProps {
@@ -26,46 +25,6 @@ interface NotificationPreferences {
   parkInviteDecline: boolean;
   parkInviteCancelled: boolean;
 }
-
-interface NotificationSectionProps {
-  title: string;
-  description: string;
-  value: boolean;
-  onChange: (value: boolean) => void;
-  isLast?: boolean;
-}
-
-const NotificationSection: React.FC<NotificationSectionProps> = ({
-  title,
-  description,
-  value,
-  onChange,
-  isLast = false,
-}) => {
-  return (
-    <div
-      className={`${styles.settingItem} ${
-        isLast ? styles.settingItemLast : ''
-      }`}
-    >
-      <div className={styles.settingInfo}>
-        <div className={styles.settingDetails}>
-          <span className={styles.settingLabel}>{title}</span>
-          <span className={styles.settingDescription}>{description}</span>
-        </div>
-      </div>
-      <ToggleInput
-        label=""
-        value={value}
-        valueOn={true}
-        valueOff={false}
-        onChange={onChange}
-        iconOn={<Bell size={16} />}
-        iconOff={<BellOff size={16} />}
-      />
-    </div>
-  );
-};
 
 export const NotificationsModal: React.FC<NotificationsModalProps> = ({
   isOpen,
@@ -159,25 +118,13 @@ export const NotificationsModal: React.FC<NotificationsModalProps> = ({
             <span>{t('notifications.modal.section.general')}</span>
           </div>
           <div className={styles.sectionContainer}>
-            <div className={`${styles.settingItem} ${styles.settingItemLast}`}>
-              <div className={styles.settingInfo}>
-                <div className={styles.settingDetails}>
-                  <span className={styles.settingLabel}>
-                    {t('notifications.modal.mute.title')}
-                  </span>
-                  <span className={styles.settingDescription}>
-                    {t('notifications.modal.mute.description')}
-                  </span>
-                </div>
-              </div>
-              <ToggleInput
-                label=""
-                value={muteAll}
-                valueOn={true}
-                valueOff={false}
-                onChange={(value) => setMuteAll(value)}
-              />
-            </div>
+            <NotificationSection
+              title={t('notifications.modal.mute.title')}
+              description={t('notifications.modal.mute.description')}
+              value={muteAll}
+              onChange={(value) => setMuteAll(value)}
+              isLast={true}
+            />
           </div>
         </div>
         {!muteAll && (
@@ -216,7 +163,9 @@ export const NotificationsModal: React.FC<NotificationsModalProps> = ({
                   'notifications.modal.types.parkInviteAccept.description'
                 )}
                 value={preferences.parkInviteAccept}
-                onChange={(value) => updatePreference('parkInviteAccept', value)}
+                onChange={(value) =>
+                  updatePreference('parkInviteAccept', value)
+                }
               />
               <NotificationSection
                 title={t('notifications.modal.types.parkInviteDecline.title')}
@@ -224,7 +173,9 @@ export const NotificationsModal: React.FC<NotificationsModalProps> = ({
                   'notifications.modal.types.parkInviteDecline.description'
                 )}
                 value={preferences.parkInviteDecline}
-                onChange={(value) => updatePreference('parkInviteDecline', value)}
+                onChange={(value) =>
+                  updatePreference('parkInviteDecline', value)
+                }
               />
               <NotificationSection
                 title={t('notifications.modal.types.parkInviteCancelled.title')}
@@ -232,7 +183,9 @@ export const NotificationsModal: React.FC<NotificationsModalProps> = ({
                   'notifications.modal.types.parkInviteCancelled.description'
                 )}
                 value={preferences.parkInviteCancelled}
-                onChange={(value) => updatePreference('parkInviteCancelled', value)}
+                onChange={(value) =>
+                  updatePreference('parkInviteCancelled', value)
+                }
                 isLast={true}
               />
             </div>
