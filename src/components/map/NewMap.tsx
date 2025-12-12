@@ -9,9 +9,11 @@ import {
 } from 'react';
 import { Link } from 'react-router-dom';
 import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
+import { useTranslation } from 'react-i18next';
+import classnames from 'classnames';
+import { AlignJustify, Locate } from 'lucide-react';
 import { Location, ParkJSON as Park } from '../../types/park';
 import { MarkerList } from './MarkerList';
-import { AlignJustify, Locate } from 'lucide-react';
 import { MapEventHandler } from './mapHelpers/MapEventHandler';
 import { MapCenter } from './mapHelpers/MapCenter';
 import { Routing } from './mapHelpers/Routing';
@@ -23,8 +25,8 @@ import { useUserLocation } from '../../context/LocationContext';
 import { Button } from '../Button';
 import { useInitLocation } from '../../hooks/useInitLocation';
 import { WeatherButton } from '../weather/WeatherButton';
-import { useTranslation } from 'react-i18next';
 import { isRTL } from '../../utils/language';
+import { useOrientationContext } from '../../context/OrientationContext';
 import styles from './NewMap.module.scss';
 
 const ParkPopupLazy = lazy(() => import('../parks/ParkPopupLazy'));
@@ -38,6 +40,8 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
   const userLocation = useInitLocation();
   const { i18n } = useTranslation();
   const isRTLMode = isRTL(i18n.language);
+  const orientation = useOrientationContext((state) => state.orientation);
+  const isLandscape = orientation === 'landscape';
   const setUserLocation = useUserLocation((state) => state.setUserLocation);
   const [center, setCenter] = useState<Location>(
     location ?? userLocation ?? DEFAULT_LOCATION
@@ -156,10 +160,14 @@ const NewMap: React.FC<NewMapProps> = ({ location, className }) => {
           onClick={() =>
             setUserCenter([setUserLocationByPosition, setCenterByPosition])
           }
-          className={styles.centerButton}
+          className={classnames(styles.centerButton, {
+            [styles.landscape]: isLandscape,
+          })}
           style={{
             position: 'absolute',
-            top: `calc(120px + var(--safe-area-inset-top, 0px))`,
+            top: isLandscape
+              ? `calc(80px + var(--safe-area-inset-top, 0px))`
+              : `calc(120px + var(--safe-area-inset-top, 0px))`,
             [isRTLMode ? 'left' : 'right']:
               `calc(16px + var(--safe-area-inset-${isRTLMode ? 'left' : 'right'}, 0px))`,
           }}

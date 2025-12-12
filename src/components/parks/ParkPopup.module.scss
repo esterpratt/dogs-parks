@@ -19,7 +19,7 @@
   }
 
   &.open {
-    bottom: calc(12px + $navbar-height + var(--safe-area-inset-bottom, 0px));
+    bottom: calc(12px + var(--navbar-height) + var(--safe-area-inset-bottom, 0px));
   }
 
   .close {

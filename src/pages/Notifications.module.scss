@@ -10,7 +10,7 @@
 
 .content {
   padding: 0 calc(8px + var(--safe-area-inset-right, 0px))
-    calc(12px + $navbar-height) calc(8px + var(--safe-area-inset-left, 0px));
+    calc(12px + var(--navbar-height)) calc(8px + var(--safe-area-inset-left, 0px));
 }
 
 .loader {

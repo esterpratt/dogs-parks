@@ -22,6 +22,7 @@ body {
   height: 100dvh;
   display: flex;
   flex-direction: column;
+  --navbar-height: 64px;
 }
 
 * {
@@ -188,6 +189,7 @@ textarea {
     border-radius: 50%;
     -webkit-tap-highlight-color: transparent;
     transition: all 0.3s ease;
+    line-height: unset;
 
     &:active {
       transform: scale(0.96);
@@ -324,7 +326,24 @@ textarea {
 }
 
 @media (orientation: landscape) {
+  #root {
+    --navbar-height: 48px;
+  }
+
   .slick-slider .slick-track .slick-slide {
     height: 180px;
+  }
+
+  .leaflet-touch .leaflet-control-layers,
+  .leaflet-touch .leaflet-bar.leaflet-control-zoom {
+    top: calc(120px + var(--safe-area-inset-top, 0px));
+
+    a.leaflet-control-zoom-in:first-child,
+    a.leaflet-control-zoom-out:last-child {
+      margin-top: 3px;
+      width: 40px;
+      height: 40px;
+      font-size: 18px;
+    }
   }
 }

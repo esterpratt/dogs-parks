@@ -1,11 +1,12 @@
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import classnames from 'classnames';
 import { useQuery } from '@tanstack/react-query';
 import { getWeatherInfo } from '../../utils/weather';
 import styles from './WeatherButton.module.scss';
 import { WeatherForecast } from '../../types/weather';
 import { getWeatherForecast } from '../../services/weather';
+import { useClickOutside } from '../../hooks/useClickOutside';
 
 interface WeatherButtonProps {
   lat: number;
@@ -17,6 +18,7 @@ const ONE_MINUTE = 60 * 1000;
 const WeatherButton: React.FC<WeatherButtonProps> = ({ lat, long }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
   const { data: forecast } = useQuery<WeatherForecast | null>({
     queryKey: ['weather', lat, long],
@@ -24,6 +26,13 @@ const WeatherButton: React.FC<WeatherButtonProps> = ({ lat, long }) => {
     staleTime: ONE_MINUTE,
     gcTime: ONE_MINUTE,
     refetchInterval: ONE_MINUTE,
+  });
+
+  useClickOutside({
+    refs: [wrapperRef],
+    handler: () => {
+      setOpen(false);
+    },
   });
 
   if (!forecast) {
@@ -45,6 +54,7 @@ const WeatherButton: React.FC<WeatherButtonProps> = ({ lat, long }) => {
 
   return (
     <div
+      ref={wrapperRef}
       className={styles.weatherButtonWrapper}
       style={
         {

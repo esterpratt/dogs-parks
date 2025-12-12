@@ -4,11 +4,12 @@
   position: absolute;
   top: calc(320px + var(--safe-area-inset-top, 0px));
   right: calc(16px + var(--safe-area-inset-right, 0px));
-  z-index: 1100;
+  z-index: 1000;
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
   gap: 12px;
+  transition: all 0.3s ease;
 }
 
 .button {
@@ -93,6 +94,40 @@
   margin: 0 2px;
 }
 
+@media (orientation: landscape) {
+  .weather-button-wrapper {
+    top: calc(70px + var(--safe-area-inset-top, 0px));
+    left: calc(16px + var(--safe-area-inset-left, 0px));
+    right: auto;
+    flex-direction: row;
+  }
+
+  .button {
+    height: 40px;
+    width: 40px;
+  }
+
+  .inner-circle,
+  .innerCircle {
+    height: 34px;
+    width: 34px;
+
+    svg {
+      width: 22px;
+      height: 22px;
+    }
+  }
+
+  .content {
+    transform-origin: center left;
+    transform: translateX(-6px) scaleX(0.6) scaleY(0.96);
+  }
+
+  .content-open {
+    transform: translateX(0) scaleX(1) scaleY(1);
+  }
+}
+
 :global(.rtl) .weather-button-wrapper {
   right: auto;
   left: calc(16px + var(--safe-area-inset-left, 0px));
@@ -104,5 +139,21 @@
 
   .content-open {
     transform: translateX(0) scaleX(1) scaleY(1);
+  }
+}
+
+@media (orientation: landscape) {
+  :global(.rtl) .weather-button-wrapper {
+    left: auto;
+    right: calc(16px + var(--safe-area-inset-right, 0px));
+
+    .content {
+      transform-origin: center right;
+      transform: translateX(6px) scaleX(0.6) scaleY(0.96);
+    }
+
+    .content-open {
+      transform: translateX(0) scaleX(1) scaleY(1);
+    }
   }
 }

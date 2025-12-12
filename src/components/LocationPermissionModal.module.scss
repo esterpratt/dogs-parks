@@ -2,7 +2,7 @@
 
 .modal {
   position: fixed;
-  bottom: calc($navbar-height + var(--safe-area-inset-bottom, 0px) + 12px);
+  bottom: calc(var(--navbar-height) + var(--safe-area-inset-bottom, 0px) + 12px);
   left: 50%;
   transform: translateX(-50%);
   padding: 12px;
