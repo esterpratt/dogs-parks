@@ -521,7 +521,6 @@
   "common": {
     "actions": {
       "cancel": "إلغاء",
-      "close": "إغلاق",
       "delete": "حذف",
       "login": "تسجيل الدخول",
       "logout": "خروج",
@@ -826,7 +825,6 @@
         "size": "الحجم",
         "temperament": "الطبع",
         "energy": "الطاقة",
-        "waitingResponse": "بانتظار رد الصديق",
         "possessive": "التملك"
       },
       "addDetails": "إضافة",

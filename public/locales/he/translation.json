@@ -521,7 +521,6 @@
   "common": {
     "actions": {
       "cancel": "ביטול",
-      "close": "סגירה",
       "delete": "מחיקה",
       "login": "כניסה",
       "logout": "יציאה",

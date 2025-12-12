@@ -278,6 +278,8 @@
     },
     "list": {
       "headerNew_one": "{{count}} new notification",
+      "headerNew_two": "{{count}} new notifications",
+      "headerNew_many": "{{count}} new notifications",
       "headerNew_other": "{{count}} new notifications",
       "headerNone": "No new notifications",
       "headerEarlier": "Earlier"
@@ -823,7 +825,6 @@
         "size": "Size",
         "temperament": "Temperament",
         "energy": "Energy",
-        "waitingResponse": "Waiting friend's response",
         "possessive": "Possessive"
       },
       "addDetails": "Add your dog's details",

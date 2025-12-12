@@ -60,7 +60,7 @@ const ParksList: React.FC<ParksListProps> = ({ className }) => {
         <Link to="/login?mode=login">
           {t('parks.noResults.noUser.loginLink')}
         </Link>{' '}
-        {t('parks.noResults.noUser.loginSuffix')}
+        {t('parks.noResults.noUser.ctaSignedOutSuffix')}
       </span>
     </div>
   );
