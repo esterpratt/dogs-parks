@@ -6,12 +6,13 @@
   justify-content: space-between;
   gap: 16px;
 
-  button {
+  .button {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
+    padding: 12px 16px;
   }
 }
 
@@ -25,4 +26,10 @@
 .loader {
   width: 20px;
   height: 20px;
+}
+
+@media (orientation: landscape) {
+  .container .button {
+    padding: 8px 16px;
+  }
 }

@@ -57,7 +57,11 @@ const OrganizerActions = (props: OrganizerActionsProps) => {
       ) : isEventEnded ? (
         <span className={styles.text}>{t('event.organizer.ended')}</span>
       ) : (
-        <Button variant="secondary" onClick={handleOpenConfirmModal}>
+        <Button
+          className={styles.button}
+          variant="secondary"
+          onClick={handleOpenConfirmModal}
+        >
           {t('event.cancel.buttonTxt')}
         </Button>
       )}

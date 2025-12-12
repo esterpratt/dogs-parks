@@ -77,6 +77,7 @@ const InviteeActions: React.FC<InviteeActionsProps> = (
     <div className={styles.container}>
       {isInvited && (
         <Button
+          className={styles.button}
           disabled={isPendingAccept}
           onClick={() =>
             handleUpdateInvitee({
@@ -96,6 +97,7 @@ const InviteeActions: React.FC<InviteeActionsProps> = (
         </Button>
       )}
       <Button
+        className={styles.button}
         disabled={isPendingAccept}
         variant="secondary"
         onClick={handleOpenConfirmModal}

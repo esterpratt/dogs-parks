@@ -110,9 +110,9 @@ const InvitedEvent = (props: InviteeEventProps) => {
         !isLoadingInvitee && (
           <InviteeActions
             eventStatus={event.status}
-            inviteeStatus={inviteeStatus}
+            inviteeStatus={inviteeStatus!}
             eventId={event.id}
-            userId={userId!}
+            userId={userId}
             isEventEnded={isEventEnded}
           />
         )

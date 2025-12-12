@@ -12,8 +12,10 @@ const EventDetails = (props: EventDetailsProps) => {
 
   return (
     <div className={styles.container}>
-      {eventHeader}
-      <div className={styles.bodyContainer}>{eventBody}</div>
+      <div className={styles.scrollableContent}>
+        {eventHeader}
+        <div className={styles.bodyContainer}>{eventBody}</div>
+      </div>
       {!!eventActions && <div className={styles.actions}>{eventActions}</div>}
     </div>
   );

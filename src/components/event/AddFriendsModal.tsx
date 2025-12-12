@@ -44,6 +44,7 @@ const AddFriendsModal = (props: AddFriendsModalProps) => {
           queryKey: ['event', eventId],
         });
       },
+      onSettled: onClose,
     });
 
   const handleSaveEvent = () => {
