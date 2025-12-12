@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import classnames from 'classnames';
 import styles from './ToggleInput.module.scss';
 
 interface ToggleInputProps<T> {
@@ -9,6 +10,7 @@ interface ToggleInputProps<T> {
   onChange: (value: T) => void;
   iconOn?: ReactNode;
   iconOff?: ReactNode;
+  variant?: 'large' | 'small';
 }
 
 export const ToggleInput = <T,>(props: ToggleInputProps<T>) => {
@@ -20,13 +22,18 @@ export const ToggleInput = <T,>(props: ToggleInputProps<T>) => {
     onChange,
     iconOn = null,
     iconOff = null,
+    variant = 'large',
   } = props;
   const isOn = value === valueOn;
 
   return (
     <label className={styles.toggleRow}>
       <span className={styles.label}>{label}</span>
-      <div className={styles.switch}>
+      <div
+        className={classnames(styles.switch, {
+          [styles.small]: variant === 'small',
+        })}
+      >
         <input
           type="checkbox"
           checked={isOn}

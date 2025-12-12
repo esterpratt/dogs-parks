@@ -128,6 +128,7 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
       >
         <div className={styles.timeSection}>
           <RadioInputs
+            inputClassName={styles.input}
             onOptionChange={handleOffsetSelect}
             options={OFFSET_OPTIONS}
             name="offsetOptions"
@@ -157,6 +158,7 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
               {t('parkInvite.modal.friends.title')}
             </span>
             <ToggleInput
+              variant="small"
               label={t('parkInvite.modal.visibility.title')}
               value={visibility}
               valueOn={ParkEventVisibility.FRIENDS_ALL}

@@ -20,6 +20,10 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+
+  .input {
+    font-size: 12px;
+  }
 }
 
 .conflict {
@@ -60,5 +64,9 @@
 
   .form {
     gap: 16px;
+
+    &.extra-padding {
+      padding-bottom: 60px;
+    }
   }
 }

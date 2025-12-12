@@ -11,6 +11,7 @@ interface MultiSelectInputsProps {
     event: ChangeEvent<HTMLInputElement>,
     value: string[]
   ) => void;
+  inputClassName?: string;
 }
 
 const MultiSelectInputs: React.FC<MultiSelectInputsProps> = ({
@@ -19,6 +20,7 @@ const MultiSelectInputs: React.FC<MultiSelectInputsProps> = ({
   value = [],
   label,
   onInputChange,
+  inputClassName,
 }) => {
   const onOptionChange = (
     event: ChangeEvent<HTMLInputElement>,
@@ -41,6 +43,7 @@ const MultiSelectInputs: React.FC<MultiSelectInputsProps> = ({
         {options.map((option) => {
           return (
             <MultiSelectInput
+              className={inputClassName}
               key={option.id}
               name={name}
               id={option.id}

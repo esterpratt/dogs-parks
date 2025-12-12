@@ -7,6 +7,7 @@ interface RadioInputProps {
   name: string;
   label: string;
   value: string;
+  inputClassName?: string;
   onOptionChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -16,6 +17,7 @@ const RadioInputs: React.FC<RadioInputProps> = ({
   label,
   value,
   onOptionChange,
+  inputClassName,
 }) => {
   return (
     <div className={styles.container}>
@@ -24,6 +26,7 @@ const RadioInputs: React.FC<RadioInputProps> = ({
         {options.map((option) => {
           return (
             <RadioInput
+              className={inputClassName}
               key={option.id}
               name={name}
               id={option.id}

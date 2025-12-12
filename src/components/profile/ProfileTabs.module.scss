@@ -9,6 +9,12 @@ $small-height: 190px;
   justify-content: space-between;
 }
 
+@media (max-width: 360px) {
+  .tabs {
+    font-size: 12px;
+  }
+}
+
 @media (orientation: landscape) {
   .tabs {
     position: initial;

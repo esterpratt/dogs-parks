@@ -167,6 +167,7 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
         )}
         {!park.materials?.length && (
           <MultiSelectInputs
+            inputClassName={styles.input}
             options={[
               {
                 id: ParkMaterial.SAND,

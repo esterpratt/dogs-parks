@@ -71,6 +71,36 @@
   input:checked + .slider .icon {
     transform: translateX(48px);
   }
+
+  &.small {
+    width: 54px;
+    height: 28px;
+
+    .slider {
+      &::before {
+        height: 24px;
+        width: 24px;
+      }
+
+      .icon {
+        height: 24px;
+        width: 24px;
+
+        svg {
+          width: 14px;
+          height: 14px;
+        }
+      }
+    }
+
+    input:checked + .slider::before {
+      transform: translateX(26px);
+    }
+
+    input:checked + .slider .icon {
+      transform: translateX(26px);
+    }
+  }
 }
 
 :global(.rtl) .switch {
@@ -80,5 +110,15 @@
 
   input:checked + .slider .icon {
     transform: translateX(-48px);
+  }
+
+  &.small {
+    input:checked + .slider::before {
+      transform: translateX(-26px);
+    }
+
+    input:checked + .slider .icon {
+      transform: translateX(-26px);
+    }
   }
 }

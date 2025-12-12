@@ -9,6 +9,7 @@ interface RadioInputsProps {
   selectedValue: string;
   onOptionChange: (event: ChangeEvent<HTMLInputElement>) => void;
   label?: string;
+  className?: string;
 }
 
 const RadioInput: React.FC<RadioInputsProps> = ({
@@ -18,12 +19,14 @@ const RadioInput: React.FC<RadioInputsProps> = ({
   selectedValue,
   onOptionChange,
   label,
+  className,
 }) => {
   return (
     <div
       className={classnames(
         styles.input,
-        selectedValue === value && styles.checked
+        selectedValue === value && styles.checked,
+        className
       )}
     >
       <input
