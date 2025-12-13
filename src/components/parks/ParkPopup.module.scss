@@ -102,14 +102,10 @@
 }
 
 .address-container {
-  display: flex;
-  gap: 8px;
-}
-
-.address,
-.city {
-  display: block;
   font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .buttons {

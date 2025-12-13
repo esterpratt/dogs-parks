@@ -169,8 +169,7 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
             <span>{displayName}</span>{' '}
           </Link>
           <div className={styles.addressContainer}>
-            <span className={styles.address}>{displayAddress},</span>{' '}
-            <span className={styles.city}>{displayCity}</span>
+            {displayAddress}, {displayCity}
           </div>
         </div>
         <div>
