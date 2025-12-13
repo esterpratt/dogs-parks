@@ -71,8 +71,9 @@
 
 @media (orientation: landscape) {
   .container {
+    padding: 56px calc(16px + var(--safe-area-inset-right, 0px)) 16px
+      calc(16px + var(--safe-area-inset-left, 0px));
     height: unset;
-    padding-bottom: 16px;
   }
 }
 
