@@ -5,10 +5,16 @@
 
 .list-view-button {
   z-index: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .center-button {
   z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &.landscape {
     width: 40px;
