@@ -19,7 +19,9 @@
   }
 
   &.open {
-    bottom: calc(12px + var(--navbar-height) + var(--safe-area-inset-bottom, 0px));
+    bottom: calc(
+      12px + var(--navbar-height) + var(--safe-area-inset-bottom, 0px)
+    );
   }
 
   .close {
@@ -34,6 +36,12 @@
     justify-content: center;
     width: 36px;
     height: 36px;
+  }
+
+  &.no-img .close {
+    top: 0;
+    transform: translate(20%, -30%);
+    inset-inline-end: var(--safe-area-inset-right, 0px);
   }
 
   a {
