@@ -546,7 +546,7 @@
     },
     "placeholders": {
       "search": "Search",
-      "searchPark": "Search park",
+      "searchPark": "Find park",
       "reviewTitle": "Review title",
       "reviewContent": "Please elaborate..."
     },
@@ -576,7 +576,7 @@
       "seeOnMap": "See in map"
     },
     "search": {
-      "placeholder": "Search park"
+      "placeholder": "Find park"
     },
     "tabs": {
       "general": "General",
@@ -742,7 +742,7 @@
     "input": {
       "clickMap": "Click the map or",
       "useCurrent": "use current location",
-      "searchAddress": "Search address",
+      "searchAddress": "Address",
       "errorAddressNotFound": "Oops! We couldn't sniff out that address"
     }
   },

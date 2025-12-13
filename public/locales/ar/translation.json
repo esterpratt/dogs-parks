@@ -742,7 +742,7 @@
     "input": {
       "clickMap": "اضغط على الخريطة أو",
       "useCurrent": "استخدم الموقع الحالي",
-      "searchAddress": "البحث عن عنوان",
+      "searchAddress": "عنوان",
       "errorAddressNotFound": "عذراً! لم نتمكن من العثور على هذا العنوان"
     }
   },
