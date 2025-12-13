@@ -8,21 +8,21 @@ import {
 } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Eye, EyeClosed } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { useMutation } from '@tanstack/react-query';
 import classnames from 'classnames';
 import GoogleIcon from '../assets/google.svg?react';
 import AppleWhite from '../assets/apple-white.svg?react';
 import AppleBlack from '../assets/apple-black.svg?react';
-import { Button } from '../components/Button';
+import { preserveCursor } from '../utils/input';
+import { useTransportOnline } from '../hooks/useTransportOnline';
 import { UserContext, SigninProps } from '../context/UserContext';
-import { useMutation } from '@tanstack/react-query';
+import { useModeContext } from '../context/ModeContext';
+import { useNotification } from '../context/NotificationContext';
 import { sendResetEmail, signin } from '../services/authentication';
 import { Input } from '../components/inputs/Input';
-import { useNotification } from '../context/NotificationContext';
-import { preserveCursor } from '../utils/input';
+import { Button } from '../components/Button';
 import styles from './Login.module.scss';
-import { useTranslation } from 'react-i18next';
-import { useModeContext } from '../context/ModeContext';
-import { useTransportOnline } from '../hooks/useTransportOnline';
 
 const Login = () => {
   const { t } = useTranslation();
@@ -299,7 +299,9 @@ const Login = () => {
             onClick={googleSignin}
             disabled={isOffline}
           >
-            <GoogleIcon width={16} height={16} />
+            <div className={styles.googleIcon}>
+              <GoogleIcon width={16} height={16} />
+            </div>
             <div className={styles.buttonText}>{t(providerGoogleKey)}</div>
           </Button>
         </div>

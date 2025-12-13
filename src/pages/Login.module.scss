@@ -29,30 +29,33 @@
     border-radius: 12px;
     width: 100%;
     font-size: 20px;
-    padding: 16px;
+    padding: 17px 16px;
   }
 
   .input {
+    padding: 17px 16px;
+
     &.dark {
       background-color: black;
     }
   }
 
   .button-text {
-    margin-top: -3px;
+    margin-top: -2px;
+    white-space: normal;
+    text-align: center;
+    padding: 8px 0;
   }
 
   .google-login-button {
     width: 100%;
-    height: 56px;
+    min-height: 56px;
     padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 12px;
-    gap: 20.5px;
-    margin-bottom: 24px;
-    margin-top: 24px;
+    margin-top: 12px;
     color: black;
 
     &.dark {
@@ -63,7 +66,7 @@
 
   .apple-login-button {
     width: 100%;
-    height: 56px;
+    min-height: 56px;
     padding: 0;
     display: flex;
     align-items: center;
@@ -75,10 +78,15 @@
       background-color: black;
       color: white;
     }
+  }
 
-    svg {
-      margin-inline-start: -28px;
-    }
+  .google-icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
   }
 }
 
@@ -92,7 +100,7 @@
 .inputs {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 12px;
 }
 
 .eye-button {
