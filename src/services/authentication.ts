@@ -93,7 +93,8 @@ const signOut = async () => {
     }
   } catch (error) {
     await supabase.auth.signOut({ scope: 'local' });
-    throwError(error);
+    console.error('signOut error (ignored for logout UX)', error);
+    return;
   }
 };
 
