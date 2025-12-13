@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useOutletContext } from 'react-router';
 import { CalendarHeart } from 'lucide-react';
+import classnames from 'classnames';
 import { User } from '../types/user';
 import {
   ParkEventBase,
@@ -30,6 +31,14 @@ const UserEvents = () => {
 
   if (isLoadingOrganizedEvents || isLoadingInvitedEvents || isLoadingParks) {
     return <Loader inside className={styles.loader} />;
+  }
+
+  if (!organizedEvents?.length && !invitedEvents?.length) {
+    return (
+      <div className={classnames(styles.container, styles.empty)}>
+        <span>{t('userEvents.none')}</span>
+      </div>
+    );
   }
 
   return (

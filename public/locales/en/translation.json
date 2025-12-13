@@ -351,7 +351,8 @@
   "userEvents": {
     "upcomingEvents": "Upcoming events",
     "organizedEvents": "Organized by me",
-    "invitedEvents": "Invited to"
+    "invitedEvents": "Invited to",
+    "none": "You have no upcoming events"
   },
   "event": {
     "general": "Overview",

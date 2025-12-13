@@ -379,7 +379,8 @@
   "userEvents": {
     "upcomingEvents": "אירועים עתידיים",
     "organizedEvents": "האירועים שלי",
-    "invitedEvents": "הזמנות"
+    "invitedEvents": "הזמנות",
+    "none": "אין לך אירועים עתידיים"
   },
   "event": {
     "general": "מידע כללי",

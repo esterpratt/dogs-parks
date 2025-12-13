@@ -351,7 +351,8 @@
   "userEvents": {
     "upcomingEvents": "الفعاليات القادمة",
     "organizedEvents": "الفعاليات التي نظمتها",
-    "invitedEvents": "الفعاليات المدعو إليها"
+    "invitedEvents": "الفعاليات المدعو إليها",
+    "none": "ليس لديك فعاليات قادمة"
   },
   "event": {
     "general": "نظرة عامة",

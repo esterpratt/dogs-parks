@@ -6,6 +6,12 @@
   gap: 32px;
 }
 
+.empty {
+  align-items: center;
+  gap: 24px;
+  margin: 24px;
+}
+
 .title {
   font-size: $title-font-size;
   height: 34px;
