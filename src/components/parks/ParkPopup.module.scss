@@ -121,9 +121,9 @@
   position: relative;
   flex-grow: 1;
   gap: 12px;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
-  height: 36px;
+  min-height: 36px;
   margin-top: 12px;
 
   .button {
@@ -134,8 +134,8 @@
     align-items: center;
     justify-content: center;
     border-radius: 8px;
-    height: 100%;
     line-height: 1;
+    padding: 4px;
   }
 }
 

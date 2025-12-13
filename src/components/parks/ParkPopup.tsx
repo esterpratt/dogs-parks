@@ -226,12 +226,12 @@ const ParkPopup: React.FC<ParkPopupProps> = ({
                 className={styles.button}
                 onClick={onClickGetDirections}
               >
-                <Navigation size={12} className={styles.icon} />
+                <Navigation size={16} className={styles.icon} />
                 <span>{t('parks.popup.leadTheWay')}</span>
               </Button>
             )}
             <Button className={styles.button} onClick={onClickViewPark}>
-              <Eye size={12} className={styles.icon} />
+              <Eye size={16} className={styles.icon} />
               <span>{t('parks.preview.view')}</span>
             </Button>
           </div>
