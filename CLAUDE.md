@@ -13,6 +13,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 7. Finally, add a review section to the todo.md file with a summary of the changes you made and any other relevant information.
 8. DO NOT BE LAZY. NEVER BE LAZY. IF THERE IS A BUG FIND THE ROOT CAUSE AND FIX IT. NO TEMPORARY FIXES. YOU ARE A SENIOR DEVELOPER. NEVER BE LAZY
 9. MAKE ALL FIXES AND CODE CHANGES AS SIMPLE AS HUMANLY POSSIBLE. THEY SHOULD ONLY IMPACT NECESSARY CODE RELEVANT TO THE TASK AND NOTHING ELSE. IT SHOULD IMPACT AS LITTLE CODE AS POSSIBLE. YOUR GOAL IS TO NOT INTRODUCE ANY BUGS. IT'S ALL ABOUT SIMPLICITY
+10. **ALWAYS CHECK FOR EXISTING SOLUTIONS FIRST**: Before implementing any new utility, hook, helper, or pattern:
+    - Search the codebase for similar existing solutions (check `src/hooks/`, `src/utils/`, `src/components/`)
+    - Look for existing custom hooks for common patterns (outside clicks, keyboard handlers, scroll listeners, etc.)
+    - Use Grep/Glob to find similar implementations before building new ones
+    - Prefer reusing or adapting existing code over creating new solutions
+    - If you find similar code, use it as a reference or extend it rather than building from scratch
+11. **READ THE FULL CONTEXT BEFORE MAKING CHANGES**: Before editing any component or file:
+    - Read the ENTIRE component/file first, not just the specific line you think needs changing
+    - Understand the existing structure - check what containers, wrappers, and elements already exist
+    - Look at the component hierarchy - is there already a parent/wrapper that can be used?
+    - Verify your change doesn't duplicate existing structure or contradict the current pattern
+    - Make minimal changes that work WITH the existing code structure, not against it
+    - Never add a wrapper/container without first checking if one already exists
 
 ## Development Commands
 
