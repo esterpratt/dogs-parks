@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import { useOutletContext } from 'react-router';
-import { CalendarHeart } from 'lucide-react';
 import classnames from 'classnames';
 import { User } from '../types/user';
 import {
@@ -44,7 +43,6 @@ const UserEvents = () => {
   return (
     <div className={styles.container}>
       <div className={styles.title}>
-        <CalendarHeart className={styles.titleIcon} size={20} />
         <span>{t('userEvents.upcomingEvents')}</span>
       </div>
       {!!organizedEvents?.length && (

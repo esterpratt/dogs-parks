@@ -14,19 +14,12 @@
 
 .title {
   font-size: $title-font-size;
-  height: 34px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.title-icon {
-  color: $green;
+  min-height: 34px;
 }
 
 .subtitle {
   font-size: $title-font-size;
-  height: 34px;
+  min-height: 34px;
 }
 
 .events-container {
