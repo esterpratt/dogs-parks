@@ -12,11 +12,12 @@
 
   .buttons-container {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: space-between;
     width: 100%;
     padding: 0 12px 12px;
     flex: 0 0 auto;
+    gap: 2px;
   }
 
   .button {
@@ -27,7 +28,7 @@
     padding: 8px;
     border-radius: 8px;
     gap: 8px;
-    align-self: flex-end;
+    height: 100%;
 
     &:only-child {
       margin-inline-start: 100%;
@@ -36,7 +37,6 @@
   }
 
   .primary-button {
-    height: 100%;
     padding: 0 12px;
   }
 
