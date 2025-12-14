@@ -74,6 +74,7 @@ const Users = () => {
         noResultsLayout={NoResultsLayout}
         containerClassName={styles.list}
         inputContainerClassName={styles.inputContainer}
+        loaderClassName={styles.loader}
       >
         {(user) => <UserPreview user={user} showFriendshipButton={false} />}
       </SearchListAsync>

@@ -17,6 +17,7 @@ interface SearchListAsyncProps<T> {
   placeholder?: string;
   containerClassName?: string;
   inputContainerClassName?: string;
+  loaderClassName?: string;
   noResultsLayout?: string | ReactNode;
   itemKeyfn: (item: T) => string;
   children: (item: T) => ReactNode;
@@ -38,6 +39,7 @@ const SearchListAsync = <T,>({
   itemKeyfn,
   containerClassName,
   inputContainerClassName,
+  loaderClassName,
   noResultsLayout = 'No Results',
   children,
   renderSearchInput,
@@ -69,7 +71,7 @@ const SearchListAsync = <T,>({
           {t('common.actions.search')}
         </Button>
       </div>
-      {showLoader && <Loader />}
+      {showLoader && <Loader inside className={loaderClassName} />}
       {!showLoader && !!filteredItems.length && (
         <SearchListItems items={filteredItems} itemKeyfn={itemKeyfn}>
           {children}
