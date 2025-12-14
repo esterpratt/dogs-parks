@@ -7,6 +7,13 @@ $small-height: 190px;
   top: calc($small-height + $page-top-padding);
   gap: 0;
   justify-content: space-between;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @media (max-width: 360px) {
