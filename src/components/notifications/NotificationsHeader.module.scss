@@ -3,7 +3,7 @@
 $header-height: 60px;
 
 .header {
-  height: $header-height;
+  min-height: $header-height;
   padding: 0 calc(16px + var(--safe-area-inset-right, 0px)) 0
     calc(16px + var(--safe-area-inset-left, 0px));
   background: var(--color-background);
