@@ -20,8 +20,8 @@
 .title-container {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  height: 34px;
+  align-items: center;
+  min-height: 34px;
 
   .add-dog-button {
     font-size: 14px;
