@@ -83,7 +83,7 @@
 .menu-container {
   position: absolute;
   z-index: 3000;
-  width: 50%;
+  width: 60%;
   border: 1px solid $blue;
   bottom: calc(var(--safe-area-inset-bottom) + var(--navbar-height) + 2px);
   inset-inline-end: 12px;
@@ -166,6 +166,10 @@
 
   .menu-container {
     width: 40%;
+    max-height: calc(
+      100dvh - var(--navbar-height) - var(--safe-area-inset-bottom) - 16px
+    );
+    overflow-y: auto;
 
     .menu-item {
       font-size: 11px;
