@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: 4px;
+  padding: 4px 0;
   color: var(--color-text-medium);
   min-height: 42px;
   border-radius: 6px;
@@ -24,11 +24,13 @@
   &:first-child:nth-last-child(3),
   &:first-child:nth-last-child(3) ~ .input {
     width: 33.3333%;
+    font-size: 12px;
   }
 
   &:first-child:nth-last-child(4),
   &:first-child:nth-last-child(4) ~ .input {
     width: 25%;
+    font-size: 11px;
   }
 
   &:first-child {
@@ -49,6 +51,12 @@
   label {
     text-align: center;
     padding: 0;
+    overflow: hidden;
+    padding: 0 1px;
+
+    span {
+      overflow-wrap: break-word;
+    }
   }
 
   input {
