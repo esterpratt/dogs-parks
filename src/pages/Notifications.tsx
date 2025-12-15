@@ -77,9 +77,13 @@ const Notifications = () => {
 
   const isLoading = isLoadingUnseen || historicalStatus === 'pending';
 
+  const unreadCount =
+    allNotifications.filter((notification) => !notification.read_at).length ??
+    0;
+
   return (
     <div className={styles.container}>
-      <NotificationsHeader />
+      <NotificationsHeader showReadButton={unreadCount > 0} />
       <div className={styles.content}>
         {!allNotifications.length && !isLoading ? (
           <div className={styles.emptyState}>

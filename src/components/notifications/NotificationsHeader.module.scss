@@ -9,7 +9,6 @@ $header-height: 60px;
   background: var(--color-background);
   box-shadow: $box-shadow-sm;
   display: flex;
-  align-items: center;
   position: relative;
   z-index: 1;
 }
@@ -30,6 +29,18 @@ $header-height: 60px;
     align-items: center;
     justify-content: center;
   }
+}
+
+.left-part {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 12px;
+  height: 100%;
+}
+
+.read-button {
+  min-height: 20px;
 }
 
 .title {

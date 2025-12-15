@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import styles from './ToggleInput.module.scss';
 
 interface ToggleInputProps<T> {
-  label: string;
+  label?: string;
   value: T;
   valueOn: T;
   valueOff: T;
@@ -28,7 +28,7 @@ export const ToggleInput = <T,>(props: ToggleInputProps<T>) => {
 
   return (
     <label className={styles.toggleRow}>
-      <span className={styles.label}>{label}</span>
+      {label && <span className={styles.label}>{label}</span>}
       <div
         className={classnames(styles.switch, {
           [styles.small]: variant === 'small',

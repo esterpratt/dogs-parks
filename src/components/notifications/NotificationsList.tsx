@@ -5,12 +5,16 @@ import classnames from 'classnames';
 import { Notification } from '../../types/notification';
 import { NotificationItem } from '../../components/notifications/NotificationItem';
 import { Loader } from '../../components/Loader';
-import { MarkAllReadButton } from './MarkAllReadButton';
 import styles from './NotificationsList.module.scss';
 
 type ListRow =
   | {
-      type: 'header';
+      type: 'new-header';
+      data: { title: string; isNew: boolean };
+      id: string;
+    }
+  | {
+      type: 'middle-header';
       data: { title: string; isNew: boolean };
       id: string;
     }
@@ -55,7 +59,7 @@ const NotificationsList = (props: NotificationsListProps) => {
 
     if (newList.length > 0) {
       rows.push({
-        type: 'header',
+        type: 'new-header',
         data: {
           title: t('notifications.list.headerNew', {
             count: newList.length,
@@ -74,7 +78,7 @@ const NotificationsList = (props: NotificationsListProps) => {
       });
     } else {
       rows.push({
-        type: 'header',
+        type: 'new-header',
         data: {
           title: t('notifications.list.headerNone') as string,
           isNew: true,
@@ -85,7 +89,7 @@ const NotificationsList = (props: NotificationsListProps) => {
 
     if (oldList.length > 0) {
       rows.push({
-        type: 'header',
+        type: 'middle-header',
         data: {
           title: t('notifications.list.headerEarlier') as string,
           isNew: false,
@@ -105,9 +109,6 @@ const NotificationsList = (props: NotificationsListProps) => {
     return rows;
   }, [notifications, newIdsSet, t]);
 
-  const unreadCount =
-    notifications.filter((notification) => !notification.read_at).length ?? 0;
-
   const dataCount = virtualizedItems.length;
   const hasLoaderRow = hasNextPage;
   const totalCount = hasLoaderRow ? dataCount + 1 : dataCount;
@@ -118,13 +119,15 @@ const NotificationsList = (props: NotificationsListProps) => {
     estimateSize: (index) => {
       const item = virtualizedItems[index];
       if (!item) {
-        return 120;
+        return 160;
       }
 
-      if (item.type === 'header') {
+      if (item.type === 'new-header') {
         return 48;
+      } else if (item.type === 'middle-header') {
+        return 36;
       } else {
-        return 120;
+        return 160;
       }
     },
     overscan: 2,
@@ -186,7 +189,9 @@ const NotificationsList = (props: NotificationsListProps) => {
                   <div className={styles.loadingMore}>
                     {isFetchingNextPage ? <Loader inside /> : null}
                   </div>
-                ) : virtualizedItems[virtualRow.index].type === 'header' ? (
+                ) : virtualizedItems[virtualRow.index].type === 'new-header' ||
+                  virtualizedItems[virtualRow.index].type ===
+                    'middle-header' ? (
                   <div className={styles.sectionHeader}>
                     <h2
                       className={classnames(styles.sectionTitle, {
@@ -203,13 +208,6 @@ const NotificationsList = (props: NotificationsListProps) => {
                             isNew: boolean;
                           }
                         ).isNew,
-                        [styles.noNewNotifications]:
-                          !(
-                            virtualizedItems[virtualRow.index].data as {
-                              title: string;
-                              isNew: boolean;
-                            }
-                          ).isNew && newIds.length === 0,
                       })}
                     >
                       {
@@ -221,14 +219,6 @@ const NotificationsList = (props: NotificationsListProps) => {
                         ).title
                       }
                     </h2>
-
-                    {(
-                      virtualizedItems[virtualRow.index].data as {
-                        title: string;
-                        isNew: boolean;
-                      }
-                    ).isNew &&
-                      unreadCount > 0 && <MarkAllReadButton />}
                   </div>
                 ) : (
                   <NotificationItem

@@ -1,4 +1,5 @@
 import { TFunction } from 'i18next';
+import { capitalizeWords } from './text';
 
 interface TranslateNotificationParams {
   type?: string | null;
@@ -48,7 +49,7 @@ function translateNotification(
 
   const safeName =
     senderName && senderName.trim().length > 0
-      ? senderName
+      ? capitalizeWords(senderName)
       : t('notifications.common.someone');
 
   const lookupKey = typeof type === 'string' ? type.toUpperCase() : '';

@@ -6,10 +6,15 @@ $header-height: 60px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 12px;
 
   h2 {
     margin: 0;
+  }
+
+  &:not(:has(.earlier-title)) {
+    min-height: 90%;
+    display: flex;
+    align-items: center;
   }
 }
 
@@ -24,10 +29,6 @@ $header-height: 60px;
 
 .earlier-title {
   margin-top: 16px;
-}
-
-.no-new-notifications {
-  margin-top: 8px;
 }
 
 .virtualized-container {

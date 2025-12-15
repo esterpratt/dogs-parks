@@ -3,9 +3,15 @@ import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { Button } from '../Button';
 import { NotificationsModal } from './NotificationsModal';
+import { MarkAllReadButton } from './MarkAllReadButton';
 import styles from './NotificationsHeader.module.scss';
 
-const NotificationsHeader = () => {
+interface NotificationsHeaderProps {
+  showReadButton: boolean;
+}
+
+const NotificationsHeader = (props: NotificationsHeaderProps) => {
+  const { showReadButton } = props;
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const { t } = useTranslation();
 
@@ -13,7 +19,12 @@ const NotificationsHeader = () => {
     <>
       <div className={styles.header}>
         <div className={styles.titleRow}>
-          <h1 className={styles.title}>{t('notifications.title')}</h1>
+          <div className={styles.leftPart}>
+            <h1 className={styles.title}>{t('notifications.title')}</h1>
+            <div className={styles.readButton}>
+              {showReadButton && <MarkAllReadButton />}
+            </div>
+          </div>
           <Button
             variant="secondary"
             onClick={() => setIsSettingsModalOpen(true)}
