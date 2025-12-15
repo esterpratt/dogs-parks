@@ -32,17 +32,19 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   row-gap: 24px;
+  column-gap: 12px;
 }
 
 .character {
   display: flex;
   gap: 8px;
-  align-items: center;
+  align-items: flex-start;
+  min-width: 0;
 
   > :first-child {
     border-radius: 50%;
-    height: 48px;
-    width: 48px;
+    height: clamp(36px, 10vw, 48px);
+    width: clamp(36px, 10vw, 48px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -50,6 +52,8 @@
 
     svg {
       fill: $white;
+      width: clamp(20px, 6vw, 28px);
+      height: clamp(20px, 6vw, 28px);
     }
   }
 }
@@ -58,14 +62,20 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
+  min-width: 0;
 
   :first-child {
     font-size: 11px;
     text-transform: uppercase;
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
 
   :last-child {
     font-size: 14px;
+    overflow-wrap: break-word;
+    word-break: break-word;
 
     &::first-letter {
       text-transform: capitalize;

@@ -87,9 +87,10 @@
 }
 
 .content-open {
-  max-height: 500px;
+  max-height: 1200px;
   visibility: visible;
   opacity: 1;
+  overflow: visible;
   transition:
     max-height var(--transition-duration) ease,
     opacity var(--transition-duration) ease,
