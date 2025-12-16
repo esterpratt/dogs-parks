@@ -176,7 +176,6 @@ const Profile: React.FC = () => {
           ) : !!signedInUser && !isSignedInUser ? (
             <div className={styles.title}>
               <div className={styles.text}>
-                {!!dogs?.length && <span>{t('profile.meetPrefix')} </span>}
                 <span className={styles.userName}>{user.name}</span>
                 {!!dogs?.length && (
                   <span>

@@ -235,7 +235,6 @@
     "users": "Users",
     "pawsUp": "Paws up, {{name}}!",
     "pawsUpRich": "Paws up, <name>{{name}}</name>!",
-    "meetPrefix": "Meet",
     "packSuffix": "'s pack: {{dogs}}",
     "tabs": {
       "dogs": "Dogs",

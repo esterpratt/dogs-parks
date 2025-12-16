@@ -235,7 +235,6 @@
     "users": "المستخدمون",
     "pawsUp": "ممتع رؤيتك، {{name}}!",
     "pawsUpRich": "ممتع رؤيتك، <name>{{name}}</name>!",
-    "meetPrefix": "تعرف على",
     "packSuffix": " والقطيع: {{dogs}}",
     "tabs": {
       "dogs": "الكلاب",

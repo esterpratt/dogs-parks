@@ -29,6 +29,8 @@ $medium-height: 264px;
   }
 
   &:not(:only-child) {
+    --img-aspect: 1 / 1;
+    --img-size: 112px;
     width: var(--img-size);
   }
 
@@ -42,9 +44,6 @@ $medium-height: 264px;
 }
 
 .title {
-  position: absolute;
-  bottom: 0;
-  padding-bottom: 8px;
   font-size: $second-title-font-size;
   display: flex;
   flex-direction: column;
@@ -68,7 +67,6 @@ $medium-height: 264px;
 
 .welcome {
   width: 100%;
-  padding: 0 16px 4px;
   display: flex;
   justify-content: space-between;
   gap: 8px;

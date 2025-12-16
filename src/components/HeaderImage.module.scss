@@ -5,8 +5,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: calc(var(--img-size) * 1.5);
-  height: var(--img-size);
+  width: calc(var(--img-size, 124px) * 1.5);
+  height: var(--img-size, 124px);
   border: 2px solid $white;
   border-radius: 12px;
   background-color: var(--background-color);
