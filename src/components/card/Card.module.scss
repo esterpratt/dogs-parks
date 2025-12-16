@@ -19,11 +19,12 @@
   text-decoration: none;
   color: var(--color-text);
   display: flex;
-  height: 110px;
+  min-height: 110px;
   gap: 24px;
 }
 
 .img {
+  align-self: center;
   flex-shrink: 0;
   width: 108px;
   height: 108px;
