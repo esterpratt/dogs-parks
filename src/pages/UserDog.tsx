@@ -144,17 +144,19 @@ const UserDog = () => {
           bottomCmp={
             <>
               <div className={styles.details}>
-                <div>
-                  <span className={styles.name}>{dog.name}</span>
-                  {dog.gender && (
-                    <span className={styles.gender}>
-                      {dog.gender === GENDER.FEMALE ? (
-                        <Venus color={styles.green} size={18} />
-                      ) : (
-                        <Mars color={styles.green} size={18} />
-                      )}
-                    </span>
-                  )}
+                <div className={styles.topPart}>
+                  <div className={styles.dogDetails}>
+                    <span className={styles.name}>{dog.name}</span>
+                    {dog.gender && (
+                      <span className={styles.gender}>
+                        {dog.gender === GENDER.FEMALE ? (
+                          <Venus color={styles.green} size={18} />
+                        ) : (
+                          <Mars color={styles.green} size={18} />
+                        )}
+                      </span>
+                    )}
+                  </div>
                   {!isSignedInUser && (
                     <span className={styles.userName}>
                       {dog.gender === GENDER.FEMALE
@@ -167,7 +169,7 @@ const UserDog = () => {
                     </span>
                   )}
                 </div>
-                <div>
+                <div className={styles.bottomPart}>
                   {ageText && (
                     <span className={styles.age}>
                       <Cake color={styles.green} size={14} />

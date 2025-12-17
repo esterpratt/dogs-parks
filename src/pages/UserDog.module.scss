@@ -21,7 +21,8 @@
     .details {
       align-items: center;
 
-      > :first-child {
+      .top-part,
+      .bottom-part {
         justify-content: center;
       }
     }
@@ -52,37 +53,39 @@
     align-items: center;
   }
 
-  > :first-child {
-    font-size: $second-title-font-size;
+  .top-part {
     width: 100%;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    row-gap: 4px;
+
+    .dog-details {
+      display: flex;
+      gap: 6px;
+      min-width: 0;
+    }
   }
 
-  :last-child {
+  .bottom-part {
     font-size: 14px;
     min-width: 0;
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
+    row-gap: 4px;
+    gap: 12px;
   }
 
   .name {
+    font-size: 16px;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
   .user-name {
-    max-width: 50%;
-
-    &::before {
-      content: '•';
-      margin: 0 8px;
-    }
-  }
-
-  .breed {
-    &:not(:only-child)::before {
-      content: '•';
-      margin: 0 8px;
-    }
+    font-size: 14px;
+    min-width: 0;
   }
 
   .gender,
@@ -99,8 +102,9 @@
   }
 
   .breed {
-    flex: 1;
+    flex: 0 0 auto;
     min-width: 0;
+    max-width: 100%;
 
     span {
       display: block;
@@ -110,10 +114,9 @@
     }
   }
 
-  .name,
   .age svg,
   .breed svg {
-    margin-inline-end: 8px;
+    margin-inline-end: 6px;
   }
 }
 
