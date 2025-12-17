@@ -25,14 +25,12 @@ const Header = (props: HeaderProps) => {
     children,
   } = props;
 
-  const hasPrevLinks = !!prevLinksCmp;
-
   return (
     <div
       className={classnames(
         styles.header,
         styles[size],
-        { [styles.hasPrevLinks]: hasPrevLinks },
+        { [styles.hasPrevLinks]: !!prevLinksCmp },
         containerClassName
       )}
     >
