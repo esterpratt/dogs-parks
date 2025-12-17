@@ -20,6 +20,10 @@
 
     .details {
       align-items: center;
+
+      > :first-child {
+        justify-content: center;
+      }
     }
   }
 
@@ -48,8 +52,9 @@
     align-items: center;
   }
 
-  :first-child {
+  > :first-child {
     font-size: $second-title-font-size;
+    width: 100%;
   }
 
   :last-child {
@@ -59,7 +64,14 @@
     align-items: center;
   }
 
+  .name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   .user-name {
+    max-width: 50%;
+
     &::before {
       content: '•';
       margin: 0 8px;

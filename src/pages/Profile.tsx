@@ -2,7 +2,6 @@ import { useContext } from 'react';
 import { Navigate, Outlet, useLoaderData, useNavigate } from 'react-router-dom';
 import { MoveLeft, MoveRight, Settings } from 'lucide-react';
 import { Trans, useTranslation } from 'react-i18next';
-import classnames from 'classnames';
 import { useQueries, useQuery } from '@tanstack/react-query';
 import { UserContext } from '../context/UserContext';
 import { FRIENDSHIP_STATUS, USER_ROLE } from '../types/friendship';
@@ -193,11 +192,7 @@ const Profile: React.FC = () => {
         }
       />
       {isSignedInUser && <ProfileTabs />}
-      <div
-        className={classnames(styles.container, {
-          [styles.withMargin]: isSignedInUser,
-        })}
-      >
+      <div className={styles.container}>
         <Outlet
           context={{
             user,

@@ -3,8 +3,6 @@
 $small-height: 190px;
 
 .tabs {
-  position: fixed;
-  top: calc($small-height + $page-top-padding);
   gap: 0;
   justify-content: space-between;
   overflow-x: auto;
