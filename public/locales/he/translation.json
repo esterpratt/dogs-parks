@@ -235,7 +235,6 @@
     "users": "משתמשים",
     "pawsUp": "כיף לראותך, {{name}}!",
     "pawsUpRich": "כיף לראותך, <name>{{name}}</name>!",
-    "meetPrefix": "הכירו את",
     "packSuffix": " והחבורה: {{dogs}}",
     "tabs": {
       "dogs": "כלבים",

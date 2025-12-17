@@ -36,9 +36,11 @@ const SearchListInfiniteItems = <T,>({
           <div
             key={virtualRow.key}
             className={styles.rowContainer}
+            data-index={virtualRow.index}
             style={{
               transform: `translateY(${virtualRow.start}px)`,
             }}
+            ref={rowVirtualizer.measureElement}
           >
             {children(items[virtualRow.index])}
           </div>

@@ -39,3 +39,6 @@ capacitor.config.ts.backup
 .cursor/docs/features/*
 scripts/*
 exports/*
+
+# Local notes
+todos/

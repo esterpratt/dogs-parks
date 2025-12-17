@@ -5,21 +5,6 @@
   display: inline-block;
 }
 
-.image-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  background-color: rgba($pink, 0.2);
-  color: $white;
-  pointer-events: none;
-}
-
 .title-container {
   display: inline-flex;
   flex-direction: column;
@@ -30,6 +15,7 @@
 
 .title-text {
   font-size: 14px;
+  text-align: center;
 }
 
 .park-name {

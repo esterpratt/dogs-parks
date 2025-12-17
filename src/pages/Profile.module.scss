@@ -1,25 +1,19 @@
 @use '../variables' as *;
 
-$small-height: 190px;
-$medium-height: 264px;
-
 .profile-container {
+  display: flex;
+  flex-direction: column;
   margin-top: $page-top-padding;
+  height: $content-max-height;
   max-height: $content-max-height;
   overflow: hidden;
-  height: 100%;
 }
 
 .container {
-  max-height: calc($content-max-height - $medium-height);
-  height: 100%;
+  flex: 1;
+  min-height: 0;
   padding: 12px 16px 12px;
   overflow: auto;
-
-  &.with-margin {
-    max-height: calc($content-max-height - $tabs-height - $small-height);
-    margin-top: $tabs-height;
-  }
 }
 
 .img {
@@ -29,6 +23,8 @@ $medium-height: 264px;
   }
 
   &:not(:only-child) {
+    --img-aspect: 1 / 1;
+    --img-size: 112px;
     width: var(--img-size);
   }
 
@@ -42,9 +38,6 @@ $medium-height: 264px;
 }
 
 .title {
-  position: absolute;
-  bottom: 0;
-  padding-bottom: 8px;
   font-size: $second-title-font-size;
   display: flex;
   flex-direction: column;
@@ -63,12 +56,11 @@ $medium-height: 264px;
 }
 
 .friend-request-container {
-  height: 55px;
+  min-height: 55px;
 }
 
 .welcome {
   width: 100%;
-  padding: 0 16px 4px;
   display: flex;
   justify-content: space-between;
   gap: 8px;
@@ -87,6 +79,7 @@ $medium-height: 264px;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
   }
 }
 
@@ -110,14 +103,9 @@ $medium-height: 264px;
   .container {
     padding: 12px calc(16px + var(--safe-area-inset-right, 0px)) 0
       calc(16px + var(--safe-area-inset-left, 0px));
-    max-height: calc($content-max-height);
+    flex: 1;
+    min-height: 0;
     overflow: visible;
-    height: fit-content;
-
-    &.with-margin {
-      max-height: calc($content-max-height);
-      margin-top: 0;
-    }
   }
 
   .loader {

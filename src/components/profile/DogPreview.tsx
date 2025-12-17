@@ -40,9 +40,9 @@ const DogPreview: React.FC<DogPreviewProps> = ({ dog, image }) => {
             {gender && (
               <>
                 {gender === GENDER.FEMALE ? (
-                  <Venus size={18} color={styles.green} />
+                  <Venus className={styles.genderIcon} color={styles.green} />
                 ) : (
-                  <Mars size={18} color={styles.green} />
+                  <Mars className={styles.genderIcon} color={styles.green} />
                 )}
               </>
             )}
