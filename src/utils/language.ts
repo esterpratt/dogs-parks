@@ -32,8 +32,8 @@ const RTL_LANGS = new Set<AppLanguage>([APP_LANGUAGES.HE, APP_LANGUAGES.AR]);
  * @param lang - The language code to check
  * @returns true if the language is RTL, false otherwise
  */
-function isRTL(lang: string): boolean {
-  const base = lang.split('-')[0].toLowerCase();
+function isRTL(lang?: string): boolean {
+  const base = (lang ?? APP_LANGUAGES.EN).split('-')[0].toLowerCase();
   return RTL_LANGS.has(base as AppLanguage);
 }
 
