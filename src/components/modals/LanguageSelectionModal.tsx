@@ -40,15 +40,15 @@ const LanguageSelectionModal = (props: LanguageSelectionModalProps) => {
   ];
 
   const handleLanguageSelect = async (languageCode: AppLanguage) => {
+    onClose();
+
     if (languageCode === currentLang) {
-      onClose();
       return;
     }
 
     try {
       await i18n.changeLanguage(languageCode);
       await setPreferredLanguage(languageCode);
-      onClose();
     } catch (error) {
       console.error('Failed to change language:', error);
     }

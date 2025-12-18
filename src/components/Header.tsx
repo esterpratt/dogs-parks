@@ -27,16 +27,23 @@ const Header = (props: HeaderProps) => {
 
   return (
     <div
-      className={classnames(styles.header, styles[size], containerClassName)}
+      className={classnames(
+        styles.header,
+        styles[size],
+        { [styles.hasPrevLinks]: !!prevLinksCmp },
+        containerClassName
+      )}
     >
       {!!prevLinksCmp && prevLinksCmp}
-      <div className={classnames(styles.imgsContainer, imgsClassName)}>
-        {imgCmp}
+      <div className={styles.content}>
+        <div className={classnames(styles.imgsContainer, imgsClassName)}>
+          {imgCmp}
+        </div>
+        <div className={classnames(styles.bottom, bottomClassName)}>
+          {bottomCmp}
+        </div>
+        {!!children && children}
       </div>
-      <div className={classnames(styles.bottom, bottomClassName)}>
-        {bottomCmp}
-      </div>
-      {!!children && children}
     </div>
   );
 };

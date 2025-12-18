@@ -3,6 +3,7 @@
 .prev-links {
   position: fixed;
   top: 0;
+  left: 0;
   z-index: 500;
   padding: calc($page-top-padding + 4px)
     calc(8px + var(--safe-area-inset-right)) 4px

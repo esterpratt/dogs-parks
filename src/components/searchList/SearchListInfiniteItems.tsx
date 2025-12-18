@@ -3,7 +3,7 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 import styles from './SearchListInfiniteItems.module.scss';
 
 // row height should include padding
-const DEFAULT_ROW_HEIGHT = 194 + 24;
+const DEFAULT_ROW_HEIGHT = 190 + 24;
 
 interface SearchListInfiniteItemsProps<T> {
   items: T[];
