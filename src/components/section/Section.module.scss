@@ -68,11 +68,10 @@
   color: var(--color-text);
   max-height: 0;
   visibility: hidden;
-  opacity: 0;
   overflow: hidden;
+  pointer-events: none;
   transition:
     max-height var(--transition-duration) ease,
-    opacity var(--transition-duration) ease,
     visibility 0s linear var(--transition-duration);
 
   > div {
@@ -80,23 +79,26 @@
     min-height: 108px;
     display: flex;
     align-items: center;
+    opacity: 0;
     transform-origin: top;
     transform: translateY(-12px);
-    transition: transform var(--transition-duration) ease;
+    transition:
+      opacity var(--transition-duration) ease,
+      transform var(--transition-duration) ease;
   }
 }
 
 .content-open {
   max-height: 1200px;
   visibility: visible;
-  opacity: 1;
-  overflow: visible;
+  overflow: hidden;
+  pointer-events: auto;
   transition:
     max-height var(--transition-duration) ease,
-    opacity var(--transition-duration) ease,
     visibility 0s linear;
 
   > div {
+    opacity: 1;
     transform: translateY(0);
   }
 }
