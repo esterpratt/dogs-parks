@@ -41,7 +41,8 @@ const createFriendship = async ({
     return friendship.id;
   } catch (error) {
     console.error(
-      `there was an error while creating friendship for users ${requesteeId}, ${requesterId}: ${JSON.stringify(error)}`
+      `there was an error while creating friendship for users ${requesteeId}, ${requesterId}:`,
+      error
     );
     return null;
   }
@@ -64,7 +65,8 @@ const fetchFriendship = async (ids: FetchFriendshipProps) => {
     return friendship;
   } catch (error) {
     console.error(
-      `there was an error while fetching friendship for users ${ids[0]}, ${ids[1]}: ${JSON.stringify(error)}`
+      `there was an error while fetching friendship for users ${ids[0]}, ${ids[1]}:`,
+      error
     );
     return null;
   }
@@ -112,7 +114,8 @@ const fetchUserFriendships = async ({
     return friendships;
   } catch (error) {
     console.error(
-      `there was an error while fetching friendships for user ${userId}: ${JSON.stringify(error)}`
+      `there was an error while fetching friendships for user ${userId}:`,
+      error
     );
     return null;
   }
@@ -136,7 +139,8 @@ const updateFriendship = async ({
     }
   } catch (error) {
     console.error(
-      `there was an error while updating friendship with id ${friendshipId}: ${JSON.stringify(error)}`
+      `there was an error while updating friendship with id ${friendshipId}:`,
+      error
     );
     throw error;
   }
@@ -154,7 +158,8 @@ const deleteFriendship = async (friendshipId: string) => {
     }
   } catch (error) {
     console.error(
-      `there was an error deleting friendship with id ${friendshipId}: ${JSON.stringify(error)}`
+      `there was an error deleting friendship with id ${friendshipId}:`,
+      error
     );
   }
 };

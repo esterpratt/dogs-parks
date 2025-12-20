@@ -25,7 +25,7 @@ export async function initializeUserLocation({
   } catch (error) {
     console.error(
       `There was an error initialize user lcoation: `,
-      JSON.stringify(error)
+      error
     );
   }
 }

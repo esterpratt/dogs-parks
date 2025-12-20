@@ -18,7 +18,7 @@ class AppError {
 }
 
 const throwError = (error: unknown, status?: number) => {
-  console.error('there was an error: ', JSON.stringify(error));
+  console.error('there was an error: ', error);
 
   if (error instanceof AppError) {
     throw error;

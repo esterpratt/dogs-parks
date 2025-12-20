@@ -76,7 +76,7 @@ const deleteDog = async (id: string) => {
         throw error;
     }
   } catch (error) {
-    console.error(`there was an error deleting dog with id ${id}: ${JSON.stringify(error)}`);
+    console.error(`there was an error deleting dog with id ${id}:`, error);
     return null;
   }
 };
@@ -172,7 +172,8 @@ const fetchDogPrimaryImage = async (dogId: string) => {
     return res?.[0] ?? null;
   } catch (error) {
     console.error(
-      `there was a problem fetching primary image for dog ${dogId}: ${JSON.stringify(error)}`
+      `there was a problem fetching primary image for dog ${dogId}:`,
+      error
     );
     return null;
   }
@@ -186,7 +187,8 @@ const fetchAllDogImages = async (dogId: string) => {
     return res;
   } catch (error) {
     console.error(
-      `there was a problem fetching images for dog ${dogId}: ${JSON.stringify(error)}`
+      `there was a problem fetching images for dog ${dogId}:`,
+      error
     );
     return null;
   }
@@ -210,7 +212,8 @@ const movePrimaryImageToOther = async (imgPath: string, dogId: string) => {
     }
   } catch (error) {
     console.error(
-      `there was a problem moving primary image for dog ${dogId}: ${JSON.stringify(error)}`
+      `there was a problem moving primary image for dog ${dogId}:`,
+      error
     );
     return null;
   }
@@ -230,7 +233,8 @@ const moveOtherImageToPrimary = async (imgPath: string, dogId: string) => {
     });
   } catch (error) {
     console.error(
-      `there was a problem moving other image for dog ${dogId}: ${JSON.stringify(error)}`
+      `there was a problem moving other image for dog ${dogId}:`,
+      error
     );
     return null;
   }
@@ -252,7 +256,8 @@ const setDogPrimaryImage = async (imgPath: string, dogId: string) => {
     }
   } catch (error) {
     console.error(
-      `there was a problem moving images for dog ${dogId}: ${JSON.stringify(error)}`
+      `there was a problem moving images for dog ${dogId}:`,
+      error
     );
   }
 };

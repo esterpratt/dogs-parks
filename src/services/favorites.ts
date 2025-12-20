@@ -18,7 +18,10 @@ const addFavorite = async ({ userId, parkId }: ActionFavoriteProps) => {
       throw error;
     }
   } catch(error) {
-    console.error(`there was an error adding favorite park: ${parkId} for user: ${userId}: ${JSON.stringify(error)}`)
+    console.error(
+      `there was an error adding favorite park: ${parkId} for user: ${userId}:`,
+      error
+    )
   }
 };
 
@@ -35,7 +38,8 @@ const removeFavorite = async ({ userId, parkId }: ActionFavoriteProps) => {
     }
   } catch (error) {
     console.error(
-      `there was an error removing favorite park ${parkId} from user ${userId}: ${JSON.stringify(error)}`
+      `there was an error removing favorite park ${parkId} from user ${userId}:`,
+      error
     );
   }
 };
@@ -54,7 +58,8 @@ const fetchUserFavorites = async (userId: string) => {
     return favorites.map(favorite => favorite.park_id);
   } catch (error) {
     console.error(
-      `there was an error fetching favorites parks for user ${userId}: ${JSON.stringify(error)}`
+      `there was an error fetching favorites parks for user ${userId}:`,
+      error
     );
     return null;
   }
@@ -70,7 +75,7 @@ const fetchFavoriteParks = async () => {
 
     return (favorites as Favorites[]).map(favorite => favorite.park_id);
   } catch (error) {
-    console.error(`there was an error fetching favorite park: ${JSON.stringify(error)}`);
+    console.error(`there was an error fetching favorite park:`, error);
     return [];
   }
 };

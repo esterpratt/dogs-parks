@@ -20,7 +20,8 @@ const createParkReport = async ({user_id, park_id, text}: CreateParkReportProps)
 
   } catch (error) {
     console.error(
-      `there was an error while reporting park: ${JSON.stringify(error)}`
+      `there was an error while reporting park:`,
+      error
     );
   }
 };

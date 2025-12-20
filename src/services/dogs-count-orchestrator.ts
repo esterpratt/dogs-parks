@@ -97,7 +97,8 @@ const fetchDogsCount = async (parkId: string) => {
     return dogsCountByCheckins;
   } catch (error) {
     console.error(
-      `there was a problem fetching dogs count of park ${parkId}: ${JSON.stringify(error)}`
+      `there was a problem fetching dogs count of park ${parkId}:`,
+      error
     );
   }
 };

@@ -28,7 +28,7 @@ const fetchParkRank = async (parkId: string) => {
 
     return data.avg;
   } catch (error) {
-    console.error(`there was an error while fetching rank for park ${parkId}: ${JSON.stringify(error)}`);
+    console.error(`there was an error while fetching rank for park ${parkId}:`, error);
     return null;
   }
 };
@@ -47,7 +47,8 @@ const fetchReviews = async (parkId: string) => {
     return reviews;
   } catch (error) {
     console.error(
-      `there was an error while fetching reviews for park ${parkId}: ${JSON.stringify(error)}`
+      `there was an error while fetching reviews for park ${parkId}:`,
+      error
     );
     return [];
   }
@@ -67,7 +68,8 @@ const fetchUserReviews = async (userId: string) => {
     return reviews;
   } catch (error) {
     console.error(
-      `there was an error while fetching reviews of user ${userId}: ${JSON.stringify(error)}`
+      `there was an error while fetching reviews of user ${userId}:`,
+      error
     );
     return [];
   }
@@ -106,7 +108,7 @@ const updateReview = async ({ reviewId, reviewData }: UpdateReviewProps) => {
 
     return reviews;
   } catch (error) {
-    console.error(`there was an error updating review ${reviewId}: ${JSON.stringify(error)}`);
+    console.error(`there was an error updating review ${reviewId}:`, error);
     return null;
   }
 };
@@ -128,7 +130,8 @@ const createReview = async ({ parkId, userId, reviewData }: AddReviewProps) => {
     return review;
   } catch (error) {
     console.error(
-      `there was an error creating review for park ${parkId}: ${JSON.stringify(error)}`
+      `there was an error creating review for park ${parkId}:`,
+      error
     );
     return null;
   }
@@ -152,7 +155,7 @@ const reportReview = async ({
       throw error;
     }
   } catch (error) {
-    console.error(`there was an error reporting review ${reviewId}: ${JSON.stringify(error)}`);
+    console.error(`there was an error reporting review ${reviewId}:`, error);
   }
 };
 

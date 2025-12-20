@@ -53,7 +53,7 @@ export const getWeatherForecast = async ({
       time: data.hourly.time[currentHourIndex]
     };
   } catch (error) {
-    console.error('Error fetching weather forecast:', JSON.stringify(error));
+    console.error('Error fetching weather forecast:', error);
     return null;
   }
 };

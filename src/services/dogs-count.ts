@@ -21,7 +21,7 @@ const reportDogsCount = async ({
       throw error;
     }
   } catch (error) {
-    console.error('there was an error reporting dogs count: ', JSON.stringify(error));
+    console.error('there was an error reporting dogs count: ', error);
   }
 };
 
@@ -38,7 +38,7 @@ const fetchDogsCountByReports = async (parkId: string) => {
 
     return dogsCountReport;
   } catch (error) {
-    console.error(`there was an error fetching dogs count: ${JSON.stringify(error)}`);
+    console.error(`there was an error fetching dogs count:`, error);
     return []
   }
 };

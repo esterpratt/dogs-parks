@@ -24,7 +24,8 @@ const createParkSuggestion = async ({user_id, name, size, city, address, locatio
 
   } catch (error) {
     console.error(
-      `there was an error while creating park suggetion: ${JSON.stringify(error)}`
+      `there was an error while creating park suggetion:`,
+      error
     );
   }
 };

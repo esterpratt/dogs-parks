@@ -22,7 +22,7 @@ const checkin = async ({ userId = null, parkId }: CheckinProps) => {
 
     return data.id;
   } catch (error) {
-    console.error(`there was an error while checking in: ${JSON.stringify(error)}`);
+    console.error(`there was an error while checking in:`, error);
     return null;
   }
 };
@@ -35,7 +35,7 @@ const checkout = async (checkinId: string) => {
       throw error;
     }
   } catch (error) {
-    console.error('there was an error while checking out: ', JSON.stringify(error));
+    console.error('there was an error while checking out: ', error);
   }
 };
 
@@ -53,7 +53,8 @@ const fetchAllDayParkCheckins = async (parkId: string) => {
     return checkins;
   } catch (error) {
     console.error(
-      `there was an error while fetching all day checkins for park ${parkId}: ${JSON.stringify(error)}`
+      `there was an error while fetching all day checkins for park ${parkId}:`,
+      error
     );
     return null;
   }
@@ -70,7 +71,8 @@ const fetchParkCheckins = async (parkId: string): Promise<Checkin[] | null> => {
     return checkins;
   } catch (error) {
     console.error(
-      `there was an error while fetching checkins for park ${parkId}: ${JSON.stringify(error)}`
+      `there was an error while fetching checkins for park ${parkId}:`,
+      error
     );
     return null;
   }
