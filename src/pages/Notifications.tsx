@@ -8,6 +8,7 @@ import { useSeenNotifications } from '../hooks/api/useSeenNotifications';
 import { NotificationsList } from '../components/notifications/NotificationsList';
 import { NotificationsHeader } from '../components/notifications/NotificationsHeader';
 import styles from './Notifications.module.scss';
+import { Loader } from '../components/Loader';
 
 const Notifications = () => {
   const { t } = useTranslation();
@@ -81,11 +82,15 @@ const Notifications = () => {
     allNotifications.filter((notification) => !notification.read_at).length ??
     0;
 
+  if (isLoading) {
+    return <Loader style={{ paddingTop: '64px' }} />;
+  }
+
   return (
     <div className={styles.container}>
       <NotificationsHeader showReadButton={unreadCount > 0} />
       <div className={styles.content}>
-        {!allNotifications.length && !isLoading ? (
+        {!allNotifications.length ? (
           <div className={styles.emptyState}>
             <div className={styles.emptyIcon}>
               <Bell size={64} />

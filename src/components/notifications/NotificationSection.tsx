@@ -10,6 +10,7 @@ interface NotificationSectionProps {
   value: boolean;
   onChange: (value: boolean) => void;
   isLast?: boolean;
+  isMute?: boolean;
 }
 
 const NotificationSection: React.FC<NotificationSectionProps> = ({
@@ -18,6 +19,7 @@ const NotificationSection: React.FC<NotificationSectionProps> = ({
   value,
   onChange,
   isLast = false,
+  isMute = false,
 }) => {
   return (
     <div
@@ -38,8 +40,8 @@ const NotificationSection: React.FC<NotificationSectionProps> = ({
         valueOn={true}
         valueOff={false}
         onChange={onChange}
-        iconOn={<Bell size={16} />}
-        iconOff={<BellOff size={16} />}
+        iconOn={isMute ? <BellOff size={16} /> : <Bell size={16} />}
+        iconOff={isMute ? <Bell size={16} /> : <BellOff size={16} />}
       />
     </div>
   );

@@ -124,6 +124,7 @@ export const NotificationsModal: React.FC<NotificationsModalProps> = ({
               value={muteAll}
               onChange={(value) => setMuteAll(value)}
               isLast={true}
+              isMute={true}
             />
           </div>
         </div>
