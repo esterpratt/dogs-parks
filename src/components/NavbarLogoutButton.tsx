@@ -1,10 +1,8 @@
 import { LogOut } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { useAppLogout } from '../hooks/useAppLogout';
 import { Button } from './Button';
 import styles from './NavbarBottom.module.scss';
-import { useContext } from 'react';
-import { UserContext } from '../context/UserContext';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 
 interface NavbarLogoutButtonProps {
   onClick: () => void;
@@ -12,21 +10,19 @@ interface NavbarLogoutButtonProps {
 
 const NavbarLogoutButton = (props: NavbarLogoutButtonProps) => {
   const { onClick } = props;
-  const { userLogout } = useContext(UserContext);
-  const navigate = useNavigate();
   const { t } = useTranslation();
+  const { logout } = useAppLogout();
 
-  const logout = () => {
-    userLogout();
+  const onLogout = () => {
+    logout();
     onClick();
-    navigate('/');
   };
 
   return (
     <Button
       variant="simple"
       color={styles.blue}
-      onClick={logout}
+      onClick={onLogout}
       className={styles.inner}
       data-test="navbar-logout"
     >

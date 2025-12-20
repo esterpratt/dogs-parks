@@ -1,16 +1,18 @@
 import { cleanupDeviceTokensBeforeLogout } from '../services/notifications';
 import { signOut } from '../services/authentication';
-import { throwError } from './error';
+import { SignOutResult } from '../types/auth';
 
 interface LogoutOptions {
   clearQueries?: () => void;
   after?: () => void;
 }
 
-async function logoutWithCleanup(options?: LogoutOptions) {
+async function logoutWithCleanup(
+  options?: LogoutOptions
+): Promise<SignOutResult> {
   try {
     await cleanupDeviceTokensBeforeLogout();
-    await signOut();
+    const result = await signOut();
 
     if (options?.clearQueries) {
       options.clearQueries();
@@ -19,13 +21,14 @@ async function logoutWithCleanup(options?: LogoutOptions) {
     if (options?.after) {
       options.after();
     }
+
+    return result;
   } catch (err) {
-    try {
-      await signOut();
-    } catch {
-      console.error('Error logging out');
-    }
-    throwError(err);
+    console.error('Error logging out: ', err);
+
+    const result = await signOut();
+
+    return result;
   }
 }
 

@@ -1,8 +1,11 @@
 import { Browser } from '@capacitor/browser';
+import { Preferences } from '@capacitor/preferences';
 import { isMobile } from '../utils/platform';
 import { AppError, throwError } from './error';
 import { supabase } from './supabase-client';
 import { i18n } from '../i18n';
+import { SignOutResult } from '../types/auth';
+import { FORCED_LOGOUT_EVENT } from '../utils/consts';
 
 interface LoginProps {
   email: string;
@@ -11,6 +14,18 @@ interface LoginProps {
 
 interface SigninProps extends LoginProps {
   name: string;
+}
+
+async function removeAuthToken(): Promise<void> {
+  const url = new URL(import.meta.env.VITE_SUPABASE_URL);
+  const projectRef = url.hostname.split('.')[0];
+  const authTokenKey = `sb-${projectRef}-auth-token`;
+
+  if (isMobile()) {
+    await Preferences.remove({ key: authTokenKey });
+  } else {
+    localStorage.removeItem(authTokenKey);
+  }
 }
 
 const signinWithOAuthProvider = async (provider: 'google' | 'apple') => {
@@ -85,16 +100,23 @@ const login = async ({ email, password }: LoginProps) => {
   }
 };
 
-const signOut = async () => {
+const signOut = async (): Promise<SignOutResult> => {
   try {
-    const { error } = await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut({ scope: 'local' });
+
     if (error) {
       throw error;
     }
+
+    return SignOutResult.OK;
   } catch (error) {
-    await supabase.auth.signOut({ scope: 'local' });
     console.error('signOut error (ignored for logout UX)', error);
-    return;
+
+    await removeAuthToken();
+
+    window.dispatchEvent(new Event(FORCED_LOGOUT_EVENT));
+
+    return SignOutResult.FORCED_LOGOUT;
   }
 };
 
@@ -136,7 +158,7 @@ const deleteUser = async (id: string | null) => {
     if (error) {
       throw error;
     }
-    await supabase.auth.signOut();
+    await signOut();
   } catch (error) {
     throwError(error);
   }

@@ -1,12 +1,10 @@
 // src/services/supabase-client.ts
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
-import { Capacitor } from '@capacitor/core';
 import { Preferences } from '@capacitor/preferences';
+import { isMobile } from '../utils/platform';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
-
-const isNativePlatform = Capacitor.getPlatform() !== 'web';
 
 interface SupabaseStorageAdapter {
   getItem(key: string): Promise<string | null>;
@@ -35,7 +33,7 @@ const preferencesStorage: SupabaseStorageAdapter = {
 // Create the client. On native, pass the Capacitor storage; on web, let Supabase use localStorage.
 let supabase: SupabaseClient;
 
-if (isNativePlatform) {
+if (isMobile()) {
   supabase = createClient(supabaseUrl, supabaseAnonKey, {
     auth: {
       persistSession: true,

@@ -1,8 +1,8 @@
 import { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LogOut, MoveLeft, Pencil, Trash2, X } from 'lucide-react';
 import { UserContext } from '../context/UserContext';
+import { useAppLogout } from '../hooks/useAppLogout';
 import { Button } from '../components/Button';
 import { EditUserModal } from '../components/profile/EditUserModal';
 import { TopModal } from '../components/modals/TopModal';
@@ -11,15 +11,14 @@ import { PrevLinks } from '../components/PrevLinks';
 import styles from './Settings.module.scss';
 
 const Settings = () => {
-  const { userLogout, userDeletion, userId } = useContext(UserContext);
+  const { userDeletion, userId } = useContext(UserContext);
   const { t } = useTranslation();
   const [isEditUserModalOpen, setIsEditUserModalOpen] = useState(false);
   const [isDeleteUserModalOpen, setIsDeleteUserModalOpen] = useState(false);
-  const navigate = useNavigate();
+  const { logout } = useAppLogout();
 
-  const logout = () => {
-    userLogout();
-    navigate('/');
+  const onLogout = () => {
+    logout();
   };
 
   const onEditUser = () => {
@@ -55,7 +54,7 @@ const Settings = () => {
             <span>{t('settings.editDetails')}</span>
           </Button>
           <Button
-            onClick={logout}
+            onClick={onLogout}
             className={styles.button}
             variant="secondary"
             color={styles.blue}

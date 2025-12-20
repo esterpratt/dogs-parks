@@ -15,3 +15,5 @@ export const APP_LANGUAGES = {
   HE: 'he',
   AR: 'ar',
 } as const;
+
+export const FORCED_LOGOUT_EVENT = 'klavhub:forced-logout';

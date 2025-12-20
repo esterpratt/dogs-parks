@@ -18,6 +18,7 @@ import { useOnAuthStateChanged } from '../hooks/useOnAuthStateChanged';
 import { queryClient } from '../services/react-query';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { logoutWithCleanup } from '../services/logout-orchestrator';
+import { SignOutResult } from '../types/auth';
 
 type SigninProps = Partial<LoginWithEmailAndPasswordProps> & {
   name?: string;
@@ -35,6 +36,7 @@ interface UserContextObj {
   isLoadingUser: boolean;
   userLogin: (props: LoginProps) => void;
   userLogout: () => void;
+  userLogoutAsync: () => Promise<SignOutResult>;
   userSigninWithGoogle: () => void;
   userSigninWithApple: () => void;
   userDeletion: () => void;
@@ -51,6 +53,7 @@ const initialData: UserContextObj = {
   isLoadingUser: false,
   userLogin: () => Promise.resolve(),
   userLogout: () => {},
+  userLogoutAsync: () => Promise.resolve(SignOutResult.OK),
   userSigninWithGoogle: () => Promise.resolve(),
   userSigninWithApple: () => Promise.resolve(),
   userDeletion: () => {},
@@ -79,16 +82,16 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { mutate: userSigninWithGoogle, isPending: isSigninInWithGoogle } =
     useMutation({
       mutationFn: () => signinWithGoogle(),
-      onError: (error) => {
-        setError(error.message);
+      onError: (mutationError) => {
+        setError(mutationError.message);
       },
     });
 
   const { mutate: userSigninWithApple, isPending: isSigninInWithApple } =
     useMutation({
       mutationFn: () => signinWithApple(),
-      onError: (error) => {
-        setError(error.message);
+      onError: (mutationError) => {
+        setError(mutationError.message);
       },
     });
 
@@ -97,13 +100,22 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
       mutationFn: (data: LoginProps) => {
         return login({ email: data.email!, password: data.password! });
       },
-      onError: (error) => {
-        setError(error.message);
+      onError: (mutationError) => {
+        setError(mutationError.message);
       },
     });
 
-  const { mutate: userLogout, isPending: isLoggingOut } = useMutation({
-    mutationFn: () => logoutWithCleanup(),
+  const {
+    mutate: userLogout,
+    mutateAsync: userLogoutAsync,
+    isPending: isLoggingOut,
+  } = useMutation({
+    mutationFn: () =>
+      logoutWithCleanup({
+        clearQueries: () => {
+          queryClient.removeQueries({ queryKey: ['user'] });
+        },
+      }),
     onSettled: () => {
       queryClient.removeQueries({ queryKey: ['user'] });
     },
@@ -118,15 +130,14 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
       localStorage.removeItem('userDeleted');
     },
     onSettled: () => {
-      userLogout();
       queryClient.removeQueries({ queryKey: ['user'] });
     },
   });
 
   useEffect(() => {
     if (session?.user?.id) {
-      refetchUser({ throwOnError: true }).catch((error) => {
-        if (!error?.silent) {
+      refetchUser({ throwOnError: true }).catch((fetchError) => {
+        if (!fetchError?.silent) {
           if (!isLoggingOut) {
             userLogout();
           }
@@ -169,6 +180,7 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     isLoadingAuthUser,
     userLogin,
     userLogout,
+    userLogoutAsync,
     userSigninWithGoogle,
     userSigninWithApple,
     userDeletion,
