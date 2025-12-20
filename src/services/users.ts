@@ -106,10 +106,7 @@ const filterUsersAndDogs = async (input: string) => {
 
     return data;
   } catch (error) {
-    console.error(
-      `there was an error searching users:`,
-      error
-    );
+    console.error(`there was an error searching users: ${error}`);
     return [];
   }
 };

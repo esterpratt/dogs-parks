@@ -10,18 +10,15 @@ const addFavorite = async ({ userId, parkId }: ActionFavoriteProps) => {
   try {
     const { error } = await supabase
       .from('favorites')
-      .insert([
-        { user_id: userId, park_id: parkId },
-      ])
+      .insert([{ user_id: userId, park_id: parkId }]);
 
     if (error) {
       throw error;
     }
-  } catch(error) {
+  } catch (error) {
     console.error(
-      `there was an error adding favorite park: ${parkId} for user: ${userId}:`,
-      error
-    )
+      `there was an error adding favorite park: ${parkId} for user: ${userId}: ${error}`
+    );
   }
 };
 
@@ -31,15 +28,14 @@ const removeFavorite = async ({ userId, parkId }: ActionFavoriteProps) => {
       .from('favorites')
       .delete()
       .eq('park_id', parkId)
-      .eq('user_id', userId)
+      .eq('user_id', userId);
 
     if (error) {
       throw error;
     }
   } catch (error) {
     console.error(
-      `there was an error removing favorite park ${parkId} from user ${userId}:`,
-      error
+      `there was an error removing favorite park ${parkId} from user ${userId}: ${error}`
     );
   }
 };
@@ -49,17 +45,16 @@ const fetchUserFavorites = async (userId: string) => {
     const { data: favorites, error } = await supabase
       .from('favorites')
       .select('park_id')
-      .eq('user_id', userId)
+      .eq('user_id', userId);
 
     if (error) {
       throw error;
     }
 
-    return favorites.map(favorite => favorite.park_id);
+    return favorites.map((favorite) => favorite.park_id);
   } catch (error) {
     console.error(
-      `there was an error fetching favorites parks for user ${userId}:`,
-      error
+      `there was an error fetching favorites parks for user ${userId}: ${error}`
     );
     return null;
   }
@@ -73,9 +68,9 @@ const fetchFavoriteParks = async () => {
       throw error;
     }
 
-    return (favorites as Favorites[]).map(favorite => favorite.park_id);
+    return (favorites as Favorites[]).map((favorite) => favorite.park_id);
   } catch (error) {
-    console.error(`there was an error fetching favorite park:`, error);
+    console.error(`there was an error fetching favorite park: ${error}`);
     return [];
   }
 };

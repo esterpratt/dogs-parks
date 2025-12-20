@@ -49,10 +49,7 @@ const createParkEvent = async (params: CreateParkEventParams) => {
 
     return event;
   } catch (error) {
-    console.error(
-      `there was an error while creating the event:`,
-      error
-    );
+    console.error(`there was an error while creating the event: ${error}`);
     return null;
   }
 };
@@ -155,8 +152,7 @@ const fetchUserOrganizedEvents = async () => {
     return events;
   } catch (error) {
     console.error(
-      `there was an error while fetching user organized events:`,
-      error
+      `there was an error while fetching user organized events: ${error}`
     );
     return [];
   }
@@ -175,8 +171,7 @@ const fetchUserInvitedEvents = async () => {
     return events;
   } catch (error) {
     console.error(
-      `there was an error while fetching user invited events:`,
-      error
+      `there was an error while fetching user invited events: ${error}`
     );
     return [];
   }

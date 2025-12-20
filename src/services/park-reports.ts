@@ -6,23 +6,21 @@ interface CreateParkReportProps {
   text: string;
 }
 
-const createParkReport = async ({user_id, park_id, text}: CreateParkReportProps) => {
+const createParkReport = async ({
+  user_id,
+  park_id,
+  text,
+}: CreateParkReportProps) => {
   try {
     const { error } = await supabase
       .from('park_reports')
-      .insert([
-        {user_id, park_id, content: text}
-      ])
+      .insert([{ user_id, park_id, content: text }]);
 
     if (error) {
       throw error;
     }
-
   } catch (error) {
-    console.error(
-      `there was an error while reporting park:`,
-      error
-    );
+    console.error(`there was an error while reporting park: ${error}`);
   }
 };
 

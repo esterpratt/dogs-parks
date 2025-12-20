@@ -12,11 +12,9 @@ const reportDogsCount = async ({
 }: ReportParkDogsCountProps) => {
   try {
     const { error } = await supabase
-    .from('dogs_count_reports')
-    .insert([
-      { park_id: parkId, count: dogsCount },
-    ])
-  
+      .from('dogs_count_reports')
+      .insert([{ park_id: parkId, count: dogsCount }]);
+
     if (error) {
       throw error;
     }
@@ -28,9 +26,9 @@ const reportDogsCount = async ({
 const fetchDogsCountByReports = async (parkId: string) => {
   try {
     const { data: dogsCountReport, error } = await supabase
-    .from('dogs_count_reports')
-    .select('*')
-    .eq('park_id', parkId)
+      .from('dogs_count_reports')
+      .select('*')
+      .eq('park_id', parkId);
 
     if (error) {
       throw error;
@@ -38,8 +36,8 @@ const fetchDogsCountByReports = async (parkId: string) => {
 
     return dogsCountReport;
   } catch (error) {
-    console.error(`there was an error fetching dogs count:`, error);
-    return []
+    console.error(`there was an error fetching dogs count: ${error}`);
+    return [];
   }
 };
 

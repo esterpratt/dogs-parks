@@ -8,7 +8,6 @@ interface CreateFriendshipProps {
 
 type FetchFriendshipProps = [string, string];
 
-
 interface UpdateFriendshipProps {
   friendshipId: string;
   status: FRIENDSHIP_STATUS;
@@ -29,7 +28,11 @@ const createFriendship = async ({
     const { data: friendship, error } = await supabase
       .from('friendships')
       .insert([
-        { requestee_id: requesteeId, requester_id: requesterId, status: FRIENDSHIP_STATUS.PENDING },
+        {
+          requestee_id: requesteeId,
+          requester_id: requesterId,
+          status: FRIENDSHIP_STATUS.PENDING,
+        },
       ])
       .select('id')
       .single();
@@ -41,8 +44,7 @@ const createFriendship = async ({
     return friendship.id;
   } catch (error) {
     console.error(
-      `there was an error while creating friendship for users ${requesteeId}, ${requesterId}:`,
-      error
+      `there was an error while creating friendship for users ${requesteeId}, ${requesterId}: ${error}`
     );
     return null;
   }
@@ -51,12 +53,12 @@ const createFriendship = async ({
 const fetchFriendship = async (ids: FetchFriendshipProps) => {
   try {
     const { data: friendship, error } = await supabase
-    .from('friendships')
-    .select('*')
-    .or(
-      `and(requester_id.eq.${ids[0]},requestee_id.eq.${ids[1]}),and(requester_id.eq.${ids[1]},requestee_id.eq.${ids[0]})`
-    )
-    .maybeSingle();
+      .from('friendships')
+      .select('*')
+      .or(
+        `and(requester_id.eq.${ids[0]},requestee_id.eq.${ids[1]}),and(requester_id.eq.${ids[1]},requestee_id.eq.${ids[0]})`
+      )
+      .maybeSingle();
 
     if (error) {
       throw error;
@@ -65,8 +67,7 @@ const fetchFriendship = async (ids: FetchFriendshipProps) => {
     return friendship;
   } catch (error) {
     console.error(
-      `there was an error while fetching friendship for users ${ids[0]}, ${ids[1]}:`,
-      error
+      `there was an error while fetching friendship for users ${ids[0]}, ${ids[1]}: ${error}`
     );
     return null;
   }
@@ -75,7 +76,7 @@ const fetchFriendship = async (ids: FetchFriendshipProps) => {
 const getFriendshipUserQuery = ({
   userId,
   userRole,
-  status
+  status,
 }: FetchUserFriendshipsProps) => {
   const baseQuery = supabase.from('friendships').select('*');
 
@@ -84,13 +85,9 @@ const getFriendshipUserQuery = ({
 
   switch (userRole) {
     case USER_ROLE.REQUESTEE:
-      return addStatusFilter(
-        baseQuery.eq('requestee_id', userId)
-      );
+      return addStatusFilter(baseQuery.eq('requestee_id', userId));
     case USER_ROLE.REQUESTER:
-      return addStatusFilter(
-        baseQuery.eq('requester_id', userId)
-      );
+      return addStatusFilter(baseQuery.eq('requester_id', userId));
     case USER_ROLE.ANY:
     default:
       return addStatusFilter(
@@ -105,8 +102,12 @@ const fetchUserFriendships = async ({
   status,
 }: FetchUserFriendshipsProps) => {
   try {
-    const { data: friendships, error } = await getFriendshipUserQuery({ userId, userRole, status });
-    
+    const { data: friendships, error } = await getFriendshipUserQuery({
+      userId,
+      userRole,
+      status,
+    });
+
     if (error) {
       throw error;
     }
@@ -114,18 +115,16 @@ const fetchUserFriendships = async ({
     return friendships;
   } catch (error) {
     console.error(
-      `there was an error while fetching friendships for user ${userId}:`,
-      error
+      `there was an error while fetching friendships for user ${userId}: ${error}`
     );
     return null;
   }
 };
 
-
 const updateFriendship = async ({
   friendshipId,
   status,
-  updatedAt
+  updatedAt,
 }: UpdateFriendshipProps) => {
   try {
     const { error } = await supabase.rpc('safe_update_friendship', {
@@ -139,8 +138,7 @@ const updateFriendship = async ({
     }
   } catch (error) {
     console.error(
-      `there was an error while updating friendship with id ${friendshipId}:`,
-      error
+      `there was an error while updating friendship with id ${friendshipId}: ${error}`
     );
     throw error;
   }
@@ -149,17 +147,16 @@ const updateFriendship = async ({
 const deleteFriendship = async (friendshipId: string) => {
   try {
     const { error } = await supabase
-    .from('friendships')
-    .delete()
-    .eq('id', friendshipId)
+      .from('friendships')
+      .delete()
+      .eq('id', friendshipId);
 
     if (error) {
       throw error;
     }
   } catch (error) {
     console.error(
-      `there was an error deleting friendship with id ${friendshipId}:`,
-      error
+      `there was an error deleting friendship with id ${friendshipId}: ${error}`
     );
   }
 };

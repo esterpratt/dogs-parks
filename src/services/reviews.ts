@@ -17,10 +17,10 @@ interface UpdateReviewProps {
 const fetchParkRank = async (parkId: string) => {
   try {
     const { data, error } = await supabase
-    .from('reviews')
-    .select('rank.avg()')
-    .eq('park_id', parkId)
-    .single()
+      .from('reviews')
+      .select('rank.avg()')
+      .eq('park_id', parkId)
+      .single();
 
     if (error) {
       throw error;
@@ -28,7 +28,9 @@ const fetchParkRank = async (parkId: string) => {
 
     return data.avg;
   } catch (error) {
-    console.error(`there was an error while fetching rank for park ${parkId}:`, error);
+    console.error(
+      `there was an error while fetching rank for park ${parkId}: ${error}`
+    );
     return null;
   }
 };
@@ -36,9 +38,9 @@ const fetchParkRank = async (parkId: string) => {
 const fetchReviews = async (parkId: string) => {
   try {
     const { data: reviews, error } = await supabase
-    .from('reviews')
-    .select('*')
-    .eq('park_id', parkId)
+      .from('reviews')
+      .select('*')
+      .eq('park_id', parkId);
 
     if (error) {
       throw error;
@@ -47,8 +49,7 @@ const fetchReviews = async (parkId: string) => {
     return reviews;
   } catch (error) {
     console.error(
-      `there was an error while fetching reviews for park ${parkId}:`,
-      error
+      `there was an error while fetching reviews for park ${parkId}: ${error}`
     );
     return [];
   }
@@ -57,9 +58,9 @@ const fetchReviews = async (parkId: string) => {
 const fetchUserReviews = async (userId: string) => {
   try {
     const { data: reviews, error } = await supabase
-    .from('reviews')
-    .select('*')
-    .eq('user_id', userId)
+      .from('reviews')
+      .select('*')
+      .eq('user_id', userId);
 
     if (error) {
       throw error;
@@ -68,8 +69,7 @@ const fetchUserReviews = async (userId: string) => {
     return reviews;
   } catch (error) {
     console.error(
-      `there was an error while fetching reviews of user ${userId}:`,
-      error
+      `there was an error while fetching reviews of user ${userId}: ${error}`
     );
     return [];
   }
@@ -78,10 +78,10 @@ const fetchUserReviews = async (userId: string) => {
 const fetchReview = async (reviewId: string) => {
   try {
     const { data: review, error } = await supabase
-    .from('reviews')
-    .select('*')
-    .eq('id', reviewId)
-    .single();
+      .from('reviews')
+      .select('*')
+      .eq('id', reviewId)
+      .single();
 
     if (error) {
       throw error;
@@ -96,11 +96,11 @@ const fetchReview = async (reviewId: string) => {
 const updateReview = async ({ reviewId, reviewData }: UpdateReviewProps) => {
   try {
     const { data: reviews, error } = await supabase
-    .from('reviews')
-    .update({ ...reviewData })
-    .eq('id', reviewId)
-    .select()
-    .single();
+      .from('reviews')
+      .update({ ...reviewData })
+      .eq('id', reviewId)
+      .select()
+      .single();
 
     if (error) {
       throw error;
@@ -108,7 +108,7 @@ const updateReview = async ({ reviewId, reviewData }: UpdateReviewProps) => {
 
     return reviews;
   } catch (error) {
-    console.error(`there was an error updating review ${reviewId}:`, error);
+    console.error(`there was an error updating review ${reviewId}: ${error}`);
     return null;
   }
 };
@@ -116,22 +116,27 @@ const updateReview = async ({ reviewId, reviewData }: UpdateReviewProps) => {
 const createReview = async ({ parkId, userId, reviewData }: AddReviewProps) => {
   try {
     const { data: review, error } = await supabase
-    .from('reviews')
-    .insert([
-      { 'park_id': parkId, 'user_id': userId, 'title': reviewData.title, 'content': reviewData.content, 'rank': reviewData.rank},
-    ])
-    .select()
-    .single();
-  
+      .from('reviews')
+      .insert([
+        {
+          park_id: parkId,
+          user_id: userId,
+          title: reviewData.title,
+          content: reviewData.content,
+          rank: reviewData.rank,
+        },
+      ])
+      .select()
+      .single();
+
     if (error) {
       throw error;
     }
-    
+
     return review;
   } catch (error) {
     console.error(
-      `there was an error creating review for park ${parkId}:`,
-      error
+      `there was an error creating review for park ${parkId}: ${error}`
     );
     return null;
   }
@@ -146,16 +151,14 @@ const reportReview = async ({
 }) => {
   try {
     const { error } = await supabase
-    .from('review_reports')
-    .insert([
-      { 'review_id': reviewId, 'reason': reason },
-    ])
+      .from('review_reports')
+      .insert([{ review_id: reviewId, reason: reason }]);
 
     if (error) {
       throw error;
     }
   } catch (error) {
-    console.error(`there was an error reporting review ${reviewId}:`, error);
+    console.error(`there was an error reporting review ${reviewId}: ${error}`);
   }
 };
 

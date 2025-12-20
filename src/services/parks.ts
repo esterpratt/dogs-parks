@@ -185,10 +185,7 @@ const updatePark = async (parkId: string, parkDetails: Partial<Park>) => {
       throw error;
     }
   } catch (error) {
-    console.error(
-      `there was an error while updating park ${parkId}:`,
-      error
-    );
+    console.error(`there was an error while updating park ${parkId}: ${error}`);
   }
 };
 
@@ -228,8 +225,7 @@ const fetchParkPrimaryImage = async (parkId: string) => {
     return res?.[0] ?? null;
   } catch (error) {
     console.error(
-      `there was a problem fetching primary image for park ${parkId}:`,
-      error
+      `there was a problem fetching primary image for park ${parkId}: ${error}`
     );
     return null;
   }
@@ -244,8 +240,7 @@ const fetchAllParkImages = async (parkId: string) => {
     return res;
   } catch (error) {
     console.error(
-      `there was a problem fetching images for park ${parkId}:`,
-      error
+      `there was a problem fetching images for park ${parkId}: ${error}`
     );
     return null;
   }

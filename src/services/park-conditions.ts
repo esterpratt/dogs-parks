@@ -27,8 +27,7 @@ const getActiveParkConditions = async ({
     return data || [];
   } catch (error) {
     console.error(
-      `There was an error fetching park conditions for park ${parkId}:`,
-      error
+      `There was an error fetching park conditions for park ${parkId}: ${error}`
     );
     return [];
   }

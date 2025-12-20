@@ -1,8 +1,13 @@
 import { throwError } from './error';
 import { Dog } from '../types/dog';
 import { supabase } from './supabase-client';
-import { deleteImage, fetchImagesByDirectory, moveImage, uploadImage } from './image';
-import { removeBasePath } from './image-utils'
+import {
+  deleteImage,
+  fetchImagesByDirectory,
+  moveImage,
+  uploadImage,
+} from './image';
+import { removeBasePath } from './image-utils';
 
 type CreateDogProps = Omit<Dog, 'id'>;
 
@@ -19,10 +24,10 @@ const getDogOwnerId = async (dogId: string) => {
   }
 
   const { data: dog, error } = await supabase
-  .from('dogs')
-  .select('owner')
-  .eq('id', dogId)
-  .single();
+    .from('dogs')
+    .select('owner')
+    .eq('id', dogId)
+    .single();
 
   if (error) {
     throw error;
@@ -36,18 +41,16 @@ const getDogOwnerId = async (dogId: string) => {
 const createDog = async (createDogProps: CreateDogProps) => {
   try {
     const { data: dog, error } = await supabase
-    .from('dogs')
-    .insert([
-      { ...createDogProps },
-    ])
-    .select('id')
-    .single();
+      .from('dogs')
+      .insert([{ ...createDogProps }])
+      .select('id')
+      .single();
 
     if (error) {
       throw error;
     }
 
-    return dog.id
+    return dog.id;
   } catch (error) {
     throwError(error);
   }
@@ -56,9 +59,9 @@ const createDog = async (createDogProps: CreateDogProps) => {
 const updateDog = async ({ dogId, dogDetails }: EditDogProps) => {
   try {
     const { error } = await supabase
-    .from('dogs')
-    .update({ ...dogDetails })
-    .eq('id', dogId)
+      .from('dogs')
+      .update({ ...dogDetails })
+      .eq('id', dogId);
 
     if (error) {
       throw error;
@@ -73,10 +76,10 @@ const deleteDog = async (id: string) => {
     const { error } = await supabase.rpc('delete_dog', { dog_id: id });
 
     if (error) {
-        throw error;
+      throw error;
     }
   } catch (error) {
-    console.error(`there was an error deleting dog with id ${id}:`, error);
+    console.error(`there was an error deleting dog with id ${id}: ${error}`);
     return null;
   }
 };
@@ -84,10 +87,10 @@ const deleteDog = async (id: string) => {
 const fetchDogs = async (ids: string[]) => {
   try {
     const { data: dogs, error } = await supabase
-    .from('dogs')
-    .select('*')
-    .in('id', ids)
-    .is('deleted_at', null)
+      .from('dogs')
+      .select('*')
+      .in('id', ids)
+      .is('deleted_at', null);
 
     if (error) {
       throw error;
@@ -101,10 +104,10 @@ const fetchDogs = async (ids: string[]) => {
 const fetchUserDogs = async (userId: string) => {
   try {
     const { data: dogs, error } = await supabase
-    .from('dogs')
-    .select('*')
-    .eq('owner', userId)
-    .is('deleted_at', null)
+      .from('dogs')
+      .select('*')
+      .eq('owner', userId)
+      .is('deleted_at', null);
 
     if (error) {
       throw error;
@@ -119,10 +122,10 @@ const fetchUserDogs = async (userId: string) => {
 const fetchUsersDogs = async (userIds: string[]) => {
   try {
     const { data: dogs, error } = await supabase
-    .from('dogs')
-    .select('*')
-    .in('owner', userIds)
-    .is('deleted_at', null)
+      .from('dogs')
+      .select('*')
+      .in('owner', userIds)
+      .is('deleted_at', null);
 
     if (error) {
       throw error;
@@ -148,7 +151,15 @@ const uploadDogImage = async (image: File | string, dogId: string) => {
   }
 };
 
-const uploadDogPrimaryImage = async ({image, dogId, upsert}: {image: File | string, dogId: string, upsert: boolean}) => {
+const uploadDogPrimaryImage = async ({
+  image,
+  dogId,
+  upsert,
+}: {
+  image: File | string;
+  dogId: string;
+  upsert: boolean;
+}) => {
   try {
     const userId = await getDogOwnerId(dogId);
     const res = await uploadImage({
@@ -156,7 +167,7 @@ const uploadDogPrimaryImage = async ({image, dogId, upsert}: {image: File | stri
       bucket: 'users',
       path: `${userId}/dogs/${dogId}/primary`,
       name: 'primary',
-      upsert
+      upsert,
     });
     return res;
   } catch (error) {
@@ -168,12 +179,14 @@ const fetchDogPrimaryImage = async (dogId: string) => {
   try {
     const userId = await getDogOwnerId(dogId);
 
-    const res = await fetchImagesByDirectory({bucket: 'users', path: `${userId}/dogs/${dogId}/primary/`});
+    const res = await fetchImagesByDirectory({
+      bucket: 'users',
+      path: `${userId}/dogs/${dogId}/primary/`,
+    });
     return res?.[0] ?? null;
   } catch (error) {
     console.error(
-      `there was a problem fetching primary image for dog ${dogId}:`,
-      error
+      `there was a problem fetching primary image for dog ${dogId}: ${error}`
     );
     return null;
   }
@@ -183,12 +196,14 @@ const fetchAllDogImages = async (dogId: string) => {
   try {
     const userId = await getDogOwnerId(dogId);
 
-    const res = await fetchImagesByDirectory({bucket: 'users', path: `${userId}/dogs/${dogId}/other/`});
+    const res = await fetchImagesByDirectory({
+      bucket: 'users',
+      path: `${userId}/dogs/${dogId}/other/`,
+    });
     return res;
   } catch (error) {
     console.error(
-      `there was a problem fetching images for dog ${dogId}:`,
-      error
+      `there was a problem fetching images for dog ${dogId}: ${error}`
     );
     return null;
   }
@@ -201,7 +216,7 @@ const movePrimaryImageToOther = async (imgPath: string, dogId: string) => {
     if (imageName) {
       const newPath = `${userId}/dogs/${dogId}/other/${imageName}`;
       const oldPath = `${userId}/dogs/${dogId}/primary/primary-${imageName}`;
-      
+
       return moveImage({
         bucket: 'users',
         oldPath,
@@ -212,12 +227,11 @@ const movePrimaryImageToOther = async (imgPath: string, dogId: string) => {
     }
   } catch (error) {
     console.error(
-      `there was a problem moving primary image for dog ${dogId}:`,
-      error
+      `there was a problem moving primary image for dog ${dogId}: ${error}`
     );
     return null;
   }
-}
+};
 
 const moveOtherImageToPrimary = async (imgPath: string, dogId: string) => {
   try {
@@ -225,7 +239,7 @@ const moveOtherImageToPrimary = async (imgPath: string, dogId: string) => {
     const imageName = imgPath.split('other/')[1];
     const newPath = `${userId}/dogs/${dogId}/primary/primary-${imageName}`;
     const oldPath = `${userId}/dogs/${dogId}/other/${imageName}`;
-    
+
     return moveImage({
       bucket: 'users',
       oldPath,
@@ -233,12 +247,11 @@ const moveOtherImageToPrimary = async (imgPath: string, dogId: string) => {
     });
   } catch (error) {
     console.error(
-      `there was a problem moving other image for dog ${dogId}:`,
-      error
+      `there was a problem moving other image for dog ${dogId}: ${error}`
     );
     return null;
   }
-}
+};
 
 const setDogPrimaryImage = async (imgPath: string, dogId: string) => {
   try {
@@ -256,16 +269,15 @@ const setDogPrimaryImage = async (imgPath: string, dogId: string) => {
     }
   } catch (error) {
     console.error(
-      `there was a problem moving images for dog ${dogId}:`,
-      error
+      `there was a problem moving images for dog ${dogId}: ${error}`
     );
   }
 };
 
 const deleteDogImage = async (imgPath: string) => {
   const relevantPath = removeBasePath(imgPath, 'users/');
-  return deleteImage({bucket: 'users', path: relevantPath});
-}
+  return deleteImage({ bucket: 'users', path: relevantPath });
+};
 
 export {
   fetchDogs,
@@ -279,7 +291,7 @@ export {
   uploadDogImage,
   uploadDogPrimaryImage,
   deleteDogImage,
-  setDogPrimaryImage
+  setDogPrimaryImage,
 };
 
 export type { EditDogProps };

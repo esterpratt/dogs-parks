@@ -52,10 +52,7 @@ const deleteImage = async ({ path, bucket }: HandleImageProps) => {
       throw error;
     }
   } catch (error) {
-    console.error(
-      'Sorry, there was a problem deleting the image: ',
-      error
-    );
+    console.error('Sorry, there was a problem deleting the image: ', error);
   }
 };
 
@@ -132,10 +129,7 @@ const moveImage = async ({ bucket, oldPath, newPath }: MoveImageProps) => {
 
     return data;
   } catch (error) {
-    console.error(
-      'Sorry, there was a problem moving the image: ',
-      error
-    );
+    console.error('Sorry, there was a problem moving the image: ', error);
     return null;
   }
 };

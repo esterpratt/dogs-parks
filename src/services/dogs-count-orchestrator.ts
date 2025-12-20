@@ -7,21 +7,21 @@ const processReportsToDogsCount = (reports: DogsCountReport[]) => {
   return reports.map((report) => {
     const date = new Date(report.timestamp);
 
-    const parts = new Intl.DateTimeFormat("en-US", {
-      timeZone: "Asia/Jerusalem",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'Asia/Jerusalem',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
       hour12: false,
-      weekday: 'short'
+      weekday: 'short',
     }).formatToParts(date);
 
-    const year = parts.find(p => p.type === "year")!.value;
-    const month = parts.find(p => p.type === "month")!.value;
-    const day = parts.find(p => p.type === "day")!.value;
-    const hour = Number(parts.find(p => p.type === "hour")!.value);
-    const weekday = parts.find(p => p.type === "weekday")!.value;
+    const year = parts.find((p) => p.type === 'year')!.value;
+    const month = parts.find((p) => p.type === 'month')!.value;
+    const day = parts.find((p) => p.type === 'day')!.value;
+    const hour = Number(parts.find((p) => p.type === 'hour')!.value);
+    const weekday = parts.find((p) => p.type === 'weekday')!.value;
 
     return {
       count: report.count,
@@ -41,26 +41,28 @@ const processCheckinsToDogsCount = (checkins: Checkin[]) => {
       ? new Date(checkout_timestamp)
       : new Date();
 
-    const startParts = new Intl.DateTimeFormat("en-US", {
-      timeZone: "Asia/Jerusalem",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
+    const startParts = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'Asia/Jerusalem',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
       hour12: false,
-      weekday: 'short'
+      weekday: 'short',
     }).formatToParts(checkin);
 
-    const year = startParts.find(p => p.type === "year")!.value;
-    const month = startParts.find(p => p.type === "month")!.value;
-    const day = startParts.find(p => p.type === "day")!.value;
-    const startHour = Number(startParts.find(p => p.type === "hour")!.value);
-    const endHour = Number(new Intl.DateTimeFormat("en-US", {
-      timeZone: "Asia/Jerusalem",
-      hour: "2-digit",
-      hour12: false,
-    }).format(checkout));
-    const weekday = startParts.find(p => p.type === "weekday")!.value;
+    const year = startParts.find((p) => p.type === 'year')!.value;
+    const month = startParts.find((p) => p.type === 'month')!.value;
+    const day = startParts.find((p) => p.type === 'day')!.value;
+    const startHour = Number(startParts.find((p) => p.type === 'hour')!.value);
+    const endHour = Number(
+      new Intl.DateTimeFormat('en-US', {
+        timeZone: 'Asia/Jerusalem',
+        hour: '2-digit',
+        hour12: false,
+      }).format(checkout)
+    );
+    const weekday = startParts.find((p) => p.type === 'weekday')!.value;
 
     for (let hour = startHour; hour <= endHour; hour++) {
       const fullDate = `${day}, ${month}, ${year}`;
@@ -97,8 +99,7 @@ const fetchDogsCount = async (parkId: string) => {
     return dogsCountByCheckins;
   } catch (error) {
     console.error(
-      `there was a problem fetching dogs count of park ${parkId}:`,
-      error
+      `there was a problem fetching dogs count of park ${parkId}: ${error}`
     );
   }
 };
