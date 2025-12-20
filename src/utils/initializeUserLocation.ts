@@ -11,7 +11,10 @@ export async function initializeUserLocation({
     const userLocation = await getUserLocation();
 
     if (userLocation?.error) {
-      setIsLocationDenied(true);
+      const message =
+        (userLocation.error as { message?: string } | null)?.message ?? '';
+
+      setIsLocationDenied(message === 'PERMISSION_DENIED');
       return;
     }
 
@@ -23,9 +26,6 @@ export async function initializeUserLocation({
       });
     }
   } catch (error) {
-    console.error(
-      `There was an error initialize user lcoation: `,
-      error
-    );
+    console.error(`There was an error initialize user lcoation: `, error);
   }
 }

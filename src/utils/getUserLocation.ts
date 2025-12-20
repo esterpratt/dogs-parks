@@ -9,7 +9,7 @@ let inFlightRequest: Promise<{
 } | null> | null = null;
 
 // Solve the issue of:
-// Android returns an error when 2 requests are been sent at the same time
+// Android returns an error when 2 requests are sent at the same time
 export async function getUserLocation() {
   if (inFlightRequest) {
     return inFlightRequest;
@@ -46,9 +46,8 @@ async function getUserLocationInternal() {
       }
 
       const capPosition = await Geolocation.getCurrentPosition({
-        enableHighAccuracy: true,
-        timeout: 15000,
-        maximumAge: 0,
+        timeout: 6000,
+        maximumAge: 60000,
       });
 
       position = {
@@ -71,6 +70,7 @@ async function getUserLocationInternal() {
     }
   } catch (error) {
     console.error('Error getting location:', error);
+
     position = {
       error,
       position: {
