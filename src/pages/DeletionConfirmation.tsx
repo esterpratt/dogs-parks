@@ -15,7 +15,7 @@ const DeletionConfirmation: React.FC = () => {
 
   useEffect(() => {
     if (!state?.userDeleted) {
-      navigate('/');
+      navigate('/', { replace: true });
     }
   }, [state, navigate]);
 

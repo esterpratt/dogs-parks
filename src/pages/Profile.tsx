@@ -109,7 +109,7 @@ const Profile: React.FC = () => {
   }
 
   if (!isAllowedToViewProfile) {
-    return <Navigate to="/" />;
+    return <Navigate to="/" replace />;
   }
 
   return (

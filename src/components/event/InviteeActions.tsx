@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Check, X } from 'lucide-react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { useCallback } from 'react';
 import { ParkEventInviteeStatus, ParkEventStatus } from '../../types/parkEvent';
 import { useUpdateInvitee } from '../../hooks/api/useUpdateInvitee';

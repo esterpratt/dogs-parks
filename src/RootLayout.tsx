@@ -14,6 +14,7 @@ import { useThemeMode } from './hooks/useThemeMode';
 import { usePushNotifications } from './hooks/usePushNotifications';
 import { useNotificationsRealtime } from './hooks/api/useNotificationsRealtime';
 import { useI18nDirection } from './hooks/useI18nDirection';
+import { useAndroidSystemBack } from './hooks/useAndroidSystemBack';
 
 const RootLayout = () => {
   useUrlHandler();
@@ -22,6 +23,7 @@ const RootLayout = () => {
   usePushNotifications();
   useNotificationsRealtime();
   useI18nDirection();
+  useAndroidSystemBack();
   const keyboardHeight = useKeyboardFix();
   useSafeArea();
   const safeAreaAddition = !isIos()

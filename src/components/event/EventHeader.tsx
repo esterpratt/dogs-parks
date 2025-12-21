@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { MoveLeft, MapPin } from 'lucide-react';
 import { Header } from '../Header';
 import { HeaderImage } from '../HeaderImage';

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useOutletContext } from 'react-router';
+import { useOutletContext } from 'react-router-dom';
 import classnames from 'classnames';
 import { User } from '../types/user';
 import {

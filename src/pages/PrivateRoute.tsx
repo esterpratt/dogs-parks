@@ -10,11 +10,13 @@ const PrivateRoute: React.FC<PropsWithChildren> = ({ children }) => {
   }
 
   if (localStorage.getItem('userDeleted')) {
-    return <Navigate to="/user-deleted" state={{ userDeleted: true }} />;
+    return (
+      <Navigate to="/user-deleted" state={{ userDeleted: true }} replace />
+    );
   }
 
   if (!isLoadingAuthUser && !userId) {
-    return <Navigate to="/" />;
+    return <Navigate to="/" replace />;
   }
 
   return children;

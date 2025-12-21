@@ -61,7 +61,7 @@ const Login = () => {
 
   useEffect(() => {
     if (user) {
-      navigate(`/profile/${user.id}`);
+      navigate(`/profile/${user.id}`, { replace: true });
     }
   }, [user, navigate]);
 

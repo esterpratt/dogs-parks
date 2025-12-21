@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { UserContext } from '../context/UserContext';
 import { fetchEvent } from '../services/events';

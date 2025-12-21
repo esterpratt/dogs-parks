@@ -37,7 +37,7 @@ const DeleteDogModal: React.FC<DeleteDogModalProps> = ({
       revalidate();
     },
     onSettled: () => {
-      navigate(`/profile/${userId}/dogs`);
+      navigate(`/profile/${userId}/dogs`, { replace: true });
     },
   });
 
