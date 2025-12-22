@@ -26,7 +26,7 @@ import { HeaderImage } from '../components/HeaderImage';
 import { PrevLinks } from '../components/PrevLinks';
 import { Button } from '../components/Button';
 import DogIcon from '../assets/dog.svg?react';
-import styles from './ParkDetails.module.scss';
+import styles from './ProfileResolved.module.scss';
 
 interface ProfileResolvedProps {
   user: User;
