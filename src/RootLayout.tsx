@@ -26,9 +26,9 @@ const RootLayout = () => {
   useAndroidSystemBack();
   const keyboardHeight = useKeyboardFix();
   useSafeArea();
-  const safeAreaAddition = !isIos()
-    ? 'var(--safe-area-inset-bottom, 0px)'
-    : '14px';
+  const safeAreaAddition = !isIos() ? '0px' : '14px';
+
+  const appliedKeyboardHeight = isIos() ? keyboardHeight : 0;
 
   // warms up the keyboard pre-focus to avoid a delay when the keyboard is opened for the first time
   useKeyboardPreFocus();
@@ -42,10 +42,10 @@ const RootLayout = () => {
         <Outlet />
         <div
           className={classnames(styles.keyboardHeightContainer, {
-            [styles.withExtraHeight]: !!keyboardHeight,
+            [styles.withExtraHeight]: !!appliedKeyboardHeight,
           })}
           style={{
-            '--keyboard-height': `calc(${keyboardHeight}px + ${safeAreaAddition})`,
+            '--keyboard-height': `calc(${appliedKeyboardHeight}px + ${safeAreaAddition})`,
           }}
         />
       </div>
