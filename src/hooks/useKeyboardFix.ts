@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Keyboard } from '@capacitor/keyboard';
 import { PluginListenerHandle } from '@capacitor/core';
-import { isMobile } from '../utils/platform';
+import { isIos, isMobile } from '../utils/platform';
 
 const useKeyboardFix = () => {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
@@ -24,7 +24,7 @@ const useKeyboardFix = () => {
         requestAnimationFrame(() => {
           focusedElement?.scrollIntoView({
             behavior: 'smooth',
-            block: 'start',
+            block: isIos() ? 'start' : 'nearest',
           });
         });
       });
