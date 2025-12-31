@@ -12,7 +12,7 @@ dist
 dist-ssr
 *.local
 .firebase/
-parks.json
+parks*.json
 test-results
 playwright-report
 
