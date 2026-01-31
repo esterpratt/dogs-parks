@@ -3,13 +3,18 @@ import { MAX_IMAGES } from '../../utils/consts';
 import { Carousel } from '../Carousel';
 import styles from './DogGallery.module.scss';
 
+interface DogGalleryImage {
+  id: string;
+  src: string;
+}
+
 interface DogGalleryProps {
-  images: string[];
+  images: DogGalleryImage[];
   dog: Dog;
   openCameraModal: () => void;
   isSignedInUser: boolean;
-  removeImage?: ((imgPath: string) => void) | null;
-  setPrimaryImage?: ((imgPath: string) => void) | null;
+  removeImage?: ((imageId: string) => void) | null;
+  setPrimaryImage?: ((imageId: string) => void) | null;
   isLoading?: boolean;
 }
 

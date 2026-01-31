@@ -2,6 +2,7 @@ import { User } from '../types/user';
 import { AppError, throwError } from './error';
 import { fetchUsersDogs } from './dogs';
 import { Dog } from '../types/dog';
+import { UserDogRow } from '../types/dogOwnership';
 import { supabase } from './supabase-client';
 import { USER_NOT_FOUND_ERROR } from '../utils/consts';
 
@@ -77,14 +78,29 @@ const fetchUsersWithDogsByIds = async (ids: string[]) => {
     }
 
     const dogsPromise = fetchUsersDogs(ids);
-    const promises: [Promise<User[] | undefined>, Promise<Dog[] | undefined>] =
-      [fetchUsers(ids), dogsPromise];
+    const promises: [
+      Promise<User[] | undefined>,
+      Promise<UserDogRow[] | undefined>,
+    ] = [fetchUsers(ids), dogsPromise];
 
     const [users = [], dogs = []] = await Promise.all(promises);
     const usersWithDogs = users?.map((user) => {
+      const userRows = dogs
+        ? dogs.filter((row) => row.user_id === user.id)
+        : [];
+      const rolePriority: Record<UserDogRow['role'], number> = {
+        PRIMARY_OWNER: 0,
+        EDITOR: 1,
+        VIEWER: 2,
+      };
+      const userDogs = userRows
+        .sort((a, b) => rolePriority[a.role] - rolePriority[b.role])
+        .map((row) => row.dog)
+        .filter((dog): dog is Dog => !!dog);
+
       return {
         ...user,
-        dogs: dogs ? dogs.filter((dog) => dog.owner === user.id) : [],
+        dogs: userDogs,
       };
     });
 

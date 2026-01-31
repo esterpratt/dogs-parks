@@ -12,16 +12,16 @@ interface UploadImageProps {
   upsert?: boolean;
 }
 
+interface UploadImageResult {
+  publicUrl: string;
+  path: string;
+}
+
 interface HandleImageProps {
   bucket: string;
   path: string;
 }
 
-interface MoveImageProps {
-  bucket: string;
-  oldPath: string;
-  newPath: string;
-}
 
 const fetchImagesByDirectory = async ({ path, bucket }: HandleImageProps) => {
   try {
@@ -56,13 +56,13 @@ const deleteImage = async ({ path, bucket }: HandleImageProps) => {
   }
 };
 
-const uploadImage = async ({
+const uploadImageInternal = async ({
   image,
   bucket,
   path,
   name,
   upsert,
-}: UploadImageProps) => {
+}: UploadImageProps): Promise<UploadImageResult | undefined> => {
   try {
     const rawInput = name || (typeof image !== 'string' ? image.name : 'image');
     const baseWithoutExt = rawInput.replace(/\.[^/.]+$/, '');
@@ -111,27 +111,28 @@ const uploadImage = async ({
       }
     }
 
-    return getFileUrl({ bucketName: bucket, fileName: data?.path || '' });
+    const uploadedPath = data?.path || '';
+    return {
+      publicUrl: getFileUrl({ bucketName: bucket, fileName: uploadedPath }),
+      path: uploadedPath,
+    };
   } catch (error) {
     throwError(error);
   }
 };
 
-const moveImage = async ({ bucket, oldPath, newPath }: MoveImageProps) => {
-  try {
-    const { data, error } = await supabase.storage
-      .from(bucket)
-      .move(oldPath, newPath);
-
-    if (error) {
-      throw error;
-    }
-
-    return data;
-  } catch (error) {
-    console.error('Sorry, there was a problem moving the image: ', error);
-    return null;
-  }
+const uploadImage = async (props: UploadImageProps) => {
+  const result = await uploadImageInternal(props);
+  return result?.publicUrl;
 };
 
-export { uploadImage, fetchImagesByDirectory, deleteImage, moveImage };
+const uploadImageWithPath = async (props: UploadImageProps) => {
+  return uploadImageInternal(props);
+};
+
+export {
+  uploadImage,
+  uploadImageWithPath,
+  fetchImagesByDirectory,
+  deleteImage,
+};

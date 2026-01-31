@@ -35,7 +35,6 @@ const UserDogs = () => {
       uploadDogPrimaryImage({
         image: img,
         dogId: newDogId!,
-        upsert: true,
       }),
     onSettled: () => {
       queryClient.invalidateQueries({

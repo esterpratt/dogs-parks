@@ -9,6 +9,7 @@ import {
   uploadDogImage,
   setDogPrimaryImage,
 } from '../../services/dogs';
+import { DogImage } from '../../types/dogOwnership';
 import { DogGallery } from './DogGallery';
 import { queryClient } from '../../services/react-query';
 import { Section } from '../section/Section';
@@ -45,7 +46,17 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
   });
 
   const { mutate: removeImage } = useMutation({
-    mutationFn: (imgPath: string) => deleteDogImage(imgPath),
+    mutationFn: (imageId: string) => {
+      const imageToDelete = (dogImages || []).find(
+        (image) => image.id === imageId,
+      );
+
+      if (!imageToDelete) {
+        throw new Error('missing_image');
+      }
+
+      return deleteDogImage(imageToDelete);
+    },
     onSuccess: async () => {
       queryClient.invalidateQueries({
         queryKey: ['dogImages', dog.id],
@@ -54,7 +65,7 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
   });
 
   const { mutate: setPrimaryImage } = useMutation({
-    mutationFn: (imgPath: string) => setDogPrimaryImage(imgPath, dog.id),
+    mutationFn: (imageId: string) => setDogPrimaryImage(imageId, dog.id),
     onSuccess: async () => {
       queryClient.invalidateQueries({
         queryKey: ['dogImage', dog.id],
@@ -82,6 +93,13 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
     return null;
   }
 
+  const galleryImages = (dogImages || [])
+    .map((image: DogImage) => ({
+      id: image.id,
+      src: image.url || '',
+    }))
+    .filter((image) => !!image.src);
+
   return (
     <>
       <Section
@@ -102,7 +120,7 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
         contentCmp={
           <DogGallery
             isLoading={isPending}
-            images={dogImages ?? []}
+            images={galleryImages}
             dog={dog}
             isSignedInUser={isSignedInUser}
             openCameraModal={openCameraModal}

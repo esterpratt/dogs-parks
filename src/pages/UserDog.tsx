@@ -65,7 +65,6 @@ const UserDog = () => {
       uploadDogPrimaryImage({
         image: img,
         dogId: dogId!,
-        upsert: !!primaryImage,
       }),
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['dogImage', dogId] });

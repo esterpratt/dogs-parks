@@ -2,6 +2,9 @@ import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Plus } from 'lucide-react';
+import { MAX_IMAGES } from '../../utils/consts';
+import { useUploadImage } from '../../hooks/api/useUploadImage';
+import { useTranslation } from 'react-i18next';
 import { fetchAllParkImages, uploadParkImage } from '../../services/parks';
 import { queryClient } from '../../services/react-query';
 import { UserContext } from '../../context/UserContext';
@@ -10,9 +13,6 @@ import { Button } from '../Button';
 import { Carousel } from '../Carousel';
 import { CameraModal } from '../camera/CameraModal';
 import styles from './ParkGalleryContainer.module.scss';
-import { MAX_IMAGES } from '../../utils/consts';
-import { useUploadImage } from '../../hooks/api/useUploadImage';
-import { useTranslation } from 'react-i18next';
 
 interface ParkGalleryContainerProps {
   parkId: string;
@@ -74,7 +74,10 @@ const ParkGalleryContainer: React.FC<ParkGalleryContainerProps> = ({
             <div className={styles.galleryContainer}>
               <Carousel
                 isLoading={isPending}
-                images={parkImages || []}
+                images={(parkImages || []).map((image) => ({
+                  id: image,
+                  src: image,
+                }))}
                 addImage={
                   userId && (parkImages || []).length < MAX_IMAGES
                     ? () => setIsAddImageModalOpen(true)

@@ -13,11 +13,16 @@ import { Image } from './Image';
 import { Loader } from './Loader';
 import styles from './Carousel.module.scss';
 
+interface CarouselImage {
+  id: string;
+  src: string;
+}
+
 interface CarouselProps {
-  images: string[];
+  images: CarouselImage[];
   addImage?: (() => void) | null;
-  removeImage?: ((imgPath: string) => void) | null;
-  setPrimaryImage?: ((imgPath: string) => void) | null;
+  removeImage?: ((imageId: string) => void) | null;
+  setPrimaryImage?: ((imageId: string) => void) | null;
   isLoading?: boolean;
 }
 
@@ -30,6 +35,7 @@ const Carousel: React.FC<CarouselProps> = ({
 }) => {
   const { t } = useTranslation();
   const [imageToEnlarge, setImageToEnlarge] = useState<string>('');
+  const [selectedImageId, setSelectedImageId] = useState<string | null>(null);
   const [isApproveDeleteModalOpen, setIsApproveDeleteModalOpen] =
     useState(false);
   const [isEnlargedImageModalOpen, setIsEnlargeImageModalOpen] =
@@ -50,8 +56,8 @@ const Carousel: React.FC<CarouselProps> = ({
   usePreventVerticalScrollOnHorizontalSwipe(containerRef);
 
   const onDeleteImage = () => {
-    if (removeImage) {
-      removeImage(imageToEnlarge);
+    if (removeImage && selectedImageId) {
+      removeImage(selectedImageId);
     }
     setIsApproveDeleteModalOpen(false);
     setIsEnlargeImageModalOpen(false);
@@ -65,14 +71,15 @@ const Carousel: React.FC<CarouselProps> = ({
     swipeToSlide: true,
   };
 
-  const onClickImage = (img: string) => {
-    setImageToEnlarge(img);
+  const onClickImage = (img: CarouselImage) => {
+    setImageToEnlarge(img.src);
+    setSelectedImageId(img.id);
     setIsEnlargeImageModalOpen(true);
   };
 
   const handleSetPrimaryImage = () => {
-    if (setPrimaryImage) {
-      setPrimaryImage(imageToEnlarge);
+    if (setPrimaryImage && selectedImageId) {
+      setPrimaryImage(selectedImageId);
     }
     setIsEnlargeImageModalOpen(false);
   };
@@ -89,8 +96,8 @@ const Carousel: React.FC<CarouselProps> = ({
           {images.map((img) => (
             <Image
               className={styles.image}
-              src={img}
-              key={img}
+              src={img.src}
+              key={img.id}
               onClick={() => onClickImage(img)}
             />
           ))}
@@ -141,7 +148,12 @@ const Carousel: React.FC<CarouselProps> = ({
         isOpen={isEnlargedImageModalOpen}
         onClose={() => setIsEnlargeImageModalOpen(false)}
         imgSrc={imageToEnlarge}
-        setImgSrc={setImageToEnlarge}
+        setImgSrc={(src) => {
+          setImageToEnlarge(src);
+          if (!src) {
+            setSelectedImageId(null);
+          }
+        }}
         onClickDeleteImage={
           removeImage && (() => setIsApproveDeleteModalOpen(true))
         }
