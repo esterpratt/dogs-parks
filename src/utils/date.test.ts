@@ -10,11 +10,15 @@ import {
 describe('date.ts utils', () => {
   it('getAge returns exact months diff and unit for 1 and 6 months', () => {
     const d1 = new Date();
+    d1.setDate(1);
+    d1.setHours(12, 0, 0, 0);
     d1.setMonth(d1.getMonth() - 1);
     const age1 = getAge(d1);
     expect(age1).toEqual({ diff: 1, unit: 'month' });
 
     const d6 = new Date();
+    d6.setDate(1);
+    d6.setHours(12, 0, 0, 0);
     d6.setMonth(d6.getMonth() - 6);
     const age6 = getAge(d6);
     expect(age6).toEqual({ diff: 6, unit: 'months' });
@@ -96,10 +100,14 @@ describe('date.ts utils', () => {
 
   it('getAge returns 11 months and 12 months boundary like legacy tests', () => {
     const m11 = new Date();
+    m11.setDate(1);
+    m11.setHours(12, 0, 0, 0);
     m11.setMonth(m11.getMonth() - 11);
     expect(getAge(m11)).toEqual({ diff: 11, unit: 'months' });
 
     const m12 = new Date();
+    m12.setDate(1);
+    m12.setHours(12, 0, 0, 0);
     m12.setMonth(m12.getMonth() - 12);
     expect(getAge(m12)).toEqual({ diff: 1, unit: 'year' });
   });
