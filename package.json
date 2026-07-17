@@ -43,6 +43,7 @@
     "capacitor-plugin-safe-area": "4.0.0",
     "classnames": "2.5.1",
     "dayjs": "1.11.11",
+    "firebase": "^11.10.0",
     "geolib": "3.3.4",
     "i18next": "^25.5.2",
     "i18next-http-backend": "^3.0.2",
