@@ -37,7 +37,6 @@ interface GetNotificationPreferencesParams {
 }
 
 interface UpsertDeviceTokenParams {
-  userId: string;
   deviceId: string;
   platform: Platform;
   token: string;
@@ -76,21 +75,19 @@ const normalizeSender = (
 };
 
 const upsertDeviceToken = async (params: UpsertDeviceTokenParams) => {
-  const { userId, deviceId, platform, token } = params;
+  const { deviceId, platform, token } = params;
+
   if (!Capacitor.isNativePlatform()) {
     return;
   }
 
   try {
-    const { error } = await supabase.from('device_tokens').upsert(
-      {
-        user_id: userId,
-        device_id: deviceId,
-        platform,
-        token,
-      },
-      { onConflict: 'device_id' }
-    );
+    // Changed to register the token atomically and resolve the user through auth.uid().
+    const { error } = await supabase.rpc('api_upsert_device_token', {
+      p_device_id: deviceId,
+      p_platform: platform,
+      p_token: token,
+    });
 
     if (error) {
       throw error;

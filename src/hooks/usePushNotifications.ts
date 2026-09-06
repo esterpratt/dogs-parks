@@ -13,6 +13,7 @@ const PLATFORM = Capacitor.getPlatform();
 
 async function getDeviceId(): Promise<string> {
   const existing = await Preferences.get({ key: DEVICE_ID_KEY });
+
   if (existing.value) {
     return existing.value;
   } else {
@@ -35,25 +36,31 @@ function usePushNotifications() {
     let actionListener: PluginListenerHandle | undefined;
 
     async function saveToken(token?: string | null) {
-      if (!token) return;
+      if (!token) {
+        return;
+      }
+
       try {
         const deviceId = await getDeviceId();
+
+        // Changed because the RPC identifies the authenticated user through auth.uid().
         await upsertDeviceToken({
-          userId: userId!,
           deviceId,
           platform: PLATFORM as Platform,
           token,
         });
-      } catch (err) {
-        console.error('[Push] upsertDeviceToken failed:', err);
+      } catch (error) {
+        console.error('[Push] upsertDeviceToken failed:', error);
       }
     }
 
     async function init() {
       try {
         const perm = await FirebaseMessaging.checkPermissions();
+
         if (perm.receive !== 'granted') {
           const req = await FirebaseMessaging.requestPermissions();
+
           if (req.receive !== 'granted') {
             return;
           }
@@ -75,7 +82,7 @@ function usePushNotifications() {
 
         tokenListener = await FirebaseMessaging.addListener(
           'tokenReceived',
-          (e) => saveToken(e.token ?? '')
+          (event) => saveToken(event.token ?? '')
         );
 
         actionListener = await FirebaseMessaging.addListener(
