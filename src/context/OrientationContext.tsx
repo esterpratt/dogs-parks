@@ -44,7 +44,7 @@ export const OrientationProvider = ({ children }: OrientationProviderProps) => {
         const currentOrientation = await ScreenOrientation.orientation();
         const isLandscape = currentOrientation.type.includes('landscape');
         setOrientation(isLandscape ? 'landscape' : 'portrait');
-      } catch (error) {
+      } catch {
         // Already set via media query, no action needed
       }
     };
@@ -65,7 +65,7 @@ export const OrientationProvider = ({ children }: OrientationProviderProps) => {
             setOrientation(isLandscape ? 'landscape' : 'portrait');
           }
         );
-      } catch (error) {
+      } catch {
         // If ScreenOrientation API is not available, fall back to media query listener
         const mediaQuery = window.matchMedia('(orientation: landscape)');
         const handler = (e: MediaQueryListEvent) => {

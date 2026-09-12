@@ -44,7 +44,7 @@ export async function waitForAppReady(page: Page) {
     // Wait for the preload element to be hidden/removed
     // The preload element is removed when React hydrates (see main.tsx)
     await page.waitForSelector('#preload', { state: 'hidden', timeout: 30000 });
-  } catch (error) {
+  } catch {
     // If preload never disappears, log console errors and take a screenshot for debugging
     console.error('Preload element never disappeared. Checking for errors...');
 

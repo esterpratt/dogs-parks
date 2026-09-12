@@ -4,7 +4,7 @@ const getInitialValue = (key: string) => {
   try {
     const item = localStorage.getItem(key);
     return item ? JSON.parse(item) : '';
-  } catch (e) {
+  } catch {
     return '';
   }
 };
