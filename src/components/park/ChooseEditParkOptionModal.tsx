@@ -30,7 +30,8 @@ const ChooseEditParkOptionModal: React.FC<ChooseEditParkOptionModalProps> = ({
   }, [isReportModalOpen, isEditModalOpen, onClose]);
 
   const isEditable =
-    !park.size ||
+    // A missing size category can be completed from the park details modal.
+    park.size_category === null ||
     !park.materials?.length ||
     park.shade === null ||
     park.has_facilities === null;

@@ -12,13 +12,21 @@ enum ParkMaterial {
   DIRT = 'dirt',
 }
 
+// Park size is stored as a user-selected category instead of estimated square meters.
+enum ParkSizeCategory {
+  SMALL = 'small',
+  MEDIUM = 'medium',
+  LARGE = 'large',
+  HUGE = 'huge',
+}
+
 interface Park {
   id: string;
   location: Location;
   name: string;
   city: string;
   address: string;
-  size: number | null;
+  size_category: ParkSizeCategory | null;
   materials: ParkMaterial[] | null;
   shade: number | null;
   has_facilities: boolean | null;
@@ -41,7 +49,7 @@ interface TranslatedPark {
   name: string;
   city: string;
   address: string;
-  size: number | null;
+  size_category: ParkSizeCategory | null;
   materials: ParkMaterial[] | null;
   shade: number | null;
   has_facilities: boolean | null;
@@ -69,9 +77,17 @@ interface NewParkDetails {
   name: string;
   city: string;
   address: string;
-  size: number | null;
+  size_category: ParkSizeCategory | null;
   location: Location;
   user_id: string;
+}
+
+// Only editable general park details are accepted by the update service.
+interface UpdateParkDetails {
+  size_category?: ParkSizeCategory;
+  materials?: ParkMaterial[];
+  shade?: number;
+  has_facilities?: boolean;
 }
 
 export type {
@@ -82,5 +98,6 @@ export type {
   RawParkData,
   Location,
   NewParkDetails,
+  UpdateParkDetails,
 };
-export { ParkMaterial };
+export { ParkMaterial, ParkSizeCategory };

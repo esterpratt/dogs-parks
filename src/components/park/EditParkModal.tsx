@@ -2,10 +2,14 @@ import { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRevalidator } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
-import { Park, ParkMaterial } from '../../types/park';
+import {
+  Park,
+  ParkMaterial,
+  ParkSizeCategory,
+  UpdateParkDetails,
+} from '../../types/park';
 import { updatePark } from '../../services/parks';
 import { queryClient } from '../../services/react-query';
-import { ControlledInput } from '../inputs/ControlledInput';
 import { MultiSelectInputs } from '../inputs/MultiSelectInputs';
 import { RadioInputs } from '../inputs/RadioInputs';
 import { RangeInput } from '../inputs/RangeInput';
@@ -32,7 +36,7 @@ const getBooleanValue = (value: string | null) => {
   return null;
 };
 
-export const EditParkModal: React.FC<EditParksModalProps> = ({
+const EditParkModal: React.FC<EditParksModalProps> = ({
   isOpen,
   onClose,
   park,
@@ -41,15 +45,14 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
   const orientation = useOrientationContext((state) => state.orientation);
   const { revalidate } = useRevalidator();
   const { notify } = useNotification();
-  const [errors, setErrors] = useState<string[] | null>([]);
   const [parkDetails, setParkDetails] = useState<{
     materials: ParkMaterial[] | null;
     hasFacilities: string | null;
-    size: string | null;
+    sizeCategory: ParkSizeCategory | null;
     shade: string | null;
   }>(() => {
     return {
-      size: park.size?.toString() || null,
+      sizeCategory: park.size_category,
       shade: park.shade?.toString() || null,
       hasFacilities:
         park.has_facilities === false
@@ -62,7 +65,7 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
   });
 
   const { mutate } = useMutation({
-    mutationFn: (data: { id: string; updatedData: Partial<Park> }) =>
+    mutationFn: (data: { id: string; updatedData: UpdateParkDetails }) =>
       updatePark(data.id, data.updatedData),
     onMutate: async (data) => {
       onClose();
@@ -92,7 +95,6 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     value?: string | number | string[]
   ) => {
-    setErrors(null);
     setParkDetails((prev) => {
       return {
         ...prev,
@@ -101,30 +103,25 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
     });
   };
 
-  const onSubmit = async () => {
-    const updatedData: {
-      materials: ParkMaterial[];
-      size?: number | null;
-      shade?: number | null;
-      has_facilities?: boolean | null;
-    } = {
-      materials: [],
-      size: null,
-      shade: null,
-      has_facilities: null,
-    };
+  // Stores the selected category as one of the database enum values.
+  const onSizeCategoryChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setParkDetails((previousParkDetails) => {
+      return {
+        ...previousParkDetails,
+        sizeCategory: event.target.value as ParkSizeCategory,
+      };
+    });
+  };
+
+  const onSubmit = () => {
+    const updatedData: UpdateParkDetails = {};
 
     const materials = parkDetails.materials ? parkDetails.materials : [];
     const hasFacilities = getBooleanValue(parkDetails.hasFacilities);
     const shade = parkDetails.shade !== null ? Number(parkDetails.shade) : null;
-    const size = parkDetails.size !== null ? Number(parkDetails.size) : null;
-    const curErrors = [];
 
-    if (size !== null) {
-      if (size < 10) {
-        curErrors.push('Size must be greater than 10');
-      }
-      updatedData.size = size;
+    if (parkDetails.sizeCategory !== null) {
+      updatedData.size_category = parkDetails.sizeCategory;
     }
     if (shade !== null) {
       updatedData.shade = shade;
@@ -134,11 +131,6 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
     }
     if (hasFacilities !== null) {
       updatedData.has_facilities = hasFacilities;
-    }
-
-    if (curErrors.length) {
-      setErrors(curErrors);
-      return;
     }
 
     mutate({ id: park.id, updatedData });
@@ -155,14 +147,34 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
       titleClassName={styles.title}
     >
       <form className={styles.form}>
-        {!park.size && (
-          <ControlledInput
-            type="number"
-            inputMode="numeric"
-            value={parkDetails.size?.toString() || ''}
-            onChange={onInputChange}
-            name="size"
-            label={t('parks.edit.modal.sizeMeters')}
+        {park.size_category === null && (
+          <RadioInputs
+            name="sizeCategory"
+            label={t('parks.edit.modal.sizeCategory')}
+            value={parkDetails.sizeCategory || ''}
+            onOptionChange={onSizeCategoryChange}
+            options={[
+              {
+                id: 'park-size-small',
+                value: ParkSizeCategory.SMALL,
+                label: t('parks.about.sizeLabel.small'),
+              },
+              {
+                id: 'park-size-medium',
+                value: ParkSizeCategory.MEDIUM,
+                label: t('parks.about.sizeLabel.medium'),
+              },
+              {
+                id: 'park-size-large',
+                value: ParkSizeCategory.LARGE,
+                label: t('parks.about.sizeLabel.large'),
+              },
+              {
+                id: 'park-size-huge',
+                value: ParkSizeCategory.HUGE,
+                label: t('parks.about.sizeLabel.huge'),
+              },
+            ]}
           />
         )}
         {!park.materials?.length && (
@@ -217,11 +229,9 @@ export const EditParkModal: React.FC<EditParksModalProps> = ({
             className={styles.range}
           />
         )}
-        <div className={styles.errors}>
-          {!!errors?.length &&
-            errors.map((error) => <span key={error}>{error}</span>)}
-        </div>
       </form>
     </FormModal>
   );
 };
+
+export { EditParkModal };

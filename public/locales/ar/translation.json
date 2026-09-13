@@ -466,7 +466,7 @@
     "breadcrumbAllParks": "لجميع الحدائق",
     "fillDetailsTitle": "املأ تفاصيل الحديقة",
     "placeholderName": "اسم الحديقة",
-    "placeholderSize": "الحجم بالمتر المربع (إذا كان معروفاً)",
+    "sizeCategoryLabel": "حجم الحديقة",
     "placeholderCity": "المدينة *",
     "placeholderAddress": "العنوان *",
     "labelLocation": "موقع الحديقة *",
@@ -641,7 +641,8 @@
       "sizeLabel": {
         "small": "صغير",
         "medium": "متوسط",
-        "large": "كبير"
+        "large": "كبير",
+        "huge": "ضخم"
       },
       "groundOptions": {
         "SAND": "رمل",
@@ -672,7 +673,7 @@
     "edit": {
       "modal": {
         "title": "أضف تفاصيل الحديقة",
-        "sizeMeters": "الحجم (بالمتر)",
+        "sizeCategory": "حجم الحديقة",
         "groundCovering": "نوع الأرض",
         "containsFacilities": "هل توجد مرافق؟",
         "dailyShadeHours": "ساعات الظل اليومية"

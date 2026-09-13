@@ -1,4 +1,9 @@
-import { Park, ParkJSON, RawParkData, TranslatedPark } from '../types/park';
+import {
+  ParkJSON,
+  RawParkData,
+  TranslatedPark,
+  UpdateParkDetails,
+} from '../types/park';
 import type { AppLanguage } from '../types/language';
 import { APP_LANGUAGES } from '../utils/consts';
 import { throwError } from './error';
@@ -169,16 +174,15 @@ const fetchParkWithTranslation = async (
   }
 };
 
-const updatePark = async (parkId: string, parkDetails: Partial<Park>) => {
+const updatePark = async (
+  parkId: string,
+  parkDetails: UpdateParkDetails
+) => {
   try {
+    // Update only the details supplied by the form so existing data is preserved.
     const { error } = await supabase
       .from('parks')
-      .update({
-        size: parkDetails.size,
-        materials: parkDetails.materials,
-        shade: parkDetails.shade,
-        has_facilities: parkDetails.has_facilities,
-      })
+      .update(parkDetails)
       .eq('id', parkId);
 
     if (error) {

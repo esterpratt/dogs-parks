@@ -466,7 +466,7 @@
     "breadcrumbAllParks": "All parks",
     "fillDetailsTitle": "Fill the park details to add it",
     "placeholderName": "Park name",
-    "placeholderSize": "Size in square meters (if known)",
+    "sizeCategoryLabel": "Park size",
     "placeholderCity": "City *",
     "placeholderAddress": "Address *",
     "labelLocation": "Park location *",
@@ -641,7 +641,8 @@
       "sizeLabel": {
         "small": "Small",
         "medium": "Medium",
-        "large": "Large"
+        "large": "Large",
+        "huge": "Huge"
       },
       "groundOptions": {
         "SAND": "Sand",
@@ -672,7 +673,7 @@
     "edit": {
       "modal": {
         "title": "Add the following park details",
-        "sizeMeters": "Size (in meters)",
+        "sizeCategory": "Park size",
         "groundCovering": "Ground covering",
         "containsFacilities": "Contains facilities?",
         "dailyShadeHours": "Daily shade hours"

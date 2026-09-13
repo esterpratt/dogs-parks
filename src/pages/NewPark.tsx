@@ -5,12 +5,17 @@ import { useMutation } from '@tanstack/react-query';
 import { MoveLeft, Plus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { LeafletMouseEvent } from 'leaflet';
-import { Location, NewParkDetails } from '../types/park';
+import {
+  Location,
+  NewParkDetails,
+  ParkSizeCategory,
+} from '../types/park';
 import { createParkSuggestion } from '../services/park-suggestions';
 import { UserContext } from '../context/UserContext';
 import { Button } from '../components/Button';
 import { LocationInput } from '../components/inputs/LocationInput';
 import { Input } from '../components/inputs/Input';
+import { RadioInputs } from '../components/inputs/RadioInputs';
 import { TopModal } from '../components/modals/TopModal';
 import { PrevLinks } from '../components/PrevLinks';
 import styles from './NewPark.module.scss';
@@ -21,7 +26,7 @@ const NewPark: React.FC = () => {
     name: '',
     city: '',
     address: '',
-    size: '',
+    sizeCategory: null as ParkSizeCategory | null,
   });
   const [error, setError] = useState('');
   const { user } = useContext(UserContext);
@@ -43,6 +48,16 @@ const NewPark: React.FC = () => {
       return {
         ...prev,
         [event.target.name]: event.target.value,
+      };
+    });
+  };
+
+  // Stores the approximate category selected instead of an estimated area.
+  const onSizeCategoryChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setParkDetails((previousParkDetails) => {
+      return {
+        ...previousParkDetails,
+        sizeCategory: event.target.value as ParkSizeCategory,
       };
     });
   };
@@ -73,7 +88,7 @@ const NewPark: React.FC = () => {
           long: markerLocation.long,
         },
         user_id: user.id,
-        size: parkDetails.size ? Number(parkDetails.size) : null,
+        size_category: parkDetails.sizeCategory,
       };
 
       mutate(newPark);
@@ -91,7 +106,7 @@ const NewPark: React.FC = () => {
       name: '',
       city: '',
       address: '',
-      size: '',
+      sizeCategory: null,
     });
     setMarkerLocation(null);
   };
@@ -118,13 +133,33 @@ const NewPark: React.FC = () => {
               value={parkDetails.name}
               onChange={onChangeParkDetails}
             />
-            <Input
-              type="number"
-              inputMode="numeric"
-              placeholder={t('newPark.placeholderSize')}
-              name="size"
-              value={parkDetails.size}
-              onChange={onChangeParkDetails}
+            <RadioInputs
+              name="sizeCategory"
+              label={t('newPark.sizeCategoryLabel')}
+              value={parkDetails.sizeCategory || ''}
+              onOptionChange={onSizeCategoryChange}
+              options={[
+                {
+                  id: 'park-size-small',
+                  value: ParkSizeCategory.SMALL,
+                  label: t('parks.about.sizeLabel.small'),
+                },
+                {
+                  id: 'park-size-medium',
+                  value: ParkSizeCategory.MEDIUM,
+                  label: t('parks.about.sizeLabel.medium'),
+                },
+                {
+                  id: 'park-size-large',
+                  value: ParkSizeCategory.LARGE,
+                  label: t('parks.about.sizeLabel.large'),
+                },
+                {
+                  id: 'park-size-huge',
+                  value: ParkSizeCategory.HUGE,
+                  label: t('parks.about.sizeLabel.huge'),
+                },
+              ]}
             />
             <Input
               placeholder={t('newPark.placeholderCity')}

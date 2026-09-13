@@ -466,7 +466,7 @@
     "breadcrumbAllParks": "לכל הגינות",
     "fillDetailsTitle": "מלאו את פרטי הגינה",
     "placeholderName": "שם הגינה",
-    "placeholderSize": "גודל במ\"ר (אם ידוע)",
+    "sizeCategoryLabel": "גודל הגינה",
     "placeholderCity": "עיר *",
     "placeholderAddress": "כתובת *",
     "labelLocation": "מיקום הגינה *",
@@ -641,7 +641,8 @@
       "sizeLabel": {
         "small": "קטן",
         "medium": "בינוני",
-        "large": "גדול"
+        "large": "גדול",
+        "huge": "ענק"
       },
       "groundOptions": {
         "SAND": "חול",
@@ -672,7 +673,7 @@
     "edit": {
       "modal": {
         "title": "הוסיפו את פרטי הגינה",
-        "sizeMeters": "גודל (במטרים)",
+        "sizeCategory": "גודל הגינה",
         "groundCovering": "סוג הקרקע",
         "containsFacilities": "האם יש מתקנים?",
         "dailyShadeHours": "שעות צל ביום"

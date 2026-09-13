@@ -1,23 +1,14 @@
-import { Location } from '../types/park';
+import { NewParkDetails } from '../types/park';
 import { supabase } from './supabase-client';
-
-interface CreateParkSuggestionProps {
-  user_id: string;
-  name: string;
-  size: number | null;
-  city: string;
-  address: string;
-  location: Location;
-}
 
 const createParkSuggestion = async ({
   user_id,
   name,
-  size,
+  size_category,
   city,
   address,
   location,
-}: CreateParkSuggestionProps) => {
+}: NewParkDetails) => {
   try {
     const { error } = await supabase.from('park_suggestions').insert([
       {
@@ -26,7 +17,8 @@ const createParkSuggestion = async ({
         city,
         address,
         location,
-        size: size || null,
+        // Preserve the approximate size selected by the user.
+        size_category,
       },
     ]);
 

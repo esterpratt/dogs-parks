@@ -1,7 +1,7 @@
 import { useContext, useMemo, useState } from 'react';
 import { Dumbbell, Pencil, Ruler, Sprout, Sun } from 'lucide-react';
 import classnames from 'classnames';
-import { Park } from '../../types/park';
+import { Park, ParkSizeCategory } from '../../types/park';
 import { Section } from '../section/Section';
 import { Button } from '../Button';
 import { UserContext } from '../../context/UserContext';
@@ -43,22 +43,23 @@ const getListContentLabels = (values: string[] | null) => {
   return values.slice(0, -1).join(', ') + ' & ' + values[values.length - 1];
 };
 
-const getSizeContent = (value: number | null, t: TFunction) => {
+// Displays the saved category directly without calculating numeric thresholds.
+const getSizeContent = (value: ParkSizeCategory | null, t: TFunction) => {
   let content = NO_CONTENT;
-  if (value) {
-    content = t('parks.about.sizeLabel.medium');
-    if (value >= 100) {
-      content = t('parks.about.sizeLabel.large');
-    } else if (value < 50) {
-      content = t('parks.about.sizeLabel.small');
-    }
+  if (value !== null) {
+    content = t(`parks.about.sizeLabel.${value}`);
   }
   return content;
 };
 
 const ParkGenerals = ({ park }: ParkGeneralsProps) => {
   const { t } = useTranslation();
-  const { size, materials: ground, has_facilities: facilities, shade } = park;
+  const {
+    size_category: sizeCategory,
+    materials: ground,
+    has_facilities: facilities,
+    shade,
+  } = park;
   const { userId } = useContext(UserContext);
   const [isEditParkModalOpen, setIsEditParkModalOpen] = useState(false);
 
@@ -81,7 +82,7 @@ const ParkGenerals = ({ park }: ParkGeneralsProps) => {
     () => [
       {
         label: t('parks.about.size'),
-        data: getSizeContent(size, t),
+        data: getSizeContent(sizeCategory, t),
         icon: (
           <div
             style={{
@@ -152,7 +153,7 @@ const ParkGenerals = ({ park }: ParkGeneralsProps) => {
         ),
       },
     ],
-    [facilities, groundLabels, shade, size, t]
+    [facilities, groundLabels, shade, sizeCategory, t]
   );
 
   const handleClickEditAbout = () => {
