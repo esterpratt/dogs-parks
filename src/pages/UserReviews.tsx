@@ -54,23 +54,23 @@ const UserReviews = () => {
     },
   });
 
-  if (reviews?.length) {
-    reviews.sort((a, b) => {
-      const aDate = a.updated_at
-        ? new Date(a.updated_at).getTime()
-        : new Date(a.created_at).getTime();
-      const bDate = b.update_aAt
-        ? new Date(b.updated_at).getTime()
-        : new Date(b.created_at).getTime();
-      return bDate - aDate;
-    });
-  }
+  // Sort a copy so React Query's cached reviews are not mutated.
+  const sortedReviews = [...(reviews ?? [])].sort((firstReview, secondReview) => {
+    const firstReviewDate = firstReview.updated_at
+      ? new Date(firstReview.updated_at).getTime()
+      : new Date(firstReview.created_at).getTime();
+    const secondReviewDate = secondReview.updated_at
+      ? new Date(secondReview.updated_at).getTime()
+      : new Date(secondReview.created_at).getTime();
+
+    return secondReviewDate - firstReviewDate;
+  });
 
   const onUpdateReview = ({ reviewData, reviewId }: UpdateReviewProps) => {
     mutateReview({ reviewData, reviewId });
   };
 
-  if (!reviews?.length) {
+  if (!sortedReviews.length) {
     return null;
   }
 
@@ -78,7 +78,7 @@ const UserReviews = () => {
     <ReviewModalContextProvider onUpdateReview={onUpdateReview}>
       <div className={styles.container}>
         <div className={styles.title}>{t('userReviews.title')}</div>
-        {reviews.map((review) => {
+        {sortedReviews.map((review) => {
           return (
             <ReviewPreview
               showPark

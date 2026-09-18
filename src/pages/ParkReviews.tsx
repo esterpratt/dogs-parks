@@ -69,17 +69,17 @@ const Reviews: React.FC = () => {
     },
   });
 
-  if (reviews?.length) {
-    reviews.sort((a, b) => {
-      const aDate = a.updated_at
-        ? new Date(a.updated_at).getTime()
-        : new Date(a.created_at).getTime();
-      const bDate = b.update_aAt
-        ? new Date(b.updated_at).getTime()
-        : new Date(b.created_at).getTime();
-      return bDate - aDate;
-    });
-  }
+  // Sort a copy so React Query's cached reviews are not mutated.
+  const sortedReviews = [...(reviews ?? [])].sort((firstReview, secondReview) => {
+    const firstReviewDate = firstReview.updated_at
+      ? new Date(firstReview.updated_at).getTime()
+      : new Date(firstReview.created_at).getTime();
+    const secondReviewDate = secondReview.updated_at
+      ? new Date(secondReview.updated_at).getTime()
+      : new Date(secondReview.created_at).getTime();
+
+    return secondReviewDate - firstReviewDate;
+  });
 
   const onAddReview = (
     reviewData: { title: string; content?: string; rank: number },
@@ -97,7 +97,7 @@ const Reviews: React.FC = () => {
     return <Loader inside className={styles.loader} />;
   }
 
-  if (!isPending && !reviews?.length) {
+  if (!isPending && !sortedReviews.length) {
     return (
       <div className={styles.noReviews}>
         <span className={styles.title}>{t('parkReviews.emptyTitle')}</span>
@@ -126,7 +126,7 @@ const Reviews: React.FC = () => {
       <div className={styles.container}>
         <ReviewsPreview variant="reviews" />
         <ul className={styles.list}>
-          {reviews?.map((review) => (
+          {sortedReviews.map((review) => (
             <li key={review.id} className={styles.item}>
               <ReviewPreview review={review} userId={userId} />
             </li>
