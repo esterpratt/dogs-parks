@@ -1,46 +1,66 @@
-import { useContext } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useMutation } from '@tanstack/react-query';
 import { useRevalidator } from 'react-router-dom';
 import {
   updateDog,
   EditDogProps as UpdateDogProps,
 } from '../../services/dogs';
-import { queryClient } from "../../services/react-query";
-import { useNotification } from "../../context/NotificationContext";
-import { UserContext } from "../../context/UserContext";
-import { Dog } from "../../types/dog";
+import { queryClient } from '../../services/react-query';
+import { useNotification } from '../../context/NotificationContext';
+import { UserContext } from '../../context/UserContext';
+import { Dog } from '../../types/dog';
 
 const useUpdateDog = () => {
+  const { t } = useTranslation();
   const { notify } = useNotification();
   const { revalidate } = useRevalidator();
   const { userId } = useContext(UserContext);
 
-  const { mutate: mutateDog } = useMutation({
+  const { mutate: mutateDog, isPending: isPendingUpdateDog } = useMutation({
     mutationFn: (data: UpdateDogProps) =>
-      updateDog({ dogId: data.dogId, dogDetails: data.dogDetails }),
-    onMutate: async (vars) => {
-      await queryClient.cancelQueries({ queryKey: ['dogs', vars.dogId] });
-      const prevDog = queryClient.getQueryData<Dog>(['dogs', vars.dogId]);
-      queryClient.setQueryData(['dogs', vars.dogId], {
-        ...prevDog,
-        ...vars.dogDetails,
+      updateDog({
+        dogId: data.dogId,
+        dogDetails: data.dogDetails,
+      }),
+    onMutate: async (variables) => {
+      await queryClient.cancelQueries({
+        queryKey: ['dogs', variables.dogId],
       });
-      return { prevDog };
+
+      const previousDog = queryClient.getQueryData<Dog>([
+        'dogs',
+        variables.dogId,
+      ]);
+
+      queryClient.setQueryData(['dogs', variables.dogId], {
+        ...previousDog,
+        ...variables.dogDetails,
+      });
+
+      return { previousDog };
     },
-    onError: (_error, vars, context) => {
-      queryClient.setQueryData(['dogs', vars.dogId], context?.prevDog);
+    onError: (_error, variables, context) => {
+      // Restore the cached dog and expose the failed update to the user.
+      queryClient.setQueryData(
+        ['dogs', variables.dogId],
+        context?.previousDog
+      );
+      notify(t('toasts.generic.error'), true);
     },
     onSuccess: () => {
       notify();
     },
-    onSettled: (_data, _error, vars) => {
-      queryClient.invalidateQueries({ queryKey: ['dogs', vars.dogId] });
+    onSettled: (_data, _error, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ['dogs', variables.dogId],
+      });
       queryClient.invalidateQueries({ queryKey: ['dogs', userId] });
       revalidate();
     },
   });
 
-  return { mutateDog };
-}
+  return { mutateDog, isPendingUpdateDog };
+};
 
-export { useUpdateDog }
+export { useUpdateDog };

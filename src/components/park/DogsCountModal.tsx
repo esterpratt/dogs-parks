@@ -10,13 +10,16 @@ import { useNotification } from '../../context/NotificationContext';
 import { FormModal } from '../modals/FormModal';
 import styles from './DogsCountModal.module.scss';
 
-const DogsCountModal: React.FC<{
+interface DogsCountModalProps {
   parkId: string;
   isOpen: boolean;
   onClose: () => void;
   showOnlyCount?: boolean;
   title?: string;
-}> = ({ parkId, isOpen, onClose, showOnlyCount, title }) => {
+}
+
+const DogsCountModal: React.FC<DogsCountModalProps> = (props) => {
+  const { parkId, isOpen, onClose, showOnlyCount, title } = props;
   const { notify } = useNotification();
   const { t } = useTranslation();
 
@@ -24,30 +27,59 @@ const DogsCountModal: React.FC<{
     useLocalStorage('hideDogsModal');
   const [shouldHideDogsModalLocal, setShouldHideDogsModalLocal] =
     useState<boolean>(shouldHideDogsModal ?? false);
-  const [dogsCount, setDogsCount] = useState<string>('');
+  const [dogsCount, setDogsCount] = useState('');
 
-  const { mutate: addDogCountReport } = useMutation({
-    mutationFn: (dogsCount: number) =>
+  const resetAndClose = () => {
+    setDogsCount('');
+    onClose();
+  };
+
+  const handleCancel = () => {
+    setDogsCount('');
+    setShouldHideDogsModalLocal(shouldHideDogsModal ?? false);
+    onClose();
+  };
+
+  const { mutate: addDogCountReport, isPending } = useMutation({
+    mutationFn: (reportedDogsCount: number) =>
       reportDogsCount({
         parkId,
-        dogsCount,
+        dogsCount: reportedDogsCount,
       }),
-    onSuccess: async () => {
+    onError: () => {
+      notify(t('toasts.generic.error'), true);
+    },
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['dogsCount', parkId],
       });
+
+      if (shouldHideDogsModalLocal) {
+        setShouldHideDogsModal(true);
+      }
+
+      // Close only after the count report was saved successfully.
       notify();
+      resetAndClose();
     },
   });
 
-  const onSave = async () => {
-    if (shouldHideDogsModalLocal) {
-      setShouldHideDogsModal(true);
+  const onSave = () => {
+    if (isPending) {
+      return;
     }
-    if (dogsCount) {
-      addDogCountReport(Number(dogsCount));
+
+    if (!dogsCount) {
+      if (shouldHideDogsModalLocal) {
+        setShouldHideDogsModal(true);
+      }
+
+      // No server write is needed when only the local preference changed.
+      resetAndClose();
+      return;
     }
-    onClose();
+
+    addDogCountReport(Number(dogsCount));
   };
 
   return (
@@ -55,9 +87,10 @@ const DogsCountModal: React.FC<{
       saveText={t('common.actions.submit')}
       title={title}
       open={isOpen}
-      onClose={() => onClose()}
+      onClose={handleCancel}
       onSave={onSave}
       className={styles.modal}
+      isPending={isPending}
       disabled={
         !dogsCount &&
         ((!showOnlyCount && !shouldHideDogsModalLocal) || showOnlyCount)
@@ -80,7 +113,11 @@ const DogsCountModal: React.FC<{
           <Checkbox
             id="show"
             label={t('common.actions.dontShowAgain')}
-            onChange={() => setShouldHideDogsModalLocal((prev) => !prev)}
+            onChange={() =>
+              setShouldHideDogsModalLocal(
+                (previousShouldHideValue) => !previousShouldHideValue
+              )
+            }
             isChecked={shouldHideDogsModalLocal}
           />
           <span>{t('parks.busyHours.modal.hintSuffix')}</span>

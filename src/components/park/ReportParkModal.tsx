@@ -15,41 +15,57 @@ interface ReportParkModalProps {
   parkId: string;
 }
 
-export const ReportParkModal: React.FC<ReportParkModalProps> = ({
-  open,
-  onClose,
-  parkId,
-}) => {
+const ReportParkModal: React.FC<ReportParkModalProps> = (props) => {
+  const { open, onClose, parkId } = props;
   const { t } = useTranslation();
   const { userId } = useContext(UserContext);
   const orientation = useOrientationContext((state) => state.orientation);
   const { notify } = useNotification();
   const [text, setText] = useState('');
-  const { mutate } = useMutation({
+
+  const handleClose = () => {
+    setText('');
+    onClose();
+  };
+
+  const { mutate, isPending } = useMutation({
     mutationFn: () =>
-      createParkReport({ user_id: userId!, park_id: parkId, text }),
-    onSuccess: () => notify(),
+      createParkReport({
+        user_id: userId!,
+        park_id: parkId,
+        text,
+      }),
+    onError: () => {
+      notify(t('toasts.generic.error'), true);
+    },
+    onSuccess: () => {
+      // Reset and close only after the report was persisted.
+      notify();
+      handleClose();
+    },
   });
 
   const onChangeText = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setText(event.target.value);
   };
 
-  const onSubmitReport = async () => {
-    onClose();
-    if (text) {
-      mutate();
+  const onSubmitReport = () => {
+    if (!text || isPending) {
+      return;
     }
+
+    mutate();
   };
 
   return (
     <FormModal
       saveText={t('common.actions.report')}
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       onSave={onSubmitReport}
       className={styles.modal}
       disabled={!text}
+      isPending={isPending}
     >
       <TextArea
         rows={orientation === 'landscape' ? 3 : 12}
@@ -63,3 +79,5 @@ export const ReportParkModal: React.FC<ReportParkModalProps> = ({
     </FormModal>
   );
 };
+
+export { ReportParkModal };

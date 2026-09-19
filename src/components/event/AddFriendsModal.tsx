@@ -1,5 +1,5 @@
-import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 import { User } from '../../types/user';
 import { useNotification } from '../../context/NotificationContext';
@@ -19,17 +19,20 @@ interface AddFriendsModalProps {
 
 const AddFriendsModal = (props: AddFriendsModalProps) => {
   const { notInvitedFriends, eventId, userId, open, onClose } = props;
-
   const { t } = useTranslation();
   const { notify } = useNotification();
-
   const [addedFriends, setAddedFriends] = useState<User[]>([]);
+
+  const handleClose = () => {
+    setAddedFriends([]);
+    onClose();
+  };
 
   const { mutate: saveAddedFriends, isPending: isPendingAddFriends } =
     useMutation({
       mutationFn: () =>
         addEventInvitees({
-          eventId: eventId,
+          eventId,
           inviteeIds: addedFriends.map((friend) => friend.id),
         }),
       onError: () => {
@@ -43,21 +46,28 @@ const AddFriendsModal = (props: AddFriendsModalProps) => {
         queryClient.invalidateQueries({
           queryKey: ['event', eventId],
         });
+
+        // Preserve the selection on failure and reset it only after success.
+        handleClose();
       },
-      onSettled: onClose,
     });
 
   const handleSaveEvent = () => {
+    if (isPendingAddFriends || !addedFriends.length) {
+      return;
+    }
+
     saveAddedFriends();
   };
 
   return (
     <FormModal
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       onSave={handleSaveEvent}
       saveText={t('event.save.buttonTxt')}
-      disabled={!addedFriends.length || isPendingAddFriends}
+      disabled={!addedFriends.length}
+      isPending={isPendingAddFriends}
       className={styles.modalContainer}
       formContainerClassName={styles.formContainer}
       formClassName={styles.form}

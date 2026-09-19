@@ -46,9 +46,7 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
   ];
 
   const [minutesOffset, setMinutesOffset] = useState(OFFSET_OPTIONS[0].value);
-
   const { friends } = useFetchFriends({ userId });
-
   const normalizedForConflictEvents = useEventSlots(userId, isOpen);
 
   const conflictedEvents = useMemo(() => {
@@ -62,6 +60,14 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
     });
   }, [minutesOffset, normalizedForConflictEvents, isOpen]);
 
+  const handleClose = () => {
+    setInvitedFriends([]);
+    setVisibility(ParkEventVisibility.FRIENDS_SELECTED);
+    setMessage('');
+    setMinutesOffset('0');
+    onClose();
+  };
+
   const { mutate: createEvent, isPending } = useMutation({
     mutationFn: () =>
       createParkEvent({
@@ -70,7 +76,7 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
         inviteeIds:
           visibility === ParkEventVisibility.FRIENDS_ALL
             ? friends?.map((friend) => friend.id)
-            : invitedFriends?.map((friend) => friend.id),
+            : invitedFriends.map((friend) => friend.id),
         message,
         presetOffsetMinutes: Number(minutesOffset),
       }),
@@ -79,12 +85,12 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
       queryClient.invalidateQueries({
         queryKey: ['events', 'organized', userId],
       });
+
+      // Close and reset only after the event was created.
+      handleClose();
     },
     onError: () => {
-      notify(t('parkInvite.messageError'));
-    },
-    onSettled: () => {
-      onClose();
+      notify(t('parkInvite.messageError'), true);
     },
   });
 
@@ -98,26 +104,29 @@ const ParkInviteModal = (props: ParkInviteModalProps) => {
 
   const handleCreateEvent = () => {
     if (
-      parkId &&
-      (visibility === ParkEventVisibility.FRIENDS_ALL ||
-        !!invitedFriends.length)
+      isPending ||
+      !parkId ||
+      (visibility === ParkEventVisibility.FRIENDS_SELECTED &&
+        !invitedFriends.length)
     ) {
-      createEvent();
+      return;
     }
+
+    createEvent();
   };
 
   return (
     <FormModal
       open={isOpen}
-      onClose={onClose}
+      onClose={handleClose}
       onSave={handleCreateEvent}
       saveText={t('parkInvite.modal.buttonText')}
       disabled={
         (!invitedFriends.length &&
           visibility === ParkEventVisibility.FRIENDS_SELECTED) ||
-        !parkId ||
-        isPending
+        !parkId
       }
+      isPending={isPending}
       title={t('parkInvite.modal.title')}
       className={styles.modal}
     >

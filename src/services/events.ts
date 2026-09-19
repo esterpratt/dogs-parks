@@ -49,8 +49,8 @@ const createParkEvent = async (params: CreateParkEventParams) => {
 
     return event;
   } catch (error) {
-    console.error(`there was an error while creating the event: ${error}`);
-    return null;
+    // Write failures must reach React Query so the event modal stays open.
+    throwError(error);
   }
 };
 

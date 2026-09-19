@@ -22,21 +22,22 @@ interface FormModalProps {
   title?: string;
 }
 
-const FormModal = ({
-  open,
-  onClose,
-  children,
-  className,
-  formContainerClassName,
-  formClassName,
-  titleClassName,
-  height,
-  onSave,
-  saveText,
-  disabled,
-  isPending,
-  title,
-}: FormModalProps) => {
+const FormModal = (props: FormModalProps) => {
+  const {
+    open,
+    onClose,
+    children,
+    className,
+    formContainerClassName,
+    formClassName,
+    titleClassName,
+    height,
+    onSave,
+    saveText,
+    disabled,
+    isPending,
+    title,
+  } = props;
   const { t } = useTranslation();
 
   // Keep the modal open while the server is processing the submitted data.
@@ -69,12 +70,9 @@ const FormModal = ({
             <Button
               disabled={disabled || isPending}
               onClick={onSave}
-              className={classnames(styles.button, {
-                // Keep the primary background visible behind the loading indicator.
-                [styles.pending]: isPending,
-              })}
+              className={styles.button}
             >
-              {/* Show consistent feedback inside the save button during submission. */}
+              {/* Match the established loading behavior of event action buttons. */}
               {isPending ? (
                 <Loader
                   variant="secondary"

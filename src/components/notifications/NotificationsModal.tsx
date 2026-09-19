@@ -1,7 +1,8 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useOrientationContext } from '../../context/OrientationContext';
+import { useNotification } from '../../context/NotificationContext';
 import { UserContext } from '../../context/UserContext';
 import { FormModal } from '../modals/FormModal';
 import {
@@ -26,11 +27,10 @@ interface NotificationPreferences {
   parkInviteCancelled: boolean;
 }
 
-export const NotificationsModal: React.FC<NotificationsModalProps> = ({
-  isOpen,
-  onClose,
-}) => {
+const NotificationsModal: React.FC<NotificationsModalProps> = (props) => {
+  const { isOpen, onClose } = props;
   const { t } = useTranslation();
+  const { notify } = useNotification();
   const [muteAll, setMuteAll] = useState(false);
   const [preferences, setPreferences] = useState<NotificationPreferences>({
     friendRequests: true,
@@ -68,10 +68,12 @@ export const NotificationsModal: React.FC<NotificationsModalProps> = ({
     key: keyof NotificationPreferences,
     value: boolean
   ) => {
-    setPreferences((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
+    setPreferences((previousPreferences) => {
+      return {
+        ...previousPreferences,
+        [key]: value,
+      };
+    });
   };
 
   const { mutate: mutateNotificationsPreferences, isPending } = useMutation({
@@ -86,31 +88,36 @@ export const NotificationsModal: React.FC<NotificationsModalProps> = ({
         park_invite_decline: preferences.parkInviteDecline,
         park_invite_cancelled: preferences.parkInviteCancelled,
       }),
+    onError: () => {
+      notify(t('toasts.generic.error'), true);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['notification-preferences', userId],
       });
+
+      // Close only after the server confirms the updated preferences.
       onClose();
     },
   });
 
-  const onSubmit = async () => {
-    mutateNotificationsPreferences();
-  };
+  const onSubmit = () => {
+    if (isPending) {
+      return;
+    }
 
-  const handleClose = () => {
-    onClose();
+    mutateNotificationsPreferences();
   };
 
   return (
     <FormModal
       open={isOpen}
-      onClose={handleClose}
+      onClose={onClose}
       height={orientation === 'landscape' ? 98 : null}
       onSave={onSubmit}
+      isPending={isPending}
       className={styles.modal}
       title={t('notifications.modal.title')}
-      disabled={isPending}
     >
       <form className={styles.form}>
         <div className={styles.sectionGroup}>
@@ -196,3 +203,5 @@ export const NotificationsModal: React.FC<NotificationsModalProps> = ({
     </FormModal>
   );
 };
+
+export { NotificationsModal };

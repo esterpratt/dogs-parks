@@ -79,8 +79,8 @@ const deleteDog = async (id: string) => {
       throw error;
     }
   } catch (error) {
-    console.error(`there was an error deleting dog with id ${id}: ${error}`);
-    return null;
+    // Prevent the deletion modal from treating a failed RPC as success.
+    throwError(error);
   }
 };
 
@@ -95,6 +95,7 @@ const fetchDogs = async (ids: string[]) => {
     if (error) {
       throw error;
     }
+
     return dogs;
   } catch (error) {
     throwError(error);
@@ -140,12 +141,13 @@ const fetchUsersDogs = async (userIds: string[]) => {
 const uploadDogImage = async (image: File | string, dogId: string) => {
   try {
     const userId = await getDogOwnerId(dogId);
-    const res = await uploadImage({
+    const response = await uploadImage({
       image,
       path: `${userId}/dogs/${dogId}/other/`,
       bucket: 'users',
     });
-    return res;
+
+    return response;
   } catch (error) {
     throwError(error);
   }
@@ -162,14 +164,15 @@ const uploadDogPrimaryImage = async ({
 }) => {
   try {
     const userId = await getDogOwnerId(dogId);
-    const res = await uploadImage({
+    const response = await uploadImage({
       image,
       bucket: 'users',
       path: `${userId}/dogs/${dogId}/primary`,
       name: 'primary',
       upsert,
     });
-    return res;
+
+    return response;
   } catch (error) {
     throwError(error);
   }
@@ -179,11 +182,12 @@ const fetchDogPrimaryImage = async (dogId: string) => {
   try {
     const userId = await getDogOwnerId(dogId);
 
-    const res = await fetchImagesByDirectory({
+    const response = await fetchImagesByDirectory({
       bucket: 'users',
       path: `${userId}/dogs/${dogId}/primary/`,
     });
-    return res?.[0] ?? null;
+
+    return response?.[0] ?? null;
   } catch (error) {
     console.error(
       `there was a problem fetching primary image for dog ${dogId}: ${error}`
@@ -196,11 +200,12 @@ const fetchAllDogImages = async (dogId: string) => {
   try {
     const userId = await getDogOwnerId(dogId);
 
-    const res = await fetchImagesByDirectory({
+    const response = await fetchImagesByDirectory({
       bucket: 'users',
       path: `${userId}/dogs/${dogId}/other/`,
     });
-    return res;
+
+    return response;
   } catch (error) {
     console.error(
       `there was a problem fetching images for dog ${dogId}: ${error}`
@@ -209,10 +214,13 @@ const fetchAllDogImages = async (dogId: string) => {
   }
 };
 
-const movePrimaryImageToOther = async (imgPath: string, dogId: string) => {
+const movePrimaryImageToOther = async (imagePath: string, dogId: string) => {
   try {
     const userId = await getDogOwnerId(dogId);
-    const imageName = imgPath.split('primary/')[1].slice('primary-'.length);
+    const imageName = imagePath
+      .split('primary/')[1]
+      .slice('primary-'.length);
+
     if (imageName) {
       const newPath = `${userId}/dogs/${dogId}/other/${imageName}`;
       const oldPath = `${userId}/dogs/${dogId}/primary/primary-${imageName}`;
@@ -222,9 +230,9 @@ const movePrimaryImageToOther = async (imgPath: string, dogId: string) => {
         oldPath,
         newPath,
       });
-    } else {
-      return null;
     }
+
+    return null;
   } catch (error) {
     console.error(
       `there was a problem moving primary image for dog ${dogId}: ${error}`
@@ -233,10 +241,13 @@ const movePrimaryImageToOther = async (imgPath: string, dogId: string) => {
   }
 };
 
-const moveOtherImageToPrimary = async (imgPath: string, dogId: string) => {
+const moveOtherImageToPrimary = async (
+  imagePath: string,
+  dogId: string
+) => {
   try {
     const userId = await getDogOwnerId(dogId);
-    const imageName = imgPath.split('other/')[1];
+    const imageName = imagePath.split('other/')[1];
     const newPath = `${userId}/dogs/${dogId}/primary/primary-${imageName}`;
     const oldPath = `${userId}/dogs/${dogId}/other/${imageName}`;
 
@@ -253,18 +264,21 @@ const moveOtherImageToPrimary = async (imgPath: string, dogId: string) => {
   }
 };
 
-const setDogPrimaryImage = async (imgPath: string, dogId: string) => {
+const setDogPrimaryImage = async (imagePath: string, dogId: string) => {
   try {
-    const curPrimaryImage = await fetchDogPrimaryImage(dogId);
-    const promises = [moveOtherImageToPrimary(imgPath, dogId)];
+    const currentPrimaryImage = await fetchDogPrimaryImage(dogId);
+    const promises = [moveOtherImageToPrimary(imagePath, dogId)];
 
-    if (curPrimaryImage) {
-      promises.push(movePrimaryImageToOther(curPrimaryImage, dogId));
+    if (currentPrimaryImage) {
+      promises.push(
+        movePrimaryImageToOther(currentPrimaryImage, dogId)
+      );
     }
 
-    const [newPrimaryRes, oldPrimaryRes] = await Promise.all(promises);
+    const [newPrimaryResponse, oldPrimaryResponse] =
+      await Promise.all(promises);
 
-    if (!newPrimaryRes || !oldPrimaryRes) {
+    if (!newPrimaryResponse || !oldPrimaryResponse) {
       throw new Error('Error moving images');
     }
   } catch (error) {
@@ -274,8 +288,8 @@ const setDogPrimaryImage = async (imgPath: string, dogId: string) => {
   }
 };
 
-const deleteDogImage = async (imgPath: string) => {
-  const relevantPath = removeBasePath(imgPath, 'users/');
+const deleteDogImage = async (imagePath: string) => {
+  const relevantPath = removeBasePath(imagePath, 'users/');
   return deleteImage({ bucket: 'users', path: relevantPath });
 };
 

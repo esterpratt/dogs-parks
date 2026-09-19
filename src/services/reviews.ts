@@ -95,7 +95,7 @@ const fetchReview = async (reviewId: string) => {
 
 const updateReview = async ({ reviewId, reviewData }: UpdateReviewProps) => {
   try {
-    const { data: reviews, error } = await supabase
+    const { data: review, error } = await supabase
       .from('reviews')
       .update({ ...reviewData })
       .eq('id', reviewId)
@@ -106,10 +106,10 @@ const updateReview = async ({ reviewId, reviewData }: UpdateReviewProps) => {
       throw error;
     }
 
-    return reviews;
+    return review;
   } catch (error) {
-    console.error(`there was an error updating review ${reviewId}: ${error}`);
-    return null;
+    // Allow the review modal to roll back and remain open after failure.
+    throwError(error);
   }
 };
 
@@ -135,10 +135,8 @@ const createReview = async ({ parkId, userId, reviewData }: AddReviewProps) => {
 
     return review;
   } catch (error) {
-    console.error(
-      `there was an error creating review for park ${parkId}: ${error}`
-    );
-    return null;
+    // A failed insert must reject instead of being treated as a successful null result.
+    throwError(error);
   }
 };
 
@@ -152,13 +150,14 @@ const reportReview = async ({
   try {
     const { error } = await supabase
       .from('review_reports')
-      .insert([{ review_id: reviewId, reason: reason }]);
+      .insert([{ review_id: reviewId, reason }]);
 
     if (error) {
       throw error;
     }
   } catch (error) {
-    console.error(`there was an error reporting review ${reviewId}: ${error}`);
+    // Keep the report modal open when the report was not persisted.
+    throwError(error);
   }
 };
 

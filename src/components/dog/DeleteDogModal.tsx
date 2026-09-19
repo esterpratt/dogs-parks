@@ -1,16 +1,17 @@
 import { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useRevalidator } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { Trash2, X } from 'lucide-react';
 import { Dog } from '../../types/dog';
 import { UserContext } from '../../context/UserContext';
+import { useNotification } from '../../context/NotificationContext';
 import { deleteDog } from '../../services/dogs';
 import { queryClient } from '../../services/react-query';
 import { Button } from '../Button';
 import { Loader } from '../Loader';
 import { TopModal } from '../modals/TopModal';
 import styles from './DeleteDogModal.module.scss';
-import { useTranslation } from 'react-i18next';
 
 interface DeleteDogModalProps {
   isOpen: boolean;
@@ -18,31 +19,52 @@ interface DeleteDogModalProps {
   dog: Dog;
 }
 
-const DeleteDogModal: React.FC<DeleteDogModalProps> = ({
-  isOpen,
-  onClose,
-  dog,
-}) => {
+const DeleteDogModal: React.FC<DeleteDogModalProps> = (props) => {
+  const { isOpen, onClose, dog } = props;
   const { t } = useTranslation();
+  const { notify } = useNotification();
   const { userId } = useContext(UserContext);
   const { revalidate } = useRevalidator();
   const navigate = useNavigate();
 
-  const { mutateAsync: onDeleteDog, isPending } = useMutation({
+  const { mutate: deleteSelectedDog, isPending } = useMutation({
     mutationFn: (id: string) => deleteDog(id),
-    onSuccess: async () => {
+    onError: () => {
+      notify(t('toasts.generic.error'), true);
+    },
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['dogs', userId],
       });
       revalidate();
-    },
-    onSettled: () => {
+
+      // Navigate away only after the delete RPC succeeds.
       navigate(`/profile/${userId}/dogs`, { replace: true });
     },
   });
 
+  const handleClose = () => {
+    if (isPending) {
+      return;
+    }
+
+    onClose();
+  };
+
+  const handleDelete = () => {
+    if (isPending) {
+      return;
+    }
+
+    deleteSelectedDog(dog.id);
+  };
+
   return (
-    <TopModal open={isOpen} onClose={onClose} className={styles.approveModal}>
+    <TopModal
+      open={isOpen}
+      onClose={handleClose}
+      className={styles.approveModal}
+    >
       <div className={styles.approveContent}>
         <div>
           <span>
@@ -55,7 +77,7 @@ const DeleteDogModal: React.FC<DeleteDogModalProps> = ({
       <div className={styles.buttonsContainer}>
         <Button
           variant="primary"
-          onClick={() => onDeleteDog(dog.id)}
+          onClick={handleDelete}
           className={styles.modalButton}
           disabled={isPending}
         >
@@ -70,7 +92,7 @@ const DeleteDogModal: React.FC<DeleteDogModalProps> = ({
         </Button>
         <Button
           variant="secondary"
-          onClick={onClose}
+          onClick={handleClose}
           className={styles.modalButton}
           disabled={isPending}
         >

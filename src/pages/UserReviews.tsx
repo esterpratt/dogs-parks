@@ -22,30 +22,40 @@ const UserReviews = () => {
     queryFn: () => fetchUserReviews(user.id),
   });
 
-  const { mutate: mutateReview } = useMutation({
+  const { mutateAsync: mutateReview } = useMutation({
     mutationFn: (data: { reviewData: ReviewData; reviewId: string }) =>
-      updateReview({ reviewData: data.reviewData, reviewId: data.reviewId }),
+      updateReview({
+        reviewData: data.reviewData,
+        reviewId: data.reviewId,
+      }),
     onMutate: async (data) => {
       await queryClient.cancelQueries({ queryKey: ['reviews', user.id] });
-      const prevReviews = queryClient.getQueryData<Review[]>([
+      const previousReviews = queryClient.getQueryData<Review[]>([
         'reviews',
         user.id,
       ]);
-      const review = prevReviews?.find((review) => review.id === data.reviewId);
-      const updatedReview = { ...review, ...data?.reviewData };
+      const review = previousReviews?.find(
+        (reviewItem) => reviewItem.id === data.reviewId
+      );
+      const updatedReview = { ...review, ...data.reviewData };
+
       queryClient.setQueryData(
         ['reviews', user.id],
         [
-          ...(prevReviews ?? []).filter(
-            (review) => review.id !== data.reviewId
+          ...(previousReviews ?? []).filter(
+            (reviewItem) => reviewItem.id !== data.reviewId
           ),
           updatedReview,
         ]
       );
-      return { prevReviews, updatedReview };
+
+      return { previousReviews, updatedReview };
     },
     onError: (_error, _data, context) => {
-      queryClient.setQueryData(['reviews', user.id], context?.prevReviews);
+      queryClient.setQueryData(
+        ['reviews', user.id],
+        context?.previousReviews
+      );
     },
     onSettled: (_data, _error, _variables, context) => {
       const parkId = context?.updatedReview.park_id;
@@ -55,19 +65,21 @@ const UserReviews = () => {
   });
 
   // Sort a copy so React Query's cached reviews are not mutated.
-  const sortedReviews = [...(reviews ?? [])].sort((firstReview, secondReview) => {
-    const firstReviewDate = firstReview.updated_at
-      ? new Date(firstReview.updated_at).getTime()
-      : new Date(firstReview.created_at).getTime();
-    const secondReviewDate = secondReview.updated_at
-      ? new Date(secondReview.updated_at).getTime()
-      : new Date(secondReview.created_at).getTime();
+  const sortedReviews = [...(reviews ?? [])].sort(
+    (firstReview, secondReview) => {
+      const firstReviewDate = firstReview.updated_at
+        ? new Date(firstReview.updated_at).getTime()
+        : new Date(firstReview.created_at).getTime();
+      const secondReviewDate = secondReview.updated_at
+        ? new Date(secondReview.updated_at).getTime()
+        : new Date(secondReview.created_at).getTime();
 
-    return secondReviewDate - firstReviewDate;
-  });
+      return secondReviewDate - firstReviewDate;
+    }
+  );
 
-  const onUpdateReview = ({ reviewData, reviewId }: UpdateReviewProps) => {
-    mutateReview({ reviewData, reviewId });
+  const onUpdateReview = (updateReviewProps: UpdateReviewProps) => {
+    return mutateReview(updateReviewProps);
   };
 
   if (!sortedReviews.length) {

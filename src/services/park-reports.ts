@@ -1,3 +1,4 @@
+import { throwError } from './error';
 import { supabase } from './supabase-client';
 
 interface CreateParkReportProps {
@@ -20,7 +21,8 @@ const createParkReport = async ({
       throw error;
     }
   } catch (error) {
-    console.error(`there was an error while reporting park: ${error}`);
+    // Allow the report modal to display a real failure state.
+    throwError(error);
   }
 };
 

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import classnames from 'classnames';
 import { useNotification } from '../../context/NotificationContext';
 import {
@@ -6,11 +7,10 @@ import {
   ParkCondition,
   ParkConditionStatus,
 } from '../../types/parkCondition';
-import { FormModal } from '../modals/FormModal';
-import styles from './ReportConditionModal.module.scss';
 import { useAddParkCondition } from '../../hooks/api/useAddParkCondition';
 import { PARK_CONDITIONS } from '../../utils/parkConditions';
-import { useTranslation } from 'react-i18next';
+import { FormModal } from '../modals/FormModal';
+import styles from './ReportConditionModal.module.scss';
 
 interface ReportConditionModalProps {
   isOpen: boolean;
@@ -19,12 +19,8 @@ interface ReportConditionModalProps {
   activeConditions: ActiveParkCondition[];
 }
 
-export const ReportConditionModal: React.FC<ReportConditionModalProps> = ({
-  isOpen,
-  onClose,
-  parkId,
-  activeConditions,
-}) => {
+const ReportConditionModal: React.FC<ReportConditionModalProps> = (props) => {
+  const { isOpen, onClose, parkId, activeConditions } = props;
   const { t } = useTranslation();
   const { notify } = useNotification();
   const { mutate, isPending } = useAddParkCondition();
@@ -33,25 +29,32 @@ export const ReportConditionModal: React.FC<ReportConditionModalProps> = ({
   );
 
   const reportableConditions = PARK_CONDITIONS.filter(
-    (option) => !activeConditions.some((ac) => ac.condition === option.id)
+    (option) =>
+      !activeConditions.some(
+        (activeCondition) => activeCondition.condition === option.id
+      )
   );
 
+  const handleClose = () => {
+    setChosenCondition(null);
+    onClose();
+  };
+
   const onSubmitReport = () => {
-    if (!chosenCondition) {
+    if (!chosenCondition || isPending) {
       return;
     }
 
     mutate(
       {
-        parkId: parkId,
+        parkId,
         condition: chosenCondition,
         status: ParkConditionStatus.PRESENT,
       },
       {
         onSuccess: () => {
           notify(t('toasts.live.reportThanks'));
-          onClose();
-          setChosenCondition(null);
+          handleClose();
         },
         onError: () => {
           notify(t('toasts.live.reportRejected'), true);
@@ -63,13 +66,11 @@ export const ReportConditionModal: React.FC<ReportConditionModalProps> = ({
   return (
     <FormModal
       open={isOpen}
-      onClose={() => {
-        setChosenCondition(null);
-        onClose();
-      }}
+      onClose={handleClose}
       onSave={reportableConditions.length === 0 ? undefined : onSubmitReport}
       saveText={t('parks.live.report')}
-      disabled={!chosenCondition || isPending}
+      disabled={!chosenCondition}
+      isPending={isPending}
       className={styles.modal}
       title={t('parks.live.reportModal.title')}
     >
@@ -81,6 +82,7 @@ export const ReportConditionModal: React.FC<ReportConditionModalProps> = ({
         ) : (
           reportableConditions.map((option) => {
             const isChecked = chosenCondition === option.id;
+
             return (
               <div
                 key={option.id}
@@ -99,7 +101,8 @@ export const ReportConditionModal: React.FC<ReportConditionModalProps> = ({
                   disabled={isPending}
                 />
                 <label htmlFor={option.id}>
-                  <option.icon size={18} /> <span>{t(option.key)}</span>
+                  <option.icon size={18} />
+                  <span>{t(option.key)}</span>
                 </label>
               </div>
             );
@@ -109,3 +112,5 @@ export const ReportConditionModal: React.FC<ReportConditionModalProps> = ({
     </FormModal>
   );
 };
+
+export { ReportConditionModal };

@@ -11,6 +11,7 @@ import { ReviewModal } from '../ReviewModal';
 import styles from './ReviewsPreview.module.scss';
 import { Plus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { ReviewData } from '../../types/review';
 
 interface ReviewsPreviewProps {
   variant?: 'title' | 'reviews';
@@ -34,25 +35,19 @@ const ReviewsPreview = (props: ReviewsPreviewProps) => {
   });
 
   const isReviewsPage = variant === 'reviews';
-
   const reviewsCount = reviews?.length;
-
   const { addReview } = useAddReview(parkId!, userId);
 
   if (isLoadingReviews || isLoadingRank) {
     return null;
   }
 
-  const onAddReview = async (
-    reviewData: {
-      title: string;
-      content?: string;
-      rank: number;
-    },
+  const onAddReview = (
+    reviewData: ReviewData,
     isAnonymous: boolean
   ) => {
-    setIsAddReviewModalOpen(false);
-    addReview({ reviewData, isAnonymous });
+    // ReviewModal will close only after this promise resolves.
+    return addReview({ reviewData, isAnonymous });
   };
 
   return (

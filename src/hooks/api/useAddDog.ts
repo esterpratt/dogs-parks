@@ -1,31 +1,36 @@
-import { useContext } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { useRevalidator } from "react-router-dom";
-import { createDog } from "../../services/dogs";
-import { UserContext } from "../../context/UserContext";
-import { Dog } from "../../types/dog";
-import { queryClient } from "../../services/react-query";
+import { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useMutation } from '@tanstack/react-query';
+import { useRevalidator } from 'react-router-dom';
+import { createDog } from '../../services/dogs';
+import { UserContext } from '../../context/UserContext';
+import { useNotification } from '../../context/NotificationContext';
+import { Dog } from '../../types/dog';
+import { queryClient } from '../../services/react-query';
 
 const useAddDog = (onAddDog?: (dogId?: string) => void) => {
   const { userId } = useContext(UserContext);
   const { revalidate } = useRevalidator();
+  const { notify } = useNotification();
+  const { t } = useTranslation();
 
-  const { mutateAsync: addDog } = useMutation({
+  const { mutate: addDog, isPending: isPendingAddDog } = useMutation({
     mutationFn: (data: Omit<Dog, 'id'>) => createDog({ ...data }),
-    onSuccess: async () => {
+    onError: () => {
+      notify(t('toasts.generic.error'), true);
+    },
+    onSuccess: (dogId) => {
       queryClient.invalidateQueries({
         queryKey: ['dogs', userId],
       });
       revalidate();
-    },
-    onSettled: (data) => {
-      if (onAddDog) {
-        onAddDog(data);
-      }
+
+      // Notify the caller only when the dog was created successfully.
+      onAddDog?.(dogId);
     },
   });
 
-  return { addDog };
-}
+  return { addDog, isPendingAddDog };
+};
 
 export { useAddDog };

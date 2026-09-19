@@ -1,3 +1,4 @@
+import { throwError } from './error';
 import { supabase } from './supabase-client';
 
 interface ReportParkDogsCountProps {
@@ -19,7 +20,8 @@ const reportDogsCount = async ({
       throw error;
     }
   } catch (error) {
-    console.error('there was an error reporting dogs count: ', error);
+    // Keep the count modal open when the report was not persisted.
+    throwError(error);
   }
 };
 

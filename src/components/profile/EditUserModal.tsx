@@ -1,7 +1,9 @@
 import { ChangeEvent, useContext, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 import { useRevalidator } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
+import { useNotification } from '../../context/NotificationContext';
 import {
   updateUser,
   EditUserProps as UpdateUserProps,
@@ -11,20 +13,16 @@ import { User } from '../../types/user';
 import { ControlledInput } from '../inputs/ControlledInput';
 import { Checkbox } from '../inputs/Checkbox';
 import { useOrientationContext } from '../../context/OrientationContext';
-import { useNotification } from '../../context/NotificationContext';
 import { FormModal } from '../modals/FormModal';
 import styles from './EditUserModal.module.scss';
-import { useTranslation } from 'react-i18next';
 
 interface EditUserModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const EditUserModal: React.FC<EditUserModalProps> = ({
-  isOpen,
-  onClose,
-}) => {
+const EditUserModal: React.FC<EditUserModalProps> = (props) => {
+  const { isOpen, onClose } = props;
   const { user } = useContext(UserContext);
   const { revalidate } = useRevalidator();
   const [userData, setUserData] = useState(user);
@@ -36,7 +34,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
     setUserData(user);
   }, [user]);
 
-  const { mutate: mutateUser } = useMutation({
+  const { mutate: mutateUser, isPending } = useMutation({
     mutationFn: (data: UpdateUserProps) =>
       updateUser({
         userId: data.userId,
@@ -44,18 +42,24 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
       }),
     onMutate: async (data) => {
       await queryClient.cancelQueries({ queryKey: ['user', user!.id] });
-      const prevUser = queryClient.getQueryData<User>(['user', user!.id]);
+      const previousUser = queryClient.getQueryData<User>(['user', user!.id]);
+
       queryClient.setQueryData(['user', user!.id], {
-        ...prevUser,
+        ...previousUser,
         ...data.userDetails,
       });
-      return { prevUser };
+
+      return { previousUser };
     },
     onError: (_error, _data, context) => {
-      queryClient.setQueryData(['user', user!.id], context?.prevUser);
+      // Restore the cached user and keep the modal open when the update fails.
+      queryClient.setQueryData(['user', user!.id], context?.previousUser);
+      notify(t('toasts.generic.error'), true);
     },
     onSuccess: () => {
+      // Close only after the server confirms the profile update.
       notify();
+      onClose();
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['user', user!.id] });
@@ -64,26 +68,32 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
   });
 
   const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setUserData((prev) => {
+    setUserData((previousUserData) => {
       return {
-        ...prev,
+        ...previousUserData,
         [event.target.name]: event.target.value,
       } as User;
     });
   };
 
   const onPrivacyChange = () => {
-    setUserData((prev) => {
+    setUserData((previousUserData) => {
       return {
-        ...prev,
-        private: !prev?.private,
+        ...previousUserData,
+        private: !previousUserData?.private,
       } as User;
     });
   };
 
-  const onSubmit = async () => {
-    mutateUser({ userId: user!.id, userDetails: userData! });
-    onClose();
+  const onSubmit = () => {
+    if (!userData || isPending) {
+      return;
+    }
+
+    mutateUser({
+      userId: user!.id,
+      userDetails: userData,
+    });
   };
 
   const handleClose = () => {
@@ -102,6 +112,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
       height={orientation === 'landscape' ? 98 : null}
       onSave={onSubmit}
       disabled={!userData?.name}
+      isPending={isPending}
       className={styles.modal}
       title={t('settings.edit.titleUpdate')}
     >
@@ -126,3 +137,5 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
     </FormModal>
   );
 };
+
+export { EditUserModal };

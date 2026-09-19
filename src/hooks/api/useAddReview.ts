@@ -4,14 +4,14 @@ import { ReviewData } from '../../types/review';
 import { queryClient } from '../../services/react-query';
 
 const useAddReview = (parkId: string, userId: string | null) => {
-  const { mutate } = useMutation({
+  const { mutateAsync: addReview, isPending: isPendingAddReview } = useMutation({
     mutationFn: (data: { reviewData: ReviewData; isAnonymous?: boolean }) =>
       createReview({
         parkId,
         reviewData: data.reviewData,
         userId: data.isAnonymous ? null : userId,
       }),
-    onSuccess: async () => {
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['reviews', parkId],
       });
@@ -21,7 +21,8 @@ const useAddReview = (parkId: string, userId: string | null) => {
     },
   });
 
-  return { addReview: mutate };
+  // Expose the promise so the modal can close only after a confirmed insert.
+  return { addReview, isPendingAddReview };
 };
 
 export { useAddReview };

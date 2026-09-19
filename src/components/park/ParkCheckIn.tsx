@@ -9,17 +9,21 @@ import { queryClient } from '../../services/react-query';
 import { fetchUserReviews } from '../../services/reviews';
 import { useNotification } from '../../context/NotificationContext';
 import { capitalizeWords } from '../../utils/text';
+import { ReviewData } from '../../types/review';
 import { ParkIcon } from './ParkIcon';
 import { ReviewModal } from '../ReviewModal';
 import { DogsCountModal } from './DogsCountModal';
 import CheckoutFromAnotherParkModal from './CheckoutFromAnotherParkModal';
 import styles from './ParkCheckIn.module.scss';
 
-const ParkCheckIn: React.FC<{
+interface ParkCheckInProps {
   parkId: string;
   userId: string | null;
   userName?: string;
-}> = ({ parkId, userId, userName }) => {
+}
+
+const ParkCheckIn: React.FC<ParkCheckInProps> = (props) => {
+  const { parkId, userId, userName } = props;
   const { t } = useTranslation();
   const [checkIn, setCheckIn] = useLocalStorage('checkin');
   const [openDogsCountModal, setOpenDogsCountModal] = useState(false);
@@ -42,9 +46,11 @@ const ParkCheckIn: React.FC<{
       if (id) {
         setCheckIn({ id, parkId });
       }
+
       queryClient.invalidateQueries({
         queryKey: ['parkVisitors', parkId],
       });
+
       if (localStorage.getItem('hideDogsModal')) {
         notify(title);
       } else {
@@ -56,9 +62,9 @@ const ParkCheckIn: React.FC<{
   const { mutate: anotherParkCheckout } = useMutation({
     mutationFn: ({ checkinId }: { checkinId: string; parkId: string }) =>
       checkout(checkinId),
-    onSuccess: (_data, vars) => {
+    onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({
-        queryKey: ['parkVisitors', vars.parkId],
+        queryKey: ['parkVisitors', variables.parkId],
       });
     },
   });
@@ -107,13 +113,12 @@ const ParkCheckIn: React.FC<{
     parkCheckIn();
   };
 
-  const onSubmitReview = async (review: {
-    title: string;
-    content?: string;
-    rank: number;
-  }) => {
-    setOpenReviewModal(false);
-    addReview({ reviewData: review });
+  const onSubmitReview = (
+    reviewData: ReviewData,
+    isAnonymous: boolean
+  ) => {
+    // Preserve the modal until the review insert succeeds.
+    return addReview({ reviewData, isAnonymous });
   };
 
   return (

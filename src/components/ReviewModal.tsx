@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
-import { Review } from '../types/review';
+import { useTranslation } from 'react-i18next';
+import { Review, ReviewData } from '../types/review';
 import { ControlledInput } from './inputs/ControlledInput';
 import { TextArea } from './inputs/TextArea';
 import { Stars } from './Stars';
@@ -9,7 +10,6 @@ import { useOrientationContext } from '../context/OrientationContext';
 import { useNotification } from '../context/NotificationContext';
 import { FormModal } from './modals/FormModal';
 import styles from './ReviewModal.module.scss';
-import { useTranslation } from 'react-i18next';
 
 interface ReviewModalProps {
   title?: string;
@@ -17,24 +17,23 @@ interface ReviewModalProps {
   review?: Review;
   closeModal: () => void;
   onSubmitReview: (
-    reviewData: {
-      title: string;
-      content?: string;
-      rank: number;
-    },
+    reviewData: ReviewData,
     isAnonymous: boolean
-  ) => void;
+  ) => Promise<unknown>;
 }
 
-export const ReviewModal: React.FC<ReviewModalProps> = ({
-  isOpen,
-  closeModal,
-  title,
-  review,
-  onSubmitReview,
-}) => {
+const ReviewModal: React.FC<ReviewModalProps> = (props) => {
+  const {
+    isOpen,
+    closeModal,
+    title,
+    review,
+    onSubmitReview,
+  } = props;
   const { t } = useTranslation();
   const { notify } = useNotification();
+  const { userId } = useContext(UserContext);
+  const orientation = useOrientationContext((state) => state.orientation);
 
   const [reviewData, setReviewData] = useState(() => {
     return {
@@ -42,11 +41,9 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
       content: review?.content || '',
     };
   });
-  const [rank, setRank] = useState<number>(5);
-  const { userId } = useContext(UserContext);
-  const [isAnonymous, setIsAnonymous] = useState(userId ? false : true);
-
-  const orientation = useOrientationContext((state) => state.orientation);
+  const [rank, setRank] = useState(5);
+  const [isAnonymous, setIsAnonymous] = useState(!userId);
+  const [isPending, setIsPending] = useState(false);
 
   useEffect(() => {
     if (review) {
@@ -67,9 +64,9 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
   const onChangeInput = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setReviewData((prev) => {
+    setReviewData((previousReviewData) => {
       return {
-        ...prev,
+        ...previousReviewData,
         [event.target.name]: event.target.value,
       };
     });
@@ -78,39 +75,61 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
   const resetReview = () => {
     setReviewData({ title: '', content: '' });
     setRank(5);
-    setIsAnonymous(false);
+    setIsAnonymous(!userId);
+  };
+
+  const handleClose = () => {
+    resetReview();
+    closeModal();
   };
 
   const onSubmit = async () => {
-    onSubmitReview(
-      {
-        title: reviewData.title,
-        content: reviewData.content,
-        rank: Number(rank),
-      },
-      isAnonymous
-    );
+    if (!reviewData.title || isPending) {
+      return;
+    }
+
+    setIsPending(true);
+
+    try {
+      // Wait for the caller's mutation before showing success or closing.
+      await onSubmitReview(
+        {
+          title: reviewData.title,
+          content: reviewData.content,
+          rank: Number(rank),
+        },
+        isAnonymous
+      );
+    } catch {
+      notify(t('toasts.generic.error'), true);
+      setIsPending(false);
+      return;
+    }
+
     resetReview();
     notify();
+    setIsPending(false);
+    closeModal();
   };
 
   const onChangeAnonymousStatus = () => {
-    setIsAnonymous((prev) => !prev);
+    setIsAnonymous((previousIsAnonymous) => !previousIsAnonymous);
   };
 
   return (
     <FormModal
       saveText={t('common.actions.submit')}
       open={isOpen}
-      onClose={closeModal}
+      onClose={handleClose}
       onSave={onSubmit}
       disabled={!reviewData.title}
+      isPending={isPending}
       className={styles.modal}
       title={title || t('reviews.modal.title')}
     >
       <form className={styles.form}>
         <ControlledInput
-          label={t('reviews.modal.placeholderTitle') + ' *'}
+          label={`${t('reviews.modal.placeholderTitle')} *`}
           name="title"
           value={reviewData.title}
           onChange={onChangeInput}
@@ -151,3 +170,5 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
     </FormModal>
   );
 };
+
+export { ReviewModal };

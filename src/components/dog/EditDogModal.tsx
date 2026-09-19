@@ -38,7 +38,6 @@ interface EditDogModalProps {
 
 const EditDogModal: React.FC<EditDogModalProps> = (props) => {
   const { isOpen, onClose, onAddDog, dog } = props;
-
   const orientation = useOrientationContext((state) => state.orientation);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -56,18 +55,20 @@ const EditDogModal: React.FC<EditDogModalProps> = (props) => {
         likes: dog.likes?.join(', '),
         dislikes: dog.dislikes?.join(', '),
       };
-    } else {
-      return null;
     }
+
+    return null;
   });
 
   const { userId } = useContext(UserContext);
   const [isDeleteDogModalOpen, setIsDeleteDogModalOpen] = useState(false);
   const keyboardHeight = useKeyboardFix();
 
-  const { mutateDog } = useUpdateDog();
-  const { addDog } = useAddDog(onAddDog);
+  const { mutateDog, isPendingUpdateDog } = useUpdateDog();
+  const { addDog, isPendingAddDog } = useAddDog(onAddDog);
   const { t, i18n } = useTranslation();
+
+  const isPending = isPendingUpdateDog || isPendingAddDog;
 
   useEffect(() => {
     if (dog) {
@@ -102,34 +103,58 @@ const EditDogModal: React.FC<EditDogModalProps> = (props) => {
     });
   };
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
+    if (!dogData || isPending) {
+      return;
+    }
+
     const likes =
-      dogData!.likes?.split(',').map((likeItem) => likeItem.trim()) || [];
+      dogData.likes?.split(',').map((likeItem) => likeItem.trim()) || [];
     const dislikes =
-      dogData!.dislikes?.split(',').map((dislikeItem) => dislikeItem.trim()) ||
-      [];
-    const birthday = !dogData!.birthday
-      ? dogData!.birthday
-      : new Date(dogData!.birthday);
+      dogData.dislikes
+        ?.split(',')
+        .map((dislikeItem) => dislikeItem.trim()) || [];
+    const birthday = !dogData.birthday
+      ? dogData.birthday
+      : new Date(dogData.birthday);
 
     if (dog) {
       const dogFullData = Object.fromEntries(
-        Object.entries(dogData!).filter(([, value]) => value !== undefined)
+        Object.entries(dogData).filter(([, value]) => value !== undefined)
       );
-      mutateDog({
-        dogId: dog.id,
-        dogDetails: { ...dogFullData, birthday, likes, dislikes },
-      });
-    } else {
-      addDog({
+
+      mutateDog(
+        {
+          dogId: dog.id,
+          dogDetails: {
+            ...dogFullData,
+            birthday,
+            likes,
+            dislikes,
+          },
+        },
+        {
+          // Close only after the server confirms the dog update.
+          onSuccess: onClose,
+        }
+      );
+
+      return;
+    }
+
+    addDog(
+      {
         owner: userId!,
-        ...dogData!,
+        ...dogData,
         birthday,
         likes,
         dislikes,
-      });
-    }
-    onClose();
+      },
+      {
+        // Keep the form open when creation fails.
+        onSuccess: onClose,
+      }
+    );
   };
 
   const { getFormattedDateISO } = useDateUtils();
@@ -151,13 +176,17 @@ const EditDogModal: React.FC<EditDogModalProps> = (props) => {
 
   const sortedDogBreeds = useMemo(() => {
     const pinned = dogBreeds.slice(0, 2);
-
     const tail = dogBreeds.slice(2);
 
-    const sortedTail = [...tail].sort((a, b) => {
-      const aLabel = t(`dogs.breeds.${a}`, { defaultValue: a });
-      const bLabel = t(`dogs.breeds.${b}`, { defaultValue: b });
-      return aLabel.localeCompare(bLabel, i18n.language);
+    const sortedTail = [...tail].sort((firstBreed, secondBreed) => {
+      const firstLabel = t(`dogs.breeds.${firstBreed}`, {
+        defaultValue: firstBreed,
+      });
+      const secondLabel = t(`dogs.breeds.${secondBreed}`, {
+        defaultValue: secondBreed,
+      });
+
+      return firstLabel.localeCompare(secondLabel, i18n.language);
     });
 
     return [...pinned, ...sortedTail];
@@ -171,6 +200,7 @@ const EditDogModal: React.FC<EditDogModalProps> = (props) => {
         height={orientation === 'landscape' ? 98 : null}
         onSave={onSubmit}
         disabled={isSaveButtonDisabled}
+        isPending={isPending}
         className={styles.modal}
         title={
           dog
@@ -338,6 +368,7 @@ const EditDogModal: React.FC<EditDogModalProps> = (props) => {
             color={styles.red}
             onClick={() => setIsDeleteDogModalOpen(true)}
             className={styles.deleteDogWrapper}
+            disabled={isPending}
           >
             <Trash2 size={16} />
             <div>{t('settings.deleteDogButton', { name: dog.name })}</div>

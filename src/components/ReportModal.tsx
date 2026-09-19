@@ -1,11 +1,12 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useMutation } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { REPORT_DESCRIPTION, ReportReason } from '../types/report';
 import { reportReview } from '../services/reviews';
 import { useNotification } from '../context/NotificationContext';
 import { FormModal } from './modals/FormModal';
 import styles from './ReportModal.module.scss';
-import { useTranslation } from 'react-i18next';
 
 interface ReportModalProps {
   isOpen: boolean;
@@ -13,22 +14,39 @@ interface ReportModalProps {
   reviewId: string;
 }
 
-export const ReportModal: React.FC<ReportModalProps> = ({
-  isOpen,
-  onClose,
-  reviewId,
-}) => {
+const ReportModal: React.FC<ReportModalProps> = (props) => {
+  const { isOpen, onClose, reviewId } = props;
   const { notify } = useNotification();
   const [chosenReason, setChosenReason] = useState<ReportReason | null>(null);
   const { t } = useTranslation();
 
-  const onSubmitReport = async () => {
-    if (chosenReason) {
-      reportReview({ reviewId, reason: chosenReason });
+  const handleClose = () => {
+    setChosenReason(null);
+    onClose();
+  };
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: (reason: ReportReason) =>
+      reportReview({
+        reviewId,
+        reason,
+      }),
+    onError: () => {
+      notify(t('toasts.generic.error'), true);
+    },
+    onSuccess: () => {
+      // Show success and close only after the report was persisted.
+      notify(t('reports.reviewModal.sentMessage'));
+      handleClose();
+    },
+  });
+
+  const onSubmitReport = () => {
+    if (!chosenReason || isPending) {
+      return;
     }
 
-    onClose();
-    notify(t('reports.reviewModal.sentMessage'));
+    mutate(chosenReason);
   };
 
   const onChooseReason = (reason: ReportReason) => {
@@ -38,10 +56,11 @@ export const ReportModal: React.FC<ReportModalProps> = ({
   return (
     <FormModal
       open={isOpen}
-      onClose={onClose}
+      onClose={handleClose}
       onSave={onSubmitReport}
       saveText={t('common.actions.report')}
       disabled={!chosenReason}
+      isPending={isPending}
       className={styles.modal}
       title={t('reports.reviewModal.title')}
     >
@@ -62,6 +81,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
                 id={key}
                 checked={key === chosenReason}
                 onChange={() => onChooseReason(key as ReportReason)}
+                disabled={isPending}
               />
               <label htmlFor={key}>
                 {t(`reports.reasons.${key}.title`)} -{' '}
@@ -74,3 +94,5 @@ export const ReportModal: React.FC<ReportModalProps> = ({
     </FormModal>
   );
 };
+
+export { ReportModal };
