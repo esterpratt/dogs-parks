@@ -64,25 +64,15 @@ const EditParkModal: React.FC<EditParksModalProps> = ({
     };
   });
 
-  const { mutate } = useMutation({
+  // Wait for the server to confirm the update before closing the modal or showing success.
+  const { mutate, isPending } = useMutation({
     mutationFn: (data: { id: string; updatedData: UpdateParkDetails }) =>
       updatePark(data.id, data.updatedData),
-    onMutate: async (data) => {
-      onClose();
-
-      await queryClient.cancelQueries({ queryKey: ['park', park.id] });
-      const prevPark = queryClient.getQueryData<Park>(['park', park.id]);
-      queryClient.setQueryData(['park', park.id], {
-        ...prevPark,
-        ...data.updatedData,
-      });
-
-      return { prevPark };
-    },
-    onError: (_error, _data, context) => {
-      queryClient.setQueryData(['park', park.id], context?.prevPark);
+    onError: () => {
+      notify(t('toasts.generic.error'), true);
     },
     onSuccess: () => {
+      onClose();
       notify();
     },
     onSettled: () => {
@@ -114,6 +104,10 @@ const EditParkModal: React.FC<EditParksModalProps> = ({
   };
 
   const onSubmit = () => {
+    if (isPending) {
+      return;
+    }
+
     const updatedData: UpdateParkDetails = {};
 
     const materials = parkDetails.materials ? parkDetails.materials : [];
@@ -123,14 +117,22 @@ const EditParkModal: React.FC<EditParksModalProps> = ({
     if (parkDetails.sizeCategory !== null) {
       updatedData.size_category = parkDetails.sizeCategory;
     }
+
     if (shade !== null) {
       updatedData.shade = shade;
     }
-    if (materials?.length) {
+
+    if (materials.length) {
       updatedData.materials = materials;
     }
+
     if (hasFacilities !== null) {
       updatedData.has_facilities = hasFacilities;
+    }
+
+    // Avoid calling the RPC when the user has not supplied any missing detail.
+    if (Object.keys(updatedData).length === 0) {
+      return;
     }
 
     mutate({ id: park.id, updatedData });
@@ -142,6 +144,7 @@ const EditParkModal: React.FC<EditParksModalProps> = ({
       onClose={onClose}
       height={orientation === 'landscape' ? 98 : null}
       onSave={onSubmit}
+      isPending={isPending}
       className={styles.modal}
       title={t('parks.edit.modal.title')}
       titleClassName={styles.title}

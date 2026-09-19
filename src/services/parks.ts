@@ -178,18 +178,17 @@ const updatePark = async (
   parkId: string,
   parkDetails: UpdateParkDetails
 ) => {
-  try {
-    // Update only the details supplied by the form so existing data is preserved.
-    const { error } = await supabase
-      .from('parks')
-      .update(parkDetails)
-      .eq('id', parkId);
+  // Use the protected RPC so users can fill missing details without direct table update access.
+  const { error } = await supabase.rpc('api_update_missing_park_details', {
+    p_park_id: parkId,
+    p_size_category: parkDetails.size_category ?? null,
+    p_materials: parkDetails.materials ?? null,
+    p_shade: parkDetails.shade ?? null,
+    p_has_facilities: parkDetails.has_facilities ?? null,
+  });
 
-    if (error) {
-      throw error;
-    }
-  } catch (error) {
-    console.error(`there was an error while updating park ${parkId}: ${error}`);
+  if (error) {
+    throwError(error);
   }
 };
 

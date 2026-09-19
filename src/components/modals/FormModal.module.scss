@@ -42,8 +42,13 @@
     width: 100%;
     padding: 0;
     height: 100%;
-    width: 100%;
   }
+}
+
+// Match the loader used by the existing event confirmation button.
+.loader {
+  width: 20px;
+  height: 20px;
 }
 
 @media (orientation: landscape) {

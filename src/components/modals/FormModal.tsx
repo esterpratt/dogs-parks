@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import classnames from 'classnames';
 import { TopModal } from './TopModal';
 import { Button } from '../Button';
+import { Loader } from '../Loader';
 import styles from './FormModal.module.scss';
 
 interface FormModalProps {
@@ -17,6 +18,7 @@ interface FormModalProps {
   height?: number | null;
   saveText?: string;
   disabled?: boolean;
+  isPending?: boolean;
   title?: string;
 }
 
@@ -32,13 +34,24 @@ const FormModal = ({
   onSave,
   saveText,
   disabled,
+  isPending,
   title,
 }: FormModalProps) => {
   const { t } = useTranslation();
+
+  // Keep the modal open while the server is processing the submitted data.
+  const handleClose = () => {
+    if (isPending) {
+      return;
+    }
+
+    onClose?.();
+  };
+
   return (
     <TopModal
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       height={height}
       className={classnames(styles.modal, className)}
     >
@@ -54,17 +67,30 @@ const FormModal = ({
         <div className={styles.buttonsContainer}>
           {!!onSave && (
             <Button
-              disabled={disabled}
+              disabled={disabled || isPending}
               onClick={onSave}
-              className={styles.button}
+              className={classnames(styles.button, {
+                // Keep the primary background visible behind the loading indicator.
+                [styles.pending]: isPending,
+              })}
             >
-              {saveText ?? t('common.actions.save')}
+              {/* Show consistent feedback inside the save button during submission. */}
+              {isPending ? (
+                <Loader
+                  variant="secondary"
+                  inside
+                  className={styles.loader}
+                />
+              ) : (
+                saveText ?? t('common.actions.save')
+              )}
             </Button>
           )}
           <Button
             variant="secondary"
-            onClick={onClose}
+            onClick={handleClose}
             className={styles.button}
+            disabled={isPending}
           >
             {t('common.actions.cancel')}
           </Button>
