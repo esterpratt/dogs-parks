@@ -1,5 +1,7 @@
 # KlavHub - Dog Parks App
 
+For the current plan, Notion task links, and unresolved decisions, see [the current handoff](docs/CODEX_CONTEXT.md). This file describes architecture and coding patterns.
+
 This is a mobile-first web application for finding and reviewing dog parks.
 
 ## Architecture Overview
