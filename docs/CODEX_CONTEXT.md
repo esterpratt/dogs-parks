@@ -4,7 +4,7 @@ Short bootstrap and handoff; Notion is the task source of truth. Permanent codin
 
 ## Current state
 
-- Backlog review completed on 2026-09-21; ownership discovery awaits the user's eligibility decision.
+- Backlog review completed on 2026-09-21. The next feature is shared **dog ownership**; the prior park-ownership interpretation was incorrect.
 - Recent park-details and modal-submit fixes were completed, verified, merged into `main`, and pushed.
 - iOS 1.2.4 (build 12) was uploaded and submitted to Apple.
 - Android 1.0.9 (versionCode 11) was uploaded to Google Play checks.
@@ -26,7 +26,7 @@ Connected to **ester prat's Notion** through the existing Notion tools; read acc
 - Set `In progress` when implementation starts; record implementation notes, verification, and decisions in the ticket body while preserving existing content. Set `Done` only when the agreed work is complete. Record architectural proposals and user decisions in the relevant feature ticket.
 - Notion read and write access verified. Four handoff tickets were created as `Not started`; existing ticket content, statuses, and database schema were preserved. Do not duplicate the database or change its schema without explanation and approval.
 
-Immediate next step: resolve ownership eligibility with the user (community volunteers, verified operators/municipal staff, or separate roles for both), then review a concrete permissions and approval model. Suggested technical priority is write reliability and duplicate-report triage before expanding permissions. This order is a recommendation, not an approved implementation plan.
+Immediate next step: finish shared dog ownership product decisions and screen flows with the user, then audit the live dog schema, RLS, RPCs, storage policies and account-deletion behavior before implementation. The Notion ticket distinguishes confirmed choices from proposals. General reliability and duplicate-report work are separate backlog tasks, not established blockers for this feature.
 
 ## Reconciled handoff tasks
 
@@ -36,18 +36,20 @@ Immediate next step: resolve ownership eligibility with the user (community volu
 - Existing [duplicate review reports](https://app.notion.com/p/1b44e04c2ff18061a7bdf7f1807541e8) and [upside-down mobile photos](https://app.notion.com/p/2344e04c2ff180cf933ec82667918ec9) remain open. Live database uniqueness and current photo reproduction were not verified. The old completed Security ticket concerns Firebase and does not establish current Supabase authorization safety.
 - Store publication status remains unverified. Redesign and React Native migration are separate open backlog items, not authorized scope expansions.
 
-## Next major feature: park ownership
+## Next major feature: shared dog ownership
 
-Discovery is recorded in [the ownership planning ticket](https://app.notion.com/p/3e24e04c2ff1810592a3cb0f61d736d4). Eligibility is still awaiting a user answer. Before implementation, define:
+Discovery is recorded in [the corrected ownership planning ticket](https://app.notion.com/p/3e24e04c2ff1810592a3cb0f61d736d4). Several users should share one dog profile; a user may still have multiple dogs. Confirmed by the user:
 
-- What ownership means and owner permissions.
-- Who may request, approve, transfer, or remove ownership, and how ownership is verified.
-- Required database and RLS changes, and permissions retained by regular users.
-- Dispute, reporting, and abuse handling.
-- Privacy and app-store implications.
-- Whether an administrative approval interface is required.
+- One primary owner plus co-owners, with shared day-to-day editing as the working model.
+- Support both invitations (recipient accepts) and ownership requests.
+- All owners upload and select the main photo; co-owners delete their own uploads; primary can delete any photo.
+- Delete the dog profile only when the primary is the sole owner; leaving ownership is separate.
 
-Do not implement ownership until its conceptual model and authorization rules have been reviewed with the user.
+Repository findings: dog queries use a single `dogs.owner`; image paths and their cached owner ID depend on that owner; dog edit controls depend on navigation state. Account deletion removes the user's storage folder, including dog photos. The live schema, policies, RPC definitions and deployed account-deletion authorization remain unverified.
+
+Proposed design: dog-owner membership records, atomic membership/transfer operations, images stored by stable dog ID with uploader metadata, and an Owners screen with focused invitation/request/transfer/leave modals. No application or database changes have been made.
+
+Open decisions include public owner visibility, transfer acceptance and old primary's role, account deletion/unavailable primary recovery, membership removal versus deletion protection, invitation eligibility/expiry, and legacy photo attribution. The detailed plan and verification stages live in Notion. Do not implement until the user reviews the remaining product and authorization rules.
 
 ## Continuity rule
 
