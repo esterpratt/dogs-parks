@@ -43,13 +43,18 @@ Discovery is recorded in [the corrected ownership planning ticket](https://app.n
 - One primary owner plus co-owners, with shared day-to-day editing as the working model.
 - Support both invitations (recipient accepts) and ownership requests.
 - All owners upload and select the main photo; co-owners delete their own uploads; primary can delete any photo.
-- Delete the dog profile only when the primary is the sole owner; leaving ownership is separate.
+- Ordinary primary-role transfer requires acceptance; the previous primary remains a co-owner.
+- The previous sole-owner-only deletion rule has been reopened. Shared dog deletion without consent is unresolved, not approved.
+
+Latest user preferences: preserve user-card friend search and hide mode; put a discreet Request ownership action on the dog page and ownership management in an owner-only area (tab versus subpage undecided). Primary owners should not remove co-owners. Leaving/account deletion should offer successor selection with automatic promotion of the longest-standing eligible co-owner when none is selected, without recipient acceptance. These departure semantics differ from ordinary voluntary transfers.
 
 Repository findings: dog queries use a single `dogs.owner`; image paths and their cached owner ID depend on that owner; dog edit controls depend on navigation state. Account deletion removes the user's storage folder, including dog photos. The live schema, policies, RPC definitions and deployed account-deletion authorization remain unverified.
 
-Proposed design: dog-owner membership records, atomic membership/transfer operations, images stored by stable dog ID with uploader metadata, and an Owners screen with focused invitation/request/transfer/leave modals. No application or database changes have been made.
+Proposed design: dog-owner memberships, atomic database succession/departure, a retryable account-erasure workflow across Auth/DB/Storage, and images stored by dog ID with nullable uploader metadata. Leaving a dog removes access; account erasure removes identifying references while shared-image retention needs an explicit policy. No application or database changes have been made.
 
-Open decisions include public owner visibility, transfer acceptance and old primary's role, account deletion/unavailable primary recovery, membership removal versus deletion protection, invitation eligibility/expiry, and legacy photo attribution. The detailed plan and verification stages live in Notion. Do not implement until the user reviews the remaining product and authorization rules.
+Open decisions: shared-dog deletion consent/recovery, last-owner account deletion, retained images and attribution, unavailable-primary recovery, hidden co-owner identity within ownership management, invitation eligibility/expiry, and legacy photo attribution. Check-in remains user-based; selecting accompanying dogs is a separate proposed follow-up, with independent co-owner visits protected by regression tests.
+
+The user wants tests before behavior changes. Notion now specifies green baseline regressions, new-feature tests demonstrated failing before implementation, real database/storage authorization tests, and multi-session browser journeys. Existing tooling is Vitest/happy-dom and Playwright; a disposable database test harness still needs validation/setup. No tests were added or run during planning. Do not implement until remaining product and authorization rules are reviewed.
 
 ## Continuity rule
 
