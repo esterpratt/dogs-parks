@@ -30,6 +30,7 @@ Read [CODEX_CONTEXT.md](CODEX_CONTEXT.md) for the live audit, access, security f
 - Requester accepts the privacy/shared-editing disclosure before submitting. Primary approval adds them immediately; no second requester confirmation.
 - Unanswered invitations and requests expire after 30 days.
 - After an invitation or request is declined or canceled, the same pair may create a new action immediately. Duplicate pending/crossed actions remain blocked and submission retries remain idempotent.
+- Pending outgoing invitations cannot exceed the dog's remaining owner slots: `8 - active owner count`. Invitation creation and acceptance both recheck capacity.
 - Ending the relevant friendship cancels pending invitations and requests. Existing ownership is unaffected.
 - Changing the primary cancels all pending invitations and requests, rather than handing them to the new primary.
 - Responses are reached through the existing Notifications area, opening a dedicated response page. Owners also see pending items in Ownership.
@@ -90,7 +91,7 @@ These are recommendations from the draft, not separately confirmed choices:
 - Use continuous membership tenure with deterministic tie-breaking; rejoining starts new tenure. If a selected successor becomes ineligible, stop and refresh rather than silently substituting someone.
 - Ordinary departure retains uploader attribution but removes member permissions; account erasure removes identifying references. Review rejoin implications.
 - Cancel stale ordinary transfer offers on relevant departure/primary change; define concurrency explicitly.
-- Pending-action limits still need concrete defaults in the design.
+- Ownership-request abuse/rate limits still need concrete defaults in the design.
 - Define support evidence, contact/waiting periods, permissible exceptional actions, decision records and retention/redaction.
 - Resolve exact schema/API contracts, legacy owner synchronization, old-client compatibility, erasure records and storage migration/rollback before implementation.
 
