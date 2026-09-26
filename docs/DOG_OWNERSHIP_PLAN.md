@@ -58,6 +58,7 @@ Read [CODEX_CONTEXT.md](CODEX_CONTEXT.md) for the live audit, access, security f
 ## Confirmed photos and support policy
 
 - Legacy photos have unknown uploaders; do not invent attribution to the current primary. All owners can select them as main photo, but only primary can delete them.
+- Preserve the current photo capacity: at most 5 secondary gallery photos plus 1 main photo, represented in the new model as at most 6 active dog-image records total.
 - When the main photo is deleted, automatically select the newest remaining non-deleted photo. If no photos remain, the dog has no main photo.
 - Shared photos survive uploader account deletion; remove uploader attribution.
 - Support-reviewed recovery is included in the first release, using the existing support contact path.
@@ -88,7 +89,7 @@ These are recommendations from the draft, not separately confirmed choices:
 - Use continuous membership tenure with deterministic tie-breaking; rejoining starts new tenure. If a selected successor becomes ineligible, stop and refresh rather than silently substituting someone.
 - Ordinary departure retains uploader attribution but removes member permissions; account erasure removes identifying references. Review rejoin implications.
 - Cancel stale ordinary transfer offers on relevant departure/primary change; define concurrency explicitly.
-- Photo limits and resend cooldowns still need concrete defaults in the design.
+- Pending-action limits and resend cooldowns still need concrete defaults in the design.
 - Define support evidence, contact/waiting periods, permissible exceptional actions, decision records and retention/redaction.
 - Resolve exact schema/API contracts, legacy owner synchronization, old-client compatibility, erasure records and storage migration/rollback before implementation.
 
