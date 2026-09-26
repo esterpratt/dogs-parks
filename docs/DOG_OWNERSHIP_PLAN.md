@@ -29,6 +29,7 @@ Read [CODEX_CONTEXT.md](CODEX_CONTEXT.md) for the live audit, access, security f
 - Only friends of the primary can request ownership from the dog page; primary must approve.
 - Requester accepts the privacy/shared-editing disclosure before submitting. Primary approval adds them immediately; no second requester confirmation.
 - Unanswered invitations and requests expire after 30 days.
+- After an invitation or request is declined or canceled, the same pair may create a new action immediately. Duplicate pending/crossed actions remain blocked and submission retries remain idempotent.
 - Ending the relevant friendship cancels pending invitations and requests. Existing ownership is unaffected.
 - Changing the primary cancels all pending invitations and requests, rather than handing them to the new primary.
 - Responses are reached through the existing Notifications area, opening a dedicated response page. Owners also see pending items in Ownership.
@@ -77,7 +78,7 @@ Use existing React/Vite/SCSS patterns and visual language; prefer tabs/pages ove
 5. Account-deletion review lists every affected dog, successor selections, solo-owned-dog consequences and photo retention.
 6. Shared deletion page shows pending consent, expiry, approval/rejection/withdrawal and the final-approval consequence.
 
-Include loading, empty, error, expired, declined, cancelled and stale-permission states; direct URLs without navigation state; Hebrew RTL/accessibility; native back/keyboard behavior. Prototype is still to be built and reviewed.
+Include loading, empty, error, expired, declined, cancelled and stale-permission states; direct URLs without navigation state; Hebrew RTL/accessibility; native back/keyboard behavior. The standalone prototype is drafted and awaiting product review.
 
 ## Proposed defaults and unresolved design details
 
@@ -89,7 +90,7 @@ These are recommendations from the draft, not separately confirmed choices:
 - Use continuous membership tenure with deterministic tie-breaking; rejoining starts new tenure. If a selected successor becomes ineligible, stop and refresh rather than silently substituting someone.
 - Ordinary departure retains uploader attribution but removes member permissions; account erasure removes identifying references. Review rejoin implications.
 - Cancel stale ordinary transfer offers on relevant departure/primary change; define concurrency explicitly.
-- Pending-action limits and resend cooldowns still need concrete defaults in the design.
+- Pending-action limits still need concrete defaults in the design.
 - Define support evidence, contact/waiting periods, permissible exceptional actions, decision records and retention/redaction.
 - Resolve exact schema/API contracts, legacy owner synchronization, old-client compatibility, erasure records and storage migration/rollback before implementation.
 

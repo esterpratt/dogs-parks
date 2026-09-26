@@ -52,7 +52,7 @@ RLS: an active owner can select active fellow owners and the minimum profile fie
 
 Columns: `id`; `dog_id on delete cascade`; nullable `inviter_member_id references dog_members(id) on delete set null`; nullable `invitee_user_id references users(id) on delete set null`; `primary_user_id_at_creation` nullable `on delete set null`; `ownership_version_at_creation bigint`; status enum `PENDING/ACCEPTED/DECLINED/CANCELED/EXPIRED`; `created_at`; `expires_at` fixed to `created_at + interval '30 days'`; `responded_at`; cancellation-reason enum.
 
-Remove `role_offered` and `is_primary_transfer` from the active contract. Transfers get their own table. A partial unique index allows at most one pending join action across invite/request for the same dog and candidate; because PostgreSQL cannot enforce a cross-table unique index, the lifecycle RPC takes a dog-scoped advisory/row lock and checks both tables. Pending means `status = PENDING AND now() < expires_at`; at the exact boundary it is expired.
+Remove `role_offered` and `is_primary_transfer` from the active contract. Transfers get their own table. A partial unique index allows at most one pending join action across invite/request for the same dog and candidate; because PostgreSQL cannot enforce a cross-table unique index, the lifecycle RPC takes a dog-scoped advisory/row lock and checks both tables. Pending means `status = PENDING AND now() < expires_at`; at the exact boundary it is expired. Once an action is declined or canceled, the same pair may create a replacement immediately; there is no resend cooldown. Idempotency keys prevent a retried submission from creating duplicates.
 
 RLS: parties and the current primary may read the row; only RPCs mutate. Creation rechecks active dog, current primary, accepted friendship, no current membership, no crossed/pending action and limits. Acceptance repeats every check, including the 8-active-owner maximum, and records disclosure acceptance before adding membership. Pending actions do not bypass or increase the active-owner limit.
 
@@ -213,7 +213,7 @@ The prototype uses the current Fredoka font, blue active tabs, pink section head
 
 - Confirmed: for a solo-owned dog, do not display Leave. Delete dog is the only ownership-removal action.
 - Confirmed limit: 8 active owners per dog including the primary.
-- Proposed remaining limit: 20 pending ownership actions per primary across dogs; rejected/canceled invite resend cooldown 24 hours and submit debounce/idempotency key for retries.
+- Proposed remaining limit: 20 pending ownership actions per primary across dogs. Confirmed retry behavior: no cooldown after decline/cancellation, while idempotency keys make submission retries safe.
 - If a selected departure successor becomes ineligible before confirmation, stop with a refresh-required state; never silently substitute.
 - Support evidence, unreachable-primary contact attempts/waiting period, exceptional authority, case retention and redaction remain intentionally unspecified and must be decided before support recovery ships.
 
