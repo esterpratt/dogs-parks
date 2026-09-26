@@ -98,7 +98,7 @@ Rows are immutable evidence for a proposal. A response RPC locks the proposal an
 
 All owners may insert metadata after successful dog-scoped upload and select the main photo. Delete RPC permits the primary for any image; a co-owner only when `uploader_member_id` is their active membership. Unknown legacy uploads therefore remain primary-delete-only. Direct metadata and storage mutations are denied.
 
-Proposed main-photo fallback: when the main image is deleted, choose the newest remaining non-deleted image by `created_at, id`; otherwise set null. This is still a proposed default, not a confirmed product choice.
+Confirmed main-photo fallback: when the main image is deleted, choose the newest remaining non-deleted image by `created_at DESC, id DESC`; otherwise set `dogs.primary_image_id` to null.
 
 ### `public.dog_ownership_audit` — new, append-only
 
@@ -210,7 +210,6 @@ The prototype uses the current Fredoka font, blue active tabs, pink section head
 ## Proposed operational defaults still requiring confirmation
 
 - Confirmed: for a solo-owned dog, do not display Leave. Delete dog is the only ownership-removal action.
-- Main-photo fallback: newest remaining image, else no main image.
 - Limits: 8 active owners per dog, 20 pending ownership actions per primary across dogs, 30 gallery images per dog; rejected/canceled invite resend cooldown 24 hours and submit debounce/idempotency key for retries.
 - If a selected departure successor becomes ineligible before confirmation, stop with a refresh-required state; never silently substitute.
 - Support evidence, unreachable-primary contact attempts/waiting period, exceptional authority, case retention and redaction remain intentionally unspecified and must be decided before support recovery ships.
