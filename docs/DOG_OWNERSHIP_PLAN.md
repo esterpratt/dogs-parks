@@ -4,7 +4,7 @@ Planning checkpoint: 2026-09-26. Source: user decisions in the planning conversa
 
 ## Resume here
 
-Product decisions below are confirmed; do not ask the user to choose them again. Implementation has not started. The next deliverable is the complete new/changed table inventory with deletion rules and a clickable screen proposal using existing styles. Review the schema, authorization rules and screens with the user before implementing behavior.
+Product decisions below are confirmed; do not ask the user to choose them again. Implementation has not started. The table/deletion-rule inventory and standalone clickable proposal are now drafted in [DOG_OWNERSHIP_SCHEMA_AND_UX.md](DOG_OWNERSHIP_SCHEMA_AND_UX.md) for review. Review the schema, authorization rules and screens with the user before implementing behavior.
 
 For any remaining product questions, ask one focused question at a time with numbered options directly in chat. The user did not see the tool-based question UI. Distinguish confirmed decisions from proposed defaults.
 
@@ -40,6 +40,7 @@ Read [CODEX_CONTEXT.md](CODEX_CONTEXT.md) for the live audit, access, security f
 - Leaving/account deletion uses different succession semantics: no successor acceptance is required.
 - The departure screen preselects the longest-standing eligible co-owner, clearly names them and lets the departing primary choose another co-owner before confirming.
 - Account deletion uses one review page for all affected dogs, each shared dog showing its changeable preselected successor.
+- When the primary is the dog's only owner, do not show a Leave action. The only ownership-removal action is Delete dog.
 - Shared dogs remain with the remaining owners. When no co-owner exists, preserve current deletion behavior after verifying actual cascades and the delete RPC.
 
 ## Confirmed shared-dog deletion
@@ -87,7 +88,6 @@ These are recommendations from the draft, not separately confirmed choices:
 - Cancel stale ordinary transfer offers on relevant departure/primary change; define concurrency explicitly.
 - Main-photo fallback on deletion, membership/photo limits and resend cooldowns still need concrete defaults in the design.
 - Define support evidence, contact/waiting periods, permissible exceptional actions, decision records and retention/redaction.
-- Define final-owner Leave UX separately from existing solo-dog deletion behavior; never leave an active dog ownerless.
 - Resolve exact schema/API contracts, legacy owner synchronization, old-client compatibility, erasure records and storage migration/rollback before implementation.
 
 Do not restart the entire product questionnaire. Include routine technical choices as explicit proposals in the review package; ask only where a material product choice remains.

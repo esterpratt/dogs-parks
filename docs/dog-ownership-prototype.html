@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KlavHub shared ownership proposal</title>
+    <style>
+      /* This standalone prototype mirrors the app tokens without importing runtime code. */
+      @font-face {
+        font-family: Fredoka;
+        src: url('../public/fonts/Fredoka-Regular.woff2') format('woff2');
+      }
+      :root {
+        --green: #7dc95e;
+        --blue: #0da2e7;
+        --pink: #ec4899;
+        --red: #ff5714;
+        --orange: #f5b700;
+        --text: #4d4d4d;
+        --muted: #8d8d8d;
+        --line: #ebebeb;
+        --surface: #fff;
+        --canvas: #f5f7fa;
+        --shadow: 2px 4px 8px 2px rgba(0, 0, 0, 0.1);
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--text);
+        background: var(--canvas);
+        font-family: Fredoka, 'Segoe UI', sans-serif;
+      }
+      button, select { font: inherit; }
+      button { cursor: pointer; }
+      .workspace {
+        display: grid;
+        grid-template-columns: minmax(240px, 320px) minmax(320px, 430px);
+        justify-content: center;
+        gap: 32px;
+        padding: 24px;
+      }
+      .guide {
+        position: sticky;
+        top: 24px;
+        align-self: start;
+        background: var(--surface);
+        padding: 20px;
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+      }
+      .guide h1 { margin: 0 0 8px; font-size: 22px; }
+      .guide p { margin: 0 0 16px; color: var(--muted); font-size: 14px; line-height: 1.45; }
+      .guide-controls { display: grid; gap: 10px; margin-bottom: 16px; }
+      .guide label { font-size: 12px; color: var(--muted); }
+      select, .guide-button {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        background: var(--surface);
+        color: var(--text);
+        padding: 9px 10px;
+      }
+      .screen-links { display: grid; gap: 6px; }
+      .screen-links button {
+        border: 0;
+        border-radius: 8px;
+        padding: 9px 10px;
+        background: transparent;
+        color: var(--blue);
+        text-align: start;
+      }
+      .screen-links button.active { color: #fff; background: rgba(13, 162, 231, 0.82); }
+      .phone {
+        position: relative;
+        height: min(844px, calc(100vh - 48px));
+        min-height: 650px;
+        overflow: hidden;
+        background: var(--surface);
+        border: 8px solid #222;
+        border-radius: 34px;
+        box-shadow: 0 18px 48px rgba(0, 0, 0, 0.2);
+      }
+      .statusbar {
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 18px;
+        font-size: 11px;
+        background: var(--surface);
+      }
+      .app {
+        height: calc(100% - 28px);
+        overflow-y: auto;
+        scrollbar-width: none;
+        padding-bottom: 24px;
+      }
+      .app::-webkit-scrollbar { display: none; }
+      .screen { display: none; min-height: 100%; }
+      .screen.active { display: block; }
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 3;
+        min-height: 54px;
+        display: grid;
+        grid-template-columns: 44px 1fr 44px;
+        align-items: center;
+        padding: 0 8px;
+        background: rgba(255, 255, 255, 0.96);
+        border-bottom: 1px solid var(--line);
+      }
+      .topbar h2 { margin: 0; font-size: 18px; text-align: center; }
+      .icon-button {
+        width: 38px;
+        height: 38px;
+        border: 0;
+        border-radius: 50%;
+        color: var(--pink);
+        background: transparent;
+        font-size: 20px;
+      }
+      .hero {
+        min-height: 176px;
+        padding: 24px 20px 18px;
+        display: flex;
+        align-items: end;
+        gap: 14px;
+        color: #fff;
+        background:
+          linear-gradient(to bottom, rgba(13, 162, 231, 0.65), rgba(236, 72, 153, 0.2)),
+          linear-gradient(135deg, #c7ebff 0%, #8ccfec 48%, #7dc95e 100%);
+      }
+      .dog-avatar, .avatar {
+        display: grid;
+        place-items: center;
+        flex: 0 0 auto;
+        border-radius: 50%;
+        background: #fff;
+        box-shadow: var(--shadow);
+      }
+      .dog-avatar { width: 76px; height: 76px; font-size: 36px; }
+      .avatar { width: 44px; height: 44px; color: #fff; background: var(--blue); }
+      .avatar.green { background: var(--green); }
+      .avatar.pink { background: var(--pink); }
+      .hero h1 { margin: 0; font-size: 25px; text-shadow: 0 1px 2px rgba(0,0,0,.2); }
+      .hero p { margin: 4px 0 0; font-size: 13px; }
+      .tabs {
+        position: sticky;
+        top: 54px;
+        z-index: 2;
+        height: 48px;
+        display: flex;
+        padding: 4px;
+        background: var(--surface);
+        border-bottom: 1px solid var(--line);
+      }
+      .tab {
+        flex: 1;
+        border: 0;
+        border-radius: 6px;
+        color: var(--blue);
+        background: transparent;
+      }
+      .tab.active { color: #fff; background: rgba(13, 162, 231, 0.82); }
+      .content { display: grid; gap: 16px; padding: 16px; }
+      .section, .card {
+        overflow: hidden;
+        border-radius: 12px;
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+      .section-title {
+        margin: 0;
+        padding: 9px 12px;
+        color: #fff;
+        background: rgba(236, 72, 153, 0.98);
+        font-size: 16px;
+      }
+      .section-body { display: grid; gap: 12px; padding: 14px 12px; }
+      .card { padding: 14px; }
+      .row { display: flex; align-items: center; gap: 12px; }
+      .row.between { justify-content: space-between; }
+      .grow { flex: 1; min-width: 0; }
+      .title { margin: 0; font-size: 16px; }
+      .meta, .hint { color: var(--muted); font-size: 12px; line-height: 1.4; }
+      .hint { margin: 0; }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        width: fit-content;
+        border-radius: 999px;
+        padding: 4px 8px;
+        color: var(--blue);
+        background: rgba(13, 162, 231, 0.12);
+        font-size: 11px;
+      }
+      .badge.green { color: #347d20; background: rgba(125, 201, 94, 0.2); }
+      .badge.orange { color: #875f00; background: rgba(245, 183, 0, 0.22); }
+      .button-row { display: flex; flex-wrap: wrap; gap: 9px; }
+      .button {
+        border: 0;
+        border-radius: 10px;
+        padding: 10px 16px;
+        color: #fff;
+        background: var(--pink);
+      }
+      .button.secondary { color: var(--pink); background: #fff; border: 1px solid var(--pink); }
+      .button.blue { background: var(--blue); }
+      .button.blue.secondary { color: var(--blue); background: #fff; border-color: var(--blue); }
+      .button.danger { background: var(--red); }
+      .button.danger.secondary { color: var(--red); background: #fff; border-color: var(--red); }
+      .button.simple { padding: 5px 0; color: var(--pink); background: transparent; }
+      .button:disabled { color: #fff; background: #d9d9d9; border-color: #d9d9d9; }
+      .notice {
+        border-inline-start: 4px solid var(--blue);
+        border-radius: 8px;
+        padding: 11px 12px;
+        background: rgba(13, 162, 231, 0.08);
+        font-size: 13px;
+        line-height: 1.4;
+      }
+      .notice.warning { border-color: var(--orange); background: rgba(245, 183, 0, 0.12); }
+      .notice.danger { border-color: var(--red); background: rgba(255, 87, 20, 0.09); }
+      .owner-list, .timeline, .dog-list { display: grid; gap: 10px; }
+      .owner { display: flex; align-items: center; gap: 11px; padding: 2px 0; }
+      .owner .actions { margin-inline-start: auto; }
+      .pending { border-inline-start: 3px solid rgba(236, 72, 153, 0.5); }
+      .divider { height: 1px; background: var(--line); }
+      .field { display: grid; gap: 6px; }
+      .field label { font-size: 12px; color: var(--muted); }
+      .field select { width: 100%; }
+      .check { display: flex; align-items: flex-start; gap: 9px; font-size: 13px; line-height: 1.35; }
+      .check input { margin-top: 2px; accent-color: var(--pink); }
+      .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .photo { aspect-ratio: 1; display: grid; place-items: center; border-radius: 9px; background: rgba(13, 162, 231, .12); font-size: 28px; }
+      .photo.primary { outline: 3px solid var(--green); }
+      .progress { height: 8px; overflow: hidden; border-radius: 99px; background: var(--line); }
+      .progress > span { display: block; width: 66%; height: 100%; background: var(--green); }
+      .state-panel { display: none; }
+      .state-panel.active { display: grid; gap: 12px; padding: 32px 18px; text-align: center; }
+      .spinner { width: 30px; height: 30px; margin: auto; border: 3px solid var(--line); border-top-color: var(--pink); border-radius: 50%; }
+      .prototype-note { padding: 10px 16px; color: var(--muted); text-align: center; font-size: 10px; }
+      [dir='rtl'] .back-icon { transform: scaleX(-1); }
+      [dir='rtl'] .screen-links button { text-align: right; }
+      @media (max-width: 760px) {
+        .workspace { display: block; padding: 0; }
+        .guide {
+          position: static;
+          border-radius: 0;
+          box-shadow: none;
+        }
+        .guide p { display: none; }
+        .guide-controls { grid-template-columns: 1fr 1fr; }
+        .screen-links { display: flex; overflow-x: auto; }
+        .screen-links button { flex: 0 0 auto; }
+        .phone { width: 100%; height: 780px; min-height: 620px; border: 0; border-radius: 0; box-shadow: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="workspace">
+      <aside class="guide">
+        <h1>Shared ownership proposal</h1>
+        <p>Fake data only. Use the screen list and in-phone actions to review the proposed journeys.</p>
+        <div class="guide-controls">
+          <div>
+            <label for="direction">Layout direction</label>
+            <select id="direction">
+              <option value="ltr">English · LTR</option>
+              <option value="rtl">עברית · RTL</option>
+            </select>
+          </div>
+          <div>
+            <label for="state">Screen state</label>
+            <select id="state">
+              <option value="ready">Ready</option>
+              <option value="loading">Loading</option>
+              <option value="empty">Empty</option>
+              <option value="error">Error</option>
+              <option value="expired">Expired</option>
+              <option value="stale">Permission changed</option>
+            </select>
+          </div>
+        </div>
+        <nav class="screen-links" aria-label="Prototype screens">
+          <button data-go="dog" class="active">Dog page</button>
+          <button data-go="ownership">Ownership</button>
+          <button data-go="request">Request ownership</button>
+          <button data-go="response">Notification response</button>
+          <button data-go="leave">Leave & succession</button>
+          <button data-go="account">Delete account review</button>
+          <button data-go="delete">Shared dog deletion</button>
+          <button data-go="solo">Solo-owner actions</button>
+        </nav>
+      </aside>
+
+      <section class="phone" aria-label="Mobile prototype">
+        <div class="statusbar"><span>9:41</span><span>● ● ▰</span></div>
+        <div class="app" id="app">
+          <section class="screen active" data-screen="dog">
+            <div class="topbar"><button class="icon-button back-icon">←</button><h2>Luna</h2><span></span></div>
+            <div class="hero"><div class="dog-avatar">🐕</div><div><h1>Luna</h1><p>4 years · Mixed breed</p></div></div>
+            <div class="tabs"><button class="tab active">Details</button><button class="tab" data-go="ownership">Ownership</button></div>
+            <div class="content ready-content">
+              <article class="section"><h3 class="section-title">Details</h3><div class="section-body"><div class="row between"><span>Size</span><strong>Medium</strong></div><div class="row between"><span>Energy</span><strong>High</strong></div><p class="hint">Friendly, curious, and always looking for the next stick.</p></div></article>
+              <article class="notice">You’re friends with Luna’s primary owner. <button class="button simple" data-go="request">Request ownership</button></article>
+              <article class="section"><h3 class="section-title">Photos</h3><div class="section-body"><div class="gallery"><div class="photo primary">🐶</div><div class="photo">🌳</div><div class="photo">🎾</div></div></div></article>
+            </div>
+          </section>
+
+          <section class="screen" data-screen="ownership">
+            <div class="topbar"><button class="icon-button back-icon" data-go="dog">←</button><h2>Luna · Ownership</h2><span></span></div>
+            <div class="content ready-content">
+              <div class="notice">Owners can see each other’s names and avatars here, including owners who use hide mode elsewhere.</div>
+              <article class="section"><h3 class="section-title">Owners</h3><div class="section-body owner-list">
+                <div class="owner"><div class="avatar pink">EP</div><div class="grow"><div class="title">Ester</div><div class="meta">Primary owner · since Mar 2024</div></div><span class="badge">You</span></div>
+                <div class="owner"><div class="avatar green">DN</div><div class="grow"><div class="title">Dana</div><div class="meta">Co-owner · since Jun 2025</div></div></div>
+                <div class="owner"><div class="avatar">AM</div><div class="grow"><div class="title">Amit</div><div class="meta">Co-owner · since Jan 2026</div></div></div>
+              </div></article>
+              <article class="section"><h3 class="section-title">Pending</h3><div class="section-body">
+                <div class="card pending"><div class="row between"><div><div class="title">Invitation to Noa</div><div class="meta">Expires in 12 days</div></div><button class="button simple">Cancel</button></div></div>
+                <div class="card pending"><div class="row between"><div><div class="title">Ownership request from Gil</div><div class="meta">Expires in 27 days</div></div><button class="button simple" data-go="response">Review</button></div></div>
+              </div></article>
+              <div class="button-row"><button class="button blue">Invite a friend</button><button class="button blue secondary">Transfer primary role</button></div>
+              <div class="divider"></div>
+              <div class="button-row"><button class="button danger secondary" data-go="leave">Leave ownership</button><button class="button danger" data-go="delete">Propose deleting Luna</button></div>
+            </div>
+          </section>
+
+          <section class="screen" data-screen="request">
+            <div class="topbar"><button class="icon-button back-icon" data-go="dog">←</button><h2>Request ownership</h2><span></span></div>
+            <div class="content ready-content">
+              <article class="card"><div class="row"><div class="dog-avatar">🐕</div><div><h3 class="title">Luna</h3><div class="meta">Primary owner: Ester</div></div></div></article>
+              <h3 class="title">Before you request</h3>
+              <div class="notice">If approved, you can edit Luna’s profile, upload photos, and choose the main photo. Other owners will see your name and avatar here even if you use hide mode elsewhere.</div>
+              <label class="check"><input id="request-check" type="checkbox" /> <span>I understand the shared editing and owner visibility rules.</span></label>
+              <button id="request-submit" class="button" disabled>Send request</button>
+              <p class="hint">The request goes to the current primary owner and expires after 30 days. Ending your friendship cancels it.</p>
+            </div>
+          </section>
+
+          <section class="screen" data-screen="response">
+            <div class="topbar"><button class="icon-button back-icon">←</button><h2>Ownership request</h2><span></span></div>
+            <div class="content ready-content">
+              <article class="card"><div class="row"><div class="avatar">GG</div><div class="grow"><h3 class="title">Gil wants to co-own Luna</h3><div class="meta">Requested today · expires Oct 26</div></div></div></article>
+              <div class="notice">Approving adds Gil immediately. Gil will be able to edit details, upload photos, select the main photo, and see fellow owners in the Ownership tab.</div>
+              <div class="button-row"><button class="button blue">Approve</button><button class="button blue secondary">Decline</button></div>
+              <p class="hint">If your friendship ends, the request expires, or your primary role changes, this page becomes read-only and explains why.</p>
+            </div>
+          </section>
+
+          <section class="screen" data-screen="leave">
+            <div class="topbar"><button class="icon-button back-icon" data-go="ownership">←</button><h2>Leave Luna</h2><span></span></div>
+            <div class="content ready-content">
+              <div class="notice warning">You are Luna’s primary owner. Leaving removes your access immediately and promotes a current co-owner without asking them to accept.</div>
+              <div class="field"><label for="successor">New primary owner</label><select id="successor"><option>Dana · longest-standing co-owner</option><option>Amit</option></select></div>
+              <article class="card"><div class="title">After you leave</div><ul class="hint"><li>Dana becomes primary owner.</li><li>Your pending invitations and requests are canceled.</li><li>Your photo attribution remains, but you can no longer edit or delete photos.</li></ul></article>
+              <label class="check"><input type="checkbox" /> <span>I understand that I will lose access to Luna.</span></label>
+              <button class="button danger">Confirm leaving</button>
+            </div>
+          </section>
+
+          <section class="screen" data-screen="account">
+            <div class="topbar"><button class="icon-button back-icon">←</button><h2>Review account deletion</h2><span></span></div>
+            <div class="content ready-content">
+              <div class="notice danger">Review every dog before deleting your account. This change cannot be undone.</div>
+              <div class="dog-list">
+                <article class="card"><div class="row"><div class="dog-avatar">🐕</div><div><h3 class="title">Luna</h3><div class="meta">Shared · you are primary</div></div></div><div class="field"><label>New primary owner</label><select><option>Dana · longest-standing</option><option>Amit</option></select></div></article>
+                <article class="card"><div class="row"><div class="dog-avatar">🐩</div><div><h3 class="title">Milo</h3><div class="meta">Shared · co-owner</div></div></div><p class="hint">You leave; Milo stays with the other owners.</p></article>
+                <article class="card"><div class="row"><div class="dog-avatar">🦮</div><div><h3 class="title">Pico</h3><div class="meta">Only you own this dog</div></div></div><div class="notice danger">Pico’s profile and photos will be deleted.</div></article>
+              </div>
+              <div class="notice">Photos on shared dogs remain. Your uploader attribution is removed. Support handles evidence-based removal requests.</div>
+              <button class="button danger">Continue to final confirmation</button>
+            </div>
+          </section>
+
+          <section class="screen" data-screen="delete">
+            <div class="topbar"><button class="icon-button back-icon" data-go="ownership">←</button><h2>Delete Luna</h2><span></span></div>
+            <div class="content ready-content">
+              <div class="notice danger"><strong>All 3 owners must approve.</strong> The owner who gives the final approval may delete Luna immediately.</div>
+              <article class="section"><h3 class="section-title">Owner consent</h3><div class="section-body timeline">
+                <div class="owner"><div class="avatar pink">EP</div><div class="grow">Ester · primary</div><span class="badge green">Approved</span></div>
+                <div class="owner"><div class="avatar green">DN</div><div class="grow">Dana</div><span class="badge green">Approved</span></div>
+                <div class="owner"><div class="avatar">AM</div><div class="grow">Amit</div><span class="badge orange">Waiting</span></div>
+              </div></article>
+              <div><div class="row between meta"><span>2 of 3 approved</span><span>Expires in 29 days</span></div><div class="progress"><span></span></div></div>
+              <div class="button-row"><button class="button danger">Approve deletion</button><button class="button danger secondary">Reject</button></div>
+              <button class="button simple">Withdraw my approval and cancel proposal</button>
+              <p class="hint">Any owner joining/leaving, any primary change, rejection, or approval withdrawal cancels this proposal. A new proposal requires fresh consent.</p>
+            </div>
+          </section>
+
+          <section class="screen" data-screen="solo">
+            <div class="topbar"><button class="icon-button back-icon" data-go="dog">←</button><h2>Luna · Ownership</h2><span></span></div>
+            <div class="content ready-content">
+              <article class="section"><h3 class="section-title">Owner</h3><div class="section-body"><div class="owner"><div class="avatar pink">EP</div><div class="grow"><div class="title">Ester</div><div class="meta">Primary owner · only owner</div></div><span class="badge">You</span></div></div></article>
+              <div class="notice">There is no Leave action when you are the only owner. Add a co-owner if you want the profile to remain with someone else.</div>
+              <button class="button blue">Invite a friend</button>
+              <div class="divider"></div>
+              <button class="button danger">Delete dog</button>
+            </div>
+          </section>
+
+          <section class="state-panel" data-state-panel="loading"><div class="spinner"></div><strong>Loading ownership…</strong><span class="hint">Controls stay unavailable until current permissions are known.</span></section>
+          <section class="state-panel" data-state-panel="empty"><div style="font-size:36px">🐾</div><strong>Nothing pending</strong><span class="hint">New invitations, requests, or proposals will appear here.</span></section>
+          <section class="state-panel" data-state-panel="error"><div style="font-size:36px">↻</div><strong>Couldn’t load ownership</strong><span class="hint">Your changes were not submitted.</span><button class="button blue">Try again</button></section>
+          <section class="state-panel" data-state-panel="expired"><div style="font-size:36px">⌛</div><strong>This action expired</strong><span class="hint">It reached its 30-day deadline. Return to Luna for the current status.</span><button class="button blue" data-go="dog">View Luna</button></section>
+          <section class="state-panel" data-state-panel="stale"><div style="font-size:36px">🔒</div><strong>Your permission changed</strong><span class="hint">Another ownership change happened first. Refresh before choosing again.</span><button class="button blue">Refresh</button></section>
+          <div class="prototype-note">Proposal only · fake data · no network or production actions</div>
+        </div>
+      </section>
+    </main>
+    <script>
+      // Hash navigation keeps every proposed screen directly addressable during review.
+      const screens = [...document.querySelectorAll('[data-screen]')];
+      const navigationButtons = [...document.querySelectorAll('[data-go]')];
+      const guideButtons = [...document.querySelectorAll('.screen-links [data-go]')];
+      const stateSelect = document.querySelector('#state');
+      const directionSelect = document.querySelector('#direction');
+      const statePanels = [...document.querySelectorAll('[data-state-panel]')];
+
+      function showScreen(screenName) {
+        const targetName = screens.some((screen) => screen.dataset.screen === screenName)
+          ? screenName
+          : 'dog';
+        screens.forEach((screen) => screen.classList.toggle('active', screen.dataset.screen === targetName));
+        guideButtons.forEach((button) => button.classList.toggle('active', button.dataset.go === targetName));
+        window.location.hash = targetName;
+        document.querySelector('#app').scrollTop = 0;
+        stateSelect.value = 'ready';
+        updateState('ready');
+      }
+
+      function updateState(stateName) {
+        screens.forEach((screen) => {
+          screen.style.display = stateName === 'ready' && screen.classList.contains('active') ? 'block' : 'none';
+        });
+        statePanels.forEach((panel) => panel.classList.toggle('active', panel.dataset.statePanel === stateName));
+      }
+
+      navigationButtons.forEach((button) => button.addEventListener('click', () => showScreen(button.dataset.go)));
+      stateSelect.addEventListener('change', (event) => updateState(event.target.value));
+      directionSelect.addEventListener('change', (event) => {
+        document.documentElement.dir = event.target.value;
+        document.documentElement.lang = event.target.value === 'rtl' ? 'he' : 'en';
+      });
+
+      const requestCheck = document.querySelector('#request-check');
+      const requestSubmit = document.querySelector('#request-submit');
+      requestCheck.addEventListener('change', () => { requestSubmit.disabled = !requestCheck.checked; });
+
+      showScreen(window.location.hash.slice(1) || 'dog');
+      window.addEventListener('hashchange', () => showScreen(window.location.hash.slice(1)));
+    </script>
+  </body>
+</html>
