@@ -14,6 +14,7 @@ Read [CODEX_CONTEXT.md](CODEX_CONTEXT.md) for the live audit, access, security f
 
 - Several users share one dog profile; each user can have multiple dogs.
 - Exactly one primary owner per active dog, plus optional co-owners.
+- A dog can have at most 8 active owners total, including the primary owner.
 - All owners edit dog details, upload photos and select the main photo.
 - Primary can delete any photo; co-owners can delete their own uploads.
 - Only primary sends invitations, approves ownership requests, initiates ordinary primary transfer and proposes shared-dog deletion.
@@ -87,7 +88,7 @@ These are recommendations from the draft, not separately confirmed choices:
 - Use continuous membership tenure with deterministic tie-breaking; rejoining starts new tenure. If a selected successor becomes ineligible, stop and refresh rather than silently substituting someone.
 - Ordinary departure retains uploader attribution but removes member permissions; account erasure removes identifying references. Review rejoin implications.
 - Cancel stale ordinary transfer offers on relevant departure/primary change; define concurrency explicitly.
-- Membership/photo limits and resend cooldowns still need concrete defaults in the design.
+- Photo limits and resend cooldowns still need concrete defaults in the design.
 - Define support evidence, contact/waiting periods, permissible exceptional actions, decision records and retention/redaction.
 - Resolve exact schema/API contracts, legacy owner synchronization, old-client compatibility, erasure records and storage migration/rollback before implementation.
 

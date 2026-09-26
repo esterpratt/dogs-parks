@@ -43,6 +43,7 @@ Discovery is recorded in [the corrected ownership planning ticket](https://app.n
 The complete 2026-09-26 decision record, implementation/test plan, proposed defaults and copyable next-chat prompt are in [DOG_OWNERSHIP_PLAN.md](DOG_OWNERSHIP_PLAN.md). Primary-only invitations/approvals, friends-only eligibility, all 30-day expiry rules, cancellation on friendship/primary changes, unanimous deletion cancellation/execution rules, co-owner-only transfers, unknown legacy uploaders, support evidence rules and notification/departure screens are now decided. Documentation only; no feature code, migrations, prototype or new tests yet.
 
 - One primary owner plus co-owners, with shared day-to-day editing as the working model.
+- Confirmed 2026-09-26: each dog can have at most 8 active owners total, including the primary.
 - Support both invitations (recipient accepts) and ownership requests.
 - All owners upload and select the main photo; co-owners delete their own uploads; primary can delete any photo.
 - Ordinary primary-role transfer requires acceptance; the previous primary remains a co-owner.
@@ -66,7 +67,7 @@ Critical live findings: `delete-user` accepts a request-body user ID and uses th
 
 Data integrity snapshot: 18 total dog rows, 15 active and 3 soft-deleted; every active dog has exactly one primary and its legacy owner matches. Two deleted dogs have no primary. There are 16 membership rows, 0 invites, and 15 image rows; all image rows point to existing objects in the legacy `users` bucket. No production data or schema was changed. Treat the live prototype as drift to reconcile through a new additive migration, not as an implementation to build upon blindly.
 
-Remaining design work: operational support evidence/contact/recordkeeping details, limits/cooldowns, succession edge cases, schema/API contracts, migration/rollback and old-client compatibility. Invitation eligibility/expiry, final-owner Leave UX, main-photo fallback and legacy photo attribution are confirmed, not open. Recovery uses the existing support contact path; inactivity is never automatic deletion consent. Check-in remains user-based; accompanying-dog selection is separate. See the plan for confirmed rules versus proposed defaults.
+Remaining design work: operational support evidence/contact/recordkeeping details, photo/pending-action limits and cooldowns, succession edge cases, schema/API contracts, migration/rollback and old-client compatibility. Invitation eligibility/expiry, the 8-owner maximum, final-owner Leave UX, main-photo fallback and legacy photo attribution are confirmed, not open. Recovery uses the existing support contact path; inactivity is never automatic deletion consent. Check-in remains user-based; accompanying-dog selection is separate. See the plan for confirmed rules versus proposed defaults.
 
 Supabase access (2026-09-26): OAuth login and live read-only MCP calls succeeded against project `kbsjdfzpeianxhidguam`. The direct server `supabase-audit` is restricted with `read_only=true` and database/functions/storage/docs feature groups. No local database or Docker is needed for MCP.
 
