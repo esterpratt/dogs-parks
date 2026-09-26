@@ -280,6 +280,7 @@
               <option value="empty">Empty</option>
               <option value="error">Error</option>
               <option value="expired">Expired</option>
+              <option value="capacity">At owner limit</option>
               <option value="stale">Permission changed</option>
             </select>
           </div>
@@ -407,6 +408,7 @@
           <section class="state-panel" data-state-panel="empty"><div style="font-size:36px">🐾</div><strong>Nothing pending</strong><span class="hint">New invitations, requests, or proposals will appear here.</span></section>
           <section class="state-panel" data-state-panel="error"><div style="font-size:36px">↻</div><strong>Couldn’t load ownership</strong><span class="hint">Your changes were not submitted.</span><button class="button blue">Try again</button></section>
           <section class="state-panel" data-state-panel="expired"><div style="font-size:36px">⌛</div><strong>This action expired</strong><span class="hint">It reached its 30-day deadline. Return to Luna for the current status.</span><button class="button blue" data-go="dog">View Luna</button></section>
+          <section class="state-panel" data-state-panel="capacity"><div style="font-size:36px">🐾</div><strong>Luna has 8 owners</strong><span class="hint">New ownership requests are unavailable. Existing requests remain pending and can be approved if a slot opens before they expire.</span><button class="button blue" data-go="dog">View Luna</button></section>
           <section class="state-panel" data-state-panel="stale"><div style="font-size:36px">🔒</div><strong>Your permission changed</strong><span class="hint">Another ownership change happened first. Refresh before choosing again.</span><button class="button blue">Refresh</button></section>
           <div class="prototype-note">Proposal only · fake data · no network or production actions</div>
         </div>

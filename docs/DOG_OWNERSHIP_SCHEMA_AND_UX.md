@@ -62,6 +62,8 @@ Same lifecycle timestamps/version fields as invites, with `requester_user_id`, `
 
 RLS: requester and current primary only. Creation and response are RPC-only and recheck accepted friendship with the current primary. A friendship ending cancels pending invites and requests in the same friendship mutation transaction.
 
+At 8 active owners, the dog-page capability response disables Request ownership. Existing pending requests remain pending and keep their original expiry, but approval returns a capacity error until a slot opens. Capacity is locked and rechecked at approval.
+
 ### `public.dog_primary_transfers` — new
 
 Columns: `id`; `dog_id on delete cascade`; nullable `from_member_id` and `to_member_id` referencing `dog_members(id) on delete set null`; `ownership_version_at_creation`; status; `created_at`; fixed 30-day `expires_at`; `responded_at`; cancellation reason.
@@ -108,20 +110,18 @@ Columns: `id bigserial`; nullable `dog_id` (no cascading FK, so a purged dog can
 
 No client RLS access and no client grants. Security-definer lifecycle functions append events; support/service access is separately authorized and logged. Account erasure nulls the actor relationship. Retention/redaction duration is intentionally unresolved pending the support-policy decision.
 
-### `private.account_erasure_jobs` — new, service-only
-
-Columns: opaque job ID; target user ID held only while required; state; attempt count; last error code; database-transition timestamp; Auth-deletion timestamp; storage cursors; created/updated/completed timestamps. No Data API exposure or client grants.
-
-The authenticated Edge Function derives the target from the verified access token, never the request body. It creates/resumes one idempotent job, calls the atomic database departure/succession function first, then deletes Auth and paginates user-owned storage cleanup. Shared dog images are under dog paths and are not deleted. Job identifiers and target references are purged/redacted under the future support-retention rule.
-
 ### `private.storage_jobs` — new, service-only
 
-Columns: job ID; operation enum (`COPY_LEGACY_DOG_IMAGE`, `DELETE_DOG_ASSETS`, `DELETE_USER_ASSETS`); dog/image/user references as needed; source/destination bucket/path; state; checksum/size; attempts; error code; timestamps. It provides resumability and proves copy-before-delete for migration. No secrets or public URLs are stored.
+Columns: job ID; operation enum (`COPY_LEGACY_DOG_IMAGE`, `DELETE_DOG_ASSETS`); dog/image references as needed; source/destination bucket/path; state; checksum/size; attempts; error code; timestamps. It provides resumability for dog deletion and proves copy-before-delete for migration. No secrets or signed URLs are stored. This mechanism is not used for account erasure.
+
+### Existing `delete-user` Edge Function — hardened, no new erasure job
+
+Keep the current single-function account-deletion mechanism. The function verifies the authenticated session and derives the target user from it, calls one atomic database transition for every affected dog, then deletes the Auth user and paginates the existing user-scoped storage cleanup. Shared dog files are not user-scoped cleanup targets and remain untouched. Because Auth, Postgres and Storage do not share one transaction, any failure after Auth deletion requires explicit support/manual recovery; this design does not introduce a durable erasure-job table.
 
 ### Related existing tables
 
-- `public.notifications`: change `sender_id` from `ON DELETE CASCADE` to `ON DELETE SET NULL`; keep `receiver_id ON DELETE CASCADE`. Remove authenticated direct insert. Ownership notifications point to a response route through typed `target_type/target_id`; a missing, canceled or expired target opens a terminal state rather than failing. Do not put owner lists or private names in push payloads.
-- `public.notifications_preferences`: add explicit ownership categories only after final notification taxonomy is settled; `user_id ON DELETE CASCADE` remains correct.
+- `public.notifications`: preserve today's notification-row, Realtime and push-delivery architecture. Ownership lifecycle RPCs insert notification rows in their database transaction; push failure cannot roll back the ownership change. Change `sender_id` from `ON DELETE CASCADE` to `ON DELETE SET NULL`; keep `receiver_id ON DELETE CASCADE`. Remove authenticated direct insert. Ownership notifications point to a response route through typed `target_type/target_id`; a missing, canceled or expired target opens a terminal state rather than failing. Do not put owner lists or private names in push payloads.
+- `public.notifications_preferences`: in-app ownership notifications always remain visible; current preferences may mute push delivery. Add explicit ownership push categories only if the existing preference model requires them; `user_id ON DELETE CASCADE` remains correct.
 - `public.friendships`: schema is unchanged. Approved-to-ended transitions call an internal function that cancels matching pending invitations/requests. Existing ownership is untouched.
 - `public.users` / `auth.users`: current Auth → profile cascade remains, but `dogs.owner ON DELETE RESTRICT` ensures Auth cannot be deleted before succession/solo deletion. The Edge workflow must finish the database transition first.
 
@@ -147,7 +147,7 @@ Columns: job ID; operation enum (`COPY_LEGACY_DOG_IMAGE`, `DELETE_DOG_ASSETS`, `
 
 ## Lifecycle RPC and grant inventory
 
-All names are proposed. Each function sets a fixed `search_path`, derives the caller with `auth.uid()`, rejects null callers, locks the dog/current action, checks `now() < expires_at`, and returns a typed result suitable for idempotent retries.
+All names are proposed. Each function sets a fixed `search_path`, derives the caller with `auth.uid()`, rejects null callers, locks the dog/current action, checks `now() < expires_at`, and returns a typed result suitable for idempotent retries. Reads and responses treat `now() >= expires_at` as expired and lazily persist `EXPIRED`; no scheduler or client clock decides validity.
 
 | RPC | Caller | Atomic responsibility |
 | --- | --- | --- |
@@ -167,6 +167,7 @@ Existing prototype ownership RPCs should be replaced or wrapped only after compa
 ## Storage contract
 
 - New objects use the private `dogs` bucket and `<dog_id>/<image_id>.<ext>` paths. Reading uses an authenticated, membership/profile-visibility-aware signed URL path rather than public bucket access.
+- Use the Supabase Storage SDK for short-lived signed URLs and cache them client-side only until shortly before expiry. No image-proxy Edge Function or external service is introduced.
 - Storage insert requires an active owner and an image ID reserved by the upload RPC. Update is unnecessary. Delete is service/RPC coordinated; clients cannot delete arbitrary objects.
 - Legacy migration inventories database rows and objects, copies to the dog path, verifies byte size/checksum and readable metadata, changes `dog_images`, verifies again, then retires the old object. Every step is idempotent and resumable.
 - Switching the main photo only changes `dogs.primary_image_id`; it never moves an object.
@@ -177,7 +178,7 @@ Existing prototype ownership RPCs should be replaced or wrapped only after compa
 2. Add tests and the additive reconciliation migration with the feature disabled. Backfill primary memberships and image metadata; assert every active dog has exactly one matching primary.
 3. Deploy dual-read services and dog-ID storage support. Keep `dogs.owner` synchronized for legacy pack reads.
 4. Copy and verify legacy objects. Do not delete source files during the observation/rollback window.
-5. Require a shared-ownership-capable app version before a user may join/share a dog. Old clients may continue solo-owner reads/edits through compatibility RPCs, but cannot participate in shared mutations.
+5. Enforce a minimum shared-ownership-capable app version before users can access shared-ownership features. Old clients may continue unrelated/solo flows through compatibility RPCs, but cannot view or mutate shared ownership.
 6. Enable ownership UI gradually. Monitor invariant failures, job retries and authorization denials.
 7. Only after supported clients no longer depend on it, remove the compatibility `dogs.owner` API contract and legacy storage paths in a later migration.
 
@@ -207,19 +208,20 @@ The prototype uses the current Fredoka font, blue active tabs, pink section head
 - Departure: names the default successor and lets a primary select another eligible co-owner before confirmation.
 - Account deletion: one review page for every dog, editable successor selections, solo-dog consequence and shared-photo retention.
 - Shared deletion: consent roster, expiry, reject/withdraw/cancel behavior and prominent final-approval consequence.
-- State menu: loading, empty, error, expired and stale-permission samples; direction toggle demonstrates Hebrew RTL layout. Native implementation must also wire Android/system back, iOS swipe/back expectations, focus order and keyboard-safe scrolling.
+- State menu: loading, empty, error, expired, owner-capacity and stale-permission samples; direction toggle demonstrates Hebrew RTL layout. Native implementation must also wire Android/system back, iOS swipe/back expectations, focus order and keyboard-safe scrolling.
 
-## Proposed operational defaults still requiring confirmation
+## Confirmed operational decisions and open support policy
 
 - Confirmed: for a solo-owned dog, do not display Leave. Delete dog is the only ownership-removal action.
 - Confirmed limit: 8 active owners per dog including the primary.
 - Confirmed pending-invitation limit: for each dog, pending outgoing invitations cannot exceed `8 - active owner count`. Ownership-request abuse/rate limits remain open. Confirmed retry behavior: no cooldown after decline/cancellation, while idempotency keys make submission retries safe.
-- If a selected departure successor becomes ineligible before confirmation, stop with a refresh-required state; never silently substitute.
+- If a selected departure successor becomes ineligible before commit, automatically choose the next longest-standing eligible co-owner and notify the departing owner which successor was used.
+- Support policy remains open by explicit product decision; do not treat the discarded 14-day discussion as confirmed.
 - Support evidence, unreachable-primary contact attempts/waiting period, exceptional authority, case retention and redaction remain intentionally unspecified and must be decided before support recovery ships.
 
 ## Review gates before implementation
 
-- Confirm the remaining product defaults and operational support policy.
+- Keep the operational support policy open, and require it to be decided before support recovery ships; the other reviewed product defaults are confirmed.
 - Convert every confirmed rule and forbidden direct-write path into failing tests before behavior code.
-- Validate the disposable database/storage harness, including real RLS, RPC grants and object policies with multiple sessions.
+- Set up local Supabase with Docker and validate real migrations, RLS, RPC grants, Auth and object policies with multiple sessions. Generate database types from this migrated schema and map them to existing UI domain types.
 - Review the table inventory, prototype, old-client gate, migration/rollback and erasure boundary together.

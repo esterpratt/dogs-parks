@@ -31,6 +31,8 @@ Read [CODEX_CONTEXT.md](CODEX_CONTEXT.md) for the live audit, access, security f
 - Unanswered invitations and requests expire after 30 days.
 - After an invitation or request is declined or canceled, the same pair may create a new action immediately. Duplicate pending/crossed actions remain blocked and submission retries remain idempotent.
 - Pending outgoing invitations cannot exceed the dog's remaining owner slots: `8 - active owner count`. Invitation creation and acceptance both recheck capacity.
+- At 8 active owners, hide or disable Request ownership. Existing pending requests remain pending, cannot be approved until a slot opens, and retain their original 30-day expiry.
+- Primary owners may cancel pending invitations; requesters may cancel their own pending requests. Invitees/request recipients may decline.
 - Ending the relevant friendship cancels pending invitations and requests. Existing ownership is unaffected.
 - Changing the primary cancels all pending invitations and requests, rather than handing them to the new primary.
 - Responses are reached through the existing Notifications area, opening a dedicated response page. Owners also see pending items in Ownership.
@@ -42,6 +44,9 @@ Read [CODEX_CONTEXT.md](CODEX_CONTEXT.md) for the live audit, access, security f
 - On acceptance, the old primary remains a co-owner.
 - Leaving/account deletion uses different succession semantics: no successor acceptance is required.
 - The departure screen preselects the longest-standing eligible co-owner, clearly names them and lets the departing primary choose another co-owner before confirming.
+- Any active co-owner whose account is not being deleted is eligible for automatic succession; hide/private mode does not disqualify them.
+- Rejoining starts a new continuous tenure for succession ordering.
+- If the selected successor becomes ineligible before commit, automatically use the next longest-standing eligible co-owner and notify the departing owner which successor was used.
 - Account deletion uses one review page for all affected dogs, each shared dog showing its changeable preselected successor.
 - When the primary is the dog's only owner, do not show a Leave action. The only ownership-removal action is Delete dog.
 - Shared dogs remain with the remaining owners. When no co-owner exists, preserve current deletion behavior after verifying actual cascades and the delete RPC.
@@ -49,6 +54,7 @@ Read [CODEX_CONTEXT.md](CODEX_CONTEXT.md) for the live audit, access, security f
 ## Confirmed shared-dog deletion
 
 - Only primary can start a proposal; all current owners must explicitly consent.
+- Starting a proposal records the primary owner's approval.
 - Proposals expire after 30 days. Inactivity/silence never counts as consent.
 - Delete immediately after the final approval, clearly explaining before approval that it may complete deletion.
 - Any rejection cancels the proposal immediately.
@@ -81,19 +87,29 @@ Use existing React/Vite/SCSS patterns and visual language; prefer tabs/pages ove
 
 Include loading, empty, error, expired, declined, cancelled and stale-permission states; direct URLs without navigation state; Hebrew RTL/accessibility; native back/keyboard behavior. The standalone prototype is drafted and awaiting product review.
 
-## Proposed defaults and unresolved design details
+## Confirmed technical design and unresolved details
 
-These are recommendations from the draft, not separately confirmed choices:
+Confirmed:
 
-- Senders can cancel pending actions; recipients can decline. Prevent duplicate/crossed invitations and requests and make retries safe.
-- Starting a deletion proposal records primary consent; primary can cancel it while pending.
-- Eligible successor means an active current co-owner whose account is not being deleted; hide mode alone does not disqualify them.
-- Use continuous membership tenure with deterministic tie-breaking; rejoining starts new tenure. If a selected successor becomes ineligible, stop and refresh rather than silently substituting someone.
-- Ordinary departure retains uploader attribution but removes member permissions; account erasure removes identifying references. Review rejoin implications.
+- Use separate typed tables for invitations, requests, transfers and deletion proposals.
+- Keep departed membership rows with `left_at`; account erasure nulls identifying references. Rejoining creates a new tenure.
+- `dog_members` is authoritative. Keep `dogs.owner` synchronized as a compatibility mirror and remove it later.
+- Enforce exactly one primary with lifecycle RPC checks plus a deferred database constraint trigger.
+- Expiry is enforced server-side in read/response RPCs and marked lazily; no scheduler or client authority.
+- Move all dog photos to dog-ID paths in a private `dogs` bucket. Use authenticated short-lived signed URLs with client caching; copy and verify legacy objects before retiring them.
+- Dog deletion immediately hides the dog as `DELETING`, retries storage cleanup asynchronously, then hard-deletes relational data after verification.
+- Preserve today's notification architecture: ownership RPCs write existing notification rows, Realtime updates the app, and existing push delivery runs independently. In-app ownership notifications always appear; push may be muted through current preferences.
+- Preserve today's single `delete-user` Edge Function pattern rather than adding an erasure-job system. Verify the session-derived target, apply atomic ownership transitions, paginate cleanup and keep shared dog photos. A post-Auth cleanup failure requires support/manual recovery.
+- Require the minimum shared-ownership-capable app version before accessing shared-ownership features.
+- Use local Supabase with Docker for real migration/RLS/RPC/Auth/Storage tests.
+- Generate database types from the locally migrated schema while retaining and mapping UI domain types.
+
+Still open:
+
+- Ownership-request abuse/rate limits.
 - Cancel stale ordinary transfer offers on relevant departure/primary change; define concurrency explicitly.
-- Ownership-request abuse/rate limits still need concrete defaults in the design.
 - Define support evidence, contact/waiting periods, permissible exceptional actions, decision records and retention/redaction.
-- Resolve exact schema/API contracts, legacy owner synchronization, old-client compatibility, erasure records and storage migration/rollback before implementation.
+- Resolve exact SQL/API contracts, migration/rollback details and signed-URL cache lifetime before implementation.
 
 Do not restart the entire product questionnaire. Include routine technical choices as explicit proposals in the review package; ask only where a material product choice remains.
 
@@ -105,23 +121,23 @@ Do not restart the entire product questionnaire. Include routine technical choic
 4. Treat the recorded delete-user caller/target authorization flaw as an urgent early fix. Authenticate the caller and derive the target from the verified session. No remediation has yet been performed.
 5. Propose dog-ID-based storage and image metadata with nullable uploader identity; main-photo reference rather than moving files to switch main photo. Enforce rights in both database and storage.
 6. Inventory/copy/verify legacy files and metadata before retiring old objects. Test transition, retries and rollback. Do not discard files before verified replacement.
-7. Design retryable account erasure across Auth, database and storage. Make succession/departure atomic in the database; account for pagination, partial failures, storage ownership metadata and identifying references in notifications/history/files. Do not claim these systems form one transaction.
+7. Harden the existing single-function account deletion flow across Auth, database and storage. Make succession/departure atomic in the database; paginate cleanup, derive the target from the verified session, preserve shared dog files, and document manual recovery for partial post-Auth failures. Do not claim these systems form one transaction.
 8. Replace single-owner queries/grouping/caches and navigation-state edit permissions with authenticated membership capabilities. Cover pack, friend/search, dog, image and notification refreshes.
-9. Define notification delivery after commit with safe retries; failure must not duplicate or undo an ownership mutation.
-10. Sequence deployment for old installed mobile clients: choose compatibility or minimum-version enforcement before enabling shared ownership. Review recovery/rollback before production changes.
+9. Use the existing notification-row, Realtime and push path after lifecycle mutations; test that delivery failure neither duplicates nor undoes an ownership mutation.
+10. Enforce the minimum shared-ownership-capable app version before enabling shared ownership. Review recovery/rollback before production changes.
 
 The detailed schema/migration design is not yet implemented or approved. General reliability backlog, package upgrades, redesign, React Native migration, duplicate-profile merging and dog-attendance redesign are not implicit scope additions.
 
 ## Tests before behavior changes
 
-Historical baseline on 2026-09-26: 67 tests in 9 files passed. These utility-heavy tests do not prove shared ownership or real database authorization. No ownership tests have been added. Existing tools are Vitest/happy-dom and Playwright; the disposable database/storage harness still needs validation/setup.
+Historical baseline on 2026-09-26: 67 tests in 9 files passed. These utility-heavy tests do not prove shared ownership or real database authorization. No ownership tests have been added. Existing tools are Vitest/happy-dom and Playwright. The confirmed integration-test target is a local Supabase stack using Docker; setup still needs implementation and validation.
 
 1. Establish green baseline regressions for solo ownership, several dogs per user, gallery, friend search/hide mode and independent user check-ins. Record actual current defects as failures, not expected behavior.
 2. Add meaningful new-feature tests, demonstrate failure before implementation, then build one vertical slice at a time.
 3. Test each confirmed rule above, including exact 30-day boundaries, friendship cancellation, primary-change invalidation, withdrawal and immediate final approval.
 4. Test races/retries: duplicate or crossed joins, simultaneous approvals, membership changes during deletion, transfer versus departure, concurrent account deletion and stale successor selection.
 5. Test real RLS/RPC/storage authorization with primary, co-owner, former owner, outsider and anonymous sessions. Include direct table/object bypass attempts, hidden-owner disclosure and caller/target account deletion.
-6. Test retained photos, null/legacy attribution, migration file integrity, main-photo consistency and resumable account erasure after partial failure.
+6. Test retained photos, null/legacy attribution, migration file integrity, main-photo consistency and explicit manual-recovery behavior after a partial account-deletion failure.
 7. Run multi-session Playwright journeys and targeted Web/iOS/Android checks for notifications, photos, RTL, direct links, keyboard/back and connectivity.
 8. Run npm test, relevant existing e2e scripts, npm run lint, npm run build and git diff --check after implementation. Do not use production accounts for destructive tests.
 
