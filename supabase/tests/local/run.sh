@@ -5,15 +5,27 @@ set -euo pipefail
 # This runner always rebuilds the isolated fixture so characterization tests cannot
 # inherit local rows or accidentally use the repository's linked Supabase project.
 readonly SUPABASE_TEST_WORKDIR="supabase/tests/local"
-readonly EXCLUDED_SERVICES="edge-runtime,imgproxy,logflare,postgres-meta,studio,supavisor,vector"
+readonly EXCLUDED_SERVICES="imgproxy,logflare,postgres-meta,studio,supavisor,vector"
 readonly EXPECTED_SUPABASE_VERSION="2.109.1"
 readonly LOCAL_DB_CONTAINER="supabase_db_dogs-parks-ownership-tests"
 readonly OWNERSHIP_HARDENING_MIGRATION="supabase/migrations/20260927193000_harden_existing_dog_ownership.sql"
+readonly RUNTIME_FUNCTIONS_DIR="supabase/tests/local/supabase/.runtime-functions"
 
 cleanup() {
   if [[ "${KEEP_LOCAL_SUPABASE:-0}" != "1" ]]; then
     supabase stop --workdir "${SUPABASE_TEST_WORKDIR}" --no-backup >/dev/null
   fi
+
+  rm -f \
+    "${RUNTIME_FUNCTIONS_DIR}/delete-user/index.ts" \
+    "${RUNTIME_FUNCTIONS_DIR}/delete-user/deno.json" \
+    "${RUNTIME_FUNCTIONS_DIR}/delete-user/.npmrc" \
+    "${RUNTIME_FUNCTIONS_DIR}/_shared/cors.ts"
+  rmdir \
+    "${RUNTIME_FUNCTIONS_DIR}/delete-user" \
+    "${RUNTIME_FUNCTIONS_DIR}/_shared" \
+    "${RUNTIME_FUNCTIONS_DIR}" \
+    2>/dev/null || true
 }
 
 trap cleanup EXIT
@@ -23,6 +35,14 @@ if [[ "${actual_supabase_version}" != "${EXPECTED_SUPABASE_VERSION}" ]]; then
   echo "Expected Supabase CLI ${EXPECTED_SUPABASE_VERSION}, found ${actual_supabase_version}." >&2
   exit 1
 fi
+
+mkdir -p "${RUNTIME_FUNCTIONS_DIR}/delete-user" "${RUNTIME_FUNCTIONS_DIR}/_shared"
+cp \
+  supabase/functions/delete-user/index.ts \
+  supabase/functions/delete-user/deno.json \
+  supabase/functions/delete-user/.npmrc \
+  "${RUNTIME_FUNCTIONS_DIR}/delete-user/"
+cp supabase/functions/_shared/cors.ts "${RUNTIME_FUNCTIONS_DIR}/_shared/cors.ts"
 
 supabase stop --workdir "${SUPABASE_TEST_WORKDIR}" --no-backup >/dev/null 2>&1 || true
 supabase start \
@@ -54,3 +74,8 @@ SUPABASE_LOCAL_URL="${local_api_url}" \
 SUPABASE_LOCAL_ANON_KEY="${local_anon_key}" \
 SUPABASE_LOCAL_SERVICE_ROLE_KEY="${local_service_role_key}" \
   node --test supabase/tests/local/hardening-contract.test.mjs
+
+SUPABASE_LOCAL_URL="${local_api_url}" \
+SUPABASE_LOCAL_ANON_KEY="${local_anon_key}" \
+SUPABASE_LOCAL_SERVICE_ROLE_KEY="${local_service_role_key}" \
+  node --test supabase/tests/local/delete-user-contract.test.mjs

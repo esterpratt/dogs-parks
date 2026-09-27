@@ -124,7 +124,7 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { mutate: userDeletion, isPending: isPendingDeletion } = useMutation({
     mutationFn: async () => {
       localStorage.setItem('userDeleted', '1');
-      return deleteUser(session?.user.id || null);
+      return deleteUser();
     },
     onError: () => {
       localStorage.removeItem('userDeleted');

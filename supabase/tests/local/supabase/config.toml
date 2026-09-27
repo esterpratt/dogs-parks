@@ -382,6 +382,13 @@ inspector_port = 8083
 # The Deno major version to use.
 deno_version = 2
 
+# Exercise the repository function directly; handler-level Auth verification remains mandatory.
+[functions.delete-user]
+enabled = true
+verify_jwt = false
+entrypoint = "./.runtime-functions/delete-user/index.ts"
+import_map = "./.runtime-functions/delete-user/deno.json"
+
 # [edge_runtime.secrets]
 # secret_key = "env(SECRET_VALUE)"
 

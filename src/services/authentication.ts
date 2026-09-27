@@ -147,13 +147,11 @@ const updatePassword = async (password: string) => {
   }
 };
 
-const deleteUser = async (id: string | null) => {
+const deleteUser = async () => {
   try {
-    if (!id) {
-      return;
-    }
+    // The Edge Function derives the deletion target from this authenticated session.
     const { error } = await supabase.functions.invoke('delete-user', {
-      body: { id },
+      body: {},
     });
     if (error) {
       throw error;
