@@ -3,6 +3,7 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   test: {
     environment: 'happy-dom',
-    exclude: ['tests/e2e/**/*', 'node_modules', 'dist'],
+    // Local Supabase integration tests own their Docker lifecycle through test:supabase.
+    exclude: ['tests/e2e/**/*', 'supabase/tests/local/**/*', 'node_modules', 'dist'],
   },
 });
