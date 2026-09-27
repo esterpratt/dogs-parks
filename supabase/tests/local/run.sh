@@ -7,6 +7,8 @@ set -euo pipefail
 readonly SUPABASE_TEST_WORKDIR="supabase/tests/local"
 readonly EXCLUDED_SERVICES="edge-runtime,imgproxy,logflare,postgres-meta,studio,supavisor,vector"
 readonly EXPECTED_SUPABASE_VERSION="2.109.1"
+readonly LOCAL_DB_CONTAINER="supabase_db_dogs-parks-ownership-tests"
+readonly OWNERSHIP_HARDENING_MIGRATION="supabase/migrations/20260927193000_harden_existing_dog_ownership.sql"
 
 cleanup() {
   if [[ "${KEEP_LOCAL_SUPABASE:-0}" != "1" ]]; then
@@ -42,3 +44,13 @@ SUPABASE_LOCAL_URL="${local_api_url}" \
 SUPABASE_LOCAL_ANON_KEY="${local_anon_key}" \
 SUPABASE_LOCAL_SERVICE_ROLE_KEY="${local_service_role_key}" \
   node --test supabase/tests/local/current-baseline.test.mjs
+
+# The security contract runs separately so the baseline remains permanent evidence
+# of the behavior that the first additive ownership migration must replace.
+docker exec -i "${LOCAL_DB_CONTAINER}" psql -U postgres -d postgres -q -1 -v ON_ERROR_STOP=1 \
+  < "${OWNERSHIP_HARDENING_MIGRATION}"
+
+SUPABASE_LOCAL_URL="${local_api_url}" \
+SUPABASE_LOCAL_ANON_KEY="${local_anon_key}" \
+SUPABASE_LOCAL_SERVICE_ROLE_KEY="${local_service_role_key}" \
+  node --test supabase/tests/local/hardening-contract.test.mjs
