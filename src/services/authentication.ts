@@ -3,6 +3,8 @@ import { Preferences } from '@capacitor/preferences';
 import { isMobile } from '../utils/platform';
 import { AppError, throwError } from './error';
 import { supabase } from './supabase-client';
+import { clearDogImageUrlCache } from './dogs';
+import { clearPrivateDogImageQueries } from './react-query';
 import { i18n } from '../i18n';
 import { SignOutResult } from '../types/auth';
 import { FORCED_LOGOUT_EVENT } from '../utils/consts';
@@ -107,12 +109,16 @@ const signOut = async (): Promise<SignOutResult> => {
     if (error) {
       throw error;
     }
+    clearDogImageUrlCache();
+    clearPrivateDogImageQueries();
 
     return SignOutResult.OK;
   } catch (error) {
     console.error('signOut error (ignored for logout UX)', error);
 
     await removeAuthToken();
+    clearDogImageUrlCache();
+    clearPrivateDogImageQueries();
 
     window.dispatchEvent(new Event(FORCED_LOGOUT_EVENT));
 

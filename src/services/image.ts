@@ -23,6 +23,24 @@ interface MoveImageProps {
   newPath: string;
 }
 
+interface PreparedImage {
+  file: File;
+  format: string;
+}
+
+const prepareImage = async (image: File | string): Promise<PreparedImage> => {
+  const rawName = typeof image === 'string' ? `image-${v4()}` : image.name;
+  const { compressImage, getCompressedImage } = await import(
+    './image-compression'
+  );
+  const file =
+    typeof image === 'string'
+      ? await getCompressedImage(image, rawName)
+      : image;
+
+  return compressImage(file);
+};
+
 const fetchImagesByDirectory = async ({ path, bucket }: HandleImageProps) => {
   try {
     const { data, error } = await supabase.storage.from(bucket).list(path);
@@ -134,4 +152,10 @@ const moveImage = async ({ bucket, oldPath, newPath }: MoveImageProps) => {
   }
 };
 
-export { uploadImage, fetchImagesByDirectory, deleteImage, moveImage };
+export {
+  uploadImage,
+  fetchImagesByDirectory,
+  deleteImage,
+  moveImage,
+  prepareImage,
+};

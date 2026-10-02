@@ -10,7 +10,10 @@ import type { Dog } from '../types/dog';
 import type { User } from '../types/user';
 import { getDogNames } from '../utils/getDogNames';
 import { ONE_MINUTE } from '../utils/consts';
-import { fetchDogPrimaryImage } from '../services/dogs';
+import {
+  DOG_IMAGE_QUERY_REFRESH_MS,
+  fetchDogPrimaryImage,
+} from '../services/dogs';
 import { fetchUserFavorites } from '../services/favorites';
 import {
   fetchUserInvitedEvents,
@@ -46,6 +49,8 @@ const ProfileResolved: React.FC<ProfileResolvedProps> = (props) => {
       return {
         queryKey: ['dogImage', dog.id],
         queryFn: async () => fetchDogPrimaryImage(dog.id),
+        refetchInterval: DOG_IMAGE_QUERY_REFRESH_MS,
+        staleTime: DOG_IMAGE_QUERY_REFRESH_MS,
       };
     }),
   });

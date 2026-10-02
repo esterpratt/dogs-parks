@@ -114,26 +114,35 @@ export type Database = {
         Row: {
           bucket_id: string
           created_at: string
+          deleted_at: string | null
           dog_id: string
           id: string
-          is_primary: boolean
+          reservation_expires_at: string | null
           storage_path: string
+          upload_state: Database["public"]["Enums"]["dog_image_upload_state"]
+          uploader_member_id: string | null
         }
         Insert: {
           bucket_id: string
           created_at?: string
+          deleted_at?: string | null
           dog_id: string
           id?: string
-          is_primary?: boolean
+          reservation_expires_at?: string | null
           storage_path: string
+          upload_state?: Database["public"]["Enums"]["dog_image_upload_state"]
+          uploader_member_id?: string | null
         }
         Update: {
           bucket_id?: string
           created_at?: string
+          deleted_at?: string | null
           dog_id?: string
           id?: string
-          is_primary?: boolean
+          reservation_expires_at?: string | null
           storage_path?: string
+          upload_state?: Database["public"]["Enums"]["dog_image_upload_state"]
+          uploader_member_id?: string | null
         }
         Relationships: [
           {
@@ -141,6 +150,13 @@ export type Database = {
             columns: ["dog_id"]
             isOneToOne: false
             referencedRelation: "dogs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dog_images_uploader_member_id_fkey"
+            columns: ["uploader_member_id"]
+            isOneToOne: false
+            referencedRelation: "dog_members"
             referencedColumns: ["id"]
           },
         ]
@@ -256,6 +272,7 @@ export type Database = {
           owner: string | null
           ownership_version: number
           possessive: string | null
+          primary_image_id: string | null
           size: string | null
           temperament: string | null
         }
@@ -274,6 +291,7 @@ export type Database = {
           owner?: string | null
           ownership_version?: number
           possessive?: string | null
+          primary_image_id?: string | null
           size?: string | null
           temperament?: string | null
         }
@@ -292,6 +310,7 @@ export type Database = {
           owner?: string | null
           ownership_version?: number
           possessive?: string | null
+          primary_image_id?: string | null
           size?: string | null
           temperament?: string | null
         }
@@ -301,6 +320,13 @@ export type Database = {
             columns: ["owner"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dogs_primary_image_id_fkey"
+            columns: ["primary_image_id"]
+            isOneToOne: false
+            referencedRelation: "dog_images"
             referencedColumns: ["id"]
           },
         ]
@@ -1043,6 +1069,25 @@ export type Database = {
         Args: { p_device_id?: string }
         Returns: number
       }
+      api_delete_dog_image: { Args: { p_image_id: string }; Returns: undefined }
+      api_finalize_dog_image: {
+        Args: { p_image_id: string }
+        Returns: undefined
+      }
+      api_reserve_dog_image: {
+        Args: { p_dog_id: string; p_extension: string }
+        Returns: {
+          bucket_id: string
+          id: string
+          reservation_expires_at: string
+          storage_path: string
+          upload_state: Database["public"]["Enums"]["dog_image_upload_state"]
+        }[]
+      }
+      api_set_primary_dog_image: {
+        Args: { p_image_id: string }
+        Returns: undefined
+      }
       api_update_missing_park_details: {
         Args: {
           p_has_facilities?: boolean
@@ -1069,6 +1114,14 @@ export type Database = {
         Args: { p_object_name: string }
         Returns: boolean
       }
+      can_upload_reserved_dog_image_object: {
+        Args: { p_object_name: string }
+        Returns: boolean
+      }
+      can_view_dog_image_object: {
+        Args: { p_object_name: string }
+        Returns: boolean
+      }
       cancel_dog_invite: { Args: { p_invite_id: string }; Returns: undefined }
       check_device_token_match: {
         Args: { p_device_id: string; p_token: string }
@@ -1080,6 +1133,30 @@ export type Database = {
           updated_at: string
           user_id: string
         }[]
+      }
+      claim_dog_storage_jobs: {
+        Args: { p_limit?: number }
+        Returns: {
+          attempts: number
+          checksum: string
+          destination_bucket: string
+          destination_path: string
+          dog_id: string
+          expected_size: number
+          id: string
+          image_id: string
+          operation: Database["public"]["Enums"]["dog_storage_job_operation"]
+          source_bucket: string
+          source_path: string
+        }[]
+      }
+      complete_dog_storage_job: {
+        Args: {
+          p_checksum?: string
+          p_job_id: string
+          p_verified_size?: number
+        }
+        Returns: undefined
       }
       count_unseen_notifications: { Args: never; Returns: number }
       create_dog_invite: {
@@ -1106,6 +1183,10 @@ export type Database = {
       }
       decline_dog_invite: { Args: { p_invite_id: string }; Returns: undefined }
       delete_dog: { Args: { dog_id: string }; Returns: undefined }
+      fail_dog_storage_job: {
+        Args: { p_error_code: string; p_job_id: string }
+        Returns: undefined
+      }
       get_active_park_conditions: {
         Args: { p_now?: string; p_park_id: string }
         Returns: {
@@ -1275,10 +1356,16 @@ export type Database = {
       app_language: "en" | "he" | "ar"
       app_platform: "IOS" | "ANDROID" | "WEB"
       condition_observed_status: "PRESENT" | "NOT_PRESENT"
+      dog_image_upload_state: "RESERVED" | "ACTIVE" | "DELETING"
       dog_invite_status: "PENDING" | "ACCEPTED" | "DECLINED" | "CANCELED"
       dog_lifecycle_state: "ACTIVE" | "DELETING" | "DELETED"
       dog_member_departure_reason: "LEFT" | "ACCOUNT_ERASED" | "DOG_DELETED"
       dog_member_role: "PRIMARY_OWNER" | "CO_OWNER" | "VIEWER"
+      dog_storage_job_operation:
+        | "COPY_LEGACY_DOG_IMAGE"
+        | "DELETE_DOG_ASSETS"
+        | "DELETE_ORPHAN_UPLOAD"
+      dog_storage_job_state: "PENDING" | "PROCESSING" | "COMPLETED"
       friendship_status: "APPROVED" | "PENDING"
       invite_status: "INVITED" | "ACCEPTED" | "DECLINED" | "REMOVED"
       notification_target_type:
@@ -1439,10 +1526,17 @@ export const Constants = {
       app_language: ["en", "he", "ar"],
       app_platform: ["IOS", "ANDROID", "WEB"],
       condition_observed_status: ["PRESENT", "NOT_PRESENT"],
+      dog_image_upload_state: ["RESERVED", "ACTIVE", "DELETING"],
       dog_invite_status: ["PENDING", "ACCEPTED", "DECLINED", "CANCELED"],
       dog_lifecycle_state: ["ACTIVE", "DELETING", "DELETED"],
       dog_member_departure_reason: ["LEFT", "ACCOUNT_ERASED", "DOG_DELETED"],
       dog_member_role: ["PRIMARY_OWNER", "CO_OWNER", "VIEWER"],
+      dog_storage_job_operation: [
+        "COPY_LEGACY_DOG_IMAGE",
+        "DELETE_DOG_ASSETS",
+        "DELETE_ORPHAN_UPLOAD",
+      ],
+      dog_storage_job_state: ["PENDING", "PROCESSING", "COMPLETED"],
       friendship_status: ["APPROVED", "PENDING"],
       invite_status: ["INVITED", "ACCEPTED", "DECLINED", "REMOVED"],
       notification_target_type: [

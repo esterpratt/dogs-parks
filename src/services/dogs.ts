@@ -1,13 +1,8 @@
 import { throwError } from './error';
 import { Dog } from '../types/dog';
+import { DogImage } from '../types/dog-image';
 import { supabase } from './supabase-client';
-import {
-  deleteImage,
-  fetchImagesByDirectory,
-  moveImage,
-  uploadImage,
-} from './image';
-import { removeBasePath } from './image-utils';
+import { prepareImage } from './image';
 
 type CreateDogProps = Omit<Dog, 'id'>;
 
@@ -16,27 +11,14 @@ interface EditDogProps {
   dogDetails: Partial<Dog>;
 }
 
-const dogOwnerCache = new Map<string, string>();
-
-const getDogOwnerId = async (dogId: string) => {
-  if (dogOwnerCache.has(dogId)) {
-    return dogOwnerCache.get(dogId);
-  }
-
-  const { data: dog, error } = await supabase
-    .from('dogs')
-    .select('owner')
-    .eq('id', dogId)
-    .single();
-
-  if (error) {
-    throw error;
-  }
-
-  const ownerId = dog.owner;
-  dogOwnerCache.set(dogId, ownerId);
-  return ownerId;
-};
+const DOG_IMAGE_URL_LIFETIME_SECONDS = 15 * 60;
+const DOG_IMAGE_URL_REFRESH_BUFFER_MS = 2 * 60 * 1000;
+const DOG_IMAGE_QUERY_REFRESH_MS =
+  DOG_IMAGE_URL_LIFETIME_SECONDS * 1000 - DOG_IMAGE_URL_REFRESH_BUFFER_MS;
+const dogImageUrlCache = new Map<
+  string,
+  { expiresAt: number; storagePath: string; url: string }
+>();
 
 const createDog = async (createDogProps: CreateDogProps) => {
   try {
@@ -140,54 +122,154 @@ const fetchUsersDogs = async (userIds: string[]) => {
 
 const uploadDogImage = async (image: File | string, dogId: string) => {
   try {
-    const userId = await getDogOwnerId(dogId);
-    const response = await uploadImage({
-      image,
-      path: `${userId}/dogs/${dogId}/other/`,
-      bucket: 'users',
-    });
+    const preparedImage = await prepareImage(image);
+    const { data: reservations, error: reservationError } = await supabase.rpc(
+      'api_reserve_dog_image',
+      {
+        p_dog_id: dogId,
+        p_extension: preparedImage.format,
+      }
+    );
 
-    return response;
+    if (reservationError) {
+      throw reservationError;
+    }
+
+    const reservation = reservations?.[0];
+    if (!reservation) {
+      throw new Error('Dog image reservation was not created');
+    }
+
+    // Storage accepts only this unexpired reservation path for its creating owner.
+    const { error: uploadError } = await supabase.storage
+      .from('dogs')
+      .upload(reservation.storage_path, preparedImage.file, {
+        cacheControl: '2592000',
+        contentType: `image/${preparedImage.format}`,
+      });
+
+    if (uploadError) {
+      throw uploadError;
+    }
+
+    const { error: finalizeError } = await supabase.rpc(
+      'api_finalize_dog_image',
+      {
+        p_image_id: reservation.id,
+      }
+    );
+
+    if (finalizeError) {
+      throw finalizeError;
+    }
+
+    return reservation.id;
   } catch (error) {
     throwError(error);
   }
 };
 
-const uploadDogPrimaryImage = async ({
-  image,
-  dogId,
-  upsert,
+const getDogImageUrl = async ({
+  bucketId,
+  imageId,
+  storagePath,
 }: {
-  image: File | string;
-  dogId: string;
-  upsert: boolean;
+  bucketId: string;
+  imageId: string;
+  storagePath: string;
 }) => {
-  try {
-    const userId = await getDogOwnerId(dogId);
-    const response = await uploadImage({
-      image,
-      bucket: 'users',
-      path: `${userId}/dogs/${dogId}/primary`,
-      name: 'primary',
-      upsert,
-    });
+  const cached = dogImageUrlCache.get(imageId);
+  const now = Date.now();
 
-    return response;
-  } catch (error) {
-    throwError(error);
+  if (
+    cached &&
+    cached.storagePath === storagePath &&
+    cached.expiresAt - DOG_IMAGE_URL_REFRESH_BUFFER_MS > now
+  ) {
+    return cached.url;
   }
+
+  const { data, error } = await supabase.storage
+    .from(bucketId)
+    .createSignedUrl(storagePath, DOG_IMAGE_URL_LIFETIME_SECONDS);
+
+  if (error) {
+    throw error;
+  }
+
+  dogImageUrlCache.set(imageId, {
+    expiresAt: now + DOG_IMAGE_URL_LIFETIME_SECONDS * 1000,
+    storagePath,
+    url: data.signedUrl,
+  });
+
+  return data.signedUrl;
+};
+
+const fetchDogImageRecords = async (dogId: string): Promise<DogImage[]> => {
+  const [{ data: dog, error: dogError }, { data: authData, error: authError }] =
+    await Promise.all([
+      supabase
+        .from('dogs')
+        .select('primary_image_id')
+        .eq('id', dogId)
+        .single(),
+      supabase.auth.getUser(),
+    ]);
+
+  if (dogError) {
+    throw dogError;
+  }
+
+  if (authError) {
+    throw authError;
+  }
+
+  const { data: membership, error: membershipError } = await supabase
+    .from('dog_members')
+    .select('id,role')
+    .eq('dog_id', dogId)
+    .eq('user_id', authData.user.id)
+    .is('left_at', null)
+    .maybeSingle();
+
+  if (membershipError) {
+    throw membershipError;
+  }
+
+  const { data: images, error: imagesError } = await supabase
+    .from('dog_images')
+    .select('id,bucket_id,storage_path,uploader_member_id,created_at')
+    .eq('dog_id', dogId)
+    .eq('upload_state', 'ACTIVE')
+    .is('deleted_at', null)
+    .order('created_at', { ascending: false });
+
+  if (imagesError) {
+    throw imagesError;
+  }
+
+  return Promise.all(
+    images.map(async (dogImage) => ({
+      canDelete:
+        membership?.role === 'PRIMARY_OWNER' ||
+        membership?.id === dogImage.uploader_member_id,
+      id: dogImage.id,
+      isPrimary: dog.primary_image_id === dogImage.id,
+      storagePath: dogImage.storage_path,
+      url: await getDogImageUrl({
+        bucketId: dogImage.bucket_id,
+        imageId: dogImage.id,
+        storagePath: dogImage.storage_path,
+      }),
+    }))
+  );
 };
 
 const fetchDogPrimaryImage = async (dogId: string) => {
   try {
-    const userId = await getDogOwnerId(dogId);
-
-    const response = await fetchImagesByDirectory({
-      bucket: 'users',
-      path: `${userId}/dogs/${dogId}/primary/`,
-    });
-
-    return response?.[0] ?? null;
+    const images = await fetchDogImageRecords(dogId);
+    return images.find(({ isPrimary }) => isPrimary)?.url ?? null;
   } catch (error) {
     console.error(
       `there was a problem fetching primary image for dog ${dogId}: ${error}`
@@ -198,14 +280,7 @@ const fetchDogPrimaryImage = async (dogId: string) => {
 
 const fetchAllDogImages = async (dogId: string) => {
   try {
-    const userId = await getDogOwnerId(dogId);
-
-    const response = await fetchImagesByDirectory({
-      bucket: 'users',
-      path: `${userId}/dogs/${dogId}/other/`,
-    });
-
-    return response;
+    return await fetchDogImageRecords(dogId);
   } catch (error) {
     console.error(
       `there was a problem fetching images for dog ${dogId}: ${error}`
@@ -214,83 +289,38 @@ const fetchAllDogImages = async (dogId: string) => {
   }
 };
 
-const movePrimaryImageToOther = async (imagePath: string, dogId: string) => {
+const setDogPrimaryImage = async (imageId: string) => {
   try {
-    const userId = await getDogOwnerId(dogId);
-    const imageName = imagePath
-      .split('primary/')[1]
-      .slice('primary-'.length);
-
-    if (imageName) {
-      const newPath = `${userId}/dogs/${dogId}/other/${imageName}`;
-      const oldPath = `${userId}/dogs/${dogId}/primary/primary-${imageName}`;
-
-      return moveImage({
-        bucket: 'users',
-        oldPath,
-        newPath,
-      });
-    }
-
-    return null;
-  } catch (error) {
-    console.error(
-      `there was a problem moving primary image for dog ${dogId}: ${error}`
-    );
-    return null;
-  }
-};
-
-const moveOtherImageToPrimary = async (
-  imagePath: string,
-  dogId: string
-) => {
-  try {
-    const userId = await getDogOwnerId(dogId);
-    const imageName = imagePath.split('other/')[1];
-    const newPath = `${userId}/dogs/${dogId}/primary/primary-${imageName}`;
-    const oldPath = `${userId}/dogs/${dogId}/other/${imageName}`;
-
-    return moveImage({
-      bucket: 'users',
-      oldPath,
-      newPath,
+    const { error } = await supabase.rpc('api_set_primary_dog_image', {
+      p_image_id: imageId,
     });
+
+    if (error) {
+      throw error;
+    }
   } catch (error) {
-    console.error(
-      `there was a problem moving other image for dog ${dogId}: ${error}`
-    );
-    return null;
+    throwError(error);
   }
 };
 
-const setDogPrimaryImage = async (imagePath: string, dogId: string) => {
+const deleteDogImage = async (imageId: string) => {
   try {
-    const currentPrimaryImage = await fetchDogPrimaryImage(dogId);
-    const promises = [moveOtherImageToPrimary(imagePath, dogId)];
+    const { error } = await supabase.rpc('api_delete_dog_image', {
+      p_image_id: imageId,
+    });
 
-    if (currentPrimaryImage) {
-      promises.push(
-        movePrimaryImageToOther(currentPrimaryImage, dogId)
-      );
+    if (error) {
+      throw error;
     }
 
-    const [newPrimaryResponse, oldPrimaryResponse] =
-      await Promise.all(promises);
-
-    if (!newPrimaryResponse || !oldPrimaryResponse) {
-      throw new Error('Error moving images');
-    }
+    dogImageUrlCache.delete(imageId);
   } catch (error) {
-    console.error(
-      `there was a problem moving images for dog ${dogId}: ${error}`
-    );
+    throwError(error);
   }
 };
 
-const deleteDogImage = async (imagePath: string) => {
-  const relevantPath = removeBasePath(imagePath, 'users/');
-  return deleteImage({ bucket: 'users', path: relevantPath });
+const clearDogImageUrlCache = () => {
+  dogImageUrlCache.clear();
 };
 
 export {
@@ -303,9 +333,10 @@ export {
   fetchDogPrimaryImage,
   fetchAllDogImages,
   uploadDogImage,
-  uploadDogPrimaryImage,
   deleteDogImage,
   setDogPrimaryImage,
+  clearDogImageUrlCache,
+  DOG_IMAGE_QUERY_REFRESH_MS,
 };
 
 export type { EditDogProps };

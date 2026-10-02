@@ -6,7 +6,10 @@ import { useQuery } from '@tanstack/react-query';
 import { Check, X } from 'lucide-react';
 import { User } from '../../types/user';
 import { Dog, GENDER } from '../../types/dog';
-import { fetchDogPrimaryImage } from '../../services/dogs';
+import {
+  DOG_IMAGE_QUERY_REFRESH_MS,
+  fetchDogPrimaryImage,
+} from '../../services/dogs';
 import { UserContext } from '../../context/UserContext';
 import { useUpdateFriendship } from '../../hooks/api/useUpdateFriendship';
 import { FRIENDSHIP_STATUS } from '../../types/friendship';
@@ -36,6 +39,8 @@ const UserPreview: React.FC<UserPreviewProps> = ({
     queryKey: ['dogImage', user.dogs[0]?.id ?? null],
     queryFn: async () => fetchDogPrimaryImage(user.dogs[0].id),
     enabled: user.dogs.length > 0,
+    refetchInterval: DOG_IMAGE_QUERY_REFRESH_MS,
+    staleTime: DOG_IMAGE_QUERY_REFRESH_MS,
   });
 
   const { onUpdateFriendship } = useUpdateFriendship({

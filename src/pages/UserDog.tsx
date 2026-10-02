@@ -6,14 +6,12 @@ import { Trans, useTranslation } from 'react-i18next';
 import classnames from 'classnames';
 import { GENDER } from '../types/dog';
 import {
+  DOG_IMAGE_QUERY_REFRESH_MS,
   fetchDogPrimaryImage,
   fetchDogs,
-  uploadDogPrimaryImage,
 } from '../services/dogs';
-import { queryClient } from '../services/react-query';
 import { getLocalizedDogAgeText } from '../utils/dogAge';
 import { capitalizeText } from '../utils/text';
-import { useUploadImage } from '../hooks/api/useUploadImage';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import DogIcon from '../assets/dog.svg?react';
 import { DogDetails } from '../components/dog/DogDetails';
@@ -26,7 +24,6 @@ import { Header } from '../components/Header';
 import { HeaderImage } from '../components/HeaderImage';
 import { PrevLinks } from '../components/PrevLinks';
 import { EditDogModal } from '../components/dog/EditDogModal';
-import { CameraModal } from '../components/camera/CameraModal';
 
 import styles from './UserDog.module.scss';
 
@@ -34,7 +31,6 @@ const UserDog = () => {
   const { dogId } = useParams();
   const { state } = useLocation();
   const [isEditDogsModalOpen, setIsEditDogsModalOpen] = useState(false);
-  const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
   const [imageToEnlarge, setImageToEnlarge] = useState<string>('');
   const [isEnlargedImageModalOpen, setIsEnlargeImageModalOpen] =
     useState(false);
@@ -53,23 +49,13 @@ const UserDog = () => {
   const { data: primaryImage } = useQuery({
     queryKey: ['dogImage', dogId],
     queryFn: async () => fetchDogPrimaryImage(dogId!),
+    refetchInterval: DOG_IMAGE_QUERY_REFRESH_MS,
+    staleTime: DOG_IMAGE_QUERY_REFRESH_MS,
   });
 
   const { showLoader } = useDelayedLoading({
     isLoading: isLoadingDog,
     minDuration: 750,
-  });
-
-  const { mutate: setDogImage, isPending } = useUploadImage({
-    mutationFn: (img: string | File) =>
-      uploadDogPrimaryImage({
-        image: img,
-        dogId: dogId!,
-        upsert: !!primaryImage,
-      }),
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['dogImage', dogId] });
-    },
   });
 
   const onCloseDogsModal = () => {
@@ -81,11 +67,6 @@ const UserDog = () => {
     if (scrollToInput) {
       sessionStorage.setItem('scroll-to-element', 'true');
     }
-  };
-
-  const onUploadImg = async (img: string | File) => {
-    setIsAddImageModalOpen(false);
-    setDogImage(img);
   };
 
   const onClickImage = (img: string) => {
@@ -135,10 +116,7 @@ const UserDog = () => {
               imgSrc={primaryImage}
               onClickImg={onClickImage}
               NoImgIcon={DogIcon}
-              onClickEditPhoto={
-                isSignedInUser ? () => setIsAddImageModalOpen(true) : null
-              }
-              isLoading={isPending}
+              onClickEditPhoto={null}
             />
           }
           bottomCmp={
@@ -229,11 +207,6 @@ const UserDog = () => {
         dog={dog}
         isOpen={isEditDogsModalOpen}
         onClose={onCloseDogsModal}
-      />
-      <CameraModal
-        open={isAddImageModalOpen}
-        setOpen={setIsAddImageModalOpen}
-        onUploadImg={onUploadImg}
       />
     </>
   );

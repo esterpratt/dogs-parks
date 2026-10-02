@@ -11,4 +11,12 @@ const queryClient = new QueryClient({
   },
 });
 
-export { queryClient };
+const clearPrivateDogImageQueries = () => {
+  // Signed URLs are private credentials and must not survive an identity change.
+  queryClient.removeQueries({
+    predicate: ({ queryKey }) =>
+      queryKey[0] === 'dogImage' || queryKey[0] === 'dogImages',
+  });
+};
+
+export { queryClient, clearPrivateDogImageQueries };

@@ -4,7 +4,7 @@ import { User } from '../types/user';
 import { Dog } from '../types/dog';
 import { DogPreview } from '../components/profile/DogPreview';
 import { Button } from '../components/Button';
-import { uploadDogPrimaryImage } from '../services/dogs';
+import { uploadDogImage } from '../services/dogs';
 import { queryClient } from '../services/react-query';
 import { CameraModal } from '../components/camera/CameraModal';
 import { EditDogModal } from '../components/dog/EditDogModal';
@@ -31,12 +31,8 @@ const UserDogs = () => {
   const [newDogId, setNewDogId] = useState('');
 
   const { mutate: setDogImage } = useUploadImage({
-    mutationFn: (img: string | File) =>
-      uploadDogPrimaryImage({
-        image: img,
-        dogId: newDogId!,
-        upsert: true,
-      }),
+    // Finalizing the first gallery image selects it as the main image atomically.
+    mutationFn: (img: string | File) => uploadDogImage(img, newDogId!),
     onSettled: () => {
       queryClient.invalidateQueries({
         queryKey: ['dogImage', newDogId],

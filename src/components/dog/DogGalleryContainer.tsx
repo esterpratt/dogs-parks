@@ -5,6 +5,7 @@ import { Plus } from 'lucide-react';
 import { Dog } from '../../types/dog';
 import {
   deleteDogImage,
+  DOG_IMAGE_QUERY_REFRESH_MS,
   fetchAllDogImages,
   uploadDogImage,
   setDogPrimaryImage,
@@ -15,7 +16,7 @@ import { Section } from '../section/Section';
 import { Button } from '../Button';
 import styles from './DogGalleryContainer.module.scss';
 import { CameraModal } from '../camera/CameraModal';
-import { MAX_IMAGES } from '../../utils/consts';
+import { MAX_DOG_IMAGES } from '../../utils/consts';
 import { useUploadImage } from '../../hooks/api/useUploadImage';
 
 interface DogGalleryContainerProps {
@@ -33,6 +34,8 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
   const { data: dogImages, isLoading } = useQuery({
     queryKey: ['dogImages', dog.id],
     queryFn: async () => fetchAllDogImages(dog.id),
+    refetchInterval: DOG_IMAGE_QUERY_REFRESH_MS,
+    staleTime: DOG_IMAGE_QUERY_REFRESH_MS,
   });
 
   const { mutate, isPending } = useUploadImage({
@@ -45,16 +48,17 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
   });
 
   const { mutate: removeImage } = useMutation({
-    mutationFn: (imgPath: string) => deleteDogImage(imgPath),
+    mutationFn: (imageId: string) => deleteDogImage(imageId),
     onSuccess: async () => {
-      queryClient.invalidateQueries({
-        queryKey: ['dogImages', dog.id],
-      });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['dogImage', dog.id] }),
+        queryClient.invalidateQueries({ queryKey: ['dogImages', dog.id] }),
+      ]);
     },
   });
 
   const { mutate: setPrimaryImage } = useMutation({
-    mutationFn: (imgPath: string) => setDogPrimaryImage(imgPath, dog.id),
+    mutationFn: (imageId: string) => setDogPrimaryImage(imageId),
     onSuccess: async () => {
       queryClient.invalidateQueries({
         queryKey: ['dogImage', dog.id],
@@ -88,7 +92,7 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
         contentClassName={styles.contentContainer}
         title={t('components.gallery.title')}
         actions={
-          isSignedInUser && (dogImages ?? []).length < MAX_IMAGES ? (
+          isSignedInUser && (dogImages ?? []).length < MAX_DOG_IMAGES ? (
             <Button
               variant="simple"
               color={styles.white}
@@ -103,7 +107,6 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
           <DogGallery
             isLoading={isPending}
             images={dogImages ?? []}
-            dog={dog}
             isSignedInUser={isSignedInUser}
             openCameraModal={openCameraModal}
             removeImage={isSignedInUser ? removeImage : null}
