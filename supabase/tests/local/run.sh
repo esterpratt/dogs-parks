@@ -9,6 +9,7 @@ readonly EXCLUDED_SERVICES="imgproxy,logflare,postgres-meta,studio,supavisor,vec
 readonly EXPECTED_SUPABASE_VERSION="2.109.1"
 readonly LOCAL_DB_CONTAINER="supabase_db_dogs-parks-ownership-tests"
 readonly OWNERSHIP_HARDENING_MIGRATION="supabase/migrations/20260927193000_harden_existing_dog_ownership.sql"
+readonly MEMBERSHIP_FOUNDATION_MIGRATION="supabase/migrations/20260928120000_add_dog_membership_foundation.sql"
 readonly RUNTIME_FUNCTIONS_DIR="supabase/tests/local/supabase/.runtime-functions"
 
 cleanup() {
@@ -74,6 +75,21 @@ SUPABASE_LOCAL_URL="${local_api_url}" \
 SUPABASE_LOCAL_ANON_KEY="${local_anon_key}" \
 SUPABASE_LOCAL_SERVICE_ROLE_KEY="${local_service_role_key}" \
   node --test supabase/tests/local/hardening-contract.test.mjs
+
+# Seed prototype-shaped rows before the foundation migration so its reconciliation
+# behavior is covered by the same local Auth-backed contract as new invariants.
+SUPABASE_LOCAL_URL="${local_api_url}" \
+SUPABASE_LOCAL_ANON_KEY="${local_anon_key}" \
+SUPABASE_LOCAL_SERVICE_ROLE_KEY="${local_service_role_key}" \
+  node supabase/tests/local/seed-membership-foundation.mjs
+
+docker exec -i "${LOCAL_DB_CONTAINER}" psql -U postgres -d postgres -q -1 -v ON_ERROR_STOP=1 \
+  < "${MEMBERSHIP_FOUNDATION_MIGRATION}"
+
+SUPABASE_LOCAL_URL="${local_api_url}" \
+SUPABASE_LOCAL_ANON_KEY="${local_anon_key}" \
+SUPABASE_LOCAL_SERVICE_ROLE_KEY="${local_service_role_key}" \
+  node --test supabase/tests/local/membership-foundation-contract.test.mjs
 
 SUPABASE_LOCAL_URL="${local_api_url}" \
 SUPABASE_LOCAL_ANON_KEY="${local_anon_key}" \

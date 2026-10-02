@@ -88,6 +88,19 @@ test('delete-user verifies and deletes only the caller', async (suite) => {
     });
 
     await suite.test('ignores a supplied target and paginates caller storage cleanup', async () => {
+      // Current solo-owned dogs must retain their existing account-deletion cascade
+      // until the later shared-dog erasure transition replaces it atomically.
+      const { data: callerDog, error: callerDogError } = await serviceClient
+        .from('dogs')
+        .insert({
+          birthday: '2020-01-01T00:00:00.000Z',
+          name: 'Delete-user solo dog',
+          owner: attacker.id,
+        })
+        .select('id')
+        .single();
+      assertNoError(callerDogError, 'create caller solo dog');
+
       const objectCount = 105;
       const uploadResults = await Promise.all(
         Array.from({ length: objectCount }, async (_, index) => {
@@ -119,6 +132,13 @@ test('delete-user verifies and deletes only the caller', async (suite) => {
       assert.equal(deletedCaller.user, null);
       assertNoError(victimError, 'read surviving victim');
       assert.equal(survivingVictim.user.id, victim.id);
+
+      const { data: deletedDogs, error: deletedDogsError } = await serviceClient
+        .from('dogs')
+        .select('id')
+        .eq('id', callerDog.id);
+      assertNoError(deletedDogsError, 'read caller dog after account deletion');
+      assert.deepEqual(deletedDogs, []);
 
       const { data: remainingObjects, error: listError } = await serviceClient.storage
         .from('users')

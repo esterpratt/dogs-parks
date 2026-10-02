@@ -9,6 +9,30 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      app_feature_compatibility: {
+        Row: {
+          enabled: boolean
+          feature: Database["public"]["Enums"]["app_feature"]
+          minimum_build: number
+          platform: Database["public"]["Enums"]["app_platform"]
+          updated_at: string
+        }
+        Insert: {
+          enabled?: boolean
+          feature: Database["public"]["Enums"]["app_feature"]
+          minimum_build: number
+          platform: Database["public"]["Enums"]["app_platform"]
+          updated_at?: string
+        }
+        Update: {
+          enabled?: boolean
+          feature?: Database["public"]["Enums"]["app_feature"]
+          minimum_build?: number
+          platform?: Database["public"]["Enums"]["app_platform"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       checkins: {
         Row: {
           checkin_timestamp: string
@@ -167,25 +191,37 @@ export type Database = {
       }
       dog_members: {
         Row: {
-          created_at: string
+          departure_reason:
+            | Database["public"]["Enums"]["dog_member_departure_reason"]
+            | null
           dog_id: string
           id: string
+          joined_at: string
+          left_at: string | null
           role: Database["public"]["Enums"]["dog_member_role"]
-          user_id: string
+          user_id: string | null
         }
         Insert: {
-          created_at?: string
+          departure_reason?:
+            | Database["public"]["Enums"]["dog_member_departure_reason"]
+            | null
           dog_id: string
           id?: string
+          joined_at?: string
+          left_at?: string | null
           role: Database["public"]["Enums"]["dog_member_role"]
-          user_id: string
+          user_id?: string | null
         }
         Update: {
-          created_at?: string
+          departure_reason?:
+            | Database["public"]["Enums"]["dog_member_departure_reason"]
+            | null
           dog_id?: string
           id?: string
+          joined_at?: string
+          left_at?: string | null
           role?: Database["public"]["Enums"]["dog_member_role"]
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -193,6 +229,13 @@ export type Database = {
             columns: ["dog_id"]
             isOneToOne: false
             referencedRelation: "dogs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dog_members_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
@@ -207,9 +250,11 @@ export type Database = {
           energy: string | null
           gender: string | null
           id: string
+          lifecycle_state: Database["public"]["Enums"]["dog_lifecycle_state"]
           likes: string[] | null
           name: string | null
           owner: string | null
+          ownership_version: number
           possessive: string | null
           size: string | null
           temperament: string | null
@@ -223,9 +268,11 @@ export type Database = {
           energy?: string | null
           gender?: string | null
           id?: string
+          lifecycle_state?: Database["public"]["Enums"]["dog_lifecycle_state"]
           likes?: string[] | null
           name?: string | null
           owner?: string | null
+          ownership_version?: number
           possessive?: string | null
           size?: string | null
           temperament?: string | null
@@ -239,9 +286,11 @@ export type Database = {
           energy?: string | null
           gender?: string | null
           id?: string
+          lifecycle_state?: Database["public"]["Enums"]["dog_lifecycle_state"]
           likes?: string[] | null
           name?: string | null
           owner?: string | null
+          ownership_version?: number
           possessive?: string | null
           size?: string | null
           temperament?: string | null
@@ -1012,6 +1061,10 @@ export type Database = {
         }
         Returns: undefined
       }
+      assert_dog_ownership_invariants: {
+        Args: { p_dog_id: string }
+        Returns: undefined
+      }
       can_access_dog_storage_object: {
         Args: { p_object_name: string }
         Returns: boolean
@@ -1218,10 +1271,14 @@ export type Database = {
       update_checkout: { Args: { checkin_id: string }; Returns: undefined }
     }
     Enums: {
+      app_feature: "SHARED_DOG_OWNERSHIP"
       app_language: "en" | "he" | "ar"
+      app_platform: "IOS" | "ANDROID" | "WEB"
       condition_observed_status: "PRESENT" | "NOT_PRESENT"
       dog_invite_status: "PENDING" | "ACCEPTED" | "DECLINED" | "CANCELED"
-      dog_member_role: "PRIMARY_OWNER" | "EDITOR" | "VIEWER"
+      dog_lifecycle_state: "ACTIVE" | "DELETING" | "DELETED"
+      dog_member_departure_reason: "LEFT" | "ACCOUNT_ERASED" | "DOG_DELETED"
+      dog_member_role: "PRIMARY_OWNER" | "CO_OWNER" | "VIEWER"
       friendship_status: "APPROVED" | "PENDING"
       invite_status: "INVITED" | "ACCEPTED" | "DECLINED" | "REMOVED"
       notification_target_type:
@@ -1378,10 +1435,14 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_feature: ["SHARED_DOG_OWNERSHIP"],
       app_language: ["en", "he", "ar"],
+      app_platform: ["IOS", "ANDROID", "WEB"],
       condition_observed_status: ["PRESENT", "NOT_PRESENT"],
       dog_invite_status: ["PENDING", "ACCEPTED", "DECLINED", "CANCELED"],
-      dog_member_role: ["PRIMARY_OWNER", "EDITOR", "VIEWER"],
+      dog_lifecycle_state: ["ACTIVE", "DELETING", "DELETED"],
+      dog_member_departure_reason: ["LEFT", "ACCOUNT_ERASED", "DOG_DELETED"],
+      dog_member_role: ["PRIMARY_OWNER", "CO_OWNER", "VIEWER"],
       friendship_status: ["APPROVED", "PENDING"],
       invite_status: ["INVITED", "ACCEPTED", "DECLINED", "REMOVED"],
       notification_target_type: [
