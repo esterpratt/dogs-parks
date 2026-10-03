@@ -42,3 +42,32 @@ exports/*
 
 # Local notes
 todos/
+
+# Keep credentials, signing material and private audit/import data local.
+*.pem
+*.key
+*.p8
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.mobileprovision
+**/service-account*.json
+**/serviceAccount*.json
+**/firebase-adminsdk*.json
+**/*firebase-adminsdk*.json
+**/credentials.json
+android/local.properties
+android/key.properties
+/.private/
+/backups/
+/supabase/backups/
+/supabase/exports/
+/supabase/imports/
+/supabase/staging-data/
+/supabase/production-data/
+/supabase/tests/local/supabase/.runtime-functions/
+*.dump
+*.backup
+*-private-manifest.json
+*-redacted.json
