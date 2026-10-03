@@ -128,6 +128,13 @@
   gap: 24px;
 }
 
+.ownership-action {
+  align-self: flex-start;
+  color: $green;
+  font-weight: 600;
+  text-decoration: none;
+}
+
 :export {
   green: $green;
 }

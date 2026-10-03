@@ -5,7 +5,7 @@ import type { TFunction } from 'i18next';
 const makeT = (): TFunction => {
   const t: TFunction = ((
     key: string | string[],
-    opts?: Record<string, unknown>
+    opts?: Record<string, unknown>,
   ): string => {
     const k = Array.isArray(key) ? key[0] : key;
     if (k === 'notifications.common.someone') {
@@ -30,7 +30,7 @@ describe('translateNotification', () => {
 
     expect(res.title).toBe('notifications.types.friendRequest.title:Alice');
     expect(res.appMessage).toBe(
-      'notifications.types.friendRequest.appMessage:Alice'
+      'notifications.types.friendRequest.appMessage:Alice',
     );
   });
 
@@ -60,7 +60,25 @@ describe('translateNotification', () => {
 
     expect(res.title).toBe('notifications.types.friendRequest.title:Someone');
     expect(res.appMessage).toBe(
-      'notifications.types.friendRequest.appMessage:Someone'
+      'notifications.types.friendRequest.appMessage:Someone',
+    );
+  });
+
+  it('maps ownership action notifications to localized client copy', () => {
+    const t = makeT();
+    const result = translateNotification({
+      type: 'dog_ownership_request_received',
+      senderName: 'Taylor',
+      serverTitle: null,
+      serverAppMessage: null,
+      t,
+    });
+
+    expect(result.title).toBe(
+      'dogOwnership.notifications.requestReceivedTitle:Taylor',
+    );
+    expect(result.appMessage).toBe(
+      'dogOwnership.notifications.requestReceivedMessage:Taylor',
     );
   });
 });

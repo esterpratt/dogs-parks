@@ -11,6 +11,7 @@ readonly LOCAL_DB_CONTAINER="supabase_db_dogs-parks-ownership-tests"
 readonly OWNERSHIP_HARDENING_MIGRATION="supabase/migrations/20260927193000_harden_existing_dog_ownership.sql"
 readonly MEMBERSHIP_FOUNDATION_MIGRATION="supabase/migrations/20260928120000_add_dog_membership_foundation.sql"
 readonly PRIVATE_IMAGE_FOUNDATION_MIGRATION="supabase/migrations/20261002120000_add_private_dog_image_foundation.sql"
+readonly OWNERSHIP_ACTIONS_MIGRATION="supabase/migrations/20261002150000_add_dog_ownership_actions.sql"
 readonly RUNTIME_FUNCTIONS_DIR="supabase/tests/local/supabase/.runtime-functions"
 
 cleanup() {
@@ -118,6 +119,14 @@ SUPABASE_LOCAL_URL="${local_api_url}" \
 SUPABASE_LOCAL_ANON_KEY="${local_anon_key}" \
 SUPABASE_LOCAL_SERVICE_ROLE_KEY="${local_service_role_key}" \
   node --test supabase/tests/local/private-image-foundation-contract.test.mjs
+
+docker exec -i "${LOCAL_DB_CONTAINER}" psql -U postgres -d postgres -q -1 -v ON_ERROR_STOP=1 \
+  < "${OWNERSHIP_ACTIONS_MIGRATION}"
+
+SUPABASE_LOCAL_URL="${local_api_url}" \
+SUPABASE_LOCAL_ANON_KEY="${local_anon_key}" \
+SUPABASE_LOCAL_SERVICE_ROLE_KEY="${local_service_role_key}" \
+  node --test supabase/tests/local/ownership-actions-contract.test.mjs
 
 SUPABASE_LOCAL_URL="${local_api_url}" \
 SUPABASE_LOCAL_ANON_KEY="${local_anon_key}" \

@@ -46,6 +46,9 @@ const About = lazy(() => import('./pages/About'));
 const Login = lazy(() => import('./pages/Login'));
 const Notifications = lazy(() => import('./pages/Notifications'));
 const Event = lazy(() => import('./pages/Event'));
+const DogOwnership = lazy(() => import('./pages/DogOwnership'));
+const DogOwnershipRequest = lazy(() => import('./pages/DogOwnershipRequest'));
+const OwnershipAction = lazy(() => import('./pages/OwnershipAction'));
 
 const App = () => {
   const router = createBrowserRouter([
@@ -169,6 +172,30 @@ const App = () => {
           element: (
             <PrivateRoute>
               <UserDog />
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: 'dogs/:dogId/ownership',
+          element: (
+            <PrivateRoute>
+              <DogOwnership />
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: 'dogs/:dogId/ownership/request',
+          element: (
+            <PrivateRoute>
+              <DogOwnershipRequest />
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: 'ownership-actions/:actionType/:actionId',
+          element: (
+            <PrivateRoute>
+              <OwnershipAction />
             </PrivateRoute>
           ),
         },

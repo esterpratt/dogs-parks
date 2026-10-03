@@ -5,6 +5,15 @@ enum NotificationType {
   PARK_INVITE_ACCEPT = 'park_invite_accept',
   PARK_INVITE_DECLINE = 'park_invite_decline',
   PARK_INVITE_CANCELLED = 'park_invite_cancelled',
+  DOG_OWNERSHIP_INVITE_RECEIVED = 'dog_ownership_invite_received',
+  DOG_OWNERSHIP_INVITE_ACCEPTED = 'dog_ownership_invite_accepted',
+  DOG_OWNERSHIP_INVITE_DECLINED = 'dog_ownership_invite_declined',
+  DOG_OWNERSHIP_INVITE_CANCELED = 'dog_ownership_invite_canceled',
+  DOG_OWNERSHIP_REQUEST_RECEIVED = 'dog_ownership_request_received',
+  DOG_OWNERSHIP_REQUEST_APPROVED = 'dog_ownership_request_approved',
+  DOG_OWNERSHIP_REQUEST_DECLINED = 'dog_ownership_request_declined',
+  DOG_OWNERSHIP_REQUEST_CANCELED = 'dog_ownership_request_canceled',
+  DOG_OWNER_JOINED = 'dog_owner_joined',
 }
 
 enum NotificationTargetType {
@@ -12,6 +21,7 @@ enum NotificationTargetType {
   PARK_EVENT = 'park_event',
   PARK = 'park',
   SYSTEM = 'system',
+  DOG_OWNERSHIP_ACTION = 'dog_ownership_action',
 }
 
 enum Platform {

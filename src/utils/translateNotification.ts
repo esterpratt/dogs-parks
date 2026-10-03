@@ -40,10 +40,46 @@ const typeKeyMap: Record<string, { title: string; appMessage: string }> = {
     title: 'notifications.types.parkInviteCancelled.title',
     appMessage: 'notifications.types.parkInviteCancelled.appMessage',
   },
+  DOG_OWNERSHIP_INVITE_RECEIVED: {
+    title: 'dogOwnership.notifications.inviteReceivedTitle',
+    appMessage: 'dogOwnership.notifications.inviteReceivedMessage',
+  },
+  DOG_OWNERSHIP_INVITE_ACCEPTED: {
+    title: 'dogOwnership.notifications.inviteAcceptedTitle',
+    appMessage: 'dogOwnership.notifications.inviteAcceptedMessage',
+  },
+  DOG_OWNERSHIP_INVITE_DECLINED: {
+    title: 'dogOwnership.notifications.inviteDeclinedTitle',
+    appMessage: 'dogOwnership.notifications.inviteDeclinedMessage',
+  },
+  DOG_OWNERSHIP_INVITE_CANCELED: {
+    title: 'dogOwnership.notifications.inviteCanceledTitle',
+    appMessage: 'dogOwnership.notifications.inviteCanceledMessage',
+  },
+  DOG_OWNERSHIP_REQUEST_RECEIVED: {
+    title: 'dogOwnership.notifications.requestReceivedTitle',
+    appMessage: 'dogOwnership.notifications.requestReceivedMessage',
+  },
+  DOG_OWNERSHIP_REQUEST_APPROVED: {
+    title: 'dogOwnership.notifications.requestApprovedTitle',
+    appMessage: 'dogOwnership.notifications.requestApprovedMessage',
+  },
+  DOG_OWNERSHIP_REQUEST_DECLINED: {
+    title: 'dogOwnership.notifications.requestDeclinedTitle',
+    appMessage: 'dogOwnership.notifications.requestDeclinedMessage',
+  },
+  DOG_OWNERSHIP_REQUEST_CANCELED: {
+    title: 'dogOwnership.notifications.requestCanceledTitle',
+    appMessage: 'dogOwnership.notifications.requestCanceledMessage',
+  },
+  DOG_OWNER_JOINED: {
+    title: 'dogOwnership.notifications.ownerJoinedTitle',
+    appMessage: 'dogOwnership.notifications.ownerJoinedMessage',
+  },
 };
 
 function translateNotification(
-  params: TranslateNotificationParams
+  params: TranslateNotificationParams,
 ): TranslateNotificationResult {
   const { type, senderName, serverTitle, serverAppMessage, t } = params;
 

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useContext, useState } from 'react';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { Cake, Mars, MoveLeft, Pencil, Tag, Venus } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { Trans, useTranslation } from 'react-i18next';
@@ -24,17 +24,24 @@ import { Header } from '../components/Header';
 import { HeaderImage } from '../components/HeaderImage';
 import { PrevLinks } from '../components/PrevLinks';
 import { EditDogModal } from '../components/dog/EditDogModal';
+import { UserContext } from '../context/UserContext';
+import { fetchDogOwnershipCapabilities } from '../services/dog-ownership';
 
 import styles from './UserDog.module.scss';
 
 const UserDog = () => {
   const { dogId } = useParams();
   const { state } = useLocation();
+  const { userId } = useContext(UserContext);
   const [isEditDogsModalOpen, setIsEditDogsModalOpen] = useState(false);
   const [imageToEnlarge, setImageToEnlarge] = useState<string>('');
   const [isEnlargedImageModalOpen, setIsEnlargeImageModalOpen] =
     useState(false);
-  const { isSignedInUser, userName } = state;
+  const navigationState = state as {
+    isSignedInUser?: boolean;
+    userName?: string;
+  } | null;
+  const userName = navigationState?.userName ?? '';
   const { t } = useTranslation();
 
   const { data: dog, isLoading: isLoadingDog } = useQuery({
@@ -51,6 +58,12 @@ const UserDog = () => {
     queryFn: async () => fetchDogPrimaryImage(dogId!),
     refetchInterval: DOG_IMAGE_QUERY_REFRESH_MS,
     staleTime: DOG_IMAGE_QUERY_REFRESH_MS,
+  });
+
+  const { data: ownershipCapabilities } = useQuery({
+    queryKey: ['dogOwnershipCapabilities', dogId],
+    queryFn: () => fetchDogOwnershipCapabilities(dogId!),
+    enabled: !!dogId && !!userId,
   });
 
   const { showLoader } = useDelayedLoading({
@@ -81,6 +94,10 @@ const UserDog = () => {
   if (!dog) {
     return null;
   }
+
+  // Navigation state is optional on refresh and ownership-action deep links.
+  const isSignedInUser =
+    navigationState?.isSignedInUser ?? userId === dog.owner;
 
   const ageText = getLocalizedDogAgeText({
     birthday: dog.birthday,
@@ -182,6 +199,24 @@ const UserDog = () => {
           })}
         />
         <div className={styles.content}>
+          {ownershipCapabilities?.enabled &&
+          ownershipCapabilities.role === 'PRIMARY_OWNER' ? (
+            <Link
+              className={styles.ownershipAction}
+              to={`/dogs/${dog.id}/ownership`}
+            >
+              {t('dogOwnership.manageTitle')}
+            </Link>
+          ) : null}
+          {ownershipCapabilities?.enabled &&
+          ownershipCapabilities.can_request ? (
+            <Link
+              className={styles.ownershipAction}
+              to={`/dogs/${dog.id}/ownership/request`}
+            >
+              {t('dogOwnership.requestAction')}
+            </Link>
+          ) : null}
           <DogDetails
             isSignedInUser={isSignedInUser}
             dog={dog}

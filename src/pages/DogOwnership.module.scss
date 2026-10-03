@@ -1,0 +1,52 @@
+@use "../variables" as *;
+
+.container {
+  min-height: $content-max-height;
+  margin-top: $page-top-padding;
+  padding: 24px calc(16px + var(--safe-area-inset-right)) 32px
+    calc(16px + var(--safe-area-inset-left));
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.content,
+.section,
+.actions,
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.section {
+  padding: 16px;
+  border-radius: 12px;
+  background: $white;
+  box-shadow: $box-shadow;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.message {
+  color: $text;
+}
+
+.error {
+  color: $red;
+}

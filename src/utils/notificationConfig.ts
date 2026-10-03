@@ -5,6 +5,7 @@ import {
   CalendarCheck,
   CalendarX,
   XCircle,
+  PawPrint,
   LucideIcon,
 } from 'lucide-react';
 import { Notification, NotificationType } from '../types/notification';
@@ -100,6 +101,47 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
           });
           queryClient.invalidateQueries({
             queryKey: ['event', notification.target_id],
+          });
+        },
+      };
+    case NotificationType.DOG_OWNERSHIP_INVITE_RECEIVED:
+    case NotificationType.DOG_OWNERSHIP_INVITE_ACCEPTED:
+    case NotificationType.DOG_OWNERSHIP_INVITE_DECLINED:
+    case NotificationType.DOG_OWNERSHIP_INVITE_CANCELED:
+      return {
+        icon: PawPrint,
+        color: 'green',
+        getUrl: (notification) =>
+          `/ownership-actions/invite/${notification.target_id}`,
+        invalidateQueries: (_userId, notification) => {
+          queryClient.invalidateQueries({
+            queryKey: ['dogOwnershipAction', 'invite', notification.target_id],
+          });
+        },
+      };
+    case NotificationType.DOG_OWNERSHIP_REQUEST_RECEIVED:
+    case NotificationType.DOG_OWNERSHIP_REQUEST_APPROVED:
+    case NotificationType.DOG_OWNERSHIP_REQUEST_DECLINED:
+    case NotificationType.DOG_OWNERSHIP_REQUEST_CANCELED:
+      return {
+        icon: PawPrint,
+        color: 'blue',
+        getUrl: (notification) =>
+          `/ownership-actions/request/${notification.target_id}`,
+        invalidateQueries: (_userId, notification) => {
+          queryClient.invalidateQueries({
+            queryKey: ['dogOwnershipAction', 'request', notification.target_id],
+          });
+        },
+      };
+    case NotificationType.DOG_OWNER_JOINED:
+      return {
+        icon: PawPrint,
+        color: 'green',
+        getUrl: (notification) => `/dogs/${notification.target_id}`,
+        invalidateQueries: (_userId, notification) => {
+          queryClient.invalidateQueries({
+            queryKey: ['dogOwnershipCapabilities', notification.target_id],
           });
         },
       };
