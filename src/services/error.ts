@@ -17,7 +17,7 @@ class AppError {
   }
 }
 
-const throwError = (error: unknown, status?: number) => {
+const throwError = (error: unknown, status?: number): never => {
   if (error instanceof Error) {
     console.error('there was an error:', error.name, error.message, error);
   } else {

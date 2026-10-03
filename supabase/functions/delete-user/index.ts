@@ -107,24 +107,40 @@ const deleteUserStorage = async (userId: string, supabase: SupabaseClient) => {
   }
 };
 
-const parseSuccessorSelections = async (request: Request) => {
+const parseAccountDeletionRequest = async (request: Request) => {
   try {
     const body = await request.json();
-    if (
-      body &&
-      typeof body === 'object' &&
-      !Array.isArray(body) &&
-      body.successorSelections &&
-      typeof body.successorSelections === 'object' &&
-      !Array.isArray(body.successorSelections)
-    ) {
-      return body.successorSelections as Record<string, string>;
+    if (body && typeof body === 'object' && !Array.isArray(body)) {
+      const platform = body.p_client_platform;
+      const build = body.p_client_build;
+      const successorSelections = body.successorSelections;
+
+      return {
+        clientBuild:
+          typeof build === 'number' && Number.isInteger(build) && build >= 0
+            ? build
+            : 1,
+        clientPlatform:
+          platform === 'IOS' || platform === 'ANDROID' || platform === 'WEB'
+            ? platform
+            : 'WEB',
+        successorSelections:
+          successorSelections &&
+          typeof successorSelections === 'object' &&
+          !Array.isArray(successorSelections)
+            ? (successorSelections as Record<string, string>)
+            : {},
+      };
     }
   } catch {
     // An empty body means deterministic server-selected succession.
   }
 
-  return {};
+  return {
+    clientBuild: 1,
+    clientPlatform: 'WEB' as const,
+    successorSelections: {},
+  };
 };
 
 serve(async (request) => {
@@ -158,7 +174,7 @@ serve(async (request) => {
     }
 
     const authorization = request.headers.get('Authorization')!;
-    const successorSelections = await parseSuccessorSelections(request);
+    const deletionRequest = await parseAccountDeletionRequest(request);
     const callerSupabase = createClient(supabaseUrl, anonKey, {
       auth: { autoRefreshToken: false, persistSession: false },
       global: { headers: { Authorization: authorization } },
@@ -166,9 +182,9 @@ serve(async (request) => {
     // Every dog transition commits together before the irreversible Auth deletion.
     const { data: preparation, error: preparationError } =
       await callerSupabase.rpc('api_prepare_account_erasure', {
-        p_client_build: 1,
-        p_client_platform: 'WEB',
-        p_successor_selections: successorSelections,
+        p_client_build: deletionRequest.clientBuild,
+        p_client_platform: deletionRequest.clientPlatform,
+        p_successor_selections: deletionRequest.successorSelections,
       });
 
     if (preparationError) {
@@ -189,9 +205,22 @@ serve(async (request) => {
       return jsonResponse({ error: authError.message }, 500);
     }
 
-    await deleteUserStorage(authenticatedUser.id, supabase);
+    try {
+      await deleteUserStorage(authenticatedUser.id, supabase);
+    } catch (storageError) {
+      // Auth is already gone, so the client must not present this as a retryable
+      // account-deletion failure. The reference lets support finish cleanup.
+      console.error('Post-deletion legacy Storage cleanup failed', storageError);
+      return jsonResponse(
+        {
+          outcome: 'DELETED_WITH_CLEANUP_PENDING',
+          recoveryReference: authenticatedUser.id,
+        },
+        200,
+      );
+    }
 
-    return jsonResponse({ message: 'User deleted successfully' }, 200);
+    return jsonResponse({ outcome: 'DELETED' }, 200);
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : 'Unknown deletion error';

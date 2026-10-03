@@ -8,6 +8,8 @@ import { clearPrivateDogImageQueries } from './react-query';
 import { i18n } from '../i18n';
 import { SignOutResult } from '../types/auth';
 import { FORCED_LOGOUT_EVENT } from '../utils/consts';
+import type { AccountDeletionResult } from '../types/account-deletion';
+import { getClientCompatibility } from './dog-ownership';
 
 interface LoginProps {
   email: string;
@@ -153,18 +155,31 @@ const updatePassword = async (password: string) => {
   }
 };
 
-const deleteUser = async () => {
+const deleteUser = async (
+  successorSelections: Record<string, string>
+): Promise<AccountDeletionResult> => {
   try {
     // The Edge Function derives the deletion target from this authenticated session.
-    const { error } = await supabase.functions.invoke('delete-user', {
-      body: {},
+    const { data, error } = await supabase.functions.invoke('delete-user', {
+      body: {
+        ...getClientCompatibility(),
+        successorSelections,
+      },
     });
     if (error) {
       throw error;
     }
+    if (
+      !data ||
+      (data.outcome !== 'DELETED' &&
+        data.outcome !== 'DELETED_WITH_CLEANUP_PENDING')
+    ) {
+      throw new Error('Account deletion returned an invalid result');
+    }
     await signOut();
+    return data as AccountDeletionResult;
   } catch (error) {
-    throwError(error);
+    return throwError(error);
   }
 };
 

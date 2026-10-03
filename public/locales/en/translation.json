@@ -206,6 +206,25 @@
     "deleteDogButton": "Say goodbye to {{name}}",
     "delete": "Delete",
     "cancel": "Cancel",
+    "accountDeletion": {
+      "back": "Back to settings",
+      "title": "Review account deletion",
+      "intro": "Review what will happen to every dog you currently own before deleting your account.",
+      "noDogs": "You do not currently share ownership of any dogs.",
+      "successorLabel": "New primary owner",
+      "warning": "Your account and profile data will be permanently deleted. This cannot be undone.",
+      "deleteAction": "Delete my account",
+      "confirmTitle": "Delete your account?",
+      "confirmBody": "This is the final step. Your account will be permanently deleted and the dog changes shown here will be applied together.",
+      "loadError": "We could not load the account deletion review. Nothing was deleted.",
+      "retry": "Try again",
+      "retryError": "Account deletion could not be prepared. Your account was not deleted; review the changes and try again.",
+      "effects": {
+        "DELETE_SOLO_DOG": "{{name}} has no other owners and will be deleted.",
+        "TRANSFER_SHARED_DOG": "{{name}} will stay with the selected co-owner as the new primary owner.",
+        "LEAVE_SHARED_DOG": "You will leave {{name}}. The dog and its shared photos will stay with the other owners."
+      }
+    },
     "edit": {
       "titleUpdate": "Update your details",
       "labels": {
@@ -484,6 +503,9 @@
   "deletionConfirmation": {
     "confirmation1": "Your data has been sent to a farm up north.",
     "confirmation2": "Thanks for being part of the pack! The doggy door is always open — come back anytime!",
+    "cleanupPendingTitle": "One cleanup step still needs support",
+    "cleanupPendingBody": "Your account was deleted, but some legacy profile files could not be removed automatically. Contact us and include the recovery reference below; do not try to sign in again.",
+    "recoveryReference": "Recovery reference: {{reference}}",
     "goHome": "Go Home"
   },
   "login": {

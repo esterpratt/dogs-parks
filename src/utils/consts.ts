@@ -18,3 +18,6 @@ export const APP_LANGUAGES = {
 } as const;
 
 export const FORCED_LOGOUT_EVENT = 'klavhub:forced-logout';
+
+export const ACCOUNT_DELETION_RECOVERY_REFERENCE_KEY =
+  'accountDeletionRecoveryReference';

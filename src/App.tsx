@@ -51,6 +51,9 @@ const DogOwnershipRequest = lazy(() => import('./pages/DogOwnershipRequest'));
 const OwnershipAction = lazy(() => import('./pages/OwnershipAction'));
 const DogOwnershipLeave = lazy(() => import('./pages/DogOwnershipLeave'));
 const DogOwnershipDeletion = lazy(() => import('./pages/DogOwnershipDeletion'));
+const AccountDeletionReview = lazy(
+  () => import('./pages/AccountDeletionReview')
+);
 
 const App = () => {
   const router = createBrowserRouter([
@@ -166,6 +169,14 @@ const App = () => {
           element: (
             <PrivateRoute>
               <Settings />
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: '/profile/:id/settings/delete-account',
+          element: (
+            <PrivateRoute>
+              <AccountDeletionReview />
             </PrivateRoute>
           ),
         },

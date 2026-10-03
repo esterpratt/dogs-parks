@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
 import test from 'node:test';
 import { createClient } from '@supabase/supabase-js';
 
@@ -23,6 +24,7 @@ const authOptions = {
 const serviceClient = createClient(apiUrl, serviceRoleKey, {
   auth: authOptions,
 });
+const localDatabaseContainer = 'supabase_db_dogs-parks-ownership-tests';
 const fixture = {
   authUserIds: [],
   dogIds: [],
@@ -88,6 +90,30 @@ const invokeDeleteUser = async ({ accessToken, body }) => {
     },
     body: JSON.stringify(body),
   });
+};
+
+const runLocalSql = (sql) => {
+  execFileSync(
+    'docker',
+    [
+      'exec',
+      '-e',
+      'PGPASSWORD=postgres',
+      '-i',
+      localDatabaseContainer,
+      'psql',
+      '-h',
+      '127.0.0.1',
+      '-U',
+      'supabase_storage_admin',
+      '-d',
+      'postgres',
+      '-q',
+      '-v',
+      'ON_ERROR_STOP=1',
+    ],
+    { input: sql },
+  );
 };
 
 test('delete-user verifies and deletes only the caller', async (suite) => {
@@ -220,16 +246,27 @@ test('delete-user verifies and deletes only the caller', async (suite) => {
 
         // This contract owns its compatibility precondition instead of relying
         // on an earlier suite to leave the isolated feature row enabled.
+        const { error: disabledWebError } = await serviceClient
+          .from('app_feature_compatibility')
+          .update({ enabled: false, minimum_build: 1 })
+          .eq('feature', 'SHARED_DOG_OWNERSHIP')
+          .eq('platform', 'WEB');
+        assertNoError(disabledWebError, 'disable Web account-erasure fixture');
         const { error: compatibilityError } = await serviceClient
           .from('app_feature_compatibility')
           .update({ enabled: true, minimum_build: 1 })
           .eq('feature', 'SHARED_DOG_OWNERSHIP')
-          .eq('platform', 'WEB');
-        assertNoError(compatibilityError, 'enable isolated account-erasure fixture');
+          .eq('platform', 'IOS');
+        assertNoError(
+          compatibilityError,
+          'enable isolated iOS account-erasure fixture',
+        );
 
         const response = await invokeDeleteUser({
           accessToken: departingPrimary.accessToken,
           body: {
+            p_client_build: 1,
+            p_client_platform: 'IOS',
             successorSelections: { [sharedDog.id]: successorMember.id },
           },
         });
@@ -260,6 +297,67 @@ test('delete-user verifies and deletes only the caller', async (suite) => {
         assert.equal(erasedTenure.user_id, null);
         assert.equal(erasedTenure.departure_reason, 'ACCOUNT_ERASED');
         assert.ok(erasedTenure.left_at);
+      },
+    );
+
+    await suite.test(
+      'surfaces manual recovery when legacy cleanup fails after Auth deletion',
+      async () => {
+        const cleanupFailureUser =
+          await createAuthenticatedUser('cleanup-failure');
+        const storagePath = `${cleanupFailureUser.id}/cleanup-failure/file.txt`;
+        fixture.storagePaths.push(storagePath);
+        const { error: uploadError } = await serviceClient.storage
+          .from('users')
+          .upload(storagePath, new TextEncoder().encode('cleanup failure'), {
+            contentType: 'text/plain',
+          });
+        assertNoError(uploadError, 'seed cleanup failure object');
+        let failureTriggerInstalled = false;
+
+        try {
+          // This local-only trigger makes the real Storage remove request fail
+          // after Auth deletion without adding a production test switch.
+          runLocalSql(`
+            create or replace function storage.reject_test_user_cleanup()
+            returns trigger language plpgsql as $$
+            begin
+              if old.bucket_id = 'users'
+                and old.name like '${cleanupFailureUser.id}/%' then
+                raise exception 'forced_local_cleanup_failure';
+              end if;
+              return old;
+            end;
+            $$;
+            create trigger reject_test_user_cleanup_trigger
+            before delete on storage.objects
+            for each row execute function storage.reject_test_user_cleanup();
+          `);
+          failureTriggerInstalled = true;
+
+          const response = await invokeDeleteUser({
+            accessToken: cleanupFailureUser.accessToken,
+            body: {},
+          });
+          const responseBody = await response.json();
+
+          assert.equal(response.status, 200, JSON.stringify(responseBody));
+          assert.deepEqual(responseBody, {
+            outcome: 'DELETED_WITH_CLEANUP_PENDING',
+            recoveryReference: cleanupFailureUser.id,
+          });
+
+          const { data: deletedUser } =
+            await serviceClient.auth.admin.getUserById(cleanupFailureUser.id);
+          assert.equal(deletedUser.user, null);
+        } finally {
+          if (failureTriggerInstalled) {
+            runLocalSql(`
+              drop trigger reject_test_user_cleanup_trigger on storage.objects;
+              drop function storage.reject_test_user_cleanup();
+            `);
+          }
+        }
       },
     );
   } finally {

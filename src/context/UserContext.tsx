@@ -19,6 +19,8 @@ import { queryClient } from '../services/react-query';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { logoutWithCleanup } from '../services/logout-orchestrator';
 import { SignOutResult } from '../types/auth';
+import type { AccountDeletionResult } from '../types/account-deletion';
+import { ACCOUNT_DELETION_RECOVERY_REFERENCE_KEY } from '../utils/consts';
 
 type SigninProps = Partial<LoginWithEmailAndPasswordProps> & {
   name?: string;
@@ -39,7 +41,9 @@ interface UserContextObj {
   userLogoutAsync: () => Promise<SignOutResult>;
   userSigninWithGoogle: () => void;
   userSigninWithApple: () => void;
-  userDeletion: () => void;
+  userDeletion: (
+    successorSelections: Record<string, string>
+  ) => Promise<AccountDeletionResult>;
   error: string;
   setError: Dispatch<React.SetStateAction<string>>;
   isLoading: boolean;
@@ -56,7 +60,10 @@ const initialData: UserContextObj = {
   userLogoutAsync: () => Promise.resolve(SignOutResult.OK),
   userSigninWithGoogle: () => Promise.resolve(),
   userSigninWithApple: () => Promise.resolve(),
-  userDeletion: () => {},
+  userDeletion: () =>
+    Promise.resolve({
+      outcome: 'DELETED',
+    }),
   setError: () => {},
   error: '',
   isLoading: false,
@@ -121,18 +128,33 @@ const UserContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     },
   });
 
-  const { mutate: userDeletion, isPending: isPendingDeletion } = useMutation({
-    mutationFn: async () => {
-      localStorage.setItem('userDeleted', '1');
-      return deleteUser();
-    },
-    onError: () => {
-      localStorage.removeItem('userDeleted');
-    },
-    onSettled: () => {
-      queryClient.removeQueries({ queryKey: ['user'] });
-    },
-  });
+  const { mutateAsync: userDeletion, isPending: isPendingDeletion } =
+    useMutation({
+      mutationFn: async (successorSelections: Record<string, string>) => {
+        localStorage.setItem('userDeleted', '1');
+        const result = await deleteUser(successorSelections);
+
+        if (
+          result.outcome === 'DELETED_WITH_CLEANUP_PENDING' &&
+          result.recoveryReference
+        ) {
+          // The confirmation survives the local session disappearing mid-route.
+          localStorage.setItem(
+            ACCOUNT_DELETION_RECOVERY_REFERENCE_KEY,
+            result.recoveryReference
+          );
+        }
+
+        return result;
+      },
+      onError: () => {
+        localStorage.removeItem('userDeleted');
+        localStorage.removeItem(ACCOUNT_DELETION_RECOVERY_REFERENCE_KEY);
+      },
+      onSettled: () => {
+        queryClient.removeQueries({ queryKey: ['user'] });
+      },
+    });
 
   useEffect(() => {
     if (session?.user?.id) {
