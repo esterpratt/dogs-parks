@@ -14,6 +14,15 @@ Short bootstrap and handoff; Notion is the task source of truth. Permanent codin
 - Missing park details use the secured `api_update_missing_park_details` RPC.
 - Existing Supabase migrations must not be edited or rerun; see `AGENTS.md` for database change rules.
 
+## Current staging and production handoff (2026-10-03)
+
+- Ownership slices 1–10 are implemented and merged into `main`. The historical checkpoints below describe prior stages; they are not instructions to restart slice 1 or reuse the deleted feature branch.
+- Detailed execution plans: [permanent staging and selected production-data import](SUPABASE_STAGING_PLAN.md) and [production preservation, compatibility and release rollout](SUPABASE_PRODUCTION_ROLLOUT_PLAN.md). Both are documented only; no staging project, production export, live migration, deployment or compatibility change was performed for this planning task.
+- User wants persistent staging with selected copies of their own profile, production test profile, dogs/photos and parks. Proposed approach: independent staging login accounts, consistent ID/path remapping, sanitized schema bootstrap and a named local staging command. Account/billing access and exact data selection remain to resolve when execution begins.
+- User wants existing email support to Ester, with manual administrative action. No dashboard is required. Evidence, contact timing, exceptional authority and retention/redaction remain open; the service-only recovery RPC and separate photo-removal/partial-cleanup procedures must follow the approved policy before full production enablement.
+- Production has few users and reportedly little activity. Preserve all existing data and verify actual released-client behavior anyway. Feature-disabled SQL changes permissions/storage/FKs; staged database/function deployment must be rehearsed because these systems have no shared deployment transaction.
+- Immediate next step on an implementation request: execute the staging plan, resolve its project/data inputs and rehearse legacy upgrade/compatibility. Production release follows the separate detailed runbook and explicit deployment authority; do not enable production shared ownership just to preview localhost.
+
 ## Notion connection and task workflow
 
 Connected to **ester prat's Notion** through the existing Notion tools; read access verified. The user identified [Dogs Parks](https://app.notion.com/p/0a4024c603da464487a7a0823ab8b3cc) as the KlavHub task database. Data source: `collection://0fe99187-19a5-4c1c-bf6c-1497977a1074`.
@@ -26,7 +35,7 @@ Connected to **ester prat's Notion** through the existing Notion tools; read acc
 - Set `In progress` when implementation starts; record implementation notes, verification, and decisions in the ticket body while preserving existing content. Set `Done` only when the agreed work is complete. Record architectural proposals and user decisions in the relevant feature ticket.
 - Notion read and write access verified. Four handoff tickets were created as `Not started`; existing ticket content, statuses, and database schema were preserved. Do not duplicate the database or change its schema without explanation and approval.
 
-Immediate next step: continue implementation sequence slice 1 in [DOG_OWNERSHIP_PLAN.md](DOG_OWNERSHIP_PLAN.md) from the paused local-Supabase checkpoint below. Product, design, schema, authorization, API, caching, compatibility and rollout decisions are final; do not restart discovery. Operational support policy remains intentionally separate and does not block starting implementation, but the confirmed first release cannot enable fully until its recovery RPC is approved and complete. General reliability and duplicate-report work remain separate backlog tasks.
+Immediate next step: use the current staging/production handoff above. Product and feature contracts remain in [DOG_OWNERSHIP_PLAN.md](DOG_OWNERSHIP_PLAN.md); operational support choices and deployment rehearsal are still required before full production enablement. General reliability and duplicate-report work remain separate backlog tasks.
 
 ## Reconciled handoff tasks
 
@@ -40,7 +49,7 @@ Immediate next step: continue implementation sequence slice 1 in [DOG_OWNERSHIP_
 
 Discovery is recorded in [the corrected ownership planning ticket](https://app.notion.com/p/3e24e04c2ff1810592a3cb0f61d736d4). Several users should share one dog profile; a user may still have multiple dogs. Confirmed by the user:
 
-The final 2026-09-26 product/design/technical contract and implementation sequence are in [DOG_OWNERSHIP_PLAN.md](DOG_OWNERSHIP_PLAN.md) and [DOG_OWNERSHIP_SCHEMA_AND_UX.md](DOG_OWNERSHIP_SCHEMA_AND_UX.md). The standalone prototype now covers owner/friend, role, modal, response, departure, account deletion, shared deletion, empty and terminal states. No production feature behavior or deployable feature migration has changed; only documentation, the prototype and the isolated local-test baseline described below have changed.
+The final 2026-09-26 product/design/technical contract and implementation sequence are in [DOG_OWNERSHIP_PLAN.md](DOG_OWNERSHIP_PLAN.md) and [DOG_OWNERSHIP_SCHEMA_AND_UX.md](DOG_OWNERSHIP_SCHEMA_AND_UX.md). The standalone prototype covers owner/friend, role, modal, response, departure, account deletion, shared deletion, empty and terminal states. Slices 1–10 subsequently implemented local application behavior and deployable migrations; production deployment remains pending.
 
 - One primary owner plus co-owners, with shared day-to-day editing as the working model.
 - Confirmed 2026-09-26: each dog can have at most 8 active owners total, including the primary.
@@ -62,7 +71,7 @@ Latest user preferences: preserve user-card friend search and hide mode; put a d
 
 Repository findings: dog queries use a single `dogs.owner`; image paths and their cached owner ID depend on that owner; dog edit controls depend on navigation state. The deployed `delete-user` source matches the checked-in function and removes the user's storage folder after deleting Auth.
 
-Confirmed design direction: separate typed ownership-action tables; historical memberships closed with `left_at`; `dog_members` authority with synchronized legacy `dogs.owner`; RPC plus deferred-trigger invariants; lazy server-side expiry; dog-ID paths in a private bucket with signed URLs; and `DELETING` followed by retryable dog-asset purge. Preserve today's notification and single-Edge-Function account-deletion mechanics, hardened for verified caller identity, atomic ownership transitions and paginated cleanup. No application or database behavior has been implemented.
+Confirmed design direction: separate typed ownership-action tables; historical memberships closed with `left_at`; `dog_members` authority with synchronized legacy `dogs.owner`; RPC plus deferred-trigger invariants; lazy server-side expiry; dog-ID paths in a private bucket with signed URLs; and `DELETING` followed by retryable dog-asset purge. Preserve today's notification and single-Edge-Function account-deletion mechanics, hardened for verified caller identity, atomic ownership transitions and paginated cleanup. These behaviors are implemented locally through slice 10; no production rollout has been performed.
 
 Live audit completed read-only on 2026-09-26. The production database already has undocumented `dog_members`, `dog_invites`, and `dog_images` tables plus invitation/transfer RPCs, but the migration ledger and repository contain none of that schema. This is an unused prototype: all 15 active dogs have one primary membership, while no dog has an editor/viewer; all 15 tracked dog images still live in the `users` bucket and the `dogs` bucket is empty. Existing rows have no missing storage objects.
 

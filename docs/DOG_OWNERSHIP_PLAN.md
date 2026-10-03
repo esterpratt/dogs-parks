@@ -134,6 +134,8 @@ Each behavior slice starts with failing local integration tests and ends with fo
 10. **Account-deletion review and hardening.** Route Settings through the review page, apply all dog transitions atomically before Auth deletion, paginate user-scoped cleanup, preserve shared dog images and surface manual recovery for partial post-Auth failure.
 11. **Compatibility and release rollout.** After the operational support policy and recovery RPC are approved, ship the prerequisite client, set platform minimum versions, enable shared ownership gradually, monitor invariant/storage/auth denials and only later retire legacy paths. Security fixes may deploy earlier; the full first release cannot omit confirmed support-reviewed recovery.
 
+Detailed handoffs added 2026-10-03: [permanent staging and selected-data import](SUPABASE_STAGING_PLAN.md) and [production upgrade, data preservation and release runbook](SUPABASE_PRODUCTION_ROLLOUT_PLAN.md). The user wants email support to Ester with manual administrative action, and persistent staging using selected copies of their production data. These plans are not executed deployments; they specify remaining policy decisions, bootstrap/history reconciliation, old-client verification, safe sequencing and recovery gates.
+
 General reliability backlog, package upgrades, redesign, React Native migration, duplicate-profile merging and dog-attendance redesign are not implicit scope additions.
 
 ## Tests before behavior changes
