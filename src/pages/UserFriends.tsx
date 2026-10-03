@@ -50,7 +50,7 @@ const UserFriends = () => {
     ].forEach((friend) => {
       const { dogs, ...userWithoutDogs } = friend;
       queryClient.setQueryData(['user', friend.id], userWithoutDogs);
-      queryClient.setQueryData(['dogs', friend.id], dogs ?? []);
+      queryClient.setQueryData(['userDogs', friend.id], dogs ?? []);
     });
   }, [friends, pendingFriends, myPendingFriends, isLoading]);
 

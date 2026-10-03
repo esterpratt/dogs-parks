@@ -10,11 +10,10 @@ import { useConfirm } from '../context/ConfirmModalContext';
 import {
   cancelDogDeletion,
   fetchDogDeletionProposal,
-  fetchDogOwnershipCapabilities,
-  fetchDogOwnershipMembers,
   respondToDogDeletion,
   withdrawDogDeletionApproval,
 } from '../services/dog-ownership';
+import { fetchDogPage } from '../services/dogs';
 import { queryClient } from '../services/react-query';
 import styles from './DogOwnership.module.scss';
 
@@ -34,25 +33,20 @@ const DogOwnershipDeletion = () => {
     enabled: !!dogId || !!proposalId,
   });
   const resolvedDogId = dogId ?? proposal?.dog_id;
-  const { data: capabilities, isLoading: isLoadingCapabilities } = useQuery({
-    queryKey: ['dogOwnershipCapabilities', resolvedDogId],
-    queryFn: () => fetchDogOwnershipCapabilities(resolvedDogId!),
+  const { data: dogPage, isLoading: isLoadingCapabilities } = useQuery({
+    queryKey: ['dogPage', resolvedDogId],
+    queryFn: () => fetchDogPage(resolvedDogId!),
     enabled: !!resolvedDogId,
   });
-  const { data: members = [], isLoading: isLoadingMembers } = useQuery({
-    queryKey: ['dogOwnershipMembers', resolvedDogId],
-    queryFn: () => fetchDogOwnershipMembers(resolvedDogId!),
-    enabled: capabilities?.enabled === true && capabilities.is_owner === true,
-  });
+  const capabilities = dogPage?.capabilities;
+  const members = dogPage?.members ?? [];
   const currentMember = members.find((member) => member.user_id === userId);
   const currentConsent = proposal?.consents.find(
     (consent) => consent.member_id === currentMember?.id,
   );
   const refreshDeletion = () => {
     refetch();
-    queryClient.invalidateQueries({
-      queryKey: ['dogOwnershipCapabilities', resolvedDogId],
-    });
+    queryClient.invalidateQueries({ queryKey: ['dogPage', resolvedDogId] });
   };
   const { mutateAsync: respond, isPending: isResponding } = useMutation({
     mutationFn: (approve: boolean) =>
@@ -77,7 +71,7 @@ const DogOwnershipDeletion = () => {
     },
   });
 
-  if (isLoadingCapabilities || isLoadingMembers || isLoadingProposal) {
+  if (isLoadingCapabilities || isLoadingProposal) {
     return <Loader style={{ paddingTop: '64px' }} />;
   }
   if (!capabilities?.enabled || !capabilities.is_owner || !proposal) {

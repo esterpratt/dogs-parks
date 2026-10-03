@@ -8,11 +8,12 @@ import { Loader } from '../components/Loader';
 import { UserContext } from '../context/UserContext';
 import {
   fetchDogOwnershipAction,
-  fetchDogOwnershipCapabilities,
   respondToDogInvite,
   respondToDogOwnershipRequest,
   respondToPrimaryTransfer,
 } from '../services/dog-ownership';
+import { fetchDogPage } from '../services/dogs';
+import { queryClient } from '../services/react-query';
 import { DogOwnershipActionType } from '../types/dog-ownership';
 import styles from './DogOwnership.module.scss';
 
@@ -39,11 +40,12 @@ const OwnershipAction = () => {
     queryFn: () => fetchDogOwnershipAction(normalizedType, actionId!),
     enabled: !!actionId,
   });
-  const { data: capabilities, isLoading: isLoadingCapabilities } = useQuery({
-    queryKey: ['dogOwnershipCapabilities', action?.dog_id],
-    queryFn: () => fetchDogOwnershipCapabilities(action!.dog_id),
+  const { data: dogPage, isLoading: isLoadingCapabilities } = useQuery({
+    queryKey: ['dogPage', action?.dog_id],
+    queryFn: () => fetchDogPage(action!.dog_id),
     enabled: !!action?.dog_id,
   });
+  const capabilities = dogPage?.capabilities;
   const { mutate: respond, isPending } = useMutation({
     mutationFn: (approve: boolean) =>
       normalizedType === 'invite'
@@ -54,13 +56,22 @@ const OwnershipAction = () => {
     onSuccess: (result) => {
       setOutcome(result.outcome);
       refetch();
+      queryClient.invalidateQueries({ queryKey: ['dogPage', action?.dog_id] });
+      queryClient.invalidateQueries({ queryKey: ['userDogs'] });
     },
   });
 
   if (isLoading || isLoadingCapabilities) {
     return <Loader style={{ paddingTop: '64px' }} />;
   }
-  if (!action || !capabilities?.enabled) {
+  if (!action) {
+    return (
+      <main className={styles.container}>
+        <p>{t('dogOwnership.outcomes.NOT_FOUND')}</p>
+      </main>
+    );
+  }
+  if (!capabilities?.enabled) {
     return null;
   }
 

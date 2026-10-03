@@ -7,7 +7,6 @@ import {
   useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Trash2 } from 'lucide-react';
 import classnames from 'classnames';
 import { DOG_ENERGY, DOG_SIZE, Dog, GENDER } from '../../types/dog';
 import { UserContext } from '../../context/UserContext';
@@ -17,9 +16,7 @@ import { RadioInputs } from '../inputs/RadioInputs';
 import { TextArea } from '../inputs/TextArea';
 import { AutoComplete } from '../inputs/AutoComplete';
 import { dogBreeds } from '../../services/dog-breeds';
-import { DeleteDogModal } from './DeleteDogModal';
 import { useOrientationContext } from '../../context/OrientationContext';
-import { Button } from '../Button';
 import { FormModal } from '../modals/FormModal';
 import useKeyboardFix from '../../hooks/useKeyboardFix';
 import { capitalizeText } from '../../utils/text';
@@ -61,7 +58,6 @@ const EditDogModal: React.FC<EditDogModalProps> = (props) => {
   });
 
   const { userId } = useContext(UserContext);
-  const [isDeleteDogModalOpen, setIsDeleteDogModalOpen] = useState(false);
   const keyboardHeight = useKeyboardFix();
 
   const { mutateDog, isPendingUpdateDog } = useUpdateDog();
@@ -193,7 +189,6 @@ const EditDogModal: React.FC<EditDogModalProps> = (props) => {
   }, [t, i18n.language]);
 
   return (
-    <>
       <FormModal
         open={isOpen}
         onClose={onClose}
@@ -362,27 +357,7 @@ const EditDogModal: React.FC<EditDogModalProps> = (props) => {
             className={styles.description}
           />
         </form>
-        {dog && (
-          <Button
-            variant="secondary"
-            color={styles.red}
-            onClick={() => setIsDeleteDogModalOpen(true)}
-            className={styles.deleteDogWrapper}
-            disabled={isPending}
-          >
-            <Trash2 size={16} />
-            <div>{t('settings.deleteDogButton', { name: dog.name })}</div>
-          </Button>
-        )}
       </FormModal>
-      {dog && (
-        <DeleteDogModal
-          isOpen={isDeleteDogModalOpen}
-          onClose={() => setIsDeleteDogModalOpen(false)}
-          dog={dog}
-        />
-      )}
-    </>
   );
 };
 

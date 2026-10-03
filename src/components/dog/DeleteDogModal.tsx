@@ -34,7 +34,7 @@ const DeleteDogModal: React.FC<DeleteDogModalProps> = (props) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['dogs', userId],
+        queryKey: ['userDogs', userId],
       });
       revalidate();
 

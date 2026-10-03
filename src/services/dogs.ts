@@ -3,6 +3,8 @@ import { Dog } from '../types/dog';
 import { DogImage } from '../types/dog-image';
 import { supabase } from './supabase-client';
 import { prepareImage } from './image';
+import { getClientCompatibility } from './dog-ownership';
+import { DogPageData, UserDogAssociation } from '../types/dog-ownership';
 
 type CreateDogProps = Omit<Dog, 'id'>;
 
@@ -22,17 +24,21 @@ const dogImageUrlCache = new Map<
 
 const createDog = async (createDogProps: CreateDogProps) => {
   try {
-    const { data: dog, error } = await supabase
-      .from('dogs')
-      .insert([{ ...createDogProps }])
-      .select('id')
-      .single();
+    const { data, error } = await supabase.rpc('api_create_dog', {
+      p_dog: createDogProps,
+    });
 
     if (error) {
       throw error;
     }
-
-    return dog.id;
+    if (!data || Array.isArray(data) || typeof data !== 'object') {
+      throw new Error('Dog creation returned no result');
+    }
+    const dogId = data.dog_id;
+    if (data.outcome !== 'CREATED' || typeof dogId !== 'string') {
+      throw new Error('Dog creation returned an invalid result');
+    }
+    return dogId;
   } catch (error) {
     throwError(error);
   }
@@ -40,13 +46,22 @@ const createDog = async (createDogProps: CreateDogProps) => {
 
 const updateDog = async ({ dogId, dogDetails }: EditDogProps) => {
   try {
-    const { error } = await supabase
-      .from('dogs')
-      .update({ ...dogDetails })
-      .eq('id', dogId);
+    const { data, error } = await supabase.rpc('api_update_dog', {
+      ...getClientCompatibility(),
+      p_changes: dogDetails,
+      p_dog_id: dogId,
+    });
 
     if (error) {
       throw error;
+    }
+    if (
+      !data ||
+      Array.isArray(data) ||
+      typeof data !== 'object' ||
+      data.outcome !== 'APPLIED'
+    ) {
+      throw new Error('Dog update is unavailable for this client');
     }
   } catch (error) {
     throwError(error);
@@ -86,17 +101,15 @@ const fetchDogs = async (ids: string[]) => {
 
 const fetchUserDogs = async (userId: string) => {
   try {
-    const { data: dogs, error } = await supabase
-      .from('dogs')
-      .select('*')
-      .eq('owner', userId)
-      .is('deleted_at', null);
+    const { data: dogs, error } = await supabase.rpc('api_get_user_dogs', {
+      p_user_id: userId,
+    });
 
     if (error) {
       throw error;
     }
 
-    return dogs;
+    return dogs as unknown as Dog[];
   } catch (error) {
     throwError(error);
   }
@@ -104,19 +117,42 @@ const fetchUserDogs = async (userId: string) => {
 
 const fetchUsersDogs = async (userIds: string[]) => {
   try {
-    const { data: dogs, error } = await supabase
-      .from('dogs')
-      .select('*')
-      .in('owner', userIds)
-      .is('deleted_at', null);
+    const { data: dogs, error } = await supabase.rpc('api_get_users_dogs', {
+      p_user_ids: userIds,
+    });
 
     if (error) {
       throw error;
     }
 
-    return dogs;
+    return dogs as unknown as UserDogAssociation[];
   } catch (error) {
     throwError(error);
+  }
+};
+
+const fetchDogPage = async (dogId: string): Promise<DogPageData | null> => {
+  try {
+    const { data, error } = await supabase.rpc('api_get_dog_page', {
+      ...getClientCompatibility(),
+      p_dog_id: dogId,
+    });
+    if (error) {
+      throw error;
+    }
+    if (!data || Array.isArray(data) || typeof data !== 'object') {
+      return null;
+    }
+    if (data.outcome === 'NOT_FOUND') {
+      return null;
+    }
+    if (data.outcome !== 'OK') {
+      throw new Error('Dog page returned an invalid result');
+    }
+    return data as unknown as DogPageData;
+  } catch (error) {
+    throwError(error);
+    return null;
   }
 };
 
@@ -325,6 +361,7 @@ const clearDogImageUrlCache = () => {
 
 export {
   fetchDogs,
+  fetchDogPage,
   createDog,
   updateDog,
   deleteDog,

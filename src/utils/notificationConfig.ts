@@ -143,7 +143,7 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
         getUrl: (notification) => `/dogs/${notification.target_id}`,
         invalidateQueries: (_userId, notification) => {
           queryClient.invalidateQueries({
-            queryKey: ['dogOwnershipCapabilities', notification.target_id],
+            queryKey: ['dogPage', notification.target_id],
           });
         },
       };
@@ -191,8 +191,9 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
         getUrl: () => null,
         invalidateQueries: (_userId, notification) => {
           queryClient.invalidateQueries({
-            queryKey: ['dogOwnershipCapabilities', notification.target_id],
+            queryKey: ['dogPage', notification.target_id],
           });
+          queryClient.invalidateQueries({ queryKey: ['userDogs'] });
         },
       };
     default:

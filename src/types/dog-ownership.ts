@@ -1,4 +1,8 @@
+import type { Dog } from './dog';
+import type { User } from './user';
+
 type DogOwnershipOutcome =
+  | 'APPLIED'
   | 'ACCEPTED'
   | 'ACTION_ALREADY_PENDING'
   | 'ALREADY_MEMBER'
@@ -70,13 +74,33 @@ interface DogOwnershipMember {
   user_name: string | null;
 }
 
+interface DogPageData {
+  capabilities: DogOwnershipCapabilities;
+  dog: Dog;
+  members?: DogOwnershipMember[];
+  outcome: 'OK';
+  profile_user: Pick<User, 'id' | 'name'>;
+  viewer: {
+    can_edit: boolean;
+    is_owner: boolean;
+    role: 'PRIMARY_OWNER' | 'CO_OWNER' | null;
+  };
+}
+
+interface UserDogAssociation {
+  dog: Dog;
+  profile_user_id: string;
+}
+
 type DogOwnershipActionType = 'invite' | 'request' | 'transfer';
 
 export type {
   DogOwnershipActionType,
   DogOwnershipCapabilities,
   DogDeletionProposal,
+  DogPageData,
   DogOwnershipMember,
   DogOwnershipOutcome,
   DogOwnershipResult,
+  UserDogAssociation,
 };

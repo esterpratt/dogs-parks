@@ -21,7 +21,7 @@ const useAddDog = (onAddDog?: (dogId?: string) => void) => {
     },
     onSuccess: (dogId) => {
       queryClient.invalidateQueries({
-        queryKey: ['dogs', userId],
+        queryKey: ['userDogs', userId],
       });
       revalidate();
 

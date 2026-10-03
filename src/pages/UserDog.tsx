@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Cake, Mars, MoveLeft, Pencil, Tag, Venus } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { Trans, useTranslation } from 'react-i18next';
@@ -8,7 +8,7 @@ import { GENDER } from '../types/dog';
 import {
   DOG_IMAGE_QUERY_REFRESH_MS,
   fetchDogPrimaryImage,
-  fetchDogs,
+  fetchDogPage,
 } from '../services/dogs';
 import { getLocalizedDogAgeText } from '../utils/dogAge';
 import { capitalizeText } from '../utils/text';
@@ -25,45 +25,31 @@ import { HeaderImage } from '../components/HeaderImage';
 import { PrevLinks } from '../components/PrevLinks';
 import { EditDogModal } from '../components/dog/EditDogModal';
 import { UserContext } from '../context/UserContext';
-import { fetchDogOwnershipCapabilities } from '../services/dog-ownership';
 
 import styles from './UserDog.module.scss';
 
 const UserDog = () => {
   const { dogId } = useParams();
-  const { state } = useLocation();
   const { userId } = useContext(UserContext);
   const [isEditDogsModalOpen, setIsEditDogsModalOpen] = useState(false);
   const [imageToEnlarge, setImageToEnlarge] = useState<string>('');
   const [isEnlargedImageModalOpen, setIsEnlargeImageModalOpen] =
     useState(false);
-  const navigationState = state as {
-    isSignedInUser?: boolean;
-    userName?: string;
-  } | null;
-  const userName = navigationState?.userName ?? '';
   const { t } = useTranslation();
 
-  const { data: dog, isLoading: isLoadingDog } = useQuery({
-    queryKey: ['dogs', dogId],
-    queryFn: async () => {
-      const dogs = await fetchDogs([dogId!]);
-      return dogs?.[0];
-    },
+  const { data: dogPage, isLoading: isLoadingDog } = useQuery({
+    queryKey: ['dogPage', dogId],
+    queryFn: () => fetchDogPage(dogId!),
     throwOnError: true,
   });
+  const dog = dogPage?.dog;
+  const userName = dogPage?.profile_user.name ?? '';
 
   const { data: primaryImage } = useQuery({
     queryKey: ['dogImage', dogId],
     queryFn: async () => fetchDogPrimaryImage(dogId!),
     refetchInterval: DOG_IMAGE_QUERY_REFRESH_MS,
     staleTime: DOG_IMAGE_QUERY_REFRESH_MS,
-  });
-
-  const { data: ownershipCapabilities } = useQuery({
-    queryKey: ['dogOwnershipCapabilities', dogId],
-    queryFn: () => fetchDogOwnershipCapabilities(dogId!),
-    enabled: !!dogId && !!userId,
   });
 
   const { showLoader } = useDelayedLoading({
@@ -91,13 +77,19 @@ const UserDog = () => {
     return <Loader style={{ paddingTop: '64px' }} />;
   }
 
-  if (!dog) {
-    return null;
+  if (!dogPage || !dog) {
+    return (
+      <main className={styles.container}>
+        <p>{t('dogOwnership.outcomes.DOG_UNAVAILABLE')}</p>
+      </main>
+    );
   }
 
-  // Navigation state is optional on refresh and ownership-action deep links.
-  const isSignedInUser =
-    navigationState?.isSignedInUser ?? userId === dog.owner;
+  // The server derives ownership for direct URLs and refreshes; router state
+  // is presentation context only and is never an authorization input.
+  const isSignedInUser = dogPage.viewer.is_owner;
+  const canEdit = dogPage.viewer.can_edit;
+  const ownershipCapabilities = dogPage.capabilities;
 
   const ageText = getLocalizedDogAgeText({
     birthday: dog.birthday,
@@ -112,7 +104,7 @@ const UserDog = () => {
           prevLinksCmp={
             <PrevLinks
               links={{
-                to: `/profile/${dog.owner}/dogs`,
+                to: `/profile/${isSignedInUser ? userId : dogPage.profile_user.id}/dogs`,
                 icon: <MoveLeft size={16} />,
                 text: isSignedInUser ? (
                   t('userDogs.titleMyPack')
@@ -183,7 +175,7 @@ const UserDog = () => {
                   )}
                 </div>
               </div>
-              {isSignedInUser && (
+              {canEdit && (
                 <Button
                   variant="secondary"
                   onClick={() => onEditDog()}
@@ -199,8 +191,7 @@ const UserDog = () => {
           })}
         />
         <div className={styles.content}>
-          {ownershipCapabilities?.enabled &&
-          ownershipCapabilities.role === 'PRIMARY_OWNER' ? (
+          {isSignedInUser ? (
             <Link
               className={styles.ownershipAction}
               to={`/dogs/${dog.id}/ownership`}
@@ -218,14 +209,14 @@ const UserDog = () => {
             </Link>
           ) : null}
           <DogDetails
-            isSignedInUser={isSignedInUser}
+            isSignedInUser={canEdit}
             dog={dog}
             userName={userName}
             onEditDog={() => onEditDog()}
           />
           <DogPreferences
             dog={dog}
-            isSignedInUser={isSignedInUser}
+            isSignedInUser={canEdit}
             userName={userName}
             onEditDog={() => onEditDog(true)}
           />
@@ -240,7 +231,7 @@ const UserDog = () => {
       />
       <EditDogModal
         dog={dog}
-        isOpen={isEditDogsModalOpen}
+        isOpen={canEdit && isEditDogsModalOpen}
         onClose={onCloseDogsModal}
       />
     </>

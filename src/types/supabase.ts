@@ -1415,6 +1415,7 @@ export type Database = {
         Args: { p_device_id?: string }
         Returns: number
       }
+      api_create_dog: { Args: { p_dog: Json }; Returns: Json }
       api_create_dog_invite: {
         Args: {
           p_client_build: number
@@ -1473,6 +1474,16 @@ export type Database = {
         }
         Returns: Json
       }
+      api_get_dog_page: {
+        Args: {
+          p_client_build: number
+          p_client_platform: Database["public"]["Enums"]["app_platform"]
+          p_dog_id: string
+        }
+        Returns: Json
+      }
+      api_get_user_dogs: { Args: { p_user_id: string }; Returns: Json }
+      api_get_users_dogs: { Args: { p_user_ids: string[] }; Returns: Json }
       api_leave_dog: {
         Args: {
           p_client_build: number
@@ -1550,6 +1561,15 @@ export type Database = {
       api_set_primary_dog_image: {
         Args: { p_image_id: string }
         Returns: undefined
+      }
+      api_update_dog: {
+        Args: {
+          p_changes: Json
+          p_client_build: number
+          p_client_platform: Database["public"]["Enums"]["app_platform"]
+          p_dog_id: string
+        }
+        Returns: Json
       }
       api_update_missing_park_details: {
         Args: {

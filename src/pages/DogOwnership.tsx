@@ -14,14 +14,14 @@ import {
   createDogInvite,
   fetchDogDeletionProposal,
   createPrimaryTransfer,
-  fetchDogOwnershipCapabilities,
-  fetchDogOwnershipMembers,
   fetchPendingDogInvites,
   fetchPendingDogOwnershipRequests,
   fetchPendingPrimaryTransfers,
   proposeDogDeletion,
 } from '../services/dog-ownership';
+import { fetchDogPage } from '../services/dogs';
 import { queryClient } from '../services/react-query';
+import { DeleteDogModal } from '../components/dog/DeleteDogModal';
 import styles from './DogOwnership.module.scss';
 
 const DogOwnership = () => {
@@ -29,6 +29,7 @@ const DogOwnership = () => {
   const { t } = useTranslation();
   const { userId } = useContext(UserContext);
   const [resultMessage, setResultMessage] = useState('');
+  const [isDeleteDogModalOpen, setIsDeleteDogModalOpen] = useState(false);
   const [selectedTransferMemberId, setSelectedTransferMemberId] = useState('');
   const inviteKeys = useRef(new Map<string, string>());
   const transferKey = useRef<string | null>(null);
@@ -36,11 +37,12 @@ const DogOwnership = () => {
   const { friends, isLoadingFriends } = useFetchFriends({ userId });
   const queryKey = ['dogOwnershipActions', dogId];
 
-  const { data: capabilities, isLoading: isLoadingCapabilities } = useQuery({
-    queryKey: ['dogOwnershipCapabilities', dogId],
-    queryFn: () => fetchDogOwnershipCapabilities(dogId!),
+  const { data: dogPage, isLoading: isLoadingCapabilities } = useQuery({
+    queryKey: ['dogPage', dogId],
+    queryFn: () => fetchDogPage(dogId!),
     enabled: !!dogId,
   });
+  const capabilities = dogPage?.capabilities;
   const { data: invites = [] } = useQuery({
     queryKey: [...queryKey, 'invites'],
     queryFn: () => fetchPendingDogInvites(dogId!),
@@ -51,11 +53,7 @@ const DogOwnership = () => {
     queryFn: () => fetchPendingDogOwnershipRequests(dogId!),
     enabled: capabilities?.role === 'PRIMARY_OWNER',
   });
-  const { data: members = [] } = useQuery({
-    queryKey: [...queryKey, 'members'],
-    queryFn: () => fetchDogOwnershipMembers(dogId!),
-    enabled: capabilities?.is_owner === true,
-  });
+  const members = dogPage?.members ?? [];
   const { data: transfers = [] } = useQuery({
     queryKey: [...queryKey, 'transfers'],
     queryFn: () => fetchPendingPrimaryTransfers(dogId!),
@@ -71,9 +69,7 @@ const DogOwnership = () => {
 
   const refreshActions = () => {
     queryClient.invalidateQueries({ queryKey });
-    queryClient.invalidateQueries({
-      queryKey: ['dogOwnershipCapabilities', dogId],
-    });
+    queryClient.invalidateQueries({ queryKey: ['dogPage', dogId] });
   };
   const { mutate: inviteFriend, isPending: isInviting } = useMutation({
     mutationFn: (friendId: string) => {
@@ -125,8 +121,19 @@ const DogOwnership = () => {
     return <Loader style={{ paddingTop: '64px' }} />;
   }
 
-  if (!capabilities?.enabled || !capabilities.is_owner) {
-    return null;
+  if (!dogPage || !capabilities) {
+    return (
+      <main className={styles.container}>
+        <p>{t('dogOwnership.outcomes.DOG_UNAVAILABLE')}</p>
+      </main>
+    );
+  }
+  if (!dogPage.viewer.is_owner) {
+    return (
+      <main className={styles.container}>
+        <p>{t('dogOwnership.outcomes.FORBIDDEN')}</p>
+      </main>
+    );
   }
 
   const invitedUserIds = new Set(
@@ -157,7 +164,7 @@ const DogOwnership = () => {
           ))}
         </section>
 
-        {capabilities.role === 'PRIMARY_OWNER' ? (
+        {capabilities.enabled && capabilities.role === 'PRIMARY_OWNER' ? (
           <>
             <section className={styles.section}>
               <h2>{t('dogOwnership.inviteTitle')}</h2>
@@ -282,13 +289,13 @@ const DogOwnership = () => {
           </>
         ) : null}
 
-        {capabilities.can_leave ? (
+        {capabilities.enabled && capabilities.can_leave ? (
           <Link to={`/dogs/${dogId}/ownership/leave`}>
             {t('dogOwnership.leaveAction')}
           </Link>
         ) : null}
 
-        {(capabilities.active_owner_count ?? 0) > 1 ? (
+        {capabilities.enabled && (capabilities.active_owner_count ?? 0) > 1 ? (
           <section className={styles.section}>
             <h2>{t('dogOwnership.deletionTitle')}</h2>
             {deletionProposal ? (
@@ -313,7 +320,25 @@ const DogOwnership = () => {
             )}
           </section>
         ) : null}
+
+        {members.length === 1 && dogPage.viewer.role === 'PRIMARY_OWNER' ? (
+          <section className={styles.section}>
+            <h2>{t('settings.deleteDogButton', { name: dogPage.dog.name })}</h2>
+            <Button
+              onClick={() => setIsDeleteDogModalOpen(true)}
+              type="button"
+              variant="secondary"
+            >
+              {t('common.actions.delete')}
+            </Button>
+          </section>
+        ) : null}
       </div>
+      <DeleteDogModal
+        dog={dogPage.dog}
+        isOpen={isDeleteDogModalOpen}
+        onClose={() => setIsDeleteDogModalOpen(false)}
+      />
     </main>
   );
 };

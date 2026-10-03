@@ -218,6 +218,15 @@ test('delete-user verifies and deletes only the caller', async (suite) => {
             .single();
         assertNoError(successorMemberError, 'add shared-dog successor');
 
+        // This contract owns its compatibility precondition instead of relying
+        // on an earlier suite to leave the isolated feature row enabled.
+        const { error: compatibilityError } = await serviceClient
+          .from('app_feature_compatibility')
+          .update({ enabled: true, minimum_build: 1 })
+          .eq('feature', 'SHARED_DOG_OWNERSHIP')
+          .eq('platform', 'WEB');
+        assertNoError(compatibilityError, 'enable isolated account-erasure fixture');
+
         const response = await invokeDeleteUser({
           accessToken: departingPrimary.accessToken,
           body: {

@@ -7,10 +7,10 @@ import { Button } from '../components/Button';
 import { Loader } from '../components/Loader';
 import { UserContext } from '../context/UserContext';
 import {
-  fetchDogOwnershipCapabilities,
-  fetchDogOwnershipMembers,
   leaveDogOwnership,
 } from '../services/dog-ownership';
+import { fetchDogPage } from '../services/dogs';
+import { queryClient } from '../services/react-query';
 import styles from './DogOwnership.module.scss';
 
 const DogOwnershipLeave = () => {
@@ -21,16 +21,13 @@ const DogOwnershipLeave = () => {
   const [confirmed, setConfirmed] = useState(false);
   const [selectedSuccessorId, setSelectedSuccessorId] = useState('');
   const [resultMessage, setResultMessage] = useState('');
-  const { data: capabilities, isLoading: isLoadingCapabilities } = useQuery({
-    queryKey: ['dogOwnershipCapabilities', dogId],
-    queryFn: () => fetchDogOwnershipCapabilities(dogId!),
+  const { data: dogPage, isLoading: isLoadingCapabilities } = useQuery({
+    queryKey: ['dogPage', dogId],
+    queryFn: () => fetchDogPage(dogId!),
     enabled: !!dogId,
   });
-  const { data: members = [], isLoading: isLoadingMembers } = useQuery({
-    queryKey: ['dogOwnershipMembers', dogId],
-    queryFn: () => fetchDogOwnershipMembers(dogId!),
-    enabled: capabilities?.enabled === true && capabilities.is_owner === true,
-  });
+  const capabilities = dogPage?.capabilities;
+  const members = dogPage?.members ?? [];
   const { mutate: leave, isPending } = useMutation({
     mutationFn: () =>
       leaveDogOwnership(
@@ -41,6 +38,8 @@ const DogOwnershipLeave = () => {
           : null,
       ),
     onSuccess: (result) => {
+      queryClient.invalidateQueries({ queryKey: ['dogPage', dogId] });
+      queryClient.invalidateQueries({ queryKey: ['userDogs'] });
       if (result.outcome === 'LEFT') {
         navigate(`/dogs/${dogId}`, { replace: true });
         return;
@@ -52,8 +51,15 @@ const DogOwnershipLeave = () => {
     (member) => member.role === 'CO_OWNER' && member.user_id !== userId,
   );
 
-  if (isLoadingCapabilities || isLoadingMembers) {
+  if (isLoadingCapabilities) {
     return <Loader style={{ paddingTop: '64px' }} />;
+  }
+  if (!dogPage) {
+    return (
+      <main className={styles.container}>
+        <p>{t('dogOwnership.outcomes.DOG_UNAVAILABLE')}</p>
+      </main>
+    );
   }
   if (
     !capabilities?.enabled ||

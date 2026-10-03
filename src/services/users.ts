@@ -1,7 +1,7 @@
 import { User } from '../types/user';
 import { AppError, throwError } from './error';
 import { fetchUsersDogs } from './dogs';
-import { Dog } from '../types/dog';
+import { UserDogAssociation } from '../types/dog-ownership';
 import { supabase } from './supabase-client';
 import { USER_NOT_FOUND_ERROR } from '../utils/consts';
 
@@ -77,14 +77,20 @@ const fetchUsersWithDogsByIds = async (ids: string[]) => {
     }
 
     const dogsPromise = fetchUsersDogs(ids);
-    const promises: [Promise<User[] | undefined>, Promise<Dog[] | undefined>] =
-      [fetchUsers(ids), dogsPromise];
+    const promises: [
+      Promise<User[] | undefined>,
+      Promise<UserDogAssociation[] | undefined>,
+    ] = [fetchUsers(ids), dogsPromise];
 
     const [users = [], dogs = []] = await Promise.all(promises);
     const usersWithDogs = users?.map((user) => {
       return {
         ...user,
-        dogs: dogs ? dogs.filter((dog) => dog.owner === user.id) : [],
+        dogs: dogs
+          ? dogs
+              .filter(({ profile_user_id: profileUserId }) => profileUserId === user.id)
+              .map(({ dog }) => dog)
+          : [],
       };
     });
 

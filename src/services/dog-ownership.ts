@@ -13,6 +13,7 @@ import { supabase } from './supabase-client';
 const SHARED_OWNERSHIP_CLIENT_BUILD = 1;
 const ownershipOutcomes = new Set([
   'ACCEPTED',
+  'APPLIED',
   'ACTION_ALREADY_PENDING',
   'ALREADY_MEMBER',
   'APPROVED',
@@ -475,6 +476,7 @@ export {
   fetchPendingDogInvites,
   fetchPendingDogOwnershipRequests,
   fetchPendingPrimaryTransfers,
+  getClientCompatibility,
   leaveDogOwnership,
   proposeDogDeletion,
   respondToDogInvite,

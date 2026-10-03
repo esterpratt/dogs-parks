@@ -10,9 +10,9 @@ import { UserContext } from '../context/UserContext';
 import {
   cancelDogOwnershipRequest,
   createDogOwnershipRequest,
-  fetchDogOwnershipCapabilities,
   fetchPendingDogOwnershipRequests,
 } from '../services/dog-ownership';
+import { fetchDogPage } from '../services/dogs';
 import { queryClient } from '../services/react-query';
 import styles from './DogOwnership.module.scss';
 
@@ -24,11 +24,12 @@ const DogOwnershipRequest = () => {
   const [outcome, setOutcome] = useState('');
   const requestKey = useRef(uuidv4());
 
-  const { data: capabilities, isLoading } = useQuery({
-    queryKey: ['dogOwnershipCapabilities', dogId],
-    queryFn: () => fetchDogOwnershipCapabilities(dogId!),
+  const { data: dogPage, isLoading } = useQuery({
+    queryKey: ['dogPage', dogId],
+    queryFn: () => fetchDogPage(dogId!),
     enabled: !!dogId,
   });
+  const capabilities = dogPage?.capabilities;
   const { data: pendingRequests = [] } = useQuery({
     queryKey: ['dogOwnershipActions', dogId, 'myRequests'],
     queryFn: () => fetchPendingDogOwnershipRequests(dogId!),
@@ -39,9 +40,7 @@ const DogOwnershipRequest = () => {
   );
 
   const refresh = () => {
-    queryClient.invalidateQueries({
-      queryKey: ['dogOwnershipCapabilities', dogId],
-    });
+    queryClient.invalidateQueries({ queryKey: ['dogPage', dogId] });
     queryClient.invalidateQueries({ queryKey: ['dogOwnershipActions', dogId] });
   };
   const { mutate: submitRequest, isPending: isSubmitting } = useMutation({
@@ -63,6 +62,13 @@ const DogOwnershipRequest = () => {
 
   if (isLoading) {
     return <Loader style={{ paddingTop: '64px' }} />;
+  }
+  if (!dogPage) {
+    return (
+      <main className={styles.container}>
+        <p>{t('dogOwnership.outcomes.DOG_UNAVAILABLE')}</p>
+      </main>
+    );
   }
   if (!capabilities?.enabled) {
     return null;

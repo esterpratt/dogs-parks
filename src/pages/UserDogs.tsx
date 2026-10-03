@@ -118,7 +118,6 @@ const UserDogs = () => {
             <Link
               to={`/dogs/${dog.id}`}
               key={dog.id}
-              state={{ userName: user.name, isSignedInUser }}
             >
               <DogPreview dog={dog} image={dogImages[index]} />
             </Link>

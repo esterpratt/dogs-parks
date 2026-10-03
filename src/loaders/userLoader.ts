@@ -27,7 +27,7 @@ const createProfilePromise = async (userId: string) => {
     });
 
     const dogsPromise = queryClient.fetchQuery({
-      queryKey: ['dogs', userId],
+      queryKey: ['userDogs', userId],
       queryFn: () => fetchUserDogs(userId),
     });
 
