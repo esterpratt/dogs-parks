@@ -14,6 +14,12 @@ enum NotificationType {
   DOG_OWNERSHIP_REQUEST_DECLINED = 'dog_ownership_request_declined',
   DOG_OWNERSHIP_REQUEST_CANCELED = 'dog_ownership_request_canceled',
   DOG_OWNER_JOINED = 'dog_owner_joined',
+  DOG_OWNER_LEFT = 'dog_owner_left',
+  DOG_PRIMARY_CHANGED = 'dog_primary_changed',
+  DOG_PRIMARY_TRANSFER_OFFERED = 'dog_primary_transfer_offered',
+  DOG_PRIMARY_TRANSFER_ACCEPTED = 'dog_primary_transfer_accepted',
+  DOG_PRIMARY_TRANSFER_DECLINED = 'dog_primary_transfer_declined',
+  DOG_PRIMARY_TRANSFER_CANCELED = 'dog_primary_transfer_canceled',
 }
 
 enum NotificationTargetType {

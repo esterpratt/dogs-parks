@@ -81,4 +81,22 @@ describe('translateNotification', () => {
       'dogOwnership.notifications.requestReceivedMessage:Taylor',
     );
   });
+
+  it('maps primary-transfer notifications to localized client copy', () => {
+    const t = makeT();
+    const result = translateNotification({
+      type: 'dog_primary_transfer_offered',
+      senderName: 'Taylor',
+      serverTitle: null,
+      serverAppMessage: null,
+      t,
+    });
+
+    expect(result.title).toBe(
+      'dogOwnership.notifications.transferOfferedTitle:Taylor',
+    );
+    expect(result.appMessage).toBe(
+      'dogOwnership.notifications.transferOfferedMessage:Taylor',
+    );
+  });
 });

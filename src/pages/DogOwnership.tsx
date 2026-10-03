@@ -10,10 +10,14 @@ import { UserContext } from '../context/UserContext';
 import { useFetchFriends } from '../hooks/api/useFetchFriends';
 import {
   cancelDogInvite,
+  cancelPrimaryTransfer,
   createDogInvite,
+  createPrimaryTransfer,
   fetchDogOwnershipCapabilities,
+  fetchDogOwnershipMembers,
   fetchPendingDogInvites,
   fetchPendingDogOwnershipRequests,
+  fetchPendingPrimaryTransfers,
 } from '../services/dog-ownership';
 import { queryClient } from '../services/react-query';
 import styles from './DogOwnership.module.scss';
@@ -23,7 +27,9 @@ const DogOwnership = () => {
   const { t } = useTranslation();
   const { userId } = useContext(UserContext);
   const [resultMessage, setResultMessage] = useState('');
+  const [selectedTransferMemberId, setSelectedTransferMemberId] = useState('');
   const inviteKeys = useRef(new Map<string, string>());
+  const transferKey = useRef<string | null>(null);
   const { friends, isLoadingFriends } = useFetchFriends({ userId });
   const queryKey = ['dogOwnershipActions', dogId];
 
@@ -40,6 +46,16 @@ const DogOwnership = () => {
   const { data: requests = [] } = useQuery({
     queryKey: [...queryKey, 'requests'],
     queryFn: () => fetchPendingDogOwnershipRequests(dogId!),
+    enabled: capabilities?.role === 'PRIMARY_OWNER',
+  });
+  const { data: members = [] } = useQuery({
+    queryKey: [...queryKey, 'members'],
+    queryFn: () => fetchDogOwnershipMembers(dogId!),
+    enabled: capabilities?.is_owner === true,
+  });
+  const { data: transfers = [] } = useQuery({
+    queryKey: [...queryKey, 'transfers'],
+    queryFn: () => fetchPendingPrimaryTransfers(dogId!),
     enabled: capabilities?.role === 'PRIMARY_OWNER',
   });
 
@@ -66,12 +82,28 @@ const DogOwnership = () => {
     mutationFn: cancelDogInvite,
     onSuccess: refreshActions,
   });
+  const { mutate: offerTransfer, isPending: isOfferingTransfer } = useMutation({
+    mutationFn: (memberId: string) => {
+      const idempotencyKey = transferKey.current ?? uuidv4();
+      transferKey.current = idempotencyKey;
+      return createPrimaryTransfer(dogId!, memberId, idempotencyKey);
+    },
+    onSuccess: (result) => {
+      transferKey.current = null;
+      setResultMessage(t(`dogOwnership.outcomes.${result.outcome}`));
+      refreshActions();
+    },
+  });
+  const { mutate: cancelTransfer } = useMutation({
+    mutationFn: cancelPrimaryTransfer,
+    onSuccess: refreshActions,
+  });
 
   if (isLoadingCapabilities || isLoadingFriends) {
     return <Loader style={{ paddingTop: '64px' }} />;
   }
 
-  if (!capabilities?.enabled || capabilities.role !== 'PRIMARY_OWNER') {
+  if (!capabilities?.enabled || !capabilities.is_owner) {
     return null;
   }
 
@@ -80,6 +112,9 @@ const DogOwnership = () => {
   );
   const eligibleFriends =
     friends?.filter((friend) => !invitedUserIds.has(friend.id)) ?? [];
+  const eligibleTransferMembers = members.filter(
+    (member) => member.role === 'CO_OWNER',
+  );
 
   return (
     <main className={styles.container}>
@@ -91,67 +126,145 @@ const DogOwnership = () => {
       </div>
       <div className={styles.content}>
         <section className={styles.section}>
-          <h2>{t('dogOwnership.inviteTitle')}</h2>
-          {eligibleFriends.length === 0 ? (
-            <p className={styles.message}>
-              {t('dogOwnership.noEligibleFriends')}
-            </p>
-          ) : (
-            <div className={styles.list}>
-              {eligibleFriends.map((friend) => (
-                <div className={styles.row} key={friend.id}>
-                  <span>{friend.name}</span>
+          <h2>{t('dogOwnership.ownersTitle')}</h2>
+          {members.map((member) => (
+            <div className={styles.row} key={member.id}>
+              <span>{member.user_name ?? member.user_id}</span>
+              <span>{t(`dogOwnership.roles.${member.role}`)}</span>
+            </div>
+          ))}
+        </section>
+
+        {capabilities.role === 'PRIMARY_OWNER' ? (
+          <>
+            <section className={styles.section}>
+              <h2>{t('dogOwnership.inviteTitle')}</h2>
+              {eligibleFriends.length === 0 ? (
+                <p className={styles.message}>
+                  {t('dogOwnership.noEligibleFriends')}
+                </p>
+              ) : (
+                <div className={styles.list}>
+                  {eligibleFriends.map((friend) => (
+                    <div className={styles.row} key={friend.id}>
+                      <span>{friend.name}</span>
+                      <Button
+                        disabled={isInviting}
+                        onClick={() => inviteFriend(friend.id)}
+                        type="button"
+                      >
+                        {t('dogOwnership.invite')}
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {resultMessage ? (
+                <p className={styles.message}>{resultMessage}</p>
+              ) : null}
+            </section>
+
+            <section className={styles.section}>
+              <h2>{t('dogOwnership.pendingInvites')}</h2>
+              {invites.length === 0 ? (
+                <p className={styles.message}>
+                  {t('dogOwnership.nonePending')}
+                </p>
+              ) : (
+                invites.map((invite) => (
+                  <div className={styles.row} key={invite.id}>
+                    <span>{invite.invitee_user_id}</span>
+                    <Button
+                      onClick={() => cancelInvite(invite.id)}
+                      type="button"
+                      variant="secondary"
+                    >
+                      {t('dogOwnership.cancel')}
+                    </Button>
+                  </div>
+                ))
+              )}
+            </section>
+
+            <section className={styles.section}>
+              <h2>{t('dogOwnership.pendingRequests')}</h2>
+              {requests.length === 0 ? (
+                <p className={styles.message}>
+                  {t('dogOwnership.nonePending')}
+                </p>
+              ) : (
+                requests.map((request) => (
+                  <Link
+                    key={request.id}
+                    to={`/ownership-actions/request/${request.id}`}
+                  >
+                    {t('dogOwnership.reviewRequest')}
+                  </Link>
+                ))
+              )}
+            </section>
+
+            <section className={styles.section}>
+              <h2>{t('dogOwnership.transferTitle')}</h2>
+              {transfers.length > 0 ? (
+                transfers.map((transfer) => (
+                  <div className={styles.row} key={transfer.id}>
+                    <Link to={`/ownership-actions/transfer/${transfer.id}`}>
+                      {t('dogOwnership.transferPending')}
+                    </Link>
+                    <Button
+                      onClick={() => cancelTransfer(transfer.id)}
+                      type="button"
+                      variant="secondary"
+                    >
+                      {t('dogOwnership.cancel')}
+                    </Button>
+                  </div>
+                ))
+              ) : (
+                <div className={styles.actions}>
+                  <select
+                    value={
+                      selectedTransferMemberId ||
+                      eligibleTransferMembers[0]?.id ||
+                      ''
+                    }
+                    onChange={(event) =>
+                      setSelectedTransferMemberId(event.target.value)
+                    }
+                  >
+                    {eligibleTransferMembers.map((member) => (
+                      <option key={member.id} value={member.id}>
+                        {member.user_name ?? member.user_id}
+                      </option>
+                    ))}
+                  </select>
                   <Button
-                    disabled={isInviting}
-                    onClick={() => inviteFriend(friend.id)}
+                    disabled={
+                      isOfferingTransfer || eligibleTransferMembers.length === 0
+                    }
+                    onClick={() =>
+                      offerTransfer(
+                        selectedTransferMemberId ||
+                          eligibleTransferMembers[0]?.id ||
+                          '',
+                      )
+                    }
                     type="button"
                   >
-                    {t('dogOwnership.invite')}
+                    {t('dogOwnership.transferAction')}
                   </Button>
                 </div>
-              ))}
-            </div>
-          )}
-          {resultMessage ? (
-            <p className={styles.message}>{resultMessage}</p>
-          ) : null}
-        </section>
+              )}
+            </section>
+          </>
+        ) : null}
 
-        <section className={styles.section}>
-          <h2>{t('dogOwnership.pendingInvites')}</h2>
-          {invites.length === 0 ? (
-            <p className={styles.message}>{t('dogOwnership.nonePending')}</p>
-          ) : (
-            invites.map((invite) => (
-              <div className={styles.row} key={invite.id}>
-                <span>{invite.invitee_user_id}</span>
-                <Button
-                  onClick={() => cancelInvite(invite.id)}
-                  type="button"
-                  variant="secondary"
-                >
-                  {t('dogOwnership.cancel')}
-                </Button>
-              </div>
-            ))
-          )}
-        </section>
-
-        <section className={styles.section}>
-          <h2>{t('dogOwnership.pendingRequests')}</h2>
-          {requests.length === 0 ? (
-            <p className={styles.message}>{t('dogOwnership.nonePending')}</p>
-          ) : (
-            requests.map((request) => (
-              <Link
-                key={request.id}
-                to={`/ownership-actions/request/${request.id}`}
-              >
-                {t('dogOwnership.reviewRequest')}
-              </Link>
-            ))
-          )}
-        </section>
+        {capabilities.can_leave ? (
+          <Link to={`/dogs/${dogId}/ownership/leave`}>
+            {t('dogOwnership.leaveAction')}
+          </Link>
+        ) : null}
       </div>
     </main>
   );

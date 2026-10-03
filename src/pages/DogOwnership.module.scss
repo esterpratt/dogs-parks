@@ -43,6 +43,12 @@
   gap: 8px;
 }
 
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
 .message {
   color: $text;
 }

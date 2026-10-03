@@ -60,11 +60,13 @@ const listAllFiles = async (
   let offset = 0;
 
   while (hasMore) {
-    const { data, error } = await supabase.storage.from(bucketName).list(folderPath, {
-      limit: STORAGE_LIST_PAGE_SIZE,
-      offset,
-      sortBy: { column: 'name', order: 'asc' },
-    });
+    const { data, error } = await supabase.storage
+      .from(bucketName)
+      .list(folderPath, {
+        limit: STORAGE_LIST_PAGE_SIZE,
+        offset,
+        sortBy: { column: 'name', order: 'asc' },
+      });
 
     if (error) {
       throw error;
@@ -91,7 +93,11 @@ const listAllFiles = async (
 const deleteUserStorage = async (userId: string, supabase: SupabaseClient) => {
   const files = await listAllFiles('users', userId, supabase);
 
-  for (let index = 0; index < files.length; index += STORAGE_DELETE_BATCH_SIZE) {
+  for (
+    let index = 0;
+    index < files.length;
+    index += STORAGE_DELETE_BATCH_SIZE
+  ) {
     const fileBatch = files.slice(index, index + STORAGE_DELETE_BATCH_SIZE);
     const { error } = await supabase.storage.from('users').remove(fileBatch);
 
@@ -99,6 +105,26 @@ const deleteUserStorage = async (userId: string, supabase: SupabaseClient) => {
       throw error;
     }
   }
+};
+
+const parseSuccessorSelections = async (request: Request) => {
+  try {
+    const body = await request.json();
+    if (
+      body &&
+      typeof body === 'object' &&
+      !Array.isArray(body) &&
+      body.successorSelections &&
+      typeof body.successorSelections === 'object' &&
+      !Array.isArray(body.successorSelections)
+    ) {
+      return body.successorSelections as Record<string, string>;
+    }
+  } catch {
+    // An empty body means deterministic server-selected succession.
+  }
+
+  return {};
 };
 
 serve(async (request) => {
@@ -112,9 +138,10 @@ serve(async (request) => {
 
   try {
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const anonKey = Deno.env.get('SUPABASE_ANON_KEY');
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
-    if (!supabaseUrl || !serviceRoleKey) {
+    if (!supabaseUrl || !anonKey || !serviceRoleKey) {
       throw new Error('Supabase environment is not configured');
     }
 
@@ -130,8 +157,33 @@ serve(async (request) => {
       return jsonResponse({ error: 'Authentication required' }, 401);
     }
 
-    // The caller is the only deletion target. Shared-dog transitions are added before enablement.
-    const { error: authError } = await supabase.auth.admin.deleteUser(authenticatedUser.id);
+    const authorization = request.headers.get('Authorization')!;
+    const successorSelections = await parseSuccessorSelections(request);
+    const callerSupabase = createClient(supabaseUrl, anonKey, {
+      auth: { autoRefreshToken: false, persistSession: false },
+      global: { headers: { Authorization: authorization } },
+    });
+    // Every dog transition commits together before the irreversible Auth deletion.
+    const { data: preparation, error: preparationError } =
+      await callerSupabase.rpc('api_prepare_account_erasure', {
+        p_client_build: 1,
+        p_client_platform: 'WEB',
+        p_successor_selections: successorSelections,
+      });
+
+    if (preparationError) {
+      return jsonResponse({ error: preparationError.message }, 409);
+    }
+    if (preparation?.outcome !== 'PREPARED') {
+      return jsonResponse(
+        { error: preparation?.outcome ?? 'Account erasure preparation failed' },
+        409,
+      );
+    }
+
+    const { error: authError } = await supabase.auth.admin.deleteUser(
+      authenticatedUser.id,
+    );
 
     if (authError) {
       return jsonResponse({ error: authError.message }, 500);
@@ -141,7 +193,8 @@ serve(async (request) => {
 
     return jsonResponse({ message: 'User deleted successfully' }, 200);
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown deletion error';
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown deletion error';
     return jsonResponse({ error: errorMessage }, 500);
   }
 });

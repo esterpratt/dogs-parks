@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import {
   DogOwnershipActionType,
   DogOwnershipCapabilities,
+  DogOwnershipMember,
   DogOwnershipResult,
 } from '../types/dog-ownership';
 import { Json } from '../types/supabase';
@@ -18,11 +19,13 @@ const ownershipOutcomes = new Set([
   'CAPACITY_REACHED',
   'CREATED',
   'DECLINED',
+  'DELETION_PREPARED',
   'DISCLOSURE_REQUIRED',
   'DOG_UNAVAILABLE',
   'EXPIRED',
   'FORBIDDEN',
   'INVALID_TARGET',
+  'LEFT',
   'NOT_FOUND',
   'NOT_FRIENDS',
   'OK',
@@ -51,8 +54,18 @@ const parseOwnershipResult = (data: Json | null): DogOwnershipResult => {
   return {
     action_id: typeof data.action_id === 'string' ? data.action_id : undefined,
     outcome: outcome as DogOwnershipResult['outcome'],
+    ownership_version:
+      typeof data.ownership_version === 'number'
+        ? data.ownership_version
+        : undefined,
     retry_after:
       typeof data.retry_after === 'string' ? data.retry_after : undefined,
+    successor_user_id:
+      typeof data.successor_user_id === 'string'
+        ? data.successor_user_id
+        : undefined,
+    used_fallback:
+      typeof data.used_fallback === 'boolean' ? data.used_fallback : undefined,
   };
 };
 
@@ -70,11 +83,18 @@ const parseOwnershipCapabilities = (
         : undefined,
     can_invite:
       typeof data.can_invite === 'boolean' ? data.can_invite : undefined,
+    can_leave: typeof data.can_leave === 'boolean' ? data.can_leave : undefined,
     can_request:
       typeof data.can_request === 'boolean' ? data.can_request : undefined,
+    can_transfer:
+      typeof data.can_transfer === 'boolean' ? data.can_transfer : undefined,
     enabled: data.enabled === true,
     is_owner: typeof data.is_owner === 'boolean' ? data.is_owner : undefined,
     outcome: result.outcome,
+    ownership_version:
+      typeof data.ownership_version === 'number'
+        ? data.ownership_version
+        : undefined,
     pending_action:
       typeof data.pending_action === 'boolean'
         ? data.pending_action
@@ -184,6 +204,90 @@ const respondToDogOwnershipRequest = async (
   return unwrapOwnershipResult(data, error);
 };
 
+const fetchDogOwnershipMembers = async (
+  dogId: string,
+): Promise<DogOwnershipMember[]> => {
+  const { data, error } = await supabase
+    .from('dog_members')
+    .select(
+      'id,user_id,role,joined_at,user:users!dog_members_user_id_fkey(name)',
+    )
+    .eq('dog_id', dogId)
+    .is('left_at', null)
+    .order('joined_at');
+  if (error) {
+    throw error;
+  }
+  return data.map((member) => ({
+    id: member.id,
+    joined_at: member.joined_at,
+    role: member.role as DogOwnershipMember['role'],
+    user_id: member.user_id!,
+    user_name: member.user[0]?.name ?? null,
+  }));
+};
+
+const fetchPendingPrimaryTransfers = async (dogId: string) => {
+  const { data, error } = await supabase
+    .from('dog_primary_transfers')
+    .select('id,to_member_id,status,created_at,expires_at')
+    .eq('dog_id', dogId)
+    .eq('status', 'PENDING')
+    .order('created_at');
+  if (error) {
+    throw error;
+  }
+  return data;
+};
+
+const createPrimaryTransfer = async (
+  dogId: string,
+  toMemberId: string,
+  idempotencyKey = uuidv4(),
+) => {
+  const { data, error } = await supabase.rpc('api_create_primary_transfer', {
+    ...getClientCompatibility(),
+    p_dog_id: dogId,
+    p_idempotency_key: idempotencyKey,
+    p_to_member_id: toMemberId,
+  });
+  return unwrapOwnershipResult(data, error);
+};
+
+const cancelPrimaryTransfer = async (transferId: string) => {
+  const { data, error } = await supabase.rpc('api_cancel_primary_transfer', {
+    ...getClientCompatibility(),
+    p_transfer_id: transferId,
+  });
+  return unwrapOwnershipResult(data, error);
+};
+
+const respondToPrimaryTransfer = async (
+  transferId: string,
+  accept: boolean,
+) => {
+  const { data, error } = await supabase.rpc('api_respond_primary_transfer', {
+    ...getClientCompatibility(),
+    p_accept: accept,
+    p_transfer_id: transferId,
+  });
+  return unwrapOwnershipResult(data, error);
+};
+
+const leaveDogOwnership = async (
+  dogId: string,
+  expectedOwnershipVersion: number,
+  selectedSuccessorMemberId: string | null,
+) => {
+  const { data, error } = await supabase.rpc('api_leave_dog', {
+    ...getClientCompatibility(),
+    p_dog_id: dogId,
+    p_expected_ownership_version: expectedOwnershipVersion,
+    p_selected_successor_member_id: selectedSuccessorMemberId,
+  });
+  return unwrapOwnershipResult(data, error);
+};
+
 const fetchPendingDogInvites = async (dogId: string) => {
   const { data, error } = await supabase
     .from('dog_invites')
@@ -228,6 +332,29 @@ const fetchDogOwnershipAction = async (
     return data;
   }
 
+  if (actionType === 'transfer') {
+    const { data, error } = await supabase
+      .from('dog_primary_transfers')
+      .select('id,dog_id,status,expires_at,to_member_id')
+      .eq('id', actionId)
+      .maybeSingle();
+    if (error || !data) {
+      if (error) {
+        throw error;
+      }
+      return null;
+    }
+    const { data: targetMember, error: targetError } = await supabase
+      .from('dog_members')
+      .select('user_id')
+      .eq('id', data.to_member_id!)
+      .maybeSingle();
+    if (targetError) {
+      throw targetError;
+    }
+    return { ...data, to_user_id: targetMember?.user_id ?? null };
+  }
+
   const { data, error } = await supabase
     .from('dog_ownership_requests')
     .select(
@@ -244,12 +371,18 @@ const fetchDogOwnershipAction = async (
 export {
   cancelDogInvite,
   cancelDogOwnershipRequest,
+  cancelPrimaryTransfer,
   createDogInvite,
   createDogOwnershipRequest,
+  createPrimaryTransfer,
   fetchDogOwnershipAction,
   fetchDogOwnershipCapabilities,
+  fetchDogOwnershipMembers,
   fetchPendingDogInvites,
   fetchPendingDogOwnershipRequests,
+  fetchPendingPrimaryTransfers,
+  leaveDogOwnership,
   respondToDogInvite,
   respondToDogOwnershipRequest,
+  respondToPrimaryTransfer,
 };

@@ -389,7 +389,8 @@ test('dog ownership invitation and request contract', async (suite) => {
         );
         assertNoError(createError, 'create expiring invite');
 
-        const expiryBoundary = new Date();
+        // Keep the fixture unambiguously on the expired side of the database clock.
+        const expiryBoundary = new Date(Date.now() - 1000);
         const createdAt = new Date(
           expiryBoundary.getTime() - 30 * 24 * 60 * 60 * 1000,
         );

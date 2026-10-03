@@ -12,6 +12,8 @@ readonly OWNERSHIP_HARDENING_MIGRATION="supabase/migrations/20260927193000_harde
 readonly MEMBERSHIP_FOUNDATION_MIGRATION="supabase/migrations/20260928120000_add_dog_membership_foundation.sql"
 readonly PRIVATE_IMAGE_FOUNDATION_MIGRATION="supabase/migrations/20261002120000_add_private_dog_image_foundation.sql"
 readonly OWNERSHIP_ACTIONS_MIGRATION="supabase/migrations/20261002150000_add_dog_ownership_actions.sql"
+readonly DEPARTURE_ENUMS_MIGRATION="supabase/migrations/20261003100000_extend_dog_departure_enums.sql"
+readonly TRANSFER_DEPARTURE_MIGRATION="supabase/migrations/20261003110000_add_dog_transfer_departure.sql"
 readonly RUNTIME_FUNCTIONS_DIR="supabase/tests/local/supabase/.runtime-functions"
 
 cleanup() {
@@ -127,6 +129,16 @@ SUPABASE_LOCAL_URL="${local_api_url}" \
 SUPABASE_LOCAL_ANON_KEY="${local_anon_key}" \
 SUPABASE_LOCAL_SERVICE_ROLE_KEY="${local_service_role_key}" \
   node --test supabase/tests/local/ownership-actions-contract.test.mjs
+
+docker exec -i "${LOCAL_DB_CONTAINER}" psql -U postgres -d postgres -q -1 -v ON_ERROR_STOP=1 \
+  < "${DEPARTURE_ENUMS_MIGRATION}"
+docker exec -i "${LOCAL_DB_CONTAINER}" psql -U postgres -d postgres -q -1 -v ON_ERROR_STOP=1 \
+  < "${TRANSFER_DEPARTURE_MIGRATION}"
+
+SUPABASE_LOCAL_URL="${local_api_url}" \
+SUPABASE_LOCAL_ANON_KEY="${local_anon_key}" \
+SUPABASE_LOCAL_SERVICE_ROLE_KEY="${local_service_role_key}" \
+  node --test supabase/tests/local/transfer-departure-contract.test.mjs
 
 SUPABASE_LOCAL_URL="${local_api_url}" \
 SUPABASE_LOCAL_ANON_KEY="${local_anon_key}" \

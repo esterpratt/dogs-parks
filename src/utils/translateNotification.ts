@@ -76,6 +76,30 @@ const typeKeyMap: Record<string, { title: string; appMessage: string }> = {
     title: 'dogOwnership.notifications.ownerJoinedTitle',
     appMessage: 'dogOwnership.notifications.ownerJoinedMessage',
   },
+  DOG_OWNER_LEFT: {
+    title: 'dogOwnership.notifications.ownerLeftTitle',
+    appMessage: 'dogOwnership.notifications.ownerLeftMessage',
+  },
+  DOG_PRIMARY_CHANGED: {
+    title: 'dogOwnership.notifications.primaryChangedTitle',
+    appMessage: 'dogOwnership.notifications.primaryChangedMessage',
+  },
+  DOG_PRIMARY_TRANSFER_OFFERED: {
+    title: 'dogOwnership.notifications.transferOfferedTitle',
+    appMessage: 'dogOwnership.notifications.transferOfferedMessage',
+  },
+  DOG_PRIMARY_TRANSFER_ACCEPTED: {
+    title: 'dogOwnership.notifications.transferAcceptedTitle',
+    appMessage: 'dogOwnership.notifications.transferAcceptedMessage',
+  },
+  DOG_PRIMARY_TRANSFER_DECLINED: {
+    title: 'dogOwnership.notifications.transferDeclinedTitle',
+    appMessage: 'dogOwnership.notifications.transferDeclinedMessage',
+  },
+  DOG_PRIMARY_TRANSFER_CANCELED: {
+    title: 'dogOwnership.notifications.transferCanceledTitle',
+    appMessage: 'dogOwnership.notifications.transferCanceledMessage',
+  },
 };
 
 function translateNotification(

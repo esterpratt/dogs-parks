@@ -8,8 +8,10 @@ import { Loader } from '../components/Loader';
 import { UserContext } from '../context/UserContext';
 import {
   fetchDogOwnershipAction,
+  fetchDogOwnershipCapabilities,
   respondToDogInvite,
   respondToDogOwnershipRequest,
+  respondToPrimaryTransfer,
 } from '../services/dog-ownership';
 import { DogOwnershipActionType } from '../types/dog-ownership';
 import styles from './DogOwnership.module.scss';
@@ -21,7 +23,11 @@ const OwnershipAction = () => {
   const [disclosureAccepted, setDisclosureAccepted] = useState(false);
   const [outcome, setOutcome] = useState('');
   const normalizedType: DogOwnershipActionType =
-    actionType === 'request' ? 'request' : 'invite';
+    actionType === 'request'
+      ? 'request'
+      : actionType === 'transfer'
+        ? 'transfer'
+        : 'invite';
   const queryKey = ['dogOwnershipAction', normalizedType, actionId];
 
   const {
@@ -33,21 +39,28 @@ const OwnershipAction = () => {
     queryFn: () => fetchDogOwnershipAction(normalizedType, actionId!),
     enabled: !!actionId,
   });
+  const { data: capabilities, isLoading: isLoadingCapabilities } = useQuery({
+    queryKey: ['dogOwnershipCapabilities', action?.dog_id],
+    queryFn: () => fetchDogOwnershipCapabilities(action!.dog_id),
+    enabled: !!action?.dog_id,
+  });
   const { mutate: respond, isPending } = useMutation({
     mutationFn: (approve: boolean) =>
       normalizedType === 'invite'
         ? respondToDogInvite(actionId!, approve, disclosureAccepted)
-        : respondToDogOwnershipRequest(actionId!, approve),
+        : normalizedType === 'transfer'
+          ? respondToPrimaryTransfer(actionId!, approve)
+          : respondToDogOwnershipRequest(actionId!, approve),
     onSuccess: (result) => {
       setOutcome(result.outcome);
       refetch();
     },
   });
 
-  if (isLoading) {
+  if (isLoading || isLoadingCapabilities) {
     return <Loader style={{ paddingTop: '64px' }} />;
   }
-  if (!action) {
+  if (!action || !capabilities?.enabled) {
     return null;
   }
 
@@ -55,8 +68,10 @@ const OwnershipAction = () => {
   const canRespond =
     normalizedType === 'invite'
       ? 'invitee_user_id' in action && action.invitee_user_id === userId
-      : 'primary_user_id_at_creation' in action &&
-        action.primary_user_id_at_creation === userId;
+      : normalizedType === 'transfer'
+        ? 'to_user_id' in action && action.to_user_id === userId
+        : 'primary_user_id_at_creation' in action &&
+          action.primary_user_id_at_creation === userId;
 
   return (
     <main className={styles.container}>

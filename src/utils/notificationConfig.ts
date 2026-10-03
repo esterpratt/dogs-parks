@@ -135,6 +135,8 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
         },
       };
     case NotificationType.DOG_OWNER_JOINED:
+    case NotificationType.DOG_OWNER_LEFT:
+    case NotificationType.DOG_PRIMARY_CHANGED:
       return {
         icon: PawPrint,
         color: 'green',
@@ -142,6 +144,25 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
         invalidateQueries: (_userId, notification) => {
           queryClient.invalidateQueries({
             queryKey: ['dogOwnershipCapabilities', notification.target_id],
+          });
+        },
+      };
+    case NotificationType.DOG_PRIMARY_TRANSFER_OFFERED:
+    case NotificationType.DOG_PRIMARY_TRANSFER_ACCEPTED:
+    case NotificationType.DOG_PRIMARY_TRANSFER_DECLINED:
+    case NotificationType.DOG_PRIMARY_TRANSFER_CANCELED:
+      return {
+        icon: PawPrint,
+        color: 'pink',
+        getUrl: (notification) =>
+          `/ownership-actions/transfer/${notification.target_id}`,
+        invalidateQueries: (_userId, notification) => {
+          queryClient.invalidateQueries({
+            queryKey: [
+              'dogOwnershipAction',
+              'transfer',
+              notification.target_id,
+            ],
           });
         },
       };

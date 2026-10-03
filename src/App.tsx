@@ -49,6 +49,7 @@ const Event = lazy(() => import('./pages/Event'));
 const DogOwnership = lazy(() => import('./pages/DogOwnership'));
 const DogOwnershipRequest = lazy(() => import('./pages/DogOwnershipRequest'));
 const OwnershipAction = lazy(() => import('./pages/OwnershipAction'));
+const DogOwnershipLeave = lazy(() => import('./pages/DogOwnershipLeave'));
 
 const App = () => {
   const router = createBrowserRouter([
@@ -188,6 +189,14 @@ const App = () => {
           element: (
             <PrivateRoute>
               <DogOwnershipRequest />
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: 'dogs/:dogId/ownership/leave',
+          element: (
+            <PrivateRoute>
+              <DogOwnershipLeave />
             </PrivateRoute>
           ),
         },

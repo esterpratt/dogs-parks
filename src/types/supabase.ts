@@ -292,6 +292,44 @@ export type Database = {
           },
         ]
       }
+      dog_ownership_audit: {
+        Row: {
+          actor_member_id: string | null
+          details: Json
+          dog_id: string | null
+          event: Database["public"]["Enums"]["dog_ownership_audit_event"]
+          id: number
+          occurred_at: string
+          ownership_version: number
+        }
+        Insert: {
+          actor_member_id?: string | null
+          details?: Json
+          dog_id?: string | null
+          event: Database["public"]["Enums"]["dog_ownership_audit_event"]
+          id?: number
+          occurred_at?: string
+          ownership_version: number
+        }
+        Update: {
+          actor_member_id?: string | null
+          details?: Json
+          dog_id?: string | null
+          event?: Database["public"]["Enums"]["dog_ownership_audit_event"]
+          id?: number
+          occurred_at?: string
+          ownership_version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dog_ownership_audit_actor_member_id_fkey"
+            columns: ["actor_member_id"]
+            isOneToOne: false
+            referencedRelation: "dog_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       dog_ownership_requests: {
         Row: {
           cancellation_reason:
@@ -361,6 +399,76 @@ export type Database = {
             columns: ["requester_user_id"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dog_primary_transfers: {
+        Row: {
+          cancellation_reason:
+            | Database["public"]["Enums"]["dog_action_cancellation_reason"]
+            | null
+          created_at: string
+          dog_id: string
+          expires_at: string
+          from_member_id: string | null
+          id: string
+          idempotency_key: string
+          ownership_version_at_creation: number
+          responded_at: string | null
+          status: Database["public"]["Enums"]["dog_invite_status"]
+          to_member_id: string | null
+        }
+        Insert: {
+          cancellation_reason?:
+            | Database["public"]["Enums"]["dog_action_cancellation_reason"]
+            | null
+          created_at?: string
+          dog_id: string
+          expires_at?: string
+          from_member_id?: string | null
+          id?: string
+          idempotency_key: string
+          ownership_version_at_creation: number
+          responded_at?: string | null
+          status?: Database["public"]["Enums"]["dog_invite_status"]
+          to_member_id?: string | null
+        }
+        Update: {
+          cancellation_reason?:
+            | Database["public"]["Enums"]["dog_action_cancellation_reason"]
+            | null
+          created_at?: string
+          dog_id?: string
+          expires_at?: string
+          from_member_id?: string | null
+          id?: string
+          idempotency_key?: string
+          ownership_version_at_creation?: number
+          responded_at?: string | null
+          status?: Database["public"]["Enums"]["dog_invite_status"]
+          to_member_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dog_primary_transfers_dog_id_fkey"
+            columns: ["dog_id"]
+            isOneToOne: false
+            referencedRelation: "dogs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dog_primary_transfers_from_member_id_fkey"
+            columns: ["from_member_id"]
+            isOneToOne: false
+            referencedRelation: "dog_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dog_primary_transfers_to_member_id_fkey"
+            columns: ["to_member_id"]
+            isOneToOne: false
+            referencedRelation: "dog_members"
             referencedColumns: ["id"]
           },
         ]
@@ -1185,6 +1293,14 @@ export type Database = {
         }
         Returns: Json
       }
+      api_cancel_primary_transfer: {
+        Args: {
+          p_client_build: number
+          p_client_platform: Database["public"]["Enums"]["app_platform"]
+          p_transfer_id: string
+        }
+        Returns: Json
+      }
       api_cleanup_device_tokens: {
         Args: { p_device_id?: string }
         Returns: number
@@ -1208,6 +1324,16 @@ export type Database = {
         }
         Returns: Json
       }
+      api_create_primary_transfer: {
+        Args: {
+          p_client_build: number
+          p_client_platform: Database["public"]["Enums"]["app_platform"]
+          p_dog_id: string
+          p_idempotency_key: string
+          p_to_member_id: string
+        }
+        Returns: Json
+      }
       api_delete_dog_image: { Args: { p_image_id: string }; Returns: undefined }
       api_finalize_dog_image: {
         Args: { p_image_id: string }
@@ -1218,6 +1344,24 @@ export type Database = {
           p_client_build: number
           p_client_platform: Database["public"]["Enums"]["app_platform"]
           p_dog_id: string
+        }
+        Returns: Json
+      }
+      api_leave_dog: {
+        Args: {
+          p_client_build: number
+          p_client_platform: Database["public"]["Enums"]["app_platform"]
+          p_dog_id: string
+          p_expected_ownership_version: number
+          p_selected_successor_member_id: string
+        }
+        Returns: Json
+      }
+      api_prepare_account_erasure: {
+        Args: {
+          p_client_build: number
+          p_client_platform: Database["public"]["Enums"]["app_platform"]
+          p_successor_selections: Json
         }
         Returns: Json
       }
@@ -1247,6 +1391,15 @@ export type Database = {
           p_client_build: number
           p_client_platform: Database["public"]["Enums"]["app_platform"]
           p_request_id: string
+        }
+        Returns: Json
+      }
+      api_respond_primary_transfer: {
+        Args: {
+          p_accept: boolean
+          p_client_build: number
+          p_client_platform: Database["public"]["Enums"]["app_platform"]
+          p_transfer_id: string
         }
         Returns: Json
       }
@@ -1291,6 +1444,15 @@ export type Database = {
       can_view_dog_image_object: {
         Args: { p_object_name: string }
         Returns: boolean
+      }
+      cancel_pending_primary_transfers: {
+        Args: {
+          p_actor_user_id: string
+          p_dog_id: string
+          p_except_transfer_id?: string
+          p_reason: Database["public"]["Enums"]["dog_action_cancellation_reason"]
+        }
+        Returns: undefined
       }
       check_device_token_match: {
         Args: { p_device_id: string; p_token: string }
@@ -1347,6 +1509,10 @@ export type Database = {
         Returns: string
       }
       expire_dog_join_actions: {
+        Args: { p_dog_id: string }
+        Returns: undefined
+      }
+      expire_primary_transfers: {
         Args: { p_dog_id: string }
         Returns: undefined
       }
@@ -1485,6 +1651,16 @@ export type Database = {
           visibility: Database["public"]["Enums"]["park_event_visibility"]
         }[]
       }
+      insert_dog_information_notification: {
+        Args: {
+          p_data?: Json
+          p_dog_id: string
+          p_receiver_id: string
+          p_sender_id: string
+          p_type: Database["public"]["Enums"]["notification_type"]
+        }
+        Returns: undefined
+      }
       insert_dog_ownership_notification: {
         Args: {
           p_action_id: string
@@ -1518,6 +1694,16 @@ export type Database = {
         }
         Returns: undefined
       }
+      record_dog_ownership_audit: {
+        Args: {
+          p_actor_member_id: string
+          p_details?: Json
+          p_dog_id: string
+          p_event: Database["public"]["Enums"]["dog_ownership_audit_event"]
+          p_ownership_version: number
+        }
+        Returns: undefined
+      }
       remove_device_token_by_device: {
         Args: { p_device_id: string; p_token: string }
         Returns: number
@@ -1534,6 +1720,16 @@ export type Database = {
           name: string
         }[]
       }
+      transition_dog_member_departure: {
+        Args: {
+          p_dog_id: string
+          p_expected_ownership_version: number
+          p_reason: Database["public"]["Enums"]["dog_member_departure_reason"]
+          p_selected_successor_member_id: string
+          p_user_id: string
+        }
+        Returns: Json
+      }
       update_checkout: { Args: { checkin_id: string }; Returns: undefined }
     }
     Enums: {
@@ -1546,6 +1742,8 @@ export type Database = {
         | "FRIENDSHIP_ENDED"
         | "PRIMARY_CHANGED"
         | "DOG_UNAVAILABLE"
+        | "MEMBER_DEPARTED"
+        | "ACCOUNT_ERASURE"
       dog_image_upload_state: "RESERVED" | "ACTIVE" | "DELETING"
       dog_invite_status:
         | "PENDING"
@@ -1556,6 +1754,14 @@ export type Database = {
       dog_lifecycle_state: "ACTIVE" | "DELETING" | "DELETED"
       dog_member_departure_reason: "LEFT" | "ACCOUNT_ERASED" | "DOG_DELETED"
       dog_member_role: "PRIMARY_OWNER" | "CO_OWNER" | "VIEWER"
+      dog_ownership_audit_event:
+        | "PRIMARY_TRANSFER_CREATED"
+        | "PRIMARY_TRANSFER_CANCELED"
+        | "PRIMARY_TRANSFER_DECLINED"
+        | "PRIMARY_TRANSFER_ACCEPTED"
+        | "OWNER_LEFT"
+        | "ACCOUNT_ERASURE_PREPARED"
+        | "SOLO_DOG_DELETION_PREPARED"
       dog_storage_job_operation:
         | "COPY_LEGACY_DOG_IMAGE"
         | "DELETE_DOG_ASSETS"
@@ -1592,6 +1798,12 @@ export type Database = {
         | "dog_ownership_request_declined"
         | "dog_ownership_request_canceled"
         | "dog_owner_joined"
+        | "dog_primary_transfer_offered"
+        | "dog_primary_transfer_accepted"
+        | "dog_primary_transfer_declined"
+        | "dog_primary_transfer_canceled"
+        | "dog_owner_left"
+        | "dog_primary_changed"
       park_condition:
         | "MUDDY"
         | "BROKEN_FOUNTAIN"
@@ -1737,6 +1949,8 @@ export const Constants = {
         "FRIENDSHIP_ENDED",
         "PRIMARY_CHANGED",
         "DOG_UNAVAILABLE",
+        "MEMBER_DEPARTED",
+        "ACCOUNT_ERASURE",
       ],
       dog_image_upload_state: ["RESERVED", "ACTIVE", "DELETING"],
       dog_invite_status: [
@@ -1749,6 +1963,15 @@ export const Constants = {
       dog_lifecycle_state: ["ACTIVE", "DELETING", "DELETED"],
       dog_member_departure_reason: ["LEFT", "ACCOUNT_ERASED", "DOG_DELETED"],
       dog_member_role: ["PRIMARY_OWNER", "CO_OWNER", "VIEWER"],
+      dog_ownership_audit_event: [
+        "PRIMARY_TRANSFER_CREATED",
+        "PRIMARY_TRANSFER_CANCELED",
+        "PRIMARY_TRANSFER_DECLINED",
+        "PRIMARY_TRANSFER_ACCEPTED",
+        "OWNER_LEFT",
+        "ACCOUNT_ERASURE_PREPARED",
+        "SOLO_DOG_DELETION_PREPARED",
+      ],
       dog_storage_job_operation: [
         "COPY_LEGACY_DOG_IMAGE",
         "DELETE_DOG_ASSETS",
@@ -1787,6 +2010,12 @@ export const Constants = {
         "dog_ownership_request_declined",
         "dog_ownership_request_canceled",
         "dog_owner_joined",
+        "dog_primary_transfer_offered",
+        "dog_primary_transfer_accepted",
+        "dog_primary_transfer_declined",
+        "dog_primary_transfer_canceled",
+        "dog_owner_left",
+        "dog_primary_changed",
       ],
       park_condition: [
         "MUDDY",
