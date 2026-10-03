@@ -12,12 +12,14 @@ import {
   cancelDogInvite,
   cancelPrimaryTransfer,
   createDogInvite,
+  fetchDogDeletionProposal,
   createPrimaryTransfer,
   fetchDogOwnershipCapabilities,
   fetchDogOwnershipMembers,
   fetchPendingDogInvites,
   fetchPendingDogOwnershipRequests,
   fetchPendingPrimaryTransfers,
+  proposeDogDeletion,
 } from '../services/dog-ownership';
 import { queryClient } from '../services/react-query';
 import styles from './DogOwnership.module.scss';
@@ -30,6 +32,7 @@ const DogOwnership = () => {
   const [selectedTransferMemberId, setSelectedTransferMemberId] = useState('');
   const inviteKeys = useRef(new Map<string, string>());
   const transferKey = useRef<string | null>(null);
+  const deletionKey = useRef<string | null>(null);
   const { friends, isLoadingFriends } = useFetchFriends({ userId });
   const queryKey = ['dogOwnershipActions', dogId];
 
@@ -57,6 +60,13 @@ const DogOwnership = () => {
     queryKey: [...queryKey, 'transfers'],
     queryFn: () => fetchPendingPrimaryTransfers(dogId!),
     enabled: capabilities?.role === 'PRIMARY_OWNER',
+  });
+  // Deletion controls are fetched only after server capabilities enable the
+  // shared ownership surface for an authenticated current owner.
+  const { data: deletionProposal } = useQuery({
+    queryKey: [...queryKey, 'deletion'],
+    queryFn: () => fetchDogDeletionProposal(dogId!),
+    enabled: capabilities?.is_owner === true,
   });
 
   const refreshActions = () => {
@@ -98,6 +108,18 @@ const DogOwnership = () => {
     mutationFn: cancelPrimaryTransfer,
     onSuccess: refreshActions,
   });
+  const { mutate: proposeDeletion, isPending: isProposingDeletion } =
+    useMutation({
+      mutationFn: () => {
+        const idempotencyKey = deletionKey.current ?? uuidv4();
+        deletionKey.current = idempotencyKey;
+        return proposeDogDeletion(dogId!, idempotencyKey);
+      },
+      onSuccess: () => {
+        deletionKey.current = null;
+        refreshActions();
+      },
+    });
 
   if (isLoadingCapabilities || isLoadingFriends) {
     return <Loader style={{ paddingTop: '64px' }} />;
@@ -264,6 +286,32 @@ const DogOwnership = () => {
           <Link to={`/dogs/${dogId}/ownership/leave`}>
             {t('dogOwnership.leaveAction')}
           </Link>
+        ) : null}
+
+        {(capabilities.active_owner_count ?? 0) > 1 ? (
+          <section className={styles.section}>
+            <h2>{t('dogOwnership.deletionTitle')}</h2>
+            {deletionProposal ? (
+              <Link
+                to={`/dogs/${dogId}/ownership/deletion/${deletionProposal.id}`}
+              >
+                {t('dogOwnership.reviewDeletion')}
+              </Link>
+            ) : capabilities.role === 'PRIMARY_OWNER' ? (
+              <Button
+                disabled={isProposingDeletion}
+                onClick={() => proposeDeletion()}
+                type="button"
+                variant="secondary"
+              >
+                {t('dogOwnership.proposeDeletion')}
+              </Button>
+            ) : (
+              <p className={styles.message}>
+                {t('dogOwnership.noDeletionProposal')}
+              </p>
+            )}
+          </section>
         ) : null}
       </div>
     </main>

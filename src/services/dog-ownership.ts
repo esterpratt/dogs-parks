@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import {
   DogOwnershipActionType,
   DogOwnershipCapabilities,
+  DogDeletionProposal,
   DogOwnershipMember,
   DogOwnershipResult,
 } from '../types/dog-ownership';
@@ -28,8 +29,10 @@ const ownershipOutcomes = new Set([
   'LEFT',
   'NOT_FOUND',
   'NOT_FRIENDS',
+  'NO_CHANGE',
   'OK',
   'RATE_LIMITED',
+  'REJECTED',
   'STALE_VERSION',
   'UPGRADE_REQUIRED',
 ]);
@@ -58,6 +61,8 @@ const parseOwnershipResult = (data: Json | null): DogOwnershipResult => {
       typeof data.ownership_version === 'number'
         ? data.ownership_version
         : undefined,
+    proposal_id:
+      typeof data.proposal_id === 'string' ? data.proposal_id : undefined,
     retry_after:
       typeof data.retry_after === 'string' ? data.retry_after : undefined,
     successor_user_id:
@@ -274,6 +279,93 @@ const respondToPrimaryTransfer = async (
   return unwrapOwnershipResult(data, error);
 };
 
+const fetchDogDeletionProposal = async (
+  dogId?: string,
+  proposalId?: string,
+): Promise<DogDeletionProposal | null> => {
+  if (!dogId && proposalId) {
+    // Notification deep links resolve through a capability-gated RPC because
+    // the notification target intentionally contains only the proposal ID.
+    const { data, error } = await supabase.rpc(
+      'api_get_dog_deletion_proposal',
+      {
+        ...getClientCompatibility(),
+        p_proposal_id: proposalId,
+      },
+    );
+    if (error) {
+      throw error;
+    }
+    if (
+      !data ||
+      Array.isArray(data) ||
+      typeof data !== 'object' ||
+      'outcome' in data
+    ) {
+      return null;
+    }
+    return data as unknown as DogDeletionProposal;
+  }
+  if (!dogId) {
+    return null;
+  }
+  // Owner-page reads also use a lifecycle RPC so exact expiry is persisted by
+  // the server rather than inferred from the client clock.
+  const { data: proposal, error } = await supabase.rpc(
+    'api_get_current_dog_deletion_proposal',
+    {
+      ...getClientCompatibility(),
+      p_dog_id: dogId,
+    },
+  );
+  if (error) {
+    throw error;
+  }
+  if (
+    !proposal ||
+    Array.isArray(proposal) ||
+    typeof proposal !== 'object' ||
+    'outcome' in proposal
+  ) {
+    return null;
+  }
+  return proposal as unknown as DogDeletionProposal;
+};
+
+const proposeDogDeletion = async (dogId: string, idempotencyKey = uuidv4()) => {
+  const { data, error } = await supabase.rpc('api_propose_dog_deletion', {
+    ...getClientCompatibility(),
+    p_dog_id: dogId,
+    p_idempotency_key: idempotencyKey,
+  });
+  return unwrapOwnershipResult(data, error);
+};
+
+const respondToDogDeletion = async (proposalId: string, approve: boolean) => {
+  const { data, error } = await supabase.rpc('api_respond_dog_deletion', {
+    ...getClientCompatibility(),
+    p_approve: approve,
+    p_proposal_id: proposalId,
+  });
+  return unwrapOwnershipResult(data, error);
+};
+
+const withdrawDogDeletionApproval = async (proposalId: string) => {
+  const { data, error } = await supabase.rpc('api_withdraw_dog_deletion', {
+    ...getClientCompatibility(),
+    p_proposal_id: proposalId,
+  });
+  return unwrapOwnershipResult(data, error);
+};
+
+const cancelDogDeletion = async (proposalId: string) => {
+  const { data, error } = await supabase.rpc('api_cancel_dog_deletion', {
+    ...getClientCompatibility(),
+    p_proposal_id: proposalId,
+  });
+  return unwrapOwnershipResult(data, error);
+};
+
 const leaveDogOwnership = async (
   dogId: string,
   expectedOwnershipVersion: number,
@@ -369,12 +461,14 @@ const fetchDogOwnershipAction = async (
 };
 
 export {
+  cancelDogDeletion,
   cancelDogInvite,
   cancelDogOwnershipRequest,
   cancelPrimaryTransfer,
   createDogInvite,
   createDogOwnershipRequest,
   createPrimaryTransfer,
+  fetchDogDeletionProposal,
   fetchDogOwnershipAction,
   fetchDogOwnershipCapabilities,
   fetchDogOwnershipMembers,
@@ -382,7 +476,10 @@ export {
   fetchPendingDogOwnershipRequests,
   fetchPendingPrimaryTransfers,
   leaveDogOwnership,
+  proposeDogDeletion,
   respondToDogInvite,
   respondToDogOwnershipRequest,
   respondToPrimaryTransfer,
+  respondToDogDeletion,
+  withdrawDogDeletionApproval,
 };

@@ -50,6 +50,7 @@ const DogOwnership = lazy(() => import('./pages/DogOwnership'));
 const DogOwnershipRequest = lazy(() => import('./pages/DogOwnershipRequest'));
 const OwnershipAction = lazy(() => import('./pages/OwnershipAction'));
 const DogOwnershipLeave = lazy(() => import('./pages/DogOwnershipLeave'));
+const DogOwnershipDeletion = lazy(() => import('./pages/DogOwnershipDeletion'));
 
 const App = () => {
   const router = createBrowserRouter([
@@ -197,6 +198,22 @@ const App = () => {
           element: (
             <PrivateRoute>
               <DogOwnershipLeave />
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: 'dogs/:dogId/ownership/deletion/:proposalId',
+          element: (
+            <PrivateRoute>
+              <DogOwnershipDeletion />
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: 'ownership-actions/deletion/:proposalId',
+          element: (
+            <PrivateRoute>
+              <DogOwnershipDeletion />
             </PrivateRoute>
           ),
         },

@@ -16,8 +16,10 @@ type DogOwnershipOutcome =
   | 'LEFT'
   | 'NOT_FOUND'
   | 'NOT_FRIENDS'
+  | 'NO_CHANGE'
   | 'OK'
   | 'RATE_LIMITED'
+  | 'REJECTED'
   | 'STALE_VERSION'
   | 'UPGRADE_REQUIRED';
 
@@ -25,6 +27,7 @@ interface DogOwnershipResult {
   action_id?: string;
   outcome: DogOwnershipOutcome;
   ownership_version?: number;
+  proposal_id?: string;
   retry_after?: string;
   successor_user_id?: string;
   used_fallback?: boolean;
@@ -44,6 +47,21 @@ interface DogOwnershipCapabilities {
   role?: 'PRIMARY_OWNER' | 'CO_OWNER' | null;
 }
 
+interface DogDeletionConsent {
+  decision: 'APPROVED' | 'REJECTED';
+  member_id: string;
+}
+
+interface DogDeletionProposal {
+  approved_consent_count: number;
+  consents: DogDeletionConsent[];
+  dog_id: string;
+  expires_at: string;
+  id: string;
+  required_consent_count: number;
+  status: 'PENDING' | 'REJECTED' | 'CANCELED' | 'EXPIRED' | 'COMPLETED';
+}
+
 interface DogOwnershipMember {
   id: string;
   joined_at: string;
@@ -57,6 +75,7 @@ type DogOwnershipActionType = 'invite' | 'request' | 'transfer';
 export type {
   DogOwnershipActionType,
   DogOwnershipCapabilities,
+  DogDeletionProposal,
   DogOwnershipMember,
   DogOwnershipOutcome,
   DogOwnershipResult,

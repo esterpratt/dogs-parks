@@ -20,6 +20,11 @@ enum NotificationType {
   DOG_PRIMARY_TRANSFER_ACCEPTED = 'dog_primary_transfer_accepted',
   DOG_PRIMARY_TRANSFER_DECLINED = 'dog_primary_transfer_declined',
   DOG_PRIMARY_TRANSFER_CANCELED = 'dog_primary_transfer_canceled',
+  DOG_DELETION_CONSENT_REQUESTED = 'dog_deletion_consent_requested',
+  DOG_DELETION_PROPOSAL_REJECTED = 'dog_deletion_proposal_rejected',
+  DOG_DELETION_PROPOSAL_CANCELED = 'dog_deletion_proposal_canceled',
+  DOG_DELETION_PROPOSAL_EXPIRED = 'dog_deletion_proposal_expired',
+  DOG_DELETION_COMPLETED = 'dog_deletion_completed',
 }
 
 enum NotificationTargetType {
@@ -28,6 +33,7 @@ enum NotificationTargetType {
   PARK = 'park',
   SYSTEM = 'system',
   DOG_OWNERSHIP_ACTION = 'dog_ownership_action',
+  DOG = 'dog',
 }
 
 enum Platform {

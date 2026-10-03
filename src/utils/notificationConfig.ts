@@ -166,6 +166,35 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
           });
         },
       };
+    case NotificationType.DOG_DELETION_CONSENT_REQUESTED:
+    case NotificationType.DOG_DELETION_PROPOSAL_REJECTED:
+    case NotificationType.DOG_DELETION_PROPOSAL_CANCELED:
+    case NotificationType.DOG_DELETION_PROPOSAL_EXPIRED:
+      return {
+        icon: PawPrint,
+        color: 'red',
+        getUrl: (notification) =>
+          `/ownership-actions/deletion/${notification.target_id}`,
+        invalidateQueries: (_userId, notification) => {
+          queryClient.invalidateQueries({
+            queryKey: ['dogDeletionProposal'],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ['dogOwnershipAction', notification.target_id],
+          });
+        },
+      };
+    case NotificationType.DOG_DELETION_COMPLETED:
+      return {
+        icon: PawPrint,
+        color: 'red',
+        getUrl: () => null,
+        invalidateQueries: (_userId, notification) => {
+          queryClient.invalidateQueries({
+            queryKey: ['dogOwnershipCapabilities', notification.target_id],
+          });
+        },
+      };
     default:
       return {
         icon: Heart,

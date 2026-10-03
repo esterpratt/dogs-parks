@@ -110,6 +110,108 @@ export type Database = {
           },
         ]
       }
+      dog_deletion_consents: {
+        Row: {
+          decided_at: string
+          decision: Database["public"]["Enums"]["dog_deletion_consent_decision"]
+          member_id: string
+          proposal_id: string
+        }
+        Insert: {
+          decided_at?: string
+          decision: Database["public"]["Enums"]["dog_deletion_consent_decision"]
+          member_id: string
+          proposal_id: string
+        }
+        Update: {
+          decided_at?: string
+          decision?: Database["public"]["Enums"]["dog_deletion_consent_decision"]
+          member_id?: string
+          proposal_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dog_deletion_consents_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "dog_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dog_deletion_consents_proposal_id_fkey"
+            columns: ["proposal_id"]
+            isOneToOne: false
+            referencedRelation: "dog_deletion_proposals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dog_deletion_proposals: {
+        Row: {
+          approved_consent_count: number
+          cancellation_reason:
+            | Database["public"]["Enums"]["dog_action_cancellation_reason"]
+            | null
+          created_at: string
+          dog_id: string
+          expires_at: string
+          id: string
+          idempotency_key: string
+          ownership_version_at_creation: number
+          proposed_by_member_id: string | null
+          required_consent_count: number
+          responded_at: string | null
+          status: Database["public"]["Enums"]["dog_deletion_proposal_status"]
+        }
+        Insert: {
+          approved_consent_count?: number
+          cancellation_reason?:
+            | Database["public"]["Enums"]["dog_action_cancellation_reason"]
+            | null
+          created_at?: string
+          dog_id: string
+          expires_at?: string
+          id?: string
+          idempotency_key: string
+          ownership_version_at_creation: number
+          proposed_by_member_id?: string | null
+          required_consent_count: number
+          responded_at?: string | null
+          status?: Database["public"]["Enums"]["dog_deletion_proposal_status"]
+        }
+        Update: {
+          approved_consent_count?: number
+          cancellation_reason?:
+            | Database["public"]["Enums"]["dog_action_cancellation_reason"]
+            | null
+          created_at?: string
+          dog_id?: string
+          expires_at?: string
+          id?: string
+          idempotency_key?: string
+          ownership_version_at_creation?: number
+          proposed_by_member_id?: string | null
+          required_consent_count?: number
+          responded_at?: string | null
+          status?: Database["public"]["Enums"]["dog_deletion_proposal_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dog_deletion_proposals_dog_id_fkey"
+            columns: ["dog_id"]
+            isOneToOne: false
+            referencedRelation: "dogs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dog_deletion_proposals_proposed_by_member_id_fkey"
+            columns: ["proposed_by_member_id"]
+            isOneToOne: false
+            referencedRelation: "dog_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       dog_images: {
         Row: {
           bucket_id: string
@@ -1277,6 +1379,14 @@ export type Database = {
         }
         Returns: string
       }
+      api_cancel_dog_deletion: {
+        Args: {
+          p_client_build: number
+          p_client_platform: Database["public"]["Enums"]["app_platform"]
+          p_proposal_id: string
+        }
+        Returns: Json
+      }
       api_cancel_dog_invite: {
         Args: {
           p_client_build: number
@@ -1339,6 +1449,22 @@ export type Database = {
         Args: { p_image_id: string }
         Returns: undefined
       }
+      api_get_current_dog_deletion_proposal: {
+        Args: {
+          p_client_build: number
+          p_client_platform: Database["public"]["Enums"]["app_platform"]
+          p_dog_id: string
+        }
+        Returns: Json
+      }
+      api_get_dog_deletion_proposal: {
+        Args: {
+          p_client_build: number
+          p_client_platform: Database["public"]["Enums"]["app_platform"]
+          p_proposal_id: string
+        }
+        Returns: Json
+      }
       api_get_dog_ownership_capabilities: {
         Args: {
           p_client_build: number
@@ -1365,6 +1491,15 @@ export type Database = {
         }
         Returns: Json
       }
+      api_propose_dog_deletion: {
+        Args: {
+          p_client_build: number
+          p_client_platform: Database["public"]["Enums"]["app_platform"]
+          p_dog_id: string
+          p_idempotency_key: string
+        }
+        Returns: Json
+      }
       api_reserve_dog_image: {
         Args: { p_dog_id: string; p_extension: string }
         Returns: {
@@ -1374,6 +1509,15 @@ export type Database = {
           storage_path: string
           upload_state: Database["public"]["Enums"]["dog_image_upload_state"]
         }[]
+      }
+      api_respond_dog_deletion: {
+        Args: {
+          p_approve: boolean
+          p_client_build: number
+          p_client_platform: Database["public"]["Enums"]["app_platform"]
+          p_proposal_id: string
+        }
+        Returns: Json
       }
       api_respond_dog_invite: {
         Args: {
@@ -1425,6 +1569,14 @@ export type Database = {
         }
         Returns: undefined
       }
+      api_withdraw_dog_deletion: {
+        Args: {
+          p_client_build: number
+          p_client_platform: Database["public"]["Enums"]["app_platform"]
+          p_proposal_id: string
+        }
+        Returns: Json
+      }
       are_accepted_friends: {
         Args: { p_first_user_id: string; p_second_user_id: string }
         Returns: boolean
@@ -1437,6 +1589,10 @@ export type Database = {
         Args: { p_object_name: string }
         Returns: boolean
       }
+      can_read_dog_deletion_proposal: {
+        Args: { p_proposal_id: string }
+        Returns: boolean
+      }
       can_upload_reserved_dog_image_object: {
         Args: { p_object_name: string }
         Returns: boolean
@@ -1444,6 +1600,18 @@ export type Database = {
       can_view_dog_image_object: {
         Args: { p_object_name: string }
         Returns: boolean
+      }
+      cancel_pending_dog_actions_for_deletion: {
+        Args: { p_actor_user_id: string; p_dog_id: string }
+        Returns: undefined
+      }
+      cancel_pending_dog_deletion_proposals: {
+        Args: {
+          p_actor_user_id: string
+          p_dog_id: string
+          p_reason: Database["public"]["Enums"]["dog_action_cancellation_reason"]
+        }
+        Returns: undefined
       }
       cancel_pending_primary_transfers: {
         Args: {
@@ -1507,6 +1675,10 @@ export type Database = {
           p_client_platform: Database["public"]["Enums"]["app_platform"]
         }
         Returns: string
+      }
+      expire_dog_deletion_proposal: {
+        Args: { p_proposal_id: string }
+        Returns: boolean
       }
       expire_dog_join_actions: {
         Args: { p_dog_id: string }
@@ -1686,6 +1858,15 @@ export type Database = {
         Args: { p_notification_ids: string[] }
         Returns: number
       }
+      notify_dog_deletion_participants: {
+        Args: {
+          p_excluded_user_id?: string
+          p_proposal_id: string
+          p_sender_id: string
+          p_type: Database["public"]["Enums"]["notification_type"]
+        }
+        Returns: undefined
+      }
       notify_existing_co_owners_of_join: {
         Args: {
           p_dog_id: string
@@ -1744,6 +1925,15 @@ export type Database = {
         | "DOG_UNAVAILABLE"
         | "MEMBER_DEPARTED"
         | "ACCOUNT_ERASURE"
+        | "OWNER_SET_CHANGED"
+        | "APPROVAL_WITHDRAWN"
+      dog_deletion_consent_decision: "APPROVED" | "REJECTED"
+      dog_deletion_proposal_status:
+        | "PENDING"
+        | "REJECTED"
+        | "CANCELED"
+        | "EXPIRED"
+        | "COMPLETED"
       dog_image_upload_state: "RESERVED" | "ACTIVE" | "DELETING"
       dog_invite_status:
         | "PENDING"
@@ -1762,6 +1952,11 @@ export type Database = {
         | "OWNER_LEFT"
         | "ACCOUNT_ERASURE_PREPARED"
         | "SOLO_DOG_DELETION_PREPARED"
+        | "DOG_DELETION_PROPOSED"
+        | "DOG_DELETION_REJECTED"
+        | "DOG_DELETION_CANCELED"
+        | "DOG_DELETION_PREPARED"
+        | "DOG_DELETION_COMPLETED"
       dog_storage_job_operation:
         | "COPY_LEGACY_DOG_IMAGE"
         | "DELETE_DOG_ASSETS"
@@ -1804,6 +1999,11 @@ export type Database = {
         | "dog_primary_transfer_canceled"
         | "dog_owner_left"
         | "dog_primary_changed"
+        | "dog_deletion_consent_requested"
+        | "dog_deletion_proposal_rejected"
+        | "dog_deletion_proposal_canceled"
+        | "dog_deletion_proposal_expired"
+        | "dog_deletion_completed"
       park_condition:
         | "MUDDY"
         | "BROKEN_FOUNTAIN"
@@ -1951,6 +2151,16 @@ export const Constants = {
         "DOG_UNAVAILABLE",
         "MEMBER_DEPARTED",
         "ACCOUNT_ERASURE",
+        "OWNER_SET_CHANGED",
+        "APPROVAL_WITHDRAWN",
+      ],
+      dog_deletion_consent_decision: ["APPROVED", "REJECTED"],
+      dog_deletion_proposal_status: [
+        "PENDING",
+        "REJECTED",
+        "CANCELED",
+        "EXPIRED",
+        "COMPLETED",
       ],
       dog_image_upload_state: ["RESERVED", "ACTIVE", "DELETING"],
       dog_invite_status: [
@@ -1971,6 +2181,11 @@ export const Constants = {
         "OWNER_LEFT",
         "ACCOUNT_ERASURE_PREPARED",
         "SOLO_DOG_DELETION_PREPARED",
+        "DOG_DELETION_PROPOSED",
+        "DOG_DELETION_REJECTED",
+        "DOG_DELETION_CANCELED",
+        "DOG_DELETION_PREPARED",
+        "DOG_DELETION_COMPLETED",
       ],
       dog_storage_job_operation: [
         "COPY_LEGACY_DOG_IMAGE",
@@ -2016,6 +2231,11 @@ export const Constants = {
         "dog_primary_transfer_canceled",
         "dog_owner_left",
         "dog_primary_changed",
+        "dog_deletion_consent_requested",
+        "dog_deletion_proposal_rejected",
+        "dog_deletion_proposal_canceled",
+        "dog_deletion_proposal_expired",
+        "dog_deletion_completed",
       ],
       park_condition: [
         "MUDDY",
