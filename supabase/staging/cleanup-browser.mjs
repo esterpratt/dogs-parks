@@ -59,7 +59,12 @@ if (!process.argv.includes('--apply')) {
   process.exit(0);
 }
 const clients = new Map();
-for (const account of accounts) {
+// Account-erasure rehearsals retain manifests after Auth deletion. Only active
+// participants in the inventoried dogs need credentials for consent cleanup.
+const participantIds = new Set(
+  dogs.flatMap((dog) => dog.members.map((member) => member.user_id)),
+);
+for (const account of accounts.filter((account) => participantIds.has(account.id))) {
   const client = stagingClient(anon);
   const login = requireSuccess(
     await client.auth.signInWithPassword({

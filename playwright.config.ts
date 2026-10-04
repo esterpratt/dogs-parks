@@ -20,6 +20,9 @@ try {
 export default defineConfig({
   testDir: 'tests/e2e',
   fullyParallel: true,
+  // Destructive staging journeys share protected fixture manifests. Serialize
+  // their preparation so each run retains its own actors and cleanup inventory.
+  workers: process.env.STAGING_E2E === 'true' ? 1 : undefined,
   retries: process.env.CI ? 1 : 0,
   maxFailures: process.env.CI ? undefined : 1, // Stop after first failure in local dev
   reporter: [['list'], ['html', { open: 'never' }]],

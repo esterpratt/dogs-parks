@@ -1,6 +1,6 @@
 # Staging execution manifest
 
-Execution date: 2026-10-04. S1–S4 are complete; S5 tooling, fixtures and the main shared-ownership browser journey are verified. Native, account-erasure browser/failure coverage and support-policy work remain.
+Execution date: 2026-10-04. S1–S4 are complete; S5 tooling, fixtures and the main shared-ownership browser journey are verified. Multi-dog account erasure and browser failure-response handling are now verified. Native, broader edge-case coverage and support-policy work remain.
 
 ## Current staging result
 
@@ -32,6 +32,16 @@ node supabase/staging/drain-storage.mjs
 Cleanup defaults to an inventory preview, validates every active owner against protected synthetic manifests and refuses unexpected ownership. It invokes actual participants' consent RPCs; it does not truncate tables or modify imported/durable dogs. Solo disposable dogs follow the existing soft-delete RPC. Queued shared-dog/photo cleanup was drained; the verified worker state was 29 completed jobs and no pending/failed jobs.
 
 Final follow-up checks: seven staging Playwright tests passed, 72 Vitest tests across 11 files passed, lint/build/diff checks passed, and all 17 staging scripts passed syntax checks. Existing build-size warnings and navigation-time event/profile/notification fetch console logs remain recorded; the journey checks no page exceptions and no production requests. The full local Docker SQL/Edge suite was not rerun because this follow-up introduces no schema or Edge Function change.
+
+## Account-erasure browser follow-up
+
+The staging browser suite now includes a fresh three-account, three-dog account-erasure journey. Its review covers a solo dog, a shared dog where the deleting account is primary, and a shared dog where it is co-owner. It selects the later-joining co-owner as successor, verifies that selection reaches the Edge Function, performs real account deletion, checks that both shared dogs retain the correct primary, and confirms the solo dog is hidden. A real browser-uploaded main photo remains downloadable by the successor with `uploader_member_id` cleared. The deleted account cannot log in again, and its browser session cannot reopen the private review route.
+
+Failure coverage deliberately stays at the browser response boundary: an intercepted 409 exercises the retry message while Auth and all three dogs remain present; the next request calls the real deployed function and verifies `DELETED`, then substitutes `DELETED_WITH_CLEANUP_PENDING` with the erased user ID. The signed-out confirmation displays the recovery reference and existing support email. This verifies client handling of the documented partial-cleanup contract; it does **not** inject an actual remote Storage failure. The existing local `delete-user-contract.test.mjs` covers an actual post-Auth Storage failure; it was not rerun during this follow-up. No deployed failure hook or schema change was introduced.
+
+Staging Playwright runs now use one worker because disposable account preparation shares protected manifests. Ordinary e2e parallelism is unchanged. Cleanup logs in only current owners of inventoried disposable dogs, so deleted accounts retained in the run history do not prevent cleanup. The apply run successfully cleaned six surviving dogs from rehearsal attempts through participant consent RPCs. The worker completed eight queued jobs, reporting 37 completed with none pending/failed. The imported baseline was reverified: 1494 records, 46 retained legacy files, seven private dog-photo copies and both confirmed logins.
+
+Verification: all eight staging Playwright tests passed, 72 Vitest tests passed, lint, production build, cleanup-script syntax and `git diff --check` passed. The existing chunk-size warning and navigation/event/notification fetch console logs remain. The injected 409 and Auth denial after successful deletion are expected in this journey; passing tests do not establish a clean console. No page exceptions or production requests occurred in the new journey. Initial test failures were corrected assertions (actual uploader column name and anonymous private-route redirect); no application defect was found.
 
 ## Open staging and find logins
 
@@ -70,7 +80,7 @@ Migration and fixture commands default to a dry-run; `--apply` executes only mis
 - Four browser smoke checks passed: both imported accounts' ownership/account-review routes and primary/private-owner shared rosters. Staging catalog requests were observed; no production requests or page exceptions occurred in those smoke checks. Screenshot inspection confirmed the ownership page renders correctly.
 - Existing Playwright suite passed all six park tests, including Hebrew/English cross-language search, visitor details and authenticated condition-modal opening. Initial runs stopped on missing browser/video dependencies; Playwright Chromium and FFmpeg were installed without changing project dependencies. After the staging aggregate migration, the anonymous park-rating API query passed and all six browser tests passed again without the rank error. Event/notification fetch console errors still occurred during the parallel suite; event RPCs succeeded in direct authenticated calls. Those logs remain a follow-up, so the passing suite does not establish zero console errors.
 - Vitest passed 71 tests across 10 files. Lint, production build, all 15 script syntax checks and `git diff --check` passed; the existing build chunk-size warning remains. Full SQL/Edge contract tests were previously verified locally and were not rerun against permanent staging.
-- Remaining: browser account erasure across multiple dogs and injected partial-cleanup failure, additional notification deep-link/reconnect/expiry and photo-capacity/unknown-uploader scenarios, native builds, and operational support decisions/recovery implementation. Core shared-ownership/photo/refresh/RTL browser paths are verified in the follow-up above; the broader matrix and production release remain pending.
+- Remaining: actual remote partial-cleanup failure injection (browser response handling is verified above), additional notification deep-link/reconnect/expiry and photo-capacity/unknown-uploader scenarios, native builds, and operational support decisions/recovery implementation. Core shared-ownership/photo/refresh/RTL browser paths are verified in the follow-up above; the broader matrix and production release remain pending.
 - Production webhook credential remediation and actual old-client compatibility remain separate production rollout prerequisites. See the production runbook.
 
 ## Historical S1 inventory
