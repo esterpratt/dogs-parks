@@ -16,6 +16,8 @@ Short bootstrap and handoff; Notion is the task source of truth. Permanent codin
 
 ## Current staging and production handoff (2026-10-03)
 
+- Execution resumed 2026-10-04: [staging execution manifest](SUPABASE_STAGING_EXECUTION.md). Production identity and ledger were verified; a private schema-only export and preliminary candidate excluding four credential-bearing webhook triggers were prepared. No staging project exists yet. Organization/region/billing and exact profile/data selection were requested; S1 review remains incomplete. No live feature migration or deployment occurred.
+
 - Ownership slices 1–10 are implemented and merged into `main`. The historical checkpoints below describe prior stages; they are not instructions to restart slice 1 or reuse the deleted feature branch.
 - Detailed execution plans: [permanent staging and selected production-data import](SUPABASE_STAGING_PLAN.md) and [production preservation, compatibility and release rollout](SUPABASE_PRODUCTION_ROLLOUT_PLAN.md). Both are documented only; no staging project, production export, live migration, deployment or compatibility change was performed for this planning task.
 - User wants persistent staging with selected copies of their own profile, production test profile, dogs/photos and parks. Proposed approach: independent staging login accounts, consistent ID/path remapping, sanitized schema bootstrap and a named local staging command. Account/billing access and exact data selection remain to resolve when execution begins.

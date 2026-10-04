@@ -1,6 +1,6 @@
 # Permanent Supabase staging and selected-data import
 
-Prepared 2026-10-03. Status: documented, not executed. This document is an implementation handoff, not evidence that a staging project exists.
+Prepared 2026-10-03. Execution resumed 2026-10-04: S1 inventory is in progress. No staging project has been created. See [the execution manifest](SUPABASE_STAGING_EXECUTION.md) for verified facts and remaining inputs.
 
 ## Objective and agreed scope
 
