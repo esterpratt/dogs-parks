@@ -18,6 +18,20 @@ interface NotificationConfig {
   invalidateQueries: (userId: string, notification: Notification) => void;
 }
 
+function invalidateDogOwnershipQueries(dogId?: string) {
+  // Action notifications identify the action rather than the dog. Invalidate
+  // cached dog capabilities broadly in that case; server reads retain authority.
+  queryClient.invalidateQueries({
+    queryKey: dogId ? ['dogPage', dogId] : ['dogPage'],
+  });
+  queryClient.invalidateQueries({ queryKey: ['userDogs'] });
+  queryClient.invalidateQueries({ queryKey: ['friendsWithDogs'] });
+  queryClient.invalidateQueries({
+    queryKey: dogId ? ['dogOwnershipActions', dogId] : ['dogOwnershipActions'],
+  });
+  queryClient.invalidateQueries({ queryKey: ['dogDeletionProposal'] });
+}
+
 const getNotificationConfig = (type: NotificationType): NotificationConfig => {
   switch (type) {
     case NotificationType.FRIEND_REQUEST:
@@ -117,6 +131,7 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
           queryClient.invalidateQueries({
             queryKey: ['dogOwnershipAction', 'invite', notification.target_id],
           });
+          invalidateDogOwnershipQueries();
         },
       };
     case NotificationType.DOG_OWNERSHIP_REQUEST_RECEIVED:
@@ -132,6 +147,7 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
           queryClient.invalidateQueries({
             queryKey: ['dogOwnershipAction', 'request', notification.target_id],
           });
+          invalidateDogOwnershipQueries();
         },
       };
     case NotificationType.DOG_OWNER_JOINED:
@@ -142,9 +158,7 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
         color: 'green',
         getUrl: (notification) => `/dogs/${notification.target_id}`,
         invalidateQueries: (_userId, notification) => {
-          queryClient.invalidateQueries({
-            queryKey: ['dogPage', notification.target_id],
-          });
+          invalidateDogOwnershipQueries(notification.target_id);
         },
       };
     case NotificationType.DOG_PRIMARY_TRANSFER_OFFERED:
@@ -164,6 +178,7 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
               notification.target_id,
             ],
           });
+          invalidateDogOwnershipQueries();
         },
       };
     case NotificationType.DOG_DELETION_CONSENT_REQUESTED:
@@ -182,6 +197,7 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
           queryClient.invalidateQueries({
             queryKey: ['dogOwnershipAction', notification.target_id],
           });
+          invalidateDogOwnershipQueries();
         },
       };
     case NotificationType.DOG_DELETION_COMPLETED:
@@ -190,10 +206,7 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
         color: 'red',
         getUrl: () => null,
         invalidateQueries: (_userId, notification) => {
-          queryClient.invalidateQueries({
-            queryKey: ['dogPage', notification.target_id],
-          });
-          queryClient.invalidateQueries({ queryKey: ['userDogs'] });
+          invalidateDogOwnershipQueries(notification.target_id);
         },
       };
     default:

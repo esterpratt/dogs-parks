@@ -1,6 +1,6 @@
 # Permanent Supabase staging and selected-data import
 
-Prepared 2026-10-03. Executed 2026-10-04: permanent staging, selected legacy import, feature migration rehearsal, fixtures and local browser preview are available. See [the execution manifest](SUPABASE_STAGING_EXECUTION.md) for commands, verification and remaining coverage.
+Prepared 2026-10-03. Executed 2026-10-04: permanent staging, selected legacy import, feature migration rehearsal and fixtures are available. The main shared-ownership/photo/RTL browser journey is verified. See [the execution manifest](SUPABASE_STAGING_EXECUTION.md) for commands, verification and remaining coverage.
 
 ## Objective and agreed scope
 

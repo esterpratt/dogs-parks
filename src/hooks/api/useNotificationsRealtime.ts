@@ -4,6 +4,7 @@ import { supabase } from '../../services/supabase-client';
 import type { Notification } from '../../types/notification';
 import { queryClient } from '../../services/react-query';
 import { UserContext } from '../../context/UserContext';
+import { getNotificationConfig } from '../../utils/notificationConfig';
 
 // Keep one channel across mounts
 let activeChannelKey: string | null = null;
@@ -12,7 +13,7 @@ let lastAccessToken: string | null = null;
 
 function invalidateNotificationsKeys(
   uid: string,
-  isOnNotificationsPage: boolean
+  isOnNotificationsPage: boolean,
 ): void {
   queryClient.invalidateQueries({ queryKey: ['unseenNotifications', uid] });
   queryClient.invalidateQueries({ queryKey: ['seenNotifications', uid] });
@@ -58,6 +59,9 @@ function useNotificationsRealtime() {
         const onNotificationsPage =
           window.location.pathname === '/notifications';
         invalidateNotificationsKeys(uid, onNotificationsPage);
+        // Apply domain invalidation on receipt so other owners see changed
+        // authority immediately, even before opening their notification list.
+        getNotificationConfig(newRow.type).invalidateQueries(uid, newRow);
       }
 
       if (startingRef.current) {
@@ -101,7 +105,7 @@ function useNotificationsRealtime() {
               setIsConnected(true);
               invalidateNotificationsKeys(
                 uid,
-                window.location.pathname === '/notifications'
+                window.location.pathname === '/notifications',
               );
             }
           });
@@ -119,7 +123,7 @@ function useNotificationsRealtime() {
           table: 'notifications',
           filter: `receiver_id=eq.${uid}`,
         },
-        (payload) => handleNotificationInsert(payload.new as Notification)
+        (payload) => handleNotificationInsert(payload.new as Notification),
       );
 
       channel.subscribe((status) => {
@@ -127,7 +131,7 @@ function useNotificationsRealtime() {
           setIsConnected(true);
           invalidateNotificationsKeys(
             uid,
-            window.location.pathname === '/notifications'
+            window.location.pathname === '/notifications',
           );
           return;
         }
@@ -161,7 +165,7 @@ function useNotificationsRealtime() {
           lastAccessToken = token;
           invalidateNotificationsKeys(
             uid,
-            window.location.pathname === '/notifications'
+            window.location.pathname === '/notifications',
           );
         }
 
@@ -184,7 +188,7 @@ function useNotificationsRealtime() {
             lastAccessToken = next;
             invalidateNotificationsKeys(
               userId,
-              window.location.pathname === '/notifications'
+              window.location.pathname === '/notifications',
             );
 
             if (!activeChannelRef || activeChannelRef.state !== 'joined') {
@@ -201,7 +205,7 @@ function useNotificationsRealtime() {
             setIsConnected(false);
           }
         }
-      }
+      },
     );
 
     if (authUnsubscribeRef.current) {

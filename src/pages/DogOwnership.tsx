@@ -139,8 +139,14 @@ const DogOwnership = () => {
   const invitedUserIds = new Set(
     invites.map((invite) => invite.invitee_user_id),
   );
+  // Existing co-owners remain friends but are already part of this dog; avoid
+  // offering invitations that the server would correctly reject as duplicates.
+  const ownerUserIds = new Set(members.map((member) => member.user_id));
   const eligibleFriends =
-    friends?.filter((friend) => !invitedUserIds.has(friend.id)) ?? [];
+    friends?.filter(
+      (friend) =>
+        !invitedUserIds.has(friend.id) && !ownerUserIds.has(friend.id),
+    ) ?? [];
   const eligibleTransferMembers = members.filter(
     (member) => member.role === 'CO_OWNER',
   );

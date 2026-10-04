@@ -1,6 +1,6 @@
 # Staging execution manifest
 
-Execution date: 2026-10-04. S1–S4 are complete; S5 tooling, fixtures and browser preview are available. The full ownership UI/native matrix and support-policy work remain.
+Execution date: 2026-10-04. S1–S4 are complete; S5 tooling, fixtures and the main shared-ownership browser journey are verified. Native, account-erasure browser/failure coverage and support-policy work remain.
 
 ## Current staging result
 
@@ -13,7 +13,25 @@ Execution date: 2026-10-04. S1–S4 are complete; S5 tooling, fixtures and brows
 - Only `delete-user` and `process-dog-storage-jobs` were deployed, both with gateway `verify_jwt=true` and internal authentication. The worker requires the exact injected modern secret; the tooling resolves it by digest without logging it. No push/mail functions or scheduler were deployed. Manually drain jobs after destructive testing.
 - `SHARED_DOG_OWNERSHIP`: WEB enabled, minimum build 1; iOS/Android disabled. Six durable synthetic accounts and five fixture dogs cover solo/shared/private/friend/outsider/cleanup and an actual unknown-uploader PNG. Destructive checks use separate disposable dogs/accounts.
 - A separate staging-only migration enables the production Data API aggregate setting used by `reviews.rank.avg()`. It lives under `supabase/staging/migrations`, outside production deployable migrations. [Supabase aggregate configuration](https://supabase.com/blog/postgrest-aggregate-functions) documents this role setting and configuration reload. This changes no RLS policy or execution grant.
-- Production application data, schema, functions, credentials and compatibility settings were not changed. Checked-in CI contains no DB/function deployment; external hosting integration settings remain unverified. This task changes tooling/configuration/documentation, with no application bundle source changes.
+- Production application data, schema, functions, credentials and compatibility settings were not changed. Checked-in CI contains no DB/function deployment; external hosting integration settings remain unverified. Initial setup changed tooling/configuration/documentation only; the browser follow-up below adds client fixes that are committed through the normal repository workflow. No separate production deployment command was run.
+
+## Ownership browser follow-up
+
+The staging-only Playwright journey now uses three independent sessions with fresh disposable accounts and one disposable dog. It verifies invitation disclosure/acceptance and refreshed action links, ownership requests/approval, live roster updates, ordinary primary transfer, departure with an explicitly selected successor, and unanimous shared deletion with client RLS immediately hiding the dog. It also uploads two real synthetic images through the browser, verifies signed-image rendering, hides deletion of another owner's upload from a co-owner, changes the primary photo, deletes the uploader's own photo and verifies deterministic main-photo fallback. The app's language selector switches to Hebrew; the ownership page survives refresh in RTL and its screenshot was inspected.
+
+Two client defects were addressed: Realtime notification receipt now invalidates affected ownership capabilities, dog packs/friend cards and pending actions instead of waiting for a notification click; the invitation list excludes existing owners. A new unit regression demonstrated stale authority before the Realtime fix. The browser test asserts live updates and absence of duplicate invitation controls.
+
+Run `npm run test:e2e:staging` for all seven tests, or add `-- tests/e2e/ownership/staging-journeys.spec.ts` for this journey. Ordinary e2e runs skip it. `prepare-browser.mjs --apply` creates fresh marked actors so reruns respect the real rolling request limit instead of resetting it. Run manifests/passwords remain private in `.private/staging/browser-run.json` and `browser-runs.json`; these disposable actors are separate from durable preview logins. Account records are retained for inspection; cleanup below targets only disposable dogs.
+
+```sh
+node supabase/staging/cleanup-browser.mjs
+node supabase/staging/cleanup-browser.mjs --apply
+node supabase/staging/drain-storage.mjs
+```
+
+Cleanup defaults to an inventory preview, validates every active owner against protected synthetic manifests and refuses unexpected ownership. It invokes actual participants' consent RPCs; it does not truncate tables or modify imported/durable dogs. Solo disposable dogs follow the existing soft-delete RPC. Queued shared-dog/photo cleanup was drained; the verified worker state was 29 completed jobs and no pending/failed jobs.
+
+Final follow-up checks: seven staging Playwright tests passed, 72 Vitest tests across 11 files passed, lint/build/diff checks passed, and all 17 staging scripts passed syntax checks. Existing build-size warnings and navigation-time event/profile/notification fetch console logs remain recorded; the journey checks no page exceptions and no production requests. The full local Docker SQL/Edge suite was not rerun because this follow-up introduces no schema or Edge Function change.
 
 ## Open staging and find logins
 
@@ -52,7 +70,7 @@ Migration and fixture commands default to a dry-run; `--apply` executes only mis
 - Four browser smoke checks passed: both imported accounts' ownership/account-review routes and primary/private-owner shared rosters. Staging catalog requests were observed; no production requests or page exceptions occurred in those smoke checks. Screenshot inspection confirmed the ownership page renders correctly.
 - Existing Playwright suite passed all six park tests, including Hebrew/English cross-language search, visitor details and authenticated condition-modal opening. Initial runs stopped on missing browser/video dependencies; Playwright Chromium and FFmpeg were installed without changing project dependencies. After the staging aggregate migration, the anonymous park-rating API query passed and all six browser tests passed again without the rank error. Event/notification fetch console errors still occurred during the parallel suite; event RPCs succeeded in direct authenticated calls. Those logs remain a follow-up, so the passing suite does not establish zero console errors.
 - Vitest passed 71 tests across 10 files. Lint, production build, all 15 script syntax checks and `git diff --check` passed; the existing build chunk-size warning remains. Full SQL/Edge contract tests were previously verified locally and were not rerun against permanent staging.
-- Remaining: full two-browser UI invite/request/transfer/departure/deletion journeys, photo upload/main-selection/deletion UI, notification/refresh/RTL matrix, native builds, injected partial-cleanup failure, and operational support decisions/recovery implementation. The backend rehearsal and preview do not establish these untested paths or authorize production release.
+- Remaining: browser account erasure across multiple dogs and injected partial-cleanup failure, additional notification deep-link/reconnect/expiry and photo-capacity/unknown-uploader scenarios, native builds, and operational support decisions/recovery implementation. Core shared-ownership/photo/refresh/RTL browser paths are verified in the follow-up above; the broader matrix and production release remain pending.
 - Production webhook credential remediation and actual old-client compatibility remain separate production rollout prerequisites. See the production runbook.
 
 ## Historical S1 inventory
