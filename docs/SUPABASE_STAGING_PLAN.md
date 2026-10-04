@@ -31,14 +31,14 @@ Related plans:
 
 ## Required inputs and responsibility
 
-| Input or task | Ester | Implementing agent |
-| --- | --- | --- |
-| Organization, region, project name and acceptable billing | Choose/approve; complete account interaction if needed | Inspect available options and provision when authorized |
-| Production/staging access | Complete OAuth or provide access through a secure mechanism | Verify project identities and effective permissions |
-| Data selection | Identify own profile, test profile, desired dogs/photos and park scope | Resolve IDs read-only; produce a dependency/import manifest |
-| Staging login | Choose email/password initially or request provider login | Create independent test accounts and map imported references |
-| Google/Apple providers if requested | Handle provider-console permissions/consent screens | Configure callback URLs and verify login |
-| Test review | Try the resulting feature and review unresolved support decisions | Implement import/deployment tooling and automated verification |
+| Input or task                                             | Ester                                                                  | Implementing agent                                             |
+| --------------------------------------------------------- | ---------------------------------------------------------------------- | -------------------------------------------------------------- |
+| Organization, region, project name and acceptable billing | Choose/approve; complete account interaction if needed                 | Inspect available options and provision when authorized        |
+| Production/staging access                                 | Complete OAuth or provide access through a secure mechanism            | Verify project identities and effective permissions            |
+| Data selection                                            | Identify own profile, test profile, desired dogs/photos and park scope | Resolve IDs read-only; produce a dependency/import manifest    |
+| Staging login                                             | Choose email/password initially or request provider login              | Create independent test accounts and map imported references   |
+| Google/Apple providers if requested                       | Handle provider-console permissions/consent screens                    | Configure callback URLs and verify login                       |
+| Test review                                               | Try the resulting feature and review unresolved support decisions      | Implement import/deployment tooling and automated verification |
 
 Keep passwords, privileged keys and raw exports out of chat, git and client-visible `VITE_*` variables. A staging URL and public anon/publishable key may be client configuration; service credentials remain server-side.
 
