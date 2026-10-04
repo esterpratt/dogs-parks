@@ -1,12 +1,12 @@
 # Permanent Supabase staging and selected-data import
 
-Prepared 2026-10-03. Execution resumed 2026-10-04: S1 inventory is in progress. No staging project has been created. See [the execution manifest](SUPABASE_STAGING_EXECUTION.md) for verified facts and remaining inputs.
+Prepared 2026-10-03. Executed 2026-10-04: permanent staging, selected legacy import, feature migration rehearsal, fixtures and local browser preview are available. See [the execution manifest](SUPABASE_STAGING_EXECUTION.md) for commands, verification and remaining coverage.
 
 ## Objective and agreed scope
 
 Create a permanent, independent `klavhub-staging` Supabase project. Run the local React/Vite client against it to preview ownership features with selected copies of Ester's production profile, test profile, dogs, photos and parks. Keep useful test data between sessions and make future migrations and fixture refreshes repeatable.
 
-The user requested documentation so another agent can execute later. This documentation task does not authorize creating paid resources, exporting private production records or deploying to production now. On resumption, use the user's current authorization; request only missing access, data selection or material choices. Do not re-open confirmed ownership product decisions.
+The user subsequently created the staging project and authorized copying both selected accounts, all their dogs/photos and all parks. That authorization was used for the staging execution. Production deployment remains a separate task. Do not re-open confirmed ownership product decisions.
 
 Related plans:
 
@@ -19,7 +19,7 @@ Related plans:
 ## Starting facts to verify again
 
 - Production reference recorded by the 2026-09-26 audit: `kbsjdfzpeianxhidguam`. Verify identity before every operation; it is never a staging target.
-- Ownership slices 1–10 are implemented locally. The feature migrations and updated Edge Functions have not been deployed by this work.
+- Ownership slices 1–10 and their migrations are deployed to staging only. Production remains on the legacy schema/functions.
 - Repository migration history is incomplete: the live ownership prototype and other baseline schema were absent from its original migration ledger. An empty project cannot be bootstrapped by blindly applying `supabase/migrations`.
 - Sanitized local baseline: `supabase/tests/local/supabase/migrations/20260926000000_current_schema.sql`. It is a test fixture, not a production migration. Compare with a fresh schema export before using it to design staging bootstrap.
 - Local contract runner: `supabase/tests/local/run.sh`; pinned CLI `2.109.1`. The runner starts/resets/stops a disposable Docker stack and cleans test users/data. Do not point it at permanent staging or production.
@@ -70,7 +70,7 @@ Import representative data in its legacy form first. This is necessary to test t
 
 1. Resolve Ester's two selected production users by exact IDs; do not export all Auth users by default. Recommended login design: create fresh staging Auth accounts with independent credentials, then map source user IDs to their new staging IDs. Verify profile triggers first to avoid duplicate profile inserts.
 2. Build the relationship closure from real foreign keys and function behavior. Include requested dog records, memberships, selected image metadata, selected friendships and park rows/dependencies needed by the UI. For references to unselected users, either omit optional records or create explicitly synthetic counterparts; never silently copy unrelated private profiles.
-3. Include all parks if Ester chooses that scope and they are appropriate to copy. Park database rows remain authoritative; translation/general-information JSON is not a park-data backup. Omit live visits, device tokens and unnecessary messages/notification history unless specifically selected for a test scenario.
+3. Include all parks if Ester chooses that scope and they are appropriate to copy. The app first downloads its park catalogs from Storage JSON; copy those catalogs as well as the authoritative database rows and translation dependencies. JSON is not a park-data backup. Omit live visits, device tokens and unnecessary messages/notification history unless specifically selected for a test scenario.
 4. Enumerate selected photo files from metadata and relevant legacy paths, including profile avatars/main images that may not appear in `dog_images`. Download exact selected objects read-only, then upload to staging using the Storage API. Preserve MIME type, verify byte length and checksum, and rewrite user-folder paths and project-specific URLs consistently.
 5. Do not insert `storage.objects` rows as a substitute for uploading files. Do not preserve production signed URLs or use production photo URLs as staging's permanent source.
 6. Import relational records in FK order. Preserve business timestamps/legacy fields where meaningful, but remap all selected user references consistently. Account for trigger-created memberships, generated identifiers and sequence values. Confirm that membership authority and compatibility owner agree after import.

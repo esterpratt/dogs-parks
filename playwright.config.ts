@@ -24,7 +24,12 @@ export default defineConfig({
   maxFailures: process.env.CI ? undefined : 1, // Stop after first failure in local dev
   reporter: [['list'], ['html', { open: 'never' }]],
   use: {
-    baseURL: 'http://localhost:5173',
+    // Explicit staging mode keeps both browser origin and server startup on the
+    // guarded staging workflow; ordinary e2e behavior remains unchanged.
+    baseURL:
+      process.env.STAGING_E2E === 'true'
+        ? 'http://127.0.0.1:5173'
+        : 'http://localhost:5173',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
@@ -36,7 +41,10 @@ export default defineConfig({
     ),
   },
   webServer: {
-    command: 'npm run dev',
+    command:
+      process.env.STAGING_E2E === 'true'
+        ? 'npm run dev:staging'
+        : 'npm run dev',
     port: 5173,
     reuseExistingServer: true,
     timeout: 60_000,

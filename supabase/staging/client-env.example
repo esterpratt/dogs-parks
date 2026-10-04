@@ -1,0 +1,4 @@
+# Copy to .env.staging.local. Get only the staging project's public anon key.
+# dev:staging validates the URL and JWT project/role before starting Vite.
+VITE_SUPABASE_URL=https://uhdzwzuyiztktxthwdfp.supabase.co
+VITE_SUPABASE_ANON_KEY=REPLACE_WITH_STAGING_ANON_KEY
