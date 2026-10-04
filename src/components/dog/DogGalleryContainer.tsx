@@ -78,6 +78,8 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
     setIsAddImageModalOpen(true);
   };
 
+  // The named header control stays reachable when the carousel's add slide
+  // scrolls out of view, including for keyboard and screen-reader users.
   const onClickAddPhoto = () => {
     openCameraModal();
   };
@@ -94,6 +96,7 @@ const DogGalleryContainer: React.FC<DogGalleryContainerProps> = ({
         actions={
           isSignedInUser && (dogImages ?? []).length < MAX_DOG_IMAGES ? (
             <Button
+              aria-label={t('components.carousel.addPhoto')}
               variant="simple"
               color={styles.white}
               className={styles.button}

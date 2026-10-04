@@ -155,7 +155,11 @@ test.describe('staging account erasure', () => {
     await loginWithEmail(page, run.accounts.primary);
     await page.goto(`/dogs/${dogs.transfer}`);
     // A real uploaded photo must survive its uploader's Auth/profile removal.
-    await page.getByRole('button', { name: 'Add photo', exact: true }).click();
+    await page
+      .getByRole('button', { name: 'Gallery', exact: true })
+      .locator('..')
+      .getByRole('button', { name: 'Add photo', exact: true })
+      .click();
     const finalized = page.waitForResponse(
       `${stagingUrl}/rest/v1/rpc/api_finalize_dog_image`,
     );

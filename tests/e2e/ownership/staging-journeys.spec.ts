@@ -75,7 +75,11 @@ async function uploadPhoto(page: Page) {
     drawing.fillRect(0, 0, 16, 16);
     return canvas.toDataURL('image/png');
   });
-  await page.getByRole('button', { name: 'Add photo', exact: true }).click();
+  await page
+    .getByRole('button', { name: 'Gallery', exact: true })
+    .locator('..')
+    .getByRole('button', { name: 'Add photo', exact: true })
+    .click();
   const finalized = page.waitForResponse(
     (response) =>
       response.url() === `${stagingUrl}/rest/v1/rpc/api_finalize_dog_image`,

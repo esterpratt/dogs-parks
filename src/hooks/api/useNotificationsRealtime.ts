@@ -27,6 +27,24 @@ function invalidateNotificationsKeys(
   }
 }
 
+function refreshAfterSubscription(uid: string): void {
+  invalidateNotificationsKeys(uid, window.location.pathname === '/notifications');
+  // Realtime does not replay missed inserts after a disconnect. Refresh the
+  // ownership views and photo rights from the server whenever it subscribes.
+  for (const queryKey of [
+    ['dogPage'],
+    ['userDogs'],
+    ['friendsWithDogs'],
+    ['dogOwnershipActions'],
+    ['dogOwnershipAction'],
+    ['dogDeletionProposal'],
+    ['dogImages'],
+    ['dogImage'],
+  ]) {
+    queryClient.invalidateQueries({ queryKey });
+  }
+}
+
 function useNotificationsRealtime() {
   const { userId } = useContext(UserContext);
   const [isConnected, setIsConnected] = useState(false);
@@ -103,10 +121,7 @@ function useNotificationsRealtime() {
           activeChannelRef.subscribe((status) => {
             if (status === 'SUBSCRIBED') {
               setIsConnected(true);
-              invalidateNotificationsKeys(
-                uid,
-                window.location.pathname === '/notifications',
-              );
+              refreshAfterSubscription(uid);
             }
           });
         }
@@ -129,10 +144,7 @@ function useNotificationsRealtime() {
       channel.subscribe((status) => {
         if (status === 'SUBSCRIBED') {
           setIsConnected(true);
-          invalidateNotificationsKeys(
-            uid,
-            window.location.pathname === '/notifications',
-          );
+          refreshAfterSubscription(uid);
           return;
         }
         if (

@@ -1,6 +1,6 @@
 # Permanent Supabase staging and selected-data import
 
-Prepared 2026-10-03. Executed 2026-10-04: permanent staging, selected legacy import, feature migration rehearsal and fixtures are available. The main shared-ownership/photo/RTL and multi-dog account-erasure browser journeys are verified, including simulated failure-response handling. See [the execution manifest](SUPABASE_STAGING_EXECUTION.md) for commands, verification and remaining coverage.
+Prepared 2026-10-03. Executed 2026-10-04: permanent staging, selected legacy import, feature migration rehearsal and fixtures are available. The main shared-ownership/photo/RTL and multi-dog account-erasure browser journeys are verified, including simulated failure-response handling. Notification invitation/transfer links, invitation expiry, Realtime reconnect and photo-capacity/unknown-uploader checks are also verified. See [the execution manifest](SUPABASE_STAGING_EXECUTION.md) for commands, verification and remaining coverage.
 
 ## Objective and agreed scope
 

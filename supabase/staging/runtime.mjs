@@ -1,7 +1,7 @@
 import { execFileSync } from "node:child_process";
-import { mkdirSync, readFileSync, writeFileSync, chmodSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync, chmodSync, unlinkSync } from "node:fs";
 import { resolve } from "node:path";
-import { createHash } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 
 // Every remote operation has an explicit target; the normal repository link is
@@ -73,16 +73,24 @@ function assertStaging() {
 
 function queryStaging(sql) {
   assertStaging();
-  const filename = savePrivate("staging-query.sql", sql);
-  return cli([
+  return queryFile(sql, [
     "db",
     "query",
     "--linked",
     "--workdir",
     STAGING_WORKDIR,
-    "--file",
-    filename,
-  ]).rows;
+  ]);
+}
+
+function queryFile(sql, argumentsList) {
+  // Overlapping verification/preparation commands must not execute each other's
+  // SQL. Each invocation owns a protected file until its CLI process finishes.
+  const filename = savePrivate(`query-${randomUUID()}.sql`, sql);
+  try {
+    return cli([...argumentsList, "--file", filename]).rows;
+  } finally {
+    unlinkSync(filename);
+  }
 }
 
 function querySource(sql) {
@@ -92,8 +100,7 @@ function querySource(sql) {
       "Source query must target verified production and use a read-only transaction",
     );
   }
-  const filename = savePrivate("source-query.sql", sql);
-  return cli(["db", "query", "--linked", "--file", filename]).rows;
+  return queryFile(sql, ["db", "query", "--linked"]);
 }
 
 function stagingKeys() {

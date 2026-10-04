@@ -5,6 +5,7 @@ import { NotificationType } from '../../types/notification';
 import { useNotificationsRealtime } from './useNotificationsRealtime';
 
 const realtime = vi.hoisted(() => ({
+  status: undefined as undefined | ((status: string) => void),
   insert: undefined as
     | undefined
     | ((payload: { new: Record<string, unknown> }) => void),
@@ -23,6 +24,7 @@ vi.mock('../../services/supabase-client', () => {
       return channel;
     }),
     subscribe: vi.fn((callback) => {
+      realtime.status = callback;
       callback('SUBSCRIBED');
       return channel;
     }),
@@ -42,6 +44,28 @@ vi.mock('../../services/supabase-client', () => {
       },
     },
   };
+});
+
+it('refreshes ownership state after reconnecting when notifications were missed', async () => {
+  renderHook(() => useNotificationsRealtime());
+  await waitFor(() => expect(realtime.status).toBeDefined());
+  // Events created during a disconnected interval are not replayed by Realtime.
+  queryClient.setQueryData(['dogPage', 'shared-dog'], {
+    role: 'PRIMARY_OWNER',
+  });
+  queryClient.setQueryData(['dogOwnershipAction', 'transfer', 'offer'], {
+    status: 'PENDING',
+  });
+  queryClient.setQueryData(['dogImages', 'shared-dog'], []);
+  act(() => realtime.status?.('CHANNEL_ERROR'));
+  act(() => realtime.status?.('SUBSCRIBED'));
+  for (const queryKey of [
+    ['dogPage', 'shared-dog'],
+    ['dogOwnershipAction', 'transfer', 'offer'],
+    ['dogImages', 'shared-dog'],
+  ]) {
+    expect(queryClient.getQueryState(queryKey)?.isInvalidated).toBe(true);
+  }
 });
 
 afterEach(() => {
