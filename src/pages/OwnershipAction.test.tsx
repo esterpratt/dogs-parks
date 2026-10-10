@@ -16,7 +16,7 @@ import {
   respondToDogInvite,
 } from "../services/dog-ownership";
 import { ModeProvider } from "../context/ModeContext";
-import OwnershipAction from "./OwnershipAction";
+import { OwnershipAction } from "./OwnershipAction";
 import OwnershipActionRedirect from "./OwnershipActionRedirect";
 
 const state = vi.hoisted(() => ({ notify: vi.fn(), isOwner: false }));
@@ -75,7 +75,7 @@ const renderInvitation = () =>
           <Routes>
             <Route
               path="/dogs/:dogId/ownership/actions/:actionType/:actionId"
-              element={<OwnershipAction />}
+              element={<OwnershipAction invitationId="invitation" />}
             />
             <Route path="/dogs/:dogId/ownership" element={<p>Owner tab</p>} />
             <Route path="/dogs/:dogId" element={<p>Dog details</p>} />
@@ -182,8 +182,6 @@ it.each([true, false])(
       </StrictMode>,
     );
     await screen.findByText(isOwner ? "Owner tab" : "Dog details");
-    expect(state.notify).toHaveBeenCalledExactlyOnceWith(
-      "dogOwnership.outcomes.ACCEPTED",
-    );
+    expect(state.notify).not.toHaveBeenCalled();
   },
 );

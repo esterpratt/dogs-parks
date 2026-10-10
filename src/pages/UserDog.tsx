@@ -42,7 +42,8 @@ const UserDog = () => {
   const { t } = useTranslation();
 
   const { data: dogPage, isLoading: isLoadingDog } = useQuery({
-    queryKey: ['dogPage', dogId],
+    // Permissions belong to this viewer, never a previous account.
+    queryKey: ['dogPage', dogId, userId],
     queryFn: () => fetchDogPage(dogId!),
     throwOnError: true,
   });
@@ -92,7 +93,7 @@ const UserDog = () => {
   // The server derives ownership for direct URLs and refreshes; router state
   // is presentation context only and is never an authorization input.
   const isSignedInUser = dogPage.viewer.is_owner;
-  const showOwnership = !!ownershipRoute && !requestRoute && isSignedInUser;
+  const showOwnership = !!ownershipRoute && !requestRoute;
   const canEdit = dogPage.viewer.can_edit;
   const ownershipCapabilities = dogPage.capabilities;
 
@@ -195,7 +196,7 @@ const UserDog = () => {
             [styles.center]: !isSignedInUser,
           })}
         />
-        {isSignedInUser ? (
+        {isSignedInUser || ownershipCapabilities?.pending_action ? (
           <TabsList
             tabs={[
               { text: t('dogOwnership.detailsTab'), url: `/dogs/${dog.id}` },

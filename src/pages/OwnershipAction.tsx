@@ -3,6 +3,8 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { OwnershipModal } from '../components/dog/OwnershipModal';
+import { Button } from '../components/Button';
+import styles from './DogOwnership.module.scss';
 import { Checkbox } from '../components/inputs/Checkbox';
 import { Loader } from '../components/Loader';
 import { UserContext } from '../context/UserContext';
@@ -17,27 +19,35 @@ import { fetchDogPage } from '../services/dogs';
 import { queryClient } from '../services/react-query';
 import { DogOwnershipActionType, DogPageData } from '../types/dog-ownership';
 
-const OwnershipAction = () => {
-  const { actionId, actionType, dogId } = useParams();
+interface OwnershipActionProps {
+  invitationId?: string;
+}
+
+const OwnershipAction = (props: OwnershipActionProps) => {
+  const { invitationId } = props;
+  const { actionId: routeActionId, actionType, dogId } = useParams();
+  const actionId = invitationId ?? routeActionId;
   const { userId } = useContext(UserContext);
   const { t } = useTranslation();
   const { notify } = useNotification();
   const navigate = useNavigate();
   const [disclosureAccepted, setDisclosureAccepted] = useState(false);
-  const normalizedType: DogOwnershipActionType =
-    actionType === 'request'
+  const normalizedType: DogOwnershipActionType = invitationId
+    ? 'invite'
+    : actionType === 'request'
       ? 'request'
       : actionType === 'transfer'
         ? 'transfer'
         : 'invite';
-  const queryKey = ['dogOwnershipAction', normalizedType, actionId];
+  const queryKey = ['dogOwnershipAction', normalizedType, actionId, userId];
   const { data: action, isLoading } = useQuery({
     queryKey,
     queryFn: () => fetchDogOwnershipAction(normalizedType, actionId!),
     enabled: !!actionId,
   });
   const { data: dogPage, isLoading: isLoadingDog } = useQuery({
-    queryKey: ['dogPage', dogId],
+    // Permissions belong to this viewer, never a previous account.
+    queryKey: ['dogPage', dogId, userId],
     queryFn: () => fetchDogPage(dogId!),
     enabled: !!dogId,
   });
@@ -74,6 +84,7 @@ const OwnershipAction = () => {
         const updatedDog = queryClient.getQueryData<DogPageData>([
           'dogPage',
           dogId,
+          userId,
         ]);
         navigate(
           updatedDog?.viewer.is_owner
@@ -105,21 +116,11 @@ const OwnershipAction = () => {
     !canRespond ||
     (action.status !== 'PENDING' && !isPending)
   ) {
-    return <Navigate to={destination} replace />;
+    return invitationId ? null : <Navigate to={destination} replace />;
   }
 
-  return (
-    <OwnershipModal
-      title={t(`dogOwnership.${normalizedType}ResponseTitle`)}
-      onClose={() => navigate(destination, { replace: true })}
-      onSave={() => respond(true)}
-      saveText={t('dogOwnership.approve')}
-      onSecondaryAction={() => respond(false)}
-      cancelText={t('dogOwnership.decline')}
-      isPending={isPending}
-      disabled={normalizedType === 'invite' && !disclosureAccepted}
-    >
-      <p>{dogPage.dog.name}</p>
+  const content = (
+    <>
       <p>
         {t(
           normalizedType === 'transfer'
@@ -135,14 +136,64 @@ const OwnershipAction = () => {
           label={t('dogOwnership.disclosureAccept')}
         />
       ) : null}
+    </>
+  );
+
+  // Invitations are part of the ownership tab, so there is no dialog to reopen.
+  if (invitationId) {
+    return (
+      <section className={styles.group}>
+        <h2 className={styles.title}>{t('dogOwnership.yourInvitation')}</h2>
+        <div className={styles.section}>
+          <fieldset className={styles.form} disabled={isPending}>
+            {content}
+          </fieldset>
+          <div className={styles.responseButtons}>
+            <Button
+              className={styles.button}
+              disabled={isPending || !disclosureAccepted}
+              onClick={() => respond(true)}
+            >
+              {t('dogOwnership.approve')}
+            </Button>
+            <Button
+              className={styles.button}
+              variant="secondary"
+              disabled={isPending}
+              onClick={() => respond(false)}
+            >
+              {t('dogOwnership.decline')}
+            </Button>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <OwnershipModal
+      title={t(`dogOwnership.${normalizedType}ResponseTitle`)}
+      onClose={() => navigate(destination, { replace: true })}
+      onSave={() => respond(true)}
+      saveText={t('dogOwnership.approve')}
+      onSecondaryAction={() => respond(false)}
+      cancelText={t('dogOwnership.decline')}
+      isPending={isPending}
+      disabled={normalizedType === 'invite' && !disclosureAccepted}
+    >
+      {content}
     </OwnershipModal>
   );
 };
 
 // Changing notifications starts a fresh decision and disclosure state.
 const OwnershipActionRoute = () => {
-  const { actionType, actionId } = useParams();
+  const { actionType, actionId, dogId } = useParams();
+  if (actionType === 'invite') {
+    return <Navigate to={`/dogs/${dogId}/ownership`} replace />;
+  }
   return <OwnershipAction key={`${actionType}:${actionId}`} />;
 };
 
+export { OwnershipAction };
 export default OwnershipActionRoute;

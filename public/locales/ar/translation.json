@@ -90,7 +90,9 @@
     "thirdParties": {
       "title": "خدمات الطرف الثالث",
       "desc": "قد نستخدم خدمات طرف ثالث تجمع البيانات (مثل، Google Analytics، Supabase). لكل طرف ثالث سياسة خصوصية خاصة به:",
-      "links": ["تحليلات جوجل: https://policies.google.com/privacy"]
+      "links": [
+        "تحليلات جوجل: https://policies.google.com/privacy"
+      ]
     },
     "changes": {
       "title": "تغييرات السياسة",
@@ -1176,7 +1178,7 @@
     "manageTitle": "الملكية",
     "requestAction": "طلب الملكية",
     "requestTitle": "طلب الملكية",
-    "inviteTitle": "دعوة صديق",
+    "inviteTitle": "إضافة مالك",
     "invite": "دعوة",
     "noEligibleFriends": "لا يوجد أصدقاء مؤهلون للدعوة.",
     "pendingInvites": "الدعوات المعلقة",
@@ -1186,8 +1188,8 @@
     "cancel": "إلغاء",
     "requestPending": "طلب الملكية الخاص بك معلق.",
     "cancelRequest": "إلغاء الطلب",
-    "disclosure": "يمكن للمالكين تعديل تفاصيل الكلب وإدارة الصور المشتركة.",
-    "disclosureAccept": "أفهم قواعد التعديل المشترك والوصول إلى الصور.",
+    "disclosure": "يمكن لجميع المالكين تعديل تفاصيل الكلب ورفع الصور واختيار الصورة الرئيسية. يمكنك حذف الصور التي رفعتها؛ ويمكن للمالك الأساسي حذف أي صورة مشتركة. يستطيع المالكون الآخرون رؤية اسمك حتى في وضع الإخفاء. تبقى الصور المشتركة عند مغادرة الملكية أو حذف حسابك. يمكن للمالك الأساسي فقط دعوة مالكين والموافقة على طلبات الملكية وعرض نقل الملكية الأساسية. يتطلب حذف كلب مشترك موافقة جميع المالكين.",
+    "disclosureAccept": "أفهم هذه الصلاحيات.",
     "submitRequest": "إرسال الطلب",
     "inviteResponseTitle": "دعوة ملكية",
     "requestResponseTitle": "طلب ملكية",
@@ -1249,19 +1251,19 @@
     "notifications": {
       "inviteReceivedTitle": "دعوة ملكية",
       "inviteReceivedMessage": "دعاك {{name}} لمشاركة ملكية كلب.",
-      "inviteAcceptedTitle": "تم قبول الدعوة",
+      "inviteAcceptedTitle": "تم قبول دعوة الملكية",
       "inviteAcceptedMessage": "قبل {{name}} دعوة الملكية.",
-      "inviteDeclinedTitle": "تم رفض الدعوة",
+      "inviteDeclinedTitle": "تم رفض دعوة الملكية",
       "inviteDeclinedMessage": "رفض {{name}} دعوة الملكية.",
-      "inviteCanceledTitle": "تم إلغاء الدعوة",
+      "inviteCanceledTitle": "تم إلغاء دعوة الملكية",
       "inviteCanceledMessage": "ألغى {{name}} دعوة الملكية.",
       "requestReceivedTitle": "طلب ملكية",
       "requestReceivedMessage": "طلب {{name}} ملكية كلب.",
-      "requestApprovedTitle": "تمت الموافقة على الطلب",
+      "requestApprovedTitle": "تمت الموافقة على طلب الملكية",
       "requestApprovedMessage": "وافق {{name}} على طلب الملكية.",
-      "requestDeclinedTitle": "تم رفض الطلب",
+      "requestDeclinedTitle": "تم رفض طلب الملكية",
       "requestDeclinedMessage": "رفض {{name}} طلب الملكية.",
-      "requestCanceledTitle": "تم إلغاء الطلب",
+      "requestCanceledTitle": "تم إلغاء طلب الملكية",
       "requestCanceledMessage": "ألغى {{name}} طلب الملكية.",
       "ownerJoinedTitle": "مالك جديد للكلب",
       "ownerJoinedMessage": "انضم {{name}} إلى مالكي هذا الكلب.",
@@ -1269,13 +1271,13 @@
       "ownerLeftMessage": "غادر {{name}} مالكي هذا الكلب.",
       "primaryChangedTitle": "تغير المالك الرئيسي",
       "primaryChangedMessage": "غيّر {{name}} المالك الرئيسي لهذا الكلب.",
-      "transferOfferedTitle": "عرض دور المالك الرئيسي",
+      "transferOfferedTitle": "عرض نقل الملكية الأساسية",
       "transferOfferedMessage": "عرض عليك {{name}} دور المالك الرئيسي لهذا الكلب.",
-      "transferAcceptedTitle": "تم قبول الدور الرئيسي",
+      "transferAcceptedTitle": "تم قبول نقل الملكية الأساسية",
       "transferAcceptedMessage": "قبل {{name}} دور المالك الرئيسي.",
-      "transferDeclinedTitle": "تم رفض الدور الرئيسي",
+      "transferDeclinedTitle": "تم رفض نقل الملكية الأساسية",
       "transferDeclinedMessage": "رفض {{name}} دور المالك الرئيسي.",
-      "transferCanceledTitle": "تم إلغاء عرض الدور الرئيسي",
+      "transferCanceledTitle": "تم إلغاء عرض الملكية الأساسية",
       "transferCanceledMessage": "ألغى {{name}} عرض الدور الرئيسي.",
       "deletionRequestedTitle": "طلب موافقة على حذف الكلب",
       "deletionRequestedMessage": "طلب {{name}} من جميع المالكين الموافقة على حذف الكلب.",
@@ -1287,7 +1289,13 @@
       "deletionExpiredMessage": "انتهت صلاحية اقتراح الحذف دون موافقة بالإجماع.",
       "deletionCompletedTitle": "تم حذف الكلب",
       "deletionCompletedMessage": "تم حذف الكلب المشترك بعد موافقة جميع المالكين."
-    }
+    },
+    "yourInvitation": "لديك دعوة للملكية المشتركة",
+    "declinedInvites": "الدعوات المرفوضة",
+    "inviteAgain": "دعوة مرة أخرى",
+    "me": "أنا",
+    "inviteHelp": "اختر أصدقاء لدعوتهم كمالكين مشاركين. سيصبحون مالكين بعد قبول دعوتك.",
+    "reviewOffer": "مراجعة العرض"
   },
   "reports": {
     "reviewModal": {

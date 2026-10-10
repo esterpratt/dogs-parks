@@ -90,7 +90,9 @@
     "thirdParties": {
       "title": "שירותים של צד שלישי",
       "desc": "ייתכן שנעשה שימוש בשירותי צד שלישי האוספים נתונים (למשל, Google Analytics, Supabase). לכל צד שלישי מדיניות פרטיות משלו:",
-      "links": ["Google Analytics: https://policies.google.com/privacy"]
+      "links": [
+        "Google Analytics: https://policies.google.com/privacy"
+      ]
     },
     "changes": {
       "title": "שינויים במדיניות",
@@ -757,7 +759,6 @@
       "reportAnonymously": "דיווח בעילום שם"
     }
   },
-
   "location": {
     "permissions": {
       "message": "לא הצלחנו לגשת למיקום. ניתן להפעיל הרשאות מיקום בהגדרות המכשיר."
@@ -1177,7 +1178,7 @@
     "manageTitle": "בעלות",
     "requestAction": "בקשת בעלות",
     "requestTitle": "בקשת בעלות",
-    "inviteTitle": "הזמנת חבר או חברה",
+    "inviteTitle": "הוספת בעלים",
     "invite": "הזמנה",
     "noEligibleFriends": "אין חברים שניתן להזמין כרגע.",
     "pendingInvites": "הזמנות ממתינות",
@@ -1187,8 +1188,8 @@
     "cancel": "ביטול",
     "requestPending": "בקשת הבעלות שלך ממתינה.",
     "cancelRequest": "ביטול הבקשה",
-    "disclosure": "בעלים יכולים לערוך את פרטי הכלב ולנהל תמונות משותפות.",
-    "disclosureAccept": "הבנתי את כללי העריכה המשותפת והגישה לתמונות.",
+    "disclosure": "כל הבעלים יכולים לערוך את פרטי הכלב, להעלות תמונות ולבחור תמונה ראשית. ניתן למחוק תמונות שהעלית; הבעלים הראשיים יכולים למחוק כל תמונה משותפת. שאר הבעלים יכולים לראות את השם שלך גם במצב הסתרה. תמונות משותפות נשארות לאחר עזיבת הבעלות או מחיקת החשבון. רק הבעלים הראשיים יכולים להזמין בעלים, לאשר בקשות בעלות או להציע העברת בעלות ראשית. מחיקת כלב משותף דורשת אישור של כל הבעלים.",
+    "disclosureAccept": "הבנתי את ההרשאות האלה.",
     "submitRequest": "שליחת בקשה",
     "inviteResponseTitle": "הזמנת בעלות",
     "requestResponseTitle": "בקשת בעלות",
@@ -1250,19 +1251,19 @@
     "notifications": {
       "inviteReceivedTitle": "הזמנת בעלות",
       "inviteReceivedMessage": "{{name}} הזמין או הזמינה אותך לבעלות משותפת על כלב.",
-      "inviteAcceptedTitle": "ההזמנה אושרה",
+      "inviteAcceptedTitle": "ההזמנה לבעלות אושרה",
       "inviteAcceptedMessage": "{{name}} אישר או אישרה את הזמנת הבעלות.",
-      "inviteDeclinedTitle": "ההזמנה נדחתה",
+      "inviteDeclinedTitle": "ההזמנה לבעלות נדחתה",
       "inviteDeclinedMessage": "{{name}} דחה או דחתה את הזמנת הבעלות.",
-      "inviteCanceledTitle": "ההזמנה בוטלה",
+      "inviteCanceledTitle": "ההזמנה לבעלות בוטלה",
       "inviteCanceledMessage": "{{name}} ביטל או ביטלה את הזמנת הבעלות.",
       "requestReceivedTitle": "בקשת בעלות",
       "requestReceivedMessage": "{{name}} ביקש או ביקשה בעלות על כלב.",
-      "requestApprovedTitle": "הבקשה אושרה",
+      "requestApprovedTitle": "בקשת הבעלות אושרה",
       "requestApprovedMessage": "{{name}} אישר או אישרה את בקשת הבעלות שלך.",
-      "requestDeclinedTitle": "הבקשה נדחתה",
+      "requestDeclinedTitle": "בקשת הבעלות נדחתה",
       "requestDeclinedMessage": "{{name}} דחה או דחתה את בקשת הבעלות שלך.",
-      "requestCanceledTitle": "הבקשה בוטלה",
+      "requestCanceledTitle": "בקשת הבעלות בוטלה",
       "requestCanceledMessage": "{{name}} ביטל או ביטלה את בקשת הבעלות.",
       "ownerJoinedTitle": "בעלים חדשים לכלב",
       "ownerJoinedMessage": "{{name}} הצטרף או הצטרפה לבעלי הכלב.",
@@ -1270,13 +1271,13 @@
       "ownerLeftMessage": "{{name}} עזב או עזבה את בעלי הכלב.",
       "primaryChangedTitle": "הבעלים הראשיים השתנו",
       "primaryChangedMessage": "{{name}} שינה או שינתה את הבעלים הראשיים של הכלב.",
-      "transferOfferedTitle": "הצעה לתפקיד הבעלים הראשי",
+      "transferOfferedTitle": "הצעה להעברת בעלות ראשית",
       "transferOfferedMessage": "{{name}} הציע או הציעה לך את תפקיד הבעלים הראשי.",
-      "transferAcceptedTitle": "התפקיד אושר",
+      "transferAcceptedTitle": "העברת הבעלות הראשית אושרה",
       "transferAcceptedMessage": "{{name}} אישר או אישרה את תפקיד הבעלים הראשי.",
-      "transferDeclinedTitle": "התפקיד נדחה",
+      "transferDeclinedTitle": "העברת הבעלות הראשית נדחתה",
       "transferDeclinedMessage": "{{name}} דחה או דחתה את תפקיד הבעלים הראשי.",
-      "transferCanceledTitle": "הצעת התפקיד בוטלה",
+      "transferCanceledTitle": "ההצעה לבעלות ראשית בוטלה",
       "transferCanceledMessage": "{{name}} ביטל או ביטלה את הצעת התפקיד.",
       "deletionRequestedTitle": "נדרש אישור למחיקת כלב",
       "deletionRequestedMessage": "{{name}} ביקש או ביקשה מכל הבעלים לאשר את מחיקת הכלב.",
@@ -1288,7 +1289,13 @@
       "deletionExpiredMessage": "תוקף הצעת המחיקה פג ללא אישור פה אחד.",
       "deletionCompletedTitle": "הכלב נמחק",
       "deletionCompletedMessage": "הכלב המשותף נמחק לאחר שכל הבעלים אישרו."
-    }
+    },
+    "yourInvitation": "יש לך הזמנה לבעלות משותפת",
+    "declinedInvites": "הזמנות שנדחו",
+    "inviteAgain": "שליחת הזמנה מחדש",
+    "me": "אני",
+    "inviteHelp": "בחרו חברים להזמנה כבעלים משותפים. הם יצטרפו לבעלות לאחר אישור ההזמנה.",
+    "reviewOffer": "בדיקת ההצעה"
   },
   "reports": {
     "reviewModal": {

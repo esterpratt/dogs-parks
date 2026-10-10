@@ -21,7 +21,8 @@ const DogOwnershipLeave = () => {
   const [selectedSuccessorId, setSelectedSuccessorId] = useState('');
   const { notify } = useNotification();
   const { data: dogPage, isLoading: isLoadingCapabilities } = useQuery({
-    queryKey: ['dogPage', dogId],
+    // Permissions belong to this viewer, never a previous account.
+    queryKey: ['dogPage', dogId, userId],
     queryFn: () => fetchDogPage(dogId!),
     enabled: !!dogId,
   });

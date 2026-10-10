@@ -27,14 +27,15 @@ const DogOwnershipRequest = () => {
   const requestKey = useRef(uuidv4());
 
   const { data: dogPage, isLoading } = useQuery({
-    queryKey: ['dogPage', dogId],
+    // Permissions belong to this viewer, never a previous account.
+    queryKey: ['dogPage', dogId, userId],
     queryFn: () => fetchDogPage(dogId!),
     enabled: !!dogId,
   });
   const capabilities = dogPage?.capabilities;
   const { data: pendingRequests = [], isLoading: isLoadingRequests } = useQuery(
     {
-      queryKey: ['dogOwnershipActions', dogId, 'myRequests'],
+      queryKey: ['dogOwnershipActions', dogId, userId, 'myRequests'],
       queryFn: () => fetchPendingDogOwnershipRequests(dogId!),
       enabled: !!capabilities?.enabled && !!userId,
     },

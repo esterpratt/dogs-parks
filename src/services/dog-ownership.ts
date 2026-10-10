@@ -381,12 +381,13 @@ const leaveDogOwnership = async (
   return unwrapOwnershipResult(data, error);
 };
 
-const fetchPendingDogInvites = async (dogId: string) => {
+// Participant RLS also governs declined history; the UI limits administration to the primary owner.
+const fetchDogInvites = async (dogId: string) => {
   const { data, error } = await supabase
     .from('dog_invites')
     .select('id,invitee_user_id,status,created_at,expires_at')
     .eq('dog_id', dogId)
-    .eq('status', 'PENDING')
+    .in('status', ['PENDING', 'DECLINED'])
     .order('created_at');
   if (error) {
     throw error;
@@ -473,7 +474,7 @@ export {
   fetchDogOwnershipAction,
   fetchDogOwnershipCapabilities,
   fetchDogOwnershipMembers,
-  fetchPendingDogInvites,
+  fetchDogInvites,
   fetchPendingDogOwnershipRequests,
   fetchPendingPrimaryTransfers,
   getClientCompatibility,

@@ -31,13 +31,14 @@ const DogOwnershipDeletion = () => {
     isLoading: isLoadingProposal,
     refetch,
   } = useQuery({
-    queryKey: ['dogDeletionProposal', dogId, proposalId],
+    queryKey: ['dogDeletionProposal', dogId, proposalId, userId],
     queryFn: () => fetchDogDeletionProposal(dogId!, proposalId),
     enabled: !!dogId || !!proposalId,
   });
   const resolvedDogId = dogId ?? proposal?.dog_id;
   const { data: dogPage, isLoading: isLoadingCapabilities } = useQuery({
-    queryKey: ['dogPage', resolvedDogId],
+    // Permissions belong to this viewer, never a previous account.
+    queryKey: ['dogPage', resolvedDogId, userId],
     queryFn: () => fetchDogPage(resolvedDogId!),
     enabled: !!resolvedDogId,
   });

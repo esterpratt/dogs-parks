@@ -11,7 +11,10 @@
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
 
-  &.list-open {
+  // Match Input specificity so the joined dropdown keeps square lower corners.
+  .container &.list-open {
+    border-color: $pink;
+    border-bottom-color: transparent;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }

@@ -124,7 +124,12 @@ test.describe('staging notification and photo edges', () => {
           productionRequests.push(request.url());
         }
       });
-      page.on('pageerror', (error) => pageErrors.push(error.message));
+      page.on('response', (response) => {
+            if (response.url().includes('/rpc/api_get_current_dog_deletion_proposal') && response.status() === 403) {
+              pageErrors.push('Forbidden deletion-proposal read');
+            }
+          });
+          page.on('pageerror', (error) => pageErrors.push(error.message));
       await setupTestEnvironment(page);
       const role = (['primary', 'coowner', 'friend'] as const)[index];
       await loginWithEmail(page, fixture.accounts[role]);
@@ -136,7 +141,7 @@ test.describe('staging notification and photo edges', () => {
       .filter({ hasText: 'Ownership invitation' })
       .click();
     await expect(friend).toHaveURL(
-      new RegExp(`/dogs/${fixture.dogId}/ownership/actions/invite/${fixture.inviteId}$`),
+      new RegExp(`/dogs/${fixture.dogId}/ownership$`),
     );
     execFileSync(
       process.execPath,
@@ -160,7 +165,7 @@ test.describe('staging notification and photo edges', () => {
     ).toBeVisible();
     await friend.goto(`/ownership-actions/invite/${fixture.inviteId}`);
     await expect(friend).toHaveURL(new RegExp(`/dogs/${fixture.dogId}$`));
-    await expect(friend.getByText('This action has expired.', { exact: true })).toBeVisible();
+    await expect(friend.getByText('This action has expired.', { exact: true })).toHaveCount(0);
     await expect(
       friend.getByRole('button', { name: 'Approve', exact: true }),
     ).toHaveCount(0);
@@ -293,7 +298,7 @@ test.describe('staging notification and photo edges', () => {
     // The other session accepts a transfer while this socket cannot receive it.
     await primary.goto(`/dogs/${fixture.dogId}/ownership`);
     await expect(
-      primary.getByText('Staging primary', { exact: true }).locator('..'),
+      primary.getByRole('link', { name: 'Me', exact: true }).locator('..'),
     ).toContainText('Primary owner');
     const offerMembers = await primaryClient
       .from('dog_members')
@@ -313,7 +318,7 @@ test.describe('staging notification and photo edges', () => {
     await coowner.goto('/notifications');
     await coowner
       .getByRole('button')
-      .filter({ hasText: 'Primary role offer' })
+      .filter({ hasText: 'Primary ownership offered' })
       .click();
     await expect(coowner).toHaveURL(
       new RegExp(
@@ -331,7 +336,7 @@ test.describe('staging notification and photo edges', () => {
     await coowner.getByRole('button', { name: 'Approve', exact: true }).click();
     expect((await (await transferredResponse).json()).outcome).toBe('ACCEPTED');
     await expect(
-      primary.getByText('Staging primary', { exact: true }).locator('..'),
+      primary.getByRole('link', { name: 'Me', exact: true }).locator('..'),
     ).toContainText('Primary owner');
     await primary.evaluate(async () => {
       const moduleUrl = '/src/services/supabase-client.ts';
@@ -341,7 +346,7 @@ test.describe('staging notification and photo edges', () => {
     await expect(
       primary
         .getByRole('heading', { name: 'Owners', exact: true })
-        .locator('..')
+        .locator('../..')
         .getByText('Staging coowner', { exact: true })
         .locator('..'),
     ).toContainText('Primary owner', { timeout: 30_000 });

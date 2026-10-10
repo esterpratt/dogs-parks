@@ -1,4 +1,4 @@
-@use '../variables' as *;
+@use "../variables" as *;
 
 .container {
   min-height: $content-max-height;
@@ -7,7 +7,7 @@
     calc(16px + var(--safe-area-inset-left, 0px));
 }
 
-// Match the friends list: headings sit above cards and actions below them.
+// Match the friends list: headings sit outside their cards.
 .title,
 .page-title {
   font-size: $title-font-size;
@@ -170,7 +170,7 @@
 .content,
 .container,
 .modal {
-  :is(button, a, select, input):focus-visible {
+  :is(button, a, select):focus-visible {
     outline: 2px solid $pink;
     outline-offset: 3px;
   }
@@ -190,4 +190,26 @@
 // Reserve space for the park picker dropdown above the fixed form footer.
 .friend-picker {
   min-height: 280px;
+}
+
+// List headings and their add action follow the My Pack header layout.
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  > button {
+    font-size: 14px;
+    padding: 8px 16px;
+    box-shadow: $box-shadow;
+    gap: 4px;
+  }
+}
+.response-buttons {
+  display: flex;
+  gap: 24px;
+  > button {
+    flex: 1;
+  }
 }
