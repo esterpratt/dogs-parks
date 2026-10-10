@@ -3,7 +3,8 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import { OwnershipModal } from '../components/dog/OwnershipModal';
 import { useTranslation } from 'react-i18next';
-import { Button } from '../components/Button';
+import { Checkbox } from '../components/inputs/Checkbox';
+import { useNotification } from '../context/NotificationContext';
 import { Loader } from '../components/Loader';
 import { UserContext } from '../context/UserContext';
 import { leaveDogOwnership } from '../services/dog-ownership';
@@ -18,7 +19,7 @@ const DogOwnershipLeave = () => {
   const navigate = useNavigate();
   const [confirmed, setConfirmed] = useState(false);
   const [selectedSuccessorId, setSelectedSuccessorId] = useState('');
-  const [resultMessage, setResultMessage] = useState('');
+  const { notify } = useNotification();
   const { data: dogPage, isLoading: isLoadingCapabilities } = useQuery({
     queryKey: ['dogPage', dogId],
     queryFn: () => fetchDogPage(dogId!),
@@ -27,7 +28,7 @@ const DogOwnershipLeave = () => {
   const capabilities = dogPage?.capabilities;
   const members = dogPage?.members ?? [];
   const { mutate: leave, isPending } = useMutation({
-    onError: () => setResultMessage(t('dogOwnership.requestError')),
+    onError: () => notify(t('dogOwnership.requestError'), true),
     mutationFn: () =>
       leaveDogOwnership(
         dogId!,
@@ -37,13 +38,16 @@ const DogOwnershipLeave = () => {
           : null,
       ),
     onSuccess: (result) => {
+      notify(
+        t(`dogOwnership.outcomes.${result.outcome}`),
+        result.outcome !== 'LEFT',
+      );
       queryClient.invalidateQueries({ queryKey: ['dogPage', dogId] });
       queryClient.invalidateQueries({ queryKey: ['userDogs'] });
       if (result.outcome === 'LEFT') {
         navigate(`/dogs/${dogId}`, { replace: true });
         return;
       }
-      setResultMessage(t(`dogOwnership.outcomes.${result.outcome}`));
     },
   });
   const eligibleSuccessors = members.filter(
@@ -73,8 +77,11 @@ const DogOwnershipLeave = () => {
       title={t('dogOwnership.leaveTitle')}
       onClose={() => navigate(`/dogs/${dogId}/ownership`, { replace: true })}
       isPending={isPending}
+      onSave={() => leave()}
+      saveText={t('dogOwnership.leaveAction')}
+      disabled={!confirmed}
     >
-      <section className={styles.modalBody}>
+      <>
         <p>{t('dogOwnership.leaveWarning')}</p>
         {capabilities.role === 'PRIMARY_OWNER' ? (
           <label className={styles.field}>
@@ -91,23 +98,13 @@ const DogOwnershipLeave = () => {
             </select>
           </label>
         ) : null}
-        <label className={styles.checkbox}>
-          <input
-            checked={confirmed}
-            onChange={(event) => setConfirmed(event.target.checked)}
-            type="checkbox"
-          />
-          <span>{t('dogOwnership.leaveConfirm')}</span>
-        </label>
-        <Button
-          disabled={!confirmed || isPending}
-          onClick={() => leave()}
-          type="button"
-        >
-          {t('dogOwnership.leaveAction')}
-        </Button>
-        {resultMessage ? <p className={styles.error}>{resultMessage}</p> : null}
-      </section>
+        <Checkbox
+          id="ownership-leave-confirm"
+          isChecked={confirmed}
+          onChange={() => setConfirmed(!confirmed)}
+          label={t('dogOwnership.leaveConfirm')}
+        />
+      </>
     </OwnershipModal>
   );
 };

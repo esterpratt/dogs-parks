@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import classnames from 'classnames';
 import { TopModal } from './TopModal';
@@ -20,6 +20,8 @@ interface FormModalProps {
   disabled?: boolean;
   isPending?: boolean;
   title?: string;
+  cancelText?: string;
+  onSecondaryAction?: () => void;
 }
 
 const FormModal = (props: FormModalProps) => {
@@ -37,8 +39,11 @@ const FormModal = (props: FormModalProps) => {
     disabled,
     isPending,
     title,
+    cancelText,
+    onSecondaryAction,
   } = props;
   const { t } = useTranslation();
+  const titleId = useId();
 
   // Keep the modal open while the server is processing the submitted data.
   const handleClose = () => {
@@ -53,13 +58,18 @@ const FormModal = (props: FormModalProps) => {
     <TopModal
       open={open}
       onClose={handleClose}
+      onCancel={handleClose}
+      ariaLabelledBy={title ? titleId : undefined}
       height={height}
       className={classnames(styles.modal, className)}
     >
       <div className={classnames(styles.container, formContainerClassName)}>
         <div className={classnames(styles.formContainer, formClassName)}>
           {title && (
-            <div className={classnames(styles.title, titleClassName)}>
+            <div
+              id={titleId}
+              className={classnames(styles.title, titleClassName)}
+            >
               {title}
             </div>
           )}
@@ -69,28 +79,25 @@ const FormModal = (props: FormModalProps) => {
           {!!onSave && (
             <Button
               disabled={disabled || isPending}
+              aria-label={saveText ?? t('common.actions.save')}
               onClick={onSave}
               className={styles.button}
             >
               {/* Match the established loading behavior of event action buttons. */}
               {isPending ? (
-                <Loader
-                  variant="secondary"
-                  inside
-                  className={styles.loader}
-                />
+                <Loader variant="secondary" inside className={styles.loader} />
               ) : (
-                saveText ?? t('common.actions.save')
+                (saveText ?? t('common.actions.save'))
               )}
             </Button>
           )}
           <Button
             variant="secondary"
-            onClick={handleClose}
+            onClick={onSecondaryAction ?? handleClose}
             className={styles.button}
             disabled={isPending}
           >
-            {t('common.actions.cancel')}
+            {cancelText ?? t('common.actions.cancel')}
           </Button>
         </div>
       </div>

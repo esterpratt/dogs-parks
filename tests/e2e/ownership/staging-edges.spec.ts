@@ -136,7 +136,7 @@ test.describe('staging notification and photo edges', () => {
       .filter({ hasText: 'Ownership invitation' })
       .click();
     await expect(friend).toHaveURL(
-      new RegExp(`/ownership-actions/invite/${fixture.inviteId}$`),
+      new RegExp(`/dogs/${fixture.dogId}/ownership/actions/invite/${fixture.inviteId}$`),
     );
     execFileSync(
       process.execPath,
@@ -158,10 +158,9 @@ test.describe('staging notification and photo edges', () => {
     await expect(
       friend.getByText('This action has expired.', { exact: true }),
     ).toBeVisible();
-    await friend.reload();
-    await expect(
-      friend.getByText('This action has expired.', { exact: true }),
-    ).toBeVisible();
+    await friend.goto(`/ownership-actions/invite/${fixture.inviteId}`);
+    await expect(friend).toHaveURL(new RegExp(`/dogs/${fixture.dogId}$`));
+    await expect(friend.getByText('This action has expired.', { exact: true })).toBeVisible();
     await expect(
       friend.getByRole('button', { name: 'Approve', exact: true }),
     ).toHaveCount(0);
@@ -318,7 +317,7 @@ test.describe('staging notification and photo edges', () => {
       .click();
     await expect(coowner).toHaveURL(
       new RegExp(
-        `/ownership-actions/transfer/${field(offer.data, 'action_id')}$`,
+        `/dogs/${fixture.dogId}/ownership/actions/transfer/${field(offer.data, 'action_id')}$`,
       ),
     );
     await primary.evaluate(async () => {
@@ -342,7 +341,7 @@ test.describe('staging notification and photo edges', () => {
     await expect(
       primary
         .getByRole('heading', { name: 'Owners', exact: true })
-        .locator('../..')
+        .locator('..')
         .getByText('Staging coowner', { exact: true })
         .locator('..'),
     ).toContainText('Primary owner', { timeout: 30_000 });

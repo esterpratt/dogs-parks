@@ -156,7 +156,8 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
       return {
         icon: PawPrint,
         color: 'green',
-        getUrl: (notification) => `/dogs/${notification.target_id}`,
+        // Membership updates belong with the current owner roster.
+        getUrl: (notification) => `/dogs/${notification.target_id}/ownership`,
         invalidateQueries: (_userId, notification) => {
           invalidateDogOwnershipQueries(notification.target_id);
         },

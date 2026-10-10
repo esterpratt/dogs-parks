@@ -49,6 +49,9 @@ const Event = lazy(() => import('./pages/Event'));
 const DogOwnership = lazy(() => import('./pages/DogOwnership'));
 const DogOwnershipRequest = lazy(() => import('./pages/DogOwnershipRequest'));
 const OwnershipAction = lazy(() => import('./pages/OwnershipAction'));
+const OwnershipActionRedirect = lazy(
+  () => import('./pages/OwnershipActionRedirect'),
+);
 const DogOwnershipLeave = lazy(() => import('./pages/DogOwnershipLeave'));
 const DogOwnershipDeletion = lazy(() => import('./pages/DogOwnershipDeletion'));
 const AccountDeletionReview = lazy(
@@ -197,7 +200,13 @@ const App = () => {
             {
               path: 'ownership',
               element: <DogOwnership />,
-              children: [{ path: 'leave', element: <DogOwnershipLeave /> }],
+              children: [
+                { path: 'leave', element: <DogOwnershipLeave /> },
+                {
+                  path: 'actions/:actionType/:actionId',
+                  element: <OwnershipAction />,
+                },
+              ],
             },
           ],
         },
@@ -221,7 +230,7 @@ const App = () => {
           path: 'ownership-actions/:actionType/:actionId',
           element: (
             <PrivateRoute>
-              <OwnershipAction />
+              <OwnershipActionRedirect />
             </PrivateRoute>
           ),
         },

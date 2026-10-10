@@ -1,7 +1,5 @@
 @use '../variables' as *;
 
-// Ownership uses the same spacing, themed surfaces and pink accents as dog
-// details. Durable notification pages retain the shared fixed back bar.
 .container {
   min-height: $content-max-height;
   margin-top: $page-top-padding;
@@ -9,223 +7,166 @@
     calc(16px + var(--safe-area-inset-left, 0px));
 }
 
+// Match the friends list: headings sit above cards and actions below them.
+.title,
 .page-title {
   font-size: $title-font-size;
   font-weight: 400;
-  margin: 0 0 24px;
+  color: var(--color-text);
+  margin: 0;
 }
-
-.content,
+.page-title {
+  margin-bottom: 24px;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.group,
+.owner-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
 .section,
-.actions,
-.modal-body {
+.actions {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  min-width: 0;
 }
-
 .section {
   padding: 16px;
   border-radius: 12px;
   background: var(--background-color);
-  box-shadow: $box-shadow;
-
+  box-shadow: var(--box-shadow);
   h2 {
+    margin: 0;
     font-size: $second-title-font-size;
     font-weight: 400;
-    margin: 0;
-    color: $pink;
   }
-
   p {
     margin: 0;
   }
 }
-
-.section-heading,
-.row,
-.modal-header {
+.owner-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: var(--box-shadow);
+  background: var(--background-color);
+}
+.person {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  font-size: 18px;
+  color: var(--color-text);
+  text-transform: capitalize;
+  overflow-wrap: anywhere;
+}
+.avatar {
+  padding: 8px;
+  color: $pink;
+  flex-shrink: 0;
+}
+.role {
+  color: var(--color-text-medium);
+  font-size: 14px;
+  text-align: end;
+  max-width: 45%;
+}
+.row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  min-width: 0;
-}
-
-.row {
   min-height: 48px;
-  font-size: 16px;
   > span {
     overflow-wrap: anywhere;
   }
   > button {
     flex-shrink: 0;
-  }
-  & + & {
-    border-top: 1px solid var(--color-grey-light);
-    padding-top: 12px;
+    border-radius: 8px;
+    font-size: 16px;
   }
 }
-
-.person {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-}
-
-.avatar {
-  padding: 8px;
+.button {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--light-pink);
-  color: $pink;
-  flex-shrink: 0;
-}
-
-.role,
-.count {
-  color: var(--color-text-medium);
-  font-size: 13px;
-}
-
-.role {
-  text-align: end;
-  flex-shrink: 0;
-  max-width: 45%;
-}
-
-.secondary-actions {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 4px;
-  > button,
-  > a {
-    justify-content: flex-start;
-    padding: 12px 4px;
-    font-size: 14px;
-    min-height: 44px;
-    text-align: start;
-    color: var(--color-text);
-  }
-  > .danger {
-    color: $red;
-  }
-}
-
-.action-link {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: $pink;
-  min-height: 44px;
-  font-size: 14px;
-  overflow-wrap: anywhere;
+  gap: 8px;
+  border-radius: 8px;
+  font-size: 16px;
+  align-self: center;
   > svg {
     flex-shrink: 0;
   }
-  &:hover {
-    text-decoration: underline;
-  }
 }
-
-.checkbox {
+.secondary-actions {
   display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding-block: 8px;
-  font-size: 14px;
-  line-height: 1.5;
-  cursor: pointer;
-  input {
-    accent-color: $pink;
-    width: 20px;
-    height: 20px;
-    flex-shrink: 0;
-    margin: 1px 0 0;
-  }
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
 }
-
+.action-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: $pink;
+  min-height: 44px;
+  font-size: 16px;
+}
 .field {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  font-size: 14px;
   select {
     width: 100%;
-    min-height: 44px;
-    border: 1px solid var(--color-grey-bold);
-    border-radius: 8px;
-    padding: 10px;
+    min-height: 48px;
+    border: 2px solid rgba($pink, 0.2);
+    border-radius: 12px;
+    padding: 16px;
     font: inherit;
     color: var(--color-text);
     background: var(--background-color);
+    :global(.dark) & {
+      border-color: rgba($pink, 0.6);
+    }
   }
 }
 
-.message {
-  color: var(--color-text-medium);
-  font-size: 14px;
-  line-height: 1.5;
+// Park invitations use this padding and typography; FormModal supplies the
+// shared title, scrolling form area and pinned two-button footer unchanged.
+.modal {
+  padding: 24px;
 }
-
+.form {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  color: var(--color-text);
+  font-size: 16px;
+  p {
+    margin: 0;
+    line-height: 1.5;
+  }
+}
+.message {
+  color: var(--color-text);
+  font-size: 16px;
+}
 .error {
   color: $red;
 }
-
-.modal {
-  flex-direction: column;
-  gap: 20px;
-  max-width: 480px;
-  max-height: calc(90dvh - var(--safe-area-inset-top, 0px));
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  font-size: 16px;
-  // Anchor at the top; content changes must not move the whole dialog.
-  transition: opacity 0.2s ease;
-  p {
-    margin: 0;
-  }
-}
-
-.modal-header {
-  h2 {
-    font-size: $second-title-font-size;
-    font-weight: 400;
-    margin: 0;
-  }
-  button {
-    padding: 8px;
-    min-width: 40px;
-    min-height: 40px;
-  }
-}
-
-.modal-body {
-  min-height: 200px;
-}
-.status {
-  min-height: 24px;
-  font-size: 14px;
-  color: var(--color-text-medium);
-}
-.response {
-  min-height: 320px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .modal {
-    transition: none;
-  }
-}
-
-// The app resets outlines globally; restore visible keyboard focus here.
 .content,
 .container,
 .modal {
@@ -233,4 +174,20 @@
     outline: 2px solid $pink;
     outline-offset: 3px;
   }
+}
+@media (orientation: landscape) {
+  .modal {
+    padding-top: 12px;
+  }
+  .form {
+    gap: 16px;
+  }
+}
+:export {
+  red: $red;
+}
+
+// Reserve space for the park picker dropdown above the fixed form footer.
+.friend-picker {
+  min-height: 280px;
 }

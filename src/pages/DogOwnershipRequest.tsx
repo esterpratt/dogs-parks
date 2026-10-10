@@ -4,7 +4,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { OwnershipModal } from '../components/dog/OwnershipModal';
 import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
-import { Button } from '../components/Button';
+import { Checkbox } from '../components/inputs/Checkbox';
+import { useNotification } from '../context/NotificationContext';
 import { Loader } from '../components/Loader';
 import { UserContext } from '../context/UserContext';
 import {
@@ -22,8 +23,7 @@ const DogOwnershipRequest = () => {
   const { userId } = useContext(UserContext);
   const { t } = useTranslation();
   const [disclosureAccepted, setDisclosureAccepted] = useState(false);
-  const [outcome, setOutcome] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const { notify } = useNotification();
   const requestKey = useRef(uuidv4());
 
   const { data: dogPage, isLoading } = useQuery({
@@ -52,22 +52,28 @@ const DogOwnershipRequest = () => {
       }),
     ]);
   const { mutate: submitRequest, isPending: isSubmitting } = useMutation({
-    onMutate: () => setErrorMessage(''),
-    onError: () => setErrorMessage(t('dogOwnership.requestError')),
+    onError: () => notify(t('dogOwnership.requestError'), true),
     mutationFn: () => createDogOwnershipRequest(dogId!, requestKey.current),
     onSuccess: (result) => {
       // A confirmed response ends this retry window; recreation uses a new key.
       requestKey.current = uuidv4();
-      setOutcome(result.outcome);
+      const succeeded = ['CREATED', 'CANCELED'].includes(result.outcome);
+      notify(t(`dogOwnership.outcomes.${result.outcome}`), !succeeded);
+      if (succeeded) {
+        navigate(`/dogs/${dogId}`, { replace: true });
+      }
       return refresh();
     },
   });
   const { mutate: cancelRequest, isPending: isCanceling } = useMutation({
-    onMutate: () => setErrorMessage(''),
-    onError: () => setErrorMessage(t('dogOwnership.requestError')),
+    onError: () => notify(t('dogOwnership.requestError'), true),
     mutationFn: cancelDogOwnershipRequest,
     onSuccess: (result) => {
-      setOutcome(result.outcome);
+      const succeeded = ['CREATED', 'CANCELED'].includes(result.outcome);
+      notify(t(`dogOwnership.outcomes.${result.outcome}`), !succeeded);
+      if (succeeded) {
+        navigate(`/dogs/${dogId}`, { replace: true });
+      }
       return refresh();
     },
   });
@@ -91,55 +97,34 @@ const DogOwnershipRequest = () => {
       title={t('dogOwnership.requestTitle')}
       onClose={() => navigate(`/dogs/${dogId}`, { replace: true })}
       isPending={isSubmitting || isCanceling}
+      onSave={() =>
+        pendingRequest ? cancelRequest(pendingRequest.id) : submitRequest()
+      }
+      saveText={t(
+        pendingRequest
+          ? 'dogOwnership.cancelRequest'
+          : 'dogOwnership.submitRequest',
+      )}
+      disabled={
+        isLoadingRequests ||
+        (!pendingRequest && (!capabilities.can_request || !disclosureAccepted))
+      }
     >
-      <section className={styles.modalBody}>
-        {isLoadingRequests ? (
-          <Loader inside />
-        ) : pendingRequest ? (
-          <>
-            <p>{t('dogOwnership.requestPending')}</p>
-            <Button
-              disabled={isCanceling}
-              onClick={() => cancelRequest(pendingRequest.id)}
-              type="button"
-              variant="secondary"
-            >
-              {t('dogOwnership.cancelRequest')}
-            </Button>
-          </>
-        ) : (
-          <>
-            <p>{t('dogOwnership.disclosure')}</p>
-            <label className={styles.checkbox}>
-              <input
-                checked={disclosureAccepted}
-                onChange={(event) =>
-                  setDisclosureAccepted(event.target.checked)
-                }
-                type="checkbox"
-              />
-              <span>{t('dogOwnership.disclosureAccept')}</span>
-            </label>
-            <Button
-              disabled={
-                !capabilities.can_request || !disclosureAccepted || isSubmitting
-              }
-              onClick={() => submitRequest()}
-              type="button"
-            >
-              {t('dogOwnership.submitRequest')}
-            </Button>
-          </>
-        )}
-        {errorMessage ? (
-          <p role="alert" className={styles.error}>
-            {errorMessage}
-          </p>
-        ) : null}
-        <p className={styles.status} role="status">
-          {outcome ? t(`dogOwnership.outcomes.${outcome}`) : ''}
-        </p>
-      </section>
+      {isLoadingRequests ? (
+        <Loader inside />
+      ) : pendingRequest ? (
+        <p>{t('dogOwnership.requestPending')}</p>
+      ) : (
+        <>
+          <p>{t('dogOwnership.disclosure')}</p>
+          <Checkbox
+            id="ownership-request-disclosure"
+            isChecked={disclosureAccepted}
+            onChange={() => setDisclosureAccepted(!disclosureAccepted)}
+            label={t('dogOwnership.disclosureAccept')}
+          />
+        </>
+      )}
     </OwnershipModal>
   );
 };

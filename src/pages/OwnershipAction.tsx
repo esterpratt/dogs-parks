@@ -1,12 +1,12 @@
-import { useContext, useRef, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Link, useParams } from 'react-router-dom';
-import { MoveLeft } from 'lucide-react';
-import { PrevLinks } from '../components/PrevLinks';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Button } from '../components/Button';
+import { OwnershipModal } from '../components/dog/OwnershipModal';
+import { Checkbox } from '../components/inputs/Checkbox';
 import { Loader } from '../components/Loader';
 import { UserContext } from '../context/UserContext';
+import { useNotification } from '../context/NotificationContext';
 import {
   fetchDogOwnershipAction,
   respondToDogInvite,
@@ -15,18 +15,15 @@ import {
 } from '../services/dog-ownership';
 import { fetchDogPage } from '../services/dogs';
 import { queryClient } from '../services/react-query';
-import { DogOwnershipActionType } from '../types/dog-ownership';
-import styles from './DogOwnership.module.scss';
+import { DogOwnershipActionType, DogPageData } from '../types/dog-ownership';
 
 const OwnershipAction = () => {
-  const { actionId, actionType } = useParams();
+  const { actionId, actionType, dogId } = useParams();
   const { userId } = useContext(UserContext);
   const { t } = useTranslation();
+  const { notify } = useNotification();
+  const navigate = useNavigate();
   const [disclosureAccepted, setDisclosureAccepted] = useState(false);
-  const [outcome, setOutcome] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const responseRef = useRef<HTMLElement>(null);
-  const [responseHeight, setResponseHeight] = useState<number>();
   const normalizedType: DogOwnershipActionType =
     actionType === 'request'
       ? 'request'
@@ -34,18 +31,19 @@ const OwnershipAction = () => {
         ? 'transfer'
         : 'invite';
   const queryKey = ['dogOwnershipAction', normalizedType, actionId];
-
   const { data: action, isLoading } = useQuery({
     queryKey,
     queryFn: () => fetchDogOwnershipAction(normalizedType, actionId!),
     enabled: !!actionId,
   });
-  const { data: dogPage, isLoading: isLoadingCapabilities } = useQuery({
-    queryKey: ['dogPage', action?.dog_id],
-    queryFn: () => fetchDogPage(action!.dog_id),
-    enabled: !!action?.dog_id,
+  const { data: dogPage, isLoading: isLoadingDog } = useQuery({
+    queryKey: ['dogPage', dogId],
+    queryFn: () => fetchDogPage(dogId!),
+    enabled: !!dogId,
   });
-  const capabilities = dogPage?.capabilities;
+  const destination = dogPage?.viewer.is_owner
+    ? `/dogs/${dogId}/ownership`
+    : `/dogs/${dogId}`;
   const { mutate: respond, isPending } = useMutation({
     mutationFn: (approve: boolean) =>
       normalizedType === 'invite'
@@ -54,143 +52,94 @@ const OwnershipAction = () => {
           ? respondToPrimaryTransfer(actionId!, approve)
           : respondToDogOwnershipRequest(actionId!, approve),
     onSuccess: async (result) => {
-      // The local result replaces the decision form immediately. Await the
-      // refresh without briefly rendering old pending controls beside it.
-      setOutcome(result.outcome);
+      const finished = [
+        'ACCEPTED',
+        'APPROVED',
+        'DECLINED',
+        'CANCELED',
+        'EXPIRED',
+        'NO_CHANGE',
+      ].includes(result.outcome);
+      // Keep a single busy form until caches agree, then dismiss into the dog
+      // tab and use the same toast as other app actions, without an interim card.
       await Promise.all([
         queryClient.invalidateQueries({ queryKey }),
+        queryClient.invalidateQueries({ queryKey: ['dogPage', dogId] }),
         queryClient.invalidateQueries({
-          queryKey: ['dogPage', action?.dog_id],
-        }),
-        queryClient.invalidateQueries({
-          queryKey: ['dogOwnershipActions', action?.dog_id],
+          queryKey: ['dogOwnershipActions', dogId],
         }),
         queryClient.invalidateQueries({ queryKey: ['userDogs'] }),
       ]);
+      if (finished) {
+        const updatedDog = queryClient.getQueryData<DogPageData>([
+          'dogPage',
+          dogId,
+        ]);
+        navigate(
+          updatedDog?.viewer.is_owner
+            ? `/dogs/${dogId}/ownership`
+            : `/dogs/${dogId}`,
+          { replace: true },
+        );
+      }
+      notify(t(`dogOwnership.outcomes.${result.outcome}`), !finished);
     },
-    onError: () => setErrorMessage(t('dogOwnership.requestError')),
+    onError: () => notify(t('dogOwnership.requestError'), true),
   });
 
-  const handleRespond = (approve: boolean) => {
-    // Preserve the measured card height even for long translations or small
-    // screens, so replacing the form with its result does not move content.
-    setResponseHeight(responseRef.current?.getBoundingClientRect().height);
-    setErrorMessage('');
-    respond(approve);
-  };
-
-  if (isLoading || isLoadingCapabilities) {
-    return <Loader style={{ paddingTop: '64px' }} />;
+  if (isLoading || isLoadingDog) {
+    return <Loader inside />;
   }
-  if (!action) {
-    return (
-      <main className={styles.container}>
-        <p>{t('dogOwnership.outcomes.NOT_FOUND')}</p>
-      </main>
-    );
-  }
-  if (!capabilities?.enabled) {
-    return null;
-  }
-
-  const isPendingAction = action.status === 'PENDING';
-  const hasResponded = [
-    'ACCEPTED',
-    'APPROVED',
-    'DECLINED',
-    'CANCELED',
-    'EXPIRED',
-    'NO_CHANGE',
-  ].includes(outcome);
   const canRespond =
-    normalizedType === 'invite'
+    action &&
+    (normalizedType === 'invite'
       ? 'invitee_user_id' in action && action.invitee_user_id === userId
       : normalizedType === 'transfer'
         ? 'to_user_id' in action && action.to_user_id === userId
         : 'primary_user_id_at_creation' in action &&
-          action.primary_user_id_at_creation === userId;
+          action.primary_user_id_at_creation === userId);
+  if (
+    !action ||
+    action.dog_id !== dogId ||
+    !dogPage?.capabilities.enabled ||
+    !canRespond ||
+    (action.status !== 'PENDING' && !isPending)
+  ) {
+    return <Navigate to={destination} replace />;
+  }
 
   return (
-    <main className={styles.container}>
-      <PrevLinks
-        links={{
-          to: `/dogs/${action.dog_id}`,
-          icon: <MoveLeft size={16} />,
-          text: t('dogOwnership.back'),
-        }}
-      />
-      <h1 className={styles.pageTitle}>
-        {t(`dogOwnership.${normalizedType}ResponseTitle`)}
-      </h1>
-      <section
-        ref={responseRef}
-        style={{ minHeight: responseHeight }}
-        className={`${styles.section} ${styles.response}`}
-        aria-busy={isPending}
-      >
-        <h2>{dogPage?.dog.name}</h2>
-        {!isPendingAction || outcome ? (
-          <p role="status">
-            {t(`dogOwnership.outcomes.${outcome || action.status}`)}
-          </p>
-        ) : null}
-        {isPendingAction && canRespond && !hasResponded ? (
-          <div className={styles.actions}>
-            <p className={styles.message}>
-              {t(
-                normalizedType === 'transfer'
-                  ? 'dogOwnership.transferResponseHelp'
-                  : 'dogOwnership.disclosure',
-              )}
-            </p>
-            {normalizedType === 'invite' ? (
-              <label className={styles.checkbox}>
-                <input
-                  checked={disclosureAccepted}
-                  onChange={(event) =>
-                    setDisclosureAccepted(event.target.checked)
-                  }
-                  type="checkbox"
-                />
-                <span>{t('dogOwnership.disclosureAccept')}</span>
-              </label>
-            ) : null}
-            <Button
-              disabled={
-                isPending ||
-                (normalizedType === 'invite' && !disclosureAccepted)
-              }
-              onClick={() => handleRespond(true)}
-              type="button"
-            >
-              {t('dogOwnership.approve')}
-            </Button>
-            <Button
-              disabled={isPending}
-              onClick={() => handleRespond(false)}
-              type="button"
-              variant="secondary"
-            >
-              {t('dogOwnership.decline')}
-            </Button>
-          </div>
-        ) : null}
-        {errorMessage ? (
-          <p role="alert" className={styles.error}>
-            {errorMessage}
-          </p>
-        ) : null}
-        {!isPendingAction || hasResponded ? (
-          <Link className={styles.actionLink} to={`/dogs/${action.dog_id}`}>
-            {t('dogOwnership.back')}
-          </Link>
-        ) : null}
-      </section>
-    </main>
+    <OwnershipModal
+      title={t(`dogOwnership.${normalizedType}ResponseTitle`)}
+      onClose={() => navigate(destination, { replace: true })}
+      onSave={() => respond(true)}
+      saveText={t('dogOwnership.approve')}
+      onSecondaryAction={() => respond(false)}
+      cancelText={t('dogOwnership.decline')}
+      isPending={isPending}
+      disabled={normalizedType === 'invite' && !disclosureAccepted}
+    >
+      <p>{dogPage.dog.name}</p>
+      <p>
+        {t(
+          normalizedType === 'transfer'
+            ? 'dogOwnership.transferResponseHelp'
+            : 'dogOwnership.disclosure',
+        )}
+      </p>
+      {normalizedType === 'invite' ? (
+        <Checkbox
+          id="ownership-invite-disclosure"
+          isChecked={disclosureAccepted}
+          onChange={() => setDisclosureAccepted(!disclosureAccepted)}
+          label={t('dogOwnership.disclosureAccept')}
+        />
+      ) : null}
+    </OwnershipModal>
   );
 };
 
-// Route changes between notification actions must start a fresh decision form.
+// Changing notifications starts a fresh decision and disclosure state.
 const OwnershipActionRoute = () => {
   const { actionType, actionId } = useParams();
   return <OwnershipAction key={`${actionType}:${actionId}`} />;

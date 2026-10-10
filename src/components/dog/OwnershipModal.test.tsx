@@ -1,5 +1,6 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
+import { ModeProvider } from '../../context/ModeContext';
 import { OwnershipModal } from './OwnershipModal';
 
 vi.mock('react-i18next', () => ({
@@ -19,9 +20,16 @@ afterEach(() => {
 it('ignores a queued close event when the dialog is already open again', () => {
   const onClose = vi.fn();
   render(
-    <OwnershipModal title="Invite a friend" onClose={onClose}>
-      Friends
-    </OwnershipModal>,
+    <ModeProvider>
+      <OwnershipModal
+        title="Invite a friend"
+        onClose={onClose}
+        onSave={vi.fn()}
+        saveText="Invite"
+      >
+        Friends
+      </OwnershipModal>
+    </ModeProvider>,
   );
   const dialog = screen.getByRole('dialog', { name: 'Invite a friend' });
   // Native close events are queued and can arrive after the next effect setup.
@@ -33,14 +41,27 @@ it('ignores a queued close event when the dialog is already open again', () => {
 it('blocks Escape and the close button during a submitted action', () => {
   const onClose = vi.fn();
   render(
-    <OwnershipModal title="Leave ownership" isPending onClose={onClose}>
-      Leaving
-    </OwnershipModal>,
+    <ModeProvider>
+      <OwnershipModal
+        title="Leave ownership"
+        isPending
+        onClose={onClose}
+        onSave={vi.fn()}
+        saveText="Leave"
+      >
+        Leaving
+      </OwnershipModal>
+    </ModeProvider>,
   );
   const dialog = screen.getByRole('dialog', { name: 'Leave ownership' });
   const escape = new Event('cancel', { cancelable: true });
   fireEvent(dialog, escape);
   expect(escape.defaultPrevented).toBe(true);
   expect(onClose).not.toHaveBeenCalled();
-  expect(screen.getByRole('button').hasAttribute('disabled')).toBe(true);
+  expect(screen.getAllByRole('button')).toHaveLength(2);
+  expect(
+    screen
+      .getAllByRole('button')
+      .every((button) => button.hasAttribute('disabled')),
+  ).toBe(true);
 });

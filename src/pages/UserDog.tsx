@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { Link, Outlet, useMatch, useParams } from 'react-router-dom';
+import { Outlet, useMatch, useNavigate, useParams } from 'react-router-dom';
 import { Cake, Mars, MoveLeft, Pencil, Tag, Venus } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { Trans, useTranslation } from 'react-i18next';
@@ -33,7 +33,7 @@ const UserDog = () => {
   const { dogId } = useParams();
   const ownershipRoute = useMatch('/dogs/:dogId/ownership/*');
   const requestRoute = useMatch('/dogs/:dogId/ownership/request');
-  const showOwnership = !!ownershipRoute && !requestRoute;
+  const navigate = useNavigate();
   const { userId } = useContext(UserContext);
   const [isEditDogsModalOpen, setIsEditDogsModalOpen] = useState(false);
   const [imageToEnlarge, setImageToEnlarge] = useState<string>('');
@@ -92,6 +92,7 @@ const UserDog = () => {
   // The server derives ownership for direct URLs and refreshes; router state
   // is presentation context only and is never an authorization input.
   const isSignedInUser = dogPage.viewer.is_owner;
+  const showOwnership = !!ownershipRoute && !requestRoute && isSignedInUser;
   const canEdit = dogPage.viewer.can_edit;
   const ownershipCapabilities = dogPage.capabilities;
 
@@ -229,12 +230,13 @@ const UserDog = () => {
               !isSignedInUser &&
               (ownershipCapabilities.can_request ||
                 ownershipCapabilities.pending_action) ? (
-                <Link
+                <Button
+                  variant="secondary"
                   className={styles.ownershipAction}
-                  to={`/dogs/${dog.id}/ownership/request`}
+                  onClick={() => navigate(`/dogs/${dog.id}/ownership/request`)}
                 >
                   {t('dogOwnership.requestAction')}
-                </Link>
+                </Button>
               ) : null}
               <Outlet />
             </>

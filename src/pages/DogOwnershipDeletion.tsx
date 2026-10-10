@@ -1,12 +1,13 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { MoveLeft } from 'lucide-react';
 import { PrevLinks } from '../components/PrevLinks';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../components/Button';
 import { Loader } from '../components/Loader';
 import { UserContext } from '../context/UserContext';
+import { useNotification } from '../context/NotificationContext';
 import { useConfirm } from '../context/ConfirmModalContext';
 import {
   cancelDogDeletion,
@@ -23,7 +24,8 @@ const DogOwnershipDeletion = () => {
   const { userId } = useContext(UserContext);
   const { showModal } = useConfirm();
   const { t } = useTranslation();
-  const [resultMessage, setResultMessage] = useState('');
+  const { notify } = useNotification();
+  const navigate = useNavigate();
   const {
     data: proposal,
     isLoading: isLoadingProposal,
@@ -50,24 +52,36 @@ const DogOwnershipDeletion = () => {
     queryClient.invalidateQueries({ queryKey: ['dogPage', resolvedDogId] });
   };
   const { mutateAsync: respond, isPending: isResponding } = useMutation({
+    onError: () => notify(t('dogOwnership.requestError'), true),
     mutationFn: (approve: boolean) =>
       respondToDogDeletion(proposal!.id, approve),
     onSuccess: (result) => {
-      setResultMessage(t(`dogOwnership.outcomes.${result.outcome}`));
+      notify(t(`dogOwnership.outcomes.${result.outcome}`));
+      if (result.outcome === 'DELETION_PREPARED') {
+        navigate(`/profile/${userId}/dogs`, { replace: true });
+      }
       refreshDeletion();
     },
   });
   const { mutateAsync: withdraw, isPending: isWithdrawing } = useMutation({
+    onError: () => notify(t('dogOwnership.requestError'), true),
     mutationFn: () => withdrawDogDeletionApproval(proposal!.id),
     onSuccess: (result) => {
-      setResultMessage(t(`dogOwnership.outcomes.${result.outcome}`));
+      notify(t(`dogOwnership.outcomes.${result.outcome}`));
+      if (result.outcome === 'DELETION_PREPARED') {
+        navigate(`/profile/${userId}/dogs`, { replace: true });
+      }
       refreshDeletion();
     },
   });
   const { mutateAsync: cancel, isPending: isCanceling } = useMutation({
+    onError: () => notify(t('dogOwnership.requestError'), true),
     mutationFn: () => cancelDogDeletion(proposal!.id),
     onSuccess: (result) => {
-      setResultMessage(t(`dogOwnership.outcomes.${result.outcome}`));
+      notify(t(`dogOwnership.outcomes.${result.outcome}`));
+      if (result.outcome === 'DELETION_PREPARED') {
+        navigate(`/profile/${userId}/dogs`, { replace: true });
+      }
       refreshDeletion();
     },
   });
@@ -173,9 +187,6 @@ const DogOwnershipDeletion = () => {
           >
             {t('dogOwnership.cancelDeletion')}
           </Button>
-        ) : null}
-        {resultMessage ? (
-          <p className={styles.message}>{resultMessage}</p>
         ) : null}
       </section>
     </main>

@@ -129,12 +129,9 @@
 }
 
 .ownership-action {
-  align-self: flex-start;
-  color: var(--color-text-medium);
-  font-size: 14px;
-  padding-block: 8px;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  align-self: center;
+  border-radius: 8px;
+  font-size: 16px;
 }
 
 :export {

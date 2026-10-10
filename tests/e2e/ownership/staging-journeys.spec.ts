@@ -52,7 +52,9 @@ async function clickRpc(props: ClickRpcProps) {
   await control.click();
   const response = await responsePromise;
   if (expectedPayload) {
-    expect(response.request().postDataJSON()).toMatchObject(expectedPayload);
+    expect(response.request().postDataJSON()).toMatchObject(
+      expectedPayload,
+    );
   }
   expect(response.ok()).toBe(true);
   const responseBody = await response.text();
@@ -82,7 +84,8 @@ async function uploadPhoto(page: Page) {
     .click();
   const finalized = page.waitForResponse(
     (response) =>
-      response.url() === `${stagingUrl}/rest/v1/rpc/api_finalize_dog_image`,
+      response.url() ===
+      `${stagingUrl}/rest/v1/rpc/api_finalize_dog_image`,
     { timeout: 20_000 },
   );
   await page
@@ -95,7 +98,10 @@ async function uploadPhoto(page: Page) {
     });
   const response = await finalized;
   expect(response.ok()).toBe(true);
-  const imageId = resultString(response.request().postDataJSON(), 'p_image_id');
+  const imageId = resultString(
+    response.request().postDataJSON(),
+    'p_image_id',
+  );
   const image = page.locator(`.slider-container img[src*="${imageId}"]`);
   await expect(image).toBeVisible();
   await expect
@@ -109,7 +115,10 @@ async function uploadPhoto(page: Page) {
 test.describe('staging ownership browser journeys', () => {
   // These destructive journeys are opt-in and never load credentials in normal
   // CI/production e2e runs. Only a newly created disposable dog is changed.
-  test.skip(process.env.STAGING_E2E !== 'true', 'Requires isolated staging');
+  test.skip(
+    process.env.STAGING_E2E !== 'true',
+    'Requires isolated staging',
+  );
 
   // Playwright requires fixture destructuring in the callback signature.
   test('invite, request, transfer, succession and unanimous deletion across sessions', async ({
@@ -186,94 +195,117 @@ test.describe('staging ownership browser journeys', () => {
       await expect(
         primary.getByRole('dialog', { name: 'Invite a friend' }),
       ).toBeVisible();
+      await primary
+        .getByPlaceholder('Search friends')
+        .fill('Staging friend');
+      await primary
+        .getByRole('dialog', { name: 'Invite a friend' })
+        .getByText('Staging friend', { exact: true })
+        .click();
       let invite = await clickRpc({
         page: primary,
         control: primary
-          .getByText('Staging friend', { exact: true })
-          .locator('..')
+          .getByRole('dialog', { name: 'Invite a friend' })
           .getByRole('button', { name: 'Invite', exact: true }),
         name: 'api_create_dog_invite',
         outcome: 'CREATED',
       });
-      await primary
-        .getByRole('dialog')
-        .getByRole('button', { name: 'Cancel', exact: true })
-        .click();
+      await expect(
+        primary.getByRole('dialog', { name: 'Invite a friend' }),
+      ).toHaveCount(0);
+      await expect(
+        primary.getByText('The ownership action was sent.', {
+          exact: true,
+        }),
+      ).toBeVisible();
       await friend.goto(
         `/ownership-actions/invite/${resultString(invite, 'action_id')}`,
       );
       await expect(
         friend.getByRole('button', { name: 'Approve', exact: true }),
       ).toBeDisabled();
-      // Declining must settle in place too, and a later invitation is a new action.
-      const declinedCardBounds = await friend.locator('section').boundingBox();
+      // Decisions close into the dog page with a toast; retries use a new invitation.
+      const declinedDialog = friend.getByRole('dialog', {
+        name: 'Ownership invitation',
+      });
+      await expect(declinedDialog.getByRole('button')).toHaveCount(2);
       await clickRpc({
         page: friend,
-        control: friend.getByRole('button', { name: 'Decline', exact: true }),
+        control: friend.getByRole('button', {
+          name: 'Decline',
+          exact: true,
+        }),
         name: 'api_respond_dog_invite',
         outcome: 'DECLINED',
       });
       await expect(
         friend.getByRole('button', { name: 'Decline', exact: true }),
       ).toHaveCount(0);
-      const declinedResultBounds = await friend
-        .locator('section')
-        .boundingBox();
-      expect(declinedResultBounds?.y).toBe(declinedCardBounds?.y);
-      expect(declinedResultBounds?.height).toBe(declinedCardBounds?.height);
+      await expect(declinedDialog).toHaveCount(0);
+      await expect(friend).toHaveURL(new RegExp(`/dogs/${dogId}$`));
+      await expect(
+        friend.getByText('The action was declined.', { exact: true }),
+      ).toBeVisible();
       await friend.screenshot({
         path: '.private/staging/ui-invitation-declined.png',
       });
       await primary
         .getByRole('button', { name: 'Invite a friend', exact: true })
         .click();
+      await primary
+        .getByPlaceholder('Search friends')
+        .fill('Staging friend');
+      await primary
+        .getByRole('dialog', { name: 'Invite a friend' })
+        .getByText('Staging friend', { exact: true })
+        .click();
       invite = await clickRpc({
         page: primary,
         control: primary
-          .getByRole('dialog')
-          .getByText('Staging friend', { exact: true })
-          .locator('..')
+          .getByRole('dialog', { name: 'Invite a friend' })
           .getByRole('button', { name: 'Invite', exact: true }),
         name: 'api_create_dog_invite',
         outcome: 'CREATED',
       });
-      await primary
-        .getByRole('dialog')
-        .getByRole('button', { name: 'Cancel', exact: true })
-        .click();
+      await expect(
+        primary.getByRole('dialog', { name: 'Invite a friend' }),
+      ).toHaveCount(0);
       await friend.goto(
         `/ownership-actions/invite/${resultString(invite, 'action_id')}`,
       );
       await expect(
         friend.getByRole('button', { name: 'Approve', exact: true }),
       ).toBeDisabled();
-      const responseCard = friend.locator('section').filter({
-        has: friend.getByRole('button', { name: 'Approve', exact: true }),
-      });
-      const initialResponseBounds = await responseCard.boundingBox();
       await friend.screenshot({
         path: '.private/staging/ui-invitation-pending.png',
       });
       await friend.getByRole('checkbox').check();
       await clickRpc({
         page: friend,
-        control: friend.getByRole('button', { name: 'Approve', exact: true }),
+        control: friend.getByRole('button', {
+          name: 'Approve',
+          exact: true,
+        }),
         name: 'api_respond_dog_invite',
         outcome: 'ACCEPTED',
       });
       await expect(
         friend.getByRole('button', { name: 'Approve', exact: true }),
       ).toHaveCount(0);
-      const settledResponseBounds = await friend
-        .locator('section')
-        .boundingBox();
-      expect(settledResponseBounds?.y).toBe(initialResponseBounds?.y);
-      expect(settledResponseBounds?.height).toBe(initialResponseBounds?.height);
+      await expect(
+        friend.getByRole('dialog', { name: 'Ownership invitation' }),
+      ).toHaveCount(0);
+      await expect(friend).toHaveURL(
+        new RegExp(`/dogs/${dogId}/ownership$`),
+      );
+      await expect(
+        friend.getByText('The invitation was accepted.', { exact: true }),
+      ).toBeVisible();
       // The other owner's existing screen must update through Realtime.
       await expect(
         primary
           .getByRole('heading', { name: 'Owners', exact: true })
-          .locator('../..')
+          .locator('..')
           .getByText('Staging friend', { exact: true }),
       ).toBeVisible({ timeout: 15_000 });
       // Refresh proves durable action routes and server state survive navigation.
@@ -338,7 +370,7 @@ test.describe('staging ownership browser journeys', () => {
 
       await coowner.goto(`/dogs/${dogId}`);
       await coowner
-        .getByRole('link', { name: 'Request ownership', exact: true })
+        .getByRole('button', { name: 'Request ownership', exact: true })
         .click();
       await expect(
         coowner.getByRole('dialog', { name: 'Request ownership' }),
@@ -358,14 +390,26 @@ test.describe('staging ownership browser journeys', () => {
       );
       await clickRpc({
         page: primary,
-        control: primary.getByRole('button', { name: 'Approve', exact: true }),
+        control: primary.getByRole('button', {
+          name: 'Approve',
+          exact: true,
+        }),
         name: 'api_respond_dog_ownership_request',
         outcome: 'APPROVED',
       });
 
       await primary.goto(`/dogs/${dogId}/ownership`);
+      await expect(
+        primary.getByRole('button', {
+          name: 'Invite a friend',
+          exact: true,
+        }),
+      ).toHaveCount(0);
       await primary
-        .getByRole('button', { name: 'Transfer primary role', exact: true })
+        .getByRole('button', {
+          name: 'Transfer primary role',
+          exact: true,
+        })
         .click();
       await primary
         .getByRole('combobox')
@@ -396,7 +440,9 @@ test.describe('staging ownership browser journeys', () => {
         path: '.private/staging/ownership-hebrew.png',
       });
       await primary.getByTestId('navbar-more').click();
-      await primary.getByRole('button', { name: 'שפה', exact: true }).click();
+      await primary
+        .getByRole('button', { name: 'שפה', exact: true })
+        .click();
       await primary
         .getByRole('dialog')
         .getByRole('button', { name: 'English', exact: true })
@@ -404,7 +450,10 @@ test.describe('staging ownership browser journeys', () => {
       await expect(primary.locator('html')).toHaveAttribute('dir', 'ltr');
       await primary.reload();
       await primary
-        .getByRole('button', { name: 'Transfer primary role', exact: true })
+        .getByRole('button', {
+          name: 'Transfer primary role',
+          exact: true,
+        })
         .click();
       await primary
         .getByRole('combobox')
@@ -423,7 +472,10 @@ test.describe('staging ownership browser journeys', () => {
       );
       await clickRpc({
         page: friend,
-        control: friend.getByRole('button', { name: 'Approve', exact: true }),
+        control: friend.getByRole('button', {
+          name: 'Approve',
+          exact: true,
+        }),
         name: 'api_respond_primary_transfer',
         outcome: 'ACCEPTED',
       });
@@ -434,11 +486,13 @@ test.describe('staging ownership browser journeys', () => {
 
       await coowner.goto(`/dogs/${dogId}/ownership`);
       await expect(
-        coowner.getByText('Staging coowner', { exact: true }).locator('..'),
+        coowner
+          .getByText('Staging coowner', { exact: true })
+          .locator('..'),
       ).toContainText('Co-owner');
 
       await friend
-        .getByRole('link', { name: 'Leave ownership', exact: true })
+        .getByRole('button', { name: 'Leave ownership', exact: true })
         .click();
       await expect(friend.getByRole('checkbox')).toBeVisible();
       await friend
@@ -454,22 +508,30 @@ test.describe('staging ownership browser journeys', () => {
       await expect(friend.getByRole('combobox')).toHaveValue(
         intendedSuccessor!,
       );
-      const successorMemberId = await friend.getByRole('combobox').inputValue();
+      const successorMemberId = await friend
+        .getByRole('combobox')
+        .inputValue();
       const departure = await clickRpc({
         page: friend,
-        control: friend.getByRole('button', {
-          name: 'Leave ownership',
-          exact: true,
-        }),
+        control: friend
+          .getByRole('dialog', { name: 'Leave ownership' })
+          .getByRole('button', {
+            name: 'Leave ownership',
+            exact: true,
+          }),
         name: 'api_leave_dog',
         outcome: 'LEFT',
-        expectedPayload: { p_selected_successor_member_id: successorMemberId },
+        expectedPayload: {
+          p_selected_successor_member_id: successorMemberId,
+        },
       });
       expect(resultString(departure, 'successor_user_id')).toBe(
         fixtures.accounts.coowner.id,
       );
       await expect(
-        coowner.getByText('Staging coowner', { exact: true }).locator('..'),
+        coowner
+          .getByText('Staging coowner', { exact: true })
+          .locator('..'),
       ).toContainText('Primary owner', { timeout: 15_000 });
       await expect(
         coowner.getByText('Staging friend', { exact: true }),
