@@ -1,58 +1,236 @@
-@use "../variables" as *;
+@use '../variables' as *;
 
+// Ownership uses the same spacing, themed surfaces and pink accents as dog
+// details. Durable notification pages retain the shared fixed back bar.
 .container {
   min-height: $content-max-height;
   margin-top: $page-top-padding;
-  padding: 24px calc(16px + var(--safe-area-inset-right)) 32px
-    calc(16px + var(--safe-area-inset-left));
+  padding: 56px calc(16px + var(--safe-area-inset-right, 0px)) 32px
+    calc(16px + var(--safe-area-inset-left, 0px));
 }
 
-.header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 24px;
+.page-title {
+  font-size: $title-font-size;
+  font-weight: 400;
+  margin: 0 0 24px;
 }
 
 .content,
 .section,
 .actions,
-.list {
+.modal-body {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
+  min-width: 0;
 }
 
 .section {
   padding: 16px;
   border-radius: 12px;
-  background: $white;
+  background: var(--background-color);
   box-shadow: $box-shadow;
+
+  h2 {
+    font-size: $second-title-font-size;
+    font-weight: 400;
+    margin: 0;
+    color: $pink;
+  }
+
+  p {
+    margin: 0;
+  }
 }
 
-.row {
+.section-heading,
+.row,
+.modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  min-width: 0;
+}
+
+.row {
+  min-height: 48px;
+  font-size: 16px;
+  > span {
+    overflow-wrap: anywhere;
+  }
+  > button {
+    flex-shrink: 0;
+  }
+  & + & {
+    border-top: 1px solid var(--color-grey-light);
+    padding-top: 12px;
+  }
+}
+
+.person {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.avatar {
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--light-pink);
+  color: $pink;
+  flex-shrink: 0;
+}
+
+.role,
+.count {
+  color: var(--color-text-medium);
+  font-size: 13px;
+}
+
+.role {
+  text-align: end;
+  flex-shrink: 0;
+  max-width: 45%;
+}
+
+.secondary-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  > button,
+  > a {
+    justify-content: flex-start;
+    padding: 12px 4px;
+    font-size: 14px;
+    min-height: 44px;
+    text-align: start;
+    color: var(--color-text);
+  }
+  > .danger {
+    color: $red;
+  }
+}
+
+.action-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: $pink;
+  min-height: 44px;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+  > svg {
+    flex-shrink: 0;
+  }
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .checkbox {
   display: flex;
   align-items: flex-start;
-  gap: 8px;
+  gap: 10px;
+  padding-block: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  cursor: pointer;
+  input {
+    accent-color: $pink;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    margin: 1px 0 0;
+  }
 }
 
 .field {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
+  font-size: 14px;
+  select {
+    width: 100%;
+    min-height: 44px;
+    border: 1px solid var(--color-grey-bold);
+    border-radius: 8px;
+    padding: 10px;
+    font: inherit;
+    color: var(--color-text);
+    background: var(--background-color);
+  }
 }
 
 .message {
-  color: $text;
+  color: var(--color-text-medium);
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 .error {
   color: $red;
+}
+
+.modal {
+  flex-direction: column;
+  gap: 20px;
+  max-width: 480px;
+  max-height: calc(90dvh - var(--safe-area-inset-top, 0px));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  font-size: 16px;
+  // Anchor at the top; content changes must not move the whole dialog.
+  transition: opacity 0.2s ease;
+  p {
+    margin: 0;
+  }
+}
+
+.modal-header {
+  h2 {
+    font-size: $second-title-font-size;
+    font-weight: 400;
+    margin: 0;
+  }
+  button {
+    padding: 8px;
+    min-width: 40px;
+    min-height: 40px;
+  }
+}
+
+.modal-body {
+  min-height: 200px;
+}
+.status {
+  min-height: 24px;
+  font-size: 14px;
+  color: var(--color-text-medium);
+}
+.response {
+  min-height: 320px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal {
+    transition: none;
+  }
+}
+
+// The app resets outlines globally; restore visible keyboard focus here.
+.content,
+.container,
+.modal {
+  :is(button, a, select, input):focus-visible {
+    outline: 2px solid $pink;
+    outline-offset: 3px;
+  }
 }

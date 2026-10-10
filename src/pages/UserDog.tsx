@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, Outlet, useMatch, useParams } from 'react-router-dom';
 import { Cake, Mars, MoveLeft, Pencil, Tag, Venus } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { Trans, useTranslation } from 'react-i18next';
@@ -20,6 +20,7 @@ import { Loader } from '../components/Loader';
 import { EnlargeImageModal } from '../components/EnlargeImageModal';
 import { Button } from '../components/Button';
 import { DogPreferences } from '../components/dog/DogPreferences';
+import { TabsList } from '../components/tabs/TabsList';
 import { Header } from '../components/Header';
 import { HeaderImage } from '../components/HeaderImage';
 import { PrevLinks } from '../components/PrevLinks';
@@ -30,6 +31,9 @@ import styles from './UserDog.module.scss';
 
 const UserDog = () => {
   const { dogId } = useParams();
+  const ownershipRoute = useMatch('/dogs/:dogId/ownership/*');
+  const requestRoute = useMatch('/dogs/:dogId/ownership/request');
+  const showOwnership = !!ownershipRoute && !requestRoute;
   const { userId } = useContext(UserContext);
   const [isEditDogsModalOpen, setIsEditDogsModalOpen] = useState(false);
   const [imageToEnlarge, setImageToEnlarge] = useState<string>('');
@@ -190,37 +194,51 @@ const UserDog = () => {
             [styles.center]: !isSignedInUser,
           })}
         />
+        {isSignedInUser ? (
+          <TabsList
+            tabs={[
+              { text: t('dogOwnership.detailsTab'), url: `/dogs/${dog.id}` },
+              {
+                text: t('dogOwnership.manageTitle'),
+                url: `/dogs/${dog.id}/ownership`,
+                end: false,
+              },
+            ]}
+          />
+        ) : null}
         <div className={styles.content}>
-          {isSignedInUser ? (
-            <Link
-              className={styles.ownershipAction}
-              to={`/dogs/${dog.id}/ownership`}
-            >
-              {t('dogOwnership.manageTitle')}
-            </Link>
-          ) : null}
-          {ownershipCapabilities?.enabled &&
-          ownershipCapabilities.can_request ? (
-            <Link
-              className={styles.ownershipAction}
-              to={`/dogs/${dog.id}/ownership/request`}
-            >
-              {t('dogOwnership.requestAction')}
-            </Link>
-          ) : null}
-          <DogDetails
-            isSignedInUser={canEdit}
-            dog={dog}
-            userName={userName}
-            onEditDog={() => onEditDog()}
-          />
-          <DogPreferences
-            dog={dog}
-            isSignedInUser={canEdit}
-            userName={userName}
-            onEditDog={() => onEditDog(true)}
-          />
-          <DogGalleryContainer dog={dog} isSignedInUser={isSignedInUser} />
+          {showOwnership ? (
+            <Outlet />
+          ) : (
+            <>
+              <DogDetails
+                isSignedInUser={canEdit}
+                dog={dog}
+                userName={userName}
+                onEditDog={() => onEditDog()}
+              />
+              <DogPreferences
+                dog={dog}
+                isSignedInUser={canEdit}
+                userName={userName}
+                onEditDog={() => onEditDog(true)}
+              />
+              <DogGalleryContainer dog={dog} isSignedInUser={isSignedInUser} />
+              {/* Infrequent ownership requests sit after the everyday dog content. */}
+              {ownershipCapabilities?.enabled &&
+              !isSignedInUser &&
+              (ownershipCapabilities.can_request ||
+                ownershipCapabilities.pending_action) ? (
+                <Link
+                  className={styles.ownershipAction}
+                  to={`/dogs/${dog.id}/ownership/request`}
+                >
+                  {t('dogOwnership.requestAction')}
+                </Link>
+              ) : null}
+              <Outlet />
+            </>
+          )}
         </div>
       </div>
       <EnlargeImageModal

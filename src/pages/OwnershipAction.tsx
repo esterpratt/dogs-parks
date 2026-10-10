@@ -1,7 +1,8 @@
-import { useContext, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Link, useParams } from 'react-router-dom';
 import { MoveLeft } from 'lucide-react';
+import { PrevLinks } from '../components/PrevLinks';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../components/Button';
 import { Loader } from '../components/Loader';
@@ -23,6 +24,9 @@ const OwnershipAction = () => {
   const { t } = useTranslation();
   const [disclosureAccepted, setDisclosureAccepted] = useState(false);
   const [outcome, setOutcome] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const responseRef = useRef<HTMLElement>(null);
+  const [responseHeight, setResponseHeight] = useState<number>();
   const normalizedType: DogOwnershipActionType =
     actionType === 'request'
       ? 'request'
@@ -31,11 +35,7 @@ const OwnershipAction = () => {
         : 'invite';
   const queryKey = ['dogOwnershipAction', normalizedType, actionId];
 
-  const {
-    data: action,
-    isLoading,
-    refetch,
-  } = useQuery({
+  const { data: action, isLoading } = useQuery({
     queryKey,
     queryFn: () => fetchDogOwnershipAction(normalizedType, actionId!),
     enabled: !!actionId,
@@ -53,13 +53,31 @@ const OwnershipAction = () => {
         : normalizedType === 'transfer'
           ? respondToPrimaryTransfer(actionId!, approve)
           : respondToDogOwnershipRequest(actionId!, approve),
-    onSuccess: (result) => {
+    onSuccess: async (result) => {
+      // The local result replaces the decision form immediately. Await the
+      // refresh without briefly rendering old pending controls beside it.
       setOutcome(result.outcome);
-      refetch();
-      queryClient.invalidateQueries({ queryKey: ['dogPage', action?.dog_id] });
-      queryClient.invalidateQueries({ queryKey: ['userDogs'] });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey }),
+        queryClient.invalidateQueries({
+          queryKey: ['dogPage', action?.dog_id],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['dogOwnershipActions', action?.dog_id],
+        }),
+        queryClient.invalidateQueries({ queryKey: ['userDogs'] }),
+      ]);
     },
+    onError: () => setErrorMessage(t('dogOwnership.requestError')),
   });
+
+  const handleRespond = (approve: boolean) => {
+    // Preserve the measured card height even for long translations or small
+    // screens, so replacing the form with its result does not move content.
+    setResponseHeight(responseRef.current?.getBoundingClientRect().height);
+    setErrorMessage('');
+    respond(approve);
+  };
 
   if (isLoading || isLoadingCapabilities) {
     return <Loader style={{ paddingTop: '64px' }} />;
@@ -76,6 +94,14 @@ const OwnershipAction = () => {
   }
 
   const isPendingAction = action.status === 'PENDING';
+  const hasResponded = [
+    'ACCEPTED',
+    'APPROVED',
+    'DECLINED',
+    'CANCELED',
+    'EXPIRED',
+    'NO_CHANGE',
+  ].includes(outcome);
   const canRespond =
     normalizedType === 'invite'
       ? 'invitee_user_id' in action && action.invitee_user_id === userId
@@ -86,18 +112,37 @@ const OwnershipAction = () => {
 
   return (
     <main className={styles.container}>
-      <div className={styles.header}>
-        <Link to={`/dogs/${action.dog_id}`} aria-label={t('dogOwnership.back')}>
-          <MoveLeft size={20} />
-        </Link>
-        <h1>{t(`dogOwnership.${normalizedType}ResponseTitle`)}</h1>
-      </div>
-      <section className={styles.section}>
+      <PrevLinks
+        links={{
+          to: `/dogs/${action.dog_id}`,
+          icon: <MoveLeft size={16} />,
+          text: t('dogOwnership.back'),
+        }}
+      />
+      <h1 className={styles.pageTitle}>
+        {t(`dogOwnership.${normalizedType}ResponseTitle`)}
+      </h1>
+      <section
+        ref={responseRef}
+        style={{ minHeight: responseHeight }}
+        className={`${styles.section} ${styles.response}`}
+        aria-busy={isPending}
+      >
+        <h2>{dogPage?.dog.name}</h2>
         {!isPendingAction || outcome ? (
-          <p>{t(`dogOwnership.outcomes.${outcome || action.status}`)}</p>
+          <p role="status">
+            {t(`dogOwnership.outcomes.${outcome || action.status}`)}
+          </p>
         ) : null}
-        {isPendingAction && canRespond ? (
+        {isPendingAction && canRespond && !hasResponded ? (
           <div className={styles.actions}>
+            <p className={styles.message}>
+              {t(
+                normalizedType === 'transfer'
+                  ? 'dogOwnership.transferResponseHelp'
+                  : 'dogOwnership.disclosure',
+              )}
+            </p>
             {normalizedType === 'invite' ? (
               <label className={styles.checkbox}>
                 <input
@@ -115,14 +160,14 @@ const OwnershipAction = () => {
                 isPending ||
                 (normalizedType === 'invite' && !disclosureAccepted)
               }
-              onClick={() => respond(true)}
+              onClick={() => handleRespond(true)}
               type="button"
             >
               {t('dogOwnership.approve')}
             </Button>
             <Button
               disabled={isPending}
-              onClick={() => respond(false)}
+              onClick={() => handleRespond(false)}
               type="button"
               variant="secondary"
             >
@@ -130,9 +175,25 @@ const OwnershipAction = () => {
             </Button>
           </div>
         ) : null}
+        {errorMessage ? (
+          <p role="alert" className={styles.error}>
+            {errorMessage}
+          </p>
+        ) : null}
+        {!isPendingAction || hasResponded ? (
+          <Link className={styles.actionLink} to={`/dogs/${action.dog_id}`}>
+            {t('dogOwnership.back')}
+          </Link>
+        ) : null}
       </section>
     </main>
   );
 };
 
-export default OwnershipAction;
+// Route changes between notification actions must start a fresh decision form.
+const OwnershipActionRoute = () => {
+  const { actionType, actionId } = useParams();
+  return <OwnershipAction key={`${actionType}:${actionId}`} />;
+};
+
+export default OwnershipActionRoute;

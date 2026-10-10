@@ -1,7 +1,8 @@
 import { useContext, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { MoveLeft } from 'lucide-react';
+import { PrevLinks } from '../components/PrevLinks';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../components/Button';
 import { Loader } from '../components/Loader';
@@ -97,15 +98,14 @@ const DogOwnershipDeletion = () => {
 
   return (
     <main className={styles.container}>
-      <div className={styles.header}>
-        <Link
-          to={`/dogs/${resolvedDogId}/ownership`}
-          aria-label={t('dogOwnership.back')}
-        >
-          <MoveLeft size={20} />
-        </Link>
-        <h1>{t('dogOwnership.deletionTitle')}</h1>
-      </div>
+      <PrevLinks
+        links={{
+          to: `/dogs/${resolvedDogId}/ownership`,
+          icon: <MoveLeft size={16} />,
+          text: t('dogOwnership.back'),
+        }}
+      />
+      <h1 className={styles.pageTitle}>{t('dogOwnership.deletionTitle')}</h1>
       <section className={styles.section}>
         <p>{t('dogOwnership.deletionWarning')}</p>
         <p>

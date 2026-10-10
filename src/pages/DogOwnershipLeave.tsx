@@ -1,14 +1,12 @@
 import { useContext, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { MoveLeft } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { OwnershipModal } from '../components/dog/OwnershipModal';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../components/Button';
 import { Loader } from '../components/Loader';
 import { UserContext } from '../context/UserContext';
-import {
-  leaveDogOwnership,
-} from '../services/dog-ownership';
+import { leaveDogOwnership } from '../services/dog-ownership';
 import { fetchDogPage } from '../services/dogs';
 import { queryClient } from '../services/react-query';
 import styles from './DogOwnership.module.scss';
@@ -29,6 +27,7 @@ const DogOwnershipLeave = () => {
   const capabilities = dogPage?.capabilities;
   const members = dogPage?.members ?? [];
   const { mutate: leave, isPending } = useMutation({
+    onError: () => setResultMessage(t('dogOwnership.requestError')),
     mutationFn: () =>
       leaveDogOwnership(
         dogId!,
@@ -70,17 +69,12 @@ const DogOwnershipLeave = () => {
   }
 
   return (
-    <main className={styles.container}>
-      <div className={styles.header}>
-        <Link
-          to={`/dogs/${dogId}/ownership`}
-          aria-label={t('dogOwnership.back')}
-        >
-          <MoveLeft size={20} />
-        </Link>
-        <h1>{t('dogOwnership.leaveTitle')}</h1>
-      </div>
-      <section className={styles.section}>
+    <OwnershipModal
+      title={t('dogOwnership.leaveTitle')}
+      onClose={() => navigate(`/dogs/${dogId}/ownership`, { replace: true })}
+      isPending={isPending}
+    >
+      <section className={styles.modalBody}>
         <p>{t('dogOwnership.leaveWarning')}</p>
         {capabilities.role === 'PRIMARY_OWNER' ? (
           <label className={styles.field}>
@@ -91,7 +85,7 @@ const DogOwnershipLeave = () => {
             >
               {eligibleSuccessors.map((member) => (
                 <option key={member.id} value={member.id}>
-                  {member.user_name ?? member.user_id}
+                  {member.user_name ?? t('dogOwnership.memberFallback')}
                 </option>
               ))}
             </select>
@@ -114,7 +108,7 @@ const DogOwnershipLeave = () => {
         </Button>
         {resultMessage ? <p className={styles.error}>{resultMessage}</p> : null}
       </section>
-    </main>
+    </OwnershipModal>
   );
 };
 

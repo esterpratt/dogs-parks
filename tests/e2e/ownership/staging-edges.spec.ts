@@ -342,7 +342,7 @@ test.describe('staging notification and photo edges', () => {
     await expect(
       primary
         .getByRole('heading', { name: 'Owners', exact: true })
-        .locator('..')
+        .locator('../..')
         .getByText('Staging coowner', { exact: true })
         .locator('..'),
     ).toContainText('Primary owner', { timeout: 30_000 });

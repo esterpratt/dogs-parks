@@ -180,7 +180,13 @@ test.describe('staging ownership browser journeys', () => {
         }),
       );
       await primary.goto(`/dogs/${dogId}/ownership`);
-      const invite = await clickRpc({
+      await primary
+        .getByRole('button', { name: 'Invite a friend', exact: true })
+        .click();
+      await expect(
+        primary.getByRole('dialog', { name: 'Invite a friend' }),
+      ).toBeVisible();
+      let invite = await clickRpc({
         page: primary,
         control: primary
           .getByText('Staging friend', { exact: true })
@@ -189,12 +195,65 @@ test.describe('staging ownership browser journeys', () => {
         name: 'api_create_dog_invite',
         outcome: 'CREATED',
       });
+      await primary
+        .getByRole('dialog')
+        .getByRole('button', { name: 'Cancel', exact: true })
+        .click();
       await friend.goto(
         `/ownership-actions/invite/${resultString(invite, 'action_id')}`,
       );
       await expect(
         friend.getByRole('button', { name: 'Approve', exact: true }),
       ).toBeDisabled();
+      // Declining must settle in place too, and a later invitation is a new action.
+      const declinedCardBounds = await friend.locator('section').boundingBox();
+      await clickRpc({
+        page: friend,
+        control: friend.getByRole('button', { name: 'Decline', exact: true }),
+        name: 'api_respond_dog_invite',
+        outcome: 'DECLINED',
+      });
+      await expect(
+        friend.getByRole('button', { name: 'Decline', exact: true }),
+      ).toHaveCount(0);
+      const declinedResultBounds = await friend
+        .locator('section')
+        .boundingBox();
+      expect(declinedResultBounds?.y).toBe(declinedCardBounds?.y);
+      expect(declinedResultBounds?.height).toBe(declinedCardBounds?.height);
+      await friend.screenshot({
+        path: '.private/staging/ui-invitation-declined.png',
+      });
+      await primary
+        .getByRole('button', { name: 'Invite a friend', exact: true })
+        .click();
+      invite = await clickRpc({
+        page: primary,
+        control: primary
+          .getByRole('dialog')
+          .getByText('Staging friend', { exact: true })
+          .locator('..')
+          .getByRole('button', { name: 'Invite', exact: true }),
+        name: 'api_create_dog_invite',
+        outcome: 'CREATED',
+      });
+      await primary
+        .getByRole('dialog')
+        .getByRole('button', { name: 'Cancel', exact: true })
+        .click();
+      await friend.goto(
+        `/ownership-actions/invite/${resultString(invite, 'action_id')}`,
+      );
+      await expect(
+        friend.getByRole('button', { name: 'Approve', exact: true }),
+      ).toBeDisabled();
+      const responseCard = friend.locator('section').filter({
+        has: friend.getByRole('button', { name: 'Approve', exact: true }),
+      });
+      const initialResponseBounds = await responseCard.boundingBox();
+      await friend.screenshot({
+        path: '.private/staging/ui-invitation-pending.png',
+      });
       await friend.getByRole('checkbox').check();
       await clickRpc({
         page: friend,
@@ -202,11 +261,19 @@ test.describe('staging ownership browser journeys', () => {
         name: 'api_respond_dog_invite',
         outcome: 'ACCEPTED',
       });
+      await expect(
+        friend.getByRole('button', { name: 'Approve', exact: true }),
+      ).toHaveCount(0);
+      const settledResponseBounds = await friend
+        .locator('section')
+        .boundingBox();
+      expect(settledResponseBounds?.y).toBe(initialResponseBounds?.y);
+      expect(settledResponseBounds?.height).toBe(initialResponseBounds?.height);
       // The other owner's existing screen must update through Realtime.
       await expect(
         primary
           .getByRole('heading', { name: 'Owners', exact: true })
-          .locator('..')
+          .locator('../..')
           .getByText('Staging friend', { exact: true }),
       ).toBeVisible({ timeout: 15_000 });
       // Refresh proves durable action routes and server state survive navigation.
@@ -269,7 +336,13 @@ test.describe('staging ownership browser journeys', () => {
         .single();
       expect(fallbackPhoto.data?.primary_image_id).toBe(originalImageId);
 
-      await coowner.goto(`/dogs/${dogId}/ownership/request`);
+      await coowner.goto(`/dogs/${dogId}`);
+      await coowner
+        .getByRole('link', { name: 'Request ownership', exact: true })
+        .click();
+      await expect(
+        coowner.getByRole('dialog', { name: 'Request ownership' }),
+      ).toBeVisible();
       await coowner.getByRole('checkbox').check();
       const request = await clickRpc({
         page: coowner,
@@ -292,11 +365,18 @@ test.describe('staging ownership browser journeys', () => {
 
       await primary.goto(`/dogs/${dogId}/ownership`);
       await primary
+        .getByRole('button', { name: 'Transfer primary role', exact: true })
+        .click();
+      await primary
         .getByRole('combobox')
         .selectOption({ label: 'Staging friend' });
       await expect(
         primary.getByRole('button', { name: 'Invite', exact: true }),
       ).toHaveCount(0);
+      await primary
+        .getByRole('dialog')
+        .getByRole('button', { name: 'Cancel', exact: true })
+        .click();
       // Changing language also exercises a fresh deep-link render in RTL.
       await primary.getByTestId('navbar-more').click();
       await primary
@@ -306,10 +386,11 @@ test.describe('staging ownership browser journeys', () => {
         .getByRole('dialog')
         .getByRole('button', { name: 'עברית', exact: true })
         .click();
+      await expect(primary.locator('html')).toHaveAttribute('dir', 'rtl');
       await primary.reload();
       await expect(primary.locator('html')).toHaveAttribute('dir', 'rtl');
       await expect(
-        primary.getByRole('heading', { name: 'בעלות', exact: true }),
+        primary.getByRole('link', { name: 'בעלות', exact: true }),
       ).toBeVisible();
       await primary.screenshot({
         path: '.private/staging/ownership-hebrew.png',
@@ -320,7 +401,11 @@ test.describe('staging ownership browser journeys', () => {
         .getByRole('dialog')
         .getByRole('button', { name: 'English', exact: true })
         .click();
+      await expect(primary.locator('html')).toHaveAttribute('dir', 'ltr');
       await primary.reload();
+      await primary
+        .getByRole('button', { name: 'Transfer primary role', exact: true })
+        .click();
       await primary
         .getByRole('combobox')
         .selectOption({ label: 'Staging friend' });
@@ -389,9 +474,12 @@ test.describe('staging ownership browser journeys', () => {
       await expect(
         coowner.getByText('Staging friend', { exact: true }),
       ).toHaveCount(0);
+      await coowner
+        .getByRole('button', { name: 'Propose deletion', exact: true })
+        .click();
       const proposal = await clickRpc({
         page: coowner,
-        control: coowner.getByRole('button', {
+        control: coowner.getByRole('dialog').getByRole('button', {
           name: 'Propose deletion',
           exact: true,
         }),

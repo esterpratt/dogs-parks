@@ -14,6 +14,14 @@ Short bootstrap and handoff; Notion is the task source of truth. Permanent codin
 - Missing park details use the secured `api_update_missing_park_details` RPC.
 - Existing Supabase migrations must not be edited or rerun; see `AGENTS.md` for database change rules.
 
+## Ownership UI follow-up (2026-10-10)
+
+- Dog ownership now shares the dog header and Details/Ownership tabs. Invite, transfer, request and leave use the existing modal design; request/leave URLs still work on refresh. Requests sit below the gallery, empty pending sections are hidden, names replace pending invitation UUIDs, and controls support theme/RTL styles.
+- Invitation acceptance/decline replace the decision form immediately, preserve its measured height and await cache refreshes. Regression coverage includes slow refresh, failed response retry, modal dismissal during submission, and stale native dialog close events.
+- Verification: 80 unit tests, ownership and notification/reconnect staging browser journeys, lint/build/diff. The browser journey explicitly checks unchanged card position/height for acceptance and decline. Mobile, 320px dark Hebrew, desktop, Escape and direct modal refresh were reviewed. Existing navigation-time fetch console messages and the build chunk-size warning remain; native-device verification is still pending.
+- Maintenance check: npm audit reports 13 vulnerabilities (2 critical Capacitor, 10 high, 1 low), and npm outdated lists available upgrades. No dependencies were changed. Android targets SDK 36; store publication and signing status remain unverified and need separate follow-up.
+- Production schema, functions and feature flags remain unchanged. Continue using the guarded staging preview for review.
+
 ## Current staging and production handoff (2026-10-04)
 
 - Permanent staging `uhdzwzuyiztktxthwdfp` is ready. Two selected accounts, all their dogs/photos and all parks/catalogs were imported in legacy form and upgraded through all nine feature migrations. Both required Edge Functions are deployed with gateway/internal authentication. WEB compatibility is enabled at build 1; native remains disabled. Production is unchanged. See [execution manifest](SUPABASE_STAGING_EXECUTION.md) for verified counts, isolation and limitations.

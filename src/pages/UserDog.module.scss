@@ -130,9 +130,11 @@
 
 .ownership-action {
   align-self: flex-start;
-  color: $green;
-  font-weight: 600;
-  text-decoration: none;
+  color: var(--color-text-medium);
+  font-size: 14px;
+  padding-block: 8px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 :export {

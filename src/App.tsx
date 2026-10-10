@@ -52,7 +52,7 @@ const OwnershipAction = lazy(() => import('./pages/OwnershipAction'));
 const DogOwnershipLeave = lazy(() => import('./pages/DogOwnershipLeave'));
 const DogOwnershipDeletion = lazy(() => import('./pages/DogOwnershipDeletion'));
 const AccountDeletionReview = lazy(
-  () => import('./pages/AccountDeletionReview')
+  () => import('./pages/AccountDeletionReview'),
 );
 
 const App = () => {
@@ -180,6 +180,8 @@ const App = () => {
             </PrivateRoute>
           ),
         },
+        // Keep the dog header mounted while ownership tabs and short modal
+        // routes change, including when opened directly from a saved URL.
         {
           path: 'dogs/:dogId',
           element: (
@@ -187,30 +189,17 @@ const App = () => {
               <UserDog />
             </PrivateRoute>
           ),
-        },
-        {
-          path: 'dogs/:dogId/ownership',
-          element: (
-            <PrivateRoute>
-              <DogOwnership />
-            </PrivateRoute>
-          ),
-        },
-        {
-          path: 'dogs/:dogId/ownership/request',
-          element: (
-            <PrivateRoute>
-              <DogOwnershipRequest />
-            </PrivateRoute>
-          ),
-        },
-        {
-          path: 'dogs/:dogId/ownership/leave',
-          element: (
-            <PrivateRoute>
-              <DogOwnershipLeave />
-            </PrivateRoute>
-          ),
+          children: [
+            {
+              path: 'ownership/request',
+              element: <DogOwnershipRequest />,
+            },
+            {
+              path: 'ownership',
+              element: <DogOwnership />,
+              children: [{ path: 'leave', element: <DogOwnershipLeave /> }],
+            },
+          ],
         },
         {
           path: 'dogs/:dogId/ownership/deletion/:proposalId',

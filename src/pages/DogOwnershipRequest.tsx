@@ -1,7 +1,7 @@
 import { useContext, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Link, useParams } from 'react-router-dom';
-import { MoveLeft } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { OwnershipModal } from '../components/dog/OwnershipModal';
 import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 import { Button } from '../components/Button';
@@ -18,10 +18,12 @@ import styles from './DogOwnership.module.scss';
 
 const DogOwnershipRequest = () => {
   const { dogId } = useParams();
+  const navigate = useNavigate();
   const { userId } = useContext(UserContext);
   const { t } = useTranslation();
   const [disclosureAccepted, setDisclosureAccepted] = useState(false);
   const [outcome, setOutcome] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const requestKey = useRef(uuidv4());
 
   const { data: dogPage, isLoading } = useQuery({
@@ -30,33 +32,43 @@ const DogOwnershipRequest = () => {
     enabled: !!dogId,
   });
   const capabilities = dogPage?.capabilities;
-  const { data: pendingRequests = [] } = useQuery({
-    queryKey: ['dogOwnershipActions', dogId, 'myRequests'],
-    queryFn: () => fetchPendingDogOwnershipRequests(dogId!),
-    enabled: !!capabilities?.enabled && !!userId,
-  });
+  const { data: pendingRequests = [], isLoading: isLoadingRequests } = useQuery(
+    {
+      queryKey: ['dogOwnershipActions', dogId, 'myRequests'],
+      queryFn: () => fetchPendingDogOwnershipRequests(dogId!),
+      enabled: !!capabilities?.enabled && !!userId,
+    },
+  );
   const pendingRequest = pendingRequests.find(
     (request) => request.requester_user_id === userId,
   );
 
-  const refresh = () => {
-    queryClient.invalidateQueries({ queryKey: ['dogPage', dogId] });
-    queryClient.invalidateQueries({ queryKey: ['dogOwnershipActions', dogId] });
-  };
+  // Keep the form pending until both request and capability data agree.
+  const refresh = () =>
+    Promise.all([
+      queryClient.invalidateQueries({ queryKey: ['dogPage', dogId] }),
+      queryClient.invalidateQueries({
+        queryKey: ['dogOwnershipActions', dogId],
+      }),
+    ]);
   const { mutate: submitRequest, isPending: isSubmitting } = useMutation({
+    onMutate: () => setErrorMessage(''),
+    onError: () => setErrorMessage(t('dogOwnership.requestError')),
     mutationFn: () => createDogOwnershipRequest(dogId!, requestKey.current),
     onSuccess: (result) => {
       // A confirmed response ends this retry window; recreation uses a new key.
       requestKey.current = uuidv4();
       setOutcome(result.outcome);
-      refresh();
+      return refresh();
     },
   });
   const { mutate: cancelRequest, isPending: isCanceling } = useMutation({
+    onMutate: () => setErrorMessage(''),
+    onError: () => setErrorMessage(t('dogOwnership.requestError')),
     mutationFn: cancelDogOwnershipRequest,
     onSuccess: (result) => {
       setOutcome(result.outcome);
-      refresh();
+      return refresh();
     },
   });
 
@@ -75,15 +87,15 @@ const DogOwnershipRequest = () => {
   }
 
   return (
-    <main className={styles.container}>
-      <div className={styles.header}>
-        <Link to={`/dogs/${dogId}`} aria-label={t('dogOwnership.back')}>
-          <MoveLeft size={20} />
-        </Link>
-        <h1>{t('dogOwnership.requestTitle')}</h1>
-      </div>
-      <section className={styles.section}>
-        {pendingRequest ? (
+    <OwnershipModal
+      title={t('dogOwnership.requestTitle')}
+      onClose={() => navigate(`/dogs/${dogId}`, { replace: true })}
+      isPending={isSubmitting || isCanceling}
+    >
+      <section className={styles.modalBody}>
+        {isLoadingRequests ? (
+          <Loader inside />
+        ) : pendingRequest ? (
           <>
             <p>{t('dogOwnership.requestPending')}</p>
             <Button
@@ -119,9 +131,16 @@ const DogOwnershipRequest = () => {
             </Button>
           </>
         )}
-        {outcome ? <p>{t(`dogOwnership.outcomes.${outcome}`)}</p> : null}
+        {errorMessage ? (
+          <p role="alert" className={styles.error}>
+            {errorMessage}
+          </p>
+        ) : null}
+        <p className={styles.status} role="status">
+          {outcome ? t(`dogOwnership.outcomes.${outcome}`) : ''}
+        </p>
       </section>
-    </main>
+    </OwnershipModal>
   );
 };
 

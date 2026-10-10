@@ -1167,6 +1167,11 @@
     }
   },
   "dogOwnership": {
+    "transferResponseHelp": "Accepting makes you the primary owner. The current primary owner will remain a co-owner.",
+    "detailsTab": "Details",
+    "memberFallback": "Dog owner",
+    "transferHelp": "The selected owner must accept the offer. You will stay a co-owner.",
+    "requestError": "Could not complete the action. Please try again.",
     "back": "Back to dog",
     "manageTitle": "Ownership",
     "requestAction": "Request ownership",

@@ -1,7 +1,15 @@
 import { useContext, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Link, useParams } from 'react-router-dom';
-import { MoveLeft } from 'lucide-react';
+import { Link, Outlet, useParams } from 'react-router-dom';
+import {
+  UserRound,
+  UserPlus,
+  ArrowRightLeft,
+  LogOut,
+  Trash2,
+} from 'lucide-react';
+import { OwnershipModal } from '../components/dog/OwnershipModal';
+import { useConfirm } from '../context/ConfirmModalContext';
 import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 import { Button } from '../components/Button';
@@ -28,6 +36,10 @@ const DogOwnership = () => {
   const { dogId } = useParams();
   const { t } = useTranslation();
   const { userId } = useContext(UserContext);
+  const { showModal } = useConfirm();
+  const [activeModal, setActiveModal] = useState<'invite' | 'transfer' | null>(
+    null,
+  );
   const [resultMessage, setResultMessage] = useState('');
   const [isDeleteDogModalOpen, setIsDeleteDogModalOpen] = useState(false);
   const [selectedTransferMemberId, setSelectedTransferMemberId] = useState('');
@@ -43,7 +55,7 @@ const DogOwnership = () => {
     enabled: !!dogId,
   });
   const capabilities = dogPage?.capabilities;
-  const { data: invites = [] } = useQuery({
+  const { data: invites = [], isLoading: isLoadingInvites } = useQuery({
     queryKey: [...queryKey, 'invites'],
     queryFn: () => fetchPendingDogInvites(dogId!),
     enabled: capabilities?.role === 'PRIMARY_OWNER',
@@ -67,11 +79,14 @@ const DogOwnership = () => {
     enabled: capabilities?.is_owner === true,
   });
 
-  const refreshActions = () => {
-    queryClient.invalidateQueries({ queryKey });
-    queryClient.invalidateQueries({ queryKey: ['dogPage', dogId] });
-  };
+  // Await cache refreshes so controls cannot reappear between server states.
+  const refreshActions = () =>
+    Promise.all([
+      queryClient.invalidateQueries({ queryKey }),
+      queryClient.invalidateQueries({ queryKey: ['dogPage', dogId] }),
+    ]);
   const { mutate: inviteFriend, isPending: isInviting } = useMutation({
+    onError: () => setResultMessage(t('dogOwnership.requestError')),
     mutationFn: (friendId: string) => {
       const idempotencyKey = inviteKeys.current.get(friendId) ?? uuidv4();
       inviteKeys.current.set(friendId, idempotencyKey);
@@ -81,14 +96,16 @@ const DogOwnership = () => {
       // A confirmed response ends this retry window; a later invite is a new action.
       inviteKeys.current.delete(friendId);
       setResultMessage(t(`dogOwnership.outcomes.${result.outcome}`));
-      refreshActions();
+      return refreshActions();
     },
   });
-  const { mutate: cancelInvite } = useMutation({
+  const { mutate: cancelInvite, isPending: isCancelingInvite } = useMutation({
+    onError: () => setResultMessage(t('dogOwnership.requestError')),
     mutationFn: cancelDogInvite,
     onSuccess: refreshActions,
   });
   const { mutate: offerTransfer, isPending: isOfferingTransfer } = useMutation({
+    onError: () => setResultMessage(t('dogOwnership.requestError')),
     mutationFn: (memberId: string) => {
       const idempotencyKey = transferKey.current ?? uuidv4();
       transferKey.current = idempotencyKey;
@@ -97,15 +114,21 @@ const DogOwnership = () => {
     onSuccess: (result) => {
       transferKey.current = null;
       setResultMessage(t(`dogOwnership.outcomes.${result.outcome}`));
-      refreshActions();
+      if (result.outcome === 'CREATED') {
+        setActiveModal(null);
+      }
+      return refreshActions();
     },
   });
-  const { mutate: cancelTransfer } = useMutation({
-    mutationFn: cancelPrimaryTransfer,
-    onSuccess: refreshActions,
-  });
-  const { mutate: proposeDeletion, isPending: isProposingDeletion } =
+  const { mutate: cancelTransfer, isPending: isCancelingTransfer } =
     useMutation({
+      onError: () => setResultMessage(t('dogOwnership.requestError')),
+      mutationFn: cancelPrimaryTransfer,
+      onSuccess: refreshActions,
+    });
+  const { mutateAsync: proposeDeletion, isPending: isProposingDeletion } =
+    useMutation({
+      onError: () => setResultMessage(t('dogOwnership.requestError')),
       mutationFn: () => {
         const idempotencyKey = deletionKey.current ?? uuidv4();
         deletionKey.current = idempotencyKey;
@@ -113,11 +136,11 @@ const DogOwnership = () => {
       },
       onSuccess: () => {
         deletionKey.current = null;
-        refreshActions();
+        return refreshActions();
       },
     });
 
-  if (isLoadingCapabilities || isLoadingFriends) {
+  if (isLoadingCapabilities) {
     return <Loader style={{ paddingTop: '64px' }} />;
   }
 
@@ -151,201 +174,258 @@ const DogOwnership = () => {
     (member) => member.role === 'CO_OWNER',
   );
 
+  const openModal = (modal: 'invite' | 'transfer') => {
+    setResultMessage('');
+    setActiveModal(modal);
+  };
+  const friendName = (friendId: string) =>
+    friends?.find((friend) => friend.id === friendId)?.name ??
+    t('dogOwnership.memberFallback');
+
   return (
-    <main className={styles.container}>
-      <div className={styles.header}>
-        <Link to={`/dogs/${dogId}`} aria-label={t('dogOwnership.back')}>
-          <MoveLeft size={20} />
-        </Link>
-        <h1>{t('dogOwnership.manageTitle')}</h1>
-      </div>
-      <div className={styles.content}>
-        <section className={styles.section}>
+    <div className={styles.content}>
+      <section className={styles.section}>
+        <div className={styles.sectionHeading}>
           <h2>{t('dogOwnership.ownersTitle')}</h2>
-          {members.map((member) => (
+          <span className={styles.count} dir="ltr">
+            {members.length} / 8
+          </span>
+        </div>
+        {/* Display the primary owner first without changing succession order. */}
+        {[...members]
+          .sort(
+            (first, second) =>
+              Number(second.role === 'PRIMARY_OWNER') -
+              Number(first.role === 'PRIMARY_OWNER'),
+          )
+          .map((member) => (
             <div className={styles.row} key={member.id}>
-              <span>{member.user_name ?? member.user_id}</span>
-              <span>{t(`dogOwnership.roles.${member.role}`)}</span>
+              <span className={styles.person}>
+                <UserRound className={styles.avatar} size={36} />
+                {member.user_name ?? t('dogOwnership.memberFallback')}
+              </span>
+              <span className={styles.role}>
+                {t(`dogOwnership.roles.${member.role}`)}
+              </span>
             </div>
           ))}
-        </section>
-
         {capabilities.enabled && capabilities.role === 'PRIMARY_OWNER' ? (
-          <>
-            <section className={styles.section}>
-              <h2>{t('dogOwnership.inviteTitle')}</h2>
-              {eligibleFriends.length === 0 ? (
-                <p className={styles.message}>
-                  {t('dogOwnership.noEligibleFriends')}
-                </p>
-              ) : (
-                <div className={styles.list}>
-                  {eligibleFriends.map((friend) => (
-                    <div className={styles.row} key={friend.id}>
-                      <span>{friend.name}</span>
-                      <Button
-                        disabled={isInviting}
-                        onClick={() => inviteFriend(friend.id)}
-                        type="button"
-                      >
-                        {t('dogOwnership.invite')}
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              )}
-              {resultMessage ? (
-                <p className={styles.message}>{resultMessage}</p>
-              ) : null}
-            </section>
+          <Button
+            variant="secondary"
+            onClick={() => openModal('invite')}
+            disabled={!capabilities.can_invite}
+          >
+            <UserPlus size={18} /> {t('dogOwnership.inviteTitle')}
+          </Button>
+        ) : null}
+      </section>
 
+      {capabilities.enabled && capabilities.role === 'PRIMARY_OWNER' ? (
+        <>
+          {/* Empty administrative sections stay out of the everyday profile. */}
+          {invites.length > 0 ? (
             <section className={styles.section}>
               <h2>{t('dogOwnership.pendingInvites')}</h2>
-              {invites.length === 0 ? (
-                <p className={styles.message}>
-                  {t('dogOwnership.nonePending')}
-                </p>
-              ) : (
-                invites.map((invite) => (
-                  <div className={styles.row} key={invite.id}>
-                    <span>{invite.invitee_user_id}</span>
-                    <Button
-                      onClick={() => cancelInvite(invite.id)}
-                      type="button"
-                      variant="secondary"
-                    >
-                      {t('dogOwnership.cancel')}
-                    </Button>
-                  </div>
-                ))
-              )}
-            </section>
-
-            <section className={styles.section}>
-              <h2>{t('dogOwnership.pendingRequests')}</h2>
-              {requests.length === 0 ? (
-                <p className={styles.message}>
-                  {t('dogOwnership.nonePending')}
-                </p>
-              ) : (
-                requests.map((request) => (
-                  <Link
-                    key={request.id}
-                    to={`/ownership-actions/request/${request.id}`}
-                  >
-                    {t('dogOwnership.reviewRequest')}
-                  </Link>
-                ))
-              )}
-            </section>
-
-            <section className={styles.section}>
-              <h2>{t('dogOwnership.transferTitle')}</h2>
-              {transfers.length > 0 ? (
-                transfers.map((transfer) => (
-                  <div className={styles.row} key={transfer.id}>
-                    <Link to={`/ownership-actions/transfer/${transfer.id}`}>
-                      {t('dogOwnership.transferPending')}
-                    </Link>
-                    <Button
-                      onClick={() => cancelTransfer(transfer.id)}
-                      type="button"
-                      variant="secondary"
-                    >
-                      {t('dogOwnership.cancel')}
-                    </Button>
-                  </div>
-                ))
-              ) : (
-                <div className={styles.actions}>
-                  <select
-                    value={
-                      selectedTransferMemberId ||
-                      eligibleTransferMembers[0]?.id ||
-                      ''
-                    }
-                    onChange={(event) =>
-                      setSelectedTransferMemberId(event.target.value)
-                    }
-                  >
-                    {eligibleTransferMembers.map((member) => (
-                      <option key={member.id} value={member.id}>
-                        {member.user_name ?? member.user_id}
-                      </option>
-                    ))}
-                  </select>
+              {invites.map((invite) => (
+                <div className={styles.row} key={invite.id}>
+                  <span>{friendName(invite.invitee_user_id)}</span>
                   <Button
-                    disabled={
-                      isOfferingTransfer || eligibleTransferMembers.length === 0
-                    }
-                    onClick={() =>
-                      offerTransfer(
-                        selectedTransferMemberId ||
-                          eligibleTransferMembers[0]?.id ||
-                          '',
-                      )
-                    }
+                    disabled={isCancelingInvite}
+                    onClick={() => cancelInvite(invite.id)}
                     type="button"
+                    variant="simple"
                   >
-                    {t('dogOwnership.transferAction')}
+                    {t('dogOwnership.cancel')}
                   </Button>
                 </div>
-              )}
+              ))}
             </section>
-          </>
-        ) : null}
+          ) : null}
+          {requests.length > 0 ? (
+            <section className={styles.section}>
+              <h2>{t('dogOwnership.pendingRequests')}</h2>
+              {requests.map((request) => (
+                <Link
+                  className={styles.actionLink}
+                  key={request.id}
+                  to={`/ownership-actions/request/${request.id}`}
+                >
+                  <span>{friendName(request.requester_user_id)}</span>
+                  <span>{t('dogOwnership.reviewRequest')}</span>
+                </Link>
+              ))}
+            </section>
+          ) : null}
+          {transfers.length > 0 ? (
+            <section className={styles.section}>
+              {transfers.map((transfer) => (
+                <div className={styles.row} key={transfer.id}>
+                  <Link
+                    className={styles.actionLink}
+                    to={`/ownership-actions/transfer/${transfer.id}`}
+                  >
+                    {t('dogOwnership.transferPending')}
+                  </Link>
+                  <Button
+                    disabled={isCancelingTransfer}
+                    onClick={() => cancelTransfer(transfer.id)}
+                    variant="simple"
+                  >
+                    {t('dogOwnership.cancel')}
+                  </Button>
+                </div>
+              ))}
+            </section>
+          ) : null}
+        </>
+      ) : null}
 
+      <div className={styles.secondaryActions}>
+        {capabilities.enabled &&
+        capabilities.role === 'PRIMARY_OWNER' &&
+        eligibleTransferMembers.length > 0 &&
+        transfers.length === 0 ? (
+          <Button
+            variant="simple"
+            onClick={() => openModal('transfer')}
+            disabled={!capabilities.can_transfer}
+          >
+            <ArrowRightLeft size={18} /> {t('dogOwnership.transferTitle')}
+          </Button>
+        ) : null}
         {capabilities.enabled && capabilities.can_leave ? (
-          <Link to={`/dogs/${dogId}/ownership/leave`}>
-            {t('dogOwnership.leaveAction')}
+          <Link
+            className={styles.actionLink}
+            to={`/dogs/${dogId}/ownership/leave`}
+          >
+            <LogOut size={18} /> {t('dogOwnership.leaveAction')}
           </Link>
         ) : null}
-
         {capabilities.enabled && (capabilities.active_owner_count ?? 0) > 1 ? (
-          <section className={styles.section}>
-            <h2>{t('dogOwnership.deletionTitle')}</h2>
-            {deletionProposal ? (
-              <Link
-                to={`/dogs/${dogId}/ownership/deletion/${deletionProposal.id}`}
-              >
-                {t('dogOwnership.reviewDeletion')}
-              </Link>
-            ) : capabilities.role === 'PRIMARY_OWNER' ? (
-              <Button
-                disabled={isProposingDeletion}
-                onClick={() => proposeDeletion()}
-                type="button"
-                variant="secondary"
-              >
-                {t('dogOwnership.proposeDeletion')}
-              </Button>
-            ) : (
-              <p className={styles.message}>
-                {t('dogOwnership.noDeletionProposal')}
-              </p>
-            )}
-          </section>
-        ) : null}
-
-        {members.length === 1 && dogPage.viewer.role === 'PRIMARY_OWNER' ? (
-          <section className={styles.section}>
-            <h2>{t('settings.deleteDogButton', { name: dogPage.dog.name })}</h2>
-            <Button
-              onClick={() => setIsDeleteDogModalOpen(true)}
-              type="button"
-              variant="secondary"
+          deletionProposal ? (
+            <Link
+              className={styles.actionLink}
+              to={`/dogs/${dogId}/ownership/deletion/${deletionProposal.id}`}
             >
-              {t('common.actions.delete')}
+              <Trash2 size={18} /> {t('dogOwnership.reviewDeletion')}
+            </Link>
+          ) : capabilities.role === 'PRIMARY_OWNER' ? (
+            <Button
+              variant="simple"
+              className={styles.danger}
+              disabled={isProposingDeletion}
+              onClick={() =>
+                showModal({
+                  title: t('dogOwnership.deletionWarning'),
+                  confirmText: t('dogOwnership.proposeDeletion'),
+                  onConfirm: async () => {
+                    await proposeDeletion();
+                  },
+                })
+              }
+            >
+              <Trash2 size={18} /> {t('dogOwnership.proposeDeletion')}
             </Button>
-          </section>
+          ) : null
+        ) : null}
+        {members.length === 1 && dogPage.viewer.role === 'PRIMARY_OWNER' ? (
+          <Button
+            variant="simple"
+            className={styles.danger}
+            onClick={() => setIsDeleteDogModalOpen(true)}
+          >
+            <Trash2 size={18} />{' '}
+            {t('settings.deleteDogButton', { name: dogPage.dog.name })}
+          </Button>
         ) : null}
       </div>
+      {resultMessage && !activeModal ? (
+        <p role="status" className={styles.message}>
+          {resultMessage}
+        </p>
+      ) : null}
+
+      {activeModal === 'invite' ? (
+        <OwnershipModal
+          title={t('dogOwnership.inviteTitle')}
+          onClose={() => setActiveModal(null)}
+          isPending={isInviting}
+        >
+          <p className={styles.message}>{t('dogOwnership.disclosure')}</p>
+          {isLoadingFriends || isLoadingInvites ? (
+            <Loader inside />
+          ) : eligibleFriends.length === 0 ? (
+            <p>{t('dogOwnership.noEligibleFriends')}</p>
+          ) : (
+            eligibleFriends.map((friend) => (
+              <div className={styles.row} key={friend.id}>
+                <span>{friend.name}</span>
+                <Button
+                  disabled={isInviting || !capabilities.can_invite}
+                  onClick={() => inviteFriend(friend.id)}
+                >
+                  {t('dogOwnership.invite')}
+                </Button>
+              </div>
+            ))
+          )}
+          <p className={styles.status} role="status">
+            {resultMessage}
+          </p>
+        </OwnershipModal>
+      ) : null}
+      {activeModal === 'transfer' ? (
+        <OwnershipModal
+          title={t('dogOwnership.transferTitle')}
+          onClose={() => setActiveModal(null)}
+          isPending={isOfferingTransfer}
+        >
+          <p className={styles.message}>{t('dogOwnership.transferHelp')}</p>
+          <label className={styles.field}>
+            <span>{t('dogOwnership.successorLabel')}</span>
+            <select
+              value={
+                selectedTransferMemberId || eligibleTransferMembers[0]?.id || ''
+              }
+              onChange={(event) =>
+                setSelectedTransferMemberId(event.target.value)
+              }
+            >
+              {eligibleTransferMembers.map((member) => (
+                <option key={member.id} value={member.id}>
+                  {member.user_name ?? t('dogOwnership.memberFallback')}
+                </option>
+              ))}
+            </select>
+          </label>
+          <Button
+            disabled={
+              isOfferingTransfer ||
+              !capabilities.can_transfer ||
+              eligibleTransferMembers.length === 0
+            }
+            onClick={() =>
+              offerTransfer(
+                selectedTransferMemberId ||
+                  eligibleTransferMembers[0]?.id ||
+                  '',
+              )
+            }
+          >
+            {t('dogOwnership.transferAction')}
+          </Button>
+          <p className={styles.status} role="status">
+            {resultMessage}
+          </p>
+        </OwnershipModal>
+      ) : null}
       <DeleteDogModal
         dog={dogPage.dog}
         isOpen={isDeleteDogModalOpen}
         onClose={() => setIsDeleteDogModalOpen(false)}
       />
-    </main>
+      <Outlet />
+    </div>
   );
 };
 
