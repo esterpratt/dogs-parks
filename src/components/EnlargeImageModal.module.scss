@@ -32,16 +32,18 @@
     white-space: normal;
 
     &:only-child {
-      margin-inline-start: 100%;
-      transform: translateX(-100%);
+      // Auto margins align a single action without creating overflow or shrinking it.
+      margin-inline-start: auto;
     }
   }
 
-  // Keep the text action padded and allow long translated labels to wrap.
+  // Keep the primary action at its original content width beside Delete.
+  // Labels can wrap on narrow screens while the icon remains readable.
   .primary-button {
-    padding: 8px 16px;
+    padding: 8px 12px;
     min-width: 0;
-    flex: 1;
+    max-width: 100%;
+    flex: 0 1 auto;
     > svg { flex-shrink: 0; }
   }
 
@@ -72,10 +74,6 @@
       width: 100%;
     }
   }
-}
-
-:global(.rtl) .modal-image .button .button-container:only-child {
-  transform: translateX(100%);
 }
 
 @media (orientation: landscape) {
