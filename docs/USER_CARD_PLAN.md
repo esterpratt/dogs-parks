@@ -8,7 +8,7 @@ Shared dogs can appear on several people's cards. Make the person the primary id
 
 - Show the person's name as the main title.
 - Keep the first dog's photo and the current dog-placeholder fallback. Do not add a user icon or personal-avatar feature.
-- Show dog names as secondary text, prefixed with “Human of”: for example, “Human of Luna, Milo”. Omit this line when the person has no dogs.
+- Show dog names as secondary text, prefixed with “Human of”: for example, “Human of Luna & Milo” or “Human of Luna, Milo & Bella”. Match the user-page title: commas between names and `&` before the last dog. Omit this line when the person has no dogs.
 - Keep the existing card measurements, spacing, image dimensions, navigation, login gating and friendship actions.
 - Preserve existing privacy/discoverability rules. Do not expose other owners or distinguish primary owners from co-owners on these cards.
 

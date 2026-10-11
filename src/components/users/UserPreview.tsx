@@ -15,6 +15,7 @@ import { useUpdateFriendship } from '../../hooks/api/useUpdateFriendship';
 import { FRIENDSHIP_STATUS } from '../../types/friendship';
 import { Card } from '../card/Card';
 import { capitalizeText } from '../../utils/text';
+import { getDogNames } from '../../utils/getDogNames';
 import { TopModal } from '../modals/TopModal';
 import { Button } from '../Button';
 import { Image } from '../Image';
@@ -47,10 +48,15 @@ const UserPreview: React.FC<UserPreviewProps> = (props) => {
   });
 
   const isRTLMode = isRTL(i18n.language);
-  // Isolate each name so mixed-script names and punctuation retain their order.
-  const dogNames = user.dogs
-    .map((dog) => `\u2068${capitalizeText(dog.name)}\u2069`)
-    .join(i18n.language.startsWith('ar') ? '، ' : ', ');
+  // Match profile name separators while preserving each mixed-script name's direction.
+  const dogNames = user.dogs.length
+    ? getDogNames(
+        user.dogs.map((dog) => ({
+          ...dog,
+          name: `\u2068${capitalizeText(dog.name)}\u2069`,
+        })),
+      )
+    : '';
 
   return (
     <>
