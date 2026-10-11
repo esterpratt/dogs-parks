@@ -257,20 +257,20 @@
     font-size: 14px;
   }
 }
-// Owner icons share the app green; role labels retain the shared grey text style.
+// Owner icons share the app orange; role labels retain the shared grey text style.
 .owner-card {
   .person > svg {
-    color: $green;
-    border-color: $green;
-    background: rgba($green, 0.08);
+    color: $orange;
+    border-color: $orange;
+    background: rgba($orange, 0.08);
   }
 }
 .primary-owner {
   // Matching side accents frame the primary owner in both reading directions.
-  border-inline: 4px solid $green;
+  border-inline: 4px solid $orange;
   .person > svg {
-    color: $green;
-    border-color: $green;
-    background: rgba($green, 0.08);
+    color: $orange;
+    border-color: $orange;
+    background: rgba($orange, 0.08);
   }
 }
