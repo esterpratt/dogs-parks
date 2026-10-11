@@ -260,18 +260,19 @@
 // Distinguish owner roles with app colors while retaining their explicit labels.
 .owner-card {
   .person > svg {
-    color: $green;
-    border-color: $green;
-    background: rgba($green, 0.08);
-  }
-  .role { color: $green; }
-}
-.primary-owner {
-  border-inline-start: 4px solid $orange;
-  .person > svg {
     color: $orange;
     border-color: $orange;
     background: rgba($orange, 0.08);
   }
   .role { color: $orange; }
+}
+.primary-owner {
+  // Matching side accents frame the primary owner in both reading directions.
+  border-inline: 4px solid $green;
+  .person > svg {
+    color: $green;
+    border-color: $green;
+    background: rgba($green, 0.08);
+  }
+  .role { color: $green; }
 }
