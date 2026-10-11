@@ -100,3 +100,9 @@ describe('translateNotification', () => {
     );
   });
 });
+
+// A dog name disambiguates notifications from multiple shared dogs.
+it('includes the dog name in ownership notification titles', () => {
+  const result = translateNotification({ type: 'dog_ownership_invite_received', senderName: 'Dana', dogName: 'Milo', t: makeT() });
+  expect(result.title).toBe('dogOwnership.notifications.inviteReceivedTitle:Dana · Milo');
+});

@@ -1,6 +1,8 @@
+import { fetchDogPage } from './dogs';
 import { Capacitor } from '@capacitor/core';
 import { supabase } from './supabase-client';
 import {
+  Notification,
   NotificationType,
   NotificationTargetType,
   Platform,
@@ -47,7 +49,7 @@ interface MarkNotificationsSeenParams {
 }
 
 const normalizeSender = (
-  raw: unknown
+  raw: unknown,
 ): { id: string; name: string | null } | undefined => {
   if (Array.isArray(raw)) {
     const first = raw[0] as unknown;
@@ -153,7 +155,7 @@ const getNotificationPreferences = async ({
 };
 
 const updateNotificationPreferences = async (
-  preferences: Partial<NotificationPreferences>
+  preferences: Partial<NotificationPreferences>,
 ) => {
   const {
     user_id,
@@ -209,6 +211,68 @@ const updateNotificationPreferences = async (
   }
 };
 
+// Batch dog context for the page of notifications; both reads retain the signed-in user's RLS.
+const withOwnershipDogNames = async (
+  notifications: Notification[],
+): Promise<Notification[]> => {
+  const ownership = notifications.filter((notification) =>
+    notification.type.toLowerCase().startsWith('dog_'),
+  );
+  if (!ownership.length) {
+    return notifications;
+  }
+  const { data: metadata, error } = await supabase
+    .from('notifications')
+    .select('id,data,target_type,target_id')
+    .in(
+      'id',
+      ownership.map((notification) => notification.id),
+    );
+  if (error || !metadata) {
+    return notifications;
+  }
+  const dogIds = new Map<string, string>();
+  const savedNames = new Map<string, string>();
+  for (const notification of metadata) {
+    const data = notification.data;
+    if (data && typeof data === 'object' && !Array.isArray(data)) {
+      if (typeof data.dog_id === 'string') {
+        dogIds.set(notification.id, data.dog_id);
+      }
+      if (typeof data.dog_name === 'string') {
+        savedNames.set(notification.id, data.dog_name);
+      }
+    }
+    if (notification.target_type === 'DOG' && notification.target_id) {
+      dogIds.set(notification.id, notification.target_id);
+    }
+  }
+  const ids = [...new Set(dogIds.values())];
+  // Dog table reads are intentionally restricted; use the existing authenticated dog-page API.
+  const pages = await Promise.all(
+    ids.map(async (id) => {
+      try {
+        return await fetchDogPage(id);
+      } catch {
+        return null;
+      }
+    }),
+  );
+  const names = new Map(
+    pages.flatMap((page) =>
+      page ? [[page.dog.id, page.dog.name] as const] : [],
+    ),
+  );
+  return notifications.map((notification) => ({
+    ...notification,
+    dog_id: dogIds.get(notification.id),
+    dog_name:
+      savedNames.get(notification.id) ??
+      names.get(dogIds.get(notification.id) ?? '') ??
+      undefined,
+  }));
+};
+
 const getSeenNotifications = async ({
   userId,
   limit,
@@ -241,21 +305,23 @@ const getSeenNotifications = async ({
       sender: unknown;
     }>;
 
-    return rows.map((notification) => ({
-      id: notification.id,
-      type: notification.type as NotificationType,
-      target_type: notification.target_type as NotificationTargetType,
-      target_id: notification.target_id,
-      sender_id: notification.sender_id,
-      receiver_id: notification.receiver_id ?? userId,
-      title: notification.title,
-      app_message: notification.app_message,
-      push_message: notification.push_message,
-      read_at: notification.read_at,
-      seen_at: notification.seen_at,
-      created_at: notification.created_at,
-      sender: normalizeSender(notification.sender),
-    }));
+    return withOwnershipDogNames(
+      rows.map((notification) => ({
+        id: notification.id,
+        type: notification.type as NotificationType,
+        target_type: notification.target_type as NotificationTargetType,
+        target_id: notification.target_id,
+        sender_id: notification.sender_id,
+        receiver_id: notification.receiver_id ?? userId,
+        title: notification.title,
+        app_message: notification.app_message,
+        push_message: notification.push_message,
+        read_at: notification.read_at,
+        seen_at: notification.seen_at,
+        created_at: notification.created_at,
+        sender: normalizeSender(notification.sender),
+      })),
+    );
   } catch (error) {
     console.error('Error fetching seen notifications (RPC):', error);
     return [];
@@ -288,21 +354,23 @@ const getUnseenNotifications = async (userId: string) => {
       sender: unknown;
     }>;
 
-    return rows.map((notification) => ({
-      id: notification.id,
-      type: notification.type as NotificationType,
-      target_type: notification.target_type as NotificationTargetType,
-      target_id: notification.target_id,
-      sender_id: notification.sender_id,
-      receiver_id: notification.receiver_id ?? userId,
-      title: notification.title,
-      app_message: notification.app_message,
-      push_message: notification.push_message,
-      read_at: notification.read_at,
-      seen_at: notification.seen_at,
-      created_at: notification.created_at,
-      sender: normalizeSender(notification.sender),
-    }));
+    return withOwnershipDogNames(
+      rows.map((notification) => ({
+        id: notification.id,
+        type: notification.type as NotificationType,
+        target_type: notification.target_type as NotificationTargetType,
+        target_id: notification.target_id,
+        sender_id: notification.sender_id,
+        receiver_id: notification.receiver_id ?? userId,
+        title: notification.title,
+        app_message: notification.app_message,
+        push_message: notification.push_message,
+        read_at: notification.read_at,
+        seen_at: notification.seen_at,
+        created_at: notification.created_at,
+        sender: normalizeSender(notification.sender),
+      })),
+    );
   } catch (error) {
     console.error('Error fetching unseen notifications (RPC):', error);
     return [];
@@ -325,7 +393,7 @@ const getUnseenNotificationsCount = async (): Promise<number> => {
 };
 
 const markNotificationsSeen = async (
-  params: MarkNotificationsSeenParams
+  params: MarkNotificationsSeenParams,
 ): Promise<void> => {
   const { notificationIds } = params;
 

@@ -219,7 +219,7 @@ test.describe('staging ownership browser journeys', () => {
         primary.getByRole('dialog', { name: 'Add owner' }),
       ).toHaveCount(0);
       await expect(
-        primary.getByText('The ownership action was sent.', {
+        primary.getByText('Ownership invitation sent.', {
           exact: true,
         }),
       ).toBeVisible();
@@ -230,7 +230,7 @@ test.describe('staging ownership browser journeys', () => {
         friend.getByRole('button', { name: 'Approve', exact: true }),
       ).toBeDisabled();
       // Decisions close into the dog page with a toast; retries use a new invitation.
-      const declinedDialog = friend.getByRole('heading', { name: 'You have an ownership invitation' }).locator('..');
+      const declinedDialog = friend.getByRole('heading', { name: 'Invitation awaiting your decision' }).locator('..');
       await expect(friend.getByRole('dialog')).toHaveCount(0);
       await expect(declinedDialog.getByRole('button')).toHaveCount(2);
       await clickRpc({
@@ -248,7 +248,7 @@ test.describe('staging ownership browser journeys', () => {
       await expect(declinedDialog).toHaveCount(0);
       await expect(friend).toHaveURL(new RegExp(`/dogs/${dogId}$`));
       await expect(
-        friend.getByText('The action was declined.', { exact: true }),
+        friend.getByText('Ownership invitation declined.', { exact: true }),
       ).toBeVisible();
       await friend.screenshot({
         path: '.private/staging/ui-invitation-declined.png',
@@ -256,13 +256,14 @@ test.describe('staging ownership browser journeys', () => {
       // The completed notification opens the declined list without replaying a toast.
       await primary.goto(`/ownership-actions/invite/${resultString(invite, 'action_id')}`);
       await expect(primary.getByRole('heading', { name: 'Declined invitations' })).toBeVisible();
-      await expect(primary.getByText('The action was declined.', { exact: true })).toHaveCount(0);
+      await expect(primary.getByText('Ownership invitation declined.', { exact: true })).toHaveCount(0);
       invite = await clickRpc({
         page: primary,
         control: primary.getByRole('button', { name: 'Invite again', exact: true }),
         name: 'api_create_dog_invite',
         outcome: 'CREATED',
       });
+      await expect(primary.getByRole('heading', { name: 'Declined invitations' })).toHaveCount(0);
       await friend.goto(
         `/ownership-actions/invite/${resultString(invite, 'action_id')}`,
       );
@@ -292,7 +293,7 @@ test.describe('staging ownership browser journeys', () => {
         new RegExp(`/dogs/${dogId}/ownership$`),
       );
       await expect(
-        friend.getByText('The invitation was accepted.', { exact: true }),
+        friend.getByText('You are now a co-owner.', { exact: true }),
       ).toBeVisible();
       // The other owner's existing screen must update through Realtime.
       await expect(
@@ -405,8 +406,7 @@ test.describe('staging ownership browser journeys', () => {
         })
         .click();
       await primary
-        .getByRole('combobox')
-        .selectOption({ label: 'Staging friend' });
+        .getByRole('radio', { name: 'Staging friend', exact: true }).check();
       await expect(
         primary.getByRole('button', { name: 'Invite', exact: true }),
       ).toHaveCount(0);
@@ -449,8 +449,7 @@ test.describe('staging ownership browser journeys', () => {
         })
         .click();
       await primary
-        .getByRole('combobox')
-        .selectOption({ label: 'Staging friend' });
+        .getByRole('radio', { name: 'Staging friend', exact: true }).check();
       const transfer = await clickRpc({
         page: primary,
         control: primary.getByRole('button', {
@@ -489,20 +488,19 @@ test.describe('staging ownership browser journeys', () => {
         .click();
       await expect(friend.getByRole('checkbox')).toBeVisible();
       await friend
-        .getByRole('combobox')
-        .selectOption({ label: 'Staging coowner' });
+        .getByRole('radio', { name: 'Staging coowner', exact: true }).check();
       const intendedSuccessor = await friend
-        .getByRole('option', { name: 'Staging coowner', exact: true })
+        .getByRole('radio', { name: 'Staging coowner', exact: true })
         .getAttribute('value');
-      await expect(friend.getByRole('combobox')).toHaveValue(
+      await expect(friend.getByRole('radio', { name: 'Staging coowner', exact: true })).toHaveValue(
         intendedSuccessor!,
       );
       await friend.getByRole('checkbox').check();
-      await expect(friend.getByRole('combobox')).toHaveValue(
+      await expect(friend.getByRole('radio', { name: 'Staging coowner', exact: true })).toHaveValue(
         intendedSuccessor!,
       );
       const successorMemberId = await friend
-        .getByRole('combobox')
+        .getByRole('radio', { name: 'Staging coowner', exact: true })
         .inputValue();
       const departure = await clickRpc({
         page: friend,

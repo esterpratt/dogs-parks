@@ -43,6 +43,8 @@ enum Platform {
 }
 
 interface Notification {
+  dog_name?: string;
+  dog_id?: string;
   id: string;
   target_type: NotificationTargetType;
   target_id: string;

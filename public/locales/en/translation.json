@@ -1181,13 +1181,13 @@
     "inviteTitle": "Add owner",
     "invite": "Invite",
     "noEligibleFriends": "There are no eligible friends to invite.",
-    "pendingInvites": "Awaiting invitations",
-    "pendingRequests": "Pending requests",
+    "pendingInvites": "Invitations awaiting their response",
+    "pendingRequests": "Requests awaiting your decision",
     "nonePending": "There are no pending actions.",
-    "reviewRequest": "Review ownership request",
+    "reviewRequest": "Review request",
     "cancel": "Cancel",
-    "requestPending": "Your ownership request is pending.",
-    "cancelRequest": "Cancel request",
+    "requestPending": "The primary owner has not responded to your request yet.",
+    "cancelRequest": "Withdraw request",
     "disclosure": "All owners can edit the dog’s details, upload photos, and choose the main photo. You can delete your own uploads; the primary owner can delete any shared photo. Fellow owners can see your name even in hide mode. Shared photos remain if you leave or delete your account. Only the primary owner can invite owners, approve ownership requests, or offer the primary role. Deleting a shared dog requires every owner’s approval.",
     "disclosureAccept": "I understand these permissions.",
     "submitRequest": "Send request",
@@ -1203,7 +1203,7 @@
     "transferAction": "Send offer",
     "transferPending": "Primary role offer pending",
     "leaveTitle": "Leave ownership",
-    "leaveWarning": "Leaving removes your access immediately. A primary owner must choose an eligible successor.",
+    "leaveWarning": "Leaving removes your editing and photo-management access. Your shared photos will remain. If you are the primary owner, choose who will take over.",
     "successorLabel": "New primary owner",
     "leaveConfirm": "I understand that I will lose access.",
     "leaveAction": "Leave ownership",
@@ -1231,7 +1231,7 @@
       "CAPACITY_REACHED": "This dog already has the maximum number of owners.",
       "CREATED": "The ownership action was sent.",
       "DECLINED": "The action was declined.",
-      "DELETION_PREPARED": "Dog deletion cleanup was prepared.",
+      "DELETION_PREPARED": "The dog has been removed. Its photos are being deleted.",
       "DISCLOSURE_REQUIRED": "Accept the shared ownership disclosure first.",
       "DOG_UNAVAILABLE": "This dog is no longer available.",
       "EXPIRED": "This action has expired.",
@@ -1290,12 +1290,46 @@
       "deletionCompletedTitle": "Dog deleted",
       "deletionCompletedMessage": "The shared dog was deleted after every owner approved."
     },
-    "yourInvitation": "You have an ownership invitation",
+    "yourInvitation": "Invitation awaiting your decision",
     "declinedInvites": "Declined invitations",
     "inviteAgain": "Invite again",
     "me": "Me",
     "inviteHelp": "Choose friends to invite as co-owners. They will become owners after accepting your invitation.",
-    "reviewOffer": "Review offer"
+    "reviewOffer": "Review offer",
+    "pendingTransferTitle": "Primary role offer awaiting their response",
+    "incomingTransferTitle": "Primary role offer awaiting your decision",
+    "outgoingRequestTitle": "Request awaiting their response",
+    "revokeInvitation": "Revoke invitation",
+    "revokeOffer": "Withdraw offer",
+    "invitationSent": "Ownership invitation sent.",
+    "invitationRevoked": "Ownership invitation revoked.",
+    "offerSent": "Primary role offer sent.",
+    "offerRevoked": "Primary role offer withdrawn.",
+    "requestSent": "Ownership request sent.",
+    "requestCanceled": "Ownership request withdrawn.",
+    "deletionSent": "Deletion request sent to the other owners.",
+    "requestReviewHelp": "Approve this request to add this person as a co-owner. They will be able to edit the dog’s details and manage their shared photos.",
+    "feedback": {
+      "invite": {
+        "ACCEPTED": "You are now a co-owner.",
+        "DECLINED": "Ownership invitation declined."
+      },
+      "request": {
+        "APPROVED": "Co-owner added.",
+        "DECLINED": "Ownership request declined."
+      },
+      "transfer": {
+        "ACCEPTED": "You are now the primary owner.",
+        "DECLINED": "Primary role offer declined."
+      }
+    },
+    "receipt": {
+      "ACCEPTED": "Accepted",
+      "APPROVED": "Approved",
+      "DECLINED": "Declined",
+      "CANCELED": "Withdrawn",
+      "EXPIRED": "Expired"
+    }
   },
   "reports": {
     "reviewModal": {

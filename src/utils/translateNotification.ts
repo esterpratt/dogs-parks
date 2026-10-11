@@ -2,6 +2,7 @@ import { TFunction } from 'i18next';
 import { capitalizeWords } from './text';
 
 interface TranslateNotificationParams {
+  dogName?: string | null;
   type?: string | null;
   senderName?: string | null;
   serverTitle?: string | null;
@@ -125,7 +126,8 @@ const typeKeyMap: Record<string, { title: string; appMessage: string }> = {
 function translateNotification(
   params: TranslateNotificationParams,
 ): TranslateNotificationResult {
-  const { type, senderName, serverTitle, serverAppMessage, t } = params;
+  const { type, senderName, dogName, serverTitle, serverAppMessage, t } =
+    params;
 
   const safeName =
     senderName && senderName.trim().length > 0
@@ -138,7 +140,14 @@ function translateNotification(
     const keys = typeKeyMap[lookupKey];
     const title = t(keys.title, { name: safeName });
     const appMessage = t(keys.appMessage, { name: safeName });
-    return { title, appMessage };
+    // Put the dog in the title so every ownership event has an unmistakable subject.
+    return {
+      title:
+        lookupKey.startsWith('DOG_') && dogName?.trim()
+          ? `${title} · ${dogName.trim()}`
+          : title,
+      appMessage,
+    };
   }
 
   // Fallbacks: use server-provided strings when available, otherwise generic defaults

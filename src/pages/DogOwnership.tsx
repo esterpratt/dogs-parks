@@ -1,7 +1,20 @@
 import { useContext, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
-import { UserRound, Plus, ArrowRightLeft, LogOut, Trash2 } from 'lucide-react';
+import {
+  Link,
+  Outlet,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom';
+import {
+  User as UserIcon,
+  Plus,
+  ArrowRightLeft,
+  LogOut,
+  Trash2,
+} from 'lucide-react';
+import { RadioInputs } from '../components/inputs/RadioInputs';
 import { OwnershipAction } from './OwnershipAction';
 import { OwnershipModal } from '../components/dog/OwnershipModal';
 import { SelectUsers } from '../components/SelectUsers';
@@ -33,6 +46,24 @@ import styles from './DogOwnership.module.scss';
 const DogOwnership = () => {
   const { dogId } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const notificationStatus = searchParams.get('status');
+  const receiptType = searchParams.get('action');
+  const receiptTitle =
+    receiptType === 'request'
+      ? 'requestResponseTitle'
+      : receiptType === 'transfer'
+        ? 'transferResponseTitle'
+        : 'inviteResponseTitle';
+  const visibleStatus = [
+    'ACCEPTED',
+    'APPROVED',
+    'DECLINED',
+    'CANCELED',
+    'EXPIRED',
+  ].includes(notificationStatus ?? '')
+    ? notificationStatus
+    : null;
   const { notify } = useNotification();
   const [invitedFriends, setInvitedFriends] = useState<User[]>([]);
   const { t } = useTranslation();
@@ -63,7 +94,14 @@ const DogOwnership = () => {
   });
   const invites = allInvites.filter((invite) => invite.status === 'PENDING');
   const declinedInvites = allInvites.filter(
-    (invite) => invite.status === 'DECLINED',
+    (invite) =>
+      invite.status === 'DECLINED' &&
+      !dogPage?.members?.some(
+        (member) => member.user_id === invite.invitee_user_id,
+      ) &&
+      !invites.some(
+        (pending) => pending.invitee_user_id === invite.invitee_user_id,
+      ),
   );
   const { data: requests = [] } = useQuery({
     queryKey: [...queryKey, 'requests'],
@@ -117,7 +155,7 @@ const DogOwnership = () => {
       setInvitedFriends(failedFriends);
       if (!failedFriends.length) {
         setActiveModal(null);
-        notify(t('dogOwnership.outcomes.CREATED'));
+        notify(t('dogOwnership.invitationSent'));
       } else {
         const firstFailure = results.find(
           (result) =>
@@ -139,7 +177,11 @@ const DogOwnership = () => {
     mutationFn: cancelDogInvite,
     onSuccess: (result) => {
       notify(
-        t(`dogOwnership.outcomes.${result.outcome}`),
+        t(
+          result.outcome === 'CANCELED'
+            ? 'dogOwnership.invitationRevoked'
+            : `dogOwnership.outcomes.${result.outcome}`,
+        ),
         result.outcome !== 'CANCELED',
       );
       return refreshActions();
@@ -155,7 +197,11 @@ const DogOwnership = () => {
     onSuccess: (result) => {
       transferKey.current = null;
       notify(
-        t(`dogOwnership.outcomes.${result.outcome}`),
+        t(
+          result.outcome === 'CREATED'
+            ? 'dogOwnership.offerSent'
+            : `dogOwnership.outcomes.${result.outcome}`,
+        ),
         result.outcome !== 'CREATED',
       );
       if (result.outcome === 'CREATED') {
@@ -170,7 +216,11 @@ const DogOwnership = () => {
       mutationFn: cancelPrimaryTransfer,
       onSuccess: (result) => {
         notify(
-          t(`dogOwnership.outcomes.${result.outcome}`),
+          t(
+            result.outcome === 'CANCELED'
+              ? 'dogOwnership.offerRevoked'
+              : `dogOwnership.outcomes.${result.outcome}`,
+          ),
           result.outcome !== 'CANCELED',
         );
         return refreshActions();
@@ -186,7 +236,11 @@ const DogOwnership = () => {
       },
       onSuccess: (result) => {
         notify(
-          t(`dogOwnership.outcomes.${result.outcome}`),
+          t(
+            result.outcome === 'CREATED'
+              ? 'dogOwnership.deletionSent'
+              : `dogOwnership.outcomes.${result.outcome}`,
+          ),
           result.outcome !== 'CREATED',
         );
         deletionKey.current = null;
@@ -233,6 +287,14 @@ const DogOwnership = () => {
 
   return (
     <div className={styles.content}>
+      {!dogPage.viewer.is_owner && visibleStatus ? (
+        <section className={styles.group}>
+          <h2 className={styles.title}>{t(`dogOwnership.${receiptTitle}`)}</h2>
+          <div className={styles.section}>
+            <p>{t(`dogOwnership.receipt.${visibleStatus}`)}</p>
+          </div>
+        </section>
+      ) : null}
       {invites
         .filter((invite) => invite.invitee_user_id === userId)
         .map((invite) => (
@@ -243,7 +305,7 @@ const DogOwnership = () => {
       requests.some((request) => request.requester_user_id === userId) ? (
         <section className={styles.group}>
           <h2 className={styles.title}>
-            {t('dogOwnership.requestResponseTitle')}
+            {t('dogOwnership.outgoingRequestTitle')}
           </h2>
           <div className={styles.section}>
             <p>{t('dogOwnership.requestPending')}</p>
@@ -269,7 +331,7 @@ const DogOwnership = () => {
             .map((transfer) => (
               <section className={styles.group} key={transfer.id}>
                 <h2 className={styles.title}>
-                  {t('dogOwnership.transferResponseTitle')}
+                  {t('dogOwnership.incomingTransferTitle')}
                 </h2>
                 <div className={styles.section}>
                   <p>{t('dogOwnership.transferResponseHelp')}</p>
@@ -321,7 +383,11 @@ const DogOwnership = () => {
                       className={styles.person}
                       to={`/profile/${member.user_id}`}
                     >
-                      <UserRound className={styles.avatar} size={36} />
+                      <UserIcon
+                        className={styles.avatar}
+                        size={24}
+                        aria-hidden="true"
+                      />
                       {member.user_id === userId
                         ? t('dogOwnership.me')
                         : (member.user_name ??
@@ -338,6 +404,37 @@ const DogOwnership = () => {
           {capabilities.enabled && capabilities.role === 'PRIMARY_OWNER' ? (
             <>
               {/* Empty administrative sections stay out of the everyday profile. */}
+              {requests.length > 0 ? (
+                <section className={styles.group}>
+                  <h2 className={styles.title}>
+                    {t('dogOwnership.pendingRequests')}
+                  </h2>
+                  <div className={styles.section}>
+                    {requests.map((request) => (
+                      <div className={styles.row} key={request.id}>
+                        <Link
+                          className={styles.person}
+                          to={`/profile/${request.requester_user_id}`}
+                        >
+                          <UserIcon size={24} aria-hidden="true" />
+                          {friendName(request.requester_user_id)}
+                        </Link>
+                        <Button
+                          className={styles.button}
+                          variant="secondary"
+                          onClick={() =>
+                            navigate(
+                              `/dogs/${dogId}/ownership/actions/request/${request.id}`,
+                            )
+                          }
+                        >
+                          {t('dogOwnership.reviewRequest')}
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              ) : null}
               {invites.length > 0 ? (
                 <section className={styles.group}>
                   <h2 className={styles.title}>
@@ -346,14 +443,49 @@ const DogOwnership = () => {
                   <div className={styles.section}>
                     {invites.map((invite) => (
                       <div className={styles.row} key={invite.id}>
-                        <span>{friendName(invite.invitee_user_id)}</span>
+                        <Link
+                          className={styles.person}
+                          to={`/profile/${invite.invitee_user_id}`}
+                        >
+                          <UserIcon size={24} aria-hidden="true" />
+                          {friendName(invite.invitee_user_id)}
+                        </Link>
                         <Button
                           disabled={isCancelingInvite}
                           onClick={() => cancelInvite(invite.id)}
                           type="button"
                           variant="secondary"
                         >
-                          {t('dogOwnership.cancel')}
+                          {t('dogOwnership.revokeInvitation')}
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              ) : null}
+              {transfers.length > 0 ? (
+                <section className={styles.group}>
+                  <h2 className={styles.title}>
+                    {t('dogOwnership.pendingTransferTitle')}
+                  </h2>
+                  <div className={styles.section}>
+                    {transfers.map((transfer) => (
+                      <div className={styles.row} key={transfer.id}>
+                        <Link
+                          className={styles.person}
+                          to={`/profile/${members.find((member) => member.id === transfer.to_member_id)?.user_id}`}
+                        >
+                          <UserIcon size={24} aria-hidden="true" />
+                          {members.find(
+                            (member) => member.id === transfer.to_member_id,
+                          )?.user_name ?? t('dogOwnership.memberFallback')}
+                        </Link>
+                        <Button
+                          disabled={isCancelingTransfer}
+                          onClick={() => cancelTransfer(transfer.id)}
+                          variant="secondary"
+                        >
+                          {t('dogOwnership.revokeOffer')}
                         </Button>
                       </div>
                     ))}
@@ -379,7 +511,11 @@ const DogOwnership = () => {
                       );
                       return (
                         <div className={styles.row} key={invite.id}>
-                          <Link to={`/profile/${invite.invitee_user_id}`}>
+                          <Link
+                            className={styles.person}
+                            to={`/profile/${invite.invitee_user_id}`}
+                          >
+                            <UserIcon size={24} aria-hidden="true" />
                             {friendName(invite.invitee_user_id)}
                           </Link>
                           <Button
@@ -399,54 +535,6 @@ const DogOwnership = () => {
                         </div>
                       );
                     })}
-                  </div>
-                </section>
-              ) : null}
-              {requests.length > 0 ? (
-                <section className={styles.group}>
-                  <h2 className={styles.title}>
-                    {t('dogOwnership.pendingRequests')}
-                  </h2>
-                  <div className={styles.section}>
-                    {requests.map((request) => (
-                      <div className={styles.row} key={request.id}>
-                        <Link to={`/profile/${request.requester_user_id}`}>
-                          {friendName(request.requester_user_id)}
-                        </Link>
-                        <Button
-                          className={styles.button}
-                          variant="secondary"
-                          onClick={() =>
-                            navigate(
-                              `/dogs/${dogId}/ownership/actions/request/${request.id}`,
-                            )
-                          }
-                        >
-                          {t('dogOwnership.reviewRequest')}
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              ) : null}
-              {transfers.length > 0 ? (
-                <section className={styles.group}>
-                  <h2 className={styles.title}>
-                    {t('dogOwnership.transferTitle')}
-                  </h2>
-                  <div className={styles.section}>
-                    {transfers.map((transfer) => (
-                      <div className={styles.row} key={transfer.id}>
-                        <span>{t('dogOwnership.transferPending')}</span>
-                        <Button
-                          disabled={isCancelingTransfer}
-                          onClick={() => cancelTransfer(transfer.id)}
-                          variant="secondary"
-                        >
-                          {t('dogOwnership.cancel')}
-                        </Button>
-                      </div>
-                    ))}
                   </div>
                 </section>
               ) : null}
@@ -531,8 +619,9 @@ const DogOwnership = () => {
               }
             >
               <p>{t('dogOwnership.inviteHelp')}</p>
-              <div className={styles.friendPicker}>
+              <div>
                 <SelectUsers
+                  inlineDropdown
                   users={eligibleFriends}
                   selectedUsers={invitedFriends}
                   setSelectedUsers={setInvitedFriends}
@@ -564,25 +653,24 @@ const DogOwnership = () => {
               }
             >
               <p>{t('dogOwnership.transferHelp')}</p>
-              <label className={styles.field}>
-                <span>{t('dogOwnership.successorLabel')}</span>
-                <select
-                  value={
-                    selectedTransferMemberId ||
-                    eligibleTransferMembers[0]?.id ||
-                    ''
-                  }
-                  onChange={(event) =>
-                    setSelectedTransferMemberId(event.target.value)
-                  }
-                >
-                  {eligibleTransferMembers.map((member) => (
-                    <option key={member.id} value={member.id}>
-                      {member.user_name ?? t('dogOwnership.memberFallback')}
-                    </option>
-                  ))}
-                </select>
-              </label>
+              <RadioInputs
+                label={t('dogOwnership.successorLabel')}
+                name="transfer-successor"
+                value={
+                  selectedTransferMemberId ||
+                  eligibleTransferMembers[0]?.id ||
+                  ''
+                }
+                inputClassName={styles.memberOption}
+                options={eligibleTransferMembers.map((member) => ({
+                  id: `transfer-${member.id}`,
+                  value: member.id,
+                  label: member.user_name ?? t('dogOwnership.memberFallback'),
+                }))}
+                onOptionChange={(event) =>
+                  setSelectedTransferMemberId(event.target.value)
+                }
+              />
             </OwnershipModal>
           ) : null}
           <DeleteDogModal

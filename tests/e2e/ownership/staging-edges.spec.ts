@@ -134,8 +134,10 @@ test.describe('staging notification and photo edges', () => {
       const role = (['primary', 'coowner', 'friend'] as const)[index];
       await loginWithEmail(page, fixture.accounts[role]);
     }
+    // The notification identifies its dog before opening the ownership decision.
     // The action must be reachable by clicking the actual notification card.
     await friend.goto('/notifications');
+    await expect(friend.getByRole('button').filter({ hasText: 'Ownership invitation' })).toContainText('Browser journey edges');
     await friend
       .getByRole('button')
       .filter({ hasText: 'Ownership invitation' })
@@ -164,8 +166,8 @@ test.describe('staging notification and photo edges', () => {
       friend.getByText('This action has expired.', { exact: true }),
     ).toBeVisible();
     await friend.goto(`/ownership-actions/invite/${fixture.inviteId}`);
-    await expect(friend).toHaveURL(new RegExp(`/dogs/${fixture.dogId}$`));
-    await expect(friend.getByText('This action has expired.', { exact: true })).toHaveCount(0);
+    await expect(friend).toHaveURL(new RegExp(`/dogs/${fixture.dogId}/ownership\\?status=EXPIRED&action=invite$`));
+    await expect(friend.getByText('Expired', { exact: true })).toBeVisible();
     await expect(
       friend.getByRole('button', { name: 'Approve', exact: true }),
     ).toHaveCount(0);

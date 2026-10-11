@@ -122,7 +122,7 @@ it.each([true, false])(
     await screen.findByText(approve ? "Owner tab" : "Dog details");
     expect(screen.queryByRole("dialog")).toBeNull();
     expect(state.notify).toHaveBeenCalledWith(
-      `dogOwnership.outcomes.${outcome}`,
+      `dogOwnership.feedback.invite.${outcome}`,
       false,
     );
   },
@@ -181,7 +181,7 @@ it.each([true, false])(
         </ModeProvider>
       </StrictMode>,
     );
-    await screen.findByText(isOwner ? "Owner tab" : "Dog details");
+    await screen.findByText("Owner tab");
     expect(state.notify).not.toHaveBeenCalled();
   },
 );

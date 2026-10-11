@@ -70,7 +70,6 @@
   overflow-wrap: anywhere;
 }
 .avatar {
-  padding: 8px;
   color: $pink;
   flex-shrink: 0;
 }
@@ -109,8 +108,8 @@
 }
 .secondary-actions {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
+  > button, > a { width: 100%; min-height: 48px; }
   gap: 16px;
 }
 .action-link {
@@ -121,25 +120,6 @@
   min-height: 44px;
   font-size: 16px;
 }
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  select {
-    width: 100%;
-    min-height: 48px;
-    border: 2px solid rgba($pink, 0.2);
-    border-radius: 12px;
-    padding: 16px;
-    font: inherit;
-    color: var(--color-text);
-    background: var(--background-color);
-    :global(.dark) & {
-      border-color: rgba($pink, 0.6);
-    }
-  }
-}
-
 // Park invitations use this padding and typography; FormModal supplies the
 // shared title, scrolling form area and pinned two-button footer unchanged.
 .modal {
@@ -187,11 +167,6 @@
   red: $red;
 }
 
-// Reserve space for the park picker dropdown above the fixed form footer.
-.friend-picker {
-  min-height: 280px;
-}
-
 // List headings and their add action follow the My Pack header layout.
 .header {
   display: flex;
@@ -213,3 +188,17 @@
     flex: 1;
   }
 }
+
+// Reuse the app radio cards at readable full width for names of any length.
+.form .member-option.member-option.member-option {
+  width: 100%;
+  min-width: 0;
+  font-size: 16px;
+  padding: 12px;
+  border-radius: 8px;
+}
+.person > svg { flex-shrink: 0; color: $pink; }
+.row .person { font-size: 16px; gap: 8px; }
+.secondary-actions { padding-top: 8px; border-top: 1px solid var(--color-grey-light); }
+
+.form :has(> .member-option) { flex-direction: column; gap: 8px; }

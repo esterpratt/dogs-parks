@@ -70,7 +70,7 @@ const OwnershipActionRedirect = () => {
       );
     } else {
       navigate(
-        dogPage.viewer.is_owner ? `${destination}/ownership` : destination,
+        `${destination}/ownership?status=${encodeURIComponent(action.status)}&action=${type}`,
         { replace: true },
       );
     }

@@ -7,7 +7,7 @@ import { fetchDogDeletionProposal } from '../services/dog-ownership';
 import { ModeProvider } from '../context/ModeContext';
 import DogOwnership from './DogOwnership';
 
-const state = vi.hoisted(() => ({ role: 'PRIMARY_OWNER' as string | null }));
+const state = vi.hoisted(() => ({ role: 'PRIMARY_OWNER' as string | null, reinvited: false }));
 vi.mock('../context/UserContext', async () => {
   const { createContext } = await import('react');
   return { UserContext: createContext({ userId: 'viewer' }) };
@@ -59,7 +59,7 @@ vi.mock('../services/dogs', () => ({
 vi.mock('../services/dog-ownership', () => ({
   fetchDogInvites: async () => [
     { id: 'declined', invitee_user_id: 'friend', status: 'DECLINED' },
-    { id: 'pending', invitee_user_id: 'viewer', status: 'PENDING' },
+    { id: 'pending', invitee_user_id: state.reinvited ? 'friend' : 'viewer', status: 'PENDING' },
   ],
   fetchPendingDogOwnershipRequests: async () => [],
   fetchPendingPrimaryTransfers: async () => [],
@@ -73,17 +73,18 @@ vi.mock('../services/dog-ownership', () => ({
 
 beforeEach(() => {
   state.role = 'PRIMARY_OWNER';
+  state.reinvited = false;
 });
 afterEach(() => {
   cleanup();
   queryClient.clear();
   vi.clearAllMocks();
 });
-const renderTab = () =>
+const renderTab = (url = '/dogs/dog/ownership') =>
   render(
     <ModeProvider>
       <QueryClientProvider client={queryClient}>
-        <MemoryRouter initialEntries={['/dogs/dog/ownership']}>
+        <MemoryRouter initialEntries={[url]}>
           <Routes>
             <Route path="/dogs/:dogId/ownership" element={<DogOwnership />} />
           </Routes>
@@ -135,4 +136,22 @@ it('hides other invitations and declined history from co-owners', async () => {
   expect(
     screen.queryByRole('button', { name: 'dogOwnership.inviteTitle' }),
   ).toBeNull();
+});
+
+// A new pending invitation supersedes the old decline in the administrative list.
+it('hides a declined invitation while a new invitation to that person is pending', async () => {
+  state.reinvited = true;
+  renderTab();
+  await screen.findByRole('button', { name: 'dogOwnership.revokeInvitation' });
+  expect(screen.queryByRole('heading', { name: 'dogOwnership.declinedInvites' })).toBeNull();
+  expect(screen.queryByRole('button', { name: 'dogOwnership.inviteAgain' })).toBeNull();
+});
+
+// Former participants keep a useful receipt without gaining owner-only details.
+it('shows a completed notification receipt on the ownership tab to a non-owner', async () => {
+  state.role = null;
+  renderTab('/dogs/dog/ownership?status=EXPIRED&action=invite');
+  await screen.findByText('dogOwnership.receipt.EXPIRED');
+  expect(screen.queryByText('dogOwnership.ownersTitle')).toBeNull();
+  expect(fetchDogDeletionProposal).not.toHaveBeenCalled();
 });

@@ -59,7 +59,16 @@ const DogOwnershipRequest = () => {
       // A confirmed response ends this retry window; recreation uses a new key.
       requestKey.current = uuidv4();
       const succeeded = ['CREATED', 'CANCELED'].includes(result.outcome);
-      notify(t(`dogOwnership.outcomes.${result.outcome}`), !succeeded);
+      notify(
+        t(
+          result.outcome === 'CREATED'
+            ? 'dogOwnership.requestSent'
+            : result.outcome === 'CANCELED'
+              ? 'dogOwnership.requestCanceled'
+              : `dogOwnership.outcomes.${result.outcome}`,
+        ),
+        !succeeded,
+      );
       if (succeeded) {
         navigate(`/dogs/${dogId}`, { replace: true });
       }
@@ -71,7 +80,16 @@ const DogOwnershipRequest = () => {
     mutationFn: cancelDogOwnershipRequest,
     onSuccess: (result) => {
       const succeeded = ['CREATED', 'CANCELED'].includes(result.outcome);
-      notify(t(`dogOwnership.outcomes.${result.outcome}`), !succeeded);
+      notify(
+        t(
+          result.outcome === 'CREATED'
+            ? 'dogOwnership.requestSent'
+            : result.outcome === 'CANCELED'
+              ? 'dogOwnership.requestCanceled'
+              : `dogOwnership.outcomes.${result.outcome}`,
+        ),
+        !succeeded,
+      );
       if (succeeded) {
         navigate(`/dogs/${dogId}`, { replace: true });
       }

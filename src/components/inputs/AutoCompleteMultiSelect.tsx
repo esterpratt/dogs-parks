@@ -7,6 +7,7 @@ import { useAutoComplete } from '../../hooks/useAutoComplete';
 import styles from './AutoComplete.module.scss';
 
 interface AutoCompleteMultiSelectProps<T> {
+  inlineDropdown?: boolean;
   selectedInputs?: T[];
   items: T[];
   placeholder?: string;
@@ -22,21 +23,25 @@ interface AutoCompleteMultiSelectProps<T> {
   selectedInputsFormatter: (selectedInput: T) => string;
 }
 
-const AutoCompleteMultiSelect = <T,>({
-  items,
-  selectedInputs,
-  placeholder,
-  className,
-  itemKeyfn,
-  selectedItemKeyfn,
-  label,
-  filterFunc,
-  onSelectItem,
-  onRemoveItem,
-  equalityFunc,
-  children,
-  selectedInputsFormatter,
-}: AutoCompleteMultiSelectProps<T>) => {
+const AutoCompleteMultiSelect = <T,>(
+  props: AutoCompleteMultiSelectProps<T>,
+) => {
+  const {
+    inlineDropdown,
+    items,
+    selectedInputs,
+    placeholder,
+    className,
+    itemKeyfn,
+    selectedItemKeyfn,
+    label,
+    filterFunc,
+    onSelectItem,
+    onRemoveItem,
+    equalityFunc,
+    children,
+    selectedInputsFormatter,
+  } = props;
   const { input, filteredItems, onChangeInput } = useAutoComplete({
     items,
     filterFunc,
@@ -58,7 +63,13 @@ const AutoCompleteMultiSelect = <T,>({
 
   return (
     <>
-      <div className={classnames(styles.container, className)}>
+      <div
+        className={classnames(
+          styles.container,
+          inlineDropdown && styles.inlineDropdown,
+          className,
+        )}
+      >
         <label className={styles.label}>{label}</label>
         <Input
           ref={inputRef}
@@ -69,14 +80,14 @@ const AutoCompleteMultiSelect = <T,>({
           placeholder={placeholder}
           className={classnames(
             styles.input,
-            showItems && filteredItems.length && styles.listOpen
+            showItems && filteredItems.length && styles.listOpen,
           )}
         />
         {showItems && (
           <div
             className={classnames(
               styles.listContainer,
-              !filteredItems.length && styles.noResults
+              !filteredItems.length && styles.noResults,
             )}
           >
             <SearchListItems

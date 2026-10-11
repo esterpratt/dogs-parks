@@ -93,7 +93,18 @@ const OwnershipAction = (props: OwnershipActionProps) => {
           { replace: true },
         );
       }
-      notify(t(`dogOwnership.outcomes.${result.outcome}`), !finished);
+      // Name the completed decision, rather than calling every response an invitation.
+      const hasSpecificFeedback = ['ACCEPTED', 'APPROVED', 'DECLINED'].includes(
+        result.outcome,
+      );
+      notify(
+        t(
+          hasSpecificFeedback
+            ? `dogOwnership.feedback.${normalizedType}.${result.outcome}`
+            : `dogOwnership.outcomes.${result.outcome}`,
+        ),
+        !finished,
+      );
     },
     onError: () => notify(t('dogOwnership.requestError'), true),
   });
@@ -125,7 +136,9 @@ const OwnershipAction = (props: OwnershipActionProps) => {
         {t(
           normalizedType === 'transfer'
             ? 'dogOwnership.transferResponseHelp'
-            : 'dogOwnership.disclosure',
+            : normalizedType === 'request'
+              ? 'dogOwnership.requestReviewHelp'
+              : 'dogOwnership.disclosure',
         )}
       </p>
       {normalizedType === 'invite' ? (

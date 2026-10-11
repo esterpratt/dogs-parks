@@ -16,7 +16,8 @@ interface NotificationItemProps {
   notification: Notification;
 }
 
-const NotificationItem = ({ notification }: NotificationItemProps) => {
+const NotificationItem = (props: NotificationItemProps) => {
+  const { notification } = props;
   const {
     type,
     read_at,
@@ -37,6 +38,7 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
   const { title, appMessage } = translateNotification({
     type,
     senderName: sender?.name ?? null,
+    dogName: notification.dog_name,
     serverTitle,
     serverAppMessage: app_message,
     t,

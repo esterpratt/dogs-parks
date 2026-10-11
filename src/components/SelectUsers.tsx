@@ -8,6 +8,7 @@ import { AutoCompleteMultiSelect } from './inputs/AutoCompleteMultiSelect';
 import styles from './SelectUsers.module.scss';
 
 interface SelectUsersProps {
+  inlineDropdown?: boolean;
   placeholder?: string;
   label?: string;
   users: User[];
@@ -18,6 +19,7 @@ interface SelectUsersProps {
 
 const SelectUsers = (props: SelectUsersProps) => {
   const {
+    inlineDropdown,
     placeholder,
     label,
     users,
@@ -67,6 +69,7 @@ const SelectUsers = (props: SelectUsersProps) => {
   return (
     <div className={styles.container}>
       <AutoCompleteMultiSelect
+        inlineDropdown={inlineDropdown}
         selectedInputs={selectedUsers}
         items={users}
         placeholder={placeholder || t('parkInvite.modal.friends.placeholder')}

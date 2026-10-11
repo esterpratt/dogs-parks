@@ -196,7 +196,7 @@ const UserDog = () => {
             [styles.center]: !isSignedInUser,
           })}
         />
-        {isSignedInUser || ownershipCapabilities?.pending_action ? (
+        {isSignedInUser || ownershipCapabilities?.pending_action || showOwnership ? (
           <TabsList
             tabs={[
               { text: t('dogOwnership.detailsTab'), url: `/dogs/${dog.id}` },
