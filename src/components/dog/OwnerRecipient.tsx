@@ -9,18 +9,19 @@ interface RecipientMember {
   user_name?: string | null;
 }
 interface OwnerRecipientProps {
+  dogName: string;
   members: RecipientMember[];
   value: string;
   onChange: (memberId: string) => void;
 }
 
 const OwnerRecipient = (props: OwnerRecipientProps) => {
-  const { members, value, onChange } = props;
+  const { dogName, members, value, onChange } = props;
   const { t } = useTranslation();
   const selectedMember =
     members.find((member) => member.id === value) ?? members[0];
   const memberName = (member: RecipientMember) =>
-    member.user_name ?? t('dogOwnership.memberFallback');
+    member.user_name ?? t('dogOwnership.memberFallback', { dogName });
 
   // A sole eligible owner is a recipient, not a choice the user must make.
   if (members.length === 1) {

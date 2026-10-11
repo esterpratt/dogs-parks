@@ -102,9 +102,10 @@ const DogOwnershipDeletion = () => {
   if (isLoadingCapabilities || isLoadingProposal) {
     return <Loader style={{ paddingTop: '64px' }} />;
   }
-  if (!capabilities?.enabled || !capabilities.is_owner || !proposal) {
+  if (!dogPage || !capabilities?.enabled || !capabilities.is_owner || !proposal) {
     return null;
   }
+  const dogName = dogPage.dog.name;
 
   const showDestructiveConfirmation = (
     titleKey: string,
@@ -113,7 +114,7 @@ const DogOwnershipDeletion = () => {
   ) => {
     // Shared deletion decisions use the existing app-level confirmation sheet.
     showModal({
-      title: t(titleKey),
+      title: t(titleKey, { dogName }),
       confirmText: t(confirmKey),
       cancelText: t('dogOwnership.cancel'),
       onConfirm: async () => {
@@ -129,12 +130,14 @@ const DogOwnershipDeletion = () => {
         links={{
           to: `/dogs/${resolvedDogId}/ownership`,
           icon: <MoveLeft size={16} />,
-          text: t('dogOwnership.back'),
+          text: t('dogOwnership.back', { dogName }),
         }}
       />
-      <h1 className={styles.pageTitle}>{t('dogOwnership.deletionTitle')}</h1>
+      <h1 className={styles.pageTitle}>
+        {t('dogOwnership.deletionTitle', { dogName })}
+      </h1>
       <section className={styles.section}>
-        <p>{t('dogOwnership.deletionWarning')}</p>
+        <p>{t('dogOwnership.deletionWarning', { dogName })}</p>
         <p>
           {t('dogOwnership.deletionProgress', {
             approved: proposal.approved_consent_count,

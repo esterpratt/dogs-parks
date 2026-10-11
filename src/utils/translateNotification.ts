@@ -138,13 +138,18 @@ function translateNotification(
 
   if (lookupKey && typeKeyMap[lookupKey]) {
     const keys = typeKeyMap[lookupKey];
-    const title = t(keys.title, { name: safeName });
-    const appMessage = t(keys.appMessage, { name: safeName });
+    const resolvedDogName = dogName?.trim();
+    // Deleted or inaccessible dogs need a readable localized fallback.
+    const dogLabel = lookupKey.startsWith('DOG_')
+      ? resolvedDogName || t('notifications.types.dogOwnership.dogFallback')
+      : undefined;
+    const title = t(keys.title, { name: safeName, dogName: dogLabel });
+    const appMessage = t(keys.appMessage, { name: safeName, dogName: dogLabel });
     // Put the dog in the title so every ownership event has an unmistakable subject.
     return {
       title:
-        lookupKey.startsWith('DOG_') && dogName?.trim()
-          ? `${title} · ${dogName.trim()}`
+        lookupKey.startsWith('DOG_') && resolvedDogName
+          ? `${title} · ${resolvedDogName}`
           : title,
       appMessage,
     };

@@ -148,7 +148,7 @@ const DogOwnershipRequest = () => {
         <p>{t('dogOwnership.requestPending')}</p>
       ) : (
         <>
-          <p>{t('dogOwnership.disclosure')}</p>
+          <p>{t('dogOwnership.disclosure', { dogName: dogPage.dog.name })}</p>
           <Checkbox
             id="ownership-request-disclosure"
             isChecked={disclosureAccepted}

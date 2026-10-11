@@ -331,9 +331,10 @@
         "appMessage": "Click to view details"
       },
       "dogOwnership": {
+        "dogFallback": "the dog",
         "inviteReceived": {
           "title": "Ownership invitation",
-          "appMessage": "{{name}} invited you to share ownership of a dog."
+          "appMessage": "{{name}} invited you to share ownership of {{dogName}}."
         },
         "inviteAccepted": {
           "title": "Invitation accepted",
@@ -349,7 +350,7 @@
         },
         "requestReceived": {
           "title": "Ownership request",
-          "appMessage": "{{name}} requested ownership of a dog."
+          "appMessage": "{{name}} requested ownership of {{dogName}}."
         },
         "requestApproved": {
           "title": "Request approved",
@@ -364,24 +365,24 @@
           "appMessage": "{{name}} canceled the ownership request."
         },
         "ownerJoined": {
-          "title": "New dog owner",
-          "appMessage": "{{name}} joined this dog's owners."
+          "title": "New owner",
+          "appMessage": "{{name}} is now a co-owner of {{dogName}}."
         },
         "ownerLeft": {
-          "title": "Dog owner left",
-          "appMessage": "{{name}} left this dog's owners."
+          "title": "Owner left",
+          "appMessage": "{{name}} is no longer an owner of {{dogName}}."
         },
         "primaryChanged": {
           "title": "Primary owner changed",
-          "appMessage": "{{name}} changed this dog's primary owner."
+          "appMessage": "{{name}} changed the primary owner of {{dogName}}."
         },
         "transferOffered": {
           "title": "Primary role offer",
-          "appMessage": "{{name}} offered you this dog's primary role."
+          "appMessage": "{{name}} offered you the primary role for {{dogName}}."
         },
         "transferAccepted": {
           "title": "Primary role accepted",
-          "appMessage": "{{name}} accepted the primary role."
+          "appMessage": "{{name}} accepted the primary role for {{dogName}}."
         },
         "transferDeclined": {
           "title": "Primary role declined",
@@ -393,23 +394,23 @@
         },
         "deletionRequested": {
           "title": "Deletion approval requested",
-          "appMessage": "{{name}} asked every owner to approve deleting this dog."
+          "appMessage": "{{name}} asked every owner to approve deleting {{dogName}}."
         },
         "deletionRejected": {
-          "title": "Dog deletion rejected",
+          "title": "Deletion rejected",
           "appMessage": "{{name}} rejected the deletion proposal."
         },
         "deletionCanceled": {
-          "title": "Dog deletion canceled",
+          "title": "Deletion canceled",
           "appMessage": "{{name}} canceled the deletion proposal."
         },
         "deletionExpired": {
-          "title": "Dog deletion proposal expired",
-          "appMessage": "The dog deletion proposal expired without unanimous approval."
+          "title": "Deletion proposal expired",
+          "appMessage": "The proposal to delete {{dogName}} expired without unanimous approval."
         },
         "deletionCompleted": {
-          "title": "Dog deleted",
-          "appMessage": "The shared dog was deleted after every owner approved."
+          "title": "Deletion completed",
+          "appMessage": "{{dogName}} was deleted after every owner approved."
         }
       }
     },
@@ -1263,10 +1264,10 @@
     "leaveShort": "Leave",
     "transferResponseHelp": "Accepting makes you the primary owner. The current primary owner will remain a co-owner.",
     "detailsTab": "Details",
-    "memberFallback": "Dog owner",
+    "memberFallback": "Owner of {{dogName}}",
     "transferHelp": "The selected owner must accept the offer. You will stay a co-owner.",
     "requestError": "Could not complete the action. Please try again.",
-    "back": "Back to dog",
+    "back": "Back to {{dogName}}",
     "manageTitle": "My humans",
     "requestAction": "Request ownership",
     "requestTitle": "Request ownership",
@@ -1280,7 +1281,7 @@
     "cancel": "Cancel",
     "requestPending": "Your ownership request is pending.",
     "cancelRequest": "Withdraw request",
-    "disclosure": "All owners can edit the dog’s details, upload photos, and choose the main photo. You can delete your own uploads; the primary owner can delete any shared photo. Fellow owners can see your name even in hide mode. Shared photos remain if you leave or delete your account. Only the primary owner can invite owners, approve ownership requests, or offer the primary role. Deleting a shared dog requires every owner’s approval.",
+    "disclosure": "All owners can edit the details for {{dogName}}, upload photos, and choose the main photo. You can delete your own uploads; the primary owner can delete any shared photo. Fellow owners can see your name even in hide mode. Shared photos remain if you leave or delete your account. Only the primary owner can invite owners, approve ownership requests, or offer the primary role. Deleting {{dogName}} requires every owner’s approval.",
     "disclosureAccept": "I understand these permissions.",
     "submitRequest": "Send request",
     "inviteResponseTitle": "Ownership invitation",
@@ -1301,8 +1302,8 @@
     "leaveAction": "Leave ownership",
     "approve": "Approve",
     "decline": "Decline",
-    "deletionTitle": "Delete shared dog",
-    "deletionWarning": "Every current owner must approve. The final approval immediately hides the dog and starts permanent cleanup.",
+    "deletionTitle": "Delete {{dogName}}",
+    "deletionWarning": "Every current owner must approve. The final approval immediately hides {{dogName}} and starts permanent cleanup.",
     "deletionProgress": "{{approved}} of {{required}} owners approved",
     "reviewDeletion": "Review deletion proposal",
     "proposeDeletion": "Propose deletion",
@@ -1358,7 +1359,7 @@
     "requestSent": "Ownership request sent.",
     "requestCanceled": "Ownership request withdrawn.",
     "deletionSent": "Deletion request sent to the other owners.",
-    "requestReviewHelp": "Approve this request to add this person as a co-owner. They will be able to edit the dog’s details and manage their shared photos.",
+    "requestReviewHelp": "Approve this request to add this person as a co-owner. They will be able to edit the details for {{dogName}} and manage their shared photos.",
     "feedback": {
       "invite": {
         "ACCEPTED": "You are now a co-owner.",

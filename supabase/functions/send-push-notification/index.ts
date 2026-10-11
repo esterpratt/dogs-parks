@@ -69,8 +69,16 @@ serve(async (req) => {
 
     // Build payload parts
     const senderName = await lookupUserName(record.sender_id || undefined);
+    const dogName = record.type.startsWith('dog_')
+      ? await lookupDogName(record.data)
+      : undefined;
+    // Persist the name while the dog is accessible, including for later history views.
+    const notificationData = dogName
+      ? { ...(record.data ?? {}), dog_name: dogName }
+      : record.data ?? null;
     const { title, pushMessage, appMessage } = renderCopy(record.type, {
       senderName,
+      dogName,
     });
 
     // ---- First-time-only UPDATE to mark the row ready (no title/null guard) ----
@@ -81,7 +89,7 @@ serve(async (req) => {
         title,
         push_message: record.push_message || pushMessage,
         app_message: record.app_message || appMessage,
-        data: record.data ?? null,
+        data: notificationData,
       })
       .eq('id', notificationId)
       .neq('is_ready', true)
@@ -159,7 +167,7 @@ serve(async (req) => {
       notification: { title, body: pushMessage },
       data: objectToStringDict({
         type: record.type,
-        ...(record.data ?? {}),
+        ...(notificationData ?? {}),
         sender_id: record.sender_id || '',
         unseen_count: String(unseenCount),
       }),
@@ -337,11 +345,33 @@ async function lookupUserName(userId?: string): Promise<string> {
   return data?.name || 'Someone';
 }
 
+async function lookupDogName(
+  data?: Record<string, unknown> | null,
+): Promise<string | undefined> {
+  if (typeof data?.dog_name === 'string' && data.dog_name.trim()) {
+    return data.dog_name.trim();
+  }
+  if (typeof data?.dog_id !== 'string') {
+    return undefined;
+  }
+  const { data: dog, error } = await supabase
+    .from('dogs')
+    .select('name')
+    .eq('id', data.dog_id)
+    .maybeSingle();
+  if (error) {
+    console.error('EF: lookupDogName failed', { dogId: data.dog_id, error });
+  }
+  return typeof dog?.name === 'string' && dog.name.trim()
+    ? dog.name.trim()
+    : undefined;
+}
+
 // Push delivery has no recipient locale; keep these English strings in sync with the English catalog.
 const ownershipPushCopy: Record<string, { title: string; message: string }> = {
   dog_ownership_invite_received: {
     title: "Ownership invitation",
-    message: "{{name}} invited you to share ownership of a dog.",
+    message: "{{name}} invited you to share ownership of {{dogName}}.",
   },
   dog_ownership_invite_accepted: {
     title: "Invitation accepted",
@@ -357,7 +387,7 @@ const ownershipPushCopy: Record<string, { title: string; message: string }> = {
   },
   dog_ownership_request_received: {
     title: "Ownership request",
-    message: "{{name}} requested ownership of a dog.",
+    message: "{{name}} requested ownership of {{dogName}}.",
   },
   dog_ownership_request_approved: {
     title: "Request approved",
@@ -372,24 +402,24 @@ const ownershipPushCopy: Record<string, { title: string; message: string }> = {
     message: "{{name}} canceled the ownership request.",
   },
   dog_owner_joined: {
-    title: "New dog owner",
-    message: "{{name}} joined this dog's owners.",
+    title: "New owner",
+    message: "{{name}} is now a co-owner of {{dogName}}.",
   },
   dog_owner_left: {
-    title: "Dog owner left",
-    message: "{{name}} left this dog's owners.",
+    title: "Owner left",
+    message: "{{name}} is no longer an owner of {{dogName}}.",
   },
   dog_primary_changed: {
     title: "Primary owner changed",
-    message: "{{name}} changed this dog's primary owner.",
+    message: "{{name}} changed the primary owner of {{dogName}}.",
   },
   dog_primary_transfer_offered: {
     title: "Primary role offer",
-    message: "{{name}} offered you this dog's primary role.",
+    message: "{{name}} offered you the primary role for {{dogName}}.",
   },
   dog_primary_transfer_accepted: {
     title: "Primary role accepted",
-    message: "{{name}} accepted the primary role.",
+    message: "{{name}} accepted the primary role for {{dogName}}.",
   },
   dog_primary_transfer_declined: {
     title: "Primary role declined",
@@ -401,34 +431,41 @@ const ownershipPushCopy: Record<string, { title: string; message: string }> = {
   },
   dog_deletion_consent_requested: {
     title: "Deletion approval requested",
-    message: "{{name}} asked every owner to approve deleting this dog.",
+    message: "{{name}} asked every owner to approve deleting {{dogName}}.",
   },
   dog_deletion_proposal_rejected: {
-    title: "Dog deletion rejected",
+    title: "Deletion rejected",
     message: "{{name}} rejected the deletion proposal.",
   },
   dog_deletion_proposal_canceled: {
-    title: "Dog deletion canceled",
+    title: "Deletion canceled",
     message: "{{name}} canceled the deletion proposal.",
   },
   dog_deletion_proposal_expired: {
-    title: "Dog deletion proposal expired",
-    message: "The dog deletion proposal expired without unanimous approval.",
+    title: "Deletion proposal expired",
+    message: "The proposal to delete {{dogName}} expired without unanimous approval.",
   },
   dog_deletion_completed: {
-    title: "Dog deleted",
-    message: "The shared dog was deleted after every owner approved.",
+    title: "Deletion completed",
+    message: "{{dogName}} was deleted after every owner approved.",
   },
 };
 
-function renderCopy(type: string, vars: { senderName?: string }) {
+function renderCopy(type: string, vars: { senderName?: string; dogName?: string }) {
   const who = vars.senderName || 'Someone';
   const ownershipCopy = ownershipPushCopy[type];
   if (ownershipCopy) {
     // In-app copy uses the viewer's locale; push currently uses English server copy.
+    const dogName = vars.dogName?.trim();
     const title = ownershipCopy.title.replaceAll('{{name}}', who);
-    const message = ownershipCopy.message.replaceAll('{{name}}', who);
-    return { title, pushMessage: message, appMessage: message };
+    const message = ownershipCopy.message
+      .replaceAll('{{name}}', who)
+      .replaceAll('{{dogName}}', dogName || 'the dog');
+    return {
+      title: dogName ? `${title} · ${dogName}` : title,
+      pushMessage: message,
+      appMessage: message,
+    };
   }
   switch (type) {
     case NotificationType.FRIEND_REQUEST: {

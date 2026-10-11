@@ -91,6 +91,7 @@ const DogOwnershipLeave = () => {
           <>
             <p>{t('dogOwnership.leavePrimaryWarning')}</p>
             <OwnerRecipient
+              dogName={dogPage.dog.name}
               members={eligibleSuccessors}
               value={selectedSuccessorId}
               onChange={setSelectedSuccessorId}

@@ -139,3 +139,55 @@ it.each([
     expect(result.appMessage.length).toBeGreaterThan(0);
   }
 });
+
+// Names appear in the body as well as the title, with a readable fallback after deletion.
+it.each([
+  ['he', hebrew],
+  ['en', english],
+  ['ar', arabic],
+])('uses the dog name in %s ownership notifications', async (language, catalog) => {
+  const i18n = createInstance();
+  await i18n.init({
+    lng: language,
+    resources: { [language]: { translation: catalog } },
+  });
+
+  for (const type of [
+    NotificationType.DOG_OWNERSHIP_INVITE_RECEIVED,
+    NotificationType.DOG_OWNER_JOINED,
+    NotificationType.DOG_DELETION_COMPLETED,
+  ]) {
+    const named = translateNotification({
+      type,
+      senderName: 'Dana',
+      dogName: 'Milo',
+      t: i18n.t,
+    });
+    expect(named.title).toContain('Milo');
+    expect(named.appMessage).toContain('Milo');
+    if (type !== NotificationType.DOG_DELETION_COMPLETED) {
+      expect(named.appMessage).toContain('Dana');
+    }
+
+    const withoutName = translateNotification({
+      type,
+      senderName: 'Dana',
+      t: i18n.t,
+    });
+    expect(withoutName.appMessage).toContain(
+      catalog.notifications.types.dogOwnership.dogFallback,
+    );
+    expect(withoutName.appMessage).not.toContain('{{dogName}}');
+  }
+
+  for (const key of [
+    'memberFallback',
+    'back',
+    'disclosure',
+    'deletionTitle',
+    'deletionWarning',
+    'requestReviewHelp',
+  ]) {
+    expect(i18n.t(`dogOwnership.${key}`, { dogName: 'Milo' })).toContain('Milo');
+  }
+});

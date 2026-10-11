@@ -140,6 +140,7 @@ const OwnershipAction = (props: OwnershipActionProps) => {
             : normalizedType === 'request'
               ? 'dogOwnership.requestReviewHelp'
               : 'dogOwnership.disclosure',
+          { dogName: dogPage.dog.name },
         )}
       </p>
       {normalizedType === 'invite' ? (

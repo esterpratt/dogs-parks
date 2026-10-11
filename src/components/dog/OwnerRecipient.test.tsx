@@ -15,7 +15,12 @@ const members = [
 it('opens all eligible owners and selects only one', () => {
   const onChange = vi.fn();
   render(
-    <OwnerRecipient members={members} value="first" onChange={onChange} />,
+    <OwnerRecipient
+      dogName="Milo"
+      members={members}
+      value="first"
+      onChange={onChange}
+    />,
   );
   fireEvent.focus(screen.getByRole('textbox'));
   expect(screen.getByText('Noa')).toBeTruthy();
@@ -28,6 +33,7 @@ it('opens all eligible owners and selects only one', () => {
 it('shows a fixed recipient when only one owner is eligible', () => {
   render(
     <OwnerRecipient
+      dogName="Milo"
       members={members.slice(0, 1)}
       value=""
       onChange={vi.fn()}

@@ -287,7 +287,7 @@ const DogOwnership = () => {
   };
   const friendName = (friendId: string) =>
     friends?.find((friend) => friend.id === friendId)?.name ??
-    t('dogOwnership.memberFallback');
+    t('dogOwnership.memberFallback', { dogName: dogPage.dog.name });
 
   return (
     <div className={styles.content}>
@@ -416,7 +416,9 @@ const DogOwnership = () => {
                       {member.user_id === userId
                         ? t('dogOwnership.me')
                         : (member.user_name ??
-                          t('dogOwnership.memberFallback'))}
+                          t('dogOwnership.memberFallback', {
+                            dogName: dogPage.dog.name,
+                          }))}
                     </Link>
                     <span className={styles.role}>
                       {t(`dogOwnership.roles.${member.role}`)}
@@ -518,7 +520,10 @@ const DogOwnership = () => {
                           <UserIcon size={24} aria-hidden="true" />
                           {members.find(
                             (member) => member.id === transfer.to_member_id,
-                          )?.user_name ?? t('dogOwnership.memberFallback')}
+                          )?.user_name ??
+                            t('dogOwnership.memberFallback', {
+                              dogName: dogPage.dog.name,
+                            })}
                         </Link>
                         <Button
                           className={styles.rowAction}
@@ -578,7 +583,9 @@ const DogOwnership = () => {
                   disabled={isProposingDeletion}
                   onClick={() =>
                     showModal({
-                      title: t('dogOwnership.deletionWarning'),
+                      title: t('dogOwnership.deletionWarning', {
+                        dogName: dogPage.dog.name,
+                      }),
                       confirmText: t('dogOwnership.proposeShort'),
                       onConfirm: async () => {
                         await proposeDeletion();
@@ -653,6 +660,7 @@ const DogOwnership = () => {
             >
               <p>{t('dogOwnership.transferHelp')}</p>
               <OwnerRecipient
+                dogName={dogPage.dog.name}
                 members={eligibleTransferMembers}
                 value={selectedTransferMemberId}
                 onChange={setSelectedTransferMemberId}
