@@ -257,13 +257,21 @@
     font-size: 14px;
   }
 }
-// Keep primary ownership recognizable without relying on color alone (role label remains).
-.primary-owner {
-  border-inline-start: 4px solid $pink;
+// Distinguish owner roles with app colors while retaining their explicit labels.
+.owner-card {
   .person > svg {
-    color: $pink;
-    border-color: $pink;
-    background: rgba($pink, 0.08);
+    color: $green;
+    border-color: $green;
+    background: rgba($green, 0.08);
   }
-  .role { color: $pink; }
+  .role { color: $green; }
+}
+.primary-owner {
+  border-inline-start: 4px solid $orange;
+  .person > svg {
+    color: $orange;
+    border-color: $orange;
+    background: rgba($orange, 0.08);
+  }
+  .role { color: $orange; }
 }
