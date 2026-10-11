@@ -21,7 +21,7 @@ export enum NotificationType {
 interface WebhookRecord {
   id: string;
   receiver_id: string;
-  type: NotificationType;
+  type: string;
   title?: string | null;
   push_message?: string | null;
   app_message?: string | null;
@@ -31,6 +31,7 @@ interface WebhookRecord {
 
 interface NotificationPreferencesRow {
   muted: boolean | null;
+  dog_ownership: boolean | null;
   friend_request: boolean | null;
   friend_approval: boolean | null;
   park_invite: boolean | null;
@@ -111,7 +112,7 @@ serve(async (req) => {
     // ---- Preferences ----
     const { data: prefs, error: prefsErr } = await supabase
       .from('notifications_preferences')
-      .select('muted, friend_request, friend_approval, park_invite, park_invite_accept, park_invite_decline, park_invite_cancelled')
+      .select('muted, dog_ownership, friend_request, friend_approval, park_invite, park_invite_accept, park_invite_decline, park_invite_cancelled')
       .eq('user_id', record.receiver_id)
       .maybeSingle<NotificationPreferencesRow>();
     if (prefsErr) {
@@ -290,8 +291,12 @@ function normalizePayload(raw: unknown): WebhookRecord {
 }
 
 function getPrefKey(
-  type: NotificationType
+  type: string
 ): keyof NotificationPreferencesRow | null {
+  // Every ownership event follows the same push preference.
+  if (type.startsWith('dog_')) {
+    return 'dog_ownership';
+  }
   switch (type) {
     case NotificationType.FRIEND_REQUEST: {
       return 'friend_request';
@@ -332,8 +337,99 @@ async function lookupUserName(userId?: string): Promise<string> {
   return data?.name || 'Someone';
 }
 
-function renderCopy(type: NotificationType, vars: { senderName?: string }) {
+// Push delivery has no recipient locale; keep these English strings in sync with the English catalog.
+const ownershipPushCopy: Record<string, { title: string; message: string }> = {
+  dog_ownership_invite_received: {
+    title: "Ownership invitation",
+    message: "{{name}} invited you to share ownership of a dog.",
+  },
+  dog_ownership_invite_accepted: {
+    title: "Invitation accepted",
+    message: "{{name}} accepted the ownership invitation.",
+  },
+  dog_ownership_invite_declined: {
+    title: "Invitation declined",
+    message: "{{name}} declined the ownership invitation.",
+  },
+  dog_ownership_invite_canceled: {
+    title: "Invitation revoked",
+    message: "{{name}} canceled the ownership invitation.",
+  },
+  dog_ownership_request_received: {
+    title: "Ownership request",
+    message: "{{name}} requested ownership of a dog.",
+  },
+  dog_ownership_request_approved: {
+    title: "Request approved",
+    message: "{{name}} approved your ownership request.",
+  },
+  dog_ownership_request_declined: {
+    title: "Request declined",
+    message: "{{name}} declined your ownership request.",
+  },
+  dog_ownership_request_canceled: {
+    title: "Request withdrawn",
+    message: "{{name}} canceled the ownership request.",
+  },
+  dog_owner_joined: {
+    title: "New dog owner",
+    message: "{{name}} joined this dog's owners.",
+  },
+  dog_owner_left: {
+    title: "Dog owner left",
+    message: "{{name}} left this dog's owners.",
+  },
+  dog_primary_changed: {
+    title: "Primary owner changed",
+    message: "{{name}} changed this dog's primary owner.",
+  },
+  dog_primary_transfer_offered: {
+    title: "Primary role offer",
+    message: "{{name}} offered you this dog's primary role.",
+  },
+  dog_primary_transfer_accepted: {
+    title: "Primary role accepted",
+    message: "{{name}} accepted the primary role.",
+  },
+  dog_primary_transfer_declined: {
+    title: "Primary role declined",
+    message: "{{name}} declined the primary role.",
+  },
+  dog_primary_transfer_canceled: {
+    title: "Primary role offer withdrawn",
+    message: "{{name}} canceled the primary role offer.",
+  },
+  dog_deletion_consent_requested: {
+    title: "Deletion approval requested",
+    message: "{{name}} asked every owner to approve deleting this dog.",
+  },
+  dog_deletion_proposal_rejected: {
+    title: "Dog deletion rejected",
+    message: "{{name}} rejected the deletion proposal.",
+  },
+  dog_deletion_proposal_canceled: {
+    title: "Dog deletion canceled",
+    message: "{{name}} canceled the deletion proposal.",
+  },
+  dog_deletion_proposal_expired: {
+    title: "Dog deletion proposal expired",
+    message: "The dog deletion proposal expired without unanimous approval.",
+  },
+  dog_deletion_completed: {
+    title: "Dog deleted",
+    message: "The shared dog was deleted after every owner approved.",
+  },
+};
+
+function renderCopy(type: string, vars: { senderName?: string }) {
   const who = vars.senderName || 'Someone';
+  const ownershipCopy = ownershipPushCopy[type];
+  if (ownershipCopy) {
+    // In-app copy uses the viewer's locale; push currently uses English server copy.
+    const title = ownershipCopy.title.replaceAll('{{name}}', who);
+    const message = ownershipCopy.message.replaceAll('{{name}}', who);
+    return { title, pushMessage: message, appMessage: message };
+  }
   switch (type) {
     case NotificationType.FRIEND_REQUEST: {
       return {

@@ -329,6 +329,88 @@
       "parkInviteCancelled": {
         "title": "הזמנה לאירוע בגינה בוטלה",
         "appMessage": "לחץ/י כדי לראות פרטים"
+      },
+      "dogOwnership": {
+        "inviteReceived": {
+          "title": "הזמנת בעלות",
+          "appMessage": "קיבלת הזמנה מאת {{name}} להצטרף לבעלות משותפת על כלב."
+        },
+        "inviteAccepted": {
+          "title": "ההזמנה אושרה",
+          "appMessage": "הזמנת הבעלות שנשלחה ל{{name}} אושרה."
+        },
+        "inviteDeclined": {
+          "title": "ההזמנה נדחתה",
+          "appMessage": "הזמנת הבעלות שנשלחה ל{{name}} נדחתה."
+        },
+        "inviteCanceled": {
+          "title": "ההזמנה בוטלה",
+          "appMessage": "הזמנת הבעלות מאת {{name}} בוטלה."
+        },
+        "requestReceived": {
+          "title": "בקשת בעלות",
+          "appMessage": "התקבלה בקשה מאת {{name}} להצטרף לבעלות על כלב."
+        },
+        "requestApproved": {
+          "title": "הבקשה אושרה",
+          "appMessage": "בקשת הבעלות שלך אושרה על ידי {{name}}."
+        },
+        "requestDeclined": {
+          "title": "הבקשה נדחתה",
+          "appMessage": "בקשת הבעלות שלך נדחתה על ידי {{name}}."
+        },
+        "requestCanceled": {
+          "title": "הבקשה בוטלה",
+          "appMessage": "בקשת הבעלות של {{name}} בוטלה."
+        },
+        "ownerJoined": {
+          "title": "בעלים חדשים לכלב",
+          "appMessage": "ל{{name}} יש כעת בעלות משותפת על הכלב."
+        },
+        "ownerLeft": {
+          "title": "בעלים עזבו",
+          "appMessage": "הבעלות של {{name}} על הכלב הסתיימה."
+        },
+        "primaryChanged": {
+          "title": "הבעלים הראשיים השתנו",
+          "appMessage": "הבעלות הראשית על הכלב השתנתה בעקבות פעולה של {{name}}."
+        },
+        "transferOffered": {
+          "title": "הצעה לבעלות ראשית",
+          "appMessage": "קיבלת הצעה מאת {{name}} לקבל את הבעלות הראשית על הכלב."
+        },
+        "transferAccepted": {
+          "title": "הבעלות הראשית התקבלה",
+          "appMessage": "הבעלות הראשית על הכלב הועברה ל{{name}}."
+        },
+        "transferDeclined": {
+          "title": "הבעלות הראשית נדחתה",
+          "appMessage": "ההצעה לבעלות ראשית שנשלחה ל{{name}} נדחתה."
+        },
+        "transferCanceled": {
+          "title": "ההצעה לבעלות ראשית בוטלה",
+          "appMessage": "ההצעה לבעלות ראשית מאת {{name}} בוטלה."
+        },
+        "deletionRequested": {
+          "title": "בקשה לאישור מחיקה",
+          "appMessage": "התקבלה בקשה מאת {{name}} לאשר את מחיקת הכלב."
+        },
+        "deletionRejected": {
+          "title": "מחיקת הכלב נדחתה",
+          "appMessage": "הצעת המחיקה נדחתה על ידי {{name}}."
+        },
+        "deletionCanceled": {
+          "title": "מחיקת הכלב בוטלה",
+          "appMessage": "הצעת המחיקה מאת {{name}} בוטלה."
+        },
+        "deletionExpired": {
+          "title": "תוקף הצעת המחיקה פג",
+          "appMessage": "תוקף הצעת המחיקה פג ללא אישור פה אחד."
+        },
+        "deletionCompleted": {
+          "title": "הכלב נמחק",
+          "appMessage": "הכלב המשותף נמחק לאחר שכל הבעלים אישרו."
+        }
       }
     },
     "modal": {
@@ -365,6 +447,10 @@
         "parkInviteCancelled": {
           "title": "ביטול הזמנה לגינה",
           "description": "קבלת התראה כאשר הזמנה לגינה מבוטלת"
+        },
+        "dogOwnership": {
+          "title": "בעלות על כלבים",
+          "description": "קבלת התראות על הזמנות, בקשות ושינויים בבעלות על כלבים"
         }
       }
     }
@@ -1253,48 +1339,6 @@
       "COMPLETED": "{{dogName}} נמחק.",
       "STALE_VERSION": "הבעלות השתנתה. יש לרענן ולנסות שוב.",
       "UPGRADE_REQUIRED": "בעלות משותפת אינה זמינה בגרסת האפליקציה הזו."
-    },
-    "notifications": {
-      "inviteReceivedTitle": "הזמנת בעלות",
-      "inviteReceivedMessage": "קיבלת הזמנה מאת {{name}} להצטרף לבעלות משותפת על כלב.",
-      "inviteAcceptedTitle": "ההזמנה אושרה",
-      "inviteAcceptedMessage": "הזמנת הבעלות שנשלחה ל{{name}} אושרה.",
-      "inviteDeclinedTitle": "ההזמנה נדחתה",
-      "inviteDeclinedMessage": "הזמנת הבעלות שנשלחה ל{{name}} נדחתה.",
-      "inviteCanceledTitle": "ההזמנה בוטלה",
-      "inviteCanceledMessage": "הזמנת הבעלות מאת {{name}} בוטלה.",
-      "requestReceivedTitle": "בקשת בעלות",
-      "requestReceivedMessage": "התקבלה בקשה מאת {{name}} להצטרף לבעלות על כלב.",
-      "requestApprovedTitle": "הבקשה אושרה",
-      "requestApprovedMessage": "בקשת הבעלות שלך אושרה על ידי {{name}}.",
-      "requestDeclinedTitle": "הבקשה נדחתה",
-      "requestDeclinedMessage": "בקשת הבעלות שלך נדחתה על ידי {{name}}.",
-      "requestCanceledTitle": "הבקשה בוטלה",
-      "requestCanceledMessage": "בקשת הבעלות של {{name}} בוטלה.",
-      "ownerJoinedTitle": "בעלים חדשים לכלב",
-      "ownerJoinedMessage": "ל{{name}} יש כעת בעלות משותפת על הכלב.",
-      "ownerLeftTitle": "בעלים עזבו",
-      "ownerLeftMessage": "הבעלות של {{name}} על הכלב הסתיימה.",
-      "primaryChangedTitle": "הבעלים הראשיים השתנו",
-      "primaryChangedMessage": "הבעלות הראשית על הכלב השתנתה בעקבות פעולה של {{name}}.",
-      "transferOfferedTitle": "הצעה לבעלות ראשית",
-      "transferOfferedMessage": "קיבלת הצעה מאת {{name}} לקבל את הבעלות הראשית על הכלב.",
-      "transferAcceptedTitle": "הבעלות הראשית התקבלה",
-      "transferAcceptedMessage": "הבעלות הראשית על הכלב הועברה ל{{name}}.",
-      "transferDeclinedTitle": "הבעלות הראשית נדחתה",
-      "transferDeclinedMessage": "ההצעה לבעלות ראשית שנשלחה ל{{name}} נדחתה.",
-      "transferCanceledTitle": "ההצעה לבעלות ראשית בוטלה",
-      "transferCanceledMessage": "ההצעה לבעלות ראשית מאת {{name}} בוטלה.",
-      "deletionRequestedTitle": "בקשה לאישור מחיקה",
-      "deletionRequestedMessage": "התקבלה בקשה מאת {{name}} לאשר את מחיקת הכלב.",
-      "deletionRejectedTitle": "מחיקת הכלב נדחתה",
-      "deletionRejectedMessage": "הצעת המחיקה נדחתה על ידי {{name}}.",
-      "deletionCanceledTitle": "מחיקת הכלב בוטלה",
-      "deletionCanceledMessage": "הצעת המחיקה מאת {{name}} בוטלה.",
-      "deletionExpiredTitle": "תוקף הצעת המחיקה פג",
-      "deletionExpiredMessage": "תוקף הצעת המחיקה פג ללא אישור פה אחד.",
-      "deletionCompletedTitle": "הכלב נמחק",
-      "deletionCompletedMessage": "הכלב המשותף נמחק לאחר שכל הבעלים אישרו."
     },
     "yourInvitation": "הזמנה לבעלות",
     "declinedInvites": "הזמנות שנדחו",

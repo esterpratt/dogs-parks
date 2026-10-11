@@ -20,6 +20,7 @@ interface NotificationPreferences {
   park_invite_accept: boolean;
   park_invite_decline: boolean;
   park_invite_cancelled: boolean;
+  dog_ownership: boolean;
   created_at?: string;
   updated_at?: string;
 }
@@ -166,6 +167,7 @@ const updateNotificationPreferences = async (
     park_invite_accept = true,
     park_invite_decline = true,
     park_invite_cancelled = true,
+    dog_ownership = true,
   } = preferences;
 
   try {
@@ -199,6 +201,7 @@ const updateNotificationPreferences = async (
             park_invite_accept,
             park_invite_decline,
             park_invite_cancelled,
+            dog_ownership,
           },
         ]);
 

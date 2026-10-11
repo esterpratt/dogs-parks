@@ -329,6 +329,88 @@
       "parkInviteCancelled": {
         "title": "Park event was cancelled",
         "appMessage": "Click to view details"
+      },
+      "dogOwnership": {
+        "inviteReceived": {
+          "title": "Ownership invitation",
+          "appMessage": "{{name}} invited you to share ownership of a dog."
+        },
+        "inviteAccepted": {
+          "title": "Invitation accepted",
+          "appMessage": "{{name}} accepted the ownership invitation."
+        },
+        "inviteDeclined": {
+          "title": "Invitation declined",
+          "appMessage": "{{name}} declined the ownership invitation."
+        },
+        "inviteCanceled": {
+          "title": "Invitation revoked",
+          "appMessage": "{{name}} canceled the ownership invitation."
+        },
+        "requestReceived": {
+          "title": "Ownership request",
+          "appMessage": "{{name}} requested ownership of a dog."
+        },
+        "requestApproved": {
+          "title": "Request approved",
+          "appMessage": "{{name}} approved your ownership request."
+        },
+        "requestDeclined": {
+          "title": "Request declined",
+          "appMessage": "{{name}} declined your ownership request."
+        },
+        "requestCanceled": {
+          "title": "Request withdrawn",
+          "appMessage": "{{name}} canceled the ownership request."
+        },
+        "ownerJoined": {
+          "title": "New dog owner",
+          "appMessage": "{{name}} joined this dog's owners."
+        },
+        "ownerLeft": {
+          "title": "Dog owner left",
+          "appMessage": "{{name}} left this dog's owners."
+        },
+        "primaryChanged": {
+          "title": "Primary owner changed",
+          "appMessage": "{{name}} changed this dog's primary owner."
+        },
+        "transferOffered": {
+          "title": "Primary role offer",
+          "appMessage": "{{name}} offered you this dog's primary role."
+        },
+        "transferAccepted": {
+          "title": "Primary role accepted",
+          "appMessage": "{{name}} accepted the primary role."
+        },
+        "transferDeclined": {
+          "title": "Primary role declined",
+          "appMessage": "{{name}} declined the primary role."
+        },
+        "transferCanceled": {
+          "title": "Primary role offer withdrawn",
+          "appMessage": "{{name}} canceled the primary role offer."
+        },
+        "deletionRequested": {
+          "title": "Deletion approval requested",
+          "appMessage": "{{name}} asked every owner to approve deleting this dog."
+        },
+        "deletionRejected": {
+          "title": "Dog deletion rejected",
+          "appMessage": "{{name}} rejected the deletion proposal."
+        },
+        "deletionCanceled": {
+          "title": "Dog deletion canceled",
+          "appMessage": "{{name}} canceled the deletion proposal."
+        },
+        "deletionExpired": {
+          "title": "Dog deletion proposal expired",
+          "appMessage": "The dog deletion proposal expired without unanimous approval."
+        },
+        "deletionCompleted": {
+          "title": "Dog deleted",
+          "appMessage": "The shared dog was deleted after every owner approved."
+        }
       }
     },
     "modal": {
@@ -365,6 +447,10 @@
         "parkInviteCancelled": {
           "title": "Park invite cancellations",
           "description": "Get notified when a friend cancels an event you are invited to"
+        },
+        "dogOwnership": {
+          "title": "Dog ownership",
+          "description": "Get notifications about dog ownership invitations, requests, and changes"
         }
       }
     }
@@ -1253,48 +1339,6 @@
       "COMPLETED": "{{dogName}} was deleted.",
       "STALE_VERSION": "Ownership changed. Refresh and try again.",
       "UPGRADE_REQUIRED": "Shared ownership is not available in this app version."
-    },
-    "notifications": {
-      "inviteReceivedTitle": "Ownership invitation",
-      "inviteReceivedMessage": "{{name}} invited you to share ownership of a dog.",
-      "inviteAcceptedTitle": "Invitation accepted",
-      "inviteAcceptedMessage": "{{name}} accepted the ownership invitation.",
-      "inviteDeclinedTitle": "Invitation declined",
-      "inviteDeclinedMessage": "{{name}} declined the ownership invitation.",
-      "inviteCanceledTitle": "Invitation revoked",
-      "inviteCanceledMessage": "{{name}} canceled the ownership invitation.",
-      "requestReceivedTitle": "Ownership request",
-      "requestReceivedMessage": "{{name}} requested ownership of a dog.",
-      "requestApprovedTitle": "Request approved",
-      "requestApprovedMessage": "{{name}} approved your ownership request.",
-      "requestDeclinedTitle": "Request declined",
-      "requestDeclinedMessage": "{{name}} declined your ownership request.",
-      "requestCanceledTitle": "Request withdrawn",
-      "requestCanceledMessage": "{{name}} canceled the ownership request.",
-      "ownerJoinedTitle": "New dog owner",
-      "ownerJoinedMessage": "{{name}} joined this dog's owners.",
-      "ownerLeftTitle": "Dog owner left",
-      "ownerLeftMessage": "{{name}} left this dog's owners.",
-      "primaryChangedTitle": "Primary owner changed",
-      "primaryChangedMessage": "{{name}} changed this dog's primary owner.",
-      "transferOfferedTitle": "Primary role offer",
-      "transferOfferedMessage": "{{name}} offered you this dog's primary role.",
-      "transferAcceptedTitle": "Primary role accepted",
-      "transferAcceptedMessage": "{{name}} accepted the primary role.",
-      "transferDeclinedTitle": "Primary role declined",
-      "transferDeclinedMessage": "{{name}} declined the primary role.",
-      "transferCanceledTitle": "Primary role offer withdrawn",
-      "transferCanceledMessage": "{{name}} canceled the primary role offer.",
-      "deletionRequestedTitle": "Deletion approval requested",
-      "deletionRequestedMessage": "{{name}} asked every owner to approve deleting this dog.",
-      "deletionRejectedTitle": "Dog deletion rejected",
-      "deletionRejectedMessage": "{{name}} rejected the deletion proposal.",
-      "deletionCanceledTitle": "Dog deletion canceled",
-      "deletionCanceledMessage": "{{name}} canceled the deletion proposal.",
-      "deletionExpiredTitle": "Dog deletion proposal expired",
-      "deletionExpiredMessage": "The dog deletion proposal expired without unanimous approval.",
-      "deletionCompletedTitle": "Dog deleted",
-      "deletionCompletedMessage": "The shared dog was deleted after every owner approved."
     },
     "yourInvitation": "Ownership invitation",
     "declinedInvites": "Declined invitations",

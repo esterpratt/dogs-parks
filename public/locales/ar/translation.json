@@ -329,6 +329,88 @@
       "parkInviteCancelled": {
         "title": "تم إلغاء دعوة الحديقة",
         "appMessage": "انقر لعرض التفاصيل"
+      },
+      "dogOwnership": {
+        "inviteReceived": {
+          "title": "دعوة ملكية",
+          "appMessage": "دعاك {{name}} لمشاركة ملكية كلب."
+        },
+        "inviteAccepted": {
+          "title": "تم قبول الدعوة",
+          "appMessage": "قبل {{name}} دعوة الملكية."
+        },
+        "inviteDeclined": {
+          "title": "تم رفض الدعوة",
+          "appMessage": "رفض {{name}} دعوة الملكية."
+        },
+        "inviteCanceled": {
+          "title": "تم إلغاء الدعوة",
+          "appMessage": "ألغى {{name}} دعوة الملكية."
+        },
+        "requestReceived": {
+          "title": "طلب ملكية",
+          "appMessage": "طلب {{name}} ملكية كلب."
+        },
+        "requestApproved": {
+          "title": "تمت الموافقة على الطلب",
+          "appMessage": "وافق {{name}} على طلب الملكية."
+        },
+        "requestDeclined": {
+          "title": "تم رفض الطلب",
+          "appMessage": "رفض {{name}} طلب الملكية."
+        },
+        "requestCanceled": {
+          "title": "تم سحب الطلب",
+          "appMessage": "ألغى {{name}} طلب الملكية."
+        },
+        "ownerJoined": {
+          "title": "مالك جديد للكلب",
+          "appMessage": "انضم {{name}} إلى مالكي هذا الكلب."
+        },
+        "ownerLeft": {
+          "title": "غادر مالك الكلب",
+          "appMessage": "غادر {{name}} مالكي هذا الكلب."
+        },
+        "primaryChanged": {
+          "title": "تغير المالك الرئيسي",
+          "appMessage": "غيّر {{name}} المالك الرئيسي لهذا الكلب."
+        },
+        "transferOffered": {
+          "title": "عرض الملكية الأساسية",
+          "appMessage": "عرض عليك {{name}} دور المالك الرئيسي لهذا الكلب."
+        },
+        "transferAccepted": {
+          "title": "تم قبول الدور الأساسي",
+          "appMessage": "قبل {{name}} دور المالك الرئيسي."
+        },
+        "transferDeclined": {
+          "title": "تم رفض الدور الأساسي",
+          "appMessage": "رفض {{name}} دور المالك الرئيسي."
+        },
+        "transferCanceled": {
+          "title": "تم سحب عرض الدور الأساسي",
+          "appMessage": "ألغى {{name}} عرض الدور الرئيسي."
+        },
+        "deletionRequested": {
+          "title": "طلب الموافقة على الحذف",
+          "appMessage": "طلب {{name}} من جميع المالكين الموافقة على حذف الكلب."
+        },
+        "deletionRejected": {
+          "title": "تم رفض حذف الكلب",
+          "appMessage": "رفض {{name}} اقتراح الحذف."
+        },
+        "deletionCanceled": {
+          "title": "تم إلغاء حذف الكلب",
+          "appMessage": "ألغى {{name}} اقتراح الحذف."
+        },
+        "deletionExpired": {
+          "title": "انتهت صلاحية اقتراح الحذف",
+          "appMessage": "انتهت صلاحية اقتراح الحذف دون موافقة بالإجماع."
+        },
+        "deletionCompleted": {
+          "title": "تم حذف الكلب",
+          "appMessage": "تم حذف الكلب المشترك بعد موافقة جميع المالكين."
+        }
       }
     },
     "modal": {
@@ -365,6 +447,10 @@
         "parkInviteCancelled": {
           "title": "إلغاء دعوة الحديقة",
           "description": "تلقي إشعار عند إلغاء صديق لفعالية أنت مدعو إليها"
+        },
+        "dogOwnership": {
+          "title": "ملكية الكلاب",
+          "description": "تلقي إشعارات حول دعوات وطلبات وتغييرات ملكية الكلاب"
         }
       }
     }
@@ -1253,48 +1339,6 @@
       "COMPLETED": "تم حذف {{dogName}}.",
       "STALE_VERSION": "تغيرت الملكية. حدّث الصفحة وحاول مرة أخرى.",
       "UPGRADE_REQUIRED": "الملكية المشتركة غير متاحة في إصدار التطبيق هذا."
-    },
-    "notifications": {
-      "inviteReceivedTitle": "دعوة ملكية",
-      "inviteReceivedMessage": "دعاك {{name}} لمشاركة ملكية كلب.",
-      "inviteAcceptedTitle": "تم قبول الدعوة",
-      "inviteAcceptedMessage": "قبل {{name}} دعوة الملكية.",
-      "inviteDeclinedTitle": "تم رفض الدعوة",
-      "inviteDeclinedMessage": "رفض {{name}} دعوة الملكية.",
-      "inviteCanceledTitle": "تم إلغاء الدعوة",
-      "inviteCanceledMessage": "ألغى {{name}} دعوة الملكية.",
-      "requestReceivedTitle": "طلب ملكية",
-      "requestReceivedMessage": "طلب {{name}} ملكية كلب.",
-      "requestApprovedTitle": "تمت الموافقة على الطلب",
-      "requestApprovedMessage": "وافق {{name}} على طلب الملكية.",
-      "requestDeclinedTitle": "تم رفض الطلب",
-      "requestDeclinedMessage": "رفض {{name}} طلب الملكية.",
-      "requestCanceledTitle": "تم سحب الطلب",
-      "requestCanceledMessage": "ألغى {{name}} طلب الملكية.",
-      "ownerJoinedTitle": "مالك جديد للكلب",
-      "ownerJoinedMessage": "انضم {{name}} إلى مالكي هذا الكلب.",
-      "ownerLeftTitle": "غادر مالك الكلب",
-      "ownerLeftMessage": "غادر {{name}} مالكي هذا الكلب.",
-      "primaryChangedTitle": "تغير المالك الرئيسي",
-      "primaryChangedMessage": "غيّر {{name}} المالك الرئيسي لهذا الكلب.",
-      "transferOfferedTitle": "عرض الملكية الأساسية",
-      "transferOfferedMessage": "عرض عليك {{name}} دور المالك الرئيسي لهذا الكلب.",
-      "transferAcceptedTitle": "تم قبول الدور الأساسي",
-      "transferAcceptedMessage": "قبل {{name}} دور المالك الرئيسي.",
-      "transferDeclinedTitle": "تم رفض الدور الأساسي",
-      "transferDeclinedMessage": "رفض {{name}} دور المالك الرئيسي.",
-      "transferCanceledTitle": "تم سحب عرض الدور الأساسي",
-      "transferCanceledMessage": "ألغى {{name}} عرض الدور الرئيسي.",
-      "deletionRequestedTitle": "طلب الموافقة على الحذف",
-      "deletionRequestedMessage": "طلب {{name}} من جميع المالكين الموافقة على حذف الكلب.",
-      "deletionRejectedTitle": "تم رفض حذف الكلب",
-      "deletionRejectedMessage": "رفض {{name}} اقتراح الحذف.",
-      "deletionCanceledTitle": "تم إلغاء حذف الكلب",
-      "deletionCanceledMessage": "ألغى {{name}} اقتراح الحذف.",
-      "deletionExpiredTitle": "انتهت صلاحية اقتراح الحذف",
-      "deletionExpiredMessage": "انتهت صلاحية اقتراح الحذف دون موافقة بالإجماع.",
-      "deletionCompletedTitle": "تم حذف الكلب",
-      "deletionCompletedMessage": "تم حذف الكلب المشترك بعد موافقة جميع المالكين."
     },
     "yourInvitation": "دعوة للملكية",
     "declinedInvites": "الدعوات المرفوضة",

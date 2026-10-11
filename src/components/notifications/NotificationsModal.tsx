@@ -25,6 +25,7 @@ interface NotificationPreferences {
   parkInviteAccept: boolean;
   parkInviteDecline: boolean;
   parkInviteCancelled: boolean;
+  dogOwnership: boolean;
 }
 
 const NotificationsModal: React.FC<NotificationsModalProps> = (props) => {
@@ -39,6 +40,7 @@ const NotificationsModal: React.FC<NotificationsModalProps> = (props) => {
     parkInviteAccept: true,
     parkInviteDecline: true,
     parkInviteCancelled: true,
+    dogOwnership: true,
   });
 
   const { userId } = useContext(UserContext);
@@ -60,6 +62,7 @@ const NotificationsModal: React.FC<NotificationsModalProps> = (props) => {
         parkInviteAccept: serverPreferences.park_invite_accept,
         parkInviteDecline: serverPreferences.park_invite_decline,
         parkInviteCancelled: serverPreferences.park_invite_cancelled,
+        dogOwnership: serverPreferences.dog_ownership,
       });
     }
   }, [serverPreferences]);
@@ -87,6 +90,7 @@ const NotificationsModal: React.FC<NotificationsModalProps> = (props) => {
         park_invite_accept: preferences.parkInviteAccept,
         park_invite_decline: preferences.parkInviteDecline,
         park_invite_cancelled: preferences.parkInviteCancelled,
+        dog_ownership: preferences.dogOwnership,
       }),
     onError: () => {
       notify(t('toasts.generic.error'), true);
@@ -194,6 +198,15 @@ const NotificationsModal: React.FC<NotificationsModalProps> = (props) => {
                 onChange={(value) =>
                   updatePreference('parkInviteCancelled', value)
                 }
+              />
+              {/* Ownership events share one preference because they form one product workflow. */}
+              <NotificationSection
+                title={t('notifications.modal.types.dogOwnership.title')}
+                description={t(
+                  'notifications.modal.types.dogOwnership.description'
+                )}
+                value={preferences.dogOwnership}
+                onChange={(value) => updatePreference('dogOwnership', value)}
                 isLast={true}
               />
             </div>

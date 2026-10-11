@@ -17,6 +17,7 @@ readonly TRANSFER_DEPARTURE_MIGRATION="supabase/migrations/20261003110000_add_do
 readonly DELETION_ENUMS_MIGRATION="supabase/migrations/20261003130000_extend_dog_deletion_enums.sql"
 readonly UNANIMOUS_DELETION_MIGRATION="supabase/migrations/20261003140000_add_unanimous_dog_deletion.sql"
 readonly CLIENT_CAPABILITY_MIGRATION="supabase/migrations/20261003150000_add_dog_client_capabilities.sql"
+readonly OWNERSHIP_NOTIFICATION_PREFERENCE_MIGRATION="supabase/migrations/20261011110000_add_dog_ownership_notification_preference.sql"
 readonly RUNTIME_FUNCTIONS_DIR="supabase/tests/local/supabase/.runtime-functions"
 
 cleanup() {
@@ -158,6 +159,8 @@ SUPABASE_LOCAL_SERVICE_ROLE_KEY="${local_service_role_key}" \
 
 docker exec -i "${LOCAL_DB_CONTAINER}" psql -U postgres -d postgres -q -1 -v ON_ERROR_STOP=1 \
   < "${CLIENT_CAPABILITY_MIGRATION}"
+docker exec -i "${LOCAL_DB_CONTAINER}" psql -U postgres -d postgres -q -1 -v ON_ERROR_STOP=1 \
+  < "${OWNERSHIP_NOTIFICATION_PREFERENCE_MIGRATION}"
 
 SUPABASE_LOCAL_URL="${local_api_url}" \
 SUPABASE_LOCAL_ANON_KEY="${local_anon_key}" \

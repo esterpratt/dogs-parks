@@ -841,6 +841,7 @@ export type Database = {
       notifications_preferences: {
         Row: {
           created_at: string
+          dog_ownership: boolean
           dog_invite: boolean | null
           dog_invite_accept: boolean | null
           dog_invite_decline: boolean | null
@@ -859,6 +860,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          dog_ownership?: boolean
           dog_invite?: boolean | null
           dog_invite_accept?: boolean | null
           dog_invite_decline?: boolean | null
@@ -877,6 +879,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          dog_ownership?: boolean
           dog_invite?: boolean | null
           dog_invite_accept?: boolean | null
           dog_invite_decline?: boolean | null
