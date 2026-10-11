@@ -2,6 +2,8 @@
 
 .container {
   min-height: $content-max-height;
+  // Let long dog content grow without compressing the header or tabs.
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   margin-top: $page-top-padding;
@@ -142,3 +144,5 @@
 
 // Let short ownership tabs fill the viewport while longer content grows naturally.
 .ownership-content { flex: 1; }
+
+.tabs { flex-shrink: 0; }

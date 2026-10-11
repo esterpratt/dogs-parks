@@ -32,6 +32,7 @@ import styles from './UserDog.module.scss';
 const UserDog = () => {
   const { dogId } = useParams();
   const ownershipRoute = useMatch('/dogs/:dogId/ownership/*');
+  const requestRoute = useMatch('/dogs/:dogId/ownership/request');
   const navigate = useNavigate();
   const { userId } = useContext(UserContext);
   const [isEditDogsModalOpen, setIsEditDogsModalOpen] = useState(false);
@@ -92,7 +93,10 @@ const UserDog = () => {
   // The server derives ownership for direct URLs and refreshes; router state
   // is presentation context only and is never an authorization input.
   const isSignedInUser = dogPage.viewer.is_owner;
-  const showOwnership = !!ownershipRoute;
+  // A new request is composed over Details; pending requests belong to Ownership.
+  const showOwnership =
+    !!ownershipRoute &&
+    (!requestRoute || !!dogPage.capabilities.pending_action);
   const canEdit = dogPage.viewer.can_edit;
   const ownershipCapabilities = dogPage.capabilities;
 
@@ -195,10 +199,16 @@ const UserDog = () => {
             [styles.center]: !isSignedInUser,
           })}
         />
-        {isSignedInUser || ownershipCapabilities?.pending_action || showOwnership ? (
+        {isSignedInUser ||
+        ownershipCapabilities?.pending_action ||
+        showOwnership ? (
           <TabsList
+            className={styles.tabs}
             tabs={[
-              { text: t('dogOwnership.detailsTab'), url: `/dogs/${dog.id}` },
+              {
+                text: t('dogOwnership.detailsTab'),
+                url: `/dogs/${dog.id}`,
+              },
               {
                 text: t('dogOwnership.manageTitle'),
                 url: `/dogs/${dog.id}/ownership`,
@@ -207,7 +217,12 @@ const UserDog = () => {
             ]}
           />
         ) : null}
-        <div className={classnames(styles.content, showOwnership && styles.ownershipContent)}>
+        <div
+          className={classnames(
+            styles.content,
+            showOwnership && styles.ownershipContent,
+          )}
+        >
           {showOwnership ? (
             <Outlet />
           ) : (

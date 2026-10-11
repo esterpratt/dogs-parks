@@ -217,6 +217,23 @@ test.describe('staging ownership browser journeys', () => {
           exact: true,
         }),
       ).toBeVisible();
+      // Canceling the confirmation must leave the invitation intact.
+      await primary
+        .getByRole('button', { name: 'Revoke invitation', exact: true })
+        .click();
+      await expect(
+        primary
+          .getByRole('dialog')
+          .filter({ hasText: 'Revoke the ownership invitation' }),
+      ).toContainText('Revoke the ownership invitation');
+      await primary
+        .getByRole('dialog')
+        .filter({ hasText: 'Revoke the ownership invitation' })
+        .getByRole('button', { name: 'Cancel', exact: true })
+        .click();
+      await expect(
+        primary.getByRole('button', { name: 'Revoke invitation', exact: true }),
+      ).toBeVisible();
       await friend.goto(
         `/ownership-actions/invite/${resultString(invite, 'action_id')}`,
       );
@@ -225,7 +242,7 @@ test.describe('staging ownership browser journeys', () => {
       ).toBeDisabled();
       // Decisions close into the dog page with a toast; retries use a new invitation.
       const declinedDialog = friend
-        .getByRole('heading', { name: 'Invitation awaiting your decision' })
+        .getByRole('heading', { name: 'Ownership invitation' })
         .locator('..');
       await expect(friend.getByRole('dialog')).toHaveCount(0);
       await expect(declinedDialog.getByRole('button')).toHaveCount(2);
@@ -382,6 +399,19 @@ test.describe('staging ownership browser journeys', () => {
       await expect(
         coowner.getByRole('dialog', { name: 'Request ownership' }),
       ).toBeVisible();
+      await expect(
+        coowner.getByText('Your ownership request is pending.', {
+          exact: true,
+        }),
+      ).toHaveCount(0);
+      await coowner
+        .getByRole('dialog')
+        .getByRole('button', { name: 'Cancel', exact: true })
+        .click();
+      await expect(coowner).toHaveURL(`/dogs/${dogId}`);
+      await coowner
+        .getByRole('button', { name: 'Request ownership', exact: true })
+        .click();
       await coowner.getByRole('checkbox').check();
       const request = await clickRpc({
         page: coowner,
@@ -391,6 +421,20 @@ test.describe('staging ownership browser journeys', () => {
         }),
         name: 'api_create_dog_ownership_request',
         outcome: 'CREATED',
+      });
+      await expect(coowner).toHaveURL(`/dogs/${dogId}/ownership`);
+      await expect(
+        coowner.getByText('Your ownership request is pending.', {
+          exact: true,
+        }),
+      ).toBeVisible();
+      await expect(
+        coowner.getByRole('heading', {
+          name: 'Request awaiting their response',
+        }),
+      ).toHaveCount(0);
+      await coowner.screenshot({
+        path: '.private/staging/corrected-pending-request.png',
       });
       await primary.goto(
         `/ownership-actions/request/${resultString(request, 'action_id')}`,
@@ -421,6 +465,10 @@ test.describe('staging ownership browser journeys', () => {
           exact: true,
         })
         .click();
+      await primary.getByRole('dialog').getByRole('textbox').focus();
+      await expect(
+        primary.getByRole('dialog').locator('#allow-scroll > li'),
+      ).toHaveCount(2);
       await primary
         .getByRole('dialog')
         .locator('input:not([type=checkbox])')
@@ -468,6 +516,10 @@ test.describe('staging ownership browser journeys', () => {
           exact: true,
         })
         .click();
+      await primary.getByRole('dialog').getByRole('textbox').focus();
+      await expect(
+        primary.getByRole('dialog').locator('#allow-scroll > li'),
+      ).toHaveCount(2);
       await primary
         .getByRole('dialog')
         .locator('input:not([type=checkbox])')

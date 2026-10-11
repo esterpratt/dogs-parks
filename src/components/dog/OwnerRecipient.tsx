@@ -36,6 +36,7 @@ const OwnerRecipient = (props: OwnerRecipientProps) => {
   return (
     <AutoComplete
       inlineDropdown
+      showAllOnFocus
       label={t('dogOwnership.successorLabel')}
       items={members}
       selectedInput={selectedMember ? memberName(selectedMember) : ''}
@@ -49,7 +50,7 @@ const OwnerRecipient = (props: OwnerRecipientProps) => {
       setSelectedInput={(member) => onChange(member.id)}
     >
       {(member) => (
-        <span className={styles.person}>
+        <span className={styles.recipientOption}>
           <UserIcon size={24} aria-hidden="true" />
           {memberName(member)}
         </span>

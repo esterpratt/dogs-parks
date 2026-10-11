@@ -55,7 +55,7 @@ const DogOwnershipRequest = () => {
   const { mutate: submitRequest, isPending: isSubmitting } = useMutation({
     onError: () => notify(t('dogOwnership.requestError'), true),
     mutationFn: () => createDogOwnershipRequest(dogId!, requestKey.current),
-    onSuccess: (result) => {
+    onSuccess: async (result) => {
       // A confirmed response ends this retry window; recreation uses a new key.
       requestKey.current = uuidv4();
       const succeeded = ['CREATED', 'CANCELED'].includes(result.outcome);
@@ -69,16 +69,16 @@ const DogOwnershipRequest = () => {
         ),
         !succeeded,
       );
+      await refresh();
       if (succeeded) {
         navigate(`/dogs/${dogId}/ownership`, { replace: true });
       }
-      return refresh();
     },
   });
   const { mutate: cancelRequest, isPending: isCanceling } = useMutation({
     onError: () => notify(t('dogOwnership.requestError'), true),
     mutationFn: cancelDogOwnershipRequest,
-    onSuccess: (result) => {
+    onSuccess: async (result) => {
       const succeeded = ['CREATED', 'CANCELED'].includes(result.outcome);
       notify(
         t(
@@ -90,10 +90,10 @@ const DogOwnershipRequest = () => {
         ),
         !succeeded,
       );
+      await refresh();
       if (succeeded) {
         navigate(`/dogs/${dogId}/ownership`, { replace: true });
       }
-      return refresh();
     },
   });
 
@@ -114,7 +114,14 @@ const DogOwnershipRequest = () => {
   return (
     <OwnershipModal
       title={t('dogOwnership.requestTitle')}
-      onClose={() => navigate(`/dogs/${dogId}/ownership`, { replace: true })}
+      onClose={() =>
+        navigate(
+          pendingRequest || capabilities.pending_action
+            ? `/dogs/${dogId}/ownership`
+            : `/dogs/${dogId}`,
+          { replace: true },
+        )
+      }
       isPending={isSubmitting || isCanceling}
       onSave={() =>
         pendingRequest ? cancelRequest(pendingRequest.id) : submitRequest()

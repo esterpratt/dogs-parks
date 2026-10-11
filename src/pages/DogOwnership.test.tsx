@@ -1,9 +1,19 @@
-import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import {
+  act,
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { queryClient } from '../services/react-query';
-import { fetchDogDeletionProposal } from '../services/dog-ownership';
+import {
+  cancelDogInvite,
+  fetchDogDeletionProposal,
+} from '../services/dog-ownership';
 import { ModeProvider } from '../context/ModeContext';
 import DogOwnership from './DogOwnership';
 
@@ -12,6 +22,7 @@ const state = vi.hoisted(() => ({
   reinvited: false,
   pendingRequest: false,
   noInvitation: false,
+  showModal: vi.fn(),
 }));
 vi.mock('../context/UserContext', async () => {
   const { createContext } = await import('react');
@@ -21,7 +32,7 @@ vi.mock('../context/NotificationContext', () => ({
   useNotification: () => ({ notify: vi.fn() }),
 }));
 vi.mock('../context/ConfirmModalContext', () => ({
-  useConfirm: () => ({ showModal: vi.fn() }),
+  useConfirm: () => ({ showModal: state.showModal }),
 }));
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key }),
@@ -76,7 +87,7 @@ vi.mock('../services/dog-ownership', () => ({
       : [],
   fetchPendingPrimaryTransfers: async () => [],
   fetchDogDeletionProposal: vi.fn(async () => null),
-  cancelDogInvite: vi.fn(),
+  cancelDogInvite: vi.fn(async () => ({ outcome: 'CANCELED' })),
   cancelPrimaryTransfer: vi.fn(),
   createDogInvite: vi.fn(),
   createPrimaryTransfer: vi.fn(),
@@ -187,4 +198,24 @@ it('shows only the current request after an earlier request was withdrawn', asyn
   expect(
     screen.getByRole('button', { name: 'dogOwnership.cancelRequest' }),
   ).toBeTruthy();
+});
+
+// Revocation requires an explicit confirmation before invoking the RPC.
+it('waits for confirmation before revoking an invitation', async () => {
+  state.reinvited = true;
+  renderTab();
+  fireEvent.click(
+    await screen.findByRole('button', {
+      name: 'dogOwnership.revokeInvitation',
+    }),
+  );
+  expect(cancelDogInvite).not.toHaveBeenCalled();
+  expect(state.showModal).toHaveBeenCalledWith(
+    expect.objectContaining({
+      title: 'dogOwnership.revokeInvitationConfirm',
+      confirmText: 'dogOwnership.revokeInvitation',
+    }),
+  );
+  await act(async () => state.showModal.mock.calls[0][0].onConfirm());
+  expect(vi.mocked(cancelDogInvite).mock.calls[0][0]).toBe('pending');
 });

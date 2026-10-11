@@ -13,8 +13,10 @@ import {
   ArrowRightLeft,
   LogOut,
   Trash2,
-  ChevronRight,
-  X,
+  FileCheck2,
+  CircleX,
+  Clock3,
+  Ban,
 } from 'lucide-react';
 import { OwnerRecipient } from '../components/dog/OwnerRecipient';
 import { OwnershipAction } from './OwnershipAction';
@@ -66,6 +68,9 @@ const DogOwnership = () => {
   ].includes(notificationStatus ?? '')
     ? notificationStatus
     : null;
+  const isClosedStatus = ['CANCELED', 'DECLINED', 'EXPIRED'].includes(
+    visibleStatus ?? '',
+  );
   const { notify } = useNotification();
   const [invitedFriends, setInvitedFriends] = useState<User[]>([]);
   const { t } = useTranslation();
@@ -164,21 +169,22 @@ const DogOwnership = () => {
     },
     onError: () => notify(t('dogOwnership.requestError'), true),
   });
-  const { mutate: cancelInvite, isPending: isCancelingInvite } = useMutation({
-    onError: () => notify(t('dogOwnership.requestError'), true),
-    mutationFn: cancelDogInvite,
-    onSuccess: (result) => {
-      notify(
-        t(
-          result.outcome === 'CANCELED'
-            ? 'dogOwnership.invitationRevoked'
-            : `dogOwnership.outcomes.${result.outcome}`,
-        ),
-        result.outcome !== 'CANCELED',
-      );
-      return refreshActions();
-    },
-  });
+  const { mutateAsync: cancelInvite, isPending: isCancelingInvite } =
+    useMutation({
+      onError: () => notify(t('dogOwnership.requestError'), true),
+      mutationFn: cancelDogInvite,
+      onSuccess: (result) => {
+        notify(
+          t(
+            result.outcome === 'CANCELED'
+              ? 'dogOwnership.invitationRevoked'
+              : `dogOwnership.outcomes.${result.outcome}`,
+          ),
+          result.outcome !== 'CANCELED',
+        );
+        return refreshActions();
+      },
+    });
   const { mutate: offerTransfer, isPending: isOfferingTransfer } = useMutation({
     onError: () => notify(t('dogOwnership.requestError'), true),
     mutationFn: (memberId: string) => {
@@ -285,11 +291,20 @@ const DogOwnership = () => {
       !isLoadingInvites &&
       !requests.some((request) => request.requester_user_id === userId) &&
       !invites.some((invite) => invite.invitee_user_id === userId) ? (
-        <section className={styles.section}>
-          <h2>{t(`dogOwnership.${receiptTitle}`)}</h2>
-          <div>
-            <p>{t(`dogOwnership.receipt.${visibleStatus}`)}</p>
+        <section
+          className={`${styles.statusCard} ${isClosedStatus ? styles.closedStatus : ''}`}
+        >
+          <div className={styles.statusHeading}>
+            {isClosedStatus ? (
+              <Ban size={22} aria-hidden="true" />
+            ) : (
+              <FileCheck2 size={22} aria-hidden="true" />
+            )}
+            <h2>{t(`dogOwnership.${receiptTitle}`)}</h2>
           </div>
+          <p className={styles.statusBadge}>
+            {t(`dogOwnership.receipt.${visibleStatus}`)}
+          </p>
         </section>
       ) : null}
       {invites
@@ -300,18 +315,19 @@ const DogOwnership = () => {
       {/* A requester can revisit their own pending action without seeing owner administration. */}
       {!dogPage.viewer.is_owner &&
       requests.some((request) => request.requester_user_id === userId) ? (
-        <section className={styles.section}>
-          <h2>{t('dogOwnership.outgoingRequestTitle')}</h2>
-          <div className={styles.actions}>
+        <section className={styles.statusCard}>
+          <div className={styles.statusHeading}>
+            <Clock3 size={22} aria-hidden="true" />
             <p>{t('dogOwnership.requestPending')}</p>
-            <Button
-              variant="secondary"
-              className={styles.button}
-              onClick={() => navigate(`/dogs/${dogId}/ownership/request`)}
-            >
-              {t('dogOwnership.cancelRequest')}
-            </Button>
           </div>
+          <p>{t('dogOwnership.requestPendingHelp')}</p>
+          <Button
+            variant="secondary"
+            className={styles.button}
+            onClick={() => navigate(`/dogs/${dogId}/ownership/request`)}
+          >
+            {t('dogOwnership.cancelRequest')}
+          </Button>
         </section>
       ) : null}
       {capabilities.role === 'CO_OWNER'
@@ -425,7 +441,7 @@ const DogOwnership = () => {
                             )
                           }
                         >
-                          <ChevronRight size={20} aria-hidden="true" />
+                          <FileCheck2 size={20} aria-hidden="true" />
                         </Button>
                       </div>
                     ))}
@@ -452,11 +468,21 @@ const DogOwnership = () => {
                           aria-label={t('dogOwnership.revokeInvitation')}
                           title={t('dogOwnership.revokeInvitation')}
                           disabled={isCancelingInvite}
-                          onClick={() => cancelInvite(invite.id)}
+                          onClick={() =>
+                            showModal({
+                              title: t('dogOwnership.revokeInvitationConfirm', {
+                                name: friendName(invite.invitee_user_id),
+                              }),
+                              confirmText: t('dogOwnership.revokeInvitation'),
+                              onConfirm: async () => {
+                                await cancelInvite(invite.id);
+                              },
+                            })
+                          }
                           type="button"
                           variant="secondary"
                         >
-                          <X size={20} aria-hidden="true" />
+                          <CircleX size={20} aria-hidden="true" />
                         </Button>
                       </div>
                     ))}
@@ -488,7 +514,7 @@ const DogOwnership = () => {
                           onClick={() => cancelTransfer(transfer.id)}
                           variant="secondary"
                         >
-                          <X size={20} aria-hidden="true" />
+                          <CircleX size={20} aria-hidden="true" />
                         </Button>
                       </div>
                     ))}

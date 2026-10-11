@@ -320,7 +320,7 @@ test.describe('staging notification and photo edges', () => {
     await coowner.goto('/notifications');
     await coowner
       .getByRole('button')
-      .filter({ hasText: 'Primary ownership offered' })
+      .filter({ hasText: 'Primary role offer' })
       .click();
     await expect(coowner).toHaveURL(
       new RegExp(

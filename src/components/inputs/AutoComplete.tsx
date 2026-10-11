@@ -7,6 +7,7 @@ import { useAutoComplete } from '../../hooks/useAutoComplete';
 
 interface AutoCompleteProps<T> {
   inlineDropdown?: boolean;
+  showAllOnFocus?: boolean;
   selectedInput?: string;
   items: T[];
   placeholder?: string;
@@ -23,6 +24,7 @@ interface AutoCompleteProps<T> {
 const AutoComplete = <T,>(props: AutoCompleteProps<T>) => {
   const {
     inlineDropdown,
+    showAllOnFocus,
     items,
     selectedInput,
     placeholder,
@@ -41,6 +43,9 @@ const AutoComplete = <T,>(props: AutoCompleteProps<T>) => {
   });
 
   const [showItems, setShowItems] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
+  // A selected label is a value, not an initial search that hides other options.
+  const visibleItems = showAllOnFocus && !isSearching ? items : filteredItems;
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
@@ -80,25 +85,31 @@ const AutoComplete = <T,>(props: AutoCompleteProps<T>) => {
       <label className={styles.label}>{label}</label>
       <Input
         ref={inputRef}
-        onFocus={() => setShowItems(true)}
+        onFocus={() => {
+          setIsSearching(false);
+          setShowItems(true);
+        }}
         onBlur={onInputBlur}
         value={input}
-        onChange={onChangeInput}
+        onChange={(event) => {
+          setIsSearching(true);
+          onChangeInput(event);
+        }}
         placeholder={placeholder}
         className={classnames(
           styles.input,
-          showItems && filteredItems.length && styles.listOpen,
+          showItems && visibleItems.length && styles.listOpen,
         )}
       />
       {showItems && (
         <div
           className={classnames(
             styles.listContainer,
-            !filteredItems.length && styles.noResults,
+            !visibleItems.length && styles.noResults,
           )}
         >
           <SearchListItems
-            items={filteredItems}
+            items={visibleItems}
             itemKeyfn={itemKeyfn}
             className={styles.items}
             isAutoCompleteList
