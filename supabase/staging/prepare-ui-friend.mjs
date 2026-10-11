@@ -75,7 +75,8 @@ if (!friend) {
 }
 manifest.id = friend.id;
 savePrivate('ui-friend.json', manifest);
-for (const participantId of participantIds) {
+// Noa can also be listed among local logins; never create a self-friendship.
+for (const participantId of participantIds.filter((id) => id !== friend.id)) {
   const pairs = requireSuccess(
     await admin
       .from('friendships')

@@ -15,7 +15,9 @@
   .container &.list-open,
   :global(.dark) .container &.list-open {
     border-color: $pink;
-    border-bottom: 1px solid var(--color-grey-light);
+    // Inset divider ends inside the pink frame, leaving both corners pink.
+    border-bottom: 0;
+    box-shadow: inset 0 -1px var(--color-grey-light);
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }

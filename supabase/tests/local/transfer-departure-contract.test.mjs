@@ -453,6 +453,17 @@ test('primary transfer, departure, and account-erasure contract', async (suite) 
           });
         assertNoError(acceptAgainError, 'replay accepted transfer response');
         assert.equal(acceptedAgain.outcome, 'ACCEPTED');
+        // Acceptance notifies the proposer once; the accepting user needs no notification.
+        const { data: acceptanceNotifications, error: notificationError } = await serviceClient
+          .from('notifications')
+          .select('receiver_id,type')
+          .eq('data->>dog_id', dog.id)
+          .in('type', ['dog_primary_transfer_accepted', 'dog_primary_changed']);
+        assertNoError(notificationError, 'read acceptance notification recipients');
+        assert.deepEqual(acceptanceNotifications, [{
+          receiver_id: primary.id,
+          type: 'dog_primary_transfer_accepted',
+        }]);
 
         const [
           { data: currentDog },

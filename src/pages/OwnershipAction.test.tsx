@@ -185,3 +185,32 @@ it.each([true, false])(
     expect(state.notify).not.toHaveBeenCalled();
   },
 );
+
+// Pending request notifications lead to the list; reviewing remains an explicit action.
+it("opens the ownership tab from a pending ownership request notification", async () => {
+  vi.mocked(fetchDogOwnershipAction).mockResolvedValue({
+    ...pendingAction,
+    primary_user_id_at_creation: "recipient",
+  });
+  render(
+    <ModeProvider>
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter initialEntries={["/ownership-actions/request/invitation"]}>
+        <Routes>
+          <Route
+            path="/ownership-actions/:actionType/:actionId"
+            element={<OwnershipActionRedirect />}
+          />
+          <Route path="/dogs/:dogId/ownership" element={<p>Owner tab</p>} />
+          <Route
+            path="/dogs/:dogId/ownership/actions/:actionType/:actionId"
+            element={<p>Unwanted modal</p>}
+          />
+        </Routes>
+      </MemoryRouter>
+    </QueryClientProvider>
+    </ModeProvider>,
+  );
+  await screen.findByText("Owner tab");
+  expect(screen.queryByText("Unwanted modal")).toBeNull();
+});

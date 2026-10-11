@@ -6,6 +6,7 @@ import styles from './AutoComplete.module.scss';
 import { useAutoComplete } from '../../hooks/useAutoComplete';
 
 interface AutoCompleteProps<T> {
+  inlineDropdown?: boolean;
   selectedInput?: string;
   items: T[];
   placeholder?: string;
@@ -19,19 +20,21 @@ interface AutoCompleteProps<T> {
   selectedInputFormatter?: (selectedInput: string) => string;
 }
 
-const AutoComplete = <T,>({
-  items,
-  selectedInput,
-  placeholder,
-  className,
-  itemKeyfn,
-  label,
-  filterFunc,
-  setSelectedInput,
-  equalityFunc,
-  children,
-  selectedInputFormatter,
-}: AutoCompleteProps<T>) => {
+const AutoComplete = <T,>(props: AutoCompleteProps<T>) => {
+  const {
+    inlineDropdown,
+    items,
+    selectedInput,
+    placeholder,
+    className,
+    itemKeyfn,
+    label,
+    filterFunc,
+    setSelectedInput,
+    equalityFunc,
+    children,
+    selectedInputFormatter,
+  } = props;
   const { input, setInput, filteredItems, onChangeInput } = useAutoComplete({
     items,
     filterFunc,
@@ -45,7 +48,7 @@ const AutoComplete = <T,>({
     setInput(
       selectedInputFormatter && displayValue
         ? selectedInputFormatter(displayValue)
-        : displayValue
+        : displayValue,
     );
   }, [selectedInput, selectedInputFormatter, setInput]);
 
@@ -62,12 +65,18 @@ const AutoComplete = <T,>({
     setInput(
       selectedInputFormatter && displayValue
         ? selectedInputFormatter(displayValue)
-        : displayValue
+        : displayValue,
     );
   };
 
   return (
-    <div className={classnames(styles.container, className)}>
+    <div
+      className={classnames(
+        styles.container,
+        inlineDropdown && styles.inlineDropdown,
+        className,
+      )}
+    >
       <label className={styles.label}>{label}</label>
       <Input
         ref={inputRef}
@@ -78,14 +87,14 @@ const AutoComplete = <T,>({
         placeholder={placeholder}
         className={classnames(
           styles.input,
-          showItems && filteredItems.length && styles.listOpen
+          showItems && filteredItems.length && styles.listOpen,
         )}
       />
       {showItems && (
         <div
           className={classnames(
             styles.listContainer,
-            !filteredItems.length && styles.noResults
+            !filteredItems.length && styles.noResults,
           )}
         >
           <SearchListItems

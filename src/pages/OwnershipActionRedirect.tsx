@@ -61,7 +61,7 @@ const OwnershipActionRedirect = () => {
       canRespond
     ) {
       navigate(
-        type === "invite"
+        type !== "transfer"
           ? `${destination}/ownership`
           : `${destination}/ownership/actions/${type}/${action.id}`,
         {

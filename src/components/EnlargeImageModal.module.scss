@@ -28,7 +28,8 @@
     padding: 8px;
     border-radius: 8px;
     gap: 8px;
-    height: 100%;
+    min-height: 44px;
+    white-space: normal;
 
     &:only-child {
       margin-inline-start: 100%;
@@ -36,8 +37,12 @@
     }
   }
 
+  // Keep the text action padded and allow long translated labels to wrap.
   .primary-button {
-    padding: 0 12px;
+    padding: 8px 16px;
+    min-width: 0;
+    flex: 1;
+    > svg { flex-shrink: 0; }
   }
 
   .img {

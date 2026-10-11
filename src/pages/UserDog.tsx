@@ -32,7 +32,6 @@ import styles from './UserDog.module.scss';
 const UserDog = () => {
   const { dogId } = useParams();
   const ownershipRoute = useMatch('/dogs/:dogId/ownership/*');
-  const requestRoute = useMatch('/dogs/:dogId/ownership/request');
   const navigate = useNavigate();
   const { userId } = useContext(UserContext);
   const [isEditDogsModalOpen, setIsEditDogsModalOpen] = useState(false);
@@ -93,7 +92,7 @@ const UserDog = () => {
   // The server derives ownership for direct URLs and refreshes; router state
   // is presentation context only and is never an authorization input.
   const isSignedInUser = dogPage.viewer.is_owner;
-  const showOwnership = !!ownershipRoute && !requestRoute;
+  const showOwnership = !!ownershipRoute;
   const canEdit = dogPage.viewer.can_edit;
   const ownershipCapabilities = dogPage.capabilities;
 
@@ -208,7 +207,7 @@ const UserDog = () => {
             ]}
           />
         ) : null}
-        <div className={styles.content}>
+        <div className={classnames(styles.content, showOwnership && styles.ownershipContent)}>
           {showOwnership ? (
             <Outlet />
           ) : (

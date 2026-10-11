@@ -13,8 +13,10 @@ import {
   ArrowRightLeft,
   LogOut,
   Trash2,
+  ChevronRight,
+  X,
 } from 'lucide-react';
-import { RadioInputs } from '../components/inputs/RadioInputs';
+import { OwnerRecipient } from '../components/dog/OwnerRecipient';
 import { OwnershipAction } from './OwnershipAction';
 import { OwnershipModal } from '../components/dog/OwnershipModal';
 import { SelectUsers } from '../components/SelectUsers';
@@ -93,17 +95,7 @@ const DogOwnership = () => {
     enabled: !!capabilities?.enabled && !!userId,
   });
   const invites = allInvites.filter((invite) => invite.status === 'PENDING');
-  const declinedInvites = allInvites.filter(
-    (invite) =>
-      invite.status === 'DECLINED' &&
-      !dogPage?.members?.some(
-        (member) => member.user_id === invite.invitee_user_id,
-      ) &&
-      !invites.some(
-        (pending) => pending.invitee_user_id === invite.invitee_user_id,
-      ),
-  );
-  const { data: requests = [] } = useQuery({
+  const { data: requests = [], isLoading: isLoadingRequests } = useQuery({
     queryKey: [...queryKey, 'requests'],
     queryFn: () => fetchPendingDogOwnershipRequests(dogId!),
     enabled:
@@ -287,10 +279,15 @@ const DogOwnership = () => {
 
   return (
     <div className={styles.content}>
-      {!dogPage.viewer.is_owner && visibleStatus ? (
-        <section className={styles.group}>
-          <h2 className={styles.title}>{t(`dogOwnership.${receiptTitle}`)}</h2>
-          <div className={styles.section}>
+      {!dogPage.viewer.is_owner &&
+      visibleStatus &&
+      !isLoadingRequests &&
+      !isLoadingInvites &&
+      !requests.some((request) => request.requester_user_id === userId) &&
+      !invites.some((invite) => invite.invitee_user_id === userId) ? (
+        <section className={styles.section}>
+          <h2>{t(`dogOwnership.${receiptTitle}`)}</h2>
+          <div>
             <p>{t(`dogOwnership.receipt.${visibleStatus}`)}</p>
           </div>
         </section>
@@ -303,11 +300,9 @@ const DogOwnership = () => {
       {/* A requester can revisit their own pending action without seeing owner administration. */}
       {!dogPage.viewer.is_owner &&
       requests.some((request) => request.requester_user_id === userId) ? (
-        <section className={styles.group}>
-          <h2 className={styles.title}>
-            {t('dogOwnership.outgoingRequestTitle')}
-          </h2>
-          <div className={styles.section}>
+        <section className={styles.section}>
+          <h2>{t('dogOwnership.outgoingRequestTitle')}</h2>
+          <div className={styles.actions}>
             <p>{t('dogOwnership.requestPending')}</p>
             <Button
               variant="secondary"
@@ -420,7 +415,9 @@ const DogOwnership = () => {
                           {friendName(request.requester_user_id)}
                         </Link>
                         <Button
-                          className={styles.button}
+                          className={styles.rowAction}
+                          aria-label={t('dogOwnership.reviewRequest')}
+                          title={t('dogOwnership.reviewRequest')}
                           variant="secondary"
                           onClick={() =>
                             navigate(
@@ -428,7 +425,7 @@ const DogOwnership = () => {
                             )
                           }
                         >
-                          {t('dogOwnership.reviewRequest')}
+                          <ChevronRight size={20} aria-hidden="true" />
                         </Button>
                       </div>
                     ))}
@@ -451,12 +448,15 @@ const DogOwnership = () => {
                           {friendName(invite.invitee_user_id)}
                         </Link>
                         <Button
+                          className={styles.rowAction}
+                          aria-label={t('dogOwnership.revokeInvitation')}
+                          title={t('dogOwnership.revokeInvitation')}
                           disabled={isCancelingInvite}
                           onClick={() => cancelInvite(invite.id)}
                           type="button"
                           variant="secondary"
                         >
-                          {t('dogOwnership.revokeInvitation')}
+                          <X size={20} aria-hidden="true" />
                         </Button>
                       </div>
                     ))}
@@ -481,60 +481,17 @@ const DogOwnership = () => {
                           )?.user_name ?? t('dogOwnership.memberFallback')}
                         </Link>
                         <Button
+                          className={styles.rowAction}
+                          aria-label={t('dogOwnership.revokeOffer')}
+                          title={t('dogOwnership.revokeOffer')}
                           disabled={isCancelingTransfer}
                           onClick={() => cancelTransfer(transfer.id)}
                           variant="secondary"
                         >
-                          {t('dogOwnership.revokeOffer')}
+                          <X size={20} aria-hidden="true" />
                         </Button>
                       </div>
                     ))}
-                  </div>
-                </section>
-              ) : null}
-              {declinedInvites.length > 0 ? (
-                <section className={styles.group}>
-                  <h2 className={styles.title}>
-                    {t('dogOwnership.declinedInvites')}
-                  </h2>
-                  <div className={styles.section}>
-                    {Array.from(
-                      new Map(
-                        declinedInvites.map((invite) => [
-                          invite.invitee_user_id,
-                          invite,
-                        ]),
-                      ).values(),
-                    ).map((invite) => {
-                      const friend = eligibleFriends.find(
-                        (candidate) => candidate.id === invite.invitee_user_id,
-                      );
-                      return (
-                        <div className={styles.row} key={invite.id}>
-                          <Link
-                            className={styles.person}
-                            to={`/profile/${invite.invitee_user_id}`}
-                          >
-                            <UserIcon size={24} aria-hidden="true" />
-                            {friendName(invite.invitee_user_id)}
-                          </Link>
-                          <Button
-                            className={styles.button}
-                            variant="secondary"
-                            disabled={
-                              !friend || !capabilities.can_invite || isInviting
-                            }
-                            onClick={() => {
-                              if (friend) {
-                                inviteFriends([friend]);
-                              }
-                            }}
-                          >
-                            {t('dogOwnership.inviteAgain')}
-                          </Button>
-                        </div>
-                      );
-                    })}
                   </div>
                 </section>
               ) : null}
@@ -547,7 +504,7 @@ const DogOwnership = () => {
             eligibleTransferMembers.length > 0 &&
             transfers.length === 0 ? (
               <Button
-                variant="secondary"
+                variant="primary"
                 className={styles.button}
                 onClick={() => openModal('transfer')}
                 disabled={!capabilities.can_transfer}
@@ -653,23 +610,10 @@ const DogOwnership = () => {
               }
             >
               <p>{t('dogOwnership.transferHelp')}</p>
-              <RadioInputs
-                label={t('dogOwnership.successorLabel')}
-                name="transfer-successor"
-                value={
-                  selectedTransferMemberId ||
-                  eligibleTransferMembers[0]?.id ||
-                  ''
-                }
-                inputClassName={styles.memberOption}
-                options={eligibleTransferMembers.map((member) => ({
-                  id: `transfer-${member.id}`,
-                  value: member.id,
-                  label: member.user_name ?? t('dogOwnership.memberFallback'),
-                }))}
-                onOptionChange={(event) =>
-                  setSelectedTransferMemberId(event.target.value)
-                }
+              <OwnerRecipient
+                members={eligibleTransferMembers}
+                value={selectedTransferMemberId}
+                onChange={setSelectedTransferMemberId}
               />
             </OwnershipModal>
           ) : null}

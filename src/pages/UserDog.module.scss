@@ -1,7 +1,9 @@
 @use '../variables' as *;
 
 .container {
-  height: $content-max-height;
+  min-height: $content-max-height;
+  display: flex;
+  flex-direction: column;
   margin-top: $page-top-padding;
 }
 
@@ -137,3 +139,6 @@
 :export {
   green: $green;
 }
+
+// Let short ownership tabs fill the viewport while longer content grows naturally.
+.ownership-content { flex: 1; }

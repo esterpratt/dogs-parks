@@ -3,7 +3,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import { OwnershipModal } from '../components/dog/OwnershipModal';
 import { useTranslation } from 'react-i18next';
-import { RadioInputs } from '../components/inputs/RadioInputs';
+import { OwnerRecipient } from '../components/dog/OwnerRecipient';
 import { Checkbox } from '../components/inputs/Checkbox';
 import { useNotification } from '../context/NotificationContext';
 import { Loader } from '../components/Loader';
@@ -86,20 +86,14 @@ const DogOwnershipLeave = () => {
       <>
         <p>{t('dogOwnership.leaveWarning')}</p>
         {capabilities.role === 'PRIMARY_OWNER' ? (
-          <RadioInputs
-            label={t('dogOwnership.successorLabel')}
-            name="leave-successor"
-            value={selectedSuccessorId || eligibleSuccessors[0]?.id || ''}
-            inputClassName={styles.memberOption}
-            options={eligibleSuccessors.map((member) => ({
-              id: `leave-${member.id}`,
-              value: member.id,
-              label: member.user_name ?? t('dogOwnership.memberFallback'),
-            }))}
-            onOptionChange={(event) =>
-              setSelectedSuccessorId(event.target.value)
-            }
-          />
+          <>
+            <p>{t('dogOwnership.leavePrimaryWarning')}</p>
+            <OwnerRecipient
+              members={eligibleSuccessors}
+              value={selectedSuccessorId}
+              onChange={setSelectedSuccessorId}
+            />
+          </>
         ) : null}
         <Checkbox
           id="ownership-leave-confirm"

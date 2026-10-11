@@ -7,7 +7,12 @@ import { fetchDogDeletionProposal } from '../services/dog-ownership';
 import { ModeProvider } from '../context/ModeContext';
 import DogOwnership from './DogOwnership';
 
-const state = vi.hoisted(() => ({ role: 'PRIMARY_OWNER' as string | null, reinvited: false }));
+const state = vi.hoisted(() => ({
+  role: 'PRIMARY_OWNER' as string | null,
+  reinvited: false,
+  pendingRequest: false,
+  noInvitation: false,
+}));
 vi.mock('../context/UserContext', async () => {
   const { createContext } = await import('react');
   return { UserContext: createContext({ userId: 'viewer' }) };
@@ -59,9 +64,16 @@ vi.mock('../services/dogs', () => ({
 vi.mock('../services/dog-ownership', () => ({
   fetchDogInvites: async () => [
     { id: 'declined', invitee_user_id: 'friend', status: 'DECLINED' },
-    { id: 'pending', invitee_user_id: state.reinvited ? 'friend' : 'viewer', status: 'PENDING' },
+    {
+      id: 'pending',
+      invitee_user_id: state.reinvited ? 'friend' : 'viewer',
+      status: state.noInvitation ? 'EXPIRED' : 'PENDING',
+    },
   ],
-  fetchPendingDogOwnershipRequests: async () => [],
+  fetchPendingDogOwnershipRequests: async () =>
+    state.pendingRequest
+      ? [{ id: 'new-request', requester_user_id: 'viewer', status: 'PENDING' }]
+      : [],
   fetchPendingPrimaryTransfers: async () => [],
   fetchDogDeletionProposal: vi.fn(async () => null),
   cancelDogInvite: vi.fn(),
@@ -74,6 +86,8 @@ vi.mock('../services/dog-ownership', () => ({
 beforeEach(() => {
   state.role = 'PRIMARY_OWNER';
   state.reinvited = false;
+  state.pendingRequest = false;
+  state.noInvitation = false;
 });
 afterEach(() => {
   cleanup();
@@ -112,9 +126,10 @@ it('ignores another account’s cached ownership permissions for an invitee', as
   expect(screen.queryByText('dogOwnership.declinedInvites')).toBeNull();
 });
 
-it('shows declined history and invite again only to the primary owner', async () => {
+it('omits declined history and keeps the add-owner action in the header', async () => {
   renderTab();
-  await screen.findByRole('button', { name: 'dogOwnership.inviteAgain' });
+  await screen.findByRole('button', { name: 'dogOwnership.inviteTitle' });
+  expect(screen.queryByText('dogOwnership.declinedInvites')).toBeNull();
   expect(
     screen.getByRole('link', { name: 'dogOwnership.me' }).getAttribute('href'),
   ).toBe('/profile/viewer');
@@ -143,15 +158,33 @@ it('hides a declined invitation while a new invitation to that person is pending
   state.reinvited = true;
   renderTab();
   await screen.findByRole('button', { name: 'dogOwnership.revokeInvitation' });
-  expect(screen.queryByRole('heading', { name: 'dogOwnership.declinedInvites' })).toBeNull();
-  expect(screen.queryByRole('button', { name: 'dogOwnership.inviteAgain' })).toBeNull();
+  expect(
+    screen.queryByRole('heading', { name: 'dogOwnership.declinedInvites' }),
+  ).toBeNull();
+  expect(
+    screen.queryByRole('button', { name: 'dogOwnership.inviteAgain' }),
+  ).toBeNull();
 });
 
 // Former participants keep a useful receipt without gaining owner-only details.
 it('shows a completed notification receipt on the ownership tab to a non-owner', async () => {
   state.role = null;
+  state.noInvitation = true;
   renderTab('/dogs/dog/ownership?status=EXPIRED&action=invite');
   await screen.findByText('dogOwnership.receipt.EXPIRED');
   expect(screen.queryByText('dogOwnership.ownersTitle')).toBeNull();
   expect(fetchDogDeletionProposal).not.toHaveBeenCalled();
+});
+
+// A notification about an earlier withdrawal must not compete with a new request.
+it('shows only the current request after an earlier request was withdrawn', async () => {
+  state.role = null;
+  state.pendingRequest = true;
+  state.noInvitation = true;
+  renderTab('/dogs/dog/ownership?status=CANCELED&action=request');
+  await screen.findByText('dogOwnership.requestPending');
+  expect(screen.queryByText('dogOwnership.receipt.CANCELED')).toBeNull();
+  expect(
+    screen.getByRole('button', { name: 'dogOwnership.cancelRequest' }),
+  ).toBeTruthy();
 });

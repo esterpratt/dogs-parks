@@ -52,9 +52,7 @@ async function clickRpc(props: ClickRpcProps) {
   await control.click();
   const response = await responsePromise;
   if (expectedPayload) {
-    expect(response.request().postDataJSON()).toMatchObject(
-      expectedPayload,
-    );
+    expect(response.request().postDataJSON()).toMatchObject(expectedPayload);
   }
   expect(response.ok()).toBe(true);
   const responseBody = await response.text();
@@ -84,8 +82,7 @@ async function uploadPhoto(page: Page) {
     .click();
   const finalized = page.waitForResponse(
     (response) =>
-      response.url() ===
-      `${stagingUrl}/rest/v1/rpc/api_finalize_dog_image`,
+      response.url() === `${stagingUrl}/rest/v1/rpc/api_finalize_dog_image`,
     { timeout: 20_000 },
   );
   await page
@@ -98,10 +95,7 @@ async function uploadPhoto(page: Page) {
     });
   const response = await finalized;
   expect(response.ok()).toBe(true);
-  const imageId = resultString(
-    response.request().postDataJSON(),
-    'p_image_id',
-  );
+  const imageId = resultString(response.request().postDataJSON(), 'p_image_id');
   const image = page.locator(`.slider-container img[src*="${imageId}"]`);
   await expect(image).toBeVisible();
   await expect
@@ -115,10 +109,7 @@ async function uploadPhoto(page: Page) {
 test.describe('staging ownership browser journeys', () => {
   // These destructive journeys are opt-in and never load credentials in normal
   // CI/production e2e runs. Only a newly created disposable dog is changed.
-  test.skip(
-    process.env.STAGING_E2E !== 'true',
-    'Requires isolated staging',
-  );
+  test.skip(process.env.STAGING_E2E !== 'true', 'Requires isolated staging');
 
   // Playwright requires fixture destructuring in the callback signature.
   test('invite, request, transfer, succession and unanimous deletion across sessions', async ({
@@ -183,7 +174,12 @@ test.describe('staging ownership browser journeys', () => {
             }
           });
           page.on('response', (response) => {
-            if (response.url().includes('/rpc/api_get_current_dog_deletion_proposal') && response.status() === 403) {
+            if (
+              response
+                .url()
+                .includes('/rpc/api_get_current_dog_deletion_proposal') &&
+              response.status() === 403
+            ) {
               pageErrors.push('Forbidden deletion-proposal read');
             }
           });
@@ -200,9 +196,7 @@ test.describe('staging ownership browser journeys', () => {
       await expect(
         primary.getByRole('dialog', { name: 'Add owner' }),
       ).toBeVisible();
-      await primary
-        .getByPlaceholder('Search friends')
-        .fill('Staging friend');
+      await primary.getByPlaceholder('Search friends').fill('Staging friend');
       await primary
         .getByRole('dialog', { name: 'Add owner' })
         .getByText('Staging friend', { exact: true })
@@ -230,7 +224,9 @@ test.describe('staging ownership browser journeys', () => {
         friend.getByRole('button', { name: 'Approve', exact: true }),
       ).toBeDisabled();
       // Decisions close into the dog page with a toast; retries use a new invitation.
-      const declinedDialog = friend.getByRole('heading', { name: 'Invitation awaiting your decision' }).locator('..');
+      const declinedDialog = friend
+        .getByRole('heading', { name: 'Invitation awaiting your decision' })
+        .locator('..');
       await expect(friend.getByRole('dialog')).toHaveCount(0);
       await expect(declinedDialog.getByRole('button')).toHaveCount(2);
       await clickRpc({
@@ -253,17 +249,36 @@ test.describe('staging ownership browser journeys', () => {
       await friend.screenshot({
         path: '.private/staging/ui-invitation-declined.png',
       });
-      // The completed notification opens the declined list without replaying a toast.
-      await primary.goto(`/ownership-actions/invite/${resultString(invite, 'action_id')}`);
-      await expect(primary.getByRole('heading', { name: 'Declined invitations' })).toBeVisible();
-      await expect(primary.getByText('Ownership invitation declined.', { exact: true })).toHaveCount(0);
+      // Completed notifications keep Ownership open without replaying a toast.
+      await primary.goto(
+        `/ownership-actions/invite/${resultString(invite, 'action_id')}`,
+      );
+      await expect(primary).toHaveURL(/\/ownership\?/);
+      await expect(
+        primary.getByRole('heading', { name: 'Declined invitations' }),
+      ).toHaveCount(0);
+      await expect(
+        primary.getByText('Ownership invitation declined.', { exact: true }),
+      ).toHaveCount(0);
+      await primary
+        .getByRole('button', { name: 'Add owner', exact: true })
+        .click();
+      await primary.getByPlaceholder('Search friends').fill('Staging friend');
+      await primary
+        .getByRole('dialog')
+        .getByText('Staging friend', { exact: true })
+        .click();
       invite = await clickRpc({
         page: primary,
-        control: primary.getByRole('button', { name: 'Invite again', exact: true }),
+        control: primary
+          .getByRole('dialog')
+          .getByRole('button', { name: 'Invite', exact: true }),
         name: 'api_create_dog_invite',
         outcome: 'CREATED',
       });
-      await expect(primary.getByRole('heading', { name: 'Declined invitations' })).toHaveCount(0);
+      await expect(
+        primary.getByRole('heading', { name: 'Declined invitations' }),
+      ).toHaveCount(0);
       await friend.goto(
         `/ownership-actions/invite/${resultString(invite, 'action_id')}`,
       );
@@ -289,9 +304,7 @@ test.describe('staging ownership browser journeys', () => {
       await expect(
         friend.getByRole('dialog', { name: 'Ownership invitation' }),
       ).toHaveCount(0);
-      await expect(friend).toHaveURL(
-        new RegExp(`/dogs/${dogId}/ownership$`),
-      );
+      await expect(friend).toHaveURL(new RegExp(`/dogs/${dogId}/ownership$`));
       await expect(
         friend.getByText('You are now a co-owner.', { exact: true }),
       ).toBeVisible();
@@ -382,6 +395,9 @@ test.describe('staging ownership browser journeys', () => {
       await primary.goto(
         `/ownership-actions/request/${resultString(request, 'action_id')}`,
       );
+      await primary
+        .getByRole('button', { name: 'Review request', exact: true })
+        .click();
       await clickRpc({
         page: primary,
         control: primary.getByRole('button', {
@@ -406,7 +422,13 @@ test.describe('staging ownership browser journeys', () => {
         })
         .click();
       await primary
-        .getByRole('radio', { name: 'Staging friend', exact: true }).check();
+        .getByRole('dialog')
+        .locator('input:not([type=checkbox])')
+        .fill('Staging friend');
+      await primary
+        .getByRole('dialog')
+        .getByText('Staging friend', { exact: true })
+        .click();
       await expect(
         primary.getByRole('button', { name: 'Invite', exact: true }),
       ).toHaveCount(0);
@@ -433,9 +455,7 @@ test.describe('staging ownership browser journeys', () => {
         path: '.private/staging/ownership-hebrew.png',
       });
       await primary.getByTestId('navbar-more').click();
-      await primary
-        .getByRole('button', { name: 'שפה', exact: true })
-        .click();
+      await primary.getByRole('button', { name: 'שפה', exact: true }).click();
       await primary
         .getByRole('dialog')
         .getByRole('button', { name: 'English', exact: true })
@@ -449,7 +469,13 @@ test.describe('staging ownership browser journeys', () => {
         })
         .click();
       await primary
-        .getByRole('radio', { name: 'Staging friend', exact: true }).check();
+        .getByRole('dialog')
+        .locator('input:not([type=checkbox])')
+        .fill('Staging friend');
+      await primary
+        .getByRole('dialog')
+        .getByText('Staging friend', { exact: true })
+        .click();
       const transfer = await clickRpc({
         page: primary,
         control: primary.getByRole('button', {
@@ -478,9 +504,7 @@ test.describe('staging ownership browser journeys', () => {
 
       await coowner.goto(`/dogs/${dogId}/ownership`);
       await expect(
-        coowner
-          .getByRole('link', { name: 'Me', exact: true })
-          .locator('..'),
+        coowner.getByRole('link', { name: 'Me', exact: true }).locator('..'),
       ).toContainText('Co-owner');
 
       await friend
@@ -488,20 +512,28 @@ test.describe('staging ownership browser journeys', () => {
         .click();
       await expect(friend.getByRole('checkbox')).toBeVisible();
       await friend
-        .getByRole('radio', { name: 'Staging coowner', exact: true }).check();
-      const intendedSuccessor = await friend
-        .getByRole('radio', { name: 'Staging coowner', exact: true })
-        .getAttribute('value');
-      await expect(friend.getByRole('radio', { name: 'Staging coowner', exact: true })).toHaveValue(
-        intendedSuccessor!,
-      );
+        .getByRole('dialog')
+        .locator('input:not([type=checkbox])')
+        .fill('Staging coowner');
+      await friend
+        .getByRole('dialog')
+        .getByText('Staging coowner', { exact: true })
+        .click();
       await friend.getByRole('checkbox').check();
-      await expect(friend.getByRole('radio', { name: 'Staging coowner', exact: true })).toHaveValue(
-        intendedSuccessor!,
-      );
-      const successorMemberId = await friend
-        .getByRole('radio', { name: 'Staging coowner', exact: true })
-        .inputValue();
+      await expect(
+        friend.getByRole('dialog').locator('input:not([type=checkbox])'),
+      ).toHaveValue('Staging coowner');
+      const { data: successorMember, error: successorError } = await client
+        .from('dog_members')
+        .select('id')
+        .eq('dog_id', dogId)
+        .eq('user_id', fixtures.accounts.coowner.id)
+        .is('left_at', null)
+        .single();
+      if (successorError) {
+        throw successorError;
+      }
+      const successorMemberId = successorMember!.id;
       const departure = await clickRpc({
         page: friend,
         control: friend
@@ -520,9 +552,7 @@ test.describe('staging ownership browser journeys', () => {
         fixtures.accounts.coowner.id,
       );
       await expect(
-        coowner
-          .getByRole('link', { name: 'Me', exact: true })
-          .locator('..'),
+        coowner.getByRole('link', { name: 'Me', exact: true }).locator('..'),
       ).toContainText('Primary owner', { timeout: 15_000 });
       await expect(
         coowner.getByText('Staging friend', { exact: true }),

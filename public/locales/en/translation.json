@@ -1203,7 +1203,7 @@
     "transferAction": "Send offer",
     "transferPending": "Primary role offer pending",
     "leaveTitle": "Leave ownership",
-    "leaveWarning": "Leaving removes your editing and photo-management access. Your shared photos will remain. If you are the primary owner, choose who will take over.",
+    "leaveWarning": "Leaving removes your editing and photo-management access. Your shared photos will remain.",
     "successorLabel": "New primary owner",
     "leaveConfirm": "I understand that I will lose access.",
     "leaveAction": "Leave ownership",
@@ -1329,7 +1329,8 @@
       "DECLINED": "Declined",
       "CANCELED": "Withdrawn",
       "EXPIRED": "Expired"
-    }
+    },
+    "leavePrimaryWarning": "Your primary role will pass to the owner shown below."
   },
   "reports": {
     "reviewModal": {

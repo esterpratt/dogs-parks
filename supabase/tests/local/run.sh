@@ -137,6 +137,9 @@ docker exec -i "${LOCAL_DB_CONTAINER}" psql -U postgres -d postgres -q -1 -v ON_
   < "${DEPARTURE_ENUMS_MIGRATION}"
 docker exec -i "${LOCAL_DB_CONTAINER}" psql -U postgres -d postgres -q -1 -v ON_ERROR_STOP=1 \
   < "${TRANSFER_DEPARTURE_MIGRATION}"
+# Apply the notification refinement before running ownership contracts.
+docker exec -i "${LOCAL_DB_CONTAINER}" psql -U postgres -d postgres -q -1 -v ON_ERROR_STOP=1 \
+  < "supabase/migrations/20261011100000_limit_transfer_acceptance_notification.sql"
 
 SUPABASE_LOCAL_URL="${local_api_url}" \
 SUPABASE_LOCAL_ANON_KEY="${local_anon_key}" \

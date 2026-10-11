@@ -70,7 +70,7 @@ const DogOwnershipRequest = () => {
         !succeeded,
       );
       if (succeeded) {
-        navigate(`/dogs/${dogId}`, { replace: true });
+        navigate(`/dogs/${dogId}/ownership`, { replace: true });
       }
       return refresh();
     },
@@ -91,7 +91,7 @@ const DogOwnershipRequest = () => {
         !succeeded,
       );
       if (succeeded) {
-        navigate(`/dogs/${dogId}`, { replace: true });
+        navigate(`/dogs/${dogId}/ownership`, { replace: true });
       }
       return refresh();
     },
@@ -114,7 +114,7 @@ const DogOwnershipRequest = () => {
   return (
     <OwnershipModal
       title={t('dogOwnership.requestTitle')}
-      onClose={() => navigate(`/dogs/${dogId}`, { replace: true })}
+      onClose={() => navigate(`/dogs/${dogId}/ownership`, { replace: true })}
       isPending={isSubmitting || isCanceling}
       onSave={() =>
         pendingRequest ? cancelRequest(pendingRequest.id) : submitRequest()
