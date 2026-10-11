@@ -378,7 +378,7 @@
         },
         "transferOffered": {
           "title": "הצעה לבעלות ראשית",
-          "appMessage": "קיבלת הצעה מאת {{name}} לקבל את הבעלות הראשית על {{dogName}}."
+          "appMessage": "קיבלת הצעה מ{{name}} לקבל את הבעלות הראשית על {{dogName}}."
         },
         "transferAccepted": {
           "title": "הבעלות הראשית התקבלה",
@@ -390,11 +390,11 @@
         },
         "transferCanceled": {
           "title": "ההצעה לבעלות ראשית בוטלה",
-          "appMessage": "ההצעה לבעלות ראשית מאת {{name}} בוטלה."
+          "appMessage": "ההצעה לבעלות ראשית מ{{name}} בוטלה."
         },
         "deletionRequested": {
           "title": "בקשה לאישור מחיקה",
-          "appMessage": "התקבלה בקשה מאת {{name}} לאשר את מחיקת {{dogName}}."
+          "appMessage": "התקבלה בקשה מ{{name}} לאשר את מחיקת {{dogName}}."
         },
         "deletionRejected": {
           "title": "המחיקה נדחתה",
@@ -402,7 +402,7 @@
         },
         "deletionCanceled": {
           "title": "המחיקה בוטלה",
-          "appMessage": "הצעת המחיקה מאת {{name}} בוטלה."
+          "appMessage": "הצעת המחיקה מ{{name}} בוטלה."
         },
         "deletionExpired": {
           "title": "תוקף הצעת המחיקה פג",
