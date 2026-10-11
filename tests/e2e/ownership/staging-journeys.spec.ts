@@ -468,6 +468,20 @@ test.describe('staging ownership browser journeys', () => {
       await expect(
         coowner.getByRole('button', { name: 'Request ownership', exact: true }),
       ).toBeVisible();
+      // A withdrawn action remains a readable, non-actionable deep link.
+      await coowner.goto(
+        `/ownership-actions/request/${resultString(request, 'action_id')}`,
+      );
+      await expect(coowner).toHaveURL(
+        `/dogs/${dogId}/ownership?status=CANCELED&action=request`,
+      );
+      await expect(
+        coowner.getByText('Withdrawn', { exact: true }),
+      ).toBeVisible();
+      await expect(
+        coowner.getByRole('button', { name: 'Approve', exact: true }),
+      ).toHaveCount(0);
+      await coowner.goto(`/dogs/${dogId}`);
       await coowner
         .getByRole('button', { name: 'Request ownership', exact: true })
         .click();
@@ -480,9 +494,15 @@ test.describe('staging ownership browser journeys', () => {
         name: 'api_create_dog_ownership_request',
         outcome: 'CREATED',
       });
-      await primary.goto(
-        `/ownership-actions/request/${resultString(request, 'action_id')}`,
-      );
+      // Follow the real request notification to exercise its target route
+      // together with the response page.
+      await primary.goto('/notifications');
+      await primary
+        .getByRole('button')
+        .filter({ hasText: 'Ownership request' })
+        .first()
+        .click();
+      await expect(primary).toHaveURL(`/dogs/${dogId}/ownership`);
       await primary
         .getByRole('button', { name: 'Review request', exact: true })
         .click();
@@ -661,7 +681,7 @@ test.describe('staging ownership browser journeys', () => {
       await coowner
         .getByRole('button', { name: 'Propose deletion', exact: true })
         .click();
-      const proposal = await clickRpc({
+      let proposal = await clickRpc({
         page: coowner,
         control: coowner.getByRole('dialog').getByRole('button', {
           name: 'Propose',
@@ -670,8 +690,50 @@ test.describe('staging ownership browser journeys', () => {
         name: 'api_propose_dog_deletion',
         outcome: 'CREATED',
       });
-      await primary.goto(
-        `/dogs/${dogId}/ownership/deletion/${resultString(proposal, 'proposal_id')}`,
+      const canceledProposalId = resultString(proposal, 'proposal_id');
+      await coowner.goto(
+        `/dogs/${dogId}/ownership/deletion/${canceledProposalId}`,
+      );
+      await clickRpc({
+        page: coowner,
+        control: coowner.getByRole('button', {
+          name: 'Cancel proposal',
+          exact: true,
+        }),
+        name: 'api_cancel_dog_deletion',
+        outcome: 'CANCELED',
+      });
+      // The canceled notification target remains readable after refresh and
+      // cannot be used to approve the old proposal.
+      await primary.goto(`/ownership-actions/deletion/${canceledProposalId}`);
+      await expect(
+        primary.getByRole('button', { name: 'Approve deletion', exact: true }),
+      ).toHaveCount(0);
+      await expect(
+        primary.getByText('The action was canceled.', { exact: true }),
+      ).toBeVisible();
+      await coowner.goto(`/dogs/${dogId}/ownership`);
+      await coowner
+        .getByRole('button', { name: 'Propose deletion', exact: true })
+        .click();
+      proposal = await clickRpc({
+        page: coowner,
+        control: coowner.getByRole('dialog').getByRole('button', {
+          name: 'Propose',
+          exact: true,
+        }),
+        name: 'api_propose_dog_deletion',
+        outcome: 'CREATED',
+      });
+      // A co-owner reaches the exact consent proposal from the notification.
+      await primary.goto('/notifications');
+      await primary
+        .getByRole('button')
+        .filter({ hasText: 'Deletion approval requested' })
+        .first()
+        .click();
+      await expect(primary).toHaveURL(
+        `/ownership-actions/deletion/${resultString(proposal, 'proposal_id')}`,
       );
       await expect(
         primary.getByText('1 of 2 owners approved', { exact: true }),

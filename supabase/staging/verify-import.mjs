@@ -45,9 +45,10 @@ const upgraded = actual.dogs.some((dog) =>
   Object.hasOwn(dog, "ownership_version"),
 );
 let checkedRecords = 0;
+const discrepancies = [];
 for (const table of tableNames) {
   if (actual[table].length !== fixture[table].length) {
-    throw new Error(`Imported record count differs: ${table}`);
+    discrepancies.push(`Imported record count differs: ${table}`);
   }
   for (const expected of fixture[table]) {
     const record = actual[table].find((candidate) =>
@@ -55,10 +56,14 @@ for (const table of tableNames) {
         ? candidate.condition === expected.condition
         : candidate.id === expected.id,
     );
+    if (!record) {
+      discrepancies.push(`Imported ${table} record is missing`);
+      continue;
+    }
     for (const [field, value] of Object.entries(expected)) {
       if (upgraded && table === "dog_members" && field === "created_at") {
         if (record.joined_at !== value) {
-          throw new Error("Membership tenure timestamp differs after rename");
+          discrepancies.push("Membership tenure timestamp differs after rename");
         }
         continue;
       }
@@ -70,7 +75,9 @@ for (const table of tableNames) {
         continue;
       }
       if (JSON.stringify(record[field]) !== JSON.stringify(value)) {
-        throw new Error(
+        // Continue through every protected record and file, but never print
+        // personal values or accept a baseline difference as a passing check.
+        discrepancies.push(
           `Imported ${table}.${field} differs; inspect private fixture evidence`,
         );
       }
@@ -164,6 +171,13 @@ const result = {
   retainedLegacyFiles: checkedFiles,
   migratedDogFiles: upgraded ? actual.dog_images.length : 0,
   confirmedLogins: logins.accounts.length,
+  discrepancies,
 };
+if (discrepancies.length > 0) {
+  savePrivate(`verification-${result.phase}-attempt.json`, result);
+  throw new Error(
+    `Imported baseline differs in ${discrepancies.length} field(s); all other checks completed. See private verification attempt`,
+  );
+}
 savePrivate(`verification-${result.phase}.json`, result);
 console.log(JSON.stringify(result));

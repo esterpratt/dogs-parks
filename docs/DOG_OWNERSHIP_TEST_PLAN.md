@@ -41,9 +41,16 @@ The feature is complete only when the server invariants and permissions, client 
 
 ## Remaining work and unpassed cases
 
-1. Investigate the imported description drift using private staging evidence; decide whether the edit is intentional, then rerun the full import/file preservation verifier. Keep the original import fixture immutable.
-2. Exercise request and deletion notification links, every terminal/expired action page, and signed URL expiry in browser tests. The current staging suite covers invitation/transfer links and invite expiry, not the full matrix.
+1. The imported description has one additional trailing exclamation mark in staging; its provenance is unknown. Decide whether this is an intentional edit before treating the import as an exact preservation pass. Keep the original import fixture immutable.
+2. Exercise the remaining terminal/expired action pages and signed URL expiry in browser tests. Request and deletion notification links, withdrawn-request and canceled-deletion receipts, invitation/transfer links and invite expiry have browser coverage; the full matrix does not.
 3. Inject actual staging Storage/copy and post-Auth cleanup failures, verify retry/manual recovery, and test native iOS/Android back, keyboard and released-client compatibility. Unit simulations and local Edge checks do not replace these runs.
 4. Resolve the approved manual support policy details, implement and test the service-only recovery procedure, then rehearse old-client upgrade, backups/restore, webhook credential remediation, build gates and the production rollout described in `SUPABASE_PRODUCTION_ROLLOUT_PLAN.md`. Shared ownership remains unreleased in production.
 
 The full test plan has **not** passed. The green local and browser suites establish the listed implemented paths; the failed preservation check and unrun release/platform cases remain open.
+
+## Follow-up execution — 2026-10-11
+
+- The preservation verifier now completes record, login and file checks before reporting baseline differences, while still failing on any difference. The rerun checked 1,494 records, 46 retained legacy files, seven migrated dog files and three confirmed logins. Its only recorded discrepancy was `dogs.description`; private comparison found the staging value has one trailing `!`. Ester could not confirm whether the edit was intentional. Neither the staging row nor the immutable fixture was changed.
+- The guarded staging browser journey passed with notification clicks for an ownership request and deletion consent, plus reopened withdrawn-request and canceled-deletion receipts with no approval controls. The first run failed only because the test expected the alternate deletion URL; the notification correctly opened `/ownership-actions/deletion/:proposalId`. The assertion was corrected and the expanded journey passed twice as cases were added. Console fetch/storage errors still appeared and were not fully audited.
+- Guarded cleanup removed the one disposable dog left by the failed run. The worker then drained both that run and the passing runs, with four completed and zero failed in each drain. Its final state was 117 completed jobs with no other state.
+- `npm run lint`, `npm test -- --run` (100 tests in 16 files), `npm run build` and `git diff --check` passed. Build retained the existing >500 kB chunk warning.
