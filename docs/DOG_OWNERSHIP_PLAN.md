@@ -4,7 +4,7 @@ Planning checkpoint: 2026-09-26. Final implementation plan: 2026-09-26. Source: 
 
 ## Resume here
 
-Product, design and technical decisions below are confirmed; do not ask the user to choose them again. Production behavior implementation has not started; the isolated local-Supabase test foundation is in progress at the checkpoint recorded in [CODEX_CONTEXT.md](CODEX_CONTEXT.md). The table/deletion-rule inventory and complete clickable proposal in [DOG_OWNERSHIP_SCHEMA_AND_UX.md](DOG_OWNERSHIP_SCHEMA_AND_UX.md) are approved as the implementation contract. The only intentionally open area is the operational support policy; the support-recovery RPC must not ship until that separate policy is decided.
+Product, design and technical decisions below are confirmed; do not ask the user to choose them again. Ownership slices 1–10 are implemented and locally tested; staging has exercised the main browser journeys. Production rollout, released-client compatibility, native verification, and the operational support policy remain open, as recorded in [CODEX_CONTEXT.md](CODEX_CONTEXT.md) and the [current test plan](DOG_OWNERSHIP_TEST_PLAN.md). The table/deletion-rule inventory and complete clickable proposal in [DOG_OWNERSHIP_SCHEMA_AND_UX.md](DOG_OWNERSHIP_SCHEMA_AND_UX.md) remain the implementation contract. The support-recovery RPC must not ship until the separate operational policy is decided.
 
 If implementation exposes a genuinely new material product choice, ask one focused question directly in chat. Routine schema, testing and UI implementation choices are resolved below and should not restart design discovery.
 
