@@ -541,7 +541,7 @@ test.describe('staging ownership browser journeys', () => {
       await primary.reload();
       await expect(primary.locator('html')).toHaveAttribute('dir', 'rtl');
       await expect(
-        primary.getByRole('link', { name: 'בעלות', exact: true }),
+        primary.getByRole('link', { name: 'האנשים שלי', exact: true }),
       ).toBeVisible();
       await primary.screenshot({
         path: '.private/staging/ownership-hebrew.png',
