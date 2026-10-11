@@ -21,6 +21,7 @@ Read [CODEX_CONTEXT.md](CODEX_CONTEXT.md) for the live audit, access, security f
 - Owners cannot remove another owner through normal product actions. Leaving is distinct from deleting the dog.
 - Hidden owners' names and avatars are visible to fellow owners in the owner-only Ownership tab. Disclose this before joining; hide mode remains outside that group.
 - Preserve friend search returning user cards and existing privacy/discoverability rules. Do not expose ownership lists to non-owners.
+- Follow-up design agreed 2026-10-11: person-first user cards retain the first dog photo and existing dimensions/behavior, with dog names secondary after “Human of”. Implementation is deferred; see [the short user-card plan](USER_CARD_PLAN.md).
 - Check-in stays user-based. Accompanying-dog selection and deduplicated dog attendance are separate scope.
 
 ## Confirmed invitations and ownership requests
