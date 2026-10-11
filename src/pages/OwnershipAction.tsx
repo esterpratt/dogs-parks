@@ -102,6 +102,7 @@ const OwnershipAction = (props: OwnershipActionProps) => {
           hasSpecificFeedback
             ? `dogOwnership.feedback.${normalizedType}.${result.outcome}`
             : `dogOwnership.outcomes.${result.outcome}`,
+          { dogName: dogPage?.dog.name },
         ),
         !finished,
       );

@@ -213,7 +213,7 @@ it('waits for confirmation before revoking an invitation', async () => {
   expect(state.showModal).toHaveBeenCalledWith(
     expect.objectContaining({
       title: 'dogOwnership.revokeInvitationConfirm',
-      confirmText: 'dogOwnership.revokeInvitation',
+      confirmText: 'dogOwnership.revokeShort',
     }),
   );
   await act(async () => state.showModal.mock.calls[0][0].onConfirm());

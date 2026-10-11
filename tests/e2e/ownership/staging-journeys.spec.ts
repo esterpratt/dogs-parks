@@ -413,10 +413,10 @@ test.describe('staging ownership browser journeys', () => {
         .getByRole('button', { name: 'Request ownership', exact: true })
         .click();
       await coowner.getByRole('checkbox').check();
-      const request = await clickRpc({
+      let request = await clickRpc({
         page: coowner,
         control: coowner.getByRole('button', {
-          name: 'Send request',
+          name: 'Send',
           exact: true,
         }),
         name: 'api_create_dog_ownership_request',
@@ -435,6 +435,50 @@ test.describe('staging ownership browser journeys', () => {
       ).toHaveCount(0);
       await coowner.screenshot({
         path: '.private/staging/corrected-pending-request.png',
+      });
+      // Opening withdrawal preserves the pending card behind the modal.
+      await coowner
+        .getByRole('button', { name: 'Withdraw request', exact: true })
+        .click();
+      await expect(
+        coowner.getByRole('dialog', { name: 'Request ownership' }),
+      ).toBeVisible();
+      await expect(
+        coowner
+          .locator('section')
+          .filter({ hasText: 'Your ownership request is pending.' }),
+      ).toBeVisible();
+      await coowner
+        .getByRole('dialog')
+        .getByRole('button', { name: 'Cancel', exact: true })
+        .click();
+      await expect(coowner).toHaveURL(`/dogs/${dogId}/ownership`);
+      await coowner
+        .getByRole('button', { name: 'Withdraw request', exact: true })
+        .click();
+      await clickRpc({
+        page: coowner,
+        control: coowner
+          .getByRole('dialog')
+          .getByRole('button', { name: 'Withdraw', exact: true }),
+        name: 'api_cancel_dog_ownership_request',
+        outcome: 'CANCELED',
+      });
+      await expect(coowner).toHaveURL(`/dogs/${dogId}`);
+      await expect(
+        coowner.getByRole('button', { name: 'Request ownership', exact: true }),
+      ).toBeVisible();
+      await coowner
+        .getByRole('button', { name: 'Request ownership', exact: true })
+        .click();
+      await coowner.getByRole('checkbox').check();
+      request = await clickRpc({
+        page: coowner,
+        control: coowner
+          .getByRole('dialog')
+          .getByRole('button', { name: 'Send', exact: true }),
+        name: 'api_create_dog_ownership_request',
+        outcome: 'CREATED',
       });
       await primary.goto(
         `/ownership-actions/request/${resultString(request, 'action_id')}`,
@@ -531,7 +575,7 @@ test.describe('staging ownership browser journeys', () => {
       const transfer = await clickRpc({
         page: primary,
         control: primary.getByRole('button', {
-          name: 'Send offer',
+          name: 'Send',
           exact: true,
         }),
         name: 'api_create_primary_transfer',
@@ -540,6 +584,11 @@ test.describe('staging ownership browser journeys', () => {
       await friend.goto(
         `/ownership-actions/transfer/${resultString(transfer, 'action_id')}`,
       );
+      await expect(friend).toHaveURL(`/dogs/${dogId}/ownership`);
+      await expect(friend.getByRole('dialog')).toHaveCount(0);
+      await friend
+        .getByRole('button', { name: 'Review offer', exact: true })
+        .click();
       await clickRpc({
         page: friend,
         control: friend.getByRole('button', {
@@ -591,7 +640,7 @@ test.describe('staging ownership browser journeys', () => {
         control: friend
           .getByRole('dialog', { name: 'Leave ownership' })
           .getByRole('button', {
-            name: 'Leave ownership',
+            name: 'Leave',
             exact: true,
           }),
         name: 'api_leave_dog',
@@ -615,7 +664,7 @@ test.describe('staging ownership browser journeys', () => {
       const proposal = await clickRpc({
         page: coowner,
         control: coowner.getByRole('dialog').getByRole('button', {
-          name: 'Propose deletion',
+          name: 'Propose',
           exact: true,
         }),
         name: 'api_propose_dog_deletion',
@@ -634,7 +683,7 @@ test.describe('staging ownership browser journeys', () => {
         page: primary,
         control: primary
           .getByRole('dialog')
-          .getByRole('button', { name: 'Approve deletion', exact: true }),
+          .getByRole('button', { name: 'Approve', exact: true }),
         name: 'api_respond_dog_deletion',
         outcome: 'DELETION_PREPARED',
       });

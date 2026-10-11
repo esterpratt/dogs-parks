@@ -160,7 +160,9 @@ const DogOwnership = () => {
         );
         notify(
           firstFailure?.status === 'fulfilled'
-            ? t(`dogOwnership.outcomes.${firstFailure.value.outcome}`)
+            ? t(`dogOwnership.outcomes.${firstFailure.value.outcome}`, {
+                dogName: dogPage?.dog.name,
+              })
             : t('dogOwnership.requestError'),
           true,
         );
@@ -179,6 +181,7 @@ const DogOwnership = () => {
             result.outcome === 'CANCELED'
               ? 'dogOwnership.invitationRevoked'
               : `dogOwnership.outcomes.${result.outcome}`,
+            { dogName: dogPage?.dog.name },
           ),
           result.outcome !== 'CANCELED',
         );
@@ -199,6 +202,7 @@ const DogOwnership = () => {
           result.outcome === 'CREATED'
             ? 'dogOwnership.offerSent'
             : `dogOwnership.outcomes.${result.outcome}`,
+          { dogName: dogPage?.dog.name },
         ),
         result.outcome !== 'CREATED',
       );
@@ -218,6 +222,7 @@ const DogOwnership = () => {
             result.outcome === 'CANCELED'
               ? 'dogOwnership.offerRevoked'
               : `dogOwnership.outcomes.${result.outcome}`,
+            { dogName: dogPage?.dog.name },
           ),
           result.outcome !== 'CANCELED',
         );
@@ -238,6 +243,7 @@ const DogOwnership = () => {
             result.outcome === 'CREATED'
               ? 'dogOwnership.deletionSent'
               : `dogOwnership.outcomes.${result.outcome}`,
+            { dogName: dogPage?.dog.name },
           ),
           result.outcome !== 'CREATED',
         );
@@ -324,7 +330,12 @@ const DogOwnership = () => {
           <Button
             variant="secondary"
             className={styles.button}
-            onClick={() => navigate(`/dogs/${dogId}/ownership/request`)}
+            onClick={() =>
+              // Preserve the ownership surface while withdrawing refreshes permissions.
+              navigate(`/dogs/${dogId}/ownership/request`, {
+                state: { ownershipBackground: true },
+              })
+            }
           >
             {t('dogOwnership.cancelRequest')}
           </Button>
@@ -389,7 +400,10 @@ const DogOwnership = () => {
                     Number(first.role === 'PRIMARY_OWNER'),
                 )
                 .map((member) => (
-                  <div className={styles.ownerCard} key={member.id}>
+                  <div
+                    className={`${styles.ownerCard} ${member.role === 'PRIMARY_OWNER' ? styles.primaryOwner : ''}`}
+                    key={member.id}
+                  >
                     <Link
                       className={styles.person}
                       to={`/profile/${member.user_id}`}
@@ -473,7 +487,7 @@ const DogOwnership = () => {
                               title: t('dogOwnership.revokeInvitationConfirm', {
                                 name: friendName(invite.invitee_user_id),
                               }),
-                              confirmText: t('dogOwnership.revokeInvitation'),
+                              confirmText: t('dogOwnership.revokeShort'),
                               onConfirm: async () => {
                                 await cancelInvite(invite.id);
                               },
@@ -565,7 +579,7 @@ const DogOwnership = () => {
                   onClick={() =>
                     showModal({
                       title: t('dogOwnership.deletionWarning'),
-                      confirmText: t('dogOwnership.proposeDeletion'),
+                      confirmText: t('dogOwnership.proposeShort'),
                       onConfirm: async () => {
                         await proposeDeletion();
                       },
@@ -612,7 +626,9 @@ const DogOwnership = () => {
               </div>
               {invitedFriends.length > 8 - members.length - invites.length ? (
                 <p role="alert">
-                  {t('dogOwnership.outcomes.CAPACITY_REACHED')}
+                  {t('dogOwnership.outcomes.CAPACITY_REACHED', {
+                    dogName: dogPage.dog.name,
+                  })}
                 </p>
               ) : null}
             </OwnershipModal>
@@ -629,7 +645,7 @@ const DogOwnership = () => {
                     '',
                 )
               }
-              saveText={t('dogOwnership.transferAction')}
+              saveText={t('dogOwnership.sendShort')}
               disabled={
                 !capabilities.can_transfer ||
                 eligibleTransferMembers.length === 0

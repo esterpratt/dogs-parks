@@ -194,13 +194,11 @@ const App = () => {
           ),
           children: [
             {
-              path: 'ownership/request',
-              element: <DogOwnershipRequest />,
-            },
-            {
               path: 'ownership',
               element: <DogOwnership />,
+              // Keep the ownership page mounted behind its request dialog.
               children: [
+                { path: 'request', element: <DogOwnershipRequest /> },
                 { path: 'leave', element: <DogOwnershipLeave /> },
                 {
                   path: 'actions/:actionType/:actionId',

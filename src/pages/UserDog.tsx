@@ -1,5 +1,11 @@
 import { useContext, useState } from 'react';
-import { Outlet, useMatch, useNavigate, useParams } from 'react-router-dom';
+import {
+  Outlet,
+  useLocation,
+  useMatch,
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 import { Cake, Mars, MoveLeft, Pencil, Tag, Venus } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { Trans, useTranslation } from 'react-i18next';
@@ -34,6 +40,7 @@ const UserDog = () => {
   const ownershipRoute = useMatch('/dogs/:dogId/ownership/*');
   const requestRoute = useMatch('/dogs/:dogId/ownership/request');
   const navigate = useNavigate();
+  const location = useLocation();
   const { userId } = useContext(UserContext);
   const [isEditDogsModalOpen, setIsEditDogsModalOpen] = useState(false);
   const [imageToEnlarge, setImageToEnlarge] = useState<string>('');
@@ -96,7 +103,9 @@ const UserDog = () => {
   // A new request is composed over Details; pending requests belong to Ownership.
   const showOwnership =
     !!ownershipRoute &&
-    (!requestRoute || !!dogPage.capabilities.pending_action);
+    (!requestRoute ||
+      location.state?.ownershipBackground === true ||
+      !!dogPage.capabilities.pending_action);
   const canEdit = dogPage.viewer.can_edit;
   const ownershipCapabilities = dogPage.capabilities;
 

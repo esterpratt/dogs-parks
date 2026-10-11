@@ -57,7 +57,11 @@ const DogOwnershipDeletion = () => {
     mutationFn: (approve: boolean) =>
       respondToDogDeletion(proposal!.id, approve),
     onSuccess: (result) => {
-      notify(t(`dogOwnership.outcomes.${result.outcome}`));
+      notify(
+        t(`dogOwnership.outcomes.${result.outcome}`, {
+          dogName: dogPage?.dog.name,
+        }),
+      );
       if (result.outcome === 'DELETION_PREPARED') {
         navigate(`/profile/${userId}/dogs`, { replace: true });
       }
@@ -68,7 +72,11 @@ const DogOwnershipDeletion = () => {
     onError: () => notify(t('dogOwnership.requestError'), true),
     mutationFn: () => withdrawDogDeletionApproval(proposal!.id),
     onSuccess: (result) => {
-      notify(t(`dogOwnership.outcomes.${result.outcome}`));
+      notify(
+        t(`dogOwnership.outcomes.${result.outcome}`, {
+          dogName: dogPage?.dog.name,
+        }),
+      );
       if (result.outcome === 'DELETION_PREPARED') {
         navigate(`/profile/${userId}/dogs`, { replace: true });
       }
@@ -79,7 +87,11 @@ const DogOwnershipDeletion = () => {
     onError: () => notify(t('dogOwnership.requestError'), true),
     mutationFn: () => cancelDogDeletion(proposal!.id),
     onSuccess: (result) => {
-      notify(t(`dogOwnership.outcomes.${result.outcome}`));
+      notify(
+        t(`dogOwnership.outcomes.${result.outcome}`, {
+          dogName: dogPage?.dog.name,
+        }),
+      );
       if (result.outcome === 'DELETION_PREPARED') {
         navigate(`/profile/${userId}/dogs`, { replace: true });
       }
@@ -130,7 +142,11 @@ const DogOwnershipDeletion = () => {
           })}
         </p>
         {!isPending ? (
-          <p>{t(`dogOwnership.outcomes.${proposal.status}`)}</p>
+          <p>
+            {t(`dogOwnership.outcomes.${proposal.status}`, {
+              dogName: dogPage?.dog.name,
+            })}
+          </p>
         ) : null}
         {isPending && !currentConsent ? (
           <div className={styles.actions}>
@@ -139,7 +155,7 @@ const DogOwnershipDeletion = () => {
               onClick={() =>
                 showDestructiveConfirmation(
                   'dogOwnership.finalApprovalTitle',
-                  'dogOwnership.approveDeletion',
+                  'dogOwnership.approve',
                   () => respond(true),
                 )
               }
@@ -152,7 +168,7 @@ const DogOwnershipDeletion = () => {
               onClick={() =>
                 showDestructiveConfirmation(
                   'dogOwnership.rejectDeletionTitle',
-                  'dogOwnership.rejectDeletion',
+                  'dogOwnership.decline',
                   () => respond(false),
                 )
               }
@@ -169,7 +185,7 @@ const DogOwnershipDeletion = () => {
             onClick={() =>
               showDestructiveConfirmation(
                 'dogOwnership.withdrawDeletionTitle',
-                'dogOwnership.withdrawDeletion',
+                'dogOwnership.withdrawShort',
                 withdraw,
               )
             }

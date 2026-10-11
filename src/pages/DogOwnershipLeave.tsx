@@ -41,7 +41,9 @@ const DogOwnershipLeave = () => {
       ),
     onSuccess: (result) => {
       notify(
-        t(`dogOwnership.outcomes.${result.outcome}`),
+        t(`dogOwnership.outcomes.${result.outcome}`, {
+          dogName: dogPage?.dog.name,
+        }),
         result.outcome !== 'LEFT',
       );
       queryClient.invalidateQueries({ queryKey: ['dogPage', dogId] });
@@ -80,7 +82,7 @@ const DogOwnershipLeave = () => {
       onClose={() => navigate(`/dogs/${dogId}/ownership`, { replace: true })}
       isPending={isPending}
       onSave={() => leave()}
-      saveText={t('dogOwnership.leaveAction')}
+      saveText={t('dogOwnership.leaveShort')}
       disabled={!confirmed}
     >
       <>

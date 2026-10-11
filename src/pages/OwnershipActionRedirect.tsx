@@ -46,7 +46,7 @@ const OwnershipActionRedirect = () => {
     // Resolve each notification once without replaying its completed action as a toast.
     handledAction.current = action.id;
     // Notifications contain an action ID. Resolve it through participant-only
-    // reads, then open the decision over the dog or go straight to Ownership.
+    // reads, then show the current action in the ownership tab.
     const canRespond =
       type === "invite"
         ? "invitee_user_id" in action && action.invitee_user_id === userId
@@ -60,14 +60,9 @@ const OwnershipActionRedirect = () => {
       action.status === "PENDING" &&
       canRespond
     ) {
-      navigate(
-        type !== "transfer"
-          ? `${destination}/ownership`
-          : `${destination}/ownership/actions/${type}/${action.id}`,
-        {
-          replace: true,
-        },
-      );
+      navigate(`${destination}/ownership`, {
+        replace: true,
+      });
     } else {
       navigate(
         `${destination}/ownership?status=${encodeURIComponent(action.status)}&action=${type}`,

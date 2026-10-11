@@ -1,7 +1,8 @@
-import { User as UserIcon } from 'lucide-react';
+import { Check, User as UserIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { AutoComplete } from '../inputs/AutoComplete';
 import styles from '../../pages/DogOwnership.module.scss';
+import selectStyles from '../SelectUsers.module.scss';
 
 interface RecipientMember {
   id: string;
@@ -49,11 +50,14 @@ const OwnerRecipient = (props: OwnerRecipientProps) => {
       }
       setSelectedInput={(member) => onChange(member.id)}
     >
-      {(member) => (
-        <span className={styles.recipientOption}>
-          <UserIcon size={24} aria-hidden="true" />
-          {memberName(member)}
-        </span>
+      {(member, isChosen) => (
+        // Match event invitees while retaining a single recipient selection.
+        <div
+          className={`${selectStyles.user} ${isChosen ? selectStyles.chosen : ''}`}
+        >
+          {isChosen ? <Check size={16} aria-hidden="true" /> : null}
+          <span>{memberName(member)}</span>
+        </div>
       )}
     </AutoComplete>
   );

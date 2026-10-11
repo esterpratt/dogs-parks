@@ -35,11 +35,15 @@ const DogOwnershipRequest = () => {
   const capabilities = dogPage?.capabilities;
   const { data: pendingRequests = [], isLoading: isLoadingRequests } = useQuery(
     {
-      queryKey: ['dogOwnershipActions', dogId, userId, 'myRequests'],
+      queryKey: ['dogOwnershipActions', dogId, userId, 'requests'],
       queryFn: () => fetchPendingDogOwnershipRequests(dogId!),
-      enabled: !!capabilities?.enabled && !!userId,
+      // New requests need no extra fetch; pending actions reuse the tab query.
+      enabled:
+        !!capabilities?.enabled && !!capabilities.pending_action && !!userId,
     },
   );
+  const needsRequestLookup = !!capabilities?.pending_action;
+  const loadingPendingRequest = needsRequestLookup && isLoadingRequests;
   const pendingRequest = pendingRequests.find(
     (request) => request.requester_user_id === userId,
   );
@@ -66,6 +70,7 @@ const DogOwnershipRequest = () => {
             : result.outcome === 'CANCELED'
               ? 'dogOwnership.requestCanceled'
               : `dogOwnership.outcomes.${result.outcome}`,
+          { dogName: dogPage?.dog.name },
         ),
         !succeeded,
       );
@@ -87,12 +92,13 @@ const DogOwnershipRequest = () => {
             : result.outcome === 'CANCELED'
               ? 'dogOwnership.requestCanceled'
               : `dogOwnership.outcomes.${result.outcome}`,
+          { dogName: dogPage?.dog.name },
         ),
         !succeeded,
       );
       await refresh();
       if (succeeded) {
-        navigate(`/dogs/${dogId}/ownership`, { replace: true });
+        navigate(`/dogs/${dogId}`, { replace: true });
       }
     },
   });
@@ -128,15 +134,15 @@ const DogOwnershipRequest = () => {
       }
       saveText={t(
         pendingRequest
-          ? 'dogOwnership.cancelRequest'
-          : 'dogOwnership.submitRequest',
+          ? 'dogOwnership.withdrawShort'
+          : 'dogOwnership.sendShort',
       )}
       disabled={
-        isLoadingRequests ||
+        loadingPendingRequest ||
         (!pendingRequest && (!capabilities.can_request || !disclosureAccepted))
       }
     >
-      {isLoadingRequests ? (
+      {loadingPendingRequest ? (
         <Loader inside />
       ) : pendingRequest ? (
         <p>{t('dogOwnership.requestPending')}</p>

@@ -3,7 +3,7 @@ import { execFileSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import { createClient } from '@supabase/supabase-js';
 import { test, expect, Page } from '@playwright/test';
-import { Database, Json } from '../../../src/types/supabase';
+import { Database } from '../../../src/types/supabase';
 import { loginWithEmail } from '../helpers/auth';
 import { setupTestEnvironment } from '../helpers/setup';
 
@@ -22,18 +22,6 @@ interface EdgeFixtures {
 const stagingRef = 'uhdzwzuyiztktxthwdfp';
 const stagingUrl = `https://${stagingRef}.supabase.co`;
 const compatibility = { p_client_platform: 'WEB', p_client_build: 1 };
-
-function field(result: Json, name: string) {
-  if (
-    !result ||
-    typeof result !== 'object' ||
-    Array.isArray(result) ||
-    typeof result[name] !== 'string'
-  ) {
-    throw new Error(`Missing server result field: ${name}`);
-  }
-  return result[name] as string;
-}
 
 async function uploadPhoto(page: Page) {
   const dataUrl = await page.evaluate(() => {
@@ -125,11 +113,16 @@ test.describe('staging notification and photo edges', () => {
         }
       });
       page.on('response', (response) => {
-            if (response.url().includes('/rpc/api_get_current_dog_deletion_proposal') && response.status() === 403) {
-              pageErrors.push('Forbidden deletion-proposal read');
-            }
-          });
-          page.on('pageerror', (error) => pageErrors.push(error.message));
+        if (
+          response
+            .url()
+            .includes('/rpc/api_get_current_dog_deletion_proposal') &&
+          response.status() === 403
+        ) {
+          pageErrors.push('Forbidden deletion-proposal read');
+        }
+      });
+      page.on('pageerror', (error) => pageErrors.push(error.message));
       await setupTestEnvironment(page);
       const role = (['primary', 'coowner', 'friend'] as const)[index];
       await loginWithEmail(page, fixture.accounts[role]);
@@ -137,7 +130,9 @@ test.describe('staging notification and photo edges', () => {
     // The notification identifies its dog before opening the ownership decision.
     // The action must be reachable by clicking the actual notification card.
     await friend.goto('/notifications');
-    await expect(friend.getByRole('button').filter({ hasText: 'Ownership invitation' })).toContainText('Browser journey edges');
+    await expect(
+      friend.getByRole('button').filter({ hasText: 'Ownership invitation' }),
+    ).toContainText('Browser journey edges');
     await friend
       .getByRole('button')
       .filter({ hasText: 'Ownership invitation' })
@@ -166,7 +161,11 @@ test.describe('staging notification and photo edges', () => {
       friend.getByText('This action has expired.', { exact: true }),
     ).toBeVisible();
     await friend.goto(`/ownership-actions/invite/${fixture.inviteId}`);
-    await expect(friend).toHaveURL(new RegExp(`/dogs/${fixture.dogId}/ownership\\?status=EXPIRED&action=invite$`));
+    await expect(friend).toHaveURL(
+      new RegExp(
+        `/dogs/${fixture.dogId}/ownership\\?status=EXPIRED&action=invite$`,
+      ),
+    );
     await expect(friend.getByText('Expired', { exact: true })).toBeVisible();
     await expect(
       friend.getByRole('button', { name: 'Approve', exact: true }),
@@ -322,11 +321,9 @@ test.describe('staging notification and photo edges', () => {
       .getByRole('button')
       .filter({ hasText: 'Primary role offer' })
       .click();
-    await expect(coowner).toHaveURL(
-      new RegExp(
-        `/dogs/${fixture.dogId}/ownership/actions/transfer/${field(offer.data, 'action_id')}$`,
-      ),
-    );
+    await expect(coowner).toHaveURL(`/dogs/${fixture.dogId}/ownership`);
+    await expect(coowner.getByRole('dialog')).toHaveCount(0);
+    await coowner.getByRole('button', { name: 'Review offer', exact: true }).click();
     await primary.evaluate(async () => {
       const moduleUrl = '/src/services/supabase-client.ts';
       const { supabase } = await import(moduleUrl);
@@ -353,7 +350,7 @@ test.describe('staging notification and photo edges', () => {
         .locator('..'),
     ).toContainText('Primary owner', { timeout: 30_000 });
     await expect(
-      primary.getByRole('button', { name: 'Send offer', exact: true }),
+      primary.getByRole('button', { name: 'Send', exact: true }),
     ).toHaveCount(0);
     expect(productionRequests).toEqual([]);
     expect(pageErrors).toEqual([]);

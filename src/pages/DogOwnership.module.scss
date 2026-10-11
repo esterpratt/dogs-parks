@@ -252,18 +252,18 @@
   border-inline-start-color: $red;
   .status-heading > svg { color: $red; }
   .status-badge {
-    color: $white;
-    background: $red;
-    padding: 4px 10px;
-    border-radius: 8px;
+    color: $red;
+    font-weight: 600;
     font-size: 14px;
   }
 }
-.recipient-option {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 16px;
-  color: var(--color-text);
-  > svg { color: $blue; flex-shrink: 0; }
+// Keep primary ownership recognizable without relying on color alone (role label remains).
+.primary-owner {
+  border-inline-start: 4px solid $pink;
+  .person > svg {
+    color: $pink;
+    border-color: $pink;
+    background: rgba($pink, 0.08);
+  }
+  .role { color: $pink; }
 }
