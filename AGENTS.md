@@ -19,6 +19,10 @@
 - Add comments explaining code introduced or materially changed by Codex.
 - Preserve the existing architecture unless a cleaner conceptual model is needed. Explain significant architectural recommendations before implementing them.
 
+## Hebrew copy
+
+- When possible, avoid verbs that change with the user's gender. Prefer an infinitive or a natural gender-neutral sentence. For example, write "קיבלת הצעה מ{{name}} לקבל את הבעלות הראשית" instead of "{{name}} הציע או הציעה לך את תפקיד הבעלים הראשי".
+
 ## Verification
 
 - Use the existing package scripts.
