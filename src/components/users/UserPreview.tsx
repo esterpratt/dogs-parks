@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import { useQuery } from '@tanstack/react-query';
 import { Check, X } from 'lucide-react';
 import { User } from '../../types/user';
-import { Dog, GENDER } from '../../types/dog';
+import { Dog } from '../../types/dog';
 import {
   DOG_IMAGE_QUERY_REFRESH_MS,
   fetchDogPrimaryImage,
@@ -14,7 +14,7 @@ import { UserContext } from '../../context/UserContext';
 import { useUpdateFriendship } from '../../hooks/api/useUpdateFriendship';
 import { FRIENDSHIP_STATUS } from '../../types/friendship';
 import { Card } from '../card/Card';
-import { getDogNames } from '../../utils/getDogNames';
+import { capitalizeText } from '../../utils/text';
 import { TopModal } from '../modals/TopModal';
 import { Button } from '../Button';
 import { Image } from '../Image';
@@ -27,10 +27,8 @@ interface UserPreviewProps {
   showFriendshipButton?: boolean;
 }
 
-const UserPreview: React.FC<UserPreviewProps> = ({
-  user,
-  showFriendshipButton,
-}) => {
+const UserPreview: React.FC<UserPreviewProps> = (props) => {
+  const { user, showFriendshipButton } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { userId } = useContext(UserContext);
   const { t, i18n } = useTranslation();
@@ -48,8 +46,11 @@ const UserPreview: React.FC<UserPreviewProps> = ({
     userId: userId!,
   });
 
-  const dogNames = user.dogs.length ? getDogNames(user.dogs) : null;
   const isRTLMode = isRTL(i18n.language);
+  // Isolate each name so mixed-script names and punctuation retain their order.
+  const dogNames = user.dogs
+    .map((dog) => `\u2068${capitalizeText(dog.name)}\u2069`)
+    .join(i18n.language.startsWith('ar') ? '، ' : ', ');
 
   return (
     <>
@@ -70,45 +71,17 @@ const UserPreview: React.FC<UserPreviewProps> = ({
           </>
         }
         detailsCmp={
-          <div className={styles.detailsContainer}>
-            {dogNames ? (
-              <>
-                <span className={styles.dogNames}>{dogNames}</span>
-                <span className={styles.userNameContainer}>
-                  {isRTLMode ? (
-                    <>
-                      <span>
-                        {t('users.preview.dogsCount', {
-                          count: user.dogs.length,
-                          context:
-                            user.dogs.length === 1 &&
-                            user.dogs[0]?.gender === GENDER.FEMALE
-                              ? 'female'
-                              : undefined,
-                        })}
-                      </span>
-                      <span className={styles.userName}> {user.name}</span>
-                    </>
-                  ) : (
-                    <>
-                      <span className={styles.userName}>{user.name}</span>
-                      <span>
-                        {t('users.preview.dogsCount', {
-                          count: user.dogs.length,
-                          context:
-                            user.dogs.length === 1 &&
-                            user.dogs[0]?.gender === GENDER.FEMALE
-                              ? 'female'
-                              : undefined,
-                        })}
-                      </span>
-                    </>
-                  )}
-                </span>
-              </>
-            ) : (
-              <span className={styles.userNameContainer}>
-                <span className={styles.userName}>{user.name}</span>
+          <div
+            className={styles.detailsContainer}
+            dir={isRTLMode ? 'rtl' : 'ltr'}
+          >
+            {/* Keep the person first, with their dogs as secondary context. */}
+            <span className={styles.userName}>
+              <bdi>{user.name}</bdi>
+            </span>
+            {user.dogs.length > 0 && (
+              <span className={styles.dogNames}>
+                {t('users.preview.humanOf', { dogNames })}
               </span>
             )}
           </div>

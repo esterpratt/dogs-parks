@@ -123,6 +123,7 @@
     "sniffFriends": "אפשר למצוא חברים חדשים",
     "searchPlaceholder": "חיפוש לפי שם משתמש/כלב",
     "preview": {
+      "humanOf": "האדם של {{dogNames}}",
       "dogsCount": "הכלבים של",
       "dogsCount_one": "הכלב של",
       "dogsCount_female_one": "הכלבה של",

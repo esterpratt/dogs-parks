@@ -1,6 +1,6 @@
 # Person-first user card
 
-Design agreed on 2026-10-11. Implementation is deferred; this document records the scope for a later task.
+Design agreed and implemented on 2026-10-11. This document records the implemented scope.
 
 Shared dogs can appear on several people's cards. Make the person the primary identity while preserving the familiar dog photo and existing card layout.
 

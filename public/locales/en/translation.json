@@ -123,6 +123,7 @@
     "sniffFriends": "Sniff out some friends",
     "searchPlaceholder": "Search by user or dog name",
     "preview": {
+      "humanOf": "Human of {{dogNames}}",
       "dogsCount": "'s dogs",
       "dogsCount_one": "'s dog",
       "dogsCount_female_one": "'s dog",

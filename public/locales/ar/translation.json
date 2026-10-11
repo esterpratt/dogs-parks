@@ -123,6 +123,7 @@
     "sniffFriends": "يمكن العثور على أصدقاء جدد",
     "searchPlaceholder": "البحث بالاسم/الكلب",
     "preview": {
+      "humanOf": "رفيق {{dogNames}}",
       "dogsCount": "كلاب",
       "dogsCount_one": "كلب",
       "dogsCount_female_one": "كلبة",
