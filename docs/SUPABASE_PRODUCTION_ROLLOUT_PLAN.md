@@ -21,7 +21,7 @@ This documentation request is not authorization to execute production mutations.
 - Repository migration history does not describe the full live baseline. Blind `db push`, baseline replay or broad ledger repair is not a release procedure.
 - Feature-disabled migrations still change RLS/grants, metadata writes, Storage permissions, function contracts and `dogs.owner` deletion behavior.
 - `dogs.owner` becomes `ON DELETE RESTRICT`; the new `delete-user` requires the account-erasure preparation RPC. Database/Edge/Auth/Storage changes cannot be deployed in one atomic transaction.
-- Legacy object copies retain sources, but switching metadata/URLs to private dog paths can affect older clients. The pre-feature client lists/uploads/moves/removes dog photos directly in the public `users` bucket, while the new client reads `dog_images` metadata and private `dogs` objects. A later old-client upload has no corresponding new metadata row; this is an unresolved mixed-client photo consistency gap.
+- Legacy object copies retain sources, but switching metadata/URLs to private dog paths can affect older clients. The pre-feature client lists/uploads/moves/removes dog photos directly in the public `users` bucket, while the new client reads `dog_images` metadata and private `dogs` objects. The additive cutover migration now prepares a service-only legacy write switch and final object reconciliation; it has passed local contracts but still needs released-client and production-version rehearsal before the gap can be closed for release.
 - Four webhook trigger definitions historically embedded a long-lived service-role credential. Verify remediation, inventory consumers and plan rotation before feature release.
 - `support_recover_dog_ownership` does not exist and is outside this feature's scope.
 - The Web compatibility helper uses build `1`; native clients now read `CFBundleVersion`/`versionCode` from the installed binary through Capacitor App. Concrete released-client identities and minimum-build values still need verification. An older client which never calls capability RPCs cannot be made compatible just by setting minimum builds.
@@ -45,7 +45,7 @@ Exit: every existing record category has a preservation rule; every migration ha
 
 ## Ordered feature migration inventory
 
-Inspect actual files and history at execution time. These are the eleven feature migrations in the repository, in timestamp order. The isolated contract runner applies the transfer-notification refinement immediately after the transfer migration so that its transfer tests cover the final notification behavior; production migration tooling uses timestamp order. Rehearse the final production order on a disposable restored copy before execution.
+Inspect actual files and history at execution time. These are the twelve feature migrations in the repository, in timestamp order. The isolated contract runner applies the transfer-notification refinement immediately after the transfer migration so that its transfer tests cover the final notification behavior; production migration tooling uses timestamp order. Rehearse the final production order on a disposable restored copy before execution.
 
 | Order | File | Main deployment concern |
 | --- | --- | --- |
@@ -60,6 +60,7 @@ Inspect actual files and history at execution time. These are the eleven feature
 | 9 | `20261003150000_add_dog_client_capabilities.sql` | RPC dog create/edit/read/pack contract |
 | 10 | `20261011100000_limit_transfer_acceptance_notification.sql` | Transfer notification audience refinement |
 | 11 | `20261011110000_add_dog_ownership_notification_preference.sql` | Ownership notification preference and delivery behavior |
+| 12 | `20261027100000_reconcile_legacy_dog_images_before_cutover.sql` | Service-only, repeatable final sync of legacy Storage objects into photo metadata and copy jobs |
 
 Additional compatibility or security migrations may be required before rollout. This inventory is not a command to replay applied files. The fixture schema must never be applied to production as a migration.
 
@@ -85,7 +86,7 @@ Required compatibility matrix:
 | Shared dog on unsupported client | Document read behavior and denied writes; cannot rely on a capability gate the old client never calls |
 
 5. Add new migrations/transitional APIs where evidence reveals gaps. Preserve security requirements; do not restore broad writes merely for compatibility. If supporting an old write is incompatible with required authorization, present the concrete limitation and agree an upgrade requirement before release.
-6. Verify before/after rows and file checksums, legacy unknown-uploader attribution, primary-photo fallback, soft-deleted rows, ownership invariants and unaffected data. Document each intentional transformation.
+6. Keep the old `users` bucket paths usable while the old app remains the released version. At client cutover, stop the photo worker and use the service-only `set_legacy_dog_photo_writes_enabled(false)` switch. Its row lock serializes with in-flight old Storage writes. Then invoke `reconcile_legacy_dog_images_before_cutover`, inspect the added/retired/primary-changed counts and pending jobs, drain and verify copies, and keep old photo writes disabled once new clients depend on the metadata. If an old-client rollback requires reopening writes, repeat the pause/reconciliation before restoring new-client access. Rehearse the broader maintenance control for dog/Edge transitions separately. Verify before/after rows and file checksums, legacy unknown-uploader attribution, primary-photo fallback, soft-deleted rows, ownership invariants and unaffected data. Document each intentional transformation.
 7. Rehearse retries and recovery: partial copy, missing object, unavailable worker, failure before/after Auth deletion and failure between migrations/function deployments. Prove the actual restoration procedure on a disposable destination.
 8. Run relevant local/unit/e2e/repository checks and web/native smoke coverage; record unsupported or untested versions explicitly. Do not describe the current code as release-ready while compatibility gaps remain.
 

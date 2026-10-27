@@ -171,3 +171,12 @@ SUPABASE_LOCAL_URL="${local_api_url}" \
 SUPABASE_LOCAL_ANON_KEY="${local_anon_key}" \
 SUPABASE_LOCAL_SERVICE_ROLE_KEY="${local_service_role_key}" \
   node --test supabase/tests/local/delete-user-contract.test.mjs
+
+# Apply the additive cutover tool only after the full ownership schema exists.
+docker exec -i "${LOCAL_DB_CONTAINER}" psql -U postgres -d postgres -q -1 -v ON_ERROR_STOP=1 \
+  < "supabase/migrations/20261027100000_reconcile_legacy_dog_images_before_cutover.sql"
+
+SUPABASE_LOCAL_URL="${local_api_url}" \
+SUPABASE_LOCAL_ANON_KEY="${local_anon_key}" \
+SUPABASE_LOCAL_SERVICE_ROLE_KEY="${local_service_role_key}" \
+  node --test supabase/tests/local/legacy-image-cutover-contract.test.mjs

@@ -2,6 +2,8 @@
 
 2026-10-27 scope update: Ester wants support recovery only as contextual user information. The support recovery RPC, administrative policy and manual procedures below are no longer required feature deliverables. Verify the relevant contact copy and keep the existing partial account-cleanup reference. This does not mark unrun compatibility, storage failure or production release checks as passed.
 
+2026-10-28 compatibility update: A new additive migration retains old solo-dog photo writes in `users` Storage until the app cutover, then provides a service-only write switch and reconciliation of late legacy uploads, moves, deletions, primary selection and copy jobs. The isolated local contract passed real old-style Storage calls, copied-file reconciliation, switch enforcement, idempotency and shared-dog write denial. Staging has the migration with old writes still enabled; no production migration or cutover ran. Released old-client artifacts and the full production-version rehearsal remain unverified.
+
 Prepared 2026-10-11 against `DOG_OWNERSHIP_PLAN.md`, `DOG_OWNERSHIP_SCHEMA_AND_UX.md`, the implementation on `main`, and the staging/production runbooks. Run destructive contract tests only against the isolated Docker stack; browser journeys use guarded disposable staging fixtures. Never run them against production.
 
 ## Completion criteria
