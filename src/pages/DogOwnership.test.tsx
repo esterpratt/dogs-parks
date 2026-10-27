@@ -134,6 +134,7 @@ it('ignores another account’s cached ownership permissions for an invitee', as
   await screen.findByText('Inline invitation');
   expect(fetchDogDeletionProposal).not.toHaveBeenCalled();
   expect(screen.queryByText('dogOwnership.ownersTitle')).toBeNull();
+  expect(screen.queryByText('dogOwnership.supportHelp')).toBeNull();
   expect(screen.queryByText('dogOwnership.declinedInvites')).toBeNull();
 });
 
@@ -151,6 +152,10 @@ it('omits declined history and keeps the add-owner action in the header', async 
     'dogOwnership.inviteTitle',
   );
   await waitFor(() => expect(fetchDogDeletionProposal).toHaveBeenCalledOnce());
+  expect(screen.getByText('dogOwnership.supportHelp')).toBeTruthy();
+  expect(
+    screen.getByRole('link', { name: 'esterpratt@gmail.com' }).getAttribute('href'),
+  ).toBe('mailto:esterpratt@gmail.com');
 });
 
 it('hides other invitations and declined history from co-owners', async () => {

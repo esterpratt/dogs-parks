@@ -1,4 +1,5 @@
 import { Capacitor } from '@capacitor/core';
+import { App } from '@capacitor/app';
 import { v4 as uuidv4 } from 'uuid';
 import {
   DogOwnershipActionType,
@@ -10,7 +11,7 @@ import {
 import { Json } from '../types/supabase';
 import { supabase } from './supabase-client';
 
-const SHARED_OWNERSHIP_CLIENT_BUILD = 1;
+const SHARED_OWNERSHIP_WEB_BUILD = 1;
 const ownershipOutcomes = new Set([
   'ACCEPTED',
   'APPLIED',
@@ -38,13 +39,27 @@ const ownershipOutcomes = new Set([
   'UPGRADE_REQUIRED',
 ]);
 
-const getClientCompatibility = () => {
+const getClientCompatibility = async () => {
   const platform = Capacitor.getPlatform().toUpperCase();
+  const clientPlatform =
+    platform === 'IOS' || platform === 'ANDROID' ? platform : 'WEB';
+  // Native build numbers come from the installed binary, so minimum-version
+  // enforcement cannot accidentally treat every iOS/Android release as build 1.
+  if (clientPlatform === 'WEB') {
+    return {
+      p_client_build: SHARED_OWNERSHIP_WEB_BUILD,
+      p_client_platform: clientPlatform,
+    };
+  }
+  const { build } = await App.getInfo();
+  const nativeBuild = Number(build);
+  if (!Number.isSafeInteger(nativeBuild) || nativeBuild <= 0) {
+    throw new Error('Native app build is unavailable');
+  }
   return {
-    p_client_build: SHARED_OWNERSHIP_CLIENT_BUILD,
-    p_client_platform:
-      platform === 'IOS' || platform === 'ANDROID' ? platform : 'WEB',
-  } as const;
+    p_client_build: nativeBuild,
+    p_client_platform: clientPlatform,
+  };
 };
 
 const parseOwnershipResult = (data: Json | null): DogOwnershipResult => {
@@ -123,7 +138,7 @@ const fetchDogOwnershipCapabilities = async (dogId: string) => {
   const { data, error } = await supabase.rpc(
     'api_get_dog_ownership_capabilities',
     {
-      ...getClientCompatibility(),
+      ...(await getClientCompatibility()),
       p_dog_id: dogId,
     },
   );
@@ -139,7 +154,7 @@ const createDogInvite = async (
   idempotencyKey = uuidv4(),
 ) => {
   const { data, error } = await supabase.rpc('api_create_dog_invite', {
-    ...getClientCompatibility(),
+    ...(await getClientCompatibility()),
     p_dog_id: dogId,
     p_idempotency_key: idempotencyKey,
     p_invitee_user_id: inviteeUserId,
@@ -149,7 +164,7 @@ const createDogInvite = async (
 
 const cancelDogInvite = async (inviteId: string) => {
   const { data, error } = await supabase.rpc('api_cancel_dog_invite', {
-    ...getClientCompatibility(),
+    ...(await getClientCompatibility()),
     p_invite_id: inviteId,
   });
   return unwrapOwnershipResult(data, error);
@@ -161,7 +176,7 @@ const respondToDogInvite = async (
   disclosureAccepted: boolean,
 ) => {
   const { data, error } = await supabase.rpc('api_respond_dog_invite', {
-    ...getClientCompatibility(),
+    ...(await getClientCompatibility()),
     p_accept: accept,
     p_disclosure_accepted: disclosureAccepted,
     p_invite_id: inviteId,
@@ -176,7 +191,7 @@ const createDogOwnershipRequest = async (
   const { data, error } = await supabase.rpc(
     'api_create_dog_ownership_request',
     {
-      ...getClientCompatibility(),
+      ...(await getClientCompatibility()),
       p_dog_id: dogId,
       p_idempotency_key: idempotencyKey,
     },
@@ -188,7 +203,7 @@ const cancelDogOwnershipRequest = async (requestId: string) => {
   const { data, error } = await supabase.rpc(
     'api_cancel_dog_ownership_request',
     {
-      ...getClientCompatibility(),
+      ...(await getClientCompatibility()),
       p_request_id: requestId,
     },
   );
@@ -202,7 +217,7 @@ const respondToDogOwnershipRequest = async (
   const { data, error } = await supabase.rpc(
     'api_respond_dog_ownership_request',
     {
-      ...getClientCompatibility(),
+      ...(await getClientCompatibility()),
       p_approve: approve,
       p_request_id: requestId,
     },
@@ -252,7 +267,7 @@ const createPrimaryTransfer = async (
   idempotencyKey = uuidv4(),
 ) => {
   const { data, error } = await supabase.rpc('api_create_primary_transfer', {
-    ...getClientCompatibility(),
+    ...(await getClientCompatibility()),
     p_dog_id: dogId,
     p_idempotency_key: idempotencyKey,
     p_to_member_id: toMemberId,
@@ -262,7 +277,7 @@ const createPrimaryTransfer = async (
 
 const cancelPrimaryTransfer = async (transferId: string) => {
   const { data, error } = await supabase.rpc('api_cancel_primary_transfer', {
-    ...getClientCompatibility(),
+    ...(await getClientCompatibility()),
     p_transfer_id: transferId,
   });
   return unwrapOwnershipResult(data, error);
@@ -273,7 +288,7 @@ const respondToPrimaryTransfer = async (
   accept: boolean,
 ) => {
   const { data, error } = await supabase.rpc('api_respond_primary_transfer', {
-    ...getClientCompatibility(),
+    ...(await getClientCompatibility()),
     p_accept: accept,
     p_transfer_id: transferId,
   });
@@ -290,7 +305,7 @@ const fetchDogDeletionProposal = async (
     const { data, error } = await supabase.rpc(
       'api_get_dog_deletion_proposal',
       {
-        ...getClientCompatibility(),
+        ...(await getClientCompatibility()),
         p_proposal_id: proposalId,
       },
     );
@@ -315,7 +330,7 @@ const fetchDogDeletionProposal = async (
   const { data: proposal, error } = await supabase.rpc(
     'api_get_current_dog_deletion_proposal',
     {
-      ...getClientCompatibility(),
+      ...(await getClientCompatibility()),
       p_dog_id: dogId,
     },
   );
@@ -335,7 +350,7 @@ const fetchDogDeletionProposal = async (
 
 const proposeDogDeletion = async (dogId: string, idempotencyKey = uuidv4()) => {
   const { data, error } = await supabase.rpc('api_propose_dog_deletion', {
-    ...getClientCompatibility(),
+    ...(await getClientCompatibility()),
     p_dog_id: dogId,
     p_idempotency_key: idempotencyKey,
   });
@@ -344,7 +359,7 @@ const proposeDogDeletion = async (dogId: string, idempotencyKey = uuidv4()) => {
 
 const respondToDogDeletion = async (proposalId: string, approve: boolean) => {
   const { data, error } = await supabase.rpc('api_respond_dog_deletion', {
-    ...getClientCompatibility(),
+    ...(await getClientCompatibility()),
     p_approve: approve,
     p_proposal_id: proposalId,
   });
@@ -353,7 +368,7 @@ const respondToDogDeletion = async (proposalId: string, approve: boolean) => {
 
 const withdrawDogDeletionApproval = async (proposalId: string) => {
   const { data, error } = await supabase.rpc('api_withdraw_dog_deletion', {
-    ...getClientCompatibility(),
+    ...(await getClientCompatibility()),
     p_proposal_id: proposalId,
   });
   return unwrapOwnershipResult(data, error);
@@ -361,7 +376,7 @@ const withdrawDogDeletionApproval = async (proposalId: string) => {
 
 const cancelDogDeletion = async (proposalId: string) => {
   const { data, error } = await supabase.rpc('api_cancel_dog_deletion', {
-    ...getClientCompatibility(),
+    ...(await getClientCompatibility()),
     p_proposal_id: proposalId,
   });
   return unwrapOwnershipResult(data, error);
@@ -373,7 +388,7 @@ const leaveDogOwnership = async (
   selectedSuccessorMemberId: string | null,
 ) => {
   const { data, error } = await supabase.rpc('api_leave_dog', {
-    ...getClientCompatibility(),
+    ...(await getClientCompatibility()),
     p_dog_id: dogId,
     p_expected_ownership_version: expectedOwnershipVersion,
     p_selected_successor_member_id: selectedSuccessorMemberId,

@@ -140,6 +140,13 @@ const AccountDeletionReview = () => {
       ))}
 
       <p className={styles.warning}>{t('settings.accountDeletion.warning')}</p>
+      {reviewItems.some((item) => item.effect !== 'DELETE_SOLO_DOG') ? (
+        // Shared photos remain after account erasure; show the review path before sign-out.
+        <p className={styles.supportNote}>
+          {t('settings.accountDeletion.photoSupport')}{' '}
+          <a href="mailto:esterpratt@gmail.com">esterpratt@gmail.com</a>
+        </p>
+      ) : null}
       <Button
         className={styles.deleteButton}
         color={styles.red}

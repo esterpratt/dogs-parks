@@ -1,12 +1,14 @@
 # Supabase production upgrade and ownership release
 
+2026-10-27 scope update: Ester removed administrative support recovery from this feature. Show the existing support contact and case information where users need it; do not create or deploy `support_recover_dog_ownership` or require a support policy as an enablement gate. Historical P1 and recovery-RPC requirements below are superseded. Partial account-cleanup guidance remains in the client. Old-client compatibility, data preservation, credential remediation, rehearsal and explicit production authorization remain required.
+
 Prepared 2026-10-03. Status: planning only; no live upgrade performed. This is the detailed execution framework for slice 11, with gates that must be filled by staging evidence before it becomes an executable release runbook.
 
 ## Objective and user constraints
 
 Preserve all existing users, dog profiles, parks, relationships and photos while deploying the ownership migrations, required server functions and compatible clients. The user reports very few users and no meaningful current activity; use that to arrange a short maintenance window, not to skip data validation. Verify current activity immediately before release.
 
-Support remains an email to Ester through the existing app contact path. Ester reviews each case and performs an administrative action manually. No support dashboard or automatic recovery service is required.
+Support information uses Ester's existing email contact path in relevant app screens. This feature adds no administrative ownership recovery action.
 
 Companion documents: [staging/data-import plan](SUPABASE_STAGING_PLAN.md), [ownership contract](DOG_OWNERSHIP_PLAN.md), [schema/UX contract](DOG_OWNERSHIP_SCHEMA_AND_UX.md), [handoff](CODEX_CONTEXT.md). Existing Notion ticket: <https://app.notion.com/p/3e24e04c2ff1810592a3cb0f61d736d4>.
 
@@ -21,38 +23,14 @@ This documentation request is not authorization to execute production mutations.
 - `dogs.owner` becomes `ON DELETE RESTRICT`; the new `delete-user` requires the account-erasure preparation RPC. Database/Edge/Auth/Storage changes cannot be deployed in one atomic transaction.
 - Legacy object copies retain sources, but switching metadata/URLs to private dog paths can affect older clients. Retaining a file alone does not prove they can display or edit it.
 - Four webhook trigger definitions historically embedded a long-lived service-role credential. Verify remediation, inventory consumers and plan rotation before feature release.
-- `support_recover_dog_ownership` does not exist. Policy decisions and its tested implementation are required before full shared-ownership enablement.
-- Current browser/native compatibility helper uses build `1`; concrete store/web release identities and minimum-build semantics need verification. An older client which never calls capability RPCs cannot be made compatible just by setting minimum builds.
+- `support_recover_dog_ownership` does not exist and is outside this feature's scope.
+- The Web compatibility helper uses build `1`; native clients now read `CFBundleVersion`/`versionCode` from the installed binary through Capacitor App. Concrete released-client identities and minimum-build values still need verification. An older client which never calls capability RPCs cannot be made compatible just by setting minimum builds.
 
 Historical 2026-09-26 counts (not current assertions): 18 dogs, 15 active, 3 soft-deleted; 16 memberships, no invites, 15 image metadata rows in `users`, empty `dogs` bucket. All active dogs had one matching primary; two deleted dogs lacked a primary. Re-inventory everything; preserve soft-deleted rows without treating them as active invariant failures.
 
-## Gate P1 — Support policy and manual recovery
+## Gate P1 — Contextual support information
 
-Confirmed: email support, human decision, identity/evidence checks, contact attempts for an unreachable primary, no recovery based on silence alone, no fabricated deletion consent, and evidence-based photo removal without requiring primary approval.
-
-Still needs explicit product approval:
-
-| Decision | Record before implementation/enablement |
-| --- | --- |
-| Identity and evidence | How requester identity/relationship is established; acceptable evidence and how uncertain/disputed cases are handled |
-| Contact | Who is contacted, channel, number/timing of attempts, waiting period and notice of a decision |
-| Exceptional authority | Exact permitted ownership-recovery actions, eligible target and treatment of previous primary/membership; no implied co-owner eviction or deletion bypass |
-| Case records | Case reference, decision/operator/time, evidence storage and access; retention/redaction durations |
-| Photo removal | How photo identity/claim is verified and how removal/metadata/main-image fallback is executed |
-| Partial account cleanup | How a recovery reference identifies residual cleanup and how to verify completion without trying to delete Auth twice |
-
-Do not adopt arbitrary contact/retention numbers from another service or treat these proposed details as already approved. Capture the user's decision once, then implement it.
-
-The manual recovery RPC contract should include:
-
-1. Administrative execution only; no `PUBLIC`, `anon` or ordinary `authenticated` execution grants. Review `SECURITY DEFINER`, fixed `search_path` and role/grant boundaries. Supabase SQL editor operates with administrative database privileges; record the human operator/case because `auth.uid()` may not identify that operator.
-2. Explicit dog, approved target, expected ownership version, case reference and retry/idempotency identity. Final parameter names follow the approved policy and schema.
-3. Dog lock, active-state/target/policy validation and first-commit-wins behavior; stale state requires review again.
-4. One database transaction maintaining exactly one primary, synchronized `dogs.owner`, membership history, version, cancellation of conflicting actions and minimal audit evidence. Notifications must respect privacy and transactional behavior.
-5. No implicit shared deletion consent, generic direct membership editing, restoration of purged dogs or an unapproved removal bypass. The fate of the old primary must follow the approved policy rather than an agent's assumption.
-6. Narrow administrative SQL examples and real local Auth/RLS/concurrency/idempotency tests, plus a staging manual rehearsal. Keep evidence text/files out of the minimal ownership audit; use an approved protected case record instead.
-
-Photo removal and residual user-folder cleanup require separate narrow procedures. Never use ownership recovery as a generic destructive tool. Enablement gate: policy approved, functions/procedures tested, Ester has the manual instructions.
+Verify that owners see the existing email contact for exceptional ownership concerns, that account-deletion review explains retained shared photos and how to request a review, and that partial post-Auth cleanup displays its reference and contact. These are informational screens; they do not transfer ownership, bypass unanimous consent, or promise an administrative recovery action.
 
 ## Gate P2 — Fresh inventory, preservation manifest and migration ledger
 
@@ -132,13 +110,13 @@ The final ordering is determined by P3 rehearsal. This is a framework, not a cla
 4. Deploy/configure `process-dog-storage-jobs` and its service-only invocation. Verify authenticated caller checks in `delete-user` and administrative checks in the worker under the actual gateway configuration.
 5. Keep all production compatibility rows disabled until the remaining gates pass. Read back the rows; defaults alone are insufficient evidence.
 6. Drain legacy photo-copy jobs, verify destination bytes/metadata/client access and preserve source objects. Pause metadata switching if staging showed released-client incompatibility; follow the reviewed transition rather than improvised manual updates.
-7. Publish compatible web/native clients in the rehearsed order. Record actual available builds, not submission numbers. Translate platform release identity into the server build value correctly; the current constant requires review before real minimum-version enforcement.
+7. Publish compatible web/native clients in the rehearsed order. Record actual available builds, not submission numbers. Verify native `App.getInfo().build` against the release artifacts and set the matching server minimums; update the Web build constant when publishing a new Web compatibility generation.
 8. Reconcile the preservation manifest against production: users/profiles, all dog lifecycle categories, ownership mirrors, images/main selections, parks/relationships and object verification. Exercise only explicitly designated non-destructive smoke checks or dedicated approved production test accounts; never run destructive contract suites there.
 9. Restore normal writes/access only once the backend/client combination is verified. Keep feature enablement separate from schema deployment.
 
 ## Phase P6 — Enablement and observation
 
-1. Confirm support policy/recovery RPC and manual procedures are deployed and rehearsed, old data is accounted for, released clients pass and background processing is healthy.
+1. Confirm contextual support information is present, old data is accounted for, released clients pass and background processing is healthy.
 2. Set actual minimum builds and enable only ready platforms. The current `(feature, platform)` table is platform-wide, not per-account: enabling production `WEB` also affects qualifying production web clients, including localhost connected to that backend. If a user cohort rollout is desired, implement/review a separate mechanism first.
 3. Observe representative solo and shared journeys with dedicated test accounts. Monitor invariant/RLS denials, Auth/deletion failures, function logs, Storage job states/age/retries, missing-file/checksum exceptions, notifications and client errors. Record cadence/operator/observation period in the execution sheet.
 4. Do not retire legacy source files or compatibility APIs until the reviewed observation/rollback period ends and old clients no longer depend on them. Retirement requires a separate explicit operation and verification.
@@ -160,7 +138,7 @@ The implementing agent must leave:
 
 - Verified baseline/ledger reconciliation and any new compatibility/security/recovery migrations.
 - Before/after preservation manifest and Storage verification evidence stored privately; a secret-free outcome summary in the repository.
-- Approved email/manual support policy and prepared administrative recovery/photo-removal/cleanup instructions.
+- Verified contextual support contact and partial-cleanup reference screens.
 - Staging rehearsal results for the exact production sequence and legacy-client matrix.
 - Completed release execution sheet, backup recovery verification and tested stop/rollback procedures.
 - Exact git SHA, migration/function versions, platform compatibility/build values, remaining legacy dependencies, worker operation and monitoring owner.
@@ -168,7 +146,7 @@ The implementing agent must leave:
 
 ## Resume prompt
 
-> Prepare and execute the next authorized stage of `docs/SUPABASE_PRODUCTION_ROLLOUT_PLAN.md`. Read `AGENTS.md`, `docs/CODEX_CONTEXT.md` and the staging plan first. Verify production read-only, preserve all existing data, test actual released-client calls, resolve support policy/recovery and credential dependencies, and rehearse the complete ordered rollout in staging. Produce the exact release/backup/recovery execution sheet before requesting missing production deployment approval. Do not assume feature-disabled SQL preserves older-client behavior, and do not run destructive tests on production.
+> Prepare and execute the next authorized stage of `docs/SUPABASE_PRODUCTION_ROLLOUT_PLAN.md`. Read `AGENTS.md`, `docs/CODEX_CONTEXT.md` and the staging plan first. Verify production read-only, preserve all existing data, test actual released-client calls, verify contextual support information and credential dependencies, and rehearse the complete ordered rollout in staging. Produce the exact release/backup/recovery execution sheet before requesting missing production deployment approval. Do not assume feature-disabled SQL preserves older-client behavior, and do not run destructive tests on production.
 
 ## Official references
 

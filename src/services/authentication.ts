@@ -162,7 +162,7 @@ const deleteUser = async (
     // The Edge Function derives the deletion target from this authenticated session.
     const { data, error } = await supabase.functions.invoke('delete-user', {
       body: {
-        ...getClientCompatibility(),
+        ...(await getClientCompatibility()),
         successorSelections,
       },
     });

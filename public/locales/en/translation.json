@@ -216,6 +216,7 @@
       "noDogs": "You do not currently share ownership of any dogs.",
       "successorLabel": "New primary owner",
       "warning": "Your account and profile data will be permanently deleted. This cannot be undone.",
+      "photoSupport": "Shared dog photos stay with the other owners. If you later need a photo reviewed for removal, email us with the dog's name and a description of the photo:",
       "deleteAction": "Delete my account",
       "confirmTitle": "Delete your account?",
       "confirmBody": "This is the final step. Your account will be permanently deleted and the dog changes shown here will be applied together.",
@@ -1288,6 +1289,7 @@
     "requestResponseTitle": "Ownership request",
     "transferResponseTitle": "Primary role offer",
     "ownersTitle": "Owners",
+    "supportHelp": "If the primary owner is unreachable or you need help with ownership, contact us with the dog's name and details. Requests are reviewed individually; an unanswered message does not transfer ownership or approve deletion:",
     "roles": {
       "PRIMARY_OWNER": "Primary owner",
       "CO_OWNER": "Co-owner"

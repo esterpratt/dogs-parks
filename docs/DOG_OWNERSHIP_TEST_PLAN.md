@@ -1,10 +1,12 @@
 # Dog ownership test plan and audit
 
+2026-10-27 scope update: Ester wants support recovery only as contextual user information. The support recovery RPC, administrative policy and manual procedures below are no longer required feature deliverables. Verify the relevant contact copy and keep the existing partial account-cleanup reference. This does not mark unrun compatibility, storage failure or production release checks as passed.
+
 Prepared 2026-10-11 against `DOG_OWNERSHIP_PLAN.md`, `DOG_OWNERSHIP_SCHEMA_AND_UX.md`, the implementation on `main`, and the staging/production runbooks. Run destructive contract tests only against the isolated Docker stack; browser journeys use guarded disposable staging fixtures. Never run them against production.
 
 ## Completion criteria
 
-The feature is complete only when the server invariants and permissions, client journeys, old-client compatibility, manual support recovery, native behavior, data preservation, and production rollout gates pass. A successful local or staging suite proves only the scenarios it executes.
+The feature is complete only when the server invariants and permissions, client journeys, contextual support information, old-client compatibility, native behavior, data preservation, and production rollout gates pass. A successful local or staging suite proves only the scenarios it executes.
 
 ## Test matrix
 
@@ -17,7 +19,7 @@ The feature is complete only when the server invariants and permissions, client 
 | Photos | Private dog-ID object paths and signed URL permissions/expiry; immutable reservation/finalization; 6 active/reserved image limit; co-owner deletes only own upload; primary deletes legacy unknown uploader; newest remaining image becomes main; uploader erasure removes attribution without deleting shared photo; missing object/copy retry; legacy source retained and checksummed. | Local image contract; staging edge and account-erasure journeys; staging import verification. Test signed URL expiry and remote partial-copy failure separately. |
 | Account erasure | Session-derived target prevents deleting another account; all dogs transition atomically; chosen/default successors; solo dog hidden; shared photos survive and attribution clears; 105+ nested legacy objects paginate; Auth deletion and session loss; failures before/after Auth deletion return a recoverable support reference. | Local Edge contract; staging account-erasure journey. Inject an actual remote post-Auth cleanup failure. |
 | Client and notifications | Direct URLs and refresh without router state; role-specific controls; disabled/minimum-build outcomes; loading/error/access-lost/stale state; Realtime missed-event reconnect; in-app notification regardless of push mute; request/deletion action links and all terminal/expired views; Hebrew RTL and small screen focus/scroll; Android system back and iOS back. | Vitest; staging Playwright; native devices for platform back and keyboard behavior. |
-| Migration and release | Production schema/ledger inventory; exact old-client solo flows before and between upgrades; data/file preservation and restored backup; webhook secret remediation and rotation; support recovery policy/RPC with authorization, concurrency and audit; real build numbers; platform flags; monitoring/rollback. | Staging rehearsal using released artifacts, then separately authorized production runbook. Never infer a pass from local tests. |
+| Migration and release | Production schema/ledger inventory; exact old-client solo flows before and between upgrades; data/file preservation and restored backup; webhook secret remediation and rotation; real build numbers; platform flags; monitoring/rollback. | Staging rehearsal using released artifacts, then separately authorized production runbook. Never infer a pass from local tests. |
 
 ## Execution commands
 
@@ -43,8 +45,8 @@ The feature is complete only when the server invariants and permissions, client 
 
 1. The imported description has one additional trailing exclamation mark in staging; its provenance is unknown. Decide whether this is an intentional edit before treating the import as an exact preservation pass. Keep the original import fixture immutable.
 2. Exercise the remaining terminal/expired action pages and signed URL expiry in browser tests. Request and deletion notification links, withdrawn-request and canceled-deletion receipts, invitation/transfer links and invite expiry have browser coverage; the full matrix does not.
-3. Inject actual staging Storage/copy and post-Auth cleanup failures, verify retry/manual recovery, and test native iOS/Android back, keyboard and released-client compatibility. Unit simulations and local Edge checks do not replace these runs.
-4. Resolve the approved manual support policy details, implement and test the service-only recovery procedure, then rehearse old-client upgrade, backups/restore, webhook credential remediation, build gates and the production rollout described in `SUPABASE_PRODUCTION_ROLLOUT_PLAN.md`. Shared ownership remains unreleased in production.
+3. Inject actual staging Storage/copy and post-Auth cleanup failures, verify the existing support-reference response, and test native iOS/Android back, keyboard and released-client compatibility. Unit simulations and local Edge checks do not replace these runs.
+4. Verify the contextual support information, then rehearse old-client upgrade, backups/restore, webhook credential remediation, build gates and the production rollout described in `SUPABASE_PRODUCTION_ROLLOUT_PLAN.md`. Shared ownership remains unreleased in production.
 
 The full test plan has **not** passed. The green local and browser suites establish the listed implemented paths; the failed preservation check and unrun release/platform cases remain open.
 
@@ -54,3 +56,12 @@ The full test plan has **not** passed. The green local and browser suites establ
 - The guarded staging browser journey passed with notification clicks for an ownership request and deletion consent, plus reopened withdrawn-request and canceled-deletion receipts with no approval controls. The first run failed only because the test expected the alternate deletion URL; the notification correctly opened `/ownership-actions/deletion/:proposalId`. The assertion was corrected and the expanded journey passed twice as cases were added. Console fetch/storage errors still appeared and were not fully audited.
 - Guarded cleanup removed the one disposable dog left by the failed run. The worker then drained both that run and the passing runs, with four completed and zero failed in each drain. Its final state was 117 completed jobs with no other state.
 - `npm run lint`, `npm test -- --run` (100 tests in 16 files), `npm run build` and `git diff --check` passed. Build retained the existing >500 kB chunk warning.
+
+## Follow-up execution — 2026-10-27
+
+- The three guarded staging ownership browser journeys passed. They exercised multi-account deletion, ownership notifications, invitation expiry, photo rights/capacity, reconnect, succession and unanimous deletion. The suite emitted fetch/403/409 console messages, including deliberate failure and disconnect cases; the complete console causes were not audited.
+- Guarded cleanup inventoried and removed only the three disposable browser dogs. The storage worker completed six queued jobs with none failed and reported 123 completed total, with no other state.
+- The isolated local Supabase contract suite passed again after adding a real Storage signed-URL expiry check. Native compatibility now reads the installed binary's build number; focused unit tests cover iOS, Android, Web and malformed native metadata. Manual native device tests and released-client compatibility remain unverified.
+- The read-only staging import verifier checked all categories but still failed on one previously recorded imported `dogs.description` difference. The copied value has one extra trailing `!`; neither the staging row nor the immutable fixture was changed.
+- Contextual support information is now shown to owners and on account-deletion review when shared dogs remain. The administrative recovery RPC/policy is no longer a feature requirement by Ester's 2026-10-27 direction. Production deployment and exact old-client rollout rehearsal remain separate unpassed gates.
+- Final client verification passed 104 Vitest tests in 17 files, lint, production build and `git diff --check`. The build retained its existing >500 kB chunk warning.

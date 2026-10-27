@@ -609,6 +609,11 @@ const DogOwnership = () => {
               </Button>
             ) : null}
           </div>
+          {/* Exceptional ownership concerns use the existing contact channel. */}
+          <p className={styles.supportNote}>
+            {t('dogOwnership.supportHelp')}{' '}
+            <a href="mailto:esterpratt@gmail.com">esterpratt@gmail.com</a>
+          </p>
           {activeModal === 'invite' ? (
             <OwnershipModal
               title={t('dogOwnership.inviteTitle')}

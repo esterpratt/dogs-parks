@@ -272,6 +272,17 @@ test('private dog image foundation contract', async (suite) => {
       assertNoError(signedUrlError, 'create authenticated gallery signed URL');
       assert.ok(signedUrl.signedUrl);
 
+      // Exercise actual Storage token expiry, not only the client cache timer.
+      const { data: shortUrl, error: shortUrlError } = await outsider.client.storage
+        .from('dogs')
+        .createSignedUrl(reservation.storage_path, 1);
+      assertNoError(shortUrlError, 'create short-lived dog image URL');
+      const beforeExpiry = await fetch(shortUrl.signedUrl);
+      assert.equal(beforeExpiry.status, 200);
+      await new Promise((resolve) => setTimeout(resolve, 2500));
+      const afterExpiry = await fetch(shortUrl.signedUrl);
+      assert.ok(afterExpiry.status >= 400, 'expired dog image URL must be denied');
+
       const { error: anonymousSignedUrlError } = await anonymousClient.storage
         .from('dogs')
         .createSignedUrl(reservation.storage_path, 900);

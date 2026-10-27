@@ -47,7 +47,7 @@ const createDog = async (createDogProps: CreateDogProps) => {
 const updateDog = async ({ dogId, dogDetails }: EditDogProps) => {
   try {
     const { data, error } = await supabase.rpc('api_update_dog', {
-      ...getClientCompatibility(),
+      ...(await getClientCompatibility()),
       p_changes: dogDetails,
       p_dog_id: dogId,
     });
@@ -134,7 +134,7 @@ const fetchUsersDogs = async (userIds: string[]) => {
 const fetchDogPage = async (dogId: string): Promise<DogPageData | null> => {
   try {
     const { data, error } = await supabase.rpc('api_get_dog_page', {
-      ...getClientCompatibility(),
+      ...(await getClientCompatibility()),
       p_dog_id: dogId,
     });
     if (error) {

@@ -4,7 +4,7 @@ Planning checkpoint: 2026-09-26. Final implementation plan: 2026-09-26. Source: 
 
 ## Resume here
 
-Product, design and technical decisions below are confirmed; do not ask the user to choose them again. Ownership slices 1–10 are implemented and locally tested; staging has exercised the main browser journeys. Production rollout, released-client compatibility, native verification, and the operational support policy remain open, as recorded in [CODEX_CONTEXT.md](CODEX_CONTEXT.md) and the [current test plan](DOG_OWNERSHIP_TEST_PLAN.md). The table/deletion-rule inventory and complete clickable proposal in [DOG_OWNERSHIP_SCHEMA_AND_UX.md](DOG_OWNERSHIP_SCHEMA_AND_UX.md) remain the implementation contract. The support-recovery RPC must not ship until the separate operational policy is decided.
+Product, design and technical decisions below are confirmed; do not ask the user to choose them again. Ownership slices 1–10 are implemented and locally tested; staging has exercised the main browser journeys. Production rollout, released-client compatibility, and native verification remain open, as recorded in [CODEX_CONTEXT.md](CODEX_CONTEXT.md) and the [current test plan](DOG_OWNERSHIP_TEST_PLAN.md). The table/deletion-rule inventory and complete clickable proposal in [DOG_OWNERSHIP_SCHEMA_AND_UX.md](DOG_OWNERSHIP_SCHEMA_AND_UX.md) remain the implementation contract. On 2026-10-27, Ester narrowed support recovery to contextual information for users where needed. No administrative ownership-recovery RPC or support procedure is part of this feature release. Earlier references below to a required support-recovery RPC are historical and superseded by this decision.
 
 If implementation exposes a genuinely new material product choice, ask one focused question directly in chat. Routine schema, testing and UI implementation choices are resolved below and should not restart design discovery.
 
@@ -117,7 +117,7 @@ Confirmed:
 - The migration is additive and feature-disabled first. It reconciles the live prototype, asserts invariants, keeps `dogs.owner` synchronized, copies and verifies legacy objects without deleting sources, and enables UI only after monitoring. Rollback disables new capabilities/RPC entry points, preserves additive evidence and legacy source objects, and never reverse-copies shared uploads.
 - Exact table/RLS/grant/storage contracts are defined in [DOG_OWNERSHIP_SCHEMA_AND_UX.md](DOG_OWNERSHIP_SCHEMA_AND_UX.md). Function and enum names may receive mechanical SQL-safe refinements without changing behavior.
 
-Intentionally open and nonblocking for starting core implementation: support evidence, contact/waiting periods, exceptional authority, decision-record retention and redaction. Do not implement or grant `support_recover_dog_ownership` until those operational decisions are approved. Because support-reviewed recovery is confirmed for the first release, the full shared-ownership release may not be enabled until that policy and RPC are completed; security hardening may ship independently.
+The 2026-10-27 scope decision replaces the earlier administrative recovery proposal with contextual support information. Do not implement or grant `support_recover_dog_ownership` as part of this feature. Keep the existing post-Auth cleanup reference and contact guidance.
 
 ## Implementation sequence
 
@@ -133,7 +133,7 @@ Each behavior slice starts with failing local integration tests and ends with fo
 8. **Unanimous deletion slice.** Add owner-set/version/expiry/race tests, then proposal/consent RPCs, immediate `DELETING` visibility and retryable storage cleanup.
 9. **Client capability migration.** Replace single-owner queries, grouping, caches and router-state authorization; add the approved routes, states and role-specific controls. Preserve notification Realtime/push mechanics.
 10. **Account-deletion review and hardening.** Route Settings through the review page, apply all dog transitions atomically before Auth deletion, paginate user-scoped cleanup, preserve shared dog images and surface manual recovery for partial post-Auth failure.
-11. **Compatibility and release rollout.** After the operational support policy and recovery RPC are approved, ship the prerequisite client, set platform minimum versions, enable shared ownership gradually, monitor invariant/storage/auth denials and only later retire legacy paths. Security fixes may deploy earlier; the full first release cannot omit confirmed support-reviewed recovery.
+11. **Compatibility and release rollout.** After the release rehearsal and contextual support information are verified, ship the prerequisite client, set platform minimum versions, enable shared ownership gradually, monitor invariant/storage/auth denials and only later retire legacy paths. Security fixes may deploy earlier.
 
 Detailed handoffs added 2026-10-03: [permanent staging and selected-data import](SUPABASE_STAGING_PLAN.md) and [production upgrade, data preservation and release runbook](SUPABASE_PRODUCTION_ROLLOUT_PLAN.md). The user wants email support to Ester with manual administrative action, and persistent staging using selected copies of their production data. These plans are not executed deployments; they specify remaining policy decisions, bootstrap/history reconciliation, old-client verification, safe sequencing and recovery gates.
 
