@@ -2,7 +2,7 @@
 
 2026-10-27 scope update: Ester removed administrative support recovery from this feature. Show the existing support contact and case information where users need it; do not create or deploy `support_recover_dog_ownership` or require a support policy as an enablement gate. Historical P1 and recovery-RPC requirements below are superseded. Partial account-cleanup guidance remains in the client. Old-client compatibility, data preservation, credential remediation, rehearsal and explicit production authorization remain required.
 
-Prepared 2026-10-03. Status: planning only; no live upgrade performed. This is the detailed execution framework for slice 11, with gates that must be filled by staging evidence before it becomes an executable release runbook.
+Prepared 2026-10-03. Status: planning only; no live upgrade performed. Ester authorized release preparation on 2026-10-27, not production deployment or enablement. The current read-only facts and open decisions are in [release readiness sheet](DOG_OWNERSHIP_RELEASE_READINESS.md).
 
 ## Objective and user constraints
 
@@ -21,7 +21,7 @@ This documentation request is not authorization to execute production mutations.
 - Repository migration history does not describe the full live baseline. Blind `db push`, baseline replay or broad ledger repair is not a release procedure.
 - Feature-disabled migrations still change RLS/grants, metadata writes, Storage permissions, function contracts and `dogs.owner` deletion behavior.
 - `dogs.owner` becomes `ON DELETE RESTRICT`; the new `delete-user` requires the account-erasure preparation RPC. Database/Edge/Auth/Storage changes cannot be deployed in one atomic transaction.
-- Legacy object copies retain sources, but switching metadata/URLs to private dog paths can affect older clients. Retaining a file alone does not prove they can display or edit it.
+- Legacy object copies retain sources, but switching metadata/URLs to private dog paths can affect older clients. The pre-feature client lists/uploads/moves/removes dog photos directly in the public `users` bucket, while the new client reads `dog_images` metadata and private `dogs` objects. A later old-client upload has no corresponding new metadata row; this is an unresolved mixed-client photo consistency gap.
 - Four webhook trigger definitions historically embedded a long-lived service-role credential. Verify remediation, inventory consumers and plan rotation before feature release.
 - `support_recover_dog_ownership` does not exist and is outside this feature's scope.
 - The Web compatibility helper uses build `1`; native clients now read `CFBundleVersion`/`versionCode` from the installed binary through Capacitor App. Concrete released-client identities and minimum-build values still need verification. An older client which never calls capability RPCs cannot be made compatible just by setting minimum builds.
@@ -45,7 +45,7 @@ Exit: every existing record category has a preservation rule; every migration ha
 
 ## Ordered feature migration inventory
 
-Inspect actual files and history at execution time. These are the nine feature migrations used by the current local contract runner, in order:
+Inspect actual files and history at execution time. These are the eleven feature migrations in the repository, in timestamp order. The isolated contract runner applies the transfer-notification refinement immediately after the transfer migration so that its transfer tests cover the final notification behavior; production migration tooling uses timestamp order. Rehearse the final production order on a disposable restored copy before execution.
 
 | Order | File | Main deployment concern |
 | --- | --- | --- |
@@ -58,8 +58,10 @@ Inspect actual files and history at execution time. These are the nine feature m
 | 7 | `20261003130000_extend_dog_deletion_enums.sql` | Enum commit boundary before dependent SQL |
 | 8 | `20261003140000_add_unanimous_dog_deletion.sql` | Consent lifecycle, deleting visibility and asset-job completion/purge |
 | 9 | `20261003150000_add_dog_client_capabilities.sql` | RPC dog create/edit/read/pack contract |
+| 10 | `20261011100000_limit_transfer_acceptance_notification.sql` | Transfer notification audience refinement |
+| 11 | `20261011110000_add_dog_ownership_notification_preference.sql` | Ownership notification preference and delivery behavior |
 
-Additional compatibility/security/recovery migrations may be required before rollout. This inventory is not a command to replay applied files. The fixture schema must never be applied to production as a migration.
+Additional compatibility or security migrations may be required before rollout. This inventory is not a command to replay applied files. The fixture schema must never be applied to production as a migration.
 
 ## Gate P3 — Rehearse data upgrade and old-client compatibility
 
