@@ -5,6 +5,18 @@ import { supabase } from './supabase-client';
 import { prepareImage } from './image';
 import { getClientCompatibility } from './dog-ownership';
 import { DogPageData, UserDogAssociation } from '../types/dog-ownership';
+import { usesLegacyDogBackend } from './dog-backend';
+import {
+  createLegacyDog,
+  deleteLegacyDogImage,
+  fetchLegacyDogImages,
+  fetchLegacyDogPage,
+  fetchLegacyUserDogs,
+  fetchLegacyUsersDogs,
+  setLegacyDogPrimaryImage,
+  updateLegacyDog,
+  uploadLegacyDogImage,
+} from './legacy-dogs';
 
 type CreateDogProps = Omit<Dog, 'id'>;
 
@@ -24,6 +36,9 @@ const dogImageUrlCache = new Map<
 
 const createDog = async (createDogProps: CreateDogProps) => {
   try {
+    if (await usesLegacyDogBackend()) {
+      return createLegacyDog(createDogProps);
+    }
     const { data, error } = await supabase.rpc('api_create_dog', {
       p_dog: createDogProps,
     });
@@ -46,6 +61,9 @@ const createDog = async (createDogProps: CreateDogProps) => {
 
 const updateDog = async ({ dogId, dogDetails }: EditDogProps) => {
   try {
+    if (await usesLegacyDogBackend()) {
+      return updateLegacyDog(dogId, dogDetails);
+    }
     const { data, error } = await supabase.rpc('api_update_dog', {
       ...(await getClientCompatibility()),
       p_changes: dogDetails,
@@ -101,6 +119,9 @@ const fetchDogs = async (ids: string[]) => {
 
 const fetchUserDogs = async (userId: string) => {
   try {
+    if (await usesLegacyDogBackend()) {
+      return fetchLegacyUserDogs(userId);
+    }
     const { data: dogs, error } = await supabase.rpc('api_get_user_dogs', {
       p_user_id: userId,
     });
@@ -117,6 +138,9 @@ const fetchUserDogs = async (userId: string) => {
 
 const fetchUsersDogs = async (userIds: string[]) => {
   try {
+    if (await usesLegacyDogBackend()) {
+      return fetchLegacyUsersDogs(userIds);
+    }
     const { data: dogs, error } = await supabase.rpc('api_get_users_dogs', {
       p_user_ids: userIds,
     });
@@ -133,6 +157,9 @@ const fetchUsersDogs = async (userIds: string[]) => {
 
 const fetchDogPage = async (dogId: string): Promise<DogPageData | null> => {
   try {
+    if (await usesLegacyDogBackend()) {
+      return fetchLegacyDogPage(dogId);
+    }
     const { data, error } = await supabase.rpc('api_get_dog_page', {
       ...(await getClientCompatibility()),
       p_dog_id: dogId,
@@ -158,6 +185,9 @@ const fetchDogPage = async (dogId: string): Promise<DogPageData | null> => {
 
 const uploadDogImage = async (image: File | string, dogId: string) => {
   try {
+    if (await usesLegacyDogBackend()) {
+      return uploadLegacyDogImage(image, dogId);
+    }
     const preparedImage = await prepareImage(image);
     const { data: reservations, error: reservationError } = await supabase.rpc(
       'api_reserve_dog_image',
@@ -243,6 +273,9 @@ const getDogImageUrl = async ({
 };
 
 const fetchDogImageRecords = async (dogId: string): Promise<DogImage[]> => {
+  if (await usesLegacyDogBackend()) {
+    return fetchLegacyDogImages(dogId);
+  }
   const [{ data: dog, error: dogError }, { data: authData, error: authError }] =
     await Promise.all([
       supabase
@@ -327,6 +360,9 @@ const fetchAllDogImages = async (dogId: string) => {
 
 const setDogPrimaryImage = async (imageId: string) => {
   try {
+    if (await usesLegacyDogBackend()) {
+      return setLegacyDogPrimaryImage(imageId);
+    }
     const { error } = await supabase.rpc('api_set_primary_dog_image', {
       p_image_id: imageId,
     });
@@ -341,6 +377,9 @@ const setDogPrimaryImage = async (imageId: string) => {
 
 const deleteDogImage = async (imageId: string) => {
   try {
+    if (await usesLegacyDogBackend()) {
+      return deleteLegacyDogImage(imageId);
+    }
     const { error } = await supabase.rpc('api_delete_dog_image', {
       p_image_id: imageId,
     });

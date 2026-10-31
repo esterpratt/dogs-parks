@@ -10,6 +10,7 @@ import { SignOutResult } from '../types/auth';
 import { FORCED_LOGOUT_EVENT } from '../utils/consts';
 import type { AccountDeletionResult } from '../types/account-deletion';
 import { getClientCompatibility } from './dog-ownership';
+import { usesLegacyDogBackend } from './dog-backend';
 
 interface LoginProps {
   email: string;
@@ -159,6 +160,22 @@ const deleteUser = async (
   successorSelections: Record<string, string>
 ): Promise<AccountDeletionResult> => {
   try {
+    if (await usesLegacyDogBackend()) {
+      // The deployed pre-ownership Edge handler still accepts the original id
+      // body and does not return the new outcome envelope.
+      const { data: authData, error: authError } = await supabase.auth.getUser();
+      if (authError || !authData.user) {
+        throw authError ?? new Error('Account session is unavailable');
+      }
+      const { error } = await supabase.functions.invoke('delete-user', {
+        body: { id: authData.user.id },
+      });
+      if (error) {
+        throw error;
+      }
+      await signOut();
+      return { outcome: 'DELETED' };
+    }
     // The Edge Function derives the deletion target from this authenticated session.
     const { data, error } = await supabase.functions.invoke('delete-user', {
       body: {

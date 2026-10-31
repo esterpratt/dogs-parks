@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
 import {
   getAge,
   getFormattedDateISO,
@@ -6,6 +6,17 @@ import {
   getFormattedPastDate,
   getDurationFromNow,
 } from './date.ts';
+
+// Month-end subtraction can roll into the following month; use a stable day
+// so the age contract does not depend on the date the suite runs.
+beforeEach(() => {
+  vi.useFakeTimers();
+  vi.setSystemTime(new Date('2026-10-15T12:00:00Z'));
+});
+
+afterEach(() => {
+  vi.useRealTimers();
+});
 
 describe('date.ts utils', () => {
   it('getAge returns exact months diff and unit for 1 and 6 months', () => {

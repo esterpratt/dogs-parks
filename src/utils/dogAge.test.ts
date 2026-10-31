@@ -1,6 +1,16 @@
-import { describe, it, expect } from 'vitest';
+import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
 import { getLocalizedDogAgeText } from './dogAge';
 import { GENDER } from '../types/dog';
+
+// Keep month-based birthday expectations stable on the 29th through 31st.
+beforeEach(() => {
+  vi.useFakeTimers();
+  vi.setSystemTime(new Date('2026-10-15T12:00:00Z'));
+});
+
+afterEach(() => {
+  vi.useRealTimers();
+});
 
 // Translator mocks
 const tEn = (key: string, options?: Record<string, unknown>): string => {
