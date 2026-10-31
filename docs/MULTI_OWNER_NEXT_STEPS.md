@@ -1,0 +1,71 @@
+# Multi-owner release: next steps
+
+Prepared 2026-10-31. This is the execution order for the next work. It does not authorize a production database change or a store release. Use the detailed [production rollout plan](SUPABASE_PRODUCTION_ROLLOUT_PLAN.md) for commands, preservation checks, and recovery; use the [release readiness sheet](DOG_OWNERSHIP_RELEASE_READINESS.md) for existing evidence. Recheck all live facts before execution because those documents contain historical snapshots.
+
+## Starting point and decisions
+
+- The web compatibility repair is live at `63d51a0`. The production Supabase migration ledger still lists all twelve ownership migrations as pending. The storage worker is not deployed. Multi-owner behavior is not enabled.
+- Ester accepted the updated Apple Developer agreement and confirmed the Google app and signing keys are registered. These account actions need no repetition. Check the currently published Google target API in Play Console; the repository targeting API 36 does not prove the published binary does.
+- `npm audit` reported 35 affected packages on 2026-10-31, including two critical native Capacitor packages. The security update is the first release priority. Keep Capacitor on major 7 for the urgent patch; a major-version migration requires a separate compatibility review and Ester's approval.
+- The user wants old app versions and legacy dog data supported until the new native versions are published. Publication alone does not update installed apps. Record the supported overlap and the rule for old clients before pausing legacy photo writes.
+- Support recovery remains contextual contact and case information only. Do not add an administrative ownership-recovery operation.
+
+## 1. Patch and release the native security hotfix first
+
+1. Identify the source and dependency versions used by the currently published iOS and Android binaries. Treat those binaries as affected if they contain vulnerable Capacitor native packages. Record store build identifiers and availability.
+2. On a task branch, update `@capacitor/core`, `@capacitor/android`, `@capacitor/ios`, and the compatible CLI together to a reviewed, patched Capacitor 7 release. The current audit offers `7.6.10` for Android and iOS. Update the lockfile and native projects; do not use `npm audit fix --force` or automatically move to Capacitor 8.
+3. Triage the remaining audit findings by shipped runtime versus development tooling. Apply safe, focused same-major fixes where tested; record anything deferred. Re-run both full and production-dependency audits.
+4. Run `npm run lint`, `npm run build`, `npm run test`, `npm run test:supabase`, and `git diff --check`. Build iOS with Xcode and Android with Gradle.
+5. **On this Mac:** launch the iOS app in an available iOS 26.5 Simulator and the Android app in the installed `Medium_Phone` emulator. Check launch, sign-in/out, profile and solo-dog lists/details, edit, photo upload/main change/delete, account deletion review, deep links, and basic parks. Record pass/fail and native build numbers. Check push token registration and notification opening where the simulator/emulator supports it; record any device-only gap.
+6. Submit and publish patched native binaries as a security hotfix. If the complete multi-owner release becomes ready before submission, combine only after every later gate passes; do not delay the critical patch for unfinished backend work. Confirm the store artifacts, rollout state, and the first installed build that contains the fix.
+
+**Done when:** both stores offer a verified patched build, or a documented store blocker is being resolved. A web deployment does not patch already installed native apps.
+
+## 2. Move iOS Firebase Messaging to Swift Package Manager
+
+1. On a separate task branch, inspect all iOS plugins and the existing Xcode/Podfile customizations. The installed messaging plugin has a `Package.swift`; confirm compatibility before choosing Capacitor's migration assistant. Preserve signing, entitlements, URL handling, Firebase configuration, and build settings.
+2. Migrate the native dependency installation to Swift Package Manager without automatically upgrading Capacitor or Firebase majors. Resolve duplicate Firebase dependencies, sync the project, and compare the resulting iOS archive with the previous one.
+3. Build and run on this Mac's iOS Simulator. Recheck launch, sign-in, token registration, notification-open routing where supported, dog photos, and the security-hotfix regression flows. Use a physical device later for any push or camera behavior the Simulator cannot prove.
+
+**Done when:** a reproducible iOS build uses supported Firebase package delivery and the native checks pass. Existing pinned Firebase CocoaPods remain usable while this is prepared, but they cannot receive newer Firebase Apple SDK fixes.
+
+## 3. Close compatibility and data-preservation gates before production SQL
+
+1. Replace the current web client's table-presence API switch with an explicit, reviewed backend-ready signal, or implement a tested bridge for every late legacy photo write. Creating the ownership table must not silently move the live web client to metadata that old apps can still make stale.
+2. Test the actual released old iOS and Android service calls against the fully upgraded staging backend: login/profile, solo-dog create/edit/delete, photo view/upload/main change/delete, account deletion, and unaffected parks/friends/notifications. Test new clients with ownership disabled and enabled. Deny unsafe shared-dog writes from old clients.
+3. Re-inventory **all** production users and app records, including soft-deleted dogs, parks, relationships, notifications, Auth links, photo metadata, and Storage objects. Preserve a private before-state manifest and checksums. Leave the known staging dog-description discrepancy unchanged unless Ester gives a new instruction.
+4. Rehearse the exact twelve-migration timestamp order on a disposable PostgreSQL 15 target with representative data. Rehearse database and independent Storage restore, Edge-function ordering around the owner foreign key, worker failures/retries, legacy-photo reconciliation, and account deletion after Auth removal. Audit historical webhook credentials and rehearse safe remediation.
+5. Produce the exact production execution sheet: target, SQL checksums, commands, function versions, backup locations, measured timings, expected counts, verification queries, stop conditions, and recovery actions. Recheck the current migration ledger and platform availability immediately before approval.
+
+**Done when:** old-client overlap and data preservation are demonstrated, every exception is recorded, and the production run is reviewable. Do not apply production migrations to discover these answers.
+
+## 4. Prepare production with multi-owner disabled
+
+1. After approval of the concrete execution sheet, take fresh database and Storage backups and prove the restore checkpoint. Control writes during the non-atomic database/Edge transition using the rehearsed method.
+2. Apply the reviewed pending migrations and deploy the compatible `delete-user` function and `process-dog-storage-jobs` worker. Verify its invocation schedule, credentials, retry behavior, and queue drain. Keep all three ownership compatibility rows disabled.
+3. Verify actual grants and RLS for every new `public` table and callable function; Supabase's new-table email requires explicit Data API grants, which the current migrations include. Check old-client calls and new-client disabled-state behavior against production using designated, non-destructive checks.
+4. Compare after-state records and Storage objects to the preservation manifest. Keep legacy source files and photo writes available during the supported old-client overlap. Restore normal access only after the disabled backend is healthy.
+
+**Done when:** the backend and migrated data are healthy, the old apps still work as promised, and shared ownership remains off.
+
+## 5. Build, test, and submit multi-owner iOS and Android candidates
+
+1. Incorporate the security patch and tested Firebase migration. Set higher native build numbers; confirm `App.getInfo().build` matches the server minimum-build plan. Keep Android `targetSdkVersion` at least 36 for the current Play submission requirement, and verify actual release signing and package IDs.
+2. **On this Mac, test both native platforms:** use an iOS Simulator and Android emulator against the prepared staging backend. Exercise invitation/request acceptance and cancellation, primary transfer, leave/succession, unanimous deletion, six-photo limit and primary selection, notification/deep-link routing, account deletion, and preserved old users' data. Repeat important solo-dog, login, camera/gallery, and location flows. Record exact simulator, emulator, OS, app build, backend revision, and results.
+3. Check the app's Play Console policy declarations relevant to fine location and the current published target API. Provide Apple App Review a working review account and clear notes for the server-gated ownership feature; do not present it as an undocumented dormant feature.
+4. Upload the candidates for store review, then record approval and actual availability separately. A submitted or approved build is not yet an installed build.
+
+**Done when:** both candidate artifacts and their store availability are known. Simulator/emulator checks do not replace any physical-device verification needed for push, camera, signing, or store installation.
+
+## 6. Cut over photos and enable one platform at a time
+
+1. Decide the old-client support endpoint from actual store availability and adoption. If old installed apps must keep changing photos, retain a proven synchronization bridge. Otherwise provide a clear update path before closing legacy writes. Do not assume that publication means old clients have disappeared.
+2. For a rehearsed cutover, stop the photo worker, pause legacy photo writes with the service-only switch, run final reconciliation, drain and verify private copies, then resume the worker. Check photo counts, checksums, primary selection, and old/new client read behavior. Preserve legacy sources.
+3. Set the verified minimum build and enable WEB, IOS, and ANDROID independently only when that platform's released app works with the new backend. Smoke-test solo and shared journeys with designated accounts after each enablement.
+4. Observe RLS/authorization denials, account deletion, notification delivery, Storage jobs, missing files, and client errors. Keep the disable and forward-repair procedures ready. Retire legacy paths or APIs only in a later, separately verified operation.
+
+**Done when:** the enabled platforms work in production, old-user data is reconciled, the agreed overlap is honored, and the observation period completes without an unresolved release issue.
+
+## Timing rule
+
+Do steps 1–3 immediately. Step 4 can happen before the multi-owner app versions are published **only after** the compatibility and recovery gates pass. Step 5 prepares the store releases. The final live photo reconciliation and platform enablement in step 6 depend on the new versions' availability and on the old-client support decision. Do not bundle all of these into one untested store-publication event.
