@@ -2,6 +2,8 @@
 
 Prepared 2026-10-31. This is the execution order for the next work. It does not authorize a production database change or a store release. Use the detailed [production rollout plan](SUPABASE_PRODUCTION_ROLLOUT_PLAN.md) for commands, preservation checks, and recovery; use the [release readiness sheet](DOG_OWNERSHIP_RELEASE_READINESS.md) for existing evidence. Recheck all live facts before execution because those documents contain historical snapshots.
 
+The 2026-11-06 security-hotfix preparation and remaining release checks are recorded in [the hotfix checkpoint](NATIVE_SECURITY_HOTFIX_CHECKPOINT.md).
+
 ## Starting point and decisions
 
 - The web compatibility repair is live at `63d51a0`. The production Supabase migration ledger still lists all twelve ownership migrations as pending. The storage worker is not deployed. Multi-owner behavior is not enabled.

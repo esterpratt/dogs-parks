@@ -1,5 +1,5 @@
 PODS:
-  - Capacitor (7.4.3):
+  - Capacitor (7.6.10):
     - CapacitorCordova
   - CapacitorApp (7.0.2):
     - Capacitor
@@ -7,7 +7,7 @@ PODS:
     - Capacitor
   - CapacitorCamera (7.0.2):
     - Capacitor
-  - CapacitorCordova (7.4.3)
+  - CapacitorCordova (7.6.10)
   - CapacitorFirebaseMessaging (7.3.0):
     - Capacitor
     - FirebaseMessaging (~> 11.7.0)
@@ -152,11 +152,11 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capawesome/capacitor-badge"
 
 SPEC CHECKSUMS:
-  Capacitor: 28d6c01026a9a3f7156529498ec1f389a2a28dbc
+  Capacitor: f50a57c9ce466bce30d574e1348ab25b1f572536
   CapacitorApp: 1f6922c9c5c8b1c538d7fbe92ebe44a81b34bed3
   CapacitorBrowser: 22541e48442de44dc629c214388290d6eecc6ae9
   CapacitorCamera: f9e54db0a18bb218a8dc360907d63aaefe9209ff
-  CapacitorCordova: 435121e81a2df4d0034f0fb11fcefab5104cfdb5
+  CapacitorCordova: 33313bf8891d44741970e16534be781ff3caa00a
   CapacitorFirebaseMessaging: f2be30f5cc99da414a82693e93e0f039d097aabf
   CapacitorGeolocation: 84f868bea4c2499aebc3bb3a88fd0a508f87ab87
   CapacitorKeyboard: a86aa9e4741b6444a802df26440a92ae041b34a6
