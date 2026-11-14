@@ -4,6 +4,8 @@ Prepared 2026-10-31. This is the execution order for the next work. It does not 
 
 The 2026-11-06 security-hotfix preparation and remaining release checks are recorded in [the hotfix checkpoint](NATIVE_SECURITY_HOTFIX_CHECKPOINT.md).
 
+The exact signed files, current verification, and store testing order are in [the native security release packet](NATIVE_SECURITY_RELEASE_PACKET.md).
+
 The separate iOS Swift Package Manager preparation is recorded in [the SPM migration checkpoint](IOS_SPM_MIGRATION_CHECKPOINT.md).
 
 ## Current handoff: what to do next (2026-11-14)
