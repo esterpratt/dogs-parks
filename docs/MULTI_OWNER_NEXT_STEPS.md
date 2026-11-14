@@ -16,6 +16,8 @@ The separate iOS Swift Package Manager preparation is recorded in [the SPM migra
 
 **Latest 2026-11-14 Android result:** Ester signed the replacement `e91160c` Android bundle in Android Studio. Local verification found the established upload certificate and an exact match for all 1,185 non-signature entries against the verified unsigned bundle. The signed file and hash are in [the native security release packet](NATIVE_SECURITY_RELEASE_PACKET.md). It has not been uploaded to Play. No App Review submission, public release, or production database change occurred.
 
+**Android track decision:** Ester chose to skip internal testing because she has no testers and does not want to test Android herself. Prepare a Play Production draft with the exact signed bundle and stop before rollout. A Play-installed Android build will not have a device smoke result; this is an explicit release risk to revisit before public rollout.
+
 ### Earlier handoff before the TestFlight upload
 
 **Steps 1 and 2 are not finished.** The Capacitor security patch was pushed to `main` at `fb723a1`, and Ester's accepted iOS Swift Package Manager (SPM) migration was merged and pushed at `414def7` for the next release candidate. Ester reported the latest uploaded iOS `1.2.4` / build `12` and highest Android versionCode `11`; fresh production candidates from source `c1f9188` use iOS `1.2.5` / build `13` and Android `1.0.10` / versionCode `12`. The iOS IPA is locally distribution-signed and verified. Ester signed the fresh Android AAB in Android Studio; its signature verifies and its certificate matches older locally signed bundles. The exact artifacts and remaining gates are in [the hotfix checkpoint](NATIVE_SECURITY_HOTFIX_CHECKPOINT.md). No store upload has occurred.
