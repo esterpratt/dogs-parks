@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { MoveLeft } from 'lucide-react';
 import { PrevLinks } from '../components/PrevLinks';
 import { useTranslation } from 'react-i18next';
@@ -34,6 +34,7 @@ const DogOwnershipDeletion = () => {
     queryKey: ['dogDeletionProposal', dogId, proposalId, userId],
     queryFn: () => fetchDogDeletionProposal(dogId!, proposalId),
     enabled: !!dogId || !!proposalId,
+    throwOnError: true,
   });
   const resolvedDogId = dogId ?? proposal?.dog_id;
   const { data: dogPage, isLoading: isLoadingCapabilities } = useQuery({
@@ -41,6 +42,7 @@ const DogOwnershipDeletion = () => {
     queryKey: ['dogPage', resolvedDogId, userId],
     queryFn: () => fetchDogPage(resolvedDogId!),
     enabled: !!resolvedDogId,
+    throwOnError: true,
   });
   const capabilities = dogPage?.capabilities;
   const members = dogPage?.members ?? [];
@@ -103,7 +105,8 @@ const DogOwnershipDeletion = () => {
     return <Loader style={{ paddingTop: '64px' }} />;
   }
   if (!dogPage || !capabilities?.enabled || !capabilities.is_owner || !proposal) {
-    return null;
+    // Completed or expired deletion links can outlive both the proposal and dog.
+    return <Navigate to={userId ? `/profile/${userId}/dogs` : '/login?mode=login'} replace />;
   }
   const dogName = dogPage.dog.name;
 

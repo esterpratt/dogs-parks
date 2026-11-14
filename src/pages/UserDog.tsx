@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react';
 import {
+  Navigate,
   Outlet,
   useLocation,
   useMatch,
@@ -90,11 +91,8 @@ const UserDog = () => {
   }
 
   if (!dogPage || !dog) {
-    return (
-      <main className={styles.container}>
-        <p>{t('dogOwnership.outcomes.DOG_UNAVAILABLE')}</p>
-      </main>
-    );
+    // A saved dog link may remain after deletion or access removal.
+    return <Navigate to={userId ? `/profile/${userId}/dogs` : '/login?mode=login'} replace />;
   }
 
   // The server derives ownership for direct URLs and refreshes; router state

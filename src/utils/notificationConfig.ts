@@ -18,6 +18,12 @@ interface NotificationConfig {
   invalidateQueries: (userId: string, notification: Notification) => void;
 }
 
+// Legacy notification rows can have a missing target even when the client type
+// declares an ID. Never turn that into a route containing "null" or "undefined".
+function routeForId(prefix: string, id: string | null | undefined, suffix = '') {
+  return id ? `${prefix}${id}${suffix}` : null;
+}
+
 function invalidateDogOwnershipQueries(dogId?: string) {
   // Action notifications identify the action rather than the dog. Invalidate
   // cached dog capabilities broadly in that case; server reads retain authority.
@@ -38,7 +44,7 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
       return {
         icon: UserPlus,
         color: 'pink',
-        getUrl: (notification) => `/profile/${notification.sender_id}`,
+        getUrl: (notification) => routeForId('/profile/', notification.sender_id),
         invalidateQueries: (userId) => {
           queryClient.invalidateQueries({
             queryKey: ['friendsWithDogs', userId, 'PENDING', 'REQUESTER'],
@@ -52,7 +58,7 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
       return {
         icon: Heart,
         color: 'blue',
-        getUrl: (notification) => `/profile/${notification.sender_id}`,
+        getUrl: (notification) => routeForId('/profile/', notification.sender_id),
         invalidateQueries: (userId) => {
           queryClient.invalidateQueries({
             queryKey: ['friendsWithDogs', userId],
@@ -66,7 +72,7 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
       return {
         icon: CalendarPlus,
         color: 'pink',
-        getUrl: (notification) => `/events/${notification.target_id}`,
+        getUrl: (notification) => routeForId('/events/', notification.target_id),
         invalidateQueries: (userId, notification) => {
           queryClient.invalidateQueries({
             queryKey: ['events', 'invited', userId],
@@ -80,7 +86,7 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
       return {
         icon: XCircle,
         color: 'red',
-        getUrl: (notification) => `/events/${notification.target_id}`,
+        getUrl: (notification) => routeForId('/events/', notification.target_id),
         invalidateQueries: (userId, notification) => {
           queryClient.invalidateQueries({
             queryKey: ['events', 'invited', userId],
@@ -94,7 +100,7 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
       return {
         icon: CalendarCheck,
         color: 'green',
-        getUrl: (notification) => `/events/${notification.target_id}`,
+        getUrl: (notification) => routeForId('/events/', notification.target_id),
         invalidateQueries: (userId, notification) => {
           queryClient.invalidateQueries({
             queryKey: ['events', 'organized', userId],
@@ -108,7 +114,7 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
       return {
         icon: CalendarX,
         color: 'red',
-        getUrl: (notification) => `/events/${notification.target_id}`,
+        getUrl: (notification) => routeForId('/events/', notification.target_id),
         invalidateQueries: (userId, notification) => {
           queryClient.invalidateQueries({
             queryKey: ['events', 'organized', userId],
@@ -126,7 +132,7 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
         icon: PawPrint,
         color: 'green',
         getUrl: (notification) =>
-          `/ownership-actions/invite/${notification.target_id}`,
+          routeForId('/ownership-actions/invite/', notification.target_id),
         invalidateQueries: (_userId, notification) => {
           queryClient.invalidateQueries({
             queryKey: ['dogOwnershipAction', 'invite', notification.target_id],
@@ -142,7 +148,7 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
         icon: PawPrint,
         color: 'blue',
         getUrl: (notification) =>
-          `/ownership-actions/request/${notification.target_id}`,
+          routeForId('/ownership-actions/request/', notification.target_id),
         invalidateQueries: (_userId, notification) => {
           queryClient.invalidateQueries({
             queryKey: ['dogOwnershipAction', 'request', notification.target_id],
@@ -157,7 +163,8 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
         icon: PawPrint,
         color: 'green',
         // Membership updates belong with the current owner roster.
-        getUrl: (notification) => `/dogs/${notification.target_id}/ownership`,
+        getUrl: (notification) =>
+          routeForId('/dogs/', notification.target_id, '/ownership'),
         invalidateQueries: (_userId, notification) => {
           invalidateDogOwnershipQueries(notification.target_id);
         },
@@ -170,7 +177,7 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
         icon: PawPrint,
         color: 'pink',
         getUrl: (notification) =>
-          `/ownership-actions/transfer/${notification.target_id}`,
+          routeForId('/ownership-actions/transfer/', notification.target_id),
         invalidateQueries: (_userId, notification) => {
           queryClient.invalidateQueries({
             queryKey: [
@@ -190,7 +197,7 @@ const getNotificationConfig = (type: NotificationType): NotificationConfig => {
         icon: PawPrint,
         color: 'red',
         getUrl: (notification) =>
-          `/ownership-actions/deletion/${notification.target_id}`,
+          routeForId('/ownership-actions/deletion/', notification.target_id),
         invalidateQueries: (_userId, notification) => {
           queryClient.invalidateQueries({
             queryKey: ['dogDeletionProposal'],

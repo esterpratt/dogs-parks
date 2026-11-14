@@ -135,6 +135,9 @@ const NotificationItem = (props: NotificationItemProps) => {
         [styles.read]: !!read_at,
       })}
       onClick={handleClick}
+      // Completed deletion has no destination; keep its history visible without
+      // presenting a dead-end action.
+      disabled={!url}
       type="button"
     >
       <div className={styles.notificationContent}>

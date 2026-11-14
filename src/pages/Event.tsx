@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { UserContext } from '../context/UserContext';
 import { fetchEvent } from '../services/events';
@@ -22,29 +22,31 @@ const Event = () => {
     queryKey: ['event', eventId],
     queryFn: () => fetchEvent(eventId!),
     enabled: !!eventId,
+    throwOnError: true,
   });
 
   const currentLanguage = useAppLocale();
 
   const { data: park, isLoading: isLoadingPark } = useQuery({
-    queryKey: parkKey(eventData?.event.park_id || '', currentLanguage),
+    queryKey: parkKey(eventData?.event?.park_id || '', currentLanguage),
     queryFn: () =>
       fetchParkWithTranslation({
         parkId: eventData.event.park_id,
         language: currentLanguage,
       }),
-    enabled: !!eventData?.event.park_id,
+    enabled: !!eventData?.event?.park_id,
     placeholderData: (prev) => prev,
+    throwOnError: true,
   });
 
   const { data: parkImage, isLoading: isLoadingImage } = useQuery({
-    queryKey: ['parkImage', eventData?.event.park_id],
+    queryKey: ['parkImage', eventData?.event?.park_id],
     queryFn: async () => fetchParkPrimaryImage(eventData.event.park_id),
-    enabled: !!eventData?.event.park_id,
+    enabled: !!eventData?.event?.park_id,
   });
 
   const userIsOrganizer =
-    userId && eventData && userId === eventData.event.creator_id;
+    userId && eventData?.event && userId === eventData.event.creator_id;
 
   if (isLoadingEvent || isLoadingPark || isLoadingImage) {
     return <Loader style={{ paddingTop: '64px' }} />;
@@ -52,6 +54,12 @@ const Event = () => {
 
   if (!userId) {
     return null;
+  }
+
+  // Old event notifications may outlive their event or park. Return to a safe
+  // signed-in screen before either missing record reaches the detail renderer.
+  if (!eventData?.event || !park) {
+    return <Navigate to={`/profile/${userId}/dogs`} replace />;
   }
 
   return (

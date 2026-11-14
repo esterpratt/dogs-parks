@@ -2,6 +2,7 @@ import { useContext, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   Link,
+  Navigate,
   Outlet,
   useNavigate,
   useParams,
@@ -257,11 +258,8 @@ const DogOwnership = () => {
   }
 
   if (!dogPage || !capabilities) {
-    return (
-      <main className={styles.container}>
-        <p>{t('dogOwnership.outcomes.DOG_UNAVAILABLE')}</p>
-      </main>
-    );
+    // A stale ownership notification should return to the viewer's pack.
+    return <Navigate to={userId ? `/profile/${userId}/dogs` : '/login?mode=login'} replace />;
   }
 
   const invitedUserIds = new Set(
