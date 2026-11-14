@@ -10,6 +10,10 @@ The separate iOS Swift Package Manager preparation is recorded in [the SPM migra
 
 ## Current handoff: what to do next (2026-11-14)
 
+**Later 2026-11-14 update:** iOS `1.2.5 (13)` was uploaded to TestFlight and installed. A direct push and live event/friend notification links passed, but old cards for deleted park events opened the generic error screen. Source `e91160c` fixes that route. A distribution-signed replacement iOS `1.2.5 (14)` IPA and unsigned replacement Android `1.0.10 (12)` AAB are locally prepared; neither replacement has been uploaded. The exact files and focused retest are at the top of [the native security release packet](NATIVE_SECURITY_RELEASE_PACKET.md). The earlier build `13` must not be submitted for App Review. No public release or production database change occurred.
+
+### Earlier handoff before the TestFlight upload
+
 **Steps 1 and 2 are not finished.** The Capacitor security patch was pushed to `main` at `fb723a1`, and Ester's accepted iOS Swift Package Manager (SPM) migration was merged and pushed at `414def7` for the next release candidate. Ester reported the latest uploaded iOS `1.2.4` / build `12` and highest Android versionCode `11`; fresh production candidates from source `c1f9188` use iOS `1.2.5` / build `13` and Android `1.0.10` / versionCode `12`. The iOS IPA is locally distribution-signed and verified. Ester signed the fresh Android AAB in Android Studio; its signature verifies and its certificate matches older locally signed bundles. The exact artifacts and remaining gates are in [the hotfix checkpoint](NATIVE_SECURITY_HOTFIX_CHECKPOINT.md). No store upload has occurred.
 
 **Only user-dependent inputs/actions for this hotfix:**
