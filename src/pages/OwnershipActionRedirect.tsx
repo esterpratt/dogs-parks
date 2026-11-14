@@ -1,17 +1,15 @@
 import { useContext, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { useTranslation } from "react-i18next";
+import { useNavigate, useParams } from "react-router-dom";
 import { Loader } from "../components/Loader";
+import { UnavailableNotificationTarget } from "../components/notifications/UnavailableNotificationTarget";
 import { UserContext } from "../context/UserContext";
 import { fetchDogOwnershipAction } from "../services/dog-ownership";
 import { fetchDogPage } from "../services/dogs";
-import styles from "./DogOwnership.module.scss";
 
 const OwnershipActionRedirect = () => {
   const { actionType, actionId } = useParams();
   const { userId } = useContext(UserContext);
-  const { t } = useTranslation();
   const navigate = useNavigate();
   const handledAction = useRef<string>();
   const type =
@@ -75,18 +73,13 @@ const OwnershipActionRedirect = () => {
     return <Loader style={{ paddingTop: "64px" }} />;
   }
   return (
-    <main className={styles.container}>
-      <p>
-        {t(
-          isError || isDogError
-            ? "dogOwnership.requestError"
-            : "dogOwnership.outcomes.NOT_FOUND",
-        )}
-      </p>
-      <Link className={styles.actionLink} to={`/profile/${userId}/dogs`}>
-        {t("userDogs.titleMyPack")}
-      </Link>
-    </main>
+    <UnavailableNotificationTarget
+      descriptionKey={
+        isError || isDogError
+          ? "dogOwnership.requestError"
+          : undefined
+      }
+    />
   );
 };
 

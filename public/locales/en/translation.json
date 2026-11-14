@@ -288,6 +288,10 @@
   "notifications": {
     "title": "Notifications",
     "empty": "You have no notifications",
+    "unavailable": {
+      "title": "This is no longer available",
+      "description": "The item may have been completed, canceled, or removed."
+    },
     "actions": {
       "markAllRead": "Mark all as read"
     },

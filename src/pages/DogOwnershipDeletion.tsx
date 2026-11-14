@@ -1,11 +1,12 @@
 import { useContext } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { MoveLeft } from 'lucide-react';
 import { PrevLinks } from '../components/PrevLinks';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../components/Button';
 import { Loader } from '../components/Loader';
+import { UnavailableNotificationTarget } from '../components/notifications/UnavailableNotificationTarget';
 import { UserContext } from '../context/UserContext';
 import { useNotification } from '../context/NotificationContext';
 import { useConfirm } from '../context/ConfirmModalContext';
@@ -106,7 +107,7 @@ const DogOwnershipDeletion = () => {
   }
   if (!dogPage || !capabilities?.enabled || !capabilities.is_owner || !proposal) {
     // Completed or expired deletion links can outlive both the proposal and dog.
-    return <Navigate to={userId ? `/profile/${userId}/dogs` : '/login?mode=login'} replace />;
+    return <UnavailableNotificationTarget />;
   }
   const dogName = dogPage.dog.name;
 

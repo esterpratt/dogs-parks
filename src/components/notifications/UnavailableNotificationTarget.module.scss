@@ -1,0 +1,67 @@
+@use '../../variables.scss' as *;
+
+.container {
+  min-height: calc(100vh - var(--navbar-height));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px calc(16px + var(--safe-area-inset-right, 0px))
+    calc(32px + var(--navbar-height))
+    calc(16px + var(--safe-area-inset-left, 0px));
+}
+
+.card {
+  width: min(100%, 420px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 32px 24px;
+  border-radius: 16px;
+  background: var(--background-color);
+  box-shadow: var(--box-shadow);
+  text-align: center;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba($pink, 0.1);
+  color: $pink;
+}
+
+.title {
+  margin: 0;
+  color: var(--color-text);
+  font-size: $second-title-font-size;
+  font-weight: 500;
+}
+
+.description {
+  margin: 0;
+  color: var(--color-text-medium);
+  line-height: 1.5;
+}
+
+.action-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  margin-top: 8px;
+  padding: 10px 24px;
+  border-radius: 8px;
+  background: $pink;
+  color: $white;
+  font-size: 16px;
+  text-decoration: none;
+
+  &:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 3px;
+  }
+}

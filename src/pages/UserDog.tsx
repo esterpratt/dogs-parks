@@ -1,6 +1,5 @@
 import { useContext, useState } from 'react';
 import {
-  Navigate,
   Outlet,
   useLocation,
   useMatch,
@@ -24,6 +23,7 @@ import DogIcon from '../assets/dog.svg?react';
 import { DogDetails } from '../components/dog/DogDetails';
 import { DogGalleryContainer } from '../components/dog/DogGalleryContainer';
 import { Loader } from '../components/Loader';
+import { UnavailableNotificationTarget } from '../components/notifications/UnavailableNotificationTarget';
 import { EnlargeImageModal } from '../components/EnlargeImageModal';
 import { Button } from '../components/Button';
 import { DogPreferences } from '../components/dog/DogPreferences';
@@ -92,7 +92,7 @@ const UserDog = () => {
 
   if (!dogPage || !dog) {
     // A saved dog link may remain after deletion or access removal.
-    return <Navigate to={userId ? `/profile/${userId}/dogs` : '/login?mode=login'} replace />;
+    return <UnavailableNotificationTarget />;
   }
 
   // The server derives ownership for direct URLs and refreshes; router state

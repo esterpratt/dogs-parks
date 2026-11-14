@@ -55,7 +55,7 @@ function renderDeletion() {
               path="/ownership-actions/deletion/:proposalId"
               element={<DogOwnershipDeletion />}
             />
-            <Route path="/profile/:userId/dogs" element={<p>My Pack</p>} />
+            <Route path="/profile/:userId/dogs" element={<p>Pack route loaded</p>} />
           </Routes>
         </MemoryRouter>
       </QueryClientProvider>
@@ -63,12 +63,14 @@ function renderDeletion() {
   );
 }
 
-it('returns to My Pack when an old deletion proposal is unavailable', async () => {
+it('explains when an old deletion proposal is unavailable', async () => {
   renderDeletion();
-  expect(await screen.findByText('My Pack')).toBeTruthy();
+  expect(await screen.findByText('notifications.unavailable.title')).toBeTruthy();
+  expect(screen.getByRole('link', { name: 'userDogs.titleMyPack' })).toBeTruthy();
+  expect(screen.queryByText('Pack route loaded')).toBeNull();
 });
 
-it('returns to My Pack when the proposal outlives its dog', async () => {
+it('explains when the proposal outlives its dog', async () => {
   state.proposal = {
     id: 'old-proposal',
     dog_id: 'deleted-dog',
@@ -76,5 +78,7 @@ it('returns to My Pack when the proposal outlives its dog', async () => {
     status: 'CANCELED',
   };
   renderDeletion();
-  expect(await screen.findByText('My Pack')).toBeTruthy();
+  expect(await screen.findByText('notifications.unavailable.title')).toBeTruthy();
+  expect(screen.getByRole('link', { name: 'userDogs.titleMyPack' })).toBeTruthy();
+  expect(screen.queryByText('Pack route loaded')).toBeNull();
 });

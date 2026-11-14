@@ -288,6 +288,10 @@
   "notifications": {
     "title": "התראות",
     "empty": "אין התראות",
+    "unavailable": {
+      "title": "הפריט כבר לא זמין",
+      "description": "ייתכן שהפעולה הושלמה, בוטלה או הוסרה."
+    },
     "actions": {
       "markAllRead": "סימון הכל כנקרא"
     },

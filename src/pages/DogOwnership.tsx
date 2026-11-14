@@ -2,7 +2,6 @@ import { useContext, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   Link,
-  Navigate,
   Outlet,
   useNavigate,
   useParams,
@@ -30,6 +29,7 @@ import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 import { Button } from '../components/Button';
 import { Loader } from '../components/Loader';
+import { UnavailableNotificationTarget } from '../components/notifications/UnavailableNotificationTarget';
 import { UserContext } from '../context/UserContext';
 import { useFetchFriends } from '../hooks/api/useFetchFriends';
 import {
@@ -258,8 +258,8 @@ const DogOwnership = () => {
   }
 
   if (!dogPage || !capabilities) {
-    // A stale ownership notification should return to the viewer's pack.
-    return <Navigate to={userId ? `/profile/${userId}/dogs` : '/login?mode=login'} replace />;
+    // A stale ownership notification should explain why its dog cannot open.
+    return <UnavailableNotificationTarget />;
   }
 
   const invitedUserIds = new Set(

@@ -288,6 +288,10 @@
   "notifications": {
     "title": "الإشعارات",
     "empty": "لا توجد إشعارات",
+    "unavailable": {
+      "title": "لم يعد هذا العنصر متاحًا",
+      "description": "ربما اكتمل الإجراء أو أُلغي أو أُزيل."
+    },
     "actions": {
       "markAllRead": "تحديد الكل كمقروء"
     },
