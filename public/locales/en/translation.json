@@ -290,7 +290,8 @@
     "empty": "You have no notifications",
     "unavailable": {
       "title": "This is no longer available",
-      "description": "The item may have been completed, canceled, or removed."
+      "description": "The item may have been completed, canceled, or removed.",
+      "eventDescription": "This park event may have been removed or may no longer be available to you."
     },
     "actions": {
       "markAllRead": "Mark all as read"

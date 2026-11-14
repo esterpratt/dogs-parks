@@ -7,14 +7,28 @@ import styles from './UnavailableNotificationTarget.module.scss';
 
 interface UnavailableNotificationTargetProps {
   descriptionKey?: string;
+  actionPath?: string;
+  actionLabelKey?: string;
 }
 
 const UnavailableNotificationTarget = (
   props: UnavailableNotificationTargetProps,
 ) => {
-  const { descriptionKey = 'notifications.unavailable.description' } = props;
+  const {
+    descriptionKey = 'notifications.unavailable.description',
+    actionPath,
+    actionLabelKey,
+  } = props;
   const { userId } = useContext(UserContext);
   const { t } = useTranslation();
+  // Event links return to Notifications; dog and ownership links retain their
+  // existing My Pack destination unless a caller supplies another action.
+  const defaultActionPath = userId
+    ? `/profile/${userId}/dogs`
+    : '/login?mode=login';
+  const defaultActionLabelKey = userId
+    ? 'userDogs.titleMyPack'
+    : 'login.login';
 
   // Keep an explanation and an explicit way forward when a saved notification
   // outlives the dog or ownership action it originally referenced.
@@ -28,9 +42,9 @@ const UnavailableNotificationTarget = (
         <p className={styles.description}>{t(descriptionKey)}</p>
         <Link
           className={styles.actionLink}
-          to={userId ? `/profile/${userId}/dogs` : '/login?mode=login'}
+          to={actionPath ?? defaultActionPath}
         >
-          {t(userId ? 'userDogs.titleMyPack' : 'login.login')}
+          {t(actionLabelKey ?? defaultActionLabelKey)}
         </Link>
       </section>
     </main>

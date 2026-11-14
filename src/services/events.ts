@@ -62,6 +62,14 @@ const fetchEvent = async (id: string) => {
     );
 
     if (error) {
+      // The production RPC reports deleted or inaccessible events with these
+      // codes; let the event page show its unavailable state for old links.
+      if (
+        (error.code === '42501' && error.message === 'insufficient_privilege') ||
+        error.code === 'P0002'
+      ) {
+        return null;
+      }
       throw error;
     }
 

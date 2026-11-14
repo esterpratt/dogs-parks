@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Navigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { UserContext } from '../context/UserContext';
 import { fetchEvent } from '../services/events';
@@ -12,6 +12,7 @@ import {
 import { Loader } from '../components/Loader';
 import { InvitedEvent } from '../components/event/InvitedEvent';
 import { OrganizerEvent } from '../components/event/OrganizerEvent';
+import { UnavailableNotificationTarget } from '../components/notifications/UnavailableNotificationTarget';
 import styles from './Event.module.scss';
 
 const Event = () => {
@@ -56,10 +57,16 @@ const Event = () => {
     return null;
   }
 
-  // Old event notifications may outlive their event or park. Return to a safe
-  // signed-in screen before either missing record reaches the detail renderer.
+  // Old event notifications may outlive their event or park. Explain the
+  // missing destination without sending the reader through an error route.
   if (!eventData?.event || !park) {
-    return <Navigate to={`/profile/${userId}/dogs`} replace />;
+    return (
+      <UnavailableNotificationTarget
+        descriptionKey="notifications.unavailable.eventDescription"
+        actionPath="/notifications"
+        actionLabelKey="notifications.title"
+      />
+    );
   }
 
   return (
