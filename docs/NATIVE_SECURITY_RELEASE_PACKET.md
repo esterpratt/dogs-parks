@@ -1,5 +1,23 @@
 # Native security release packet
 
+## 2026-11-17 release preparation (no store action authorized)
+
+Git was clean at `2bbdaae` before this preparation. The replacement iOS and Android files below still match their recorded SHA-256 hashes. The rejected Android upload does not establish whether Play reserved versionCode `12`; the latest accepted code must be read in Play Console. The earlier report that `11` was highest predates the rejection.
+
+**Android decision evidence to obtain in Play Console:**
+
+1. In **Statistics**, view **Install base** by **Android version** and record the Android 6.0/API 23 active-device count and the total. Google defines install base as active devices with the app installed; this gives the affected installed-device estimate. Check **Reach and devices** for the compatible-device change if Play presents a comparison.
+2. In **Test and release → Latest releases and bundles → View all app bundles**, inspect all upload/release statuses and record the highest accepted versionCode across every track. Check whether rejected `12` appears in the library. Do not infer acceptance from the local bundle or the rejected draft.
+3. In the Production draft, check whether **App bundle enhancements → Automatic protection → Turn off protection for this release** is available. Do not change it until the API 23 impact is reviewed.
+
+**Choice:** Keeping API 23 and turning off protection for this one release would preserve eligibility for Android 6.0 devices and could reuse the signed `e91160c` AAB if Play still accepts code `12`. Google's per-release switch applies only to that release, and Google recommends against promoting unprotected builds to production. Raising the minimum to API 24 keeps protection enabled, but API 23 devices cannot install or update to this release and remain on an older app version; it requires a new build and signing. Choose after the console counts and accepted-code check. No SDK setting or protection setting has been changed.
+
+**App Store review preparation:** In App Store Connect, prepare iOS version `1.2.5` and select **build `14`**. Use the localized notes below. Check current screenshots and metadata, App Privacy, export compliance, and a working non-expiring review account entered only in App Store Connect's private fields. Review note: “KlavHub currently offers parks, profile, and solo-dog management. Shared dog ownership is not enabled in this release. Use the private review credentials to inspect the available flows.” Choose **manual release** to retain a separate public-release decision. Stop before **Submit for Review**. The focused deleted-event checks passed on TestFlight build `14`; earlier direct push, live-event, and friend-card checks passed on build `13`. Do not repeat the full iPhone suite for an Android-only change.
+
+**Play Production draft preparation:** After the Android choice and any replacement signing, use only the exact verified signed bundle. Confirm Play displays `com.klavhub`, the chosen versionCode, target API `36`, the expected upload key, and the selected protection state. Review App content, location declarations, and the localized notes below; save/review the draft without starting rollout. Internal testing is intentionally skipped by Ester's choice, so a Play-installed Android smoke result remains absent. Record that gap for the separate public-rollout decision.
+
+No new store upload, App Review submission, public rollout, or production database change is authorized by this preparation. The twelve ownership migrations, worker, and feature enablement remain behind the compatibility and preservation gates in [the release sequence](MULTI_OWNER_NEXT_STEPS.md).
+
 ## Current store status and Play blocker: 2026-11-14
 
 Source `e91160c` fixes old park-event notifications that open the generic error page. iOS build `1.2.5 (13)` was uploaded to internal TestFlight testing and installed, but **must not be submitted for App Review**. Its push delivery and tap-to-Notifications route passed; old links to deleted events failed. Ester then approved uploading replacement build `14`, reported it installed from TestFlight, and confirmed both previously failing deleted-event cards show the unavailable page; the link back to Notifications also works. No App Review submission or public release occurred.
