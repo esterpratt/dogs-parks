@@ -1,5 +1,6 @@
 ext {
-    minSdkVersion = 23
+    // Play automatic protection requires API 24; the 2026-11-14 install base showed no Android 6.0 devices.
+    minSdkVersion = 24
     compileSdkVersion = 36
     targetSdkVersion = 36
     androidxActivityVersion = '1.9.2'
