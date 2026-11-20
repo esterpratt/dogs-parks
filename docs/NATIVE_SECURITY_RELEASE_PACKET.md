@@ -1,5 +1,11 @@
 # Native security release packet
 
+## 2026-11-20 App Store version correction
+
+Ester found that the App Store **iOS `1.2.4 (12)`** version was **Pending Developer Release** after a completed, approved review, although it had never been publicly released. She authorized canceling that approved release and used **Cancel This Release** on its Distribution version page. She reports the status is now **Developer Rejected**. This canceled the prior approval; no public iOS release occurred. TestFlight `1.2.5 (14)` remains the tested replacement and must not be expired.
+
+Next, edit the existing App Store version number from `1.2.4` to `1.2.5` if App Store Connect permits it, remove build `12` from the version, and select the already uploaded build `14`. Save and review metadata, export compliance, App Privacy, manual release, and private review credentials. **Do not use Add for Review until the exact version/build and review fields have been checked. Seek separate approval before Submit for Review.** If Apple blocks changing the approved version record or attaching build `14`, stop and contact App Store Connect support rather than releasing `1.2.4`.
+
 ## 2026-11-17 Play decision, replacement, and Production draft
 
 Git was clean at `2bbdaae` before this preparation. The replacement iOS and Android files below still match their recorded SHA-256 hashes. Ester subsequently supplied Play Console screenshots for the API 23 install base and accepted version codes.
